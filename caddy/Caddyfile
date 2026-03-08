@@ -1,0 +1,50 @@
+# ======================================================================
+# WCP 360 | V0.1.0 | caddy/Caddyfile
+# Production config — FrankenPHP worker mode + TLS auto
+# Replace panel.example.com with your real domain.
+# ======================================================================
+
+{
+    frankenphp {
+        worker /srv/www/{args[0]}/public_html/index.php {
+            num    4
+            env    APP_ENV production
+        }
+    }
+    email webmaster@example.com
+    log {
+        output file /var/log/wcp360/caddy.log
+        format json
+        level  INFO
+    }
+}
+
+panel.example.com {
+    tls { protocols tls1.2 tls1.3 }
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Content-Type-Options    "nosniff"
+        X-Frame-Options           "DENY"
+        Referrer-Policy           "strict-origin-when-cross-origin"
+        -Server
+    }
+    reverse_proxy localhost:8080 {
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Real-IP         {remote_host}
+        header_up X-Request-ID      {http.request.uuid}
+    }
+}
+
+*.sites.example.com {
+    tls { protocols tls1.2 tls1.3 }
+    header { X-Content-Type-Options "nosniff"; -Server }
+    php_server {
+        root /srv/www/{labels.3}/public_html
+        index index.php index.html
+    }
+    file_server { root /srv/www/{labels.3}/public_html }
+    log {
+        output file /srv/www/{labels.3}/logs/access.log
+        format json
+    }
+}

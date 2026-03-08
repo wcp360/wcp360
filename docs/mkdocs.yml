@@ -1,0 +1,30 @@
+site_name: WCP360 Documentation
+site_description: Modern Web Control Panel — Go + Caddy + FrankenPHP
+site_author: HADJ RAMDANE Yacine
+site_url: https://www.wcp360.com/docs
+
+repo_name: wcp360/wcp360
+repo_url: https://github.com/wcp360/wcp360
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: teal
+    accent: teal
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+
+nav:
+  - Home: en/index.md
+  - Architecture: en/architecture.md
+  - Changelog: en/changelog.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true

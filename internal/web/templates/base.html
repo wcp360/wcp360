@@ -1,0 +1,124 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WCP360 · {{template "title" .}}</title>
+<script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js" defer></script>
+<style>
+:root{--bg:#050A14;--surface:#0A1628;--border:#1A2E52;--accent:#4EFFC5;--danger:#FF5D73;--text:#B8CCEB;--text-muted:#4F6488;--font-mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;min-height:100vh;display:flex}
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0;flex-shrink:0}
+.logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.logo-mark{color:var(--accent);font-size:1.4rem;font-weight:700;font-family:var(--font-mono);letter-spacing:-1px}
+.logo-sub{color:var(--text-muted);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+nav{padding:12px 8px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--text-muted);text-decoration:none;font-size:.83rem;transition:.15s}
+.nav-item:hover{background:rgba(78,255,197,.08);color:var(--text)}
+.nav-item.active{background:rgba(78,255,197,.12);color:var(--accent)}
+.nav-icon{width:16px;opacity:.7}
+.sidebar-footer{padding:14px 16px;border-top:1px solid var(--border)}
+.admin-tag{font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface)}
+.topbar-title{font-size:.78rem;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.04em}
+.logout-btn{font-size:.75rem;color:var(--text-muted);background:none;border:1px solid var(--border);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;transition:.15s;text-decoration:none}
+.logout-btn:hover{color:var(--danger);border-color:var(--danger)}
+.content{padding:28px;flex:1;overflow-y:auto}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.page-title{font-size:1.4rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.page-sub{color:var(--text-muted);font-size:.8rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-title{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px}
+.stat-value{font-size:2rem;font-weight:700;color:var(--accent);font-family:var(--font-mono)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:10px 16px;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.tbl td{padding:12px 16px;border-bottom:1px solid rgba(26,46,82,.5);font-size:.84rem}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(78,255,197,.03)}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border:1px solid}
+.badge-active{color:#4EFFC5;border-color:rgba(78,255,197,.3);background:rgba(78,255,197,.08)}
+.badge-suspended{color:#FFB547;border-color:rgba(255,181,71,.3);background:rgba(255,181,71,.08)}
+.badge-deleted{color:var(--text-muted);border-color:var(--border);background:transparent}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-size:.83rem;font-weight:500;cursor:pointer;border:none;font-family:inherit;transition:.15s;text-decoration:none}
+.btn-primary{background:var(--accent);color:#050A14}
+.btn-primary:hover{opacity:.88}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+.btn-danger-sm{background:transparent;color:var(--danger);border:1px solid rgba(255,93,115,.3);padding:5px 10px;border-radius:6px;font-size:.74rem;cursor:pointer;font-family:inherit;transition:.15s}
+.btn-danger-sm:hover{background:rgba(255,93,115,.08)}
+.form-group{display:flex;flex-direction:column;gap:6px;flex:1}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)}
+.form-input,.form-select{background:#0D1B30;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:inherit;font-size:.85rem;width:100%;transition:.15s}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--accent)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234F6488' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.mono{font-family:var(--font-mono);font-size:.82em}
+.pagination{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--border)}
+.pag-info{font-size:.75rem;color:var(--text-muted)}
+.pag-links{display:flex;gap:4px}
+.pag-link{padding:5px 10px;border-radius:6px;font-size:.78rem;color:var(--text-muted);text-decoration:none;border:1px solid var(--border);transition:.15s}
+.pag-link:hover{color:var(--accent);border-color:rgba(78,255,197,.3)}
+.pag-link.current{background:rgba(78,255,197,.1);color:var(--accent);border-color:rgba(78,255,197,.3)}
+.pag-link.disabled{opacity:.3;pointer-events:none}
+.audit-item{display:flex;align-items:flex-start;gap:12px;padding:12px 20px;border-bottom:1px solid rgba(26,46,82,.4)}
+.audit-item:last-child{border-bottom:none}
+.audit-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;opacity:.6}
+.audit-action{font-family:var(--font-mono);font-size:.8rem;color:var(--text);margin-bottom:3px}
+.audit-target{color:var(--accent);font-family:var(--font-mono);font-size:.78rem}
+.audit-meta{font-size:.74rem;color:var(--text-muted)}
+.flash{padding:10px 16px;border-radius:8px;margin-bottom:16px;font-size:.83rem}
+.flash-success{background:rgba(78,255,197,.1);border:1px solid rgba(78,255,197,.3);color:var(--accent)}
+.flash-error{background:rgba(255,93,115,.1);border:1px solid rgba(255,93,115,.3);color:var(--danger)}
+.empty{padding:40px;text-align:center}
+.empty-icon{font-size:2rem;color:var(--border);margin-bottom:8px}
+.empty-text{color:var(--text-muted);font-size:.85rem}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;min-width:440px;max-width:520px;width:90%}
+.modal-title{font-size:1rem;font-weight:600;margin-bottom:20px;color:var(--text)}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">⬡ WCP360</div>
+    <div class="logo-sub">Control Panel v0.1.0</div>
+  </div>
+  <nav>
+    <a href="/admin/" class="nav-item{{if eq .Page "dashboard"}} active{{end}}">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/tenants" class="nav-item{{if eq .Page "tenants"}} active{{end}}">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
+      Tenants
+    </a>
+    <a href="/admin/audit" class="nav-item{{if eq .Page "audit"}} active{{end}}">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Audit Log
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="admin-tag">{{ .Admin }}</div>
+  </div>
+</div>
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title">{{template "title" .}}</span>
+    <form method="POST" action="/admin/logout" style="margin:0">
+      <button type="submit" class="logout-btn">Sign out</button>
+    </form>
+  </div>
+  <div class="content">
+    {{template "content" .}}
+  </div>
+</div>
+</body>
+</html>
+{{end}}

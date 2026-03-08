@@ -1,0 +1,17 @@
+# ======================================================================
+# WCP 360 | V0.1.0 | caddy/Caddyfile.dev
+# Development: HTTP only, no TLS, no FrankenPHP
+# Usage: caddy run --config caddy/Caddyfile.dev
+# ======================================================================
+
+{
+    admin off
+    auto_https off
+}
+
+:80 {
+    reverse_proxy localhost:8080 {
+        header_up X-Real-IP {remote_host}
+    }
+    log { output stderr; level DEBUG }
+}

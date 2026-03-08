@@ -1,0 +1,44 @@
+{{define "title"}}Dashboard{{end}}
+{{define "content"}}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-sub">Overview of your hosting platform</p>
+  </div>
+</div>
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Tenants</div>
+    <div class="stat-value">{{.Stats.TotalTenants}}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Active</div>
+    <div class="stat-value" style="color:#4EFFC5">{{.Stats.ActiveTenants}}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Suspended</div>
+    <div class="stat-value" style="color:#FFB547">{{.Stats.SuspendedTenants}}</div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Recent Activity</span>
+    <a href="/admin/audit" style="font-size:.75rem;color:var(--text-muted);text-decoration:none">View all →</a>
+  </div>
+  {{range .Stats.RecentAudit}}
+  <div class="audit-item">
+    <div class="audit-dot"></div>
+    <div style="flex:1">
+      <div class="audit-action">{{.Action}}</div>
+      <div class="audit-meta">
+        actor: <span class="audit-target">{{.Actor}}</span>
+        {{if .Target}}· target: <span class="audit-target">{{.Target}}</span>{{end}}
+      </div>
+    </div>
+    <div class="mono" style="font-size:.72rem;color:var(--text-muted);white-space:nowrap;margin-left:12px">{{.CreatedAt}}</div>
+  </div>
+  {{else}}
+  <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No activity yet.</div></div>
+  {{end}}
+</div>
+{{end}}

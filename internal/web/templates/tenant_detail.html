@@ -1,0 +1,123 @@
+{{define "title"}}Tenant · {{.Tenant.Username}}{{end}}
+{{define "content"}}
+<div class="page-header">
+  <div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+      <a href="/admin/tenants" style="color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem;text-decoration:none">← Tenants</a>
+      <span style="color:var(--border)">/</span>
+      <span class="mono" style="color:var(--text)">{{.Tenant.Username}}</span>
+    </div>
+    <h1 class="page-title">{{.Tenant.Username}}</h1>
+    <p class="page-sub">tenant.id #{{.Tenant.ID}} · created {{.Tenant.CreatedAt.Format "2006-01-02"}}</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span id="status-badge" class="badge badge-{{.Tenant.Status}}" style="font-size:.85rem;padding:5px 14px">{{.Tenant.Status}}</span>
+    <button hx-post="/admin/tenants/{{.Tenant.ID}}/toggle-status" hx-target="#status-badge" hx-swap="outerHTML" hx-confirm="Toggle status for {{.Tenant.Username}}?" class="btn btn-ghost" style="font-size:.78rem;padding:5px 12px">Toggle</button>
+  </div>
+</div>
+{{if .Flash.Success}}<div class="flash flash-success">✓ {{.Flash.Success}}</div>{{end}}
+{{if .Flash.Error}}<div class="flash flash-error">✕ {{.Flash.Error}}</div>{{end}}
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+  <div class="card" style="padding:22px">
+    <div class="stat-label" style="margin-bottom:14px">Identity</div>
+    <table style="width:100%;border-collapse:collapse">
+      <tr><td class="form-label" style="padding:6px 0;width:120px">Username</td><td class="mono">{{.Tenant.Username}}</td></tr>
+      <tr><td class="form-label" style="padding:6px 0">Email</td><td style="color:var(--text-muted);font-size:.88em">{{.Tenant.Email}}</td></tr>
+      <tr><td class="form-label" style="padding:6px 0">Home Dir</td><td class="mono" style="font-size:.82em;color:var(--text-muted)">{{.Tenant.HomeDir}}</td></tr>
+      <tr><td class="form-label" style="padding:6px 0">Updated</td><td class="mono" style="font-size:.82em;color:var(--text-muted)">{{.Tenant.UpdatedAt.Format "2006-01-02 15:04"}}</td></tr>
+    </table>
+  </div>
+  <div class="card" style="padding:22px">
+    <div class="stat-label" style="margin-bottom:14px">Quotas &amp; Plan</div>
+    <table style="width:100%;border-collapse:collapse">
+      <tr><td class="form-label" style="padding:6px 0;width:120px">Plan</td><td><span class="badge badge-active" style="border-color:var(--border)">{{.Tenant.Plan}}</span></td></tr>
+      <tr><td class="form-label" style="padding:6px 0">Disk Quota</td><td class="mono">{{.Tenant.DiskQuotaMB}} MB</td></tr>
+      <tr><td class="form-label" style="padding:6px 0">Bandwidth</td><td class="mono">{{.Tenant.BandwidthMB}} MB</td></tr>
+      <tr><td class="form-label" style="padding:6px 0">Max Sites</td><td class="mono">{{.Tenant.MaxSites}}</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:24px">
+  <div class="card-header"><span class="card-title">Edit Tenant</span></div>
+  <div style="padding:22px">
+    <form method="POST" action="/admin/tenants/{{.Tenant.ID}}/update">
+      <div class="form-row" style="margin-bottom:14px">
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="active"    {{if eq .Tenant.Status "active"   }}selected{{end}}>Active</option>
+            <option value="suspended" {{if eq .Tenant.Status "suspended"}}selected{{end}}>Suspended</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Plan</label>
+          <select name="plan" class="form-select">
+            <option value="starter"  {{if eq .Tenant.Plan "starter" }}selected{{end}}>Starter</option>
+            <option value="pro"      {{if eq .Tenant.Plan "pro"     }}selected{{end}}>Pro</option>
+            <option value="business" {{if eq .Tenant.Plan "business"}}selected{{end}}>Business</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" style="margin-bottom:14px">
+        <div class="form-group">
+          <label class="form-label">Disk Quota (MB)</label>
+          <input type="number" name="disk_quota_mb" class="form-input" value="{{.Tenant.DiskQuotaMB}}" min="100" max="1048576">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bandwidth (MB)</label>
+          <input type="number" name="bandwidth_mb" class="form-input" value="{{.Tenant.BandwidthMB}}" min="1024">
+        </div>
+      </div>
+      <div class="form-row" style="margin-bottom:20px">
+        <div class="form-group">
+          <label class="form-label">Max Sites</label>
+          <input type="number" name="max_sites" class="form-input" value="{{.Tenant.MaxSites}}" min="1" max="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" value="{{.Tenant.Email}}">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button type="submit" class="btn btn-primary">Save Changes →</button>
+        <a href="/admin/tenants" class="btn btn-ghost">Cancel</a>
+        <span style="flex:1"></span>
+        <form method="POST" action="/admin/tenants/{{.Tenant.ID}}/delete" style="margin:0" onsubmit="return confirm('Delete {{.Tenant.Username}}? (soft-delete)')">
+          <button type="submit" class="btn-danger-sm">Delete Tenant</button>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Audit History</span>
+    <form method="GET" action="/admin/tenants/{{.Tenant.ID}}" style="display:flex;align-items:center;gap:8px">
+      <select name="audit_limit" class="form-select" style="width:auto;padding:5px 10px;font-size:.78rem" onchange="this.form.submit()">
+        <option value="10"  {{if eq .AuditLimit 10 }}selected{{end}}>10 entries</option>
+        <option value="25"  {{if eq .AuditLimit 25 }}selected{{end}}>25 entries</option>
+        <option value="50"  {{if eq .AuditLimit 50 }}selected{{end}}>50 entries</option>
+        <option value="100" {{if eq .AuditLimit 100}}selected{{end}}>100 entries</option>
+      </select>
+      <span class="mono" style="font-size:.72rem;color:var(--text-muted)">showing {{len .AuditEntries}}</span>
+    </form>
+  </div>
+  {{if .AuditEntries}}
+    {{range .AuditEntries}}
+    <div class="audit-item">
+      <div class="audit-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div class="audit-action">{{.Action}}</div>
+        <div class="audit-meta">actor: <span class="audit-target">{{.Actor}}</span>{{if .Detail}} · <span class="mono" style="font-size:.78em">{{.Detail}}</span>{{end}}{{if .IPAddress}} · ip: <span class="mono">{{.IPAddress}}</span>{{end}}</div>
+      </div>
+      <div class="mono" style="font-size:.72rem;color:var(--text-muted);white-space:nowrap;margin-left:12px">{{.CreatedAt}}</div>
+    </div>
+    {{end}}
+  {{else}}
+  <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No audit entries for this tenant yet.</div></div>
+  {{end}}
+</div>
+{{end}}

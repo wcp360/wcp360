@@ -1,0 +1,33 @@
+{{define "title"}}Audit Log{{end}}
+{{define "content"}}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Audit Log</h1>
+    <p class="page-sub">All platform activity · showing latest {{.Limit}} entries</p>
+  </div>
+  <form method="GET" action="/admin/audit" style="display:flex;gap:8px;align-items:center">
+    <select name="limit" class="form-select" style="width:auto;padding:8px 12px" onchange="this.form.submit()">
+      <option value="50"  {{if eq .Limit 50 }}selected{{end}}>50 entries</option>
+      <option value="100" {{if eq .Limit 100}}selected{{end}}>100 entries</option>
+      <option value="200" {{if eq .Limit 200}}selected{{end}}>200 entries</option>
+      <option value="500" {{if eq .Limit 500}}selected{{end}}>500 entries</option>
+    </select>
+  </form>
+</div>
+<div class="card">
+  {{if .Entries}}
+    {{range .Entries}}
+    <div class="audit-item">
+      <div class="audit-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div class="audit-action">{{.Action}}{{if .Target}} · <span class="audit-target">{{.Target}}</span>{{end}}</div>
+        <div class="audit-meta">actor: <span class="audit-target">{{.Actor}}</span>{{if .Detail}} · <span class="mono" style="font-size:.78em">{{.Detail}}</span>{{end}}{{if .IPAddress}} · ip: <span class="mono">{{.IPAddress}}</span>{{end}}</div>
+      </div>
+      <div class="mono" style="font-size:.72rem;color:var(--text-muted);white-space:nowrap;margin-left:12px">{{.CreatedAt}}</div>
+    </div>
+    {{end}}
+  {{else}}
+  <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No audit entries yet.</div></div>
+  {{end}}
+</div>
+{{end}}

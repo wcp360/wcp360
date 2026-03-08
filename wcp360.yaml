@@ -1,0 +1,39 @@
+# ======================================================================
+# WCP 360 – Configuration File
+# Creator: HADJ RAMDANE Yacine | V0.1.0
+# File: wcp360.yaml
+# Description: Main configuration — copy to /etc/wcp360/wcp360.yaml
+#              All values can be overridden with WCP360_* env variables.
+# ======================================================================
+
+# ── Core ────────────────────────────────────────────────────────────────
+listen_addr:    ":8080"
+env:            "development"       # development | production | test
+log_level:      "info"              # debug | info | warn | error
+database_path:  "./wcp360.db"       # prod: /var/lib/wcp360/state.db
+data_dir:       "./sites"           # prod: /srv/www
+domain:         "localhost:8080"
+
+# ── JWT ─────────────────────────────────────────────────────────────────
+# CHANGE THIS — must be at least 32 characters
+jwt_secret: "CHANGE_ME_use_openssl_rand_hex_32_chars!!"
+
+# ── Admin seed (first boot only) ────────────────────────────────────────
+admin_username: "admin"
+admin_email:    "admin@example.com"
+# Generate with: htpasswd -bnBC 12 "" yourpassword | tr -d ':\n'
+# Default password: "admin123" (CHANGE IN PRODUCTION)
+admin_password_hash: "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj3oW6J9BmZe"
+
+# ── SMTP (optional — email features disabled if smtp_host is empty) ──────
+# smtp_host:     "smtp.example.com"
+# smtp_port:     587
+# smtp_username: "noreply@example.com"
+# smtp_password: "CHANGE_ME"
+# smtp_from:     "noreply@example.com"
+# smtp_starttls: true
+
+# ── Redis (optional — graceful degradation if unavailable) ───────────────
+# redis_addr:     "127.0.0.1:6379"
+# redis_password: ""
+# redis_db:       0
