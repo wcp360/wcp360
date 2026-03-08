@@ -1,0 +1,24 @@
+site_name: WCP360 Documentation
+site_url: https://docs.wcp360.com
+site_description: WCP360 Modern Web Control Panel — Go · Caddy · FrankenPHP
+site_author: HADJ RAMDANE Yacine
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: teal
+      accent: teal
+  font:
+    text: DM Sans
+    code: DM Mono
+
+nav:
+  - Home: en/index.md
+  - Architecture: en/architecture.md
+  - Changelog: en/changelog.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences

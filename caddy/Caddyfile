@@ -1,0 +1,44 @@
+# ======================================================================
+# WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
+# ======================================================================
+# Creator: HADJ RAMDANE Yacine | V0.0.5
+# File: caddy/Caddyfile
+# Description: Caddy reverse-proxy config — TLS termination, HTTP/3,
+#              security headers, reverse proxy to Go backend on :8080.
+# ======================================================================
+
+{
+    admin off
+    auto_https off  # disable in dev; remove for production
+}
+
+:443 {
+    tls /etc/wcp360/tls/cert.pem /etc/wcp360/tls/key.pem
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options    "nosniff"
+        X-Frame-Options           "DENY"
+        Referrer-Policy           "strict-origin-when-cross-origin"
+        Permissions-Policy        "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+
+    # Reverse proxy to Go backend
+    reverse_proxy localhost:8080 {
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Real-IP         {remote_host}
+    }
+
+    log {
+        output  file /var/log/wcp360/caddy-access.log
+        format  json
+        level   INFO
+    }
+}
+
+# Dev: plain HTTP on :8080 direct
+:8080 {
+    reverse_proxy localhost:9090
+}

@@ -1,0 +1,15 @@
+# ======================================================================
+# WCP 360 – .gitignore | V0.0.5
+# ======================================================================
+bin/
+*.exe
+*.db *.db-shm *.db-wal
+wcp360.yaml
+.env
+coverage.out coverage.html
+tmp/
+*.log logs/
+node_modules/
+web/*/dist/
+.DS_Store Thumbs.db
+.vscode/ .idea/ *.swp *.swo

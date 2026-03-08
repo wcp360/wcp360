@@ -1,0 +1,52 @@
+{{define "title"}}Dashboard{{end}}
+{{define "content"}}
+<div class="page-header">
+  <div><h1 class="page-title">Dashboard</h1><p class="page-sub">system.overview / real-time</p></div>
+</div>
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Tenants</div>
+    <div class="stat-value">{{.Stats.TotalTenants}}</div>
+    <div class="stat-desc">registered accounts</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Active</div>
+    <div class="stat-value">{{.Stats.ActiveTenants}}</div>
+    <div class="stat-desc">serving traffic</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Suspended</div>
+    <div class="stat-value {{if gt .Stats.SuspendedTenants 0}}warn{{end}}">{{.Stats.SuspendedTenants}}</div>
+    <div class="stat-desc">access blocked</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Version</div>
+    <div class="stat-value muted" style="font-size:1.2rem;margin-top:4px">v0.0.5</div>
+    <div class="stat-desc">Go · Caddy · FrankenPHP</div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Recent Activity</span>
+    <a href="/admin/audit" class="btn btn-ghost" style="font-size:.8rem;padding:5px 12px">View all →</a>
+  </div>
+  {{if .Stats.RecentAudit}}
+    {{range .Stats.RecentAudit}}
+    <div class="audit-item">
+      <div class="audit-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div class="audit-action">{{.Action}}</div>
+        <div class="audit-meta">
+          actor: <span class="audit-target">{{.Actor}}</span> ·
+          target: <span class="audit-target">{{if .Target}}{{.Target}}{{else}}—{{end}}</span>
+          {{if .IPAddress}}· ip: <span class="mono">{{.IPAddress}}</span>{{end}}
+        </div>
+      </div>
+      <div class="mono" style="font-size:.72rem;color:var(--text-muted);white-space:nowrap">{{.CreatedAt}}</div>
+    </div>
+    {{end}}
+  {{else}}
+    <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No activity recorded yet.</div></div>
+  {{end}}
+</div>
+{{end}}
