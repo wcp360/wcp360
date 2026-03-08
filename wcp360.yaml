@@ -1,0 +1,26 @@
+# ======================================================================
+# WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
+# ======================================================================
+# Creator: HADJ RAMDANE Yacine
+# Contact: yacine@wcp360.com
+# Version: V0.0.5
+# Website: https://www.wcp360.com
+# File: wcp360.yaml
+# Description: Example dev configuration. Copy to /etc/wcp360/wcp360.yaml.
+#              NEVER commit real passwords or secrets to Git.
+# ======================================================================
+
+listen_addr: ":8080"
+env: "development"
+log_level: "debug"
+database_path: "./wcp360.db"
+data_dir: "./data/www"
+
+# Generate: openssl rand -hex 32
+jwt_secret: "CHANGE_ME_generate_with_openssl_rand_hex_32_xxxxxxxxxxxxxxxx"
+
+admin_email: "admin@example.com"
+admin_username: "admin"
+
+# Generate: htpasswd -nbB admin 'yourpassword' | cut -d: -f2
+admin_password_hash: "$2b$12$CHANGE_THIS_WITH_A_REAL_BCRYPT_HASH_GENERATED_ABOVE"
