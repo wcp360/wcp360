@@ -1,8 +1,53 @@
 // ======================================================================
+<<<<<<< HEAD
 // WCP 360 | V0.1.0 | internal/database/pruner.go
+=======
+// WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
+// ======================================================================
+// Creator: HADJ RAMDANE Yacine
+// Contact: yacine@wcp360.com
+// Version: V0.0.5
+// Website: https://www.wcp360.com
+// File: internal/database/pruner.go
+// Description: Background goroutine pruning expired sessions every hour.
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package database
 
+<<<<<<< HEAD
 // StartPruner is defined on *DB in db.go.
 // This file is kept for organisational clarity.
+=======
+import (
+	"context"
+	"log/slog"
+	"time"
+
+	"github.com/wcp360/wcp360/internal/database/queries"
+)
+
+func (db *DB) StartPruner(ctx context.Context, interval time.Duration) {
+	go func() {
+		slog.Info("session pruner started", "interval", interval)
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				slog.Info("session pruner stopped")
+				return
+			case <-ticker.C:
+				pruneCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+				n, err := queries.PruneExpiredSessions(pruneCtx, db.DB)
+				cancel()
+				if err != nil {
+					slog.Error("session pruner error", "err", err)
+				} else if n > 0 {
+					slog.Info("session pruner: removed expired sessions", "count", n)
+				}
+			}
+		}
+	}()
+}
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee

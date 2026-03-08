@@ -1,5 +1,6 @@
 # Architecture
 
+<<<<<<< HEAD
 ## Overview
 
 WCP360 is a single-binary Linux hosting control panel.
@@ -92,3 +93,27 @@ Request → Caddy → Go HTTP/2
 - **HTMX**: Used for the status toggle fragment swap. Full page fallback always works without JS.
 - **FrankenPHP**: PHP worker mode keeps processes resident — TTFB < 50ms for WordPress.
 - **No ORMs**: All database access uses typed query functions with `database/sql`.
+=======
+## Security Invariants
+
+| ID | Description |
+|----|-------------|
+| INV-1 | JWT HS256, 24h TTL, JTI blocklist |
+| INV-2 | bcrypt cost=12, timing-safe auth |
+| INV-3 | Secrets never in logs |
+| INV-4 | No admin endpoint without Bearer or cookie auth |
+| INV-5 | Cookie: HttpOnly + SameSite=Strict |
+| INV-6 | SQL: parameterised queries only |
+| INV-7 | FHS: /opt /etc /var/lib /srv/www |
+| INV-8 | audit_log: append-only, no DELETE/UPDATE |
+
+## FHS Layout
+
+```
+/opt/wcp360/bin/wcp360    ← compiled binary
+/etc/wcp360/wcp360.yaml   ← config (chmod 600)
+/var/lib/wcp360/state.db  ← SQLite database
+/var/log/wcp360/          ← logs
+/srv/www/<username>/      ← tenant home dirs
+```
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee

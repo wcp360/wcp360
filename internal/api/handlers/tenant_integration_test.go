@@ -3,7 +3,11 @@
 // ======================================================================
 // Creator: HADJ RAMDANE Yacine
 // Contact: yacine@wcp360.com
+<<<<<<< HEAD
 // Version: V0.1.0
+=======
+// Version: V0.0.5
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // Website: https://www.wcp360.com
 // File: internal/api/handlers/tenant_integration_test.go
 // Description: Full httptest integration tests — real JWT + real SQLite DB.

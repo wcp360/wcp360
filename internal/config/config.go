@@ -3,10 +3,17 @@
 // ======================================================================
 // Creator: HADJ RAMDANE Yacine
 // Contact: yacine@wcp360.com
+<<<<<<< HEAD
 // Version: V0.1.0
 // Website: https://www.wcp360.com
 // File: internal/config/config.go
 // Description: Configuration loader — YAML + WCP360_* env overrides.
+=======
+// Version: V0.0.5
+// Website: https://www.wcp360.com
+// File: internal/config/config.go
+// Description: Configuration loader — YAML file + environment variable overrides.
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package config
@@ -29,6 +36,7 @@ type Config struct {
 	AdminEmail        string `yaml:"admin_email"`
 	AdminUsername     string `yaml:"admin_username"`
 	AdminPasswordHash string `yaml:"admin_password_hash"`
+<<<<<<< HEAD
 	Domain            string `yaml:"domain"`
 	SMTPHost          string `yaml:"smtp_host"`
 	SMTPPort          int    `yaml:"smtp_port"`
@@ -39,6 +47,8 @@ type Config struct {
 	RedisAddr         string `yaml:"redis_addr"`
 	RedisPassword     string `yaml:"redis_password"`
 	RedisDB           int    `yaml:"redis_db"`
+=======
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 }
 
 var searchPaths = []string{
@@ -68,6 +78,7 @@ func Load() (*Config, error) {
 
 func defaults() *Config {
 	return &Config{
+<<<<<<< HEAD
 		ListenAddr:   ":8080",
 		Env:          "production",
 		LogLevel:     "info",
@@ -77,11 +88,23 @@ func defaults() *Config {
 		SMTPPort:     587,
 		SMTPStartTLS: true,
 		Domain:       "localhost",
+=======
+		ListenAddr:    ":8080",
+		Env:           "production",
+		LogLevel:      "info",
+		DatabasePath:  "/var/lib/wcp360/state.db",
+		DataDir:       "/srv/www",
+		AdminUsername: "admin",
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 	}
 }
 
 func applyEnvOverrides(cfg *Config) {
+<<<<<<< HEAD
 	strMap := map[string]*string{
+=======
+	envMap := map[string]*string{
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 		"WCP360_LISTEN_ADDR":         &cfg.ListenAddr,
 		"WCP360_ENV":                 &cfg.Env,
 		"WCP360_LOG_LEVEL":           &cfg.LogLevel,
@@ -91,6 +114,7 @@ func applyEnvOverrides(cfg *Config) {
 		"WCP360_ADMIN_EMAIL":         &cfg.AdminEmail,
 		"WCP360_ADMIN_USERNAME":      &cfg.AdminUsername,
 		"WCP360_ADMIN_PASSWORD_HASH": &cfg.AdminPasswordHash,
+<<<<<<< HEAD
 		"WCP360_DOMAIN":              &cfg.Domain,
 		"WCP360_SMTP_HOST":           &cfg.SMTPHost,
 		"WCP360_SMTP_USERNAME":       &cfg.SMTPUsername,
@@ -100,6 +124,10 @@ func applyEnvOverrides(cfg *Config) {
 		"WCP360_REDIS_PASSWORD":      &cfg.RedisPassword,
 	}
 	for key, ptr := range strMap {
+=======
+	}
+	for key, ptr := range envMap {
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 		if v := os.Getenv(key); v != "" {
 			*ptr = v
 		}
@@ -125,6 +153,7 @@ func (c *Config) validate() error {
 		return fmt.Errorf("admin_password_hash is required in production")
 	}
 	if c.AdminPasswordHash != "" && !strings.HasPrefix(c.AdminPasswordHash, "$2") {
+<<<<<<< HEAD
 		return fmt.Errorf("admin_password_hash must be a bcrypt hash")
 	}
 	if c.SMTPPort < 1 || c.SMTPPort > 65535 {
@@ -136,3 +165,9 @@ func (c *Config) validate() error {
 func (c *Config) IsProd() bool       { return c.Env == "production" }
 func (c *Config) EmailEnabled() bool  { return c.SMTPHost != "" }
 func (c *Config) RedisEnabled() bool  { return c.RedisAddr != "" }
+=======
+		return fmt.Errorf("admin_password_hash must be a bcrypt hash (starts with $2a$, $2b$, or $2y$)")
+	}
+	return nil
+}
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee

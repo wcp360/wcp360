@@ -1,5 +1,16 @@
 // ======================================================================
+<<<<<<< HEAD
 // WCP 360 | V0.1.0 | internal/database/queries/audit.go
+=======
+// WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
+// ======================================================================
+// Creator: HADJ RAMDANE Yacine
+// Contact: yacine@wcp360.com
+// Version: V0.0.5
+// Website: https://www.wcp360.com
+// File: internal/database/queries/audit.go
+// Description: Audit log — append-only inserts, never UPDATE/DELETE (INV-8).
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package queries
@@ -9,7 +20,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log/slog"
+<<<<<<< HEAD
 	"time"
+=======
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 )
 
 const (
@@ -21,6 +35,7 @@ const (
 	ActionTenantSuspend = "tenant.suspend"
 )
 
+<<<<<<< HEAD
 type AuditEntry struct {
 	ID        int64     `json:"id"`
 	Actor     string    `json:"actor"`
@@ -38,11 +53,23 @@ func LogAction(ctx context.Context, db *sql.DB, actor, action, target, detail, i
 		actor, action, target, detail, ip)
 	if err != nil {
 		slog.Warn("audit: log action failed", "action", action, "err", err)
+=======
+// LogAction inserts into audit_log. Fire-and-forget — never blocks caller.
+func LogAction(ctx context.Context, db *sql.DB, actor, action, target, detail, ip string) {
+	if _, err := db.ExecContext(ctx,
+		`INSERT INTO audit_log (actor, action, target, detail, ip_address) VALUES (?, ?, ?, ?, ?)`,
+		actor, action, target, detail, ip); err != nil {
+		slog.Error("audit_log: insert failed", "actor", actor, "action", action, "err", err)
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 	}
 }
 
 func GetAuditLog(ctx context.Context, db *sql.DB, limit int) ([]AuditEntry, error) {
+<<<<<<< HEAD
 	if limit <= 0 || limit > 500 {
+=======
+	if limit <= 0 || limit > 1000 {
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 		limit = 50
 	}
 	rows, err := db.QueryContext(ctx,
@@ -55,8 +82,12 @@ func GetAuditLog(ctx context.Context, db *sql.DB, limit int) ([]AuditEntry, erro
 	var entries []AuditEntry
 	for rows.Next() {
 		var e AuditEntry
+<<<<<<< HEAD
 		if err := rows.Scan(&e.ID, &e.Actor, &e.Action, &e.Target,
 			&e.Detail, &e.IPAddress, &e.CreatedAt); err != nil {
+=======
+		if err := rows.Scan(&e.ID, &e.Actor, &e.Action, &e.Target, &e.Detail, &e.IPAddress, &e.CreatedAt); err != nil {
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 			return nil, fmt.Errorf("queries.GetAuditLog scan: %w", err)
 		}
 		entries = append(entries, e)
@@ -64,6 +95,7 @@ func GetAuditLog(ctx context.Context, db *sql.DB, limit int) ([]AuditEntry, erro
 	return entries, rows.Err()
 }
 
+<<<<<<< HEAD
 func GetAuditLogByTarget(ctx context.Context, db *sql.DB, target string, limit int) ([]AuditEntry, error) {
 	if limit <= 0 || limit > 500 {
 		limit = 50
@@ -114,4 +146,14 @@ func GetAuditLogPaginated(ctx context.Context, db *sql.DB, page, perPage int) (*
 		ap.Entries = append(ap.Entries, e)
 	}
 	return &ap, rows.Err()
+=======
+type AuditEntry struct {
+	ID        int64  `json:"id"`
+	Actor     string `json:"actor"`
+	Action    string `json:"action"`
+	Target    string `json:"target"`
+	Detail    string `json:"detail,omitempty"`
+	IPAddress string `json:"ip_address,omitempty"`
+	CreatedAt string `json:"created_at"`
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 }

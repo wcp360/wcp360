@@ -1,10 +1,22 @@
 // ======================================================================
+<<<<<<< HEAD
 // WCP 360 | V0.1.0 | internal/api/handlers/handlers.go
+=======
+// WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
+// ======================================================================
+// Creator: HADJ RAMDANE Yacine
+// Contact: yacine@wcp360.com
+// Version: V0.0.5
+// Website: https://www.wcp360.com
+// File: internal/api/handlers/handlers.go
+// Description: Handlers struct constructor — holds shared cfg + db.
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package handlers
 
 import (
+<<<<<<< HEAD
 	"net/http"
 
 	"github.com/wcp360/wcp360/internal/api/middleware"
@@ -30,4 +42,17 @@ func actorFromContext(r *http.Request) string {
 		return claims.Username
 	}
 	return "system"
+=======
+	"github.com/wcp360/wcp360/internal/config"
+	"github.com/wcp360/wcp360/internal/database"
+)
+
+type Handlers struct {
+	cfg *config.Config
+	db  *database.DB
+}
+
+func New(cfg *config.Config, db *database.DB) *Handlers {
+	return &Handlers{cfg: cfg, db: db}
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 }

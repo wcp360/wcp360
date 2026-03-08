@@ -1,5 +1,16 @@
 // ======================================================================
+<<<<<<< HEAD
 // WCP 360 | V0.1.0 | internal/api/handlers/helpers.go
+=======
+// WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
+// ======================================================================
+// Creator: HADJ RAMDANE Yacine
+// Contact: yacine@wcp360.com
+// Version: V0.0.5
+// Website: https://www.wcp360.com
+// File: internal/api/handlers/helpers.go
+// Description: Shared HTTP helpers — JSON writers, pagination, param parsers.
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package handlers
@@ -11,9 +22,12 @@ import (
 	"math"
 	"net/http"
 	"strconv"
+<<<<<<< HEAD
 	"strings"
 
 	"github.com/wcp360/wcp360/internal/database/queries"
+=======
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 )
 
 type errorResponse struct{ Error string `json:"error"` }
@@ -26,10 +40,24 @@ type Pagination struct {
 }
 
 func NewPagination(page, perPage, total int) Pagination {
+<<<<<<< HEAD
 	tp := 1
 	if perPage > 0 { tp = int(math.Ceil(float64(total) / float64(perPage))) }
 	if tp < 1 { tp = 1 }
 	return Pagination{Page: page, PerPage: perPage, Total: total, TotalPages: tp}
+=======
+	totalPages := 1
+	if perPage > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(perPage)))
+	}
+	if totalPages < 1 { totalPages = 1 }
+	return Pagination{Page: page, PerPage: perPage, Total: total, TotalPages: totalPages}
+}
+
+type paginatedResponse[T any] struct {
+	Data       []T        `json:"data"`
+	Pagination Pagination `json:"pagination"`
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 }
 
 func writeJSON(w http.ResponseWriter, status int, v any) {
@@ -44,6 +72,14 @@ func writeError(w http.ResponseWriter, status int, message string) {
 	writeJSON(w, status, errorResponse{Error: message})
 }
 
+<<<<<<< HEAD
+=======
+func writePaginated[T any](w http.ResponseWriter, items []T, pag Pagination) {
+	if items == nil { items = []T{} }
+	writeJSON(w, http.StatusOK, paginatedResponse[T]{Data: items, Pagination: pag})
+}
+
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 func parseIDParam(w http.ResponseWriter, r *http.Request, name string) (int64, bool) {
 	raw := r.PathValue(name)
 	if raw == "" {
@@ -69,6 +105,7 @@ func parsePaginationParams(r *http.Request) (page, perPage int) {
 	return
 }
 
+<<<<<<< HEAD
 func parseLimit(r *http.Request, def, max int) int {
 	v := r.URL.Query().Get("limit")
 	if v == "" { return def }
@@ -90,6 +127,8 @@ func parseFilterParams(r *http.Request) queries.TenantFilter {
 	return f
 }
 
+=======
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 func decodeJSON(w http.ResponseWriter, r *http.Request, v any) bool {
 	if err := json.NewDecoder(r.Body).Decode(v); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid JSON body: "+err.Error())

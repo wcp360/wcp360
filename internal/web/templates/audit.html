@@ -1,6 +1,7 @@
 {{define "title"}}Audit Log{{end}}
 {{define "content"}}
 <div class="page-header">
+<<<<<<< HEAD
   <div>
     <h1 class="page-title">Audit Log</h1>
     <p class="page-sub">All platform activity · showing latest {{.Limit}} entries</p>
@@ -11,23 +12,53 @@
       <option value="100" {{if eq .Limit 100}}selected{{end}}>100 entries</option>
       <option value="200" {{if eq .Limit 200}}selected{{end}}>200 entries</option>
       <option value="500" {{if eq .Limit 500}}selected{{end}}>500 entries</option>
+=======
+  <div><h1 class="page-title">Audit Log</h1><p class="page-sub">append-only · immutable · INV-8 compliant</p></div>
+  <form method="GET" action="/admin/audit" style="display:flex;gap:8px;align-items:center">
+    <select name="limit" class="form-select" style="width:auto;padding:7px 12px" onchange="this.form.submit()">
+      <option value="25"  {{if eq .Limit 25 }}selected{{end}}>25 entries</option>
+      <option value="50"  {{if eq .Limit 50 }}selected{{end}}>50 entries</option>
+      <option value="100" {{if eq .Limit 100}}selected{{end}}>100 entries</option>
+      <option value="200" {{if eq .Limit 200}}selected{{end}}>200 entries</option>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
     </select>
   </form>
 </div>
 <div class="card">
+<<<<<<< HEAD
+=======
+  <div class="card-header">
+    <span class="card-title">Activity Timeline</span>
+    <span class="mono" style="font-size:.75rem;color:var(--text-muted)">latest {{.Limit}} entries</span>
+  </div>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
   {{if .Entries}}
     {{range .Entries}}
     <div class="audit-item">
       <div class="audit-dot"></div>
       <div style="flex:1;min-width:0">
+<<<<<<< HEAD
         <div class="audit-action">{{.Action}}{{if .Target}} · <span class="audit-target">{{.Target}}</span>{{end}}</div>
         <div class="audit-meta">actor: <span class="audit-target">{{.Actor}}</span>{{if .Detail}} · <span class="mono" style="font-size:.78em">{{.Detail}}</span>{{end}}{{if .IPAddress}} · ip: <span class="mono">{{.IPAddress}}</span>{{end}}</div>
+=======
+        <div class="audit-action">{{.Action}}</div>
+        <div class="audit-meta">
+          <span>actor: <span class="audit-target">{{.Actor}}</span></span>
+          {{if .Target}}· <span>target: <span class="audit-target">{{.Target}}</span></span>{{end}}
+          {{if .Detail}}· <span class="mono" style="font-size:.78em">{{.Detail}}</span>{{end}}
+          {{if .IPAddress}}· <span>ip: <span class="mono">{{.IPAddress}}</span></span>{{end}}
+        </div>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
       </div>
       <div class="mono" style="font-size:.72rem;color:var(--text-muted);white-space:nowrap;margin-left:12px">{{.CreatedAt}}</div>
     </div>
     {{end}}
   {{else}}
+<<<<<<< HEAD
   <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No audit entries yet.</div></div>
+=======
+    <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No audit entries yet.</div></div>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
   {{end}}
 </div>
 {{end}}

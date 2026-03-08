@@ -3,15 +3,22 @@
 <div class="page-header">
   <div>
     <h1 class="page-title">Tenants</h1>
+<<<<<<< HEAD
     <p class="page-sub">{{.Pagination.Total}} accounts · page {{.Pagination.Page}}/{{.Pagination.TotalPages}}</p>
   </div>
   <button class="btn btn-primary" onclick="document.getElementById('modal-create').classList.add('open')">
+=======
+    <p class="page-sub">{{.Pagination.Total}} total accounts · page {{.Pagination.Page}}/{{.Pagination.TotalPages}}</p>
+  </div>
+  <button class="btn btn-primary" onclick="openModal('modal-create')">
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
     New Tenant
   </button>
 </div>
 {{if .Flash.Success}}<div class="flash flash-success">✓ {{.Flash.Success}}</div>{{end}}
 {{if .Flash.Error}}<div class="flash flash-error">✕ {{.Flash.Error}}</div>{{end}}
+<<<<<<< HEAD
 
 <form method="GET" action="/admin/tenants" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
   <input type="text" name="search" value="{{.Filter.Search}}" placeholder="Search username or email…" class="form-input" style="flex:1;min-width:180px;max-width:280px">
@@ -38,11 +45,25 @@
     <thead>
       <tr><th>ID</th><th>Username</th><th>Email</th><th>Plan</th><th>Status</th><th>Disk (MB)</th><th>Sites</th><th>Created</th><th></th></tr>
     </thead>
+=======
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">All Tenants</span>
+    <span class="mono" style="font-size:.75rem;color:var(--text-muted)">showing {{.From}}–{{.To}} of {{.Pagination.Total}}</span>
+  </div>
+  {{if .Tenants}}
+  <table class="tbl">
+    <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Plan</th><th>Status</th><th>Disk (MB)</th><th>Sites</th><th>Created</th><th></th></tr></thead>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
     <tbody>
       {{range .Tenants}}
       <tr>
         <td><span class="mono" style="color:var(--text-muted)">#{{.ID}}</span></td>
+<<<<<<< HEAD
         <td><a href="/admin/tenants/{{.ID}}" style="color:var(--accent);font-family:var(--font-mono);text-decoration:none;border-bottom:1px solid rgba(78,255,197,.25)">{{.Username}}</a></td>
+=======
+        <td><span class="mono">{{.Username}}</span></td>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
         <td style="color:var(--text-muted);font-size:.84em">{{.Email}}</td>
         <td><span class="mono">{{.Plan}}</span></td>
         <td><span class="badge badge-{{.Status}}">{{.Status}}</span></td>
@@ -50,8 +71,13 @@
         <td class="mono">{{.MaxSites}}</td>
         <td class="mono" style="font-size:.78em;color:var(--text-muted)">{{.CreatedAt.Format "2006-01-02"}}</td>
         <td style="text-align:right;white-space:nowrap">
+<<<<<<< HEAD
           <a href="/admin/tenants/{{.ID}}" class="btn-danger-sm" style="color:var(--text-muted);border-color:var(--border);margin-right:4px">Edit</a>
           <form method="POST" action="/admin/tenants/{{.ID}}/delete" style="display:inline" onsubmit="return confirm('Delete {{.Username}}?')">
+=======
+          <form method="POST" action="/admin/tenants/{{.ID}}/delete"
+                onsubmit="return confirm('Delete tenant {{.Username}}? (soft-delete, reversible)')">
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
             <button type="submit" class="btn-danger-sm">Delete</button>
           </form>
         </td>
@@ -62,23 +88,35 @@
   <div class="pagination">
     <span class="pag-info">Page {{.Pagination.Page}} of {{.Pagination.TotalPages}}</span>
     <div class="pag-links">
+<<<<<<< HEAD
       {{$qs := buildQS "per_page" (printf "%d" .Pagination.PerPage) "search" .Filter.Search "status" .Filter.Status "plan" .Filter.Plan}}
       {{if gt .Pagination.Page 1}}
         <a href="/admin/tenants?page=1{{if $qs}}&{{$qs}}{{end}}" class="pag-link">«</a>
         <a href="/admin/tenants?page={{prev .Pagination.Page}}{{if $qs}}&{{$qs}}{{end}}" class="pag-link">‹</a>
+=======
+      {{if gt .Pagination.Page 1}}
+        <a href="/admin/tenants?page=1&per_page={{.Pagination.PerPage}}" class="pag-link">«</a>
+        <a href="/admin/tenants?page={{prev .Pagination.Page}}&per_page={{.Pagination.PerPage}}" class="pag-link">‹</a>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
       {{else}}
         <span class="pag-link disabled">«</span><span class="pag-link disabled">‹</span>
       {{end}}
       <span class="pag-link current">{{.Pagination.Page}}</span>
       {{if lt .Pagination.Page .Pagination.TotalPages}}
+<<<<<<< HEAD
         <a href="/admin/tenants?page={{next .Pagination.Page}}{{if $qs}}&{{$qs}}{{end}}" class="pag-link">›</a>
         <a href="/admin/tenants?page={{.Pagination.TotalPages}}{{if $qs}}&{{$qs}}{{end}}" class="pag-link">»</a>
+=======
+        <a href="/admin/tenants?page={{next .Pagination.Page}}&per_page={{.Pagination.PerPage}}" class="pag-link">›</a>
+        <a href="/admin/tenants?page={{.Pagination.TotalPages}}&per_page={{.Pagination.PerPage}}" class="pag-link">»</a>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
       {{else}}
         <span class="pag-link disabled">›</span><span class="pag-link disabled">»</span>
       {{end}}
     </div>
   </div>
   {{else}}
+<<<<<<< HEAD
   <div class="empty">
     <div class="empty-icon">⬡</div>
     <div class="empty-text">No tenants found.{{if or .Filter.Search .Filter.Status .Filter.Plan}} <a href="/admin/tenants" style="color:var(--accent)">Clear filters</a>{{end}}</div>
@@ -104,13 +142,43 @@
         <div class="form-group">
           <label class="form-label">Plan</label>
           <select name="plan" class="form-select"><option value="starter">Starter</option><option value="pro">Pro</option><option value="business">Business</option></select>
+=======
+  <div class="empty"><div class="empty-icon">⬡</div><div class="empty-text">No tenants yet. Create your first one.</div></div>
+  {{end}}
+</div>
+<div class="modal-overlay" id="modal-create">
+  <div class="modal">
+    <div class="modal-title"><div class="modal-title-dot"></div>Create New Tenant</div>
+    <form method="POST" action="/admin/tenants">
+      <div class="form-group">
+        <label class="form-label">Username <span style="color:var(--danger)">*</span></label>
+        <input type="text" name="username" class="form-input" pattern="[a-z][a-z0-9\-]{2,31}" placeholder="e.g. alice" required autofocus>
+        <div class="form-hint">3–32 chars, lowercase, digits, hyphens. No reserved names.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email <span style="color:var(--danger)">*</span></label>
+        <input type="email" name="email" class="form-input" placeholder="user@example.com" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Plan</label>
+          <select name="plan" class="form-select">
+            <option value="starter">Starter</option>
+            <option value="pro">Pro</option>
+            <option value="business">Business</option>
+          </select>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
         </div>
         <div class="form-group">
           <label class="form-label">Max Sites</label>
           <input type="number" name="max_sites" class="form-input" value="1" min="1" max="100">
         </div>
       </div>
+<<<<<<< HEAD
       <div class="form-row" style="margin-bottom:20px">
+=======
+      <div class="form-row">
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
         <div class="form-group">
           <label class="form-label">Disk Quota (MB)</label>
           <input type="number" name="disk_quota_mb" class="form-input" value="1024" min="100">
@@ -120,9 +188,15 @@
           <input type="number" name="bandwidth_mb" class="form-input" value="10240" min="1024">
         </div>
       </div>
+<<<<<<< HEAD
       <div style="display:flex;gap:10px">
         <button type="submit" class="btn btn-primary">Create Tenant</button>
         <button type="button" class="btn btn-ghost" onclick="document.getElementById('modal-create').classList.remove('open')">Cancel</button>
+=======
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('modal-create')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Tenant →</button>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
       </div>
     </form>
   </div>

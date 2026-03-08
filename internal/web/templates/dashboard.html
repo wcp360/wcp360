@@ -1,15 +1,20 @@
 {{define "title"}}Dashboard{{end}}
 {{define "content"}}
 <div class="page-header">
+<<<<<<< HEAD
   <div>
     <h1 class="page-title">Dashboard</h1>
     <p class="page-sub">Overview of your hosting platform</p>
   </div>
+=======
+  <div><h1 class="page-title">Dashboard</h1><p class="page-sub">system.overview / real-time</p></div>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 </div>
 <div class="stats-grid">
   <div class="stat-card">
     <div class="stat-label">Total Tenants</div>
     <div class="stat-value">{{.Stats.TotalTenants}}</div>
+<<<<<<< HEAD
   </div>
   <div class="stat-card">
     <div class="stat-label">Active</div>
@@ -18,11 +23,30 @@
   <div class="stat-card">
     <div class="stat-label">Suspended</div>
     <div class="stat-value" style="color:#FFB547">{{.Stats.SuspendedTenants}}</div>
+=======
+    <div class="stat-desc">registered accounts</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Active</div>
+    <div class="stat-value">{{.Stats.ActiveTenants}}</div>
+    <div class="stat-desc">serving traffic</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Suspended</div>
+    <div class="stat-value {{if gt .Stats.SuspendedTenants 0}}warn{{end}}">{{.Stats.SuspendedTenants}}</div>
+    <div class="stat-desc">access blocked</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Version</div>
+    <div class="stat-value muted" style="font-size:1.2rem;margin-top:4px">v0.0.5</div>
+    <div class="stat-desc">Go · Caddy · FrankenPHP</div>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
   </div>
 </div>
 <div class="card">
   <div class="card-header">
     <span class="card-title">Recent Activity</span>
+<<<<<<< HEAD
     <a href="/admin/audit" style="font-size:.75rem;color:var(--text-muted);text-decoration:none">View all →</a>
   </div>
   {{range .Stats.RecentAudit}}
@@ -39,6 +63,27 @@
   </div>
   {{else}}
   <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No activity yet.</div></div>
+=======
+    <a href="/admin/audit" class="btn btn-ghost" style="font-size:.8rem;padding:5px 12px">View all →</a>
+  </div>
+  {{if .Stats.RecentAudit}}
+    {{range .Stats.RecentAudit}}
+    <div class="audit-item">
+      <div class="audit-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div class="audit-action">{{.Action}}</div>
+        <div class="audit-meta">
+          actor: <span class="audit-target">{{.Actor}}</span> ·
+          target: <span class="audit-target">{{if .Target}}{{.Target}}{{else}}—{{end}}</span>
+          {{if .IPAddress}}· ip: <span class="mono">{{.IPAddress}}</span>{{end}}
+        </div>
+      </div>
+      <div class="mono" style="font-size:.72rem;color:var(--text-muted);white-space:nowrap">{{.CreatedAt}}</div>
+    </div>
+    {{end}}
+  {{else}}
+    <div class="empty"><div class="empty-icon">○</div><div class="empty-text">No activity recorded yet.</div></div>
+>>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
   {{end}}
 </div>
 {{end}}
