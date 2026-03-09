@@ -1,60 +1,17 @@
 // ======================================================================
-<<<<<<< HEAD
-// WCP 360 | V0.1.0 | internal/database/migrate.go
-=======
 // WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
 // ======================================================================
 // Creator: HADJ RAMDANE Yacine
 // Contact: yacine@wcp360.com
-// Version: V0.0.5
+// Version: V0.1.0
 // Website: https://www.wcp360.com
 // File: internal/database/migrate.go
 // Description: Embedded SQL migration runner — idempotent, versioned.
->>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package database
 
 import (
-<<<<<<< HEAD
-	"database/sql"
-	_ "embed"
-	"fmt"
-	"log/slog"
-)
-
-//go:embed migrations/001_initial.sql
-var migration001 string
-
-type migration struct {
-	version int
-	sql     string
-}
-
-var migrations = []migration{
-	{1, migration001},
-}
-
-func Migrate(db *sql.DB) error {
-	for _, m := range migrations {
-		var exists int
-		err := db.QueryRow(
-			`SELECT COUNT(*) FROM schema_migrations WHERE version = ?`, m.version).Scan(&exists)
-		// Table might not exist yet
-		if err != nil || exists == 0 {
-			if _, err := db.Exec(m.sql); err != nil {
-				return fmt.Errorf("migrate: apply v%d: %w", m.version, err)
-			}
-			if _, err := db.Exec(
-				`INSERT OR IGNORE INTO schema_migrations(version) VALUES(?)`, m.version); err != nil {
-				return fmt.Errorf("migrate: record v%d: %w", m.version, err)
-			}
-			slog.Info("migration applied", "version", m.version)
-		}
-	}
-	return nil
-}
-=======
 	"context"
 	"embed"
 	"fmt"
@@ -162,4 +119,3 @@ func loadMigrations() ([]migration, error) {
 	sort.Slice(migrations, func(i, j int) bool { return migrations[i].Version < migrations[j].Version })
 	return migrations, nil
 }
->>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee

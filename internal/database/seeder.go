@@ -1,50 +1,17 @@
 // ======================================================================
-<<<<<<< HEAD
-// WCP 360 | V0.1.0 | internal/database/seeder.go
-=======
 // WCP 360 – Modern Web Control Panel (Go + Caddy + FrankenPHP)
 // ======================================================================
 // Creator: HADJ RAMDANE Yacine
 // Contact: yacine@wcp360.com
-// Version: V0.0.5
+// Version: V0.1.0
 // Website: https://www.wcp360.com
 // File: internal/database/seeder.go
 // Description: Creates root admin from config on first boot. Idempotent.
->>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 // ======================================================================
 
 package database
 
 import (
-<<<<<<< HEAD
-	"database/sql"
-	"fmt"
-	"log/slog"
-
-	"github.com/wcp360/wcp360/internal/config"
-)
-
-func Seed(db *sql.DB, cfg *config.Config) error {
-	if cfg.AdminPasswordHash == "" {
-		slog.Debug("seeder: no admin_password_hash configured, skipping")
-		return nil
-	}
-	var count int
-	if err := db.QueryRow(`SELECT COUNT(*) FROM admins`).Scan(&count); err != nil {
-		return fmt.Errorf("seeder: count admins: %w", err)
-	}
-	if count > 0 {
-		return nil
-	}
-	_, err := db.Exec(
-		`INSERT INTO admins(username, email, password_hash, role) VALUES(?,?,?,?)`,
-		cfg.AdminUsername, cfg.AdminEmail, cfg.AdminPasswordHash, "root",
-	)
-	if err != nil {
-		return fmt.Errorf("seeder: insert admin: %w", err)
-	}
-	slog.Info("seeder: root admin created", "username", cfg.AdminUsername)
-=======
 	"context"
 	"fmt"
 	"log/slog"
@@ -77,6 +44,5 @@ func (db *DB) Seed(cfg *config.Config) error {
 	}
 
 	slog.Info("seeder: root admin created", "id", id, "username", cfg.AdminUsername)
->>>>>>> 73460c3d7e41f737a10e5a15c51d744bfadf5dee
 	return nil
 }

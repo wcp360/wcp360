@@ -1,5 +1,0 @@
-# Run `go mod tidy` after cloning to populate this file.
-# go.sum is intentionally left minimal in this source snapshot.
-# Required steps:
-#   1. go mod download
-#   2. go mod tidy
