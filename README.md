@@ -86,3 +86,9 @@ Canonical artifact status is tracked in:
 - GitHub issue #13
 
 SOURCE CODE must not resume until the canonical evidence gate reaches 8/8.
+
+## Current project status
+
+The current repository/project status is maintained in:
+
+`governance/PROJECT-STATUS.md`
