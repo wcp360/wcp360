@@ -76,3 +76,13 @@ Notably excluded:
 - cancelled V4.1 “Executable Contracts”;
 - obsolete `WC-CLIENT` / `WC-ADMIN` naming.
 
+
+## SC-M01 evidence tracking
+
+Canonical artifact status is tracked in:
+
+- `governance/CANONICAL-ARTIFACT-INDEX.md`
+- `governance/SC-M01-CANONICAL-ARTIFACT-STATUS.md`
+- GitHub issue #13
+
+SOURCE CODE must not resume until the canonical evidence gate reaches 8/8.
