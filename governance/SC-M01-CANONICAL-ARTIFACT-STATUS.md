@@ -57,7 +57,7 @@ A final SC-M01-specific canonical implementation-test artifact still needs to be
 Expected final owner artifact:
 
 ```text
-ENG-WCP-RULESET-0001-v0.2.md
+WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md
 ```
 
 Publication status is confirmed as final approved / source-ready / blocker none, but the complete file body still needs to be materialized and imported.
