@@ -1,0 +1,23 @@
+# WCP360 path ownership
+# Replace or extend GitHub identities/teams as maintainers are added.
+
+* @yyogas
+
+/governance/ @yyogas
+/manifests/ @yyogas
+
+/specifications/documentation/ @yyogas
+/specifications/design-system/ @yyogas
+/specifications/modules/ @yyogas
+/specifications/security/ @yyogas
+/specifications/database/ @yyogas
+/specifications/api/ @yyogas
+/specifications/ipc/ @yyogas
+/specifications/tests/ @yyogas
+/specifications/devops/ @yyogas
+/specifications/observability/ @yyogas
+/specifications/performance/ @yyogas
+/specifications/engineering/ @yyogas
+
+/contracts/ @yyogas
+/src/ @yyogas
