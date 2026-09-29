@@ -2,13 +2,23 @@
 
 Reference date: 2026-09-29
 
-This inventory records the WCP360 Markdown files that are currently materialized and directly retrievable from Project/Library sources.
+This inventory records the WCP360 Markdown files currently materialized and directly retrievable from Project/Library sources, and their GitHub publication state.
 
 ## Total materialized Markdown files
 
 ```text
-33 files
+SOURCE MATERIALIZED MARKDOWN = 147
+GITHUB LIBRARY MIRROR = 147
+MISSING FROM MIRROR = 0
 ```
+
+Full mirror:
+
+```text
+documentation/library-mirror/
+```
+
+The mirror preserves the relative Project/Library paths and is documentary evidence only. It does not promote historical, candidate, staging, audit or superseded files to active implementation authority.
 
 ## Canonical implementation artifacts already published in GitHub
 
@@ -21,49 +31,49 @@ specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_E
 specifications/devops/WCP360_SC-M01_DEVOPS_BASELINE_v1.0.md
 ```
 
-## Design System Markdown snapshot
+## Design System documentation
 
-27 source Markdown files from the materialized staging set are published under:
+The active Design System baseline remains:
+
+```text
+DESIGN-BASELINE = V2.5.3.36.4
+```
+
+A curated snapshot is published under:
 
 ```text
 documentation/design-system/V2.5.3.36.4/
 ```
 
-The snapshot includes contracts, coverage matrices, state machines, filesystem/runtime boundaries, daemon security material, traceability, freeze gates and related design documentation.
+The complete materialized Project/Library Markdown set, including staging/audit/history evidence, is retained in the library mirror.
 
-## Authority rule
+## Documentation baseline
 
-The Design System snapshot is documentation evidence and design context.
-
-It does not override later canonical owner artifacts under `specifications/`.
-
-## DOC baseline archive availability
-
-The canonical documentation baseline is identified as:
+Canonical documentary baseline:
 
 ```text
 DOC-BASELINE = v4.0.21.23
-WCP-Design-System-Spec-v4.0.21.23-global-canonical-registry-consolidation.zip
 ```
 
-At this time the exact archive is not materialized as a retrievable Library/Project ZIP, so its internal Markdown corpus has **not** been substituted from an older version.
+The exact canonical ZIP itself is not silently substituted by an older archive. Materialized Markdown evidence is versioned as-is; owner authority and WCP360-BM-0001 determine what is active.
 
-No older v4.0.21.x archive may silently replace v4.0.21.23.
-
-When the exact archive becomes materialized, its Markdown files must be imported under:
+## SC-M01 evidence gate
 
 ```text
-documentation/doc-baseline/v4.0.21.23/
-```
+CANONICAL IMPLEMENTATION EVIDENCE IN specifications/ = 5 / 8
 
-with a snapshot README preserving authority and supersession rules.
+REMAINING:
+- DB Model v1.0
+- Test Baseline / SC-M01 requirements v1.0
+- Engineering Ruleset ENG-WCP-RULESET-0001 v0.2
 
-## Current implementation gate
-
-```text
-SC-M01 canonical implementation evidence = 5 / 8
 SOURCE CODE = PAUSED
 SC-M01 = PAUSED — TARGETED EVIDENCE
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
+
+Tracking:
+- governance/CANONICAL-ARTIFACT-INDEX.md
+- governance/SC-M01-CANONICAL-ARTIFACT-STATUS.md
+- issue #13
