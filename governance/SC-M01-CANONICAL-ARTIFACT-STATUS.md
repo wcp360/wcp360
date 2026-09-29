@@ -15,16 +15,52 @@ CODE-BASELINE = NONE
 
 ## Artifact inventory
 
-| Artifact | Version | Owner | Approved | Present in GitHub main | Source Code consumable from GitHub | Status |
+| Artifact | Version | Owner | Approved | Present in GitHub main | Source Code consumable from GitHub | Tracking |
 |---|---|---|---|---|---|---|
-| API Contract | 1.0 | API / IPC / CONTRACTS | YES | NO | NO | Final artifact reported published, repository import pending |
-| IPC Contract | WCP360-IPC-B/1 | API / IPC / CONTRACTS | YES | NO | NO | Final artifact reported published, repository import pending |
-| Permission Registry | v1.0 | SECURITY / HARDENING | YES | YES | YES | Complete |
-| Security Baseline | v1.0 | SECURITY / HARDENING | YES | YES | YES | Complete |
-| DB Model | v1.0 | DATABASE / DATA MODEL | YES | NO | NO | Final artifact reported published, repository import pending |
-| Test Baseline / SC-M01 requirements | v1.0 | TESTS / QA | BASELINE YES | NO | NO | Canonical SC-M01 publication still required |
-| DevOps Baseline / SC-M01 requirements | v1.0 | DEVOPS / BUILD / RELEASE | YES | NO | NO | Final artifact reported published, repository import pending |
-| Engineering Ruleset | ENG-WCP-RULESET-0001 v0.2 | ENGINEERING / CODE REVIEW | YES | NO | NO | Final artifact reported published, repository import pending |
+| API Contract | 1.0 | API / IPC / CONTRACTS | YES | YES | YES | issue #4 CLOSED / PR #10 |
+| IPC Contract | WCP360-IPC-B/1 | API / IPC / CONTRACTS | YES | YES | YES | issue #5 CLOSED / PR #10 |
+| Permission Registry | v1.0 | SECURITY / HARDENING | YES | YES | YES | PR #2 |
+| Security Baseline | v1.0 | SECURITY / HARDENING | YES | YES | YES | PR #2 |
+| DB Model | v1.0 | DATABASE / DATA MODEL | YES | NO | NO | issue #6 OPEN — publication confirmed, full file import pending |
+| Test Baseline / SC-M01 requirements | v1.0 | TESTS / QA | BASELINE YES | NO | NO | issue #7 OPEN — final SC-M01 artifact not yet materialized |
+| DevOps Baseline / SC-M01 requirements | v1.0 | DEVOPS / BUILD / RELEASE | YES | YES | YES | issue #8 CLOSED / PR #11 |
+| Engineering Ruleset | ENG-WCP-RULESET-0001 v0.2 | ENGINEERING / CODE REVIEW | YES | NO | NO | issue #9 OPEN — publication confirmed, full file import pending |
+
+## Canonical files already in main
+
+```text
+specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
+specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md
+specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
+specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
+specifications/devops/WCP360_SC-M01_DEVOPS_BASELINE_v1.0.md
+```
+
+## Remaining evidence
+
+### Database
+
+Expected final owner artifact:
+
+```text
+WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md
+```
+
+Publication status is confirmed as final approved / source-ready / blocker none, but the complete file body still needs to be materialized and imported.
+
+### Tests / QA
+
+A final SC-M01-specific canonical implementation-test artifact still needs to be materialized. Implementation-dependent tests remain PLANNED / READY; no fabricated PASS results.
+
+### Engineering
+
+Expected final owner artifact:
+
+```text
+ENG-WCP-RULESET-0001-v0.2.md
+```
+
+Publication status is confirmed as final approved / source-ready / blocker none, but the complete file body still needs to be materialized and imported.
 
 ## Completion gate
 
@@ -47,8 +83,8 @@ READY FOR SOURCE CODE CONSUMPTION
 Current repository state:
 
 ```text
-2 / 8 PRESENT AND CONSUMABLE
-6 / 8 NOT YET PRESENT IN GITHUB
+5 / 8 PRESENT AND CONSUMABLE
+3 / 8 NOT YET PRESENT IN GITHUB
 ```
 
 This status file does not change any baseline or owner decision.
