@@ -1,0 +1,59 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.csr
+*.jks
+*.keystore
+credentials*
+secrets*
+private/
+.secret/
+secrets/
+
+# Runtime / local state
+*.pid
+*.sock
+*.log
+logs/
+runtime/
+tmp/
+temp/
+cache/
+var/
+storage/private/
+
+# Databases / backups / dumps
+*.sql
+*.dump
+*.backup
+*.bak
+backups/
+dumps/
+
+# Dependencies / build outputs
+node_modules/
+vendor/
+dist/
+build/
+coverage/
+.cache/
+.phpunit.cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local overrides
+*.local
+config/local/
