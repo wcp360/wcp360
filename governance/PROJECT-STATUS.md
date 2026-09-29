@@ -2,7 +2,7 @@
 
 **Reference date:** 2026-09-30  
 **Repository:** `yyogas/wcp360`  
-**Main commit:** `cbc59e5d84608529e7d0391ba3b78b5fda0e0421`
+**Main branch:** `main`  
 
 ## 1. Baseline state
 
@@ -75,6 +75,7 @@ REMAINING =
 exact file body materialization/import
 ```
 
+Input support: `governance/handoffs/SC-M01-DB-CANONICAL-INPUT-PACK.md`  
 Tracking: issue #6.
 
 ### Tests / QA
@@ -95,6 +96,7 @@ Extracted input:
 - TEST-SEC-WEB-001 → TEST-SEC-WEB-040;
 - DevOps/platform validation obligations.
 
+Input support: `governance/handoffs/SC-M01-QA-CANONICAL-INPUT-PACK.md`  
 Tracking: issue #7.
 
 ### Engineering
@@ -121,6 +123,7 @@ BLOCKER = NONE
 Remaining:
 exact file body materialization/import.
 
+Input support: `governance/handoffs/SC-M01-ENGINEERING-CANONICAL-INPUT-PACK.md`  
 Tracking: issue #9.
 
 ## 4. SC-M01 gate
@@ -197,3 +200,16 @@ Use:
 - `governance/CANONICAL-ARTIFACT-INDEX.md`
 
 Documentary mirror content does not automatically become implementation authority.
+
+
+## 9. Owner-support packs
+
+To reduce rediscovery without replacing owner authority, MASTER has versioned three input packs:
+
+```text
+governance/handoffs/SC-M01-DB-CANONICAL-INPUT-PACK.md
+governance/handoffs/SC-M01-QA-CANONICAL-INPUT-PACK.md
+governance/handoffs/SC-M01-ENGINEERING-CANONICAL-INPUT-PACK.md
+```
+
+These are explicitly non-authoritative and cannot satisfy issues #6, #7 or #9 by themselves.
