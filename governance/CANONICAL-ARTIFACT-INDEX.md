@@ -20,7 +20,7 @@ This index identifies which artifacts are currently implementation authority fro
 |---|---|---|---|
 | Database | `WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md` | FINAL APPROVED / READY / BLOCKER NONE | PENDING — issue #6 |
 | Tests / QA | final SC-M01 Test Baseline v1.0 artifact | NOT YET MATERIALIZED | PENDING — issue #7 |
-| Engineering | `ENG-WCP-RULESET-0001-v0.2.md` | FINAL APPROVED / READY / BLOCKER NONE | PENDING — issue #9 |
+| Engineering | `WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md` | FINAL APPROVED / READY / BLOCKER NONE | PENDING — issue #9 |
 
 Master gate: issue #13.
 
