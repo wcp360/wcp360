@@ -52,7 +52,7 @@ Input:
 - exact final owner artifact
 
 Output:
-- `specifications/engineering/ENG-WCP-RULESET-0001-v0.2.md`
+- `specifications/engineering/WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md`
 
 Gate:
 - final owner content only;
