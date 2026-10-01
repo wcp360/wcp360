@@ -1,0 +1,16 @@
+{
+  "source_blob_sha": "479678cad0d0a624bb0dcc3ca394395b339fe4ea",
+  "command": "git check-ignore --no-index -v --stdin",
+  "tested_paths": [
+    "database/migrations/001_initial.sql",
+    "tests/fixtures/minimal.sql",
+    "src/runtime/config.go",
+    "packaging/build/README.md",
+    "documentation/modules/secrets.md",
+    ".env",
+    "config/local/production.ini"
+  ],
+  "stdout": ".gitignore:32:*.sql\tdatabase/migrations/001_initial.sql\n.gitignore:32:*.sql\ttests/fixtures/minimal.sql\n.gitignore:24:runtime/\tsrc/runtime/config.go\n.gitignore:43:build/\tpackaging/build/README.md\n.gitignore:14:secrets*\tdocumentation/modules/secrets.md\n.gitignore:2:.env\t.env\n.gitignore:59:config/local/\tconfig/local/production.ini\n",
+  "returncode": 0,
+  "scope": "local rule reproduction only; not WCP360 application tests"
+}
