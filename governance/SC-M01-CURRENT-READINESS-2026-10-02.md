@@ -50,11 +50,11 @@ The 5/8 count is a publication gate count. It is not product completion, test co
 
 ### Database #6
 
-Conversation-history recovery confirms prior owner publication metadata for:
+Conversation-history recovery confirms final owner publication metadata for:
 
 `WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md`
 
-with schemas previously identified as:
+Separately, earlier **closure-proposed/candidate** DB material identified schemas such as:
 
 ```text
 wcp_core
@@ -67,7 +67,7 @@ wcp_audit
 wcp_backup
 ```
 
-Recovered historical detail also names, among other objects:
+The same candidate/closure evidence also names, among other objects:
 
 ```text
 wcp_core.accounts
@@ -91,9 +91,11 @@ outbox_records
 event_records
 ```
 
-and confirms UUIDv7/uuid identities except typed text namespaces, tenant-aware constraints, desired/observed state, transactions/concurrency/revisions, durable jobs/outbox/idempotency/audit/reconciliation and approved indexes.
+and describes UUIDv7/uuid identities except typed text namespaces, tenant-aware constraints, desired/observed state, transactions/concurrency/revisions, durable jobs/outbox/idempotency/audit/reconciliation and indexes.
 
-**This recovered history is not enough to reproduce the exact owner file.** It is evidence that a richer final contract existed, not authority to reconstruct missing columns, constraints, tables, indexes or transaction rules. Issue #6 remains materialization-only.
+**Provenance limit:** those detailed schema/table/constraint names are not independently recovered as the exact FINAL DB v1.0 body. They belong to candidate/closure material that preceded the separately confirmed final owner metadata. They may help the Database owner locate/recover the final file, but must not be copied into `specifications/database/` as if final.
+
+Issue #6 remains materialization-only: exact final owner bytes/content are still required.
 
 ### Engineering #9
 
@@ -381,4 +383,8 @@ DEFAULT DENIED = wcp360-worker, hosting identities
 
 Earlier/provisional naming such as `wcp360-ctl` does not override the later final `wcp360-control` wording.
 
-This recovery does **not** recover the complete control wire protocol, authorization-context lifecycle, exact indirect worker path, detailed retry/idempotency model or full systemd lifecycle. C01 therefore requires owner republication/confirmation; C03–C07 remain open.
+This recovery does **not** recover the complete control wire protocol, exact indirect worker path, detailed retry/idempotency model or full systemd lifecycle. C01 therefore requires owner republication/confirmation; C03/C04/C06/C07 remain open.
+
+C05 is now **OPEN / PARTIALLY DEFINED**: current Security already defines the trusted-context fields and origin-binding responsibilities, and recovered final evidence states that wcpd creates/validates `authorization_context_id`; storage/resolver, expiry/revocation, freshness/revalidation and replay/substitution semantics remain open.
+
+T04 is also **OPEN / PARTIALLY DEFINED**: IPC-B already canonically requires `UNKNOWN_OUTCOME → reconciliation → no blind retry` when execution may have occurred but cannot be proven; only phase/error boundaries and result-retrieval details remain open.
