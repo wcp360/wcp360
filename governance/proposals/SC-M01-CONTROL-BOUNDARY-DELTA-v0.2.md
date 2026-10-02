@@ -99,21 +99,36 @@ C04 remains OPEN for the exact indirect path.
 
 ### C05 — trusted authorization-context resolution
 
-Security currently defines the trusted context fields and says it is not a browser bearer credential.
+C05 is **OPEN / PARTIALLY DEFINED**, not blank design.
 
-Required owner decision still includes:
+Current canonical Security already defines the trusted-context fields, rejects direct browser bearer use, requires unknown permission/action/IPC binding to DENY with no side effect, and states:
 
-- context producer;
-- identifier/reference creation;
-- storage/lookup;
-- authenticity/integrity;
-- binding to surface/action/resource/job/correlation;
+    wcpd validates the origin (permission_id, action_id) binding
+    wcp-privd enforces bounded ipc_operation_id and target constraints
+
+Current IPC-B already carries `authorization_context_ref`.
+
+Recovered final H3-V2 evidence additionally states that `authorization_context_id` is created/validated by `wcpd` and that the trusted context preserves origin permission/action, resource, tenant when applicable, job, correlation, technical IPC operation and decision/time. This context is policy/accountability data, not peer authentication.
+
+Evidence companion:
+
+    governance/proposals/SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md
+
+The remaining owner decision is narrower:
+
+- exact reference creation/representation;
+- storage/lookup/resolver;
+- integrity/authenticity of resolved context;
 - expiry/revocation;
-- execution-time revalidation;
+- execution-time freshness/revalidation;
 - unavailable resolver behavior;
-- replay/substitution prevention.
+- replay/substitution prevention;
+- retention/audit lifecycle;
+- exact worker interaction.
 
-Recovered conversation evidence has partial statements that wcpd participates in context creation/validation, but the exact final normative source for the whole lifecycle has not been recovered. It remains OPEN.
+No database table, signed token, TTL or cache model is implied by the recovery.
+
+C05 remains OPEN for this unresolved lifecycle, but owners should not redesign the already-defined field/binding responsibilities.
 
 ### C06 — control protocol
 
@@ -170,7 +185,7 @@ No test is executed by this proposal.
     C02 = ALREADY DEFINED
     C03 = OPEN
     C04 = OPEN
-    C05 = OPEN
+    C05 = OPEN / PARTIALLY DEFINED
     C06 = OPEN
     C07 = OPEN
 

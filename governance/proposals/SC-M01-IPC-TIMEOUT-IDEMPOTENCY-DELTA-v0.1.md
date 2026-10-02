@@ -123,6 +123,23 @@ Le CONNECT TIMEOUT de 1s est séparé et ne prolonge pas le deadline. Le temps c
 
 ## 6. Décision T04 : résultat selon la frontière de dispatch
 
+**T04 = OPEN / PARTIALLY DEFINED.**
+
+The post-dispatch uncertain-result rule is already FINAL in IPC-B/1 §5:
+
+    timeout != definite failure
+    execution may have occurred but cannot be proven
+    → UNKNOWN_OUTCOME
+    → reconciliation
+    → no blind retry
+    execution success != verified success
+
+The open work is therefore not to choose whether UNKNOWN_OUTCOME exists. It is to define the phase boundary and transport/persistence behavior around that existing rule.
+
+Evidence companion:
+
+    governance/proposals/SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md
+
 La distinction proposée repose sur **ce qui peut être prouvé**, pas uniquement sur l'horloge.
 
 ### Avant dispatch
@@ -137,6 +154,15 @@ reconciliation_required = false
 Le code exact peut être `OPERATION_TIMEOUT` ou une erreur de transport/validation selon la phase ; API/IPC doit fixer la priorité. **Ne jamais retourner UNKNOWN_OUTCOME simplement parce qu'un délai a expiré avant dispatch.**
 
 ### Après dispatch
+
+The following branch is already canonical and must not be weakened:
+
+    effet possible mais résultat non prouvable
+    → UNKNOWN_OUTCOME
+    → reconciliation_required = true
+    → no blind retry
+
+The remaining classification details around definite absence / durable verified result / response-loss recovery still require owner clarification.
 
 Si P4 a commencé :
 
@@ -237,7 +263,7 @@ Répondre T01–T05 :
 T01 I/O timeout semantics =
 T02 deadline_ms representation =
 T03 effective budget scope =
-T04 timeout/UNKNOWN_OUTCOME boundary =
+T04 phase/error boundary around canonical UNKNOWN_OUTCOME rule =
 T05 identifier/idempotency binding =
 ```
 
