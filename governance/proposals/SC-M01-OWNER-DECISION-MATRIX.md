@@ -6,21 +6,34 @@ PR #43. Reference branch is synchronized with main `25fd86225cbf0d9df2eba6ee3af5
 
 Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
+Recovered historical owner evidence is tracked separately from current canonical authority. See `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md`.
+
 ## 1. Proposal set
 
 | Area | Proposal | Owner decisions | QA cases |
 |---|---|---:|---:|
 | Authorization bindings | `SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` | D01–D04 | C01–C17 = 17 |
 | IPC timeout/idempotency | `SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | T01–T07 | TQ01–TQ10 = 10 |
-| Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` | C01–C07 | CQ01–CQ12 = 12 |
+| Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.2.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
 | API transport | `SC-M01-API-TRANSPORT-DELTA-v0.1.md` | H01–H10 | HQ01–HQ15 = 15 |
 | Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | S01–S09 | SQ01–SQ16 = 16 |
 | Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
-| **Total** | 6 active proposal files | **47 owner decisions** | **85 proposed cases** |
+| **Total** | 6 active proposal domains | **47 tracked decision points; 45 OPEN semantic decisions** | **85 proposed cases** |
 
 All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 
 ## 2. Decision register
+
+### Decision-state summary
+
+```text
+TRACKED DECISION POINTS = 47
+OPEN SEMANTIC OWNER DECISIONS = 45
+RECOVERED OWNER CONSENSUS REQUIRING REPUBLICATION = 1  (C01)
+ALREADY DEFINED IN CURRENT CANONICAL ARTIFACTS = 1     (C02)
+PROPOSED QA CASES = 85
+APPLICATION TEST EXECUTIONS = 0
+```
 
 ### API / IPC / CONTRACTS — primary
 
@@ -56,7 +69,7 @@ All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 |---|---|---|---|
 | B01–B03 | parent bindings for service reload/restart/firewall apply | exact approved tuples | OPEN |
 | B04–B05 | grants.set → apply/revoke step bindings | exact scope/target constraints | OPEN |
-| C02 | transport access vs application authorization | fail-closed peer/context rules | OPEN |
+| C02 | transport access vs application authorization | DevOps v1.0 §5.1 + Security v1.0 §1 | ALREADY DEFINED |
 | S01 | admissible USER/ADMIN topology | deployment rule, no port-only assumption | OPEN |
 | S02 | cross-surface cookie handling | no fallback/alias behavior | OPEN |
 | S03 | cross-surface CSRF/Origin/WSS behavior | exact reject/reauth rules | OPEN |
@@ -96,7 +109,7 @@ Engineering co-owns F01/F02/F04–F08; Security reviews supply-chain/secret/priv
 
 | ID | Decision | Required output | Status |
 |---|---|---|---|
-| C01 | control socket physical identity | path/owner/group/mode/runtime lifecycle | OPEN |
+| C01 | control socket physical identity | recovered M1: /run/wcp360/wcpd.sock, owner wcpd, group wcp360-control, mode 0660 | RECOVERED OWNER CONSENSUS — REPUBLISH/CONFIRM |
 | C04 | worker path to normal control boundary | W1/W2/other explicit design | OPEN |
 | S01–S04 | deploy/routing/TLS/proxy behavior | topology evidence | OPEN |
 | T01/T03 | socket timeout operational behavior | implementation constraints, not protocol redefinition | OPEN |
@@ -165,6 +178,8 @@ It does **not** mean:
 - SC-M01 resumes.
 
 Implementation consumption requires the owner decision to be published in its normative domain and MASTER to apply the existing gate/checklist.
+
+Recovered conversation evidence such as C01 is not consumed directly by SOURCE CODE. It must be republished/confirmed by its owners or pointed to an already-canonical exact source.
 
 ## 5. Toolchain note
 
