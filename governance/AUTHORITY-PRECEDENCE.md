@@ -4,6 +4,36 @@ Reference: `WCP360-BM-0001 FINAL`
 
 This file defines repository authority precedence so that documentary mirrors, historical material and staging exports cannot silently override approved implementation contracts.
 
+## Authority model
+
+The manifest selects and records the active versions, gate state and cross-project baseline references. It does **not** acquire ownership of the technical contents of another domain.
+
+Approved owner artifacts remain authoritative **inside their domain**:
+
+- Documentation project detailed = functional/documentary authority;
+- Design System = UI/UX authority;
+- MODULES = functional module catalogue and dependencies;
+- API / IPC / CONTRACTS = API, IPC, jobs/events/webhooks and contract semantics;
+- DATABASE / DATA MODEL = physical/logical PostgreSQL data model and persistence rules;
+- SECURITY / HARDENING = authentication, authorization, isolation, privileged-boundary and hardening rules;
+- TESTS / QA = canonical test strategy, assertions and validation status;
+- DEVOPS / BUILD / RELEASE = platform, filesystem, service/build/package/release lifecycle;
+- ENGINEERING / CODE REVIEW = engineering and code-review rules;
+- PERFORMANCE / SCALABILITY = performance/capacity validation;
+- OBSERVABILITY / INCIDENTS / SRE = observability and incident/SRE rules;
+- AUDIT / ARCHITECTURE REVIEW = independent architecture findings and conflict review;
+- MASTER / Project Control = baseline coordination, gate state, conflict routing and cross-domain acceptance.
+
+There is **no total technical ordering between owner domains**. A file path, filename, timestamp, higher-looking numeric version or a MASTER summary never overrides an owner rule in another domain.
+
+When one behavior spans domains, all applicable owner constraints compose. Example: an API operation may be defined by API/IPC, but its authorization still follows Security, its persistence follows Database and its proof follows QA. A convenient implementation choice in one domain does not waive another domain's invariant.
+
+If two approved owner artifacts conflict on the same cross-domain behavior, implementation remains blocked for that point until an explicit WCP360 CONFLICT / owner decision / Architecture Review resolution is recorded. No folder hierarchy resolves that conflict automatically.
+
+## Repository-source precedence
+
+The following order answers **which repository source is eligible for consumption**, not which owner wins a technical disagreement.
+
 ## Precedence order
 
 For implementation decisions, use the first applicable source in this order:
@@ -58,6 +88,22 @@ The following must never be treated as active merely because they are versioned:
 - owner drafts superseded by final canonical exports.
 
 ## Conflict handling
+
+Content conflict procedure:
+
+1. identify the exact behavior/identifier/resource in conflict;
+2. identify each source's owner, version and normative status;
+3. separate same-domain supersession from cross-domain conflict;
+4. for same-domain supersession, use the owner's approved current artifact selected by the manifest/governance;
+5. for cross-domain behavior, preserve all non-conflicting constraints and ask the relevant owners for an explicit joint delta/decision;
+6. route unresolved cross-domain conflict to MASTER and, where architectural, AUDIT / ARCHITECTURE REVIEW;
+7. record BEFORE → FINDING → DECISION → AFTER → RATIONALE → OWNER → TESTS;
+8. only then allow SOURCE CODE to consume the resolved behavior.
+
+Repository precedence still applies to reject historical/mirror/staging material.
+
+Legacy shorthand retained below for compatibility:
+
 
 If two files disagree:
 
