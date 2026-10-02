@@ -1,160 +1,192 @@
-# WCP360 — Recovered Owner Evidence — Privileged API/IPC Bindings
+# WCP360 — Recovered Evidence — Privileged API/IPC Bindings
 
-Recovery date: 2026-10-02
-Historical decision period: 2026-09-28
-Authority recovered: API / IPC owner validation with ratified/FROZEN mappings
+Recovery correction date: 2026-10-02
+Historical decision period searched: 2026-09-27 → 2026-09-28
 Status of this file: RECOVERED EVIDENCE — NOT CURRENT CANONICAL AUTHORITY
+Provenance correction: NO EXPLICIT OWNER-RATIFIED/FROZEN PROOF FOUND FOR B01–B05
 
-This file preserves owner-decision evidence recovered from prior WCP360 conversations. It does not silently rewrite the current API, IPC or Security canonical exports.
+This file corrects the provenance of the previously published recovery note.
 
-## 1. Recovered owner mappings
+The identifiers below are real and are present in the current FINAL API/IPC exports. However, the historical phrase `FROZEN_BY_API_IPC_OWNER` was found in an **assistant-authored H3-V2 freeze/output**, not in an independently recovered explicit owner statement declaring these five cross-domain bindings FINAL/RATIFIED.
+
+Therefore this file must not describe B01–B05 or D01 as recovered owner-ratified decisions.
+
+## 1. What is verifiably present today
+
+Current canonical API/IPC exports contain the relevant identifiers and per-contract rows.
 
 ### Service reload
 
-Recovered owner mapping:
+Current canonical identifiers:
 
-    API contract = API-WCP-0802
+    API-WCP-0802
     permission_id = servers.services.manage
-    origin action_id = servers.service.reload
-    IPC contract = IPC-WCP-1029
-    technical action / ipc operation = service.reload
-    resource = server/service
-    surface/scope = WCP-ADMIN / administrative server scope
+    origin/API action_id = servers.service.reload
 
-Historical status reported:
+    IPC-WCP-1029
+    IPC row action_id = servers.service.reload
+    ipc_operation_id = service.reload
 
-    FROZEN_BY_API_IPC_OWNER
-    ratified technical binding
+This proves the identifiers/contract rows are current canonical content.
 
-No new permission named servers.service.reload was created.
+It does **not** by itself prove that Security's broad parent/action cell has already been harmonized to the exact origin→technical binding intended by the historical H3-V2 output.
 
 ### Service restart
 
-Recovered owner mapping:
+Current canonical identifiers:
 
-    API contract = API-WCP-0803
+    API-WCP-0803
     permission_id = servers.services.manage
-    origin action_id = servers.service.restart
-    IPC contract = IPC-WCP-1030
-    technical action / ipc operation = service.restart
-    resource = server/service
-    surface/scope = WCP-ADMIN / administrative server scope
+    origin/API action_id = servers.service.restart
 
-Historical status:
+    IPC-WCP-1030
+    IPC row action_id = servers.service.restart
+    ipc_operation_id = service.restart
 
-    FROZEN_BY_API_IPC_OWNER
-    ratified technical binding
-
-No new permission named servers.service.restart was created.
+Same conclusion: current identifiers are canonical; the exact cross-domain parent-binding interpretation still requires owner harmonization/confirmation.
 
 ### Firewall apply
 
-Recovered owner mapping:
+Current canonical identifiers:
 
-    API contract = API-WCP-0809
+    API-WCP-0809
     permission_id = network.firewall.manage
-    origin action_id = network.firewall.apply
-    IPC contract = IPC-WCP-1026
-    technical action / ipc operation = firewall.policy.apply
-    resource = server + validated policy revision
-    scope = server / WCP-ADMIN
+    origin/API action_id = network.firewall.apply
 
-Historical status:
+    IPC-WCP-1026
+    IPC row action_id = firewall.policy.apply
+    ipc_operation_id = firewall.policy.apply
+    surface/scope = WCP-ADMIN / server
 
-    FROZEN_BY_API_IPC_OWNER
-    ratified technical binding
+The distinction between API origin action and the technical IPC row is visible in current canonical content.
 
-### Database grant set → technical grant operations
+The exact owner-approved rule connecting those namespaces is still the audit gap.
 
-Recovered owner evidence identifies:
+### Database grants
 
-    API contract = API-WCP-0305
+Current canonical API:
+
+    API-WCP-0305
     permission_id = databases.grants.manage
-    origin action_id = databases.grants.set
+    origin/API action_id = databases.grants.set
 
-Technical IPC steps:
+Current canonical IPC:
 
     IPC-WCP-1023
-    technical action / ipc operation = database_grant.apply
+    action_id = database_grant.apply
+    ipc_operation_id = database_grant.apply
 
     IPC-WCP-1024
-    technical action / ipc operation = database_grant.revoke
+    action_id = database_grant.revoke
+    ipc_operation_id = database_grant.revoke
 
-Recovered scope evidence:
+Security also requires tenant/resource constraints and forbids arbitrary SQL.
 
-    same hosted database
-    same database identity/user
-    same Tenant boundary
-    no arbitrary SQL
-    no new permission for each technical step
+These rows establish the current identifiers. They do not recover a final owner statement proving exactly when an authorized grants.set workflow may invoke apply, revoke, or both, nor the exact physical grant_set representation.
 
-Historical owner output described the grant technical mappings as ratified/frozen, with the technical steps reusable through the authorized origin binding.
+## 2. Historical evidence classification
 
-## 2. Recovered semantic rule
+Targeted history search found three classes of evidence.
 
-The recovered owner decisions distinguish:
+### A — provisional/candidate material
 
-    origin permission/action
-    !=
-    technical IPC action/operation
+Earlier H3-C/H3-CM material treated the relevant API/IPC registries and many per-operation mappings as candidate/partial/pending.
 
-The technical IPC step does not create a new application permission.
+This is not final authority.
 
-The authorization chain preserves the origin binding and then selects an explicitly allowed bounded technical operation.
+### B — assistant-authored H3-V2 freeze/output
 
-This is consistent with the current canonical Security concept that wcpd validates the origin permission/action binding while wcp-privd enforces the bounded ipc_operation_id and target constraints.
+A later assistant H3-V2 output used the listed API-WCP/IPC-WCP identifiers and the label:
 
-## 3. Why AUDIT-WCP-0104 still found a gap
+    FROZEN_BY_API_IPC_OWNER
 
-The current final API/IPC exports preserve most of the identifiers above.
+That output is useful evidence of how the closing package was assembled.
 
-However the current Security matrix has rows where the action/approved-parent column uses broad permission-like names such as:
+It is **not** sufficient proof that a separate API/IPC owner explicitly issued a FINAL/FROZEN/RATIFIED decision for each B01–B05 binding.
 
-    servers.services.manage
-    network.firewall.manage
-    databases.grants.manage
+### C — current canonical exports
 
-That current export does not fully expose the recovered origin→technical mapping in a deterministic form.
+API 1.0 and IPC WCP360-IPC-B/1 are now FINAL canonical exports and contain the identifiers/rows above.
 
-Therefore the remaining problem is primarily:
+Current Security v1.0 additionally states:
 
-    canonical republication / harmonization
-    + exact target/revision/context constraints
-    + tests
+    wcpd validates the origin (permission_id, action_id) binding
+    wcp-privd enforces bounded ipc_operation_id and target constraints
 
-not a reason for SOURCE CODE to invent aliases.
+But Security's operation matrix still contains broad permission-like parent/action values for several rows, which is exactly why AUDIT-WCP-0104 remains open.
 
-## 4. What is recovered versus still open
+## 3. Corrected conclusion for B01–B05
 
-Recovered owner evidence:
+The correct evidence classification is:
 
-- reload origin → technical step;
-- restart origin → technical step;
-- firewall apply origin → technical step;
-- grants.set origin → apply/revoke technical steps;
-- technical action is distinct from origin action when needed;
-- no new application permission is created for technical sub-operations.
+    B01–B05 CURRENT CANONICAL IDENTIFIERS = YES
+    B01–B05 EXPLICIT OWNER-RATIFIED CROSS-DOMAIN BINDING RECOVERED = NO
+    HISTORICAL H3-V2 ASSISTANT FREEZE EVIDENCE = YES
+    CURRENT CANONICAL HARMONIZATION / OWNER CONFIRMATION = REQUIRED
 
-Still not fully recovered/defined:
+SOURCE CODE must not infer aliases from text similarity.
 
-- exact trusted authorization-context lifecycle;
-- exact API→IPC revision translation for expected/config/active revisions;
-- exact physical grant_set representation;
-- audit event stage naming and correlation;
-- exact current normative wording to insert into Security/API/IPC.
+## 4. Corrected conclusion for D01
 
-## 5. Required republication
+The architecture already establishes distinct typed namespaces:
 
-This recovered evidence should be handled by the relevant owners in one of three ways:
+    permission_id != action_id != ipc_operation_id
 
-1. point to a current canonical exact source already containing the mapping;
-2. republish the recovered mapping as a content-preserving canonical clause;
-3. explicitly amend it, with version impact and rationale.
+and current Security establishes:
 
-Until then:
+    wcpd validates origin permission/action
+    wcp-privd validates bounded technical ipc_operation_id/target
 
-    RECOVERED OWNER DECISION = YES
-    CURRENT CANONICAL HARMONIZATION = REQUIRED
-    SOURCE CODE CONSUMPTION FROM THIS FILE = FORBIDDEN
+The current API/IPC rows demonstrate that origin/API action and technical IPC action can be lexically identical in some workflows and different in others.
 
-This file is evidence for owner review, not a normative contract.
+What remains unresolved is the exact current normative rule for:
+
+- what IPC request `action_id` represents when it differs from the origin action;
+- how `authorization_context_ref` carries/resolves the origin action;
+- how parent→technical-step membership is registered and checked;
+- how substitutions are refused.
+
+Therefore:
+
+    D01 = OPEN — OWNER HARMONIZATION REQUIRED
+    NOT = recovered final owner decision
+
+The v0.2 recommendation may still be reviewed, but it is not retroactively ratified.
+
+## 5. What remains useful from the historical H3-V2 output
+
+It remains useful as a **candidate intended mapping** for owner review:
+
+- service reload should not be authorized merely by matching permission text;
+- service restart remains distinct from reload;
+- firewall apply remains WCP-ADMIN/server-bound;
+- grants technical steps remain inside the authorized database/identity/tenant workflow;
+- technical sub-operations do not automatically create application permissions.
+
+Each must be accepted/amended/rejected by the current owner against the canonical exports.
+
+## 6. Required owner response
+
+For B01–B05 and D01:
+
+    REFERENCE EXAMINED =
+    DECISION = ACCEPT / AMEND / REJECT / ALREADY DEFINED
+    CANONICAL EVIDENCE =
+    REQUIRED DELTA =
+    VERSION IMPACT =
+    TESTS =
+    DEPENDENCIES =
+
+If an owner can point to an exact existing FINAL source that ratifies the mapping, this recovery classification may be upgraded using that evidence.
+
+## 7. Gate
+
+    RECOVERED EXPLICIT OWNER RATIFICATION = NO
+    CURRENT CANONICAL IDENTIFIERS PRESENT = YES
+    OWNER HARMONIZATION REQUIRED = YES
+    APPLICATION CODE = NONE
+    QA EXECUTION = 0
+    SC-M01 = PAUSED — TARGETED EVIDENCE
+    CODE-BASELINE = NONE
+
+This correction prevents an assistant-authored historical freeze label from being mistaken for owner authority.
