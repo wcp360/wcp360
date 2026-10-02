@@ -1,6 +1,6 @@
 # WCP360 — Project Status
 
-**Reference date:** 2026-09-30  
+**Reference date:** 2026-10-02  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
 
@@ -213,3 +213,88 @@ governance/handoffs/SC-M01-ENGINEERING-CANONICAL-INPUT-PACK.md
 ```
 
 These are explicitly non-authoritative and cannot satisfy issues #6, #7 or #9 by themselves.
+
+
+## 10. Current readiness / remediation — 2026-10-02
+
+Detailed current-state matrix:
+
+`governance/SC-M01-CURRENT-READINESS-2026-10-02.md`
+
+Audit tracking:
+
+```text
+AUDIT-WCP-0100 FINDINGS = 18 OPEN
+ISSUE #41 = CURRENT REMEDIATION TRACKER
+```
+
+Current work packages:
+
+```text
+PR #42 = repository guardrails / tests / CI
+         OPEN — not application code — independent review still required
+
+PR #43 = SC-M01 owner-decision pack
+         OPEN — proposals only — no canonical specifications changed
+```
+
+PR #43 currently converts the implementation-critical semantic gaps into bounded owner decisions for:
+
+- API transport / DTO / HTTP mapping;
+- authorization parent/action/primitive binding;
+- backend/worker → wcpd control boundary;
+- IPC timeout/deadline/idempotency/UNKNOWN_OUTCOME semantics;
+- USER/ADMIN web/session isolation;
+- permission-resolution versus final Security authorization composition.
+
+Its centralized matrix is:
+
+`governance/proposals/SC-M01-OWNER-DECISION-MATRIX.md`
+
+Current proposal inventory:
+
+```text
+OWNER DECISIONS TO RATIFY = 37
+LOCAL QA SCENARIOS PROPOSED = 70
+APPLICATION TESTS EXECUTED FROM THOSE CASES = 0
+```
+
+These proposals do not add a ninth artifact to the SC-M01 gate and do not alter the official baselines.
+
+### Missing artifact recovery status
+
+Targeted recovery from project conversations, Library files and GitHub history confirms:
+
+```text
+DATABASE #6
+= final/source-ready owner metadata confirmed
+= exact body still not materialized
+
+QA #7
+= Test Baseline v1.0 metadata approved
+= final SC-M01 canonical test artifact not materialized / not confirmed
+
+ENGINEERING #9
+= final/source-ready owner metadata confirmed
+= exact body still not materialized
+```
+
+Historical recovery gives additional evidence that the DB final contract contained the schemas
+`wcp_core`, `wcp_iam`, `wcp_infra`, `wcp_hosting`,
+`wcp_commercial`, `wcp_ops`, `wcp_audit`, and `wcp_backup`,
+plus named core/operations objects. This evidence is **not sufficient to reconstruct
+the exact owner artifact** and therefore does not close #6.
+
+### Current readiness
+
+```text
+CANONICAL EVIDENCE = 5 / 8
+CONTRACT REMEDIATION = OWNER REVIEW REQUIRED
+REPOSITORY GUARDRAILS = OPEN PR / TESTED / NOT YET ACCEPTED
+SOURCE CODE = PAUSED
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
+
+No generic documentation re-audit is requested. The next useful progress is owner decision/materialization, followed by the existing cross-check and resume checklist.
