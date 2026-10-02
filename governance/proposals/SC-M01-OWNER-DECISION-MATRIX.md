@@ -2,11 +2,11 @@
 
 Date : 2026-10-02. **Status: REVIEW COORDINATION — NON NORMATIVE.**
 
-PR #43. Reference branch is synchronized with main `25fd86225cbf0d9df2eba6ee3af5bd07be1e6ca4`.
+Reference main for this recovery pass: `1b8747f049164a9d5120fbf6f8d6b6be27987fa0`.
 
 Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
-Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` now explicitly records that B01–B05/D01 lack separate explicit owner-ratification evidence.
+Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence.
 
 ## 1. Proposal set
 
@@ -47,10 +47,10 @@ APPLICATION TEST EXECUTIONS = 0
 | T01 | I/O timeout semantics | phase definition | OPEN |
 | T02 | `deadline_ms` representation | absolute/relative/monotonic contract | OPEN |
 | T03 | effective operation-budget scope | formula + start/end phases | OPEN |
-| T04 | timeout vs UNKNOWN_OUTCOME boundary | deterministic outcome rules | OPEN |
+| T04 | phase/error boundary around canonical UNKNOWN_OUTCOME rule | post-dispatch uncertainty is FINAL; before-dispatch/error/result-recovery details remain | OPEN / PARTIALLY DEFINED |
 | T05 | idempotency/identifier binding | relation between request/job/key/protection classes | OPEN |
 | C03 | USER/ADMIN surface binding at control boundary | peer→surface/context constraints | OPEN |
-| C05 | trusted context resolution in wcpd | normative lookup/verification path | OPEN |
+| C05 | trusted context resolution in wcpd | fields/origin-binding/wcpd participation partly defined; storage/expiry/revocation/revalidation remain | OPEN / PARTIALLY DEFINED |
 | C06 | control request/response/job protocol | schema/version/error/idempotency contract | OPEN |
 | C07 | backend vs wcpd responsibility boundary | explicit producer/consumer responsibilities | OPEN |
 | H01 | HTTP versioning strategy | path/media/other choice + compatibility | OPEN |
