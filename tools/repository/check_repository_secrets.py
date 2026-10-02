@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Read-only, bounded secret-pattern check of a committed Git snapshot.
+"""Read-only secret-pattern check of a committed snapshot or the staged index.
 
 No network requests, external scanner, source execution, suppressions or excerpts.
 Exit 0: no selected rule matched; 1: findings; 2: incomplete/error. Not a complete
 secret audit: deleted history, archive interiors and unknown formats are outside
 coverage. Raw bytes are inspected even when they are not UTF-8 text.
+--staged reads the index, not the working tree; no hook is installed automatically.
 """
 from __future__ import annotations
 
@@ -71,9 +72,21 @@ def blob_findings(path: bytes, data: bytes, index: int) -> list[dict[str, Any]]:
     return found
 
 
-def inspect(repo: Path, ref: str = "HEAD") -> dict[str, Any]:
+def inspect(repo: Path, ref: str = "HEAD", *, staged: bool = False,
+            index_file: Path | None = None) -> dict[str, Any]:
     if ref != "HEAD" and not OID.fullmatch(ref):
         raise CheckError("INVALID_REF")
+    if index_file is not None and not staged:
+        raise CheckError("INDEX_REQUIRES_STAGED")
+    if staged and ref != "HEAD":
+        raise CheckError("CONFLICTING_SNAPSHOT_SELECTION")
+    if staged and os.environ.get("GIT_INDEX_FILE") and index_file is None:
+        # Never silently scan the default index when Git prepared another one.
+        raise CheckError("ALTERNATE_INDEX_NOT_SELECTED")
+    if index_file is not None:
+        if index_file.is_symlink() or not index_file.is_file():
+            raise CheckError("INVALID_INDEX_FILE")
+        index_file = index_file.resolve()
     executable = shutil.which("git")
     if not executable:
         raise CheckError("GIT_UNAVAILABLE")
@@ -82,7 +95,10 @@ def inspect(repo: Path, ref: str = "HEAD") -> dict[str, Any]:
         env = {"PATH": os.environ.get("PATH", ""), "HOME": home, "LC_ALL": "C",
                "XDG_CONFIG_HOME": home, "GIT_CONFIG_NOSYSTEM": "1",
                "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_SYSTEM": os.devnull,
-               "GIT_TERMINAL_PROMPT": "0", "GIT_NO_LAZY_FETCH": "1"}
+               "GIT_TERMINAL_PROMPT": "0", "GIT_NO_LAZY_FETCH": "1",
+               "GIT_OPTIONAL_LOCKS": "0"}
+        if index_file is not None:
+            env["GIT_INDEX_FILE"] = str(index_file)
 
         def git(*args: str) -> bytes:
             remaining = deadline - time.monotonic()
@@ -101,10 +117,18 @@ def inspect(repo: Path, ref: str = "HEAD") -> dict[str, Any]:
                 raise CheckError("GIT_READ_FAILED")
             return result.stdout
 
-        commit = git("rev-parse", "--verify", ref + "^{commit}").decode("ascii").strip()
-        if not OID.fullmatch(commit):
-            raise CheckError("UNSUPPORTED_OBJECT_FORMAT")
-        listing = git("ls-tree", "-r", "-l", "-z", commit)
+        # Top-anchored paths ensure scans from subdirectories cover the whole repo.
+        index_command = ("ls-files", "--cached", "--full-name", "-z",
+                         "--format=%(objectmode) %(objecttype) %(objectname) "
+                         "%(objectsize) %(stage)%x09%(path)", "--", ":/")
+        if staged:
+            commit = None  # An index is not a commit, including before the first commit.
+            listing = git(*index_command)
+        else:
+            commit = git("rev-parse", "--verify", ref + "^{commit}").decode("ascii").strip()
+            if not OID.fullmatch(commit):
+                raise CheckError("UNSUPPORTED_OBJECT_FORMAT")
+            listing = git("ls-tree", "--full-tree", "-r", "-l", "-z", commit)
         if len(listing) > 4 * 1024 * 1024:
             raise CheckError("TREE_SIZE_LIMIT")
         rows = listing.split(b"\0")
@@ -114,7 +138,12 @@ def inspect(repo: Path, ref: str = "HEAD") -> dict[str, Any]:
         for row in rows[:-1]:
             try:
                 meta, path = row.split(b"\t", 1)
-                mode, kind, oid, size = meta.split()
+                if staged:
+                    mode, kind, oid, size, stage = meta.split()
+                    if stage != b"0":
+                        raise CheckError("UNMERGED_INDEX")
+                else:
+                    mode, kind, oid, size = meta.split()
             except ValueError:
                 raise CheckError("INVALID_TREE") from None
             if mode not in (b"100644", b"100755") or kind != b"blob":
@@ -123,6 +152,8 @@ def inspect(repo: Path, ref: str = "HEAD") -> dict[str, Any]:
             if not path or not re.fullmatch(rb"[0-9a-f]{40}", oid) or not size.isdigit():
                 raise CheckError("INVALID_TREE")
             entries.append((path, oid.decode("ascii"), int(size)))
+        if len({path for path, _, _ in entries}) != len(entries):
+            raise CheckError("DUPLICATE_PATH")
         if len(entries) > MAX_FILES:
             raise CheckError("FILE_COUNT_LIMIT")
         if any(size > MAX_BLOB for _, _, size in entries):
@@ -142,9 +173,15 @@ def inspect(repo: Path, ref: str = "HEAD") -> dict[str, Any]:
             findings.extend(blob_findings(path, data, index))
             if len(findings) > MAX_FINDINGS:
                 raise CheckError("FINDING_COUNT_LIMIT")
-    return {"format": "WCP360-REPOSITORY-SECRET-CHECK/1", "commit": commit,
+        if staged and git(*index_command) != listing:
+            raise CheckError("INDEX_CHANGED_DURING_SCAN")
+    return {"format": "WCP360-REPOSITORY-SECRET-CHECK/2", "commit": commit,
+            "snapshot_kind": "index" if staged else "commit",
+            "index_snapshot_sha256": hashlib.sha256(listing).hexdigest() if staged else None,
+            "index_stable_at_recheck": True if staged else None,
             "status": "FINDINGS" if findings else "NO_KNOWN_PATTERN_DETECTED",
-            "scope": "one committed snapshot; selected byte signatures and sensitive paths",
+            "scope": ("complete staged index" if staged else "one complete committed snapshot")
+                     + "; selected byte signatures and sensitive paths",
             "files_scanned": len(entries), "bytes_scanned": sum(e[2] for e in entries),
             "binary_files_scanned_as_raw_bytes": binary_count,
             "archive_files_not_decompressed": archive_count,
@@ -162,12 +199,16 @@ class SafeParser(argparse.ArgumentParser):
 def main(argv: list[str] | None = None) -> int:
     parser = SafeParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path.cwd())
-    parser.add_argument("--ref", default="HEAD")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--ref", default="HEAD")
+    selection.add_argument("--staged", action="store_true")
+    parser.add_argument("--index-file", type=Path)
     parser.add_argument("--output", type=Path)
     args = None
     try:
         args = parser.parse_args(argv)
-        report = inspect(args.repo.resolve(), args.ref)
+        report = inspect(args.repo.resolve(), args.ref, staged=args.staged,
+                         index_file=args.index_file)
         code = 1 if report["findings"] else 0
     except CheckError as exc:
         report, code = {"status": "ERROR", "error_code": str(exc), "scan_complete": False}, 2
