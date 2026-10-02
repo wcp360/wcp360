@@ -287,11 +287,12 @@ ENGINEERING #9
 = exact body still not materialized
 ```
 
-Historical recovery gives additional evidence that the DB final contract contained the schemas
+Historical recovery also finds a **proposed/candidate physical DB closure** using schemas
 `wcp_core`, `wcp_iam`, `wcp_infra`, `wcp_hosting`,
 `wcp_commercial`, `wcp_ops`, `wcp_audit`, and `wcp_backup`,
-plus named core/operations objects. This evidence is **not sufficient to reconstruct
-the exact owner artifact** and therefore does not close #6.
+plus named core/operations objects. That detail is useful recovery evidence, but it is **not proof that the exact final owner file retained every proposed name/constraint**.
+
+What is separately confirmed as final is the owner metadata for DB Model v1.0 (final approved / physical contract included / source-ready). Because the exact final body is missing, candidate schema/table details must not be promoted into the final artifact. Issue #6 remains a materialization blocker.
 
 ### Current readiness
 
