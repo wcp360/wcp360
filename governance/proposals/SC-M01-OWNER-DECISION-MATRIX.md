@@ -6,19 +6,19 @@ PR #43. Reference branch is synchronized with main `25fd86225cbf0d9df2eba6ee3af5
 
 Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
-Recovered historical owner evidence is tracked separately from current canonical authority. See `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md`.
+Recovered historical owner evidence is tracked separately from current canonical authority. See `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` and `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md`.
 
 ## 1. Proposal set
 
 | Area | Proposal | Owner decisions | QA cases |
 |---|---|---:|---:|
-| Authorization bindings | `SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` | D01–D04 | C01–C17 = 17 |
+| Authorization bindings | `SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.3.md` | D01–D04 = 3 OPEN + D01 recovered/republication | C01–C17 = 17 |
 | IPC timeout/idempotency | `SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | T01–T07 | TQ01–TQ10 = 10 |
 | Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.2.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
 | API transport | `SC-M01-API-TRANSPORT-DELTA-v0.1.md` | H01–H10 | HQ01–HQ15 = 15 |
 | Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | S01–S09 | SQ01–SQ16 = 16 |
 | Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
-| **Total** | 6 active proposal domains | **47 tracked decision points; 45 OPEN semantic decisions** | **85 proposed cases** |
+| **Total** | 6 active proposal domains | **47 tracked decision points; 44 OPEN semantic decisions** | **85 proposed cases** |
 
 All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 
@@ -28,8 +28,8 @@ All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 
 ```text
 TRACKED DECISION POINTS = 47
-OPEN SEMANTIC OWNER DECISIONS = 45
-RECOVERED OWNER CONSENSUS REQUIRING REPUBLICATION = 1  (C01)
+OPEN SEMANTIC OWNER DECISIONS = 44
+RECOVERED OWNER DECISIONS REQUIRING REPUBLICATION = 2  (C01, D01)
 ALREADY DEFINED IN CURRENT CANONICAL ARTIFACTS = 1     (C02)
 PROPOSED QA CASES = 85
 APPLICATION TEST EXECUTIONS = 0
@@ -39,7 +39,7 @@ APPLICATION TEST EXECUTIONS = 0
 
 | ID | Decision | Required output | Status |
 |---|---|---|---|
-| D01 | semantics of origin action vs IPC action | accepted model + exact canonical section/version impact | OPEN |
+| D01 | semantics of origin action vs IPC action | recovered owner-frozen mapping; canonical harmonization required | RECOVERED OWNER DECISION — REPUBLISH/HARMONIZE |
 | D02 | trusted authorization-context lifecycle | producer/resolver/binding/expiry/revocation | OPEN |
 | D03 | API→IPC target/revision/grant translation | typed mapping and owner references | OPEN |
 | D04 | parent/step audit and uncertain-result correlation | exact event/result relationships | OPEN |
@@ -179,7 +179,7 @@ It does **not** mean:
 
 Implementation consumption requires the owner decision to be published in its normative domain and MASTER to apply the existing gate/checklist.
 
-Recovered conversation evidence such as C01 is not consumed directly by SOURCE CODE. It must be republished/confirmed by its owners or pointed to an already-canonical exact source.
+Recovered conversation evidence such as C01/D01 and B01–B05 is not consumed directly by SOURCE CODE. It must be republished/confirmed by its owners or pointed to an already-canonical exact source.
 
 ## 5. Toolchain note
 
