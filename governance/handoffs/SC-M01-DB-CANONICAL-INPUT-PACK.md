@@ -318,7 +318,15 @@ A database row never becomes authorization merely because it exists; Security co
 
 ### Evidence linkage
 
-Relevant non-normative evidence now in main:
+Relevant non-normative evidence now in main or the dedicated recovery publication:
+
+```text
+governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md
+```
+
+The recovery file preserves exact/near-verbatim fragments retrieved from the prior final-artifact publication, including global rules and selected CORE/IAM/INFRA/HOSTING/OPS structures. It explicitly lists unrecovered sections and cannot close #6.
+
+Relevant cross-domain evidence:
 
 ```text
 governance/proposals/SC-M01-OWNER-DECISION-MATRIX.md
@@ -351,3 +359,34 @@ COMMIT / SOURCE =
 If the recovered owner source is no longer byte-identical and must be recreated/amended, the owner must declare a real content delta/version impact rather than using `CONTENT CHANGE = NONE`.
 
 This input pack still cannot satisfy issue #6 by itself.
+
+
+## 14. Recovery discovery — 2026-10-03
+
+Targeted conversation-history recovery established a stronger fact than the earlier input pack:
+
+```text
+FINAL DB ARTIFACT BODY WAS PUBLISHED IN A PRIOR WCP360 CONVERSATION
+RECOVERED SOURCE EVENT ≈ 2026-09-29 20:26 UTC
+FULL ORIGINAL BODY CURRENTLY RECOVERABLE = NO
+```
+
+Recovered evidence includes exact fragments for:
+
+- publication metadata and scope/invariants;
+- schemas and identifier/common physical rules;
+- `wcp_core.tenants`;
+- `wcp_iam.tenant_memberships`;
+- `wcp_iam.role_assignments`;
+- `wcp_infra.managed_resources`;
+- HOSTING table inventory;
+- `wcp_ops.jobs`;
+- `wcp_ops.idempotency_records`;
+- `wcp_ops.leases`;
+- `wcp_ops.outbox_records`;
+- `wcp_ops.event_records`;
+- tenant-integrity, delete and uncertain-outcome invariants.
+
+These fragments prove that the richer owner contract existed and materially reduce rediscovery. They still cannot establish every missing table/column/FK/index/transaction rule.
+
+The owner should treat this as **recovery evidence**, not as a license for MASTER to complete missing sections by inference.
