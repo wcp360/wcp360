@@ -382,3 +382,31 @@ Issue #9 closes only when Engineering publishes/provides the exact final owner e
     COMMIT / SOURCE =
 
 This input pack remains non-authoritative and cannot close #9.
+
+
+## 16. Historical Engineering recovery — 2026-10-03
+
+Targeted conversation-history recovery found:
+
+    FINAL OWNER METADATA = CONFIRMED
+    FINAL OWNER BODY = NOT RECOVERED
+    PHASE G HARMONIZED CANDIDATE = PARTIALLY RECOVERED
+    H3-C REFRESH DELTA = PARTIALLY RECOVERED
+
+Recovery evidence is preserved separately in:
+
+    governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md
+
+The historical candidate confirms substantial Engineering themes — typed namespaces, architecture boundaries, fail-closed behavior, UNKNOWN_OUTCOME/reconciliation review, traceability graph checks, stale-baseline checks, review/merge/DoD families and pending toolchain/threshold follow-ups.
+
+However:
+
+    CANDIDATE != FINAL APPROVED EXPORT
+
+The candidate must only help Engineering locate/recover its own source. MASTER must not promote it into specifications/engineering/.
+
+If Engineering republishes from the original final v0.2 source, it may declare CONTENT CHANGE = NONE when provenance supports exact republication.
+
+If Engineering must reconstruct/amend the ruleset from candidate material plus later owner decisions, it must issue a real versioned owner delta and state compatibility/version impact.
+
+Issue #9 remains OPEN until the owner export is published in full.
