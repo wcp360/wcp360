@@ -1,7 +1,7 @@
 # AUDIT-WCP-0100 — Closure Matrix
 
 **Reference date:** 2026-10-02  
-**Main reference:** \`25fd86225cbf0d9df2eba6ee3af5bd07be1e6ca4\`  
+**Main reference:** \`0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d\`  
 **Audit tracker:** issue #41  
 **Implementation gate:** issue #13  
 **Status:** CURRENT CLOSURE CONTROL — NO FINDING AUTO-CLOSED
@@ -187,15 +187,16 @@ Evidence:
 
 Evidence:
 
-- PR #43 control-boundary v0.1;
-- C01–C07;
-- CQ01–CQ12;
-- Design candidate socket path is kept non-canonical;
+- merged P1 control-boundary v0.2;
+- C01 = recovered H3-CM M1 owner consensus requiring current republication/confirmation;
+- C02 = already defined by current DevOps/Security;
+- C03–C07 = remaining OPEN semantic decisions;
+- CQ01–CQ12 remain PLANNED;
 - worker is not silently added to \`wcp360-control\`.
 
 **Closure proof required:**
 
-- socket/transport identity;
+- current owner republication/confirmation of recovered socket identity;
 - peer authentication;
 - USER/ADMIN surface binding;
 - worker path;
@@ -296,8 +297,8 @@ Evidence:
 Evidence:
 
 - PR #42 contains read-only CI, repository/path checks and targeted secret checking;
-- latest synchronized head: \`86f6020025f04b605f756005c662707391c1bf00\`;
-- latest run: \`37070958655\` = SUCCESS;
+- latest synchronized head: \`a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77\`;
+- latest run: \`37072620136\` = SUCCESS;
 - both jobs and all steps succeed;
 - main still reports branch protection disabled.
 
@@ -400,7 +401,7 @@ Still missing:
 Evidence:
 
 - DevOps final fixes Debian 13 amd64, product root and reproducibility principles;
-- PR #43 Toolchain/Build v0.1 adds F01–F10 and FQ01–FQ15 without choosing versions;
+- merged P1 Toolchain/Build v0.1 records F01–F10 and FQ01–FQ15 without choosing versions;
 - cancelled Sprint 0 stack is explicitly excluded.
 
 **Closure proof required for SC-M01 toolchain:**
@@ -429,7 +430,7 @@ Evidence:
 Evidence:
 
 - final QA owner artifact missing;
-- PR #43 currently contains 85 proposed local scenarios;
+- merged P1 proposal pack contains 85 proposed local scenarios;
 - PR #42 has real repository-tool tests, explicitly not product QA.
 
 **Closure proof required:**
@@ -595,19 +596,25 @@ QA execution:
 
 Repository tooling/fixes.
 
-Current head at publication of this matrix:
+Current synchronized candidate:
 
-\`86f6020025f04b605f756005c662707391c1bf00\`
+\`a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77\`
 
 Latest verified CI:
 
-\`37070958655 = SUCCESS\`
+\`37072620136 = SUCCESS\`
+
+Merge-test:
+
+\`5c59f2170c1a7894e4ef0a620b9139d1e5eebb6f\`
+
+Evidence: 297 files / 1,086,196 bytes, mirror 147/147, audit 4/4, targeted secret findings 0.
 
 Still requires independent review and merge/enforcement proof.
 
 ### PR #43
 
-Non-normative owner-decision pack.
+Merged P1 non-normative owner-decision pack in main \`0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d\`.
 
 Current decision families:
 
@@ -620,9 +627,9 @@ Security Web/Authz
 Toolchain/Build
 \`\`\`
 
-Central matrix contains 47 owner decisions and 85 proposed QA cases.
+Central matrix tracks 47 decision points: 45 OPEN semantic decisions, C01 recovered/republication, C02 already defined, and 85 proposed QA cases.
 
-No proposal becomes an owner decision by merge or by this audit.
+No proposal became an owner decision by merge or by this audit.
 
 ## 7. Closure rule
 
@@ -636,3 +643,19 @@ A finding may move to \`CLOSED\` only after:
 4. required regression/test evidence exists where executable verification is applicable.
 
 This prevents “document exists” from being treated as “behavior verified”.
+
+
+## 8. Review-evidence policy now in main
+
+Main also contains \`governance/REVIEW-MERGE-POLICY.md\`:
+
+\`\`\`text
+E0 = authored
+E1 = automated checks
+E2 = same-author verification/publication control
+E3 = independent technical review
+\`\`\`
+
+PR #42 currently has E1 + E2 and remains blocked on E3 under class R1.
+
+The connector available in this workflow does not expose a mutation for branch-protection/ruleset administration. Main still reports \`protected=false\`; no enforcement is claimed.
