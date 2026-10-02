@@ -1,8 +1,8 @@
 # WCP360 — SC-M01 Current Readiness Matrix
 
-**Reference date:** 2026-10-02  
+**Reference date:** 2026-10-03  
 **Status:** CURRENT COORDINATION STATE — NON-NORMATIVE STATUS REPORT  
-**Main examined:** `0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d`  
+**Main examined:** `4ff664a3157e662c174260e1fd35429738188f0c`  
 **Audit:** `AUDIT-WCP-0100` / issue #41  
 **Implementation gate:** issue #13
 
@@ -388,3 +388,75 @@ This recovery does **not** recover the complete control wire protocol, exact ind
 C05 is now **OPEN / PARTIALLY DEFINED**: current Security already defines the trusted-context fields and origin-binding responsibilities, and recovered final evidence states that wcpd creates/validates `authorization_context_id`; storage/resolver, expiry/revocation, freshness/revalidation and replay/substitution semantics remain open.
 
 T04 is also **OPEN / PARTIALLY DEFINED**: IPC-B already canonically requires `UNKNOWN_OUTCOME → reconciliation → no blind retry` when execution may have occurred but cannot be proven; only phase/error boundaries and result-retrieval details remain open.
+
+
+## 15. Evidence recovery and QA-owner preparation — 2026-10-03
+
+The three missing gate artifacts are now classified more precisely.
+
+### Database
+
+```text
+FINAL OWNER METADATA = CONFIRMED
+FINAL COMPLETE BODY WAS PREVIOUSLY PUBLISHED = CONFIRMED
+FULL ORIGINAL BODY RECOVERED NOW = NO
+```
+
+Merged recovery evidence:
+
+`governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md`
+
+The recovery now preserves substantial exact/near-verbatim fragments across CORE, IAM, managed-resource, HOSTING, COMMERCIAL, OPS, AUDIT and BACKUP plus transaction/concurrency/reconciliation/delete/index classes.
+
+It is intentionally incomplete and cannot be promoted. Detailed INFRA structures beyond recovered `managed_resources` are not asserted when no reliable historical fragment is available.
+
+### QA
+
+Deeper historical recovery found no evidence of a complete final autonomous SC-M01 QA artifact ever being published.
+
+Merged owner candidate:
+
+`governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md`
+
+It provides a self-contained structure for TESTS / QA review:
+
+- mandatory test record and evidence envelope;
+- unit/contract/integration/security/E2E/recovery/install-build levels;
+- repository/surface/API/IPC/control/authz/DB/failure/audit/DevOps/toolchain/regression families;
+- explicit #6/#9 dependencies;
+- 85 proposal-case intake process;
+- PLANNED/READY/BLOCKED/PASS/FAIL transitions;
+- first CODE-BASELINE QA evidence expectations.
+
+It creates no canonical TEST IDs and no PASS/FAIL.
+
+### Engineering
+
+```text
+FINAL OWNER METADATA = CONFIRMED
+FINAL FULL BODY = NOT RECOVERED
+PHASE G/H3-C CANDIDATE = PARTIALLY RECOVERED
+```
+
+Merged historical evidence:
+
+`governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md`
+
+The candidate evidence is explicitly separated from final authority. It preserves recoverable Engineering themes but cannot be copied into `specifications/engineering/`.
+
+### Gate effect
+
+```text
+RECOVERY / PREPARATION QUALITY = IMPROVED
+CANONICAL ARTIFACT COUNT = UNCHANGED
+
+PRESENT = 5 / 8
+MISSING = 3 / 8
+
+SOURCE CODE = PAUSED
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
+
+The work has reduced owner rediscovery, not bypassed owner authority.
