@@ -157,12 +157,32 @@ Database portions depend on #6.
 
 ### D04 — audit/result-stage correlation
 
+**D04 = OPEN / PARTIALLY DEFINED.**
+
+Already final/canonical or recovered:
+
+- typed identifiers remain distinct;
+- request_id / correlation_id / job_id are linkage metadata, not authorization;
+- audit_event_id is a semantic TYPE;
+- audit_record_id is an immutable persisted OCCURRENCE;
+- durable intent precedes external dispatch;
+- durable result/audit follows the effect path;
+- UNKNOWN_OUTCOME requires reconciliation and forbids blind retry;
+- request → authorization context → action → operation → outcome → durable audit occurrence is the final traceability direction.
+
+Evidence companion:
+
+    governance/proposals/SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md
+
 Still open:
 
-- origin request / job / technical step correlation;
+- exact origin request / parent workflow / technical step audit relationship;
 - firewall audit-event naming/stage;
-- partial effect;
-- UNKNOWN_OUTCOME and final reconciliation event/result relationship.
+- exact partial-effect representation;
+- final reconciliation event/result naming;
+- whether technical steps receive distinct audit records or link under a parent occurrence;
+- exact persistence/FK/order relationship among job, audit, outbox/event and reconciliation;
+- late-result attachment after UNKNOWN_OUTCOME.
 
 ## 8. Revised QA interpretation
 
@@ -186,7 +206,7 @@ No tests are executed by this proposal.
     D01 = OPEN / OWNER HARMONIZATION REQUIRED
     D02 = OPEN
     D03 = OPEN / DATABASE-DEPENDENT
-    D04 = OPEN
+    D04 = OPEN / PARTIALLY DEFINED
 
 Actual new semantic decisions remaining in this authorization delta:
 
