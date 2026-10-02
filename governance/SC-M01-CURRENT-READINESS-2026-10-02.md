@@ -2,7 +2,7 @@
 
 **Reference date:** 2026-10-02  
 **Status:** CURRENT COORDINATION STATE — NON-NORMATIVE STATUS REPORT  
-**Main examined:** `9c1a6cb62e3a81e75cbe40bf28671ea717421be4`  
+**Main examined:** `0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d`  
 **Audit:** `AUDIT-WCP-0100` / issue #41  
 **Implementation gate:** issue #13
 
@@ -24,12 +24,12 @@ SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-Two distinct work packages are open:
+Two distinct work packages exist:
 
-- **PR #42 — repository guardrails**, code/tests/CI only, no application implementation.
-- **PR #43 — contract decision pack**, proposals only, no canonical specification changes.
+- **PR #42 — repository guardrails**, still OPEN; repository tools/tests/CI only, no application implementation.
+- **PR #43 — owner-decision pack**, MERGED AS P1 NON-NORMATIVE EVIDENCE under REVIEW-MERGE-POLICY.
 
-Neither PR is an implementation authorization.
+Neither work package is an implementation authorization. Merging PR #43 did not accept any owner decision.
 
 ## 2. Eight-artifact gate
 
@@ -142,10 +142,10 @@ Status values in this table describe remediation work, not closure of the origin
 | 0110 | independent technical review | **BLOCKED / PROCESS** | real separate reviewer/approval on exact SHA required; no fictitious reviewer | OPEN |
 | 0111 | overbroad gitignore | **FIX IMPLEMENTED + TESTED IN PR #42** | 52/52 probes, negative controls; still not merged/independently reviewed | OPEN |
 | 0112 | 147-file mirror vs full DOC publication | **PARTIALLY VERIFIED** | 147/147 manifest match; exact DOC archive still #16 | OPEN |
-| 0113 | build inputs/toolchain/rights/secrets | **PARTIAL** | DevOps principles exist; exact toolchain/locks/per-consumer details still owner work | OPEN |
+| 0113 | build inputs/toolchain/rights/secrets | **PROPOSAL READY FOR OWNER REVIEW / ENGINEERING DEPENDENCY** | merged P1 Toolchain/Build F01–F10 + FQ01–FQ15; exact Engineering/DB decisions still missing | OPEN |
 | 0114 | QA assertions and execution evidence | **BLOCKED ON QA FINAL + IMPLEMENTATION** | #7; proposal cases in #43 remain PLANNED only | OPEN |
-| 0115 | domain ownership vs folder precedence | **PARTIAL** | AUTHORITY-PRECEDENCE exists; decision ownership must remain domain-based in reviews | OPEN |
-| 0116 | foundation vs future modules | **NEEDS EXPLICIT SCOPE RATIFICATION** | MASTER/Modules/Engineering/QA must classify what blocks SC-M01 vs later milestones | OPEN |
+| 0115 | domain ownership vs folder precedence | **READY FOR AUDIT/MASTER VERIFICATION** | merged governance normalization separates source precedence from owner-domain authority | OPEN |
+| 0116 | foundation vs future modules | **READY FOR AUDIT/MASTER VERIFICATION** | merged `SC-M01-SCOPE.md` defines first implementation foundation and future-module non-blockers | OPEN |
 | 0117 | USER/ADMIN cookie topology | **PROPOSAL READY FOR OWNER REVIEW** | PR #43 S01–S04, SQ01–SQ07 | OPEN |
 | 0118 | permission priority vs Security intersection | **PROPOSAL READY FOR OWNER REVIEW** | PR #43 S05–S09, SQ08–SQ16 | OPEN |
 
@@ -175,9 +175,19 @@ Important limitations:
 - a green workflow does not itself create merge enforcement;
 - same-author tests are not an independent review.
 
-The branch is being synchronized with current main before further review. Do not merge it as a substitute for Engineering v0.2.
+Current synchronized candidate: `a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77`.
 
-## 6. PR #43 — SC-M01 owner-decision pack
+Latest run `37072620136` is SUCCESS on merge-test `5c59f2170c1a7894e4ef0a620b9139d1e5eebb6f`:
+
+- 297 files / 1,086,196 bytes scanned;
+- mirror 147/147;
+- audit files 4/4;
+- targeted secret findings 0;
+- branding originals remain NOT_PUBLISHED.
+
+This is E1 automated evidence plus E2 same-author verification. Do not merge PR #42 as a substitute for Engineering v0.2 or E3 independent review.
+
+## 6. PR #43 — SC-M01 owner-decision pack — merged P1 evidence
 
 Current proposal families:
 
@@ -185,7 +195,7 @@ Current proposal families:
 |---|---:|
 | Authorization bindings v0.2 | D01–D04 + B01–B05 |
 | IPC timeout/idempotency v0.1 | T01–T07 |
-| Control boundary v0.1 | C01–C07 |
+| Control boundary v0.2 | C01 recovered/republication, C02 already defined, C03–C07 OPEN |
 | API transport v0.1 | H01–H10 |
 | Security Web/Authz v0.1 | S01–S09 |
 
@@ -193,7 +203,11 @@ Central coordination file:
 
 `governance/proposals/SC-M01-OWNER-DECISION-MATRIX.md`
 
-It consolidates **37 owner decisions**.
+It tracks **47 decision points**:
+
+- 45 OPEN semantic owner decisions;
+- C01 recovered historical owner consensus requiring republication/confirmation;
+- C02 already defined in current DevOps/Security.
 
 Proposed local QA scenarios:
 
@@ -203,10 +217,11 @@ Timeout/idempotency  = 10
 Control boundary     = 12
 API transport        = 15
 Security Web/Authz   = 16
-TOTAL                = 70
+Toolchain/Build      = 15
+TOTAL                = 85
 ```
 
-All are `PLANNED`, none are canonical TEST IDs, and none are executable PASS evidence.
+All 85 are `PLANNED`, none are canonical TEST IDs, and none are executable PASS evidence.
 
 ## 7. Owner decisions that can advance before #6/#7/#9
 
@@ -252,13 +267,13 @@ Do not invent:
 - grant_set physical representation;
 - exact FK/delete/locking rules.
 
-PR #43 may describe required properties but not choose their physical implementation.
+Published proposal evidence may describe required properties but not choose their physical implementation.
 
 ## 9. Decisions blocked on QA #7
 
 Do not mark PASS/FAIL for:
 
-- 70 proposal cases;
+- 85 proposal cases;
 - TEST-API-*;
 - TEST-IPC-*;
 - N01–N26;
@@ -283,7 +298,7 @@ until the exact v0.2 ruleset is materialized.
 
 ## 11. Recommended order from this state
 
-### A — owners decide the five contract proposals
+### A — owners decide the merged six proposal domains
 
 No general re-audit. Each owner answers the centralized decision matrix with exact source/version impact.
 
@@ -349,3 +364,21 @@ IMPLEMENTATION READINESS = PAUSED — TARGETED EVIDENCE
 ```
 
 The next meaningful progress comes from **owner decisions and exact artifact materialization**, not from producing additional generic audits.
+
+
+## 14. Recovered M1 control-boundary evidence
+
+Conversation-history recovery cross-checks the final H3-CM M1 consensus of 2026-09-27:
+
+```text
+CONTROL SOCKET = /run/wcp360/wcpd.sock
+OWNER = wcpd
+GROUP = wcp360-control
+MODE = 0660
+DEFAULT CLIENTS = wcp360-user, wcp360-admin
+DEFAULT DENIED = wcp360-worker, hosting identities
+```
+
+Earlier/provisional naming such as `wcp360-ctl` does not override the later final `wcp360-control` wording.
+
+This recovery does **not** recover the complete control wire protocol, authorization-context lifecycle, exact indirect worker path, detailed retry/idempotency model or full systemd lifecycle. C01 therefore requires owner republication/confirmation; C03–C07 remain open.
