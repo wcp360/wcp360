@@ -40,3 +40,21 @@ CODE-BASELINE = NONE
 ```
 
 Repository, governance and documentation maintenance may continue. Broad application implementation must not start until MASTER closes the SC-M01 evidence gate.
+
+
+## Review and merge evidence
+
+Repository review evidence is defined in:
+
+governance/REVIEW-MERGE-POLICY.md
+
+Key rules:
+- automated checks are not independent review;
+- same-author/self-review is recorded as publication control, not Engineering independence;
+- non-normative proposals may be preserved without becoming owner-approved contracts;
+- implementation/security/repository tooling uses the stricter review requirements defined by its change class;
+- no fake reviewer, fake team or sub-agent approval;
+- CODEOWNERS assignment alone is not proof that a review occurred;
+- branch-protection checks must only be required after the corresponding check exists reliably on main.
+
+Current mono-maintainer status does not waive the first CODE-BASELINE independent-review requirement.

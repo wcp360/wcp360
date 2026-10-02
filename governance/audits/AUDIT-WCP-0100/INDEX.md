@@ -14,12 +14,13 @@
 | [Rapport principal](README.md) | 16 constats détaillés, preuves, impacts, responsables, critères de clôture, scénarios adverses, structure proposée et ordre de correction. |
 | [Complément du 2 octobre 2026](COMPLEMENT-2026-10-02.md) | Publication de l'analyse complémentaire, état actualisé, deux constats de sécurité supplémentaires, handoffs ciblés et table de couverture de tous les sujets de la réponse conversationnelle. |
 | [Preuve locale du gitignore](gitignore-reproduction.json) | Reproduction déjà présente dans la PR avant ce complément ; ce n'est pas un résultat de tests applicatifs WCP360. |
+| [Matrice de clôture](CLOSURE-MATRIX.md) | Critères exacts de clôture, preuves disponibles, dépendances restantes et distinction entre remediation-ready et VERIFIED/CLOSED pour les 18 findings. |
 
 Le rapport principal et sa preuve locale sont conservés sans modification. Ce dossier complète l'audit existant : aucune seconde branche ou seconde autorité d'audit n'est créée. Les sources normatives sont liées à des commits précis dans les rapports.
 
 ## Registre des 18 constats
 
-Tous les statuts ci-dessous sont **OPEN**. Les impacts sur SC-M01 sont à examiner selon le composant concerné ; les recommandations ne deviennent pas approuvées par leur simple publication.
+Tous les findings restent **OPEN** tant qu'une vérification propriétaire/Audit n'a pas satisfait leur fiche de clôture. La matrice de clôture distingue désormais leur état de remédiation. Les impacts sur SC-M01 sont à examiner selon le composant concerné ; les recommandations ne deviennent pas approuvées par leur simple publication.
 
 | ID | Objet | Propriétaire principal / coopération | Fiche |
 |---|---|---|---|
@@ -62,3 +63,20 @@ Les publications propriétaires restent suivies par #6, #7 et #9 ; le corpus DOC
 ## Portée de la présente publication
 
 Deux fichiers Markdown sont ajoutés au dossier existant : ce fichier et `COMPLEMENT-2026-10-02.md`. Aucune spécification canonique, baseline, règle GitHub, migration, unité systemd, application ou politique de production n'est modifiée. Aucun code du Sprint 0 annulé ni V4.1 « Executable Contracts » n'est réintroduit.
+
+
+## Mise à jour de clôture — 2 octobre 2026
+
+La [matrice de clôture](CLOSURE-MATRIX.md) est le point de contrôle courant pour passer de finding OPEN à VERIFIED/CLOSED sans confondre publication et preuve.
+
+À la référence main `25fd86225cbf0d9df2eba6ee3af5bd07be1e6ca4` :
+
+- AUDIT-WCP-0101 = READY FOR AUDIT/MASTER VERIFICATION ;
+- AUDIT-WCP-0115 = READY FOR AUDIT/MASTER VERIFICATION ;
+- AUDIT-WCP-0116 = READY FOR AUDIT/MASTER VERIFICATION ;
+- aucun finding n'est auto-déclaré VERIFIED/CLOSED ;
+- PR #42 porte les fixes/outils de dépôt et reste en revue ;
+- PR #43 porte les décisions propriétaires proposées et reste non normative ;
+- #6/#7/#9 restent les trois manques du gate 8/8.
+
+Cette mise à jour n'ajoute aucun prérequis global au gate SC-M01.
