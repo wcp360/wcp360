@@ -40,6 +40,16 @@ BLOCKER = NONE
 
 No artifact may be reconstructed from older audits, candidate documents or general knowledge to satisfy this gate.
 
+## Scope before resume
+
+The authorized implementation scope is normalized in:
+
+`governance/SC-M01-SCOPE.md`
+
+This scope file is **not a ninth artifact**. The global evidence gate remains 8/8.
+
+Before implementation starts, MASTER must also confirm that any semantic decision required by the specific foundation component being started has an accepted owner source. A future-module detail that is unrelated to the foundation component does not become a generic blocker.
+
 ## Cross-check before resume
 
 Before MASTER resumes SC-M01, verify:
@@ -69,6 +79,8 @@ SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-SOURCE CODE may then create the first implementation foundation only.
+SOURCE CODE may then create the first implementation foundation only, within `governance/SC-M01-SCOPE.md`.
+
+Broad functional modules, production rollout and SC-M02 remain separately authorized work.
 
 Creating code does not itself establish a CODE-BASELINE. The first CODE-BASELINE requires implementation, tests, independent Engineering review, fixes, verification and MASTER approval.
