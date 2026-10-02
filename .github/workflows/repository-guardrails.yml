@@ -73,10 +73,36 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  repository-secrets:
+    name: repository-secrets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out tested snapshot without persistent credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Test secret detection and safe reporting with synthetic fixtures
+        shell: bash
+        run: python3 -I tools/repository/test_repository_secrets.py
+      - name: Inspect committed snapshot for selected secret patterns
+        shell: bash
+        run: python3 -I tools/repository/check_repository_secrets.py --ref HEAD --output "$RUNNER_TEMP/wcp360-repository-secrets.json"
+      - name: Preserve redacted secret-check evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: wcp360-repository-secrets-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/wcp360-repository-secrets.json
+          if-no-files-found: error
+          retention-days: 30
+
 # Repository maintenance only: not WCP360 application QA or Debian certification.
 # Missing branding originals remain NOT_PUBLISHED in the optional report.
 # For PRs, base.json describes the first parent of the actual tested merge.
 # Different historical event-base metadata is retained under a distinct filename.
 # Inventories contain paths, sizes and hashes, not source file bodies or credentials.
+# Secret checks emit neither detected values nor raw filenames; not a full audit.
 # No deployment, repository writes, production secrets, or privileged runner.
 # A workflow file does not itself enforce branch protection or required reviews.
