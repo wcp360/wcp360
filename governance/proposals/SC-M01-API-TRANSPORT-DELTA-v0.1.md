@@ -129,7 +129,9 @@ Une même donnée ne doit pas être acceptée simultanément depuis plusieurs em
 
 ## 6. Décision H04 — Idempotency-Key
 
-L'API dit déjà :
+**H04 = OPEN / PARTIALLY DEFINED.**
+
+L'API canonique dit déjà :
 
 ```text
 RK: Idempotency-Key required for mutations
@@ -137,7 +139,9 @@ same key + same semantic request = same logical result
 same key + different request = IDEMPOTENCY_CONFLICT
 ```
 
-Mais de nombreuses lignes listent aussi `idempotency_key` dans leur schéma logique.
+Ces semantics sont donc FINAL. Ce qui reste ouvert est uniquement le **binding de transport**.
+
+De nombreuses lignes listent aussi `idempotency_key` dans leur schéma logique.
 
 Proposition :
 
@@ -155,6 +159,12 @@ Le champ listé dans la table serait compris comme une exigence logique, pas com
 Si conservée pour compatibilité, **les deux valeurs doivent être identiques** ; absence/divergence selon profil RK/RN → validation/idempotency error avant mutation.
 
 **Recommandation : I1 pour une nouvelle implémentation, PENDING OWNER DECISION**, afin d'éviter deux sources de vérité.
+
+Evidence companion:
+
+    governance/proposals/SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md
+
+L'owner ne doit pas redécider les semantics same-key/same-request et same-key/different-request : seule la représentation HTTP, la règle de duplication éventuelle et le mapping d'erreur restent ouverts.
 
 Database reste propriétaire de la portée, canonicalisation, unicité, rétention et stockage du résultat.
 
