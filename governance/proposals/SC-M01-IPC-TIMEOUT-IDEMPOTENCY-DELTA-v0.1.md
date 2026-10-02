@@ -174,6 +174,26 @@ Une perte en P6 après résultat durable ne transforme pas le résultat stocké 
 
 ## 7. Décision T05 : idempotence ≠ identité de transport
 
+**T05 = OPEN / PARTIALLY DEFINED.**
+
+Already canonical at API level:
+
+    RK: Idempotency-Key required for mutations
+    same key + same semantic request = same logical result
+    same key + different semantic request = IDEMPOTENCY_CONFLICT
+
+    RN: submission is key-protected
+    UNKNOWN_OUTCOME is never blindly redispatched
+    reconciliation precedes retry
+
+IPC-B also already classifies each operation with technical replay/idempotency protections.
+
+Evidence companion:
+
+    governance/proposals/SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md
+
+The remaining T05 work is the binding between these final semantics and durable/technical identifiers.
+
 Les sources utilisent plusieurs identifiants :
 
 ```text
@@ -264,7 +284,7 @@ T01 I/O timeout semantics =
 T02 deadline_ms representation =
 T03 effective budget scope =
 T04 phase/error boundary around canonical UNKNOWN_OUTCOME rule =
-T05 identifier/idempotency binding =
+T05 durable/technical binding around canonical API idempotency semantics =
 ```
 
 Pour chaque réponse : décision, section canonique à modifier ou référence existante, compatibilité/versioning, erreur/outcome, test.
