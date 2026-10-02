@@ -711,7 +711,408 @@ UNKNOWN_OUTCOME
 
 Blind destructive retry after uncertain dispatch is forbidden.
 
-## 14. What is still missing from the recovered final artifact
+
+## 14. COMMERCIAL schema — additional recovered fragments
+
+Recovered final-artifact heading:
+
+\`\`\`text
+# 9. COMMERCIAL schema
+\`\`\`
+
+Recovered canonical tables:
+
+\`\`\`text
+wcp_commercial.plans
+wcp_commercial.plan_entitlements
+wcp_commercial.subscriptions
+wcp_commercial.subscription_entitlements
+\`\`\`
+
+### 14.1 \`wcp_commercial.plans\`
+
+Recovered columns:
+
+\`\`\`text
+plan_id UUID NOT NULL PK
+plan_key TEXT NOT NULL UNIQUE
+display_name TEXT NOT NULL
+lifecycle_state TEXT NOT NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+### 14.2 \`wcp_commercial.plan_entitlements\`
+
+Recovered columns:
+
+\`\`\`text
+plan_id UUID NOT NULL
+entitlement_id TEXT NOT NULL
+value_payload JSONB NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered PK:
+
+\`\`\`text
+PRIMARY KEY (plan_id, entitlement_id)
+\`\`\`
+
+### 14.3 \`wcp_commercial.subscriptions\`
+
+Recovered columns:
+
+\`\`\`text
+subscription_id UUID NOT NULL PK
+account_id UUID NOT NULL
+tenant_id UUID NULL
+plan_id UUID NOT NULL
+subscription_state TEXT NOT NULL
+starts_at TIMESTAMPTZ NOT NULL
+ends_at TIMESTAMPTZ NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered tenant-scope relationship:
+
+\`\`\`text
+when tenant_id is set:
+(tenant_id, account_id)
+→ tenants(tenant_id, account_id)
+\`\`\`
+
+Recovered check:
+
+\`\`\`text
+ends_at IS NULL OR ends_at > starts_at
+\`\`\`
+
+### 14.4 \`wcp_commercial.subscription_entitlements\`
+
+Recovered columns:
+
+\`\`\`text
+subscription_id UUID NOT NULL
+entitlement_id TEXT NOT NULL
+override_payload JSONB NULL
+state TEXT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered PK:
+
+\`\`\`text
+PRIMARY KEY (subscription_id, entitlement_id)
+\`\`\`
+
+Recovered invariant:
+
+\`\`\`text
+entitlement != permission
+\`\`\`
+
+Unrecovered FKs/delete rules are not inferred.
+
+## 15. AUDIT schema — additional recovered fragments
+
+Recovered final-artifact headings include:
+
+\`\`\`text
+## 11. AUDIT schema
+## wcp_audit.audit_records
+## 21. Audit durability dependencies
+## 23. Delete semantics
+## 24. Approved correctness indexes
+\`\`\`
+
+### 15.1 \`wcp_audit.audit_records\`
+
+Recovered columns:
+
+\`\`\`text
+audit_record_id UUID NOT NULL PK
+audit_event_id TEXT NOT NULL
+event_version INTEGER NOT NULL
+occurred_at TIMESTAMPTZ NOT NULL
+actor_type TEXT NOT NULL
+actor_user_id UUID NULL
+tenant_id UUID NULL
+resource_id UUID NULL
+action_id TEXT NULL
+request_id UUID NULL
+job_id UUID NULL
+workflow_id UUID NULL
+trace_id UUID NULL
+outcome_class TEXT NULL
+correlation_id UUID NOT NULL
+security_classification TEXT NULL
+safe_payload JSONB NOT NULL
+persisted_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered identity invariant:
+
+\`\`\`text
+audit_event_id = semantic audit TYPE
+audit_record_id = immutable persisted OCCURRENCE
+\`\`\`
+
+Recovered durability rule:
+
+- mandatory audit is not best-effort;
+- for pure control-plane PostgreSQL mutation, required audit/outbox durability is part of the durable transaction contract;
+- audit evidence is never cascade-deleted;
+- external-effect uncertainty uses durable intent/result/reconciliation rather than fictional rollback.
+
+The exact retention/index/FK clauses remain incomplete.
+
+## 16. BACKUP schema — additional recovered fragments
+
+Recovered final-artifact heading:
+
+\`\`\`text
+# 12. BACKUP schema
+\`\`\`
+
+Recovered tables:
+
+\`\`\`text
+wcp_backup.backups
+wcp_backup.backup_objects
+wcp_backup.restore_operations
+\`\`\`
+
+### 16.1 \`wcp_backup.backups\`
+
+Recovered columns/attributes:
+
+\`\`\`text
+backup_id UUID NOT NULL PK
+backup_class TEXT NOT NULL
+tenant_id UUID NULL
+resource_id UUID NULL
+backup_state TEXT NOT NULL
+storage_ref TEXT NOT NULL
+encryption_key_ref TEXT NULL
+checksum / checksums
+size
+started_at TIMESTAMPTZ
+completed_at TIMESTAMPTZ NULL
+retention_until TIMESTAMPTZ
+revision BIGINT
+\`\`\`
+
+Recovered classes:
+
+\`\`\`text
+CONTROL_PLANE
+HOSTED_DATABASE
+WORKLOAD
+\`\`\`
+
+Recovered security invariant:
+
+\`\`\`text
+raw encryption keys are forbidden in the row
+\`\`\`
+
+The exact checksum/size column names/types and all nullability/check clauses are not sufficiently recoverable and are therefore not reconstructed.
+
+### 16.2 \`wcp_backup.backup_objects\`
+
+Recovered structure includes:
+
+\`\`\`text
+backup_object_id
+backup_id
+object metadata
+checksum metadata
+size metadata
+required metadata
+\`\`\`
+
+Recovered FK:
+
+\`\`\`text
+backup_id
+→ backups(backup_id)
+ON DELETE CASCADE
+\`\`\`
+
+This is a confirmed exception to the global RESTRICT default.
+
+### 16.3 \`wcp_backup.restore_operations\`
+
+Recovered structure includes:
+
+\`\`\`text
+restore_id
+backup_id
+tenant / target references
+restore_state
+requester
+reconciliation_required
+reconciliation / outcome / error fields
+correlation fields
+timestamps
+revision
+\`\`\`
+
+The exact column names/types for fields beyond those explicitly shown above remain unrecovered and are not invented.
+
+Recovered semantic boundary:
+
+- backup metadata/control-plane state is distinct from backup payload contents;
+- restore can require reconciliation;
+- hosted database/workload backup content remains distinct from control-plane PostgreSQL authority.
+
+## 17. Sections 13–18 — recovered integrity/transaction/concurrency structure
+
+Recovered final-artifact section grouping:
+
+\`\`\`text
+13 — Tenant integrity
+14 — Ownership reassignment
+15 — RLS / tenant authorization boundary
+16 — Transaction boundaries
+17 — Concurrency / revisions
+18 — Job claiming with leases / fencing
+\`\`\`
+
+### 17.1 Tenant integrity
+
+Recovered rule:
+
+\`\`\`text
+every tenant-scoped parent exposes UNIQUE (tenant_id, entity_id)
+children use composite (tenant_id, parent_id) foreign keys
+cross-tenant corruption is rejected by PostgreSQL
+\`\`\`
+
+### 17.2 Ownership reassignment
+
+Recovered rule:
+
+\`\`\`text
+DIRECT TENANT REASSIGNMENT = FORBIDDEN
+\`\`\`
+
+Ownership changes require an explicit approved lifecycle/migration contract rather than direct FK reassignment.
+
+### 17.3 RLS / authorization
+
+Recovered rule:
+
+\`\`\`text
+RLS is not the primary Tenant authorization mechanism
+\`\`\`
+
+Database tenant integrity supports Security isolation but does not replace application authorization.
+
+### 17.4 Transaction boundaries
+
+Recovered invariants:
+
+\`\`\`text
+DB COMMIT != EXTERNAL SUCCESS
+RETRY != RECONCILIATION
+ROLLBACK != COMPENSATION
+\`\`\`
+
+External effects are not modeled as if PostgreSQL could atomically roll them back.
+
+### 17.5 Concurrency / revisions
+
+Recovered rule:
+
+\`\`\`text
+revision BIGINT NOT NULL
+stale expected revision → fail
+\`\`\`
+
+No lost-update overwrite is permitted for revision-protected mutable state.
+
+### 17.6 Job claiming
+
+Recovered model uses leases/fencing for job/executor ownership.
+
+Recovered lease rules are preserved in section 10.3 of this evidence file.
+
+## 18. Sections 21–24 — durability/reconciliation/delete/index structure
+
+Recovered final-artifact headings/topics:
+
+\`\`\`text
+21 — Audit durability dependencies
+22 — Reconciliation state
+23 — Delete semantics
+24 — Approved correctness indexes
+\`\`\`
+
+### 18.1 Audit durability
+
+Recovered rule:
+
+- mandatory audit/outbox persistence required by a pure control-plane DB mutation participates in that durable transaction;
+- mandatory durability failure causes rollback of the DB mutation;
+- external effect already dispatched is handled via outcome/reconciliation, not database rollback fiction.
+
+### 18.2 Reconciliation
+
+Recovered model requires persistent reconciliation state for uncertain external effects.
+
+\`\`\`text
+UNKNOWN_OUTCOME
+→ observe
+→ reconcile
+→ durable final outcome
+\`\`\`
+
+The exact table/column representation of reconciliation state is still incomplete in recovery.
+
+### 18.3 Delete semantics
+
+Recovered global rule:
+
+\`\`\`text
+ON DELETE RESTRICT = default
+\`\`\`
+
+Recovered exceptions are relationship-specific only.
+
+Confirmed recovered exception:
+
+\`\`\`text
+wcp_backup.backup_objects.backup_id
+→ backups
+ON DELETE CASCADE
+\`\`\`
+
+Recovered invariant:
+
+\`\`\`text
+audit evidence is never cascade-deleted
+\`\`\`
+
+### 18.4 Approved correctness indexes
+
+Recovered index classes:
+
+- every PK / UNIQUE required by the physical contract;
+- indexes supporting FK and tenant-parent lookups;
+- scoped idempotency uniqueness;
+- single-active-lease enforcement/indexing;
+- single-active-reseller-delegation enforcement/indexing.
+
+Exact index names and every column ordering are **not** recoverable enough to republish and must be obtained from the owner source.
+
+
+## 19. What is still missing from the recovered final artifact
 
 The following are known to have existed in the complete publication, but are not sufficiently recoverable here to republish canonically:
 
@@ -719,10 +1120,9 @@ The following are known to have existed in the complete publication, but are not
 - complete IAM schema;
 - complete INFRA schema;
 - full HOSTING columns/constraints;
-- full COMMERCIAL schema;
-- full AUDIT schema;
-- full BACKUP schema;
-- complete \`job_attempts\` definition;
+- unrecovered details/FKs/checks/indexes within COMMERCIAL;
+- unrecovered details/FKs/retention/indexes within AUDIT;
+- unrecovered exact field names/types/checks within BACKUP;
 - all FKs and delete exceptions;
 - all CHECK/UNIQUE/nullability clauses;
 - every approved index;
@@ -740,7 +1140,7 @@ CANONICAL IMPORT = FORBIDDEN
 ISSUE #6 = OPEN
 \`\`\`
 
-## 15. Owner-assisted republication rule
+## 20. Owner-assisted republication rule
 
 Database may use this file only to locate/recover its own prior final source.
 
@@ -759,7 +1159,7 @@ If Database must recreate or amend missing material:
 - it must cross-check API/IPC/Security/QA dependencies;
 - it must not claim byte-identical republication.
 
-## 16. Gate state
+## 21. Gate state
 
 \`\`\`text
 DB MODEL VERSION = v1.0
