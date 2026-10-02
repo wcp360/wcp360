@@ -1,6 +1,6 @@
 # WCP360 — Project Status
 
-**Reference date:** 2026-10-02  
+**Reference date:** 2026-10-03  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
 
@@ -333,3 +333,100 @@ BRANDING ORIGINALS = NOT_PUBLISHED
 ```
 
 This remains E1 automated evidence plus E2 same-author verification. It does not satisfy E3 or branch-protection enforcement.
+
+
+## 11. Evidence-recovery update — 2026-10-03
+
+Current main reference when this update was prepared:
+
+`4ff664a3157e662c174260e1fd35429738188f0c`
+
+The canonical gate remains **5 / 8**. The nature of the three missing artifacts is now more precisely established.
+
+### Database #6
+
+```text
+FINAL OWNER METADATA = CONFIRMED
+FINAL FULL BODY EXISTED IN PRIOR WCP360 CONVERSATION = CONFIRMED
+FULL ORIGINAL BODY RECOVERED NOW = NO
+CANONICAL IMPORT = NO
+```
+
+Historical recovery evidence now in main:
+
+`governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md`
+
+Recovered material covers substantial exact/near-verbatim fragments from the prior final publication, including:
+
+- global schemas/identifier/common physical rules;
+- CORE tenant/account/organization/hosting/delegation structures;
+- IAM membership/role-assignment fragments;
+- managed-resource fragment;
+- HOSTING domain/site/DNS/mail/certificate/hosted-DB structures;
+- COMMERCIAL plans/subscriptions/entitlements;
+- OPS jobs/job attempts/idempotency/leases/outbox/events;
+- AUDIT record/durability fragments;
+- BACKUP structures;
+- tenant integrity, revisions, transaction/failure distinctions, reconciliation, delete semantics and correctness-index classes.
+
+The recovery file deliberately lists unrecovered material and is **not** Database authority. Issue #6 still requires the exact final owner file or a real owner republication/amendment.
+
+### Tests / QA #7
+
+Deeper history recovery found no evidence that a complete autonomous final SC-M01 QA artifact was ever published in full.
+
+A self-contained owner candidate is now preserved in main:
+
+`governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md`
+
+It is explicitly:
+
+```text
+OWNER CANDIDATE
+NOT CANONICAL
+NO PASS / FAIL CREATED
+```
+
+It defines test records/evidence, test levels, core SC-M01 families, Database/Engineering dependencies, status transitions, regression rules and intake of the 85 proposal scenarios. TESTS / QA must still amend/approve and publish the final artifact under `specifications/tests/`.
+
+### Engineering #9
+
+```text
+FINAL OWNER METADATA = CONFIRMED
+FINAL BODY = NOT RECOVERED
+PHASE G / H3-C CANDIDATE EVIDENCE = PARTIALLY RECOVERED
+CANDIDATE → FINAL PROMOTION = FORBIDDEN
+```
+
+Recovery evidence now in main:
+
+`governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md`
+
+It preserves typed-namespace, privileged-boundary, fail-closed, UNKNOWN_OUTCOME/reconciliation, traceability, stale-baseline, test-state and review/merge/DoD candidate themes without pretending they are the exact final export.
+
+### Current work state
+
+```text
+PR #42 = OPEN repository guardrails
+         automated evidence exists
+         independent E3 review still missing
+         main branch enforcement still not demonstrated
+
+PR #43 = MERGED P1 non-normative owner-decision/recovery pack
+
+QA OWNER CANDIDATE = MERGED P1 non-normative proposal
+
+DB / ENGINEERING RECOVERY EVIDENCE = MERGED G0 historical evidence
+
+SOURCE CODE = PAUSED
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
+
+The next gate-moving actions remain owner actions, not additional generic audits:
+1. Database exact republication / explicit versioned amendment;
+2. TESTS / QA review and final publication;
+3. Engineering exact republication / explicit versioned amendment;
+4. owner ratification of implementation-critical semantic decisions;
+5. cross-check and MASTER resume only after the existing 8/8 gate is satisfied.

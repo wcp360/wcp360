@@ -2,7 +2,7 @@
 
 Reference: `WCP360-BM-0001 FINAL / SC-M01 TARGETED EVIDENCE`
 
-Last updated: 2026-09-29
+Last updated: 2026-10-03
 
 ## Current implementation gate
 
@@ -46,11 +46,23 @@ Expected final owner artifact:
 WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md
 ```
 
-Publication status is confirmed as final approved / source-ready / blocker none, but the complete file body still needs to be materialized and imported.
+Publication status is confirmed as final approved / source-ready / blocker none. Conversation-history recovery also confirms that the complete final body was previously published, but the original body is still not fully recoverable.
+
+Non-authoritative recovery evidence:
+
+`governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md`
+
+This evidence must not be imported under `specifications/database/`; issue #6 still requires the exact final owner file or a versioned owner republication/amendment.
 
 ### Tests / QA
 
-A final SC-M01-specific canonical implementation-test artifact still needs to be materialized. Implementation-dependent tests remain PLANNED / READY; no fabricated PASS results.
+A final SC-M01-specific canonical implementation-test artifact still needs to be produced/approved by TESTS / QA.
+
+A self-contained non-canonical owner candidate now exists:
+
+`governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md`
+
+The candidate creates no PASS/FAIL and cannot satisfy issue #7 until TESTS / QA publishes its final artifact.
 
 ### Engineering
 
@@ -60,7 +72,13 @@ Expected final owner artifact:
 WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md
 ```
 
-Publication status is confirmed as final approved / source-ready / blocker none, but the complete file body still needs to be materialized and imported.
+Publication status is confirmed as final approved / source-ready / blocker none, but the complete final body remains unavailable.
+
+Historical candidate recovery evidence:
+
+`governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md`
+
+This evidence explicitly separates Phase G/H3-C candidate content from the missing final export and cannot satisfy issue #9.
 
 ## Completion gate
 
@@ -88,3 +106,14 @@ Current repository state:
 ```
 
 This status file does not change any baseline or owner decision.
+
+
+## Recovery/support evidence — non-canonical
+
+| Missing domain | Recovery/support | Authority |
+|---|---|---|
+| Database | `governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md` | historical recovery only |
+| Tests / QA | `governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md` | owner candidate only |
+| Engineering | `governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md` | historical candidate recovery only |
+
+These files reduce rediscovery; they do not increase the 5/8 count.
