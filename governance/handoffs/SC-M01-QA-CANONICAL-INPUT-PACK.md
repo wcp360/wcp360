@@ -467,3 +467,210 @@ SOURCE CODE = PAUSED
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
+
+
+## 12. Post-audit QA inputs — 2026-10-02
+
+**Status of this section:** NON-NORMATIVE OWNER INPUT. The cases below are proposal-derived test obligations. They do not reserve canonical TEST-* identifiers and they are not PASS/FAIL evidence.
+
+### Proposal-case inventory
+
+Current non-normative proposal families in main:
+
+    Authorization bindings        C01  → C17   = 17
+    IPC timeout / idempotency     TQ01 → TQ10  = 10
+    Control boundary              CQ01 → CQ12  = 12
+    API transport                 HQ01 → HQ15  = 15
+    Security Web/Authz            SQ01 → SQ16  = 16
+    Toolchain / Build             FQ01 → FQ15  = 15
+    ------------------------------------------------
+    TOTAL                                     = 85
+
+All 85 remain:
+
+    PLANNED
+    APPLICATION EXECUTION = 0
+    CANONICAL TEST ID ASSIGNMENT = NONE
+
+QA may reuse, split, merge, rename or reject these cases when creating the final owner artifact. MASTER must not pre-assign TEST-* IDs on QA's behalf.
+
+### Already-final semantics that tests should not treat as design choices
+
+#### UNKNOWN_OUTCOME
+
+IPC-B/1 already requires:
+
+    timeout != definite failure
+
+    execution may have occurred but cannot be proven
+    → UNKNOWN_OUTCOME
+    → reconciliation
+    → no blind retry
+
+    execution success != verified success
+
+QA should test this behavior, not ask implementation to choose whether it exists.
+
+Open test details still depend on owner decisions for the exact dispatch boundary, pre-dispatch error priority, late result retrieval and persistence.
+
+#### API idempotency
+
+API 1.0 already requires for RK:
+
+    Idempotency-Key required for mutations
+
+    same key + same semantic request
+    → same logical result
+
+    same key + different semantic request
+    → IDEMPOTENCY_CONFLICT
+
+RN additionally forbids blind redispatch after UNKNOWN_OUTCOME.
+
+Open details remain HTTP transport location/duplication and physical DB persistence/concurrency.
+
+#### Trusted authorization context
+
+Security v1.0 already defines the context fields and requires:
+
+- no direct browser bearer use;
+- unknown permission/action/IPC binding = DENY / no effect;
+- wcpd validates origin permission/action;
+- wcp-privd validates bounded IPC operation/target.
+
+Recovered final evidence also indicates authorization_context_id is created/validated by wcpd.
+
+Open lifecycle details remain storage/resolver, integrity, expiry/revocation, execution-time freshness, dependency outage and replay/substitution.
+
+#### Traceability
+
+Current/final inputs distinguish:
+
+    audit_event_id  = semantic type
+    audit_record_id = immutable occurrence
+    correlation_id/request_id/job_id = linkage identifiers, not authorization
+
+Durable pre-effect intent and durable post-effect result/audit remain required.
+
+Open details remain intermediate-step event naming, partial-effect representation, late-result/reconciliation linkage and physical persistence relations.
+
+### Control-boundary recovery
+
+Recovered final M1 evidence, still requiring current owner republication/confirmation for C01:
+
+    /run/wcp360/wcpd.sock
+    owner = wcpd
+    group = wcp360-control
+    mode = 0660
+    default clients = wcp360-user, wcp360-admin
+    default denied = wcp360-worker, hosting identities
+
+C02 transport access != application authorization is already defined in current DevOps/Security.
+
+C03/C04/C06/C07 remain open; C05 is OPEN / PARTIALLY DEFINED.
+
+QA must not mark control-boundary cases READY if their expected result still depends on an unresolved owner decision.
+
+### Authorization-binding provenance
+
+Current FINAL API/IPC exports contain the relevant API-WCP/IPC-WCP identifiers for reload/restart/firewall/grants.
+
+However the historical FROZEN_BY_API_IPC_OWNER label was traced to an assistant-authored H3-V2 freeze/output, not an independently recovered explicit owner-ratification statement.
+
+Therefore:
+
+    B01–B05 = owner harmonization required
+    D01 = OPEN
+
+QA must test only the mapping ultimately ratified by API/Security owners.
+
+## 13. QA result template requested for the final owner artifact
+
+For each implementation-dependent case, the final QA baseline should make the observable contract explicit:
+
+    TEST ID =
+    REQUIREMENT / CONTRACT =
+    PRECONDITIONS =
+    AUTH/SURFACE =
+    TENANT / RESOURCE =
+    INPUT =
+    FAULT INJECTION, if applicable =
+    EXPECTED RESPONSE / OUTCOME =
+    EXPECTED DB STATE =
+    EXPECTED EXTERNAL EFFECT =
+    FORBIDDEN EFFECTS =
+    EXPECTED AUDIT / CORRELATION =
+    RECOVERY / RECONCILIATION =
+    ENVIRONMENT =
+    TARGET SHA =
+    STATUS = PLANNED / READY / BLOCKED / PASS / FAIL
+    EVIDENCE =
+
+Do not require DB assertions before #6 provides the physical schema. Mark those assertions BLOCKED rather than inventing table/column names.
+
+## 14. Repository-tooling tests versus product QA
+
+PR #42 contains real executed tests for repository tooling:
+
+- gitignore path behavior;
+- publication inventory;
+- archive validation;
+- targeted secret-pattern scanning;
+- staged-index behavior;
+- pre-commit hook behavior.
+
+These are legitimate E1 evidence for the repository-tooling PR.
+
+They are **not**:
+
+- the final WCP360 QA artifact;
+- TEST-API/TEST-IPC execution;
+- application integration tests;
+- proof of SC-M01 product behavior.
+
+The QA owner may reference them for repository/bootstrap obligations after reviewing their scope, but must not count them as broad product coverage.
+
+## 15. Final QA owner publication remains required
+
+Issue #7 closes only with a TESTS / QA owner artifact that clearly identifies:
+
+    TEST BASELINE VERSION = v1.0
+    SCOPE = SC-M01 FIRST IMPLEMENTATION FOUNDATION
+    OWNER = TESTS / QA
+    FINAL APPROVED CONTENT = YES
+    HISTORICAL CONTENT INCLUDED = NO
+    READY FOR SOURCE CODE CONSUMPTION = YES
+
+If the final QA artifact incorporates accepted audit-derived cases, it should record their source and resulting canonical TEST IDs.
+
+This input pack remains non-authoritative and cannot close #7.
+
+
+## Owner-candidate publication aid — 2026-10-03
+
+MASTER has prepared a self-contained non-authoritative owner candidate:
+
+    governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md
+
+This candidate:
+
+- defines a mandatory canonical test-record schema;
+- defines execution evidence bound to exact SHA/environment;
+- separates UNIT / CONTRACT / INTEGRATION / SECURITY / E2E / RECOVERY / INSTALL-BUILD levels;
+- preserves 86 TEST-API references and 47 TEST-IPC references by source mapping rather than duplicating contract definitions;
+- preserves 82-permission authorization coverage;
+- preserves N01–N26;
+- preserves TEST-SEC-WEB-001 → 040;
+- defines Database/Engineering dependency handling;
+- integrates the 85 local PLANNED proposal cases as an intake backlog, not canonical TEST IDs;
+- defines PLANNED / READY / BLOCKED / PASS / FAIL transitions;
+- defines regression and first-CODE-BASELINE evidence expectations.
+
+The file remains:
+
+    OWNER CANDIDATE
+    NOT TESTS / QA AUTHORITY
+    NOT CANONICAL
+    NO PASS / FAIL CREATED
+
+TESTS / QA should amend rather than automatically accept it. Its purpose is to remove drafting/re-discovery work, not replace owner judgment.

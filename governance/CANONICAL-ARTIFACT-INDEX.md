@@ -18,9 +18,9 @@ This index identifies which artifacts are currently implementation authority fro
 
 | Domain | Required artifact | Owner publication | GitHub import |
 |---|---|---|---|
-| Database | `WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md` | FINAL APPROVED / READY / BLOCKER NONE | PENDING — issue #6 |
-| Tests / QA | final SC-M01 Test Baseline v1.0 artifact | NOT YET MATERIALIZED | PENDING — issue #7 |
-| Engineering | `WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md` | FINAL APPROVED / READY / BLOCKER NONE | PENDING — issue #9 |
+| Database | `WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md` | FINAL APPROVED / READY / BLOCKER NONE; prior final body existence confirmed | PENDING — exact owner body / owner republication — issue #6 |
+| Tests / QA | final SC-M01 Test Baseline v1.0 artifact | FINAL OWNER ARTIFACT NOT YET PUBLISHED; owner candidate exists | PENDING — owner review/publication — issue #7 |
+| Engineering | `WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md` | FINAL APPROVED / READY / BLOCKER NONE; historical candidate evidence recovered | PENDING — exact final owner body / owner republication — issue #9 |
 
 Master gate: issue #13.
 
@@ -37,3 +37,30 @@ CODE-BASELINE = NONE
 ```
 
 No missing artifact may be reconstructed from superseded drafts, candidate outputs or general knowledge.
+
+
+## Non-canonical recovery / preparation aids
+
+These files are versioned to reduce owner rediscovery but are **not implementation authority**:
+
+| Domain | File | Status |
+|---|---|---|
+| Database | `governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md` | incomplete historical final-artifact recovery |
+| Tests / QA | `governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md` | self-contained owner candidate |
+| Engineering | `governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md` | historical Phase G/H3-C candidate recovery |
+
+They do not change the 5/8 count.
+
+## Current owner action
+
+```text
+DATABASE
+→ exact final republication OR explicit owner amendment/version impact
+
+TESTS / QA
+→ review/amend owner candidate
+→ publish final v1.0 canonical artifact
+
+ENGINEERING
+→ exact final republication OR explicit owner amendment/version impact
+```

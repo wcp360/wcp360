@@ -215,3 +215,198 @@ SOURCE CODE = PAUSED
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
+
+
+## 14. Post-audit Engineering inputs — 2026-10-02
+
+**Status of this section:** NON-NORMATIVE OWNER INPUT. This section summarizes gaps the exact Engineering v0.2 ruleset should already cover or explicitly resolve. It does not recreate the missing owner ruleset.
+
+### Current governance sources
+
+The Engineering owner should also review:
+
+    governance/SC-M01-SCOPE.md
+    governance/REVIEW-MERGE-POLICY.md
+    governance/SC-M01-CURRENT-READINESS-2026-10-02.md
+    governance/audits/AUDIT-WCP-0100/CLOSURE-MATRIX.md
+
+SC-M01-SCOPE normalizes the already-approved FIRST IMPLEMENTATION FOUNDATION only.
+
+REVIEW-MERGE-POLICY distinguishes:
+
+    E0 = authored
+    E1 = automated checks
+    E2 = same-author verification
+    E3 = independent technical review
+
+For implementation and repository/security tooling, same-author comments and green CI do not become E3.
+
+### PR #42 status
+
+Repository guardrails PR #42 is class R1.
+
+It contains:
+
+- .gitignore corrections and path regressions;
+- publication/inventory checks;
+- branding archive checks;
+- targeted repository secret scanning;
+- staged-index checking;
+- opt-in pre-commit hook;
+- read-only CI jobs.
+
+It has repeatedly demonstrated E1 automated evidence and E2 same-author verification.
+
+It remains OPEN because E3 independent review is missing under the current review policy.
+
+**PR #42 must not be used as a substitute for ENG-WCP-RULESET-0001 v0.2.**
+
+Engineering should review PR #42 only after/with its real ruleset available, or clearly state the limited criteria applied.
+
+### Toolchain / build decisions still unresolved
+
+The audit-derived Toolchain/Build proposal identifies F01–F10:
+
+    F01 application runtime/framework
+    F02 wcpd / wcp-privd implementation language/runtime
+    F03 PostgreSQL/client/migration version policy
+    F04 dependency-source and lock policy
+    F05 frontend/Node decision
+    F06 canonical build/test entry points
+    F07 static-analysis / quality gates
+    F08 build environment / CI runner policy
+    F09 configuration/generated-artifact policy
+    F10 artifact identity/provenance/signing boundary
+
+Current final facts include:
+
+    Debian 13 amd64
+    /usr/lib/wcp360
+    PostgreSQL as control-plane authority
+    WCP-USER != WCP-ADMIN
+    backend → wcpd → bounded IPC → wcp-privd
+
+Not final in currently materialized artifacts:
+
+- exact web/backend framework;
+- exact runtime versions;
+- exact Go/runtime compiler version;
+- Node use/non-use;
+- package managers;
+- lockfile policy details;
+- static-analysis tools;
+- coverage/complexity thresholds;
+- canonical build command names.
+
+Cancelled Sprint 0 choices must not be silently reused.
+
+### Engineering decisions that must not be invented before #9
+
+Do not declare final compliance with:
+
+- directory/layering architecture;
+- dependency direction rules beyond already-canonical owner boundaries;
+- complexity limits;
+- duplication limits;
+- formatter/linter/static-analysis tools;
+- coverage thresholds;
+- build warnings-as-errors rules;
+- generated-code policy;
+- Definition of Done;
+- required review count;
+- merge quality thresholds;
+- release quality gates;
+
+unless those are present in the exact v0.2 owner ruleset or the owner explicitly issues a versioned amendment.
+
+### SC-M01 implementation-class expectations
+
+When SC-M01 resumes, Engineering should classify implementation PRs at least by the foundation areas already normalized:
+
+- repository/bootstrap;
+- WCP-USER / WCP-ADMIN surface skeleton;
+- backend foundation;
+- wcpd foundation;
+- wcp-privd foundation;
+- DB/migration framework and approved schema;
+- configuration/secrets;
+- test harness;
+- build/CI/package foundation.
+
+Broad functional module implementation remains outside SC-M01 unless separately authorized.
+
+### Exact-SHA review requirement
+
+Engineering review should record:
+
+    PR =
+    REVIEWED SHA =
+    REVIEWER =
+    FILES / SCOPE =
+    OWNER CONTRACTS CONSUMED =
+    TEST RUNS / EVIDENCE =
+    FINDINGS =
+    REQUIRED CHANGES =
+    VERDICT =
+    RESERVATIONS =
+    FOLLOW-UP SHA =
+
+A review on an earlier SHA does not automatically approve later substantive code changes.
+
+### Provenance caution
+
+Historical Engineering candidates, generic coding standards, another project's rules and assistant-generated summaries remain non-authoritative.
+
+If the original final v0.2 body cannot be recovered byte-for-byte and Engineering must republish from its own retained source/context, the owner must explicitly state:
+
+    exact republication / no content change
+
+or:
+
+    real content delta + version impact
+
+MASTER must not manufacture the missing ruleset.
+
+## 15. Exact owner response requested
+
+Issue #9 closes only when Engineering publishes/provides the exact final owner export or an explicitly versioned owner republication:
+
+    ENGINEERING RULESET = ENG-WCP-RULESET-0001
+    VERSION = v0.2
+    FINAL APPROVED CONTENT = YES
+    HISTORICAL CONTENT INCLUDED = NO
+    READY FOR SOURCE CODE CONSUMPTION = YES
+    BLOCKER = NONE
+    PROVENANCE =
+    CONTENT CHANGE =
+    COMMIT / SOURCE =
+
+This input pack remains non-authoritative and cannot close #9.
+
+
+## 16. Historical Engineering recovery — 2026-10-03
+
+Targeted conversation-history recovery found:
+
+    FINAL OWNER METADATA = CONFIRMED
+    FINAL OWNER BODY = NOT RECOVERED
+    PHASE G HARMONIZED CANDIDATE = PARTIALLY RECOVERED
+    H3-C REFRESH DELTA = PARTIALLY RECOVERED
+
+Recovery evidence is preserved separately in:
+
+    governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md
+
+The historical candidate confirms substantial Engineering themes — typed namespaces, architecture boundaries, fail-closed behavior, UNKNOWN_OUTCOME/reconciliation review, traceability graph checks, stale-baseline checks, review/merge/DoD families and pending toolchain/threshold follow-ups.
+
+However:
+
+    CANDIDATE != FINAL APPROVED EXPORT
+
+The candidate must only help Engineering locate/recover its own source. MASTER must not promote it into specifications/engineering/.
+
+If Engineering republishes from the original final v0.2 source, it may declare CONTENT CHANGE = NONE when provenance supports exact republication.
+
+If Engineering must reconstruct/amend the ruleset from candidate material plus later owner decisions, it must issue a real versioned owner delta and state compatibility/version impact.
+
+Issue #9 remains OPEN until the owner export is published in full.

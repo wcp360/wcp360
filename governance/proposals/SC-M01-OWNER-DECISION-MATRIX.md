@@ -6,7 +6,7 @@ Reference main for this recovery pass: `1b8747f049164a9d5120fbf6f8d6b6be27987fa0
 
 Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
-Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence.
+Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
 
 ## 1. Proposal set
 
@@ -43,12 +43,12 @@ APPLICATION TEST EXECUTIONS = 0
 | D01 | semantics of origin action vs IPC action | current typed/canonical identifiers + owner harmonization of origin→technical binding | OPEN |
 | D02 | trusted authorization-context lifecycle | producer/resolver/binding/expiry/revocation | OPEN |
 | D03 | API→IPC target/revision/grant translation | typed mapping and owner references | OPEN |
-| D04 | parent/step audit and uncertain-result correlation | exact event/result relationships | OPEN |
+| D04 | parent/step audit and uncertain-result correlation | core traceability/durability is final; step/event/persistence relationships remain | OPEN / PARTIALLY DEFINED |
 | T01 | I/O timeout semantics | phase definition | OPEN |
 | T02 | `deadline_ms` representation | absolute/relative/monotonic contract | OPEN |
 | T03 | effective operation-budget scope | formula + start/end phases | OPEN |
 | T04 | phase/error boundary around canonical UNKNOWN_OUTCOME rule | post-dispatch uncertainty is FINAL; before-dispatch/error/result-recovery details remain | OPEN / PARTIALLY DEFINED |
-| T05 | idempotency/identifier binding | relation between request/job/key/protection classes | OPEN |
+| T05 | idempotency/identifier binding | API replay semantics final; durable/technical binding remains | OPEN / PARTIALLY DEFINED |
 | C03 | USER/ADMIN surface binding at control boundary | peer→surface/context constraints | OPEN |
 | C05 | trusted context resolution in wcpd | fields/origin-binding/wcpd participation partly defined; storage/expiry/revocation/revalidation remain | OPEN / PARTIALLY DEFINED |
 | C06 | control request/response/job protocol | schema/version/error/idempotency contract | OPEN |
@@ -56,7 +56,7 @@ APPLICATION TEST EXECUTIONS = 0
 | H01 | HTTP versioning strategy | path/media/other choice + compatibility | OPEN |
 | H02 | method/route binding | per activated API-WCP contract | OPEN |
 | H03 | parameter locations | path/query/header/body mapping | OPEN |
-| H04 | Idempotency-Key transport source | header-only vs dual representation | OPEN |
+| H04 | Idempotency-Key transport source | semantic key behavior final; HTTP location/duplication rule remains | OPEN / PARTIALLY DEFINED |
 | H05 | DTO definitions | JobAccepted/Mutation/Collection/SecretCreated | OPEN |
 | H06 | safe error format + HTTP status map | deterministic map | OPEN |
 | H07 | session/token transport coexistence | auth selection + CSRF/CORS | OPEN |
