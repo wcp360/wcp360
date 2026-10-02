@@ -15,9 +15,10 @@ Purpose: provide one bounded checklist for owners. This matrix does not approve 
 | Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` | C01–C07 | CQ01–CQ12 = 12 |
 | API transport | `SC-M01-API-TRANSPORT-DELTA-v0.1.md` | H01–H10 | HQ01–HQ15 = 15 |
 | Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | S01–S09 | SQ01–SQ16 = 16 |
-| **Total** | 5 active proposal files | **37 owner decisions** | **70 proposed cases** |
+| Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
+| **Total** | 6 active proposal files | **47 owner decisions** | **85 proposed cases** |
 
-All 70 cases are `PLANNED`. Application tests executed by this PR = **0**.
+All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 
 ## 2. Decision register
 
@@ -68,6 +69,33 @@ All 70 cases are `PLANNED`. Application tests executed by this PR = **0**.
 
 ### DEVOPS / BUILD / RELEASE — primary
 
+Toolchain/build decisions:
+
+| ID | Decision | Required output | Status |
+|---|---|---|---|
+| F03 | PostgreSQL version/client/migration policy | supported major/range + driver/tool | OPEN |
+| F04 | dependency-source policy | registries/repos/pinning/checksums | OPEN |
+| F05 | frontend/Node decision | explicit use/non-use + lock strategy | OPEN |
+| F06 | canonical build/test entry points | commands and deterministic behavior | OPEN |
+| F08 | build environment / CI runner | OS/image/privilege/network/cache policy | OPEN |
+| F09 | configuration/generated artifacts | authority + reproducibility rules | OPEN |
+| F10 | artifact identity/provenance/signing boundary | digest/provenance/trust policy | OPEN |
+
+Engineering co-owns F01/F02/F04–F08; Security reviews supply-chain/secret/privilege constraints.
+
+### ENGINEERING / CODE REVIEW — toolchain decisions
+
+| ID | Decision | Required output | Status |
+|---|---|---|---|
+| F01 | application runtime/framework | language/framework/version/dependency manager | BLOCKED/PARTIAL ON #9 |
+| F02 | wcpd/wcp-privd implementation language | language/runtime/version/compiler policy | BLOCKED/PARTIAL ON #9 |
+| F04 | dependency lock policy | exact lock/restore expectations | BLOCKED/PARTIAL ON #9 |
+| F06 | canonical developer/build entry points | owner-approved commands | BLOCKED/PARTIAL ON #9 |
+| F07 | static analysis / quality gates | tools + thresholds/rules | BLOCKED ON #9 |
+| F08 | build/CI quality expectations | review + environment constraints | BLOCKED/PARTIAL ON #9 |
+
+### DEVOPS / BUILD / RELEASE — primary
+
 | ID | Decision | Required output | Status |
 |---|---|---|---|
 | C01 | control socket physical identity | path/owner/group/mode/runtime lifecycle | OPEN |
@@ -100,6 +128,10 @@ QA must:
 ### ENGINEERING / CODE REVIEW
 
 Engineering must publish the exact ruleset body (#9) and review implementation/repository changes on exact SHAs. PR #42 is not a substitute for `ENG-WCP-RULESET-0001 v0.2`.
+
+### TESTS / QA — toolchain cases
+
+Map FQ01–FQ15 only after owners decide F01–F10. These cases do not make QA #7 complete and remain PLANNED.
 
 ## 3. Decision response format
 
@@ -136,7 +168,13 @@ It does **not** mean:
 
 Implementation consumption requires the owner decision to be published in its normative domain and MASTER to apply the existing gate/checklist.
 
-## 5. Gate snapshot
+## 5. Toolchain note
+
+The current repository fixes Debian 13 amd64, /usr/lib/wcp360, PostgreSQL as the control-plane authority and the privileged architecture. It does **not** yet fix the web framework/runtime, frontend toolchain, concrete runtime versions, package managers, static-analysis tools or quantitative quality thresholds.
+
+Historical cancelled Sprint 0 stack choices are not eligible as defaults.
+
+## 6. Gate snapshot
 
 ```text
 CANONICAL REQUIRED ARTIFACTS PRESENT = 5 / 8
