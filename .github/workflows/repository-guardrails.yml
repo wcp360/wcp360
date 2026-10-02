@@ -31,6 +31,12 @@ jobs:
       - name: Test the publication checker with synthetic Git fixtures
         shell: bash
         run: python3 -I tools/repository/test_publication_checker.py
+      - name: Test branding archive validation rules
+        shell: bash
+        run: python3 -I tools/repository/check_branding_archive.py --self-test
+      - name: Verify branding originals when the archive is present
+        shell: bash
+        run: python3 -I tools/repository/check_branding_archive.py --optional --output publication-evidence/branding.json
       - name: Verify publication and record exact Git inventories
         shell: bash
         env:
@@ -50,7 +56,7 @@ jobs:
           retention-days: 30
 
 # Repository maintenance only: not WCP360 application QA or Debian certification.
+# Missing branding originals remain NOT_PUBLISHED in the optional report.
 # Inventories contain paths, sizes and hashes, not source file bodies or credentials.
-# A successful mirror check is not proof that unavailable archives are published.
 # No deployment, repository writes, production secrets, or privileged runner.
 # A workflow file does not itself enforce branch protection or required reviews.

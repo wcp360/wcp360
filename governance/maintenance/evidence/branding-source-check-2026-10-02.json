@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-02",
+  "scope": "Local source-archive identity and synthetic checker tests",
+  "archive_name": "WCP360-unpublished-source-assets-2026-10-02.zip",
+  "archive_bytes": 6596441,
+  "archive_sha256": "3580a3f79aa194b77abb3c9b1ed026cf99f226ac7b179a6da78d96d2dbda53d0",
+  "original_png_count": 7,
+  "members_including_sidecars": 9,
+  "local_original_bytes_verified": true,
+  "original_images_uploaded_by_this_change": false,
+  "source_archive_published_by_this_change": false,
+  "checker_git_blob": "67512e2ce00b4b8fb2528721e38a95a4ea81b7d1",
+  "checker_sha256": "fc0e4f5dd283d05271b469c3d676eb34596f61d37069071f716fc12a20dbea8a",
+  "python_version": "3.13.5",
+  "synthetic_checks": {
+    "passed": 9,
+    "failed": 0,
+    "cases": [
+      "valid_allowlisted_fixture",
+      "changed_member",
+      "missing_member",
+      "extra_member",
+      "traversal_member",
+      "symlink_member",
+      "optional_missing_stays_unpublished",
+      "required_missing",
+      "wrong_original_archive"
+    ]
+  },
+  "cli_checks": [
+    {"input": "original_archive", "exit": 0, "status": "ORIGINAL_BYTES_VERIFIED"},
+    {"input": "missing_optional", "exit": 0, "status": "NOT_PUBLISHED"},
+    {"input": "missing_required", "exit": 1, "status": "ERROR"}
+  ],
+  "archive_members_extracted": 0,
+  "application_tests_executed": 0,
+  "owner_approval": "NOT_GRANTED",
+  "overall_project_publication": "NOT_CERTIFIED_COMPLETE"
+}
