@@ -1,0 +1,105 @@
+{
+  "format": "WCP360-PUBLICATION-VERIFICATION/1",
+  "date": "2026-10-02",
+  "repository": "yyogas/wcp360",
+  "overall_project_publication": "PARTIAL_NOT_CERTIFIED_COMPLETE",
+  "main_snapshot": {
+    "commit": "d802dfdfad25f91f030c7ff7656310d05f57c311",
+    "tree": "4f3d4588d79e7b58fb5f147002f01c0b5760b670",
+    "files": 261,
+    "bytes": 771691,
+    "extension_counts": {".md": 258, ".json": 1, "no_extension": 2}
+  },
+  "mirror": {
+    "path": "documentation/library-mirror/",
+    "manifest_path": "documentation/library-mirror/MANIFEST.md",
+    "manifest_git_blob": "92fea71a6b702441582722f578a81d3b1e9b478b",
+    "expected_files": 147,
+    "exact_git_blob_and_size_matches": 147,
+    "source_bytes_as_declared_by_committed_manifest": 348310,
+    "missing": [],
+    "changed": [],
+    "unlisted": [],
+    "verified_against_committed_manifest": true,
+    "raw_library_identity_certified_for_all_files": false,
+    "composition": {"full_design_staging": 114, "partial_design_staging": 27, "root_exports": 6}
+  },
+  "other_main_groups": {
+    "audit_files": {"expected": 4, "present": 4},
+    "historical_snapshot_2026_09_27": {"files": 43, "source_markdown": 42, "readme": 1, "bytes": 92596},
+    "dedicated_design_directory": {"files": 28, "source_markdown": 27, "readme": 1, "bytes": 59167},
+    "full_design_mirror": {"files": 114, "same_blob_in_dedicated_directory": 27, "not_in_dedicated_directory_but_present_in_mirror": 87}
+  },
+  "source_library_folder_inventory": {
+    "path": "/WCP360 — PROJECT",
+    "pages_exhausted": true,
+    "files": 149,
+    "markdown": 147,
+    "html": 1,
+    "zip": 1,
+    "scope_is_not_all_conversations_or_all_library_folders": true
+  },
+  "raw_source_sample": {
+    "file": "_GITHUB-STAGING-DESIGN-FULL-V2.5.3.36.4/01-daemon-operation-allowlist.md",
+    "raw_source_bytes": 4152,
+    "raw_source_git_blob": "342155edf268ab7bd07b63efcc1fe6ce93f67951",
+    "published_bytes": 4151,
+    "published_git_blob": "0112736b015f54690f452b56a052ff5417107172",
+    "comparison": "IDENTICAL_AFTER_REMOVING_EXACTLY_ONE_FINAL_LF_FROM_SOURCE",
+    "sample_only": true
+  },
+  "first_publication_run": {
+    "url": "https://github.com/yyogas/wcp360/actions/runs/37048894960",
+    "run_id": 37048894960,
+    "head_sha": "e8423ba09e2fbb001a33a49b3b240093b8351e55",
+    "status": "completed",
+    "conclusion": "success",
+    "artifact_id": 11244913541,
+    "artifact_zip_sha256": "cf180b80d804bee6ef72dcfd48d6467e6d176d76a8070abd971852832f983ea3",
+    "downloaded_and_digest_verified": true,
+    "artifact_expires_at": "2026-11-01T18:39:28Z",
+    "reports": [
+      {"name": "base.json", "bytes": 113991, "sha256": "806745cf7a94013a3d0ffc01d614a80fe1012100598f999c4ce62272d0480ddd", "commit": "d802dfdfad25f91f030c7ff7656310d05f57c311"},
+      {"name": "candidate.json", "bytes": 115489, "sha256": "416d4977777a5fc34c1614e27d592df034b4b83e979c4c2e2d3b5460f5fdce7c", "commit": "e8423ba09e2fbb001a33a49b3b240093b8351e55"},
+      {"name": "checked-out.json", "bytes": 115489, "sha256": "9f4ddb5a1cc8e8835d01f079946ff4f6ac0175995a8c6a76e48d2273df07ab46", "commit": "29d4f22f5486c1cfe544cbcaa82f40bdcd1fe3b6"}
+    ]
+  },
+  "latest_verified_run_at_report_write": {
+    "url": "https://github.com/yyogas/wcp360/actions/runs/37049862542",
+    "run_id": 37049862542,
+    "job_id": 110980260348,
+    "head_sha": "3d8d2ac1e9ce71df02cfd2bf2a7d40a6e1f68d82",
+    "conclusion": "success",
+    "gitignore_probe_step": "success",
+    "publication_checker_synthetic_tests_step": "success",
+    "publication_inventory_step": "success",
+    "evidence_upload_step": "success"
+  },
+  "recent_work_locations": [
+    {"pr": 40, "status": "MERGED", "commit": "d802dfdfad25f91f030c7ff7656310d05f57c311", "path": "governance/audits/AUDIT-WCP-0100/"},
+    {"pr": 42, "status": "PUBLISHED_ON_BRANCH_NOT_MERGED", "head": "3d8d2ac1e9ce71df02cfd2bf2a7d40a6e1f68d82", "branch": "maintenance/sc-m01-repository-guardrails"},
+    {"pr": 43, "status": "PROPOSAL_ON_BRANCH_NOT_APPROVED_OR_MERGED", "head": "3e2ba6c10d0f5e1a81fb2c8275a301469252c320", "branch": "contracts/sc-m01-authorization-delta"}
+  ],
+  "new_source_publication": {
+    "path": "documentation/visuals/WCP360_project_flow_visual.html",
+    "commit": "36765917f53141da439f488d50d96172a6523ae5",
+    "git_blob": "a55438dc40897f61f99fd3d526513b4757f4e851",
+    "method": "FULL_98_LINE_TEXT_EXPORT_WITH_FINAL_LF",
+    "raw_original_byte_equivalence": "NOT_CERTIFIED"
+  },
+  "remaining_unpublished_or_unverifiable": [
+    {"item": "Database canonical final body", "tracking": "#6", "status": "NOT_IMPORTED"},
+    {"item": "QA canonical final body", "tracking": "#7", "status": "NOT_IMPORTED"},
+    {"item": "Engineering canonical final body", "tracking": "#9", "status": "NOT_IMPORTED"},
+    {"item": "DOC v4.0.21.23 exact full archive/corpus", "tracking": "#16", "status": "RAW_SOURCE_NOT_OBTAINED"},
+    {"item": "Design System full original archive and non-Markdown assets", "status": "NOT_CERTIFIED_BY_MARKDOWN_MIRROR"},
+    {"item": "WCP360_CONSOLIDATED_MD_2026-09-27.zip original ZIP", "status": "RAW_MATERIALIZATION_DENIED; 42 MARKDOWN SNAPSHOT FILES ARE SEPARATELY PRESENT"},
+    {"item": "WCP360 — Package R4 — Audit - Durability - Cardinality — Database Return.md", "status": "HISTORICAL_METADATA_FOUND_BUT_BODY_NOT_RETRIEVED"},
+    {"item": "Seven original PNG branding candidates", "status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB", "catalog": "pending-binary-assets-2026-10-02.json"}
+  ],
+  "semantic_audit": false,
+  "full_source_secret_scan": false,
+  "application_tests_executed": 0,
+  "owner_approvals_created": false,
+  "code_baseline": "NONE"
+}
