@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-02",
+  "scope": "Repository maintenance; synthetic path checks only",
+  "source_main_commit": "aab5033f09a9b9d459d5c723344d7629306fd5ae",
+  "before_git_blob": "479678cad0d0a624bb0dcc3ca394395b339fe4ea",
+  "after_git_blob": "3f9aebb37670a40fc959dbbeeac3b61f1d87803c",
+  "after_sha256": "1aed10181d1b0adcc6f1aa8063a428dfc9c2ad345a16e3ae91fa492e0f888e39",
+  "checker_git_blob": "3e747de764821b9df45805ae950e196373a1998c",
+  "checker_sha256": "447ecfb469d683cd20ba011adecf99a05cc7c4e180f9ab25fb2d8e6d09735728",
+  "environment": {
+    "git": "git version 2.47.3",
+    "python": "3.13.5",
+    "execution": "local isolated temporary Git repository"
+  },
+  "before": {
+    "total": 52,
+    "passed": 41,
+    "failed": 11,
+    "exit_code": 1,
+    "failed_paths": [
+      "database/migrations/001_initial.sql",
+      "database/migrations/tenant/002_scope.sql",
+      "tests/fixtures/minimal.sql",
+      "tests/fixtures/tenant/minimal.sql",
+      "src/runtime/config.go",
+      "src/wcpd/runtime/config.go",
+      "packaging/build/README.md",
+      "tools/build/check.py",
+      "documentation/modules/secrets.md",
+      "specifications/security/secrets.md",
+      "export.sql.gz"
+    ]
+  },
+  "after": {
+    "total": 52,
+    "passed": 52,
+    "failed": 0,
+    "exit_code": 0,
+    "trackable_probes": 14,
+    "ignored_probes": 38
+  },
+  "negative_controls": [
+    {"case": "remove_env_rule", "expected_exit": 1, "observed_exit": 1, "failed_probes": 2},
+    {"case": "hide_go_sources", "expected_exit": 1, "observed_exit": 1, "failed_probes": 2},
+    {"case": "missing_input", "expected_exit": 2, "observed_exit": 2}
+  ],
+  "reproduce": [
+    "python3 -I tools/repository/check_gitignore.py",
+    "git show aab5033f09a9b9d459d5c723344d7629306fd5ae:.gitignore > /tmp/wcp360-before.gitignore",
+    "python3 -I tools/repository/check_gitignore.py --ignore-file /tmp/wcp360-before.gitignore"
+  ],
+  "application_tests_executed": 0,
+  "secret_content_scan": false,
+  "nested_gitignore_coverage": false,
+  "note": "A passing filename probe does not prove that file content is safe. No SQL/secret probe file is created."
+}
