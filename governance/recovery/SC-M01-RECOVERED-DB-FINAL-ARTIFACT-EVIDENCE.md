@@ -1123,7 +1123,6 @@ The following are known to have existed in the complete publication, but are not
 - unrecovered details/FKs/checks/indexes within COMMERCIAL;
 - unrecovered details/FKs/retention/indexes within AUDIT;
 - unrecovered exact field names/types/checks within BACKUP;
-- complete \`job_attempts\` definition;
 - all FKs and delete exceptions;
 - all CHECK/UNIQUE/nullability clauses;
 - every approved index;
