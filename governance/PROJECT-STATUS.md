@@ -232,10 +232,10 @@ Current work packages:
 
 ```text
 PR #42 = repository guardrails / tests / CI
-         OPEN — not application code — independent review still required
+         OPEN — E1+E2 complete on current candidate — E3 independent review still required
 
 PR #43 = SC-M01 owner-decision pack
-         OPEN — proposals only — no canonical specifications changed
+         MERGED AS P1 NON-NORMATIVE EVIDENCE — no owner decision accepted
 ```
 
 PR #43 currently converts the implementation-critical semantic gaps into bounded owner decisions for:
@@ -254,12 +254,20 @@ Its centralized matrix is:
 Current proposal inventory:
 
 ```text
-OWNER DECISIONS TO RATIFY = 37
-LOCAL QA SCENARIOS PROPOSED = 70
+TRACKED DECISION POINTS = 47
+OPEN SEMANTIC OWNER DECISIONS = 45
+RECOVERED OWNER CONSENSUS REQUIRING REPUBLICATION = 1
+ALREADY DEFINED IN CURRENT CANONICAL ARTIFACTS = 1
+LOCAL QA SCENARIOS PROPOSED = 85
 APPLICATION TESTS EXECUTED FROM THOSE CASES = 0
 ```
 
-These proposals do not add a ninth artifact to the SC-M01 gate and do not alter the official baselines.
+These proposals were merged for traceability under REVIEW-MERGE-POLICY. Their merge does not ratify any D/T/C/H/S/F decision, does not add a ninth artifact to the SC-M01 gate and does not alter the official baselines.
+
+Recovered H3-CM M1 evidence narrows the control-boundary gap:
+- C01 physical control socket = recovered owner consensus awaiting current owner republication/confirmation;
+- C02 transport access != application authorization = already defined by current DevOps/Security;
+- C03–C07 remain open semantic decisions.
 
 ### Missing artifact recovery status
 
@@ -290,7 +298,7 @@ the exact owner artifact** and therefore does not close #6.
 ```text
 CANONICAL EVIDENCE = 5 / 8
 CONTRACT REMEDIATION = OWNER REVIEW REQUIRED
-REPOSITORY GUARDRAILS = OPEN PR / TESTED / NOT YET ACCEPTED
+REPOSITORY GUARDRAILS = OPEN PR / TESTED ON CURRENT MAIN / E3 NOT YET RECEIVED
 SOURCE CODE = PAUSED
 SC-M01 = PAUSED — TARGETED EVIDENCE
 SC-M02 = NOT AUTHORIZED
@@ -298,3 +306,29 @@ CODE-BASELINE = NONE
 ```
 
 No generic documentation re-audit is requested. The next useful progress is owner decision/materialization, followed by the existing cross-check and resume checklist.
+
+
+### Latest repository-guardrail evidence
+
+PR #42 current synchronized candidate:
+
+`a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77`
+
+GitHub Actions run:
+
+`37072620136 = SUCCESS`
+
+Verified merge-test evidence:
+
+```text
+BASE MAIN = 0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d
+BASE FILES = 280
+CANDIDATE FILES = 297
+MERGE-TEST FILES = 297
+MIRROR = 147 / 147
+AUDIT FILES = 4 / 4
+TARGETED SECRET FINDINGS = 0
+BRANDING ORIGINALS = NOT_PUBLISHED
+```
+
+This remains E1 automated evidence plus E2 same-author verification. It does not satisfy E3 or branch-protection enforcement.
