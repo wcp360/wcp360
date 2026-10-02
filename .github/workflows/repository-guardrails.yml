@@ -40,12 +40,30 @@ jobs:
       - name: Verify publication and record exact Git inventories
         shell: bash
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
           CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
+          set -euo pipefail
+          [[ "$CANDIDATE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EVENT_BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          CHECKED_OUT_SHA="$(git rev-parse HEAD)"
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            read -ra PARENTS <<< "$(git show -s --format='%P' HEAD)"
+            [[ "${#PARENTS[@]}" -eq 2 ]]
+            [[ "${PARENTS[1]}" == "$CANDIDATE_SHA" ]]
+            BASE_SHA="${PARENTS[0]}"
+          else
+            [[ "$CHECKED_OUT_SHA" == "$CANDIDATE_SHA" ]]
+            BASE_SHA="$CHECKED_OUT_SHA"
+          fi
+          printf 'event_base=%s\ntested_base=%s\ncandidate=%s\nchecked_out=%s\n' "$EVENT_BASE_SHA" "$BASE_SHA" "$CANDIDATE_SHA" "$CHECKED_OUT_SHA"
           python3 -I tools/repository/check_publication.py --ref "$BASE_SHA" --output publication-evidence/base.json
           python3 -I tools/repository/check_publication.py --ref "$CANDIDATE_SHA" --output publication-evidence/candidate.json
-          python3 -I tools/repository/check_publication.py --ref HEAD --output publication-evidence/checked-out.json
+          python3 -I tools/repository/check_publication.py --ref "$CHECKED_OUT_SHA" --output publication-evidence/checked-out.json
+          if [[ "$EVENT_BASE_SHA" != "$BASE_SHA" ]]; then
+            python3 -I tools/repository/check_publication.py --ref "$EVENT_BASE_SHA" --output publication-evidence/event-base-historical.json
+          fi
       - name: Preserve publication evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -57,6 +75,8 @@ jobs:
 
 # Repository maintenance only: not WCP360 application QA or Debian certification.
 # Missing branding originals remain NOT_PUBLISHED in the optional report.
+# For PRs, base.json describes the first parent of the actual tested merge.
+# Different historical event-base metadata is retained under a distinct filename.
 # Inventories contain paths, sizes and hashes, not source file bodies or credentials.
 # No deployment, repository writes, production secrets, or privileged runner.
 # A workflow file does not itself enforce branch protection or required reviews.
