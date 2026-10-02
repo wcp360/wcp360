@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-02",
+  "scope": "7 WCP360 native PNG source candidates retrieved from Library",
+  "count": 7,
+  "total_bytes": 6689940,
+  "original_images_published_to_github": false,
+  "manifest_publication_is_not_binary_publication": true,
+  "files": [
+    {
+      "name": "Logo WCP360 : Nuage et serveurs.png",
+      "bytes": 1053011,
+      "sha256": "d35edd827425628b5f81fe6ade6aeff59362ac5c3c9f027f9990a8ed843bc34c",
+      "git_blob_sha1": "5d14c35049a3bc30bb59df2818fd5beff9e43f7d",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "name": "Logo WCP360 : nuage et infrastructure numérique.png",
+      "bytes": 829345,
+      "sha256": "2dabf82f720825b772a1f037035bab09e1da83a4c71f9b07bc6d669ce6934cef",
+      "git_blob_sha1": "97cbfae6af5de53005949a31c9ad15d39644b3fb",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "name": "Logo futuriste WCP360 bleuté.png",
+      "bytes": 918486,
+      "sha256": "994b1239f8b79b3d4d8f55a4290ad10ebd5b0c9cac18095e2984bca50a3debac",
+      "git_blob_sha1": "bb7dc136dfba78a6188ee3e1c40b43bdfca6dc5f",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "name": "Logo moderne WCP360 avec panneau serveur.png",
+      "bytes": 809162,
+      "sha256": "ef33a05e9e5232f9b0a6b04223c7ca87128e34d41cf38d71452f61c5dc15e649",
+      "git_blob_sha1": "c50a812666a7aee778bf9a4e701e5a31ac683eac",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "name": "Logo technologique WCP360 en bleu brillant.png",
+      "bytes": 970278,
+      "sha256": "55f7a20d5aafdef5fee63a869a81b6345dafc1c4ead03e62e16c7a0e73cfda35",
+      "git_blob_sha1": "9c49a374022291ca10ba181a151530e05f84e274",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "name": "Logo technologique WCP360 en orbite.png",
+      "bytes": 1117942,
+      "sha256": "06d43adbb65f7128ad6fdc658aa1be7035957154c590da50354988031833a757",
+      "git_blob_sha1": "0360e3686444412e8a991a2b9da5ee6efd921a5f",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "name": "Présentation de marque WCP360 en bleu.png",
+      "bytes": 991716,
+      "sha256": "a1d6e798b269cfc21744ba36da0637b833630d2e8f43fd7b993d685529789e0f",
+      "git_blob_sha1": "1492bdd5ca036797d834873699a5768578a82d46",
+      "publication_status": "MATERIALIZED_LOCAL_NOT_IN_GITHUB",
+      "authority": "BRANDING_CANDIDATE_NOT_APPROVED"
+    }
+  ],
+  "prepared_archive": {
+    "name": "WCP360-unpublished-source-assets-2026-10-02.zip",
+    "bytes": 6596441,
+    "sha256": "3580a3f79aa194b77abb3c9b1ed026cf99f226ac7b179a6da78d96d2dbda53d0",
+    "status": "CONVERSATION_DOWNLOAD_NOT_GITHUB_PUBLICATION"
+  }
+}
