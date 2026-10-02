@@ -644,3 +644,33 @@ Issue #7 closes only with a TESTS / QA owner artifact that clearly identifies:
 If the final QA artifact incorporates accepted audit-derived cases, it should record their source and resulting canonical TEST IDs.
 
 This input pack remains non-authoritative and cannot close #7.
+
+
+## Owner-candidate publication aid — 2026-10-03
+
+MASTER has prepared a self-contained non-authoritative owner candidate:
+
+    governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md
+
+This candidate:
+
+- defines a mandatory canonical test-record schema;
+- defines execution evidence bound to exact SHA/environment;
+- separates UNIT / CONTRACT / INTEGRATION / SECURITY / E2E / RECOVERY / INSTALL-BUILD levels;
+- preserves 86 TEST-API references and 47 TEST-IPC references by source mapping rather than duplicating contract definitions;
+- preserves 82-permission authorization coverage;
+- preserves N01–N26;
+- preserves TEST-SEC-WEB-001 → 040;
+- defines Database/Engineering dependency handling;
+- integrates the 85 local PLANNED proposal cases as an intake backlog, not canonical TEST IDs;
+- defines PLANNED / READY / BLOCKED / PASS / FAIL transitions;
+- defines regression and first-CODE-BASELINE evidence expectations.
+
+The file remains:
+
+    OWNER CANDIDATE
+    NOT TESTS / QA AUTHORITY
+    NOT CANONICAL
+    NO PASS / FAIL CREATED
+
+TESTS / QA should amend rather than automatically accept it. Its purpose is to remove drafting/re-discovery work, not replace owner judgment.
