@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-02",
+  "scope": "repository maintenance only",
+  "failed_candidate": "d12a10d4c9cacb32371f1a8d11e27d246c65a650",
+  "failed_run": 37065205714,
+  "failed_job": 111031226578,
+  "existing_tests_in_failed_run": {"total": 37, "passed": 37},
+  "new_tests_in_failed_run": {"total": 35, "passed": 34, "errors": 1},
+  "failed_test": "test_staged_and_ref_are_exclusive",
+  "snapshot_scan_in_failed_run": "SKIPPED_AFTER_TEST_FAILURE",
+  "diagnosis": "Explicit --ref HEAD equalled its argparse default and was not counted as conflicting on the CI interpreter; local interpreter rejected it.",
+  "fix": "Use None as the parser default, resolve HEAD only after parsing, and reject empty explicit refs. Preserve the original test and add reverse-order and empty-ref cases.",
+  "local_verification": {"python": "3.13.5", "git": "2.47.3", "new_tests": 37, "passed": 37, "exit_code": 0},
+  "local_verified_blobs": {
+    "tools/repository/check_repository_secrets.py": "0e0db8881127670e69b4e7383bc98815e408616d",
+    "tools/repository/test_staged_repository_secrets.py": "fc71e2194ff04cb052daf88e5192de648967d1d0"
+  },
+  "ci_after_fix": "TO_VERIFY_AFTER_PUBLICATION",
+  "initial_35_test_evidence": "staged-secret-check-2026-10-02.json",
+  "application_tests_executed": 0,
+  "user_hook_installed": false,
+  "independent_review": "NOT_RECEIVED"
+}

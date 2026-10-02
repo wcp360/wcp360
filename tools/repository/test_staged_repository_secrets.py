@@ -204,6 +204,12 @@ class StagedTests(Fixture):
     def test_staged_and_ref_are_exclusive(self):
         self.assertEqual(self.cli('--staged', '--ref', 'HEAD')[1]['error_code'], 'INVALID_ARGUMENTS')
 
+    def test_ref_then_staged_are_exclusive(self):
+        self.assertEqual(self.cli('--ref', 'HEAD', '--staged')[1]['error_code'], 'INVALID_ARGUMENTS')
+
+    def test_empty_explicit_ref_is_not_defaulted(self):
+        self.assertEqual(self.cli('--ref', '')[1]['error_code'], 'INVALID_REF')
+
     def test_index_selection_requires_staged(self):
         self.assertEqual(self.cli('--index-file', str(self.repo / '.git/index'))[1]['error_code'],
                          'INDEX_REQUIRES_STAGED')

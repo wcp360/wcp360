@@ -200,14 +200,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = SafeParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path.cwd())
     selection = parser.add_mutually_exclusive_group()
-    selection.add_argument("--ref", default="HEAD")
+    selection.add_argument("--ref", default=None)
     selection.add_argument("--staged", action="store_true")
     parser.add_argument("--index-file", type=Path)
     parser.add_argument("--output", type=Path)
     args = None
     try:
         args = parser.parse_args(argv)
-        report = inspect(args.repo.resolve(), args.ref, staged=args.staged,
+        report = inspect(args.repo.resolve(), args.ref if args.ref is not None else "HEAD",
+                         staged=args.staged,
                          index_file=args.index_file)
         code = 1 if report["findings"] else 0
     except CheckError as exc:
