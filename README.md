@@ -92,3 +92,13 @@ SOURCE CODE must not resume until the canonical evidence gate reaches 8/8.
 The current repository/project status is maintained in:
 
 `governance/PROJECT-STATUS.md`
+
+## Publication verification — 2026-10-02
+
+See the [publication verification report](governance/publication/PUBLICATION-VERIFICATION-2026-10-02.md) for exact commits, paths, hashes, CI evidence and remaining source gaps.
+
+At the inspected main commit, all **147/147 mirror entries match their committed manifest**, and all four AUDIT-WCP-0100 files are present. This is not certification that every original archive, owner export or binary asset is published. PR #42 maintenance and PR #43 contract proposals are separately published for review; branch presence is not a merge or owner approval.
+
+The report also locates all 114 full Design Markdown mirror entries, distinguishes them from the smaller dedicated directory, and records the previously unpublished [project-flow visual](documentation/visuals/README.md). The seven original branding PNGs are still **not imported**; their [pending-source catalog](governance/publication/evidence/pending-binary-assets-2026-10-02.json) is not a substitute for their bytes.
+
+Implementation gates and all canonical baseline versions above remain unchanged.
