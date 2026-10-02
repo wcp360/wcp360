@@ -697,3 +697,27 @@ Until owner publication:
     SOURCE CODE = PAUSED
     SC-M02 = NOT AUTHORIZED
     CODE-BASELINE = NONE
+
+
+## Canonical coverage index — generated evidence
+
+A derived source-coverage index is available at:
+
+- `governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.md`
+- `governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json`
+
+At source main `4ff664a3157e662c174260e1fd35429738188f0c`, it verifies mechanically:
+
+```text
+API contracts = 86
+unique TEST-API references = 86
+IPC contracts = 47
+unique TEST-IPC references = 47
+active permissions = 82
+permissions with API binding = 82
+missing active permissions = 0
+unknown API permissions = 0
+TEST suffix mismatches = 0
+```
+
+This is derived evidence only. It does not define expected results, create new TEST IDs, execute tests, or close #7. If any source blob changes, the index must be regenerated/reverified.
