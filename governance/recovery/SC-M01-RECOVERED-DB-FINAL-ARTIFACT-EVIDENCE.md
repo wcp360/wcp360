@@ -271,6 +271,242 @@ UNIQUE (tenant_id, account_id)
 
 No additional columns or constraints are reconstructed here.
 
+
+### 6.2 Exact recovered \`wcp_core.accounts\` fragment
+
+\`\`\`text
+account_id UUID NOT NULL PK
+display_name TEXT NOT NULL
+lifecycle_state TEXT NOT NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+CHECK (revision >= 1)
+\`\`\`
+
+Recovered delete rule:
+
+\`\`\`text
+Account deletion = RESTRICT while dependent Tenants remain
+\`\`\`
+
+No additional UNIQUE/FK beyond the PK was present in the recovered fragment.
+
+### 6.3 Exact recovered \`wcp_core.customer_profiles\` fragment
+
+\`\`\`text
+account_id UUID NOT NULL PK
+lifecycle_state TEXT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered PK/FK:
+
+\`\`\`text
+account_id
+→ wcp_core.accounts(account_id)
+ON DELETE CASCADE
+\`\`\`
+
+Recovered invariant:
+
+\`\`\`text
+customer profile != Tenant ownership
+customer profile != authorization
+\`\`\`
+
+### 6.4 Exact recovered \`wcp_core.reseller_profiles\` fragment
+
+\`\`\`text
+account_id UUID NOT NULL PK
+lifecycle_state TEXT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered PK/FK:
+
+\`\`\`text
+account_id
+→ wcp_core.accounts(account_id)
+ON DELETE CASCADE
+\`\`\`
+
+Recovered invariants:
+
+\`\`\`text
+reseller profile != Tenant ownership
+reseller profile alone != authorization
+\`\`\`
+
+### 6.5 Exact recovered \`wcp_core.organizations\` fragment
+
+\`\`\`text
+organization_id UUID NOT NULL PK
+name TEXT NOT NULL
+lifecycle_state TEXT NOT NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+CHECK (revision >= 1)
+\`\`\`
+
+Recovered invariants:
+
+\`\`\`text
+Organization = grouping / membership
+Organization != Tenant security boundary
+\`\`\`
+
+Default delete behavior remains \`ON DELETE RESTRICT\`.
+
+### 6.6 Exact recovered \`wcp_core.account_organization_memberships\` fragment
+
+\`\`\`text
+account_id UUID NOT NULL
+organization_id UUID NOT NULL
+membership_state TEXT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered PK:
+
+\`\`\`text
+PRIMARY KEY (account_id, organization_id)
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+account_id → wcp_core.accounts(account_id)
+organization_id → wcp_core.organizations(organization_id)
+\`\`\`
+
+Recovered relationship delete semantics:
+
+- membership row may cascade when either parent is removed;
+- removing the membership does not delete the Account;
+- removing the membership does not delete a Tenant.
+
+### 6.7 Exact recovered \`wcp_core.organization_tenant_memberships\` fragment
+
+\`\`\`text
+organization_id UUID NOT NULL
+tenant_id UUID NOT NULL
+membership_state TEXT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered PK:
+
+\`\`\`text
+PRIMARY KEY (organization_id, tenant_id)
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+organization_id → organizations
+tenant_id → tenants
+\`\`\`
+
+Recovered invariant:
+
+\`\`\`text
+Organization ↔ Tenant = optional N:M grouping / membership
+membership != ownership
+\`\`\`
+
+Recovered delete semantics:
+
+- relation row may cascade with either parent;
+- relation deletion does not mutate Tenant ownership.
+
+### 6.8 Exact recovered \`wcp_core.hosting_accounts\` fragment
+
+\`\`\`text
+hosting_account_id UUID NOT NULL PK
+tenant_id UUID NOT NULL
+system_key TEXT NOT NULL
+display_name TEXT NOT NULL
+lifecycle_state TEXT NOT NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered FK:
+
+\`\`\`text
+tenant_id → tenants(tenant_id) ON DELETE RESTRICT
+\`\`\`
+
+Recovered UNIQUE constraints:
+
+\`\`\`text
+UNIQUE (tenant_id, system_key)
+UNIQUE (tenant_id, hosting_account_id)
+\`\`\`
+
+Recovered invariants:
+
+\`\`\`text
+Hosting Account → exactly 1 Tenant
+ownership reassignment = forbidden / immutable
+revision >= 1
+successful mutations increment revision
+\`\`\`
+
+### 6.9 Exact recovered \`wcp_core.reseller_tenant_delegations\` fragment
+
+\`\`\`text
+delegation_id UUID NOT NULL PK
+reseller_account_id UUID NOT NULL
+tenant_id UUID NOT NULL
+granted_by_account_id UUID NOT NULL
+delegation_state TEXT NOT NULL
+valid_from TIMESTAMPTZ NOT NULL
+valid_until TIMESTAMPTZ NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+reseller_account_id
+→ reseller_profiles(account_id)
+ON DELETE RESTRICT
+
+tenant_id
+→ tenants(tenant_id)
+ON DELETE RESTRICT
+
+(tenant_id, granted_by_account_id)
+→ tenants(tenant_id, account_id)
+\`\`\`
+
+Recovered CHECK rules:
+
+\`\`\`text
+valid_until IS NULL OR valid_until > valid_from
+revision >= 1
+\`\`\`
+
+Recovered uniqueness/semantics:
+
+\`\`\`text
+only one active logical delegation
+for (reseller_account_id, tenant_id)
+unless future approved independent scopes exist
+
+delegation != ownership
+\`\`\`
+
+Delegation deletion/revocation removes delegated access only and does not transfer/delete Tenant ownership or Hosting Accounts.
+
 ## 7. IAM schema — exact recovered fragments
 
 ### 7.1 \`wcp_iam.tenant_memberships\`
@@ -434,6 +670,297 @@ Recovered global HOSTING semantics:
 - audit evidence is never cascade-deleted.
 
 The exact full column definitions for these ten tables are not yet recoverable and are not reconstructed.
+
+
+### 9.1 Exact recovered \`wcp_hosting.domains\`
+
+\`\`\`text
+domain_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NOT NULL
+canonical_name TEXT NOT NULL UNIQUE
+\`\`\`
+
+Recovered tenant-aware FK:
+
+\`\`\`text
+(tenant_id, resource_id)
+→ wcp_infra.managed_resources(tenant_id, resource_id)
+\`\`\`
+
+Recovered unique:
+
+\`\`\`text
+UNIQUE (tenant_id, domain_id)
+\`\`\`
+
+Lifecycle/revision/timestamps are not duplicated locally; lifecycle authority is \`managed_resources\`. Default delete is RESTRICT.
+
+### 9.2 Exact recovered \`wcp_hosting.websites\`
+
+\`\`\`text
+website_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NOT NULL
+hosting_account_id UUID NOT NULL
+primary_domain_id UUID NULL
+display_name TEXT NOT NULL
+runtime_profile_id TEXT NOT NULL
+\`\`\`
+
+Recovered tenant-aware relationships include composite FKs to:
+
+- \`managed_resources\`;
+- \`hosting_accounts\`;
+- \`domains\`.
+
+No recovered local lifecycle/revision/timestamps: lifecycle authority remains \`managed_resources\`. No additional recovered UNIQUE/CHECK beyond PK/resource uniqueness and FK/nullability.
+
+### 9.3 Exact recovered \`wcp_hosting.dns_zones\`
+
+\`\`\`text
+zone_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NOT NULL
+domain_id UUID NOT NULL
+canonical_name TEXT NOT NULL UNIQUE
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+(tenant_id, resource_id)
+→ managed_resources(tenant_id, resource_id)
+
+(tenant_id, domain_id)
+→ domains(tenant_id, domain_id)
+\`\`\`
+
+Recovered unique:
+
+\`\`\`text
+UNIQUE (tenant_id, zone_id)
+\`\`\`
+
+Lifecycle authority remains \`managed_resources\`; no DNS-zone cascade was specified.
+
+### 9.4 Exact recovered \`wcp_hosting.dns_records\`
+
+\`\`\`text
+record_id UUID NOT NULL PK
+tenant_id UUID NOT NULL
+zone_id UUID NOT NULL
+record_type TEXT NOT NULL
+owner_name TEXT NOT NULL
+record_value TEXT NOT NULL
+ttl_seconds INTEGER NOT NULL
+priority INTEGER NULL
+revision BIGINT NOT NULL
+created_at TIMESTAMPTZ NOT NULL
+updated_at TIMESTAMPTZ NOT NULL
+\`\`\`
+
+Recovered FK:
+
+\`\`\`text
+(tenant_id, zone_id)
+→ dns_zones(tenant_id, zone_id)
+\`\`\`
+
+Recovered checks:
+
+\`\`\`text
+ttl_seconds >= 0
+priority IS NULL OR priority >= 0
+\`\`\`
+
+\`record_type\` uses the typed DNS-type registry. Default delete is RESTRICT.
+
+### 9.5 Exact recovered \`wcp_hosting.mail_domains\`
+
+\`\`\`text
+mail_domain_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NOT NULL
+domain_id UUID NOT NULL
+canonical_name TEXT NOT NULL UNIQUE
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+(tenant_id, resource_id) → wcp_infra.managed_resources
+(tenant_id, domain_id) → wcp_hosting.domains
+\`\`\`
+
+Recovered unique:
+
+\`\`\`text
+UNIQUE (tenant_id, mail_domain_id)
+\`\`\`
+
+Lifecycle authority remains \`managed_resources\`; timestamps/revision are not duplicated locally; default delete is RESTRICT.
+
+### 9.6 Exact recovered \`wcp_hosting.mailboxes\`
+
+\`\`\`text
+mailbox_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NOT NULL
+mail_domain_id UUID NOT NULL
+local_part TEXT NOT NULL
+auth_kind TEXT NOT NULL
+credential_ref TEXT NULL
+revision BIGINT NOT NULL
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+(tenant_id, resource_id) → managed_resources
+(tenant_id, mail_domain_id) → mail_domains
+\`\`\`
+
+Recovered check:
+
+\`\`\`text
+auth_kind = 'LOCAL' → credential_ref IS NOT NULL
+\`\`\`
+
+Recovered secret invariant:
+
+\`\`\`text
+raw mailbox password = forbidden
+\`\`\`
+
+### 9.7 Exact recovered \`wcp_hosting.certificates\`
+
+\`\`\`text
+certificate_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NULL
+server_id UUID NULL
+common_name TEXT NOT NULL
+serial_number TEXT NOT NULL
+issuer_name TEXT NOT NULL
+not_before TIMESTAMPTZ NOT NULL
+not_after TIMESTAMPTZ NOT NULL
+public_certificate TEXT NOT NULL
+private_key_ref TEXT NOT NULL
+revision BIGINT NOT NULL
+\`\`\`
+
+Recovered check:
+
+\`\`\`text
+not_after > not_before
+\`\`\`
+
+Recovered secret invariant:
+
+\`\`\`text
+private-key material never inline
+\`\`\`
+
+### 9.8 Exact recovered \`wcp_hosting.hosted_db_engine_instances\`
+
+\`\`\`text
+engine_instance_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+server_id UUID NOT NULL
+engine_type TEXT NOT NULL
+engine_version TEXT NOT NULL
+service_id TEXT NOT NULL
+revision BIGINT NOT NULL
+\`\`\`
+
+Recovered check:
+
+\`\`\`text
+engine_type IN ('POSTGRESQL', 'MARIADB')
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+resource_id → wcp_infra.managed_resources
+server_id → wcp_infra.servers
+\`\`\`
+
+Recovered invariant:
+
+\`\`\`text
+hosted database engine != control-plane PostgreSQL
+\`\`\`
+
+### 9.9 Exact recovered \`wcp_hosting.hosted_databases\`
+
+\`\`\`text
+hosted_database_id UUID NOT NULL PK
+resource_id UUID NOT NULL UNIQUE
+tenant_id UUID NOT NULL
+engine_instance_id UUID NOT NULL
+database_name TEXT NOT NULL
+charset_name TEXT NULL
+collation_name TEXT NULL
+revision BIGINT NOT NULL
+\`\`\`
+
+Recovered FKs:
+
+\`\`\`text
+(tenant_id, resource_id) → managed_resources
+engine_instance_id → hosted_db_engine_instances
+\`\`\`
+
+Recovered unique constraints:
+
+\`\`\`text
+UNIQUE (engine_instance_id, database_name)
+UNIQUE (tenant_id, hosted_database_id)
+\`\`\`
+
+Recovered invariant:
+
+\`\`\`text
+tenant / application database content is not mirrored into control-plane PostgreSQL
+\`\`\`
+
+### 9.10 Exact recovered \`wcp_hosting.hosted_db_principals\`
+
+\`\`\`text
+principal_id UUID NOT NULL PK
+tenant_id UUID NOT NULL
+hosted_database_id UUID NOT NULL
+principal_name TEXT NOT NULL
+privilege_profile TEXT NOT NULL
+credential_ref TEXT NOT NULL
+revision BIGINT NOT NULL
+\`\`\`
+
+Recovered FK:
+
+\`\`\`text
+(tenant_id, hosted_database_id)
+→ hosted_databases(tenant_id, hosted_database_id)
+\`\`\`
+
+Recovered unique:
+
+\`\`\`text
+UNIQUE (hosted_database_id, principal_name)
+\`\`\`
+
+Recovered security invariants:
+
+\`\`\`text
+raw DB password = forbidden
+raw SQL privilege expression = forbidden
+credential_ref = reference, not plaintext secret
+privilege_profile = typed / bounded
+\`\`\`
+
+Lifecycle authority remains \`wcp_infra.managed_resources\`.
 
 ## 10. OPS schema — exact recovered fragments
 
@@ -1116,10 +1643,10 @@ Exact index names and every column ordering are **not** recoverable enough to re
 
 The following are known to have existed in the complete publication, but are not sufficiently recoverable here to republish canonically:
 
-- complete definitions of every CORE table;
+- unrecovered details/indexes/delete exceptions within CORE;
 - complete IAM schema;
 - complete INFRA schema;
-- full HOSTING columns/constraints;
+- unrecovered details/indexes/delete exceptions within HOSTING;
 - unrecovered details/FKs/checks/indexes within COMMERCIAL;
 - unrecovered details/FKs/retention/indexes within AUDIT;
 - unrecovered exact field names/types/checks within BACKUP;
