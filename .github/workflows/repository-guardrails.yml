@@ -1,0 +1,34 @@
+name: Repository guardrails
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-guardrails-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gitignore-regression:
+    name: gitignore-regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out reviewed revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Check synthetic source and sensitive path probes
+        shell: bash
+        run: python3 -I tools/repository/check_gitignore.py
+
+# Repository maintenance only: not WCP360 application QA or Debian certification.
+# No deployment, repository writes, production secrets, or privileged runner.
+# A workflow file does not itself enforce branch protection or required reviews.
