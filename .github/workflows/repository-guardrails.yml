@@ -24,11 +24,30 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Check synthetic source and sensitive path probes
         shell: bash
         run: python3 -I tools/repository/check_gitignore.py
+      - name: Verify publication and record exact Git inventories
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python3 -I tools/repository/check_publication.py --ref "$BASE_SHA" --output publication-evidence/base.json
+          python3 -I tools/repository/check_publication.py --ref "$CANDIDATE_SHA" --output publication-evidence/candidate.json
+          python3 -I tools/repository/check_publication.py --ref HEAD --output publication-evidence/checked-out.json
+      - name: Preserve publication evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: wcp360-publication-${{ github.run_id }}-${{ github.run_attempt }}
+          path: publication-evidence/*.json
+          if-no-files-found: error
+          retention-days: 30
 
 # Repository maintenance only: not WCP360 application QA or Debian certification.
+# Inventories contain paths, sizes and hashes, not source file bodies or credentials.
+# A successful mirror check is not proof that unavailable archives are published.
 # No deployment, repository writes, production secrets, or privileged runner.
 # A workflow file does not itself enforce branch protection or required reviews.
