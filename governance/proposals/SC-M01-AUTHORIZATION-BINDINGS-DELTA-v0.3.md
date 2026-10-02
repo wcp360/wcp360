@@ -5,7 +5,7 @@ Status: PROPOSAL — REVIEW — NON-NORMATIVE
 Supersedes for review: SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md
 Finding: AUDIT-WCP-0104
 
-This v0.3 incorporates recovered API/IPC owner decisions.
+This v0.3 incorporates recovered H3-V2 mapping evidence, with corrected provenance: current canonical identifiers are verified, but no separate explicit owner-ratified/FROZEN proof was recovered for B01–B05.
 
 Evidence companion:
 
@@ -15,7 +15,7 @@ governance/proposals/SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md
 
 The following are no longer treated as blank design questions.
 
-Recovered owner-frozen mappings:
+Current canonical mappings / historical H3-V2 intended mappings:
 
     B01 service reload
     B02 service restart
@@ -23,7 +23,7 @@ Recovered owner-frozen mappings:
     B04 grants apply
     B05 grants revoke
 
-Recovered semantic rule:
+Current architecture + historical H3-V2 intended semantic rule:
 
     origin permission/action
     → explicit bounded technical IPC action/operation
@@ -50,8 +50,8 @@ Recovered:
 
 Status:
 
-    RECOVERED OWNER-FROZEN MAPPING
-    CURRENT CANONICAL HARMONIZATION REQUIRED
+    CURRENT CANONICAL IDENTIFIERS PRESENT
+    OWNER BINDING HARMONIZATION REQUIRED
 
 ## 3. B02 — service restart
 
@@ -65,8 +65,8 @@ Recovered:
 
 Status:
 
-    RECOVERED OWNER-FROZEN MAPPING
-    CURRENT CANONICAL HARMONIZATION REQUIRED
+    CURRENT CANONICAL IDENTIFIERS PRESENT
+    OWNER BINDING HARMONIZATION REQUIRED
 
 ## 4. B03 — firewall apply
 
@@ -82,8 +82,8 @@ Recovered:
 
 Status:
 
-    RECOVERED OWNER-FROZEN MAPPING
-    CURRENT CANONICAL HARMONIZATION REQUIRED
+    CURRENT CANONICAL IDENTIFIERS PRESENT
+    OWNER BINDING HARMONIZATION REQUIRED
 
 ## 5. B04/B05 — grants
 
@@ -98,7 +98,7 @@ Technical steps:
     IPC-WCP-1023 = database_grant.apply
     IPC-WCP-1024 = database_grant.revoke
 
-Recovered constraints:
+Current/required constraints:
 
     same database
     same DB identity/user
@@ -113,7 +113,7 @@ Status:
 
 ## 6. D01 — origin action versus technical action
 
-The recovered owner decisions already establish the architectural distinction needed by D01:
+Current typed namespaces and Security responsibilities establish part of the architectural distinction needed by D01; historical H3-V2 output additionally proposed/froze the following interpretation:
 
     application permission/origin action
     != technical IPC action when the workflow requires a technical sub-step
@@ -124,9 +124,9 @@ and:
 
 Therefore:
 
-    D01 = RECOVERED OWNER DECISION
-    NEW DESIGN DECISION = NOT REQUIRED
-    CURRENT CANONICAL REPUBLICATION / HARMONIZATION = REQUIRED
+    D01 = OPEN
+    CURRENT OWNER HARMONIZATION = REQUIRED
+    ASSISTANT H3-V2 FREEZE LABEL = NOT OWNER RATIFICATION
 
 The remaining exact question is how the current IPC envelope field named action_id represents this distinction on the wire. If the current canonical IPC table already fixes it per row, the owner may resolve the gap by documenting that the envelope action_id is the technical row action and the origin action lives in the trusted authorization context. If another model is intended, it must be an explicit amendment.
 
@@ -182,8 +182,8 @@ No tests are executed by this proposal.
 
 ## 9. Status summary
 
-    B01–B05 = RECOVERED OWNER-FROZEN / REPUBLISH-HARMONIZE
-    D01 = RECOVERED OWNER DECISION / REPUBLISH-HARMONIZE
+    B01–B05 = CURRENT CANONICAL IDENTIFIERS / OWNER HARMONIZATION REQUIRED
+    D01 = OPEN / OWNER HARMONIZATION REQUIRED
     D02 = OPEN
     D03 = OPEN / DATABASE-DEPENDENT
     D04 = OPEN
@@ -192,9 +192,9 @@ Actual new semantic decisions remaining in this authorization delta:
 
     3
 
-Recovered points requiring canonical owner republication/harmonization:
+Historical H3-V2 intended mappings requiring current owner confirmation/harmonization:
 
-    6
+    B01–B05 + D01
 
 ## 10. Gate
 
@@ -204,4 +204,4 @@ Recovered points requiring canonical owner republication/harmonization:
     SC-M01 = PAUSED — TARGETED EVIDENCE
     CODE-BASELINE = NONE
 
-Recovered history reduces ambiguity. It never grants SOURCE CODE permission to consume this proposal directly.
+Historical evidence reduces ambiguity but does not prove owner ratification. SOURCE CODE cannot consume this proposal directly.
