@@ -2,7 +2,7 @@
 
 Date : 2026-10-02. **Status: REVIEW COORDINATION — NON NORMATIVE.**
 
-PR #43. Reference branch is synchronized with main `9c1a6cb62e3a81e75cbe40bf28671ea717421be4`.
+PR #43. Reference branch is synchronized with main `25fd86225cbf0d9df2eba6ee3af5bd07be1e6ca4`.
 
 Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
@@ -67,9 +67,7 @@ All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 | S08 | temporary privilege/approval composition | non-bypass rules | OPEN |
 | S09 | absent/DENY representation | internal decision + safe external behavior | OPEN |
 
-### DEVOPS / BUILD / RELEASE — primary
-
-Toolchain/build decisions:
+### DEVOPS / BUILD / RELEASE — toolchain/build decisions
 
 | ID | Decision | Required output | Status |
 |---|---|---|---|
@@ -94,7 +92,7 @@ Engineering co-owns F01/F02/F04–F08; Security reviews supply-chain/secret/priv
 | F07 | static analysis / quality gates | tools + thresholds/rules | BLOCKED ON #9 |
 | F08 | build/CI quality expectations | review + environment constraints | BLOCKED/PARTIAL ON #9 |
 
-### DEVOPS / BUILD / RELEASE — primary
+### DEVOPS / BUILD / RELEASE — control/runtime decisions
 
 | ID | Decision | Required output | Status |
 |---|---|---|---|
@@ -158,7 +156,7 @@ A documentation merge of PR #43 means only that proposal/review material is pres
 
 It does **not** mean:
 
-- D/T/C/H/S decisions are accepted;
+- D/T/C/H/S/F decisions are accepted;
 - Security bindings are changed;
 - an API route exists;
 - a socket path is canonicalized;
