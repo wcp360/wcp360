@@ -4,7 +4,7 @@ Date : 2026-10-02. **Status: REVIEW COORDINATION — NON NORMATIVE.**
 
 Reference main for this recovery pass: `1b8747f049164a9d5120fbf6f8d6b6be27987fa0`.
 
-Purpose: provide one bounded checklist for owners. `SC-M01-CANONICAL-API-TRANSPORT-EVIDENCE.md` narrows H01/H03/H04/H05/H06/H07/H09/H10 using current FINAL API/Security semantics. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
+Purpose: provide one bounded checklist for owners. `SC-M01-CANONICAL-API-TRANSPORT-EVIDENCE.md` narrows H01/H03/H04/H05/H06/H07/H09/H10 using current FINAL API/Security semantics. `SC-M01-CANONICAL-TIMEOUT-WORKER-EVIDENCE.md` narrows T01/T02/T03 and C04 from current FINAL IPC/DevOps rules. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
 Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-CANONICAL-SECURITY-COMPOSITION-EVIDENCE.md` additionally narrows S02/S03/S05/S07/S08/S09 from current FINAL Security/Permission artifacts. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
 
@@ -44,9 +44,9 @@ APPLICATION TEST EXECUTIONS = 0
 | D02 | trusted authorization-context lifecycle | producer/resolver/binding/expiry/revocation | OPEN |
 | D03 | API→IPC target/revision/grant translation | typed mapping and owner references | OPEN |
 | D04 | parent/step audit and uncertain-result correlation | core traceability/durability is final; step/event/persistence relationships remain | OPEN / PARTIALLY DEFINED |
-| T01 | I/O timeout semantics | phase definition | OPEN |
-| T02 | `deadline_ms` representation | absolute/relative/monotonic contract | OPEN |
-| T03 | effective operation-budget scope | formula + start/end phases | OPEN |
+| T01 | I/O timeout semantics | value 5s is FINAL; exact I/O phase/progress semantics remain | OPEN / PARTIALLY DEFINED |
+| T02 | `deadline_ms` representation | required field existence is FINAL; representation/clock/bounds remain | OPEN / PARTIALLY DEFINED |
+| T03 | effective operation-budget scope | default 30s/max 900s/per-operation limits are FINAL; composition/start/end phases remain | OPEN / PARTIALLY DEFINED |
 | T04 | phase/error boundary around canonical UNKNOWN_OUTCOME rule | post-dispatch uncertainty is FINAL; before-dispatch/error/result-recovery details remain | OPEN / PARTIALLY DEFINED |
 | T05 | idempotency/identifier binding | API replay semantics final; durable/technical binding remains | OPEN / PARTIALLY DEFINED |
 | C03 | USER/ADMIN surface binding at control boundary | peer→surface/context constraints | OPEN |
@@ -111,7 +111,7 @@ Engineering co-owns F01/F02/F04–F08; Security reviews supply-chain/secret/priv
 | ID | Decision | Required output | Status |
 |---|---|---|---|
 | C01 | control socket physical identity | recovered M1: /run/wcp360/wcpd.sock, owner wcpd, group wcp360-control, mode 0660 | RECOVERED OWNER CONSENSUS — REPUBLISH/CONFIRM |
-| C04 | worker path to normal control boundary | W1/W2/other explicit design | OPEN |
+| C04 | worker path to normal control boundary | direct IPC-B forbidden + no control group by default + normal control path required are FINAL; exact indirect mechanism remains | OPEN / PARTIALLY DEFINED |
 | S01–S04 | deploy/routing/TLS/proxy behavior | topology evidence | OPEN |
 | T01/T03 | socket timeout operational behavior | implementation constraints, not protocol redefinition | OPEN |
 
