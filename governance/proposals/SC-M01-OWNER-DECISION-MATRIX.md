@@ -6,7 +6,7 @@ Reference main for this recovery pass: `1b8747f049164a9d5120fbf6f8d6b6be27987fa0
 
 Purpose: provide one bounded checklist for owners. `SC-M01-CANONICAL-API-TRANSPORT-EVIDENCE.md` narrows H01/H03/H04/H05/H06/H07/H09/H10 using current FINAL API/Security semantics. `SC-M01-CANONICAL-TIMEOUT-WORKER-EVIDENCE.md` narrows T01/T02/T03 and C04 from current FINAL IPC/DevOps rules. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
-Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-CANONICAL-SECURITY-COMPOSITION-EVIDENCE.md` additionally narrows S02/S03/S05/S07/S08/S09 from current FINAL Security/Permission artifacts. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
+Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-CANONICAL-CONTROL-BOUNDARY-EVIDENCE.md` narrows C03/C07 from current FINAL Security/DevOps and leaves C06 as the genuinely unpublished wire protocol. `SC-M01-CANONICAL-SECURITY-COMPOSITION-EVIDENCE.md` additionally narrows S02/S03/S05/S07/S08/S09 from current FINAL Security/Permission artifacts. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
 
 ## 1. Proposal set
 
@@ -14,7 +14,7 @@ Recovered historical evidence is tracked separately from current canonical autho
 |---|---|---:|---:|
 | Authorization bindings | `SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.3.md` | D01–D04 = 4 OPEN; B01–B05 owner harmonization required | C01–C17 = 17 |
 | IPC timeout/idempotency | `SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | T01–T07 | TQ01–TQ10 = 10 |
-| Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.2.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
+| Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.3.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
 | API transport | `SC-M01-API-TRANSPORT-DELTA-v0.2.md` | H01–H10 | HQ01–HQ15 = 15 |
 | Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.2.md` | S01–S09 | SQ01–SQ16 = 16 |
 | Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
@@ -49,10 +49,10 @@ APPLICATION TEST EXECUTIONS = 0
 | T03 | effective operation-budget scope | default 30s/max 900s/per-operation limits are FINAL; composition/start/end phases remain | OPEN / PARTIALLY DEFINED |
 | T04 | phase/error boundary around canonical UNKNOWN_OUTCOME rule | post-dispatch uncertainty is FINAL; before-dispatch/error/result-recovery details remain | OPEN / PARTIALLY DEFINED |
 | T05 | idempotency/identifier binding | API replay semantics final; durable/technical binding remains | OPEN / PARTIALLY DEFINED |
-| C03 | USER/ADMIN surface binding at control boundary | peer→surface/context constraints | OPEN |
+| C03 | USER/ADMIN surface binding at control boundary | distinct Unix identities/surfaces + origin_surface are FINAL; exact peer→surface binding/mismatch behavior remains | OPEN / PARTIALLY DEFINED |
 | C05 | trusted context resolution in wcpd | fields/origin-binding/wcpd participation partly defined; storage/expiry/revocation/revalidation remain | OPEN / PARTIALLY DEFINED |
-| C06 | control request/response/job protocol | schema/version/error/idempotency contract | OPEN |
-| C07 | backend vs wcpd responsibility boundary | explicit producer/consumer responsibilities | OPEN |
+| C06 | control request/response/job protocol | full control wire protocol remains unpublished | OPEN |
+| C07 | backend vs wcpd responsibility boundary | wcpd control/orchestration + origin-binding validation + sole IPC-B client are FINAL; workflow split remains | OPEN / PARTIALLY DEFINED |
 | H01 | HTTP versioning strategy | semantic version 1.0/breaking rules are FINAL; HTTP representation remains | OPEN / PARTIALLY DEFINED |
 | H02 | method/route binding | per activated API-WCP contract | OPEN |
 | H03 | parameter locations | logical schema + unknown-field rejection are FINAL; path/query/header/body serialization remains | OPEN / PARTIALLY DEFINED |
