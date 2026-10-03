@@ -215,208 +215,83 @@ governance/handoffs/SC-M01-ENGINEERING-CANONICAL-INPUT-PACK.md
 These are explicitly non-authoritative and cannot satisfy issues #6, #7 or #9 by themselves.
 
 
-## 10. Current readiness / remediation — 2026-10-02
+## 10. Current readiness — 2026-10-03
 
-Detailed current-state matrix:
+Detailed current-state authority:
 
-`governance/SC-M01-CURRENT-READINESS-2026-10-02.md`
+`governance/SC-M01-CURRENT-READINESS-2026-10-03.md`
 
-Audit tracking:
+Audit closure criteria:
 
-```text
-AUDIT-WCP-0100 FINDINGS = 18 OPEN
-ISSUE #41 = CURRENT REMEDIATION TRACKER
-```
+`governance/audits/AUDIT-WCP-0100/CLOSURE-MATRIX.md`
 
-Current work packages:
-
-```text
-PR #42 = repository guardrails / tests / CI
-         OPEN — E1+E2 complete on current candidate — E3 independent review still required
-
-PR #43 = SC-M01 owner-decision pack
-         MERGED AS P1 NON-NORMATIVE EVIDENCE — no owner decision accepted
-```
-
-PR #43 currently converts the implementation-critical semantic gaps into bounded owner decisions for:
-
-- API transport / DTO / HTTP mapping;
-- authorization parent/action/primitive binding;
-- backend/worker → wcpd control boundary;
-- IPC timeout/deadline/idempotency/UNKNOWN_OUTCOME semantics;
-- USER/ADMIN web/session isolation;
-- permission-resolution versus final Security authorization composition.
-
-Its centralized matrix is:
+Owner decision/harmonization matrix:
 
 `governance/proposals/SC-M01-OWNER-DECISION-MATRIX.md`
 
-Current proposal inventory:
+Current owner-finalization aids:
 
 ```text
-TRACKED DECISION POINTS = 47
-OPEN SEMANTIC OWNER DECISIONS = 45
-RECOVERED OWNER CONSENSUS REQUIRING REPUBLICATION = 1
-ALREADY DEFINED IN CURRENT CANONICAL ARTIFACTS = 1
-LOCAL QA SCENARIOS PROPOSED = 85
-APPLICATION TESTS EXECUTED FROM THOSE CASES = 0
+Database
+→ governance/handoffs/SC-M01-DB-OWNER-REPUBLICATION-CHECKLIST.md
+→ DB-R01..DB-R15
+
+Tests / QA
+→ governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md
+→ governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.md
+→ governance/handoffs/SC-M01-QA-OWNER-ACCEPTANCE-CHECKLIST.md
+→ A01..A20
+
+Engineering
+→ governance/handoffs/SC-M01-ENGINEERING-OWNER-REPUBLICATION-CHECKLIST.md
+→ ENG-R01..ENG-R20
 ```
 
-These proposals were merged for traceability under REVIEW-MERGE-POLICY. Their merge does not ratify any D/T/C/H/S/F decision, does not add a ninth artifact to the SC-M01 gate and does not alter the official baselines.
+Current semantic-evidence narrowing in main includes:
 
-Recovered H3-CM M1 evidence narrows the control-boundary gap:
-- C01 physical control socket = recovered owner consensus awaiting current owner republication/confirmation;
-- C02 transport access != application authorization = already defined by current DevOps/Security;
-- C03–C07 remain open semantic decisions.
+- canonical API transport evidence + API Transport Delta v0.2;
+- canonical Security composition evidence + Security Web/Authz Delta v0.2;
+- canonical timeout/worker evidence;
+- canonical control-boundary evidence;
+- recovered authorization context / UNKNOWN_OUTCOME evidence;
+- recovered traceability/idempotency evidence;
+- recovered M1 control-boundary evidence;
+- recovered DB/Engineering historical evidence.
 
-### Missing artifact recovery status
+These evidence/proposal files are not substitutes for owner normative artifacts.
 
-Targeted recovery from project conversations, Library files and GitHub history confirms:
+### Repository guardrails
+
+PR #42 remains open.
+
+Review class:
 
 ```text
-DATABASE #6
-= final/source-ready owner metadata confirmed
-= exact body still not materialized
-
-QA #7
-= Test Baseline v1.0 metadata approved
-= final SC-M01 canonical test artifact not materialized / not confirmed
-
-ENGINEERING #9
-= final/source-ready owner metadata confirmed
-= exact body still not materialized
+R1 repository tooling
+E1 automated evidence
+E2 same-author publication control
+E3 independent review still required
 ```
 
-Historical recovery also finds a **proposed/candidate physical DB closure** using schemas
-`wcp_core`, `wcp_iam`, `wcp_infra`, `wcp_hosting`,
-`wcp_commercial`, `wcp_ops`, `wcp_audit`, and `wcp_backup`,
-plus named core/operations objects. That detail is useful recovery evidence, but it is **not proof that the exact final owner file retained every proposed name/constraint**.
+The branch is repeatedly resynchronized with current main before CI revalidation.
 
-What is separately confirmed as final is the owner metadata for DB Model v1.0 (final approved / physical contract included / source-ready). Because the exact final body is missing, candidate schema/table details must not be promoted into the final artifact. Issue #6 remains a materialization blocker.
+Main branch enforcement is not claimed active:
 
-### Current readiness
+```text
+protected = false
+required checks = none
+```
+
+The installed GitHub integration does not provide Administration permission to configure branch protection/rulesets.
+
+### Current gate
 
 ```text
 CANONICAL EVIDENCE = 5 / 8
-CONTRACT REMEDIATION = OWNER REVIEW REQUIRED
-REPOSITORY GUARDRAILS = OPEN PR / TESTED ON CURRENT MAIN / E3 NOT YET RECEIVED
-SOURCE CODE = PAUSED
-SC-M01 = PAUSED — TARGETED EVIDENCE
-SC-M02 = NOT AUTHORIZED
-CODE-BASELINE = NONE
-```
 
-No generic documentation re-audit is requested. The next useful progress is owner decision/materialization, followed by the existing cross-check and resume checklist.
-
-
-### Latest repository-guardrail evidence
-
-PR #42 current synchronized candidate:
-
-`a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77`
-
-GitHub Actions run:
-
-`37072620136 = SUCCESS`
-
-Verified merge-test evidence:
-
-```text
-BASE MAIN = 0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d
-BASE FILES = 280
-CANDIDATE FILES = 297
-MERGE-TEST FILES = 297
-MIRROR = 147 / 147
-AUDIT FILES = 4 / 4
-TARGETED SECRET FINDINGS = 0
-BRANDING ORIGINALS = NOT_PUBLISHED
-```
-
-This remains E1 automated evidence plus E2 same-author verification. It does not satisfy E3 or branch-protection enforcement.
-
-
-## 11. Evidence-recovery update — 2026-10-03
-
-Current main reference when this update was prepared:
-
-`4ff664a3157e662c174260e1fd35429738188f0c`
-
-The canonical gate remains **5 / 8**. The nature of the three missing artifacts is now more precisely established.
-
-### Database #6
-
-```text
-FINAL OWNER METADATA = CONFIRMED
-FINAL FULL BODY EXISTED IN PRIOR WCP360 CONVERSATION = CONFIRMED
-FULL ORIGINAL BODY RECOVERED NOW = NO
-CANONICAL IMPORT = NO
-```
-
-Historical recovery evidence now in main:
-
-`governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md`
-
-Recovered material covers substantial exact/near-verbatim fragments from the prior final publication, including:
-
-- global schemas/identifier/common physical rules;
-- CORE tenant/account/organization/hosting/delegation structures;
-- IAM membership/role-assignment fragments;
-- managed-resource fragment;
-- HOSTING domain/site/DNS/mail/certificate/hosted-DB structures;
-- COMMERCIAL plans/subscriptions/entitlements;
-- OPS jobs/job attempts/idempotency/leases/outbox/events;
-- AUDIT record/durability fragments;
-- BACKUP structures;
-- tenant integrity, revisions, transaction/failure distinctions, reconciliation, delete semantics and correctness-index classes.
-
-The recovery file deliberately lists unrecovered material and is **not** Database authority. Issue #6 still requires the exact final owner file or a real owner republication/amendment.
-
-### Tests / QA #7
-
-Deeper history recovery found no evidence that a complete autonomous final SC-M01 QA artifact was ever published in full.
-
-A self-contained owner candidate is now preserved in main:
-
-`governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md`
-
-It is explicitly:
-
-```text
-OWNER CANDIDATE
-NOT CANONICAL
-NO PASS / FAIL CREATED
-```
-
-It defines test records/evidence, test levels, core SC-M01 families, Database/Engineering dependencies, status transitions, regression rules and intake of the 85 proposal scenarios. TESTS / QA must still amend/approve and publish the final artifact under `specifications/tests/`.
-
-### Engineering #9
-
-```text
-FINAL OWNER METADATA = CONFIRMED
-FINAL BODY = NOT RECOVERED
-PHASE G / H3-C CANDIDATE EVIDENCE = PARTIALLY RECOVERED
-CANDIDATE → FINAL PROMOTION = FORBIDDEN
-```
-
-Recovery evidence now in main:
-
-`governance/recovery/SC-M01-RECOVERED-ENGINEERING-V0.2-EVIDENCE.md`
-
-It preserves typed-namespace, privileged-boundary, fail-closed, UNKNOWN_OUTCOME/reconciliation, traceability, stale-baseline, test-state and review/merge/DoD candidate themes without pretending they are the exact final export.
-
-### Current work state
-
-```text
-PR #42 = OPEN repository guardrails
-         automated evidence exists
-         independent E3 review still missing
-         main branch enforcement still not demonstrated
-
-PR #43 = MERGED P1 non-normative owner-decision/recovery pack
-
-QA OWNER CANDIDATE = MERGED P1 non-normative proposal
-
-DB / ENGINEERING RECOVERY EVIDENCE = MERGED G0 historical evidence
+DATABASE #6 = exact owner body missing
+QA #7 = final owner artifact missing
+ENGINEERING #9 = exact owner body missing
 
 SOURCE CODE = PAUSED
 SC-M01 = PAUSED — TARGETED EVIDENCE
@@ -424,9 +299,4 @@ SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-The next gate-moving actions remain owner actions, not additional generic audits:
-1. Database exact republication / explicit versioned amendment;
-2. TESTS / QA review and final publication;
-3. Engineering exact republication / explicit versioned amendment;
-4. owner ratification of implementation-critical semantic decisions;
-5. cross-check and MASTER resume only after the existing 8/8 gate is satisfied.
+The remaining progress is owner publication/harmonization and real independent review, not another broad documentation audit.
