@@ -1701,3 +1701,170 @@ SC-M01 = PAUSED — TARGETED EVIDENCE
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 \`\`\`
+
+## 22. Additional recovered final sections — idempotency / outbox / partitioning / restore / migration
+
+### 22.1 Section 19 — Idempotency persistence
+
+Recovered final-artifact section title:
+
+```text
+19 — Idempotency persistence
+```
+
+Recovered identity properties:
+
+```text
+scope
+operation namespace
+idempotency key
+request fingerprint
+state
+result reference
+expiry
+```
+
+Recovered rules:
+
+- uniqueness is scope-specific;
+- the same key with the same semantic request resolves to the same logical result according to the operation contract;
+- the same key with a different semantic fingerprint is a conflict;
+- a mismatched fingerprint must never be silently reused.
+
+This recovery does not reconstruct the exact SQL expression of every scope-specific uniqueness rule beyond the already recovered `wcp_ops.idempotency_records` structure.
+
+### 22.2 Section 20 — Transactional outbox
+
+Recovered final-artifact section title:
+
+```text
+20 — Transactional outbox
+```
+
+Recovered rules:
+
+```text
+source mutation + required outbox intent
+= atomically committed
+```
+
+Delivery semantics:
+
+```text
+AT LEAST ONCE
+```
+
+Consumer requirement:
+
+```text
+duplicate safety = mandatory
+```
+
+This is consistent with the recovered `wcp_ops.outbox_records` fragment and does not imply exactly-once external delivery.
+
+### 22.3 Section 25 — Partitioning
+
+Recovered final-artifact rule:
+
+```text
+PARTITIONING = NOT REQUIRED BY DB MODEL v1.0
+```
+
+Recovered future candidates included workload-driven partitioning consideration for:
+
+- `wcp_audit.audit_records`;
+- `wcp_ops.event_records`;
+- `wcp_ops.jobs`.
+
+Recovered governance rule:
+
+```text
+partitioning requires workload evidence + Performance review
+```
+
+No partitioning scheme is canonicalized by v1.0 recovery.
+
+### 22.4 Retention policy
+
+No exact final section-26 retention wording is recoverable from the historical publication.
+
+Known historical context only established that exact future retention durations remained a later/non-blocking decision.
+
+Therefore this recovery file deliberately records:
+
+```text
+EXACT RETENTION DURATIONS / SECTION 26 = NOT RECOVERED
+```
+
+No retention period is inferred.
+
+### 22.5 Section 27 — Backup / restore separation
+
+Recovered final-artifact section title/topic:
+
+```text
+27 — Backup / restore separation
+```
+
+Recovered backup classes remain distinct:
+
+```text
+CONTROL-PLANE
+HOSTED_DATABASE
+WORKLOAD / FILESYSTEM
+```
+
+Recovered restore rules:
+
+- restore is followed by re-observation of physical state;
+- drift must be detected;
+- reconciliation must be safe and typed;
+- resume occurs only after the restored logical/physical relationship is verified;
+- privileged actions must not be blindly replayed merely because a backup was restored.
+
+This preserves the authority separation between control-plane PostgreSQL metadata and hosted/workload backup contents.
+
+### 22.6 Section 30 — Migration boundary
+
+Recovered final-artifact section title/topic:
+
+```text
+30 — Migration boundary
+```
+
+Recovered rule:
+
+```text
+DB Model v1.0 is sufficient input for future migration generation
+```
+
+Recovered publication constraint:
+
+```text
+MIGRATIONS CREATED BY THIS ARTIFACT = NONE
+MIG-WCP-* CREATED = NONE
+EXECUTABLE DDL = NONE
+```
+
+The final model defined the physical contract that future migrations must implement; it was not itself a migration package.
+
+## 23. Recovery exhaustion note
+
+After targeted searches through project conversations and available Library/GitHub history, the major recoverable final-publication fragments are now preserved.
+
+Remaining uncertainty is concentrated in:
+
+- detailed INFRA tables other than the recovered managed_resources fragment;
+- any fields/FKs/indexes whose exact wording was not reproduced in recoverable conversation context;
+- exact original ordering/prose/formatting;
+- exact retention durations/policy text;
+- complete original index names/column ordering;
+- any owner-specific clauses not surfaced by historical retrieval.
+
+The recovery process must stop rather than fill those gaps from architecture intuition.
+
+```text
+HISTORICAL RECOVERY = SUBSTANTIAL BUT INCOMPLETE
+SAFE AUTO-RECONSTRUCTION = NO
+OWNER REPUBLICATION / AMENDMENT = REQUIRED
+```

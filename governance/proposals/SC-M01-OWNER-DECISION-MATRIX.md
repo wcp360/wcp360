@@ -4,9 +4,9 @@ Date : 2026-10-02. **Status: REVIEW COORDINATION — NON NORMATIVE.**
 
 Reference main for this recovery pass: `1b8747f049164a9d5120fbf6f8d6b6be27987fa0`.
 
-Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
+Purpose: provide one bounded checklist for owners. `SC-M01-CANONICAL-API-TRANSPORT-EVIDENCE.md` narrows H01/H03/H04/H05/H06/H07/H09/H10 using current FINAL API/Security semantics. `SC-M01-CANONICAL-TIMEOUT-WORKER-EVIDENCE.md` narrows T01/T02/T03 and C04 from current FINAL IPC/DevOps rules. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
-Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
+Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-CANONICAL-CONTROL-BOUNDARY-EVIDENCE.md` narrows C03/C07 from current FINAL Security/DevOps and leaves C06 as the genuinely unpublished wire protocol. `SC-M01-CANONICAL-SECURITY-COMPOSITION-EVIDENCE.md` additionally narrows S02/S03/S05/S07/S08/S09 from current FINAL Security/Permission artifacts. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
 
 ## 1. Proposal set
 
@@ -14,9 +14,9 @@ Recovered historical evidence is tracked separately from current canonical autho
 |---|---|---:|---:|
 | Authorization bindings | `SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.3.md` | D01–D04 = 4 OPEN; B01–B05 owner harmonization required | C01–C17 = 17 |
 | IPC timeout/idempotency | `SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | T01–T07 | TQ01–TQ10 = 10 |
-| Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.2.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
-| API transport | `SC-M01-API-TRANSPORT-DELTA-v0.1.md` | H01–H10 | HQ01–HQ15 = 15 |
-| Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | S01–S09 | SQ01–SQ16 = 16 |
+| Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.3.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
+| API transport | `SC-M01-API-TRANSPORT-DELTA-v0.2.md` | H01–H10 | HQ01–HQ15 = 15 |
+| Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.2.md` | S01–S09 | SQ01–SQ16 = 16 |
 | Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
 | **Total** | 6 active proposal domains | **47 tracked decision points; 45 OPEN semantic decisions** | **85 proposed cases** |
 
@@ -44,25 +44,25 @@ APPLICATION TEST EXECUTIONS = 0
 | D02 | trusted authorization-context lifecycle | producer/resolver/binding/expiry/revocation | OPEN |
 | D03 | API→IPC target/revision/grant translation | typed mapping and owner references | OPEN |
 | D04 | parent/step audit and uncertain-result correlation | core traceability/durability is final; step/event/persistence relationships remain | OPEN / PARTIALLY DEFINED |
-| T01 | I/O timeout semantics | phase definition | OPEN |
-| T02 | `deadline_ms` representation | absolute/relative/monotonic contract | OPEN |
-| T03 | effective operation-budget scope | formula + start/end phases | OPEN |
+| T01 | I/O timeout semantics | value 5s is FINAL; exact I/O phase/progress semantics remain | OPEN / PARTIALLY DEFINED |
+| T02 | `deadline_ms` representation | required field existence is FINAL; representation/clock/bounds remain | OPEN / PARTIALLY DEFINED |
+| T03 | effective operation-budget scope | default 30s/max 900s/per-operation limits are FINAL; composition/start/end phases remain | OPEN / PARTIALLY DEFINED |
 | T04 | phase/error boundary around canonical UNKNOWN_OUTCOME rule | post-dispatch uncertainty is FINAL; before-dispatch/error/result-recovery details remain | OPEN / PARTIALLY DEFINED |
 | T05 | idempotency/identifier binding | API replay semantics final; durable/technical binding remains | OPEN / PARTIALLY DEFINED |
-| C03 | USER/ADMIN surface binding at control boundary | peer→surface/context constraints | OPEN |
+| C03 | USER/ADMIN surface binding at control boundary | distinct Unix identities/surfaces + origin_surface are FINAL; exact peer→surface binding/mismatch behavior remains | OPEN / PARTIALLY DEFINED |
 | C05 | trusted context resolution in wcpd | fields/origin-binding/wcpd participation partly defined; storage/expiry/revocation/revalidation remain | OPEN / PARTIALLY DEFINED |
-| C06 | control request/response/job protocol | schema/version/error/idempotency contract | OPEN |
-| C07 | backend vs wcpd responsibility boundary | explicit producer/consumer responsibilities | OPEN |
-| H01 | HTTP versioning strategy | path/media/other choice + compatibility | OPEN |
+| C06 | control request/response/job protocol | full control wire protocol remains unpublished | OPEN |
+| C07 | backend vs wcpd responsibility boundary | wcpd control/orchestration + origin-binding validation + sole IPC-B client are FINAL; workflow split remains | OPEN / PARTIALLY DEFINED |
+| H01 | HTTP versioning strategy | semantic version 1.0/breaking rules are FINAL; HTTP representation remains | OPEN / PARTIALLY DEFINED |
 | H02 | method/route binding | per activated API-WCP contract | OPEN |
-| H03 | parameter locations | path/query/header/body mapping | OPEN |
+| H03 | parameter locations | logical schema + unknown-field rejection are FINAL; path/query/header/body serialization remains | OPEN / PARTIALLY DEFINED |
 | H04 | Idempotency-Key transport source | semantic key behavior final; HTTP location/duplication rule remains | OPEN / PARTIALLY DEFINED |
-| H05 | DTO definitions | JobAccepted/Mutation/Collection/SecretCreated | OPEN |
-| H06 | safe error format + HTTP status map | deterministic map | OPEN |
-| H07 | session/token transport coexistence | auth selection + CSRF/CORS | OPEN |
+| H05 | DTO definitions | logical DTO names are FINAL; exact fields/types/status remain | OPEN / PARTIALLY DEFINED |
+| H06 | safe error registry/content is FINAL | HTTP status/media envelope/masking details remain | OPEN / PARTIALLY DEFINED |
+| H07 | session/token transport coexistence | AUTH-* + browser CSRF/Origin/CORS baseline are FINAL; exact transport/multi-auth rule remains | OPEN / PARTIALLY DEFINED |
 | H08 | discriminated `operation` schemas | per operation required/forbidden fields | OPEN |
-| H09 | pagination | cursor/order/filter binding | OPEN |
-| H10 | cache classification | no-store/cacheable rules | OPEN |
+| H09 | pagination | cursor/limit logical fields exist; cursor/order/filter/limits remain | OPEN / PARTIALLY DEFINED |
+| H10 | cache classification | sensitive/authenticated no-store is FINAL; any cacheable-read exception remains | OPEN / PARTIALLY DEFINED |
 
 ### SECURITY / HARDENING — primary
 
@@ -72,14 +72,14 @@ APPLICATION TEST EXECUTIONS = 0
 | B04–B05 | grants.set → apply/revoke step bindings | exact scope/target constraints | OPEN |
 | C02 | transport access vs application authorization | DevOps v1.0 §5.1 + Security v1.0 §1 | ALREADY DEFINED |
 | S01 | admissible USER/ADMIN topology | deployment rule, no port-only assumption | OPEN |
-| S02 | cross-surface cookie handling | no fallback/alias behavior | OPEN |
-| S03 | cross-surface CSRF/Origin/WSS behavior | exact reject/reauth rules | OPEN |
+| S02 | cross-surface cookie handling | session/cookie/namespace separation is FINAL; simultaneous/wrong-cookie behavior remains | OPEN / PARTIALLY DEFINED |
+| S03 | cross-surface CSRF/Origin/WSS behavior | session+CSRF+exact Origin and 403/no-mutation are FINAL; proxy/WSS/cross-surface details remain | OPEN / PARTIALLY DEFINED |
 | S04 | definition of cookie non-exposure | measurable criterion for QA | OPEN |
-| S05 | permission resolution vs final AUTHZ | two-stage or alternative deterministic algorithm | OPEN |
+| S05 | permission resolution vs final AUTHZ | final AUTHZ intersection + permission resolution order are FINAL; positive-override composition/internal algorithm remains | OPEN / PARTIALLY DEFINED |
 | S06 | account override ceiling | positive/negative limits | OPEN |
-| S07 | reseller delegation composition | ceiling/scope/revocation algorithm | OPEN |
-| S08 | temporary privilege/approval composition | non-bypass rules | OPEN |
-| S09 | absent/DENY representation | internal decision + safe external behavior | OPEN |
+| S07 | reseller delegation composition | effective-envelope ceiling/no ownership transfer/current-state revocation are FINAL; physical computation/storage remains | OPEN / PARTIALLY DEFINED |
+| S08 | temporary privilege/approval composition | no role mutation/no permission bypass/fresh MFA+scope are FINAL; state representation/lifecycle remains | OPEN / PARTIALLY DEFINED |
+| S09 | absent/DENY representation | unknown binding DENY/no side effect/audit is FINAL; NOT_GRANTED distinction + external mapping remains | OPEN / PARTIALLY DEFINED |
 
 ### DEVOPS / BUILD / RELEASE — toolchain/build decisions
 
@@ -111,7 +111,7 @@ Engineering co-owns F01/F02/F04–F08; Security reviews supply-chain/secret/priv
 | ID | Decision | Required output | Status |
 |---|---|---|---|
 | C01 | control socket physical identity | recovered M1: /run/wcp360/wcpd.sock, owner wcpd, group wcp360-control, mode 0660 | RECOVERED OWNER CONSENSUS — REPUBLISH/CONFIRM |
-| C04 | worker path to normal control boundary | W1/W2/other explicit design | OPEN |
+| C04 | worker path to normal control boundary | direct IPC-B forbidden + no control group by default + normal control path required are FINAL; exact indirect mechanism remains | OPEN / PARTIALLY DEFINED |
 | S01–S04 | deploy/routing/TLS/proxy behavior | topology evidence | OPEN |
 | T01/T03 | socket timeout operational behavior | implementation constraints, not protocol redefinition | OPEN |
 
