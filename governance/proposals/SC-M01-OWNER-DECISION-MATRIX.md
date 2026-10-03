@@ -6,7 +6,7 @@ Reference main for this recovery pass: `1b8747f049164a9d5120fbf6f8d6b6be27987fa0
 
 Purpose: provide one bounded checklist for owners. This matrix does not approve a proposal, change a baseline, reserve test IDs, or authorize implementation.
 
-Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
+Recovered historical evidence is tracked separately from current canonical authority. `SC-M01-CANONICAL-SECURITY-COMPOSITION-EVIDENCE.md` additionally narrows S02/S03/S05/S07/S08/S09 from current FINAL Security/Permission artifacts. `SC-M01-RECOVERED-CONTROL-BOUNDARY-M1.md` contains verified final M1 owner consensus. `SC-M01-RECOVERED-AUTHORIZATION-BINDINGS.md` records that B01–B05/D01 lack separate explicit owner-ratification evidence. `SC-M01-RECOVERED-AUTHORIZATION-CONTEXT-OUTCOME.md` narrows C05/T04 using current canonical Security/IPC plus recovered final context evidence. `SC-M01-RECOVERED-TRACEABILITY-IDEMPOTENCY.md` narrows D04/T05/H04 using current API/IPC and recovered final traceability evidence.
 
 ## 1. Proposal set
 
@@ -16,7 +16,7 @@ Recovered historical evidence is tracked separately from current canonical autho
 | IPC timeout/idempotency | `SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | T01–T07 | TQ01–TQ10 = 10 |
 | Control boundary | `SC-M01-CONTROL-BOUNDARY-DELTA-v0.2.md` | C01–C07 = 5 OPEN + 1 recovered/republication + 1 already defined | CQ01–CQ12 = 12 |
 | API transport | `SC-M01-API-TRANSPORT-DELTA-v0.1.md` | H01–H10 | HQ01–HQ15 = 15 |
-| Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | S01–S09 | SQ01–SQ16 = 16 |
+| Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.2.md` | S01–S09 | SQ01–SQ16 = 16 |
 | Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
 | **Total** | 6 active proposal domains | **47 tracked decision points; 45 OPEN semantic decisions** | **85 proposed cases** |
 
@@ -72,14 +72,14 @@ APPLICATION TEST EXECUTIONS = 0
 | B04–B05 | grants.set → apply/revoke step bindings | exact scope/target constraints | OPEN |
 | C02 | transport access vs application authorization | DevOps v1.0 §5.1 + Security v1.0 §1 | ALREADY DEFINED |
 | S01 | admissible USER/ADMIN topology | deployment rule, no port-only assumption | OPEN |
-| S02 | cross-surface cookie handling | no fallback/alias behavior | OPEN |
-| S03 | cross-surface CSRF/Origin/WSS behavior | exact reject/reauth rules | OPEN |
+| S02 | cross-surface cookie handling | session/cookie/namespace separation is FINAL; simultaneous/wrong-cookie behavior remains | OPEN / PARTIALLY DEFINED |
+| S03 | cross-surface CSRF/Origin/WSS behavior | session+CSRF+exact Origin and 403/no-mutation are FINAL; proxy/WSS/cross-surface details remain | OPEN / PARTIALLY DEFINED |
 | S04 | definition of cookie non-exposure | measurable criterion for QA | OPEN |
-| S05 | permission resolution vs final AUTHZ | two-stage or alternative deterministic algorithm | OPEN |
+| S05 | permission resolution vs final AUTHZ | final AUTHZ intersection + permission resolution order are FINAL; positive-override composition/internal algorithm remains | OPEN / PARTIALLY DEFINED |
 | S06 | account override ceiling | positive/negative limits | OPEN |
-| S07 | reseller delegation composition | ceiling/scope/revocation algorithm | OPEN |
-| S08 | temporary privilege/approval composition | non-bypass rules | OPEN |
-| S09 | absent/DENY representation | internal decision + safe external behavior | OPEN |
+| S07 | reseller delegation composition | effective-envelope ceiling/no ownership transfer/current-state revocation are FINAL; physical computation/storage remains | OPEN / PARTIALLY DEFINED |
+| S08 | temporary privilege/approval composition | no role mutation/no permission bypass/fresh MFA+scope are FINAL; state representation/lifecycle remains | OPEN / PARTIALLY DEFINED |
+| S09 | absent/DENY representation | unknown binding DENY/no side effect/audit is FINAL; NOT_GRANTED distinction + external mapping remains | OPEN / PARTIALLY DEFINED |
 
 ### DEVOPS / BUILD / RELEASE — toolchain/build decisions
 
