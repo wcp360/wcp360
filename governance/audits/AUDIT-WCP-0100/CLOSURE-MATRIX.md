@@ -1,7 +1,7 @@
 # AUDIT-WCP-0100 — Closure Matrix
 
-**Reference date:** 2026-10-02  
-**Main reference:** \`0aabae81fe6509b7e6567ef5ab12ecc1b9e86b1d\`  
+**Reference date:** 2026-10-03  
+**Main reference:** `7a248e907951789e47c29d95dd3733f8288dc6b6`  
 **Audit tracker:** issue #41  
 **Implementation gate:** issue #13  
 **Status:** CURRENT CLOSURE CONTROL — NO FINDING AUTO-CLOSED
@@ -101,11 +101,11 @@ Implemented evidence in main:
 
 Current evidence:
 
-- #6 Database: final/source-ready metadata confirmed; exact body not materialized;
-- #7 QA: baseline metadata v1.0 approved; final SC-M01 canonical artifact NOT MATERIALIZED / NOT CONFIRMED;
-- #9 Engineering: final/source-ready metadata confirmed; exact body not materialized.
+- #6 Database: final/source-ready metadata confirmed; full final body existence confirmed historically; substantial recovery evidence is now preserved, but recovery is explicitly exhausted before unsafe reconstruction and the exact final owner artifact is still absent.
+- #7 QA: baseline metadata v1.0 approved; no historical complete final artifact was found; a self-contained non-canonical owner candidate and source-derived coverage index now exist, but TESTS / QA has not published the final canonical artifact.
+- #9 Engineering: final/source-ready metadata confirmed; exact final body is absent; Phase G/H3-C candidate evidence is preserved separately and explicitly cannot be promoted.
 
-Recovery from conversations/Library/history adds evidence but is explicitly insufficient to reconstruct #6/#9.
+Recovery/preparation has reduced rediscovery but does not change the 5/8 gate.
 
 **Closure proof required:**
 
@@ -269,9 +269,10 @@ Evidence:
 
 Evidence:
 
-- T06/T07 in PR #43;
+- merged owner-decision pack T06/T07;
 - existing durable-intent → dispatch → observe → durable-result invariants;
-- recovered DB history includes jobs/job_attempts/leases/outbox/event records but exact contract unavailable.
+- recovered final DB evidence now preserves jobs, job_attempts, leases/fencing, outbox, event records, transaction distinctions, audit durability, reconciliation, partitioning-not-required-v1.0 and backup/restore/migration boundaries;
+- recovery is still incomplete and the exact canonical DB artifact remains required.
 
 **Closure proof required:**
 
@@ -297,8 +298,8 @@ Evidence:
 Evidence:
 
 - PR #42 contains read-only CI, repository/path checks and targeted secret checking;
-- latest synchronized head: \`a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77\`;
-- latest run: \`37072620136\` = SUCCESS;
+- latest synchronized head: `e0766718892bbcd6232e7eb3ed16482e3b38094b`;
+- latest run: `37079982904` = SUCCESS;
 - both jobs and all steps succeed;
 - main still reports branch protection disabled.
 
@@ -429,8 +430,11 @@ Evidence:
 
 Evidence:
 
-- final QA owner artifact missing;
-- merged P1 proposal pack contains 85 proposed local scenarios;
+- final QA owner artifact remains missing;
+- merged self-contained QA owner candidate defines test records, execution evidence, levels/families, dependency handling, status transitions and CODE-BASELINE evidence without creating PASS/FAIL;
+- canonical coverage index is source-derived from unchanged API/IPC/Permission blobs;
+- independent recount verifies 86/86 API rows with 0 field/test-suffix mismatches, 47/47 IPC rows with 0 field/test-suffix mismatches, and 82/82 active permissions with 0 surface/status/API-binding mismatches;
+- merged proposal pack contains 85 local PLANNED scenarios;
 - PR #42 has real repository-tool tests, explicitly not product QA.
 
 **Closure proof required:**
@@ -499,15 +503,16 @@ Merged remediation:
 ### AUDIT-WCP-0117 — USER/ADMIN cookie topology
 
 **Finding status:** OPEN  
-**Remediation readiness:** PROPOSAL READY FOR OWNER REVIEW  
+**Remediation readiness:** PARTIALLY DEFINED / OWNER + DEPLOYMENT PROOF REQUIRED  
 **SC-M01 relevance:** web/session deployment
 
 Evidence:
 
-- PR #43 Security Web/Authz S01–S04;
-- SQ01–SQ07;
-- ports alone not treated as cookie isolation;
-- no hostname or topology is silently chosen.
+- merged Security Web/Authz v0.2 plus canonical-composition evidence;
+- direct cross-check against Security v1.0 confirms separate USER/ADMIN sessions/cookies/namespaces/surface claims, synchronizer CSRF + exact Origin, fail-closed handling and current-state revocation;
+- SQ01–SQ07 remain PLANNED;
+- ports alone are not treated as cookie isolation and no hostname/topology is silently chosen.
+- remaining gap is deployment topology/non-exposure proof and detailed wrong-cookie/proxy/WSS behavior, not redesign of the core session/CSRF semantics.
 
 **Closure proof required:**
 
@@ -523,16 +528,17 @@ Evidence:
 ### AUDIT-WCP-0118 — permission priority vs Security intersection
 
 **Finding status:** OPEN  
-**Remediation readiness:** PROPOSAL READY FOR OWNER REVIEW  
+**Remediation readiness:** PARTIALLY DEFINED / OWNER HARMONIZATION REQUIRED  
 **SC-M01 relevance:** authorization engine
 
 Evidence:
 
-- PR #43 S05–S09;
-- resolution of effective permission separated from final Security intersection;
-- account override ceiling remains owner decision;
-- reseller delegation and temporary privilege composition made explicit as questions;
-- SQ08–SQ16 proposed.
+- merged Security Web/Authz v0.2 plus independently cross-checked canonical-composition evidence;
+- Security v1.0 already canonically defines final AUTHZ as an intersection;
+- Permission Registry already defines explicit DENY > account override > role grants > plan/feature envelope > default policy;
+- DEMO hard restriction, reseller effective-envelope ceiling, temporary privilege non-role mutation, approval non-bypass and UI/context non-authority are already final;
+- account positive-override ceiling/internal representation and external error projection remain owner decisions;
+- SQ08–SQ16 remain PLANNED.
 
 **Closure proof required:**
 
@@ -598,17 +604,17 @@ Repository tooling/fixes.
 
 Current synchronized candidate:
 
-\`a9fb5645a214f50414f6d9bd26ed7f2b49e3ad77\`
+`e0766718892bbcd6232e7eb3ed16482e3b38094b`
 
 Latest verified CI:
 
-\`37072620136 = SUCCESS\`
+`37079982904 = SUCCESS`
 
 Merge-test:
 
-\`5c59f2170c1a7894e4ef0a620b9139d1e5eebb6f\`
+`440cd505da0b94eb11aea8830c4ae692245092a6`
 
-Evidence: 297 files / 1,086,196 bytes, mirror 147/147, audit 4/4, targeted secret findings 0.
+Evidence: 304 files / 1,216,972 bytes, mirror 147/147, audit 4/4, targeted secret findings 0.
 
 Still requires independent review and merge/enforcement proof.
 
@@ -659,3 +665,42 @@ E3 = independent technical review
 PR #42 currently has E1 + E2 and remains blocked on E3 under class R1.
 
 The connector available in this workflow does not expose a mutation for branch-protection/ruleset administration. Main still reports \`protected=false\`; no enforcement is claimed.
+
+
+## 9. 2026-10-03 evidence refresh
+
+### Database recovery stopping rule
+
+Historical recovery is now classified:
+
+```text
+SUBSTANTIAL BUT INCOMPLETE
+SAFE AUTO-RECONSTRUCTION = NO
+OWNER REPUBLICATION / AMENDMENT REQUIRED
+```
+
+The recovery evidence explicitly records unrecovered INFRA details, exact retention policy, exact index names/order and any unsurfaced owner clauses. These gaps must remain gaps rather than being filled from architecture intuition.
+
+### QA source-derived coverage
+
+The QA coverage index was independently recomputed against the unchanged canonical source blobs:
+
+```text
+API contracts / TEST refs = 86 / 86
+API field mismatches = 0
+IPC contracts / TEST refs = 47 / 47
+IPC field mismatches = 0
+active permissions = 82
+permissions with exact index rows = 82
+permission/API-binding mismatches = 0
+```
+
+This is reference coverage, not executable behavioral coverage.
+
+### Security narrowing
+
+Direct canonical-source checks confirm the core semantics underlying 0117/0118 are already final. The remaining work is targeted owner/deployment harmonization and executable proof, not replacement of the Security model.
+
+### Repository guardrails
+
+PR #42 remains E1 + E2 only even though the current-main candidate is green. E3 and merge/enforcement proof remain required by REVIEW-MERGE-POLICY.
