@@ -3,7 +3,7 @@
 **Status:** OWNER REVIEW AID — NON-CANONICAL  
 **Owner:** WCP360 — TESTS / QA  
 **Issue:** #7  
-**Reference main:** b9f503e31ecdb2a74a5c448c34ae3a048d1b0507
+**Reference main:** 844c50299f6b117288b753ec1c919529f9b0dab8
 
 This checklist is intentionally smaller than the QA owner candidate.
 
@@ -64,6 +64,47 @@ Recommended filename remains only a candidate:
     WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
 
 QA may choose another exact name.
+
+## 3A. A01-PROVENANCE — publication type / content-change honesty
+
+Historical recovery has established an important difference between QA #7 and Database/Engineering #6/#9:
+
+    TEST BASELINE v1.0 metadata = approved
+    prior complete final QA owner body = no evidence found
+    final canonical QA artifact = not previously materialized/confirmed
+
+Therefore QA must explicitly choose one publication classification.
+
+### Option P1 — retained prior final source exists
+
+Use only if TESTS / QA can produce a previously approved complete v1.0 owner source with provenance.
+
+    PUBLICATION TYPE = EXACT REPUBLICATION
+    CONTENT CHANGE = NONE
+
+The retained source must be identifiable. MASTER must not infer this option merely from old v1.0 metadata.
+
+### Option P2 — current candidate is reviewed into the first complete canonical body
+
+Use when QA is approving/amending the current owner candidate because no prior complete final body exists.
+
+    PUBLICATION TYPE = FIRST CANONICAL MATERIALIZATION / OWNER APPROVAL
+    CONTENT CHANGE = INITIAL CANONICAL CONTENT (or equivalent owner wording)
+    VERSION IMPACT = QA OWNER DECISION
+
+This is not a historical-content recovery and must not be described as byte-identical/content-neutral republication.
+
+### Option P3 — owner determines another version is required
+
+If QA concludes that the material decisions represented by the new complete body cannot legitimately remain v1.0, it must publish the version impact and route the baseline change through MASTER.
+
+### Mandatory rule
+
+The issue template's earlier `CONTENT CHANGE = NONE` wording is not evidence by itself.
+
+QA must base CONTENT CHANGE on actual provenance.
+
+This checklist does not choose P1/P2/P3 for QA.
 
 ## 4. A02 — lifecycle states
 
