@@ -19,7 +19,7 @@ Exact final owner export identified by project history:
 WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md
 ```
 
-Owner status already confirmed:
+Historical owner status already confirmed:
 
 ```text
 FINAL APPROVED CONTENT = YES
@@ -28,6 +28,8 @@ CONTENT CHANGE = NONE
 READY FOR SOURCE CODE CONSUMPTION = YES
 BLOCKER = NONE
 ```
+
+The complete final body is not recovered. The historical `CONTENT CHANGE = NONE` statement applies to exact republication only when the retained final source is identified. Recreated/amended content requires a real delta and version-impact decision.
 
 ## 1. Canonical repository context
 
