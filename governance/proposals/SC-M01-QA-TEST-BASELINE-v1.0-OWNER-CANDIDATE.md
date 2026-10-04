@@ -77,7 +77,12 @@ Every canonical test case should provide, directly or by inherited family profil
     OBSERVABILITY ASSERTIONS
     CLEANUP
     FAILURE INJECTION, if applicable
+    DETERMINISM / CLOCK / RANDOM SEED, if applicable
+    ISOLATION NAMESPACE / PARALLELISM REQUIREMENTS, if applicable
+    RERUN / ATTEMPT POLICY
+    QUARANTINE / FLAKY CLASSIFICATION, if applicable
     EVIDENCE TO RETAIN
+    EVIDENCE RETENTION CLASS
     DEPENDENCIES
     AUTOMATION STATUS
 
@@ -98,11 +103,17 @@ Every executed PASS/FAIL must be tied to:
     runtime/toolchain versions
     configuration profile
     test command
+    test runner/tool version
+    selected test manifest/filter
     run ID / job ID
+    shard / parallel worker identity, if applicable
+    attempt number / rerun reason
+    deterministic clock source / random seed, if applicable
     start/end timestamps
     result
     failure details if safe
     evidence artifact digest/reference
+    evidence retention policy/reference
 
 Sensitive values, session cookies, tokens, private keys, raw credentials and production data must never be placed in QA evidence.
 
@@ -600,6 +611,107 @@ When product tests exist, CI should publish at least:
 Do not expose secrets in logs/artifacts.
 
 A partial test selection must identify its scope; it must not be displayed as a full baseline PASS.
+
+## 24A. Execution integrity / flakiness / determinism
+
+This section is a candidate owner rule set intended to prevent a future green CI result from hiding unstable or non-reproducible tests.
+
+### Attempt history
+
+A rerun must never erase the first failing attempt.
+
+For every test execution that is rerun, QA should retain or reference:
+
+    original attempt result
+    rerun trigger
+    attempt number
+    exact SHA / artifact
+    environment identity
+    seed / clock source where applicable
+    final disposition
+
+A “rerun until PASS” loop is forbidden as acceptance evidence.
+
+If a retry is performed only to diagnose infrastructure instability, the report must distinguish:
+
+    PRODUCT TEST FAILURE
+    TEST INFRASTRUCTURE FAILURE
+    FLAKY / NON-DETERMINISTIC OBSERVATION
+    OPERATOR / ENVIRONMENT ERROR
+
+The exact labels are owner decisions, but failure classification must not silently convert a product failure into PASS.
+
+### Flaky / quarantine behavior
+
+Quarantine is metadata, not a PASS state.
+
+A quarantined test:
+
+- remains visible in the canonical inventory;
+- retains its owner requirement and blocker;
+- has an explicit quarantine reason, owner and review/expiry condition;
+- cannot satisfy a required SC-M01 assertion while quarantined unless QA explicitly decides that assertion is outside the activated candidate scope;
+- must not be hidden from CI totals.
+
+QA should define whether an unstable required test is represented as BLOCKED, FAIL, or another explicit non-PASS disposition. No hidden “green because quarantined” behavior is allowed.
+
+### Deterministic time and randomness
+
+Tests depending on time, randomized input, UUID generation, backoff, expiry or scheduling should use an injectable/fixed source where technically practical.
+
+When randomness/property testing is used:
+
+- retain the seed for a failing attempt;
+- make the failure reproducible from that seed where possible;
+- record generator/tool version when it affects reproduction.
+
+When wall-clock behavior is under test:
+
+- distinguish monotonic duration from UTC/wall-clock assertions;
+- record timezone/clock source where relevant;
+- avoid relying on real elapsed sleeps when a deterministic clock can test the same contract.
+
+### Isolation and parallel execution
+
+Parallel execution must not create false PASS/FAIL through shared mutable fixtures.
+
+Where tests may run concurrently, define:
+
+- unique tenant/resource/test namespace;
+- isolated DB/schema/transaction strategy as permitted by #6;
+- unique filesystem/socket/service fixture names;
+- cleanup ownership;
+- collision behavior;
+- whether a test is intentionally serial.
+
+A PASS obtained only when the suite is forced serial must not be treated as evidence for a production concurrency property.
+
+### Evidence retention
+
+Temporary CI artifacts may expire. QA should define which evidence must remain durably referenceable for:
+
+- first CODE-BASELINE;
+- security/recovery failures;
+- regression tests for corrected bugs;
+- release/upgrade proofs where in scope.
+
+A durable summary should retain hashes/IDs sufficient to identify the tested SHA, environment, selected tests and result after temporary artifacts expire, without copying secrets into Git.
+
+### Material-change rerun rule
+
+A prior PASS is not automatically valid for a new candidate SHA.
+
+QA should define rerun triggers based on affected contracts/components/dependencies. At minimum, changes to:
+
+- canonical owner contract consumed by a test;
+- implementation under test;
+- schema/migration;
+- test code/fixture;
+- runtime/toolchain;
+- security boundary;
+- dependency version relevant to the assertion
+
+must cause QA to evaluate and record rerun applicability.
 
 ## 25. Gate to first CODE-BASELINE
 

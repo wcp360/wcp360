@@ -152,7 +152,12 @@ Candidate mandatory information:
     OBSERVABILITY ASSERTIONS
     CLEANUP
     FAILURE INJECTION, if applicable
+    DETERMINISM / CLOCK / RANDOM SEED, if applicable
+    ISOLATION / PARALLELISM REQUIREMENTS, if applicable
+    RERUN / ATTEMPT POLICY
+    QUARANTINE / FLAKY CLASSIFICATION, if applicable
     EVIDENCE TO RETAIN
+    EVIDENCE RETENTION CLASS
     DEPENDENCIES
     AUTOMATION STATUS
 
@@ -175,11 +180,17 @@ Candidate envelope:
     runtime/toolchain versions
     config/test profile
     test command
+    test runner/tool version
+    selected test manifest/filter
     CI run / job ID
+    shard / parallel worker identity, if applicable
+    attempt number / rerun reason
+    deterministic clock source / random seed, if applicable
     start/end timestamps
     result
     safe failure details
     evidence artifact digest/reference
+    evidence retention policy/reference
 
 Must remain forbidden:
 
@@ -503,6 +514,32 @@ Candidate required reporting:
     evidence reference
 
 A partial suite must never be rendered as “full baseline PASS”.
+
+## 20A. Cross-cutting execution-integrity decision
+
+QA should explicitly ACCEPT / AMEND these safeguards as part of A03/A04/A18/A19 rather than creating an implicit CI policy later.
+
+Required questions:
+
+- Are all execution attempts retained/referenced when a test is rerun?
+- Is “rerun until PASS” forbidden as gate evidence?
+- How are product failure, infrastructure failure and flaky/non-deterministic observation distinguished?
+- Can a quarantined required test contribute to a full baseline PASS? Candidate answer: NO.
+- What owner/reason/expiry metadata is required for quarantine?
+- Are random seeds and deterministic clock inputs retained when they affect reproduction?
+- How are parallel fixtures isolated by tenant/resource/DB/filesystem/socket identity?
+- Which evidence must remain durably referenceable after CI artifacts expire?
+- Which material changes invalidate or require evaluation of previous PASS evidence?
+
+Minimum invariant:
+
+    QUARANTINE != PASS
+    RERUN != ERASE PRIOR FAILURE
+    FLAKY != PRODUCT PASS
+    TEMPORARY ARTIFACT EXPIRY != LOSS OF AUDITABLE RESULT
+    NEW SHA != AUTOMATIC REUSE OF OLD PASS
+
+These safeguards create no new lifecycle state unless TESTS / QA explicitly chooses one.
 
 ## 21. A19 — regression policy
 
