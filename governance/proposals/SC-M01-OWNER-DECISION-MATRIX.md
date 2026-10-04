@@ -72,8 +72,8 @@ APPLICATION TEST EXECUTIONS = 0
 | B04–B05 | grants.set → apply/revoke step bindings | exact scope/target constraints | OPEN |
 | C02 | transport access vs application authorization | DevOps v1.0 §5.1 + Security v1.0 §1 | ALREADY DEFINED |
 | S01 | admissible USER/ADMIN topology | deployment rule, no port-only assumption | OPEN |
-| S02 | cross-surface cookie handling | session/cookie/namespace separation is FINAL; simultaneous/wrong-cookie behavior remains | OPEN / PARTIALLY DEFINED |
-| S03 | cross-surface CSRF/Origin/WSS behavior | session+CSRF+exact Origin and 403/no-mutation are FINAL; proxy/WSS/cross-surface details remain | OPEN / PARTIALLY DEFINED |
+| S02 | cross-surface cookie handling | cookie names/attributes + session namespace/surface separation are FINAL; only wrong/simultaneous-cookie handling and safe projection remain | OPEN / STRONGLY CONSTRAINED |
+| S03 | cross-surface CSRF/Origin/WSS behavior | exact Origin + synchronizer CSRF + 403/no-mutation + same-origin baseline are FINAL; proxy/WSS/topology details remain | OPEN / STRONGLY CONSTRAINED |
 | S04 | definition of cookie non-exposure | measurable criterion for QA | OPEN |
 | S05 | permission resolution vs final AUTHZ | final AUTHZ intersection + permission resolution order are FINAL; positive-override composition/internal algorithm remains | OPEN / PARTIALLY DEFINED |
 | S06 | account override ceiling | positive/negative limits | OPEN |

@@ -119,6 +119,11 @@ A01→A20 conformance result:
 The candidate already covers:
 
 - PLANNED / READY / BLOCKED / PASS / FAIL;
+- rerun attempt history;
+- flaky/quarantine semantics with QUARANTINE != PASS;
+- deterministic seed/clock evidence where relevant;
+- parallel fixture isolation;
+- durable evidence retention and material-change rerun applicability;
 - test-record schema;
 - execution evidence;
 - UNIT / CONTRACT / INTEGRATION / SECURITY / E2E / RECOVERY / INSTALL-BUILD;
@@ -309,11 +314,15 @@ Final values/semantics include:
     → reconciliation
     → no blind retry
 
+Narrowed on 2026-10-04:
+
+- T01 recovered FINAL from H3CM-X004: I/O TIMEOUT = 5s per complete frame read/write; operation timeout is separate;
+- T01 now requires owner republication/harmonization, not redesign.
+
 Still open:
 
-- exact I/O phase/progress meaning;
-- deadline_ms representation/clock/bounds;
-- effective budget composition;
+- T02 deadline_ms representation/clock/bounds;
+- T03 effective budget composition/start/end phases;
 - pre-dispatch timeout projection;
 - durable idempotency physical representation;
 - exact claim/fencing/recovery persistence;
@@ -404,19 +413,19 @@ governance/audits/AUDIT-WCP-0100/CLOSURE-MATRIX.md
 
 PR #42 remains the only open tooling implementation PR.
 
-Current exact candidate:
+Current exact candidate after latest synchronization:
 
-    c10c6296868852f15ed600025b8b31d589135be7
+    273bc13a3ec6567b0ce498b062f1b8effd2b7902
 
 Latest E1:
 
-    run 37194191355 = SUCCESS
-    merge-test = ffbafd88729ed62f2f0394f999241163950e2db7
+    run 37221317542 = SUCCESS
+    merge-test = f2381aae2673bb0a714f3f47ef3e6e994e226797
 
 Latest parsed evidence:
 
-    base main tested = 305 files / 1,389,780 bytes
-    candidate / merge-test = 322 files / 1,491,881 bytes
+    base main tested = 309 files / 1,438,584 bytes
+    candidate / merge-test = 326 files / 1,540,685 bytes
     mirror = 147 / 147
     audit = 4 / 4
     targeted secret findings = 0
@@ -434,7 +443,7 @@ governance/reviews/PR42-E3-INDEPENDENT-REVIEW-PACKET.md
 GitHub enforcement plan:
 governance/GITHUB-MAIN-ENFORCEMENT-PLAN.md
 
-The latest E1 was against main 1b828833... . The main branch is now 71f27d87... because review/enforcement documentation was merged after that run. Before #42 merge, rebase/synchronize and rerun E1 on the then-current main after any E3 fixes.
+The latest E1 was against main 85211b34... . Main has advanced again to a62a3db0... after canonical Web/session evidence was merged. Before #42 merge, synchronize to the then-current main and rerun E1 after any E3 fixes.
 
 ## 17. GitHub enforcement
 
