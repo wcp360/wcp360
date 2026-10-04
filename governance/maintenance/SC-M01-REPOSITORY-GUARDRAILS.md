@@ -73,3 +73,40 @@ Les références DB/QA/Engineering sont toujours à obtenir via #6/#7/#9. Aucune
 - [GitHub : sécurisation des workflows](https://docs.github.com/en/actions/reference/security/secure-use).
 - [GitHub : syntaxe et permissions des workflows](https://docs.github.com/actions/reference/workflow-syntax-for-github-actions).
 - [Commit officiel checkout v7.0.1](https://github.com/actions/checkout/commit/3d3c42e5aac5ba805825da76410c181273ba90b1).
+
+
+## 6. Tracked-path policy enforcement — 2026-10-04
+
+Deep same-author review identified a gap in the earlier 52 synthetic path probes.
+
+The previous evidence proved that selected path patterns behaved as intended, but it did **not** prove that a file already tracked by Git could not violate those ignore rules after a forced add.
+
+Example class:
+
+    git add -f .env
+    git add -f production.sql
+    git add -f credentials.json
+
+A tracked ignored path may exist even though normal `git add` would have skipped it.
+
+The guardrail now performs two distinct checks:
+
+1. **synthetic policy regression** — the existing 52 expected tracked/ignored path behaviors;
+2. **real tracked-path policy** — enumerate Git's actual tracked paths, apply `git check-ignore --no-index` to them, and fail when any tracked path is ignored by the repository rules.
+
+The real-path report does not print the raw violating path. It records only:
+
+    path_index
+    SHA-256(path bytes)
+    ignore-rule line
+    SHA-256(rule bytes)
+
+The index is read again after the check; mutation during the scan fails closed.
+
+A disposable integration self-test forcibly adds a synthetic `.env` and proves:
+
+    clean tracked set → 0 violations
+    forced ignored tracked file → detected
+    raw path not emitted
+
+This closes a repository-policy gap; it does **not** make the repository-secret scanner exhaustive and does not replace E3 review.
