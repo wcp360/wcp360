@@ -68,18 +68,32 @@ Les noms P0–P6 ci-dessous sont documentaires, pas de nouveaux états Job :
 
 Une implémentation peut organiser son code autrement. Ce modèle ne devient normatif que si les propriétaires le ratifient ; il sert à rendre les cas de timeout non ambigus.
 
-## 3. Décision T01 proposée : portée du I/O TIMEOUT = 5s
+## 3. T01 — portée du I/O TIMEOUT = 5s — recovered owner-final
 
-Deux lectures sont possibles :
+Targeted recovery of final H3CM-X004 evidence resolves the former A/B ambiguity:
 
-| Option | Sens | Conséquence |
-|---|---|---|
-| A | délai total d'attente de toute réponse | incompatible en pratique avec les opérations autorisées à 60/120/900s sauf nouveau protocole/streaming |
-| B | délai de progression des **transferts de framing** P1/P6 ; le temps d'exécution P4/P5 est gouverné par le budget d'opération | **Recommandée, PENDING OWNER DECISION** |
+```text
+I/O TIMEOUT = 5 seconds per complete frame read/write
+DEFAULT OPERATION TIMEOUT = 30 seconds
+MAX OPERATION TIMEOUT = 900 seconds
+```
 
-Sous B, un blocage de lecture du corps de requête ou d'écriture du résultat au-delà du budget I/O est traité comme un échec de transport. En revanche, le serveur n'est pas obligé de produire des octets toutes les cinq secondes pendant une primitive de 900 secondes.
+Status of recovered decision:
 
-Cela ne signifie pas qu'une connexion peut rester sans borne : le budget d'opération et le deadline effectif restent obligatoires.
+```text
+H3CM-X004 = FINAL RATIFICATION / CONSENSUS REACHED
+T01 = RECOVERED OWNER-FINAL — REPUBLISH / HARMONIZE
+```
+
+The 5-second timeout applies to the framed read/write operation; it is not the total execution time of a 60/120/900-second operation.
+
+The owner task is now republication/harmonization in current normative API/IPC/DevOps material, not redesign.
+
+Recovery evidence:
+
+`governance/recovery/SC-M01-RECOVERED-IPC-TIMEOUT-X004-EVIDENCE.md`
+
+Implementation still must choose library-specific read/write deadline handling that preserves this recovered semantic meaning.
 
 ## 4. Décision T02 : sémantique de deadline_ms
 
@@ -277,10 +291,10 @@ Pour TQ05, si le propriétaire choisit l'option A ou un protocole à messages in
 
 ### API / IPC / CONTRACTS
 
-Répondre T01–T05 :
+Répondre / harmoniser T01–T05 :
 
 ```text
-T01 I/O timeout semantics =
+T01 I/O timeout semantics = RECOVERED FINAL — confirm/republish
 T02 deadline_ms representation =
 T03 effective budget scope =
 T04 phase/error boundary around canonical UNKNOWN_OUTCOME rule =
