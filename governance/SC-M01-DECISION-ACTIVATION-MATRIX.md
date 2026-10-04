@@ -83,12 +83,13 @@ Required before implementing a successful authenticated/authorized backend→wcp
     D01 origin action vs technical action model
     D02 trusted context lifecycle semantics
 
-    T01 I/O timeout phase meaning
     T02 deadline_ms representation
     T03 effective operation budget
     T04 before/after-dispatch timeout/UNKNOWN_OUTCOME boundary
 
 C02 transport access != application authorization is already defined and is an invariant, not an open activation decision.
+
+T01 I/O timeout semantics is also no longer an open design decision: recovered final H3CM-X004 evidence fixes 5 seconds per complete frame read/write, separate from operation timeout. It remains a republication/harmonization task.
 
 A daemon/process skeleton that exposes **no positive effectful control path** may be structurally created after the global gate, but it must not invent these A2 behaviors.
 
@@ -204,7 +205,7 @@ Those remain separately authorized by DevOps/Release scope.
 | D02 | A2 | OPEN | trusted positive authorization context |
 | D03 | A3/A6 | OPEN / DB-dependent | workflows using revision/grant translation |
 | D04 | A3 | OPEN / PARTIALLY DEFINED | durable parent/step/audit/reconciliation implementation |
-| T01 | A2 | OPEN / PARTIALLY DEFINED | exact IPC I/O timeout implementation |
+| T01 | invariant / A2 implementation | RECOVERED OWNER-FINAL — REPUBLISH/HARMONIZE | 5s complete-frame read/write enforcement |
 | T02 | A2 | OPEN / PARTIALLY DEFINED | deadline parsing/validation |
 | T03 | A2 | OPEN / PARTIALLY DEFINED | operation budget enforcement |
 | T04 | A2 | OPEN / PARTIALLY DEFINED | timeout outcome boundary |
