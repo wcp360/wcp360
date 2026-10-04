@@ -1,6 +1,6 @@
 # WCP360 — Project Status
 
-**Reference date:** 2026-10-03  
+**Reference date:** 2026-10-04  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
 
@@ -222,11 +222,11 @@ governance/handoffs/SC-M01-ENGINEERING-CANONICAL-INPUT-PACK.md
 These are explicitly non-authoritative and cannot satisfy issues #6, #7 or #9 by themselves.
 
 
-## 10. Current readiness — 2026-10-03
+## 10. Current readiness — 2026-10-04
 
 Detailed current-state authority:
 
-`governance/SC-M01-CURRENT-READINESS-2026-10-03.md`
+`governance/SC-M01-CURRENT-READINESS-2026-10-04.md`
 
 Audit closure criteria:
 
@@ -306,4 +306,12 @@ SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-The remaining progress is owner publication/harmonization and real independent review, not another broad documentation audit.
+Current coordination additionally uses:
+
+- `governance/SC-M01-DECISION-ACTIVATION-MATRIX.md`;
+- `governance/reviews/PR42-E3-INDEPENDENT-REVIEW-PACKET.md`;
+- `governance/GITHUB-MAIN-ENFORCEMENT-PLAN.md`;
+- DB/Engineering republication conformance evidence;
+- QA A01→A20 conformance evidence.
+
+The remaining progress is owner publication/harmonization, real independent review and actual GitHub enforcement, not another broad documentation audit.
