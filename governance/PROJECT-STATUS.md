@@ -104,6 +104,8 @@ Tracking: issue #7.
 
 Current evidence indicates that v1.0 metadata existed but no complete prior final QA body has been evidenced. QA must therefore declare publication provenance/content change explicitly; `CONTENT CHANGE = NONE` is not assumed.
 
+The owner candidate was hardened on 2026-10-04 with explicit execution-integrity rules: rerun history, flaky/quarantine handling, deterministic seeds/clocks, parallel fixture isolation and durable evidence retention. It remains non-canonical and issue #7 remains OPEN.
+
 ### Engineering
 
 Logical identity:
@@ -256,6 +258,9 @@ Engineering
 
 Current semantic-evidence narrowing in main includes:
 
+- recovered H3CM-X004 timeout evidence: I/O 5s per complete frame read/write; T01 no longer an open design choice;
+- canonical Web/session security evidence: cookie/session/CSRF/Origin/CORS core final; only topology/proxy/WSS/wrong-cookie details remain;
+
 - canonical API transport evidence + API Transport Delta v0.2;
 - canonical Security composition evidence + Security Web/Authz Delta v0.2;
 - canonical timeout/worker evidence;
@@ -275,12 +280,25 @@ Review class:
 
 ```text
 R1 repository tooling
-E1 automated evidence
-E2 same-author publication control
-E3 independent review still required
+E1 automated evidence = YES
+E2 same-author publication control = YES
+E3 independent review = MISSING
 ```
 
-The branch is repeatedly resynchronized with current main before CI revalidation.
+Latest synchronized/tested candidate before the current status refresh:
+
+```text
+head = 273bc13a3ec6567b0ce498b062f1b8effd2b7902
+run = 37221317542 SUCCESS
+merge-test = f2381aae2673bb0a714f3f47ef3e6e994e226797
+candidate files = 326
+candidate bytes = 1,540,685
+mirror = 147/147
+audit = 4/4
+targeted secret findings = 0
+```
+
+Main advanced afterward with additional documentation/evidence, so a future #42 merge still requires resynchronization to the then-current main plus E3.
 
 Main branch enforcement is not claimed active:
 
