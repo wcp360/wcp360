@@ -43,8 +43,8 @@ These are preparation states only, not canonical QA lifecycle states.
 |---|---|---|---|---|
 | A01 | artifact identity / provenance | Candidate §1, §27–28; acceptance checklist A01 + A01-PROVENANCE | PREPARED / OWNER CHOICE | choose final filename, publication type, content-change declaration, version impact, provenance |
 | A02 | lifecycle states | Candidate §1 and §23 | PREPARED | accept/amend PLANNED/READY/BLOCKED/PASS/FAIL semantics |
-| A03 | canonical test-record schema | Candidate §3 | PREPARED | accept/amend mandatory fields/inheritance rules |
-| A04 | execution evidence envelope | Candidate §4 | PREPARED | accept/amend reproducibility/evidence fields |
+| A03 | canonical test-record schema | Candidate §3 + execution-integrity addendum | PREPARED | accept/amend mandatory fields/inheritance plus determinism/isolation/rerun/quarantine metadata |
+| A04 | execution evidence envelope | Candidate §4 + execution-integrity addendum | PREPARED | accept/amend runner/selection/attempt/seed/shard/retention evidence fields |
 | A05 | test-level taxonomy | Candidate §5 | PREPARED | accept/amend UNIT/CONTRACT/INTEGRATION/SECURITY/E2E/RECOVERY/INSTALL-BUILD |
 | A06 | API coverage rule | Candidate §8 + coverage index | PREPARED / DEPENDENCY BLOCKED | accept source mapping; keep unresolved HTTP projections blocked until API owner decisions |
 | A07 | IPC coverage rule | Candidate §9 + coverage index | PREPARED / DEPENDENCY BLOCKED | accept coverage obligations; keep timeout/control details blocked where owner decisions remain |
@@ -58,8 +58,8 @@ These are preparation states only, not canonical QA lifecycle states.
 | A15 | repository/bootstrap family | Candidate §6 + §20 | PREPARED / DEPENDENCY BLOCKED | determine which repository-tool evidence is accepted after PR #42 review/merge |
 | A16 | build/toolchain family | Candidate §18–19 | PREPARED / DEPENDENCY BLOCKED | exact runtimes/tools/thresholds wait for Engineering/DevOps decisions |
 | A17 | 85 proposal-case intake | Candidate §22 | PREPARED / OWNER CHOICE | triage REUSE/MERGE/SPLIT/DISCARD/BLOCKED/NEW TEST only after underlying owner decisions |
-| A18 | partial selection / CI reporting | Candidate §24 | PREPARED | accept/amend reporting envelope; partial run must not equal full PASS |
-| A19 | regression policy | Candidate §21 | PREPARED | accept/amend bug→regression requirement |
+| A18 | partial selection / CI reporting | Candidate §24 + §24A | PREPARED | accept/amend reporting envelope; partial run/quarantine/rerun cannot masquerade as full PASS |
+| A19 | regression policy | Candidate §21 + §24A | PREPARED | accept/amend bug→regression, rerun invalidation and flaky/quarantine rules |
 | A20 | first CODE-BASELINE evidence | Candidate §25 | PREPARED / OWNER CHOICE | accept/amend minimum evidence before MASTER may establish first CODE-BASELINE |
 
 ## 4. Coverage-index verification
@@ -94,6 +94,7 @@ The candidate already contains complete drafting sections for:
 - source authority;
 - canonical test-record structure;
 - execution evidence;
+- execution integrity: attempt history, flaky/quarantine policy, deterministic seed/clock, fixture isolation and durable evidence retention;
 - test levels;
 - repository/bootstrap;
 - USER/ADMIN separation;
