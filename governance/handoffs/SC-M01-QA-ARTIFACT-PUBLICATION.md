@@ -55,9 +55,12 @@ TEST BASELINE VERSION = v1.0
 SC-M01 TEST REQUIREMENTS = INCLUDED
 FINAL APPROVED CONTENT = YES
 HISTORICAL CONTENT INCLUDED = NO
-CONTENT CHANGE = NONE
+PUBLICATION TYPE = <EXACT REPUBLICATION | FIRST CANONICAL MATERIALIZATION | OWNER AMENDMENT>
+CONTENT CHANGE = <OWNER PROVENANCE-BASED DECISION>
+VERSION IMPACT = <OWNER DECISION>
 READY FOR SOURCE CODE CONSUMPTION = YES
 BLOCKER = NONE
+PROVENANCE = <EXACT SOURCE / OWNER APPROVAL REFERENCE>
 ```
 
 GitHub target:
@@ -69,3 +72,13 @@ specifications/tests/<EXACT FINAL .md NAME>
 Tracking: issue #7.
 
 This handoff does not authorize SC-M02 or establish CODE-BASELINE.
+
+
+## Provenance correction — 2026-10-04
+
+Historical recovery found no evidence of a complete prior final QA body. Therefore `CONTENT CHANGE = NONE` must not be assumed from v1.0 metadata alone.
+
+Use:
+`governance/handoffs/SC-M01-QA-OWNER-ACCEPTANCE-CHECKLIST.md`.
+
+If QA possesses a retained previously-approved complete v1.0 source, exact republication with `CONTENT CHANGE = NONE` is valid with provenance. Otherwise the final body is a first canonical materialization or owner amendment and must declare its real content/version status.

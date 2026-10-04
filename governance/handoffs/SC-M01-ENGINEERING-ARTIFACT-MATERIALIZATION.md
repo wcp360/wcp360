@@ -14,7 +14,7 @@ FINAL APPROVED CONTENT = YES
 HISTORICAL CONTENT INCLUDED = NO
 READY FOR SOURCE CODE CONSUMPTION = YES
 BLOCKER = NONE
-CONTENT CHANGE = NONE
+CONTENT CHANGE = NONE  # historical final-publication metadata; exact-republication only
 ```
 
 Owner history identifies the canonical export as:
@@ -49,3 +49,15 @@ specifications/engineering/WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v
 Tracking: issue #9.
 
 This handoff does not authorize SC-M02 or establish CODE-BASELINE.
+
+
+## Provenance rule — 2026-10-04
+
+The final Engineering v0.2 body is not fully recovered.
+
+- If Engineering possesses the retained exact final source, republish it with provenance and `CONTENT CHANGE = NONE`.
+- If Engineering recreates/amends unrecovered material, declare the real content delta and version impact.
+- Do not promote historical candidate/recovery evidence as the final ruleset.
+
+See:
+`governance/handoffs/SC-M01-ENGINEERING-OWNER-REPUBLICATION-CHECKLIST.md`.

@@ -130,6 +130,8 @@ CODE-BASELINE = NONE
 
 The input pack is not the final QA owner artifact.
 
+Current recovery indicates no complete prior final QA body has been evidenced. TESTS / QA must use `governance/handoffs/SC-M01-QA-OWNER-ACCEPTANCE-CHECKLIST.md` and declare publication provenance/content change honestly. `CONTENT CHANGE = NONE` is allowed only if QA identifies a retained previously-approved complete source.
+
 ## WS-ENG — Engineering Canonical Evidence
 
 Status: **OPEN**
@@ -150,7 +152,7 @@ WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATIO
 Tracking:
 issue #9
 
-Owner publication metadata:
+Historical owner publication metadata:
 ```text
 VERSION = v0.2
 FINAL APPROVED CONTENT = YES
@@ -161,7 +163,9 @@ BLOCKER = NONE
 ```
 
 Remaining action:
-materialize/import the exact owner export into `specifications/engineering/`.
+republish/materialize the exact owner export into `specifications/engineering/`, if the retained original source exists.
+
+If Engineering must recreate/amend unrecovered final content, it must declare a real content delta and version impact. Historical `CONTENT CHANGE = NONE` is not evidence for a reconstructed body.
 
 No candidate ruleset substitution.
 

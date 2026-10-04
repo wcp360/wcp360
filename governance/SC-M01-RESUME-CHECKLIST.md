@@ -32,13 +32,16 @@ EXACT OWNER ARTIFACT IDENTIFIED = YES
 VERSION IDENTIFIED = YES
 FINAL APPROVED CONTENT = YES
 HISTORICAL CONTENT INCLUDED = NO
-CONTENT CHANGE = NONE
+PUBLICATION / CONTENT-CHANGE DECLARATION = CONSISTENT WITH OWNER PROVENANCE
+VERSION IMPACT = EXPLICIT
 PRESENT IN GITHUB MAIN = YES
 READY FOR SOURCE CODE CONSUMPTION = YES
 BLOCKER = NONE
 ```
 
 No artifact may be reconstructed from older audits, candidate documents or general knowledge to satisfy this gate.
+
+`CONTENT CHANGE = NONE` is **not a universal gate condition**. It is valid for an exact republication only when owner provenance establishes the retained/original final content. If an owner recreates or amends missing content, the owner must declare the real delta and version impact. If a final body did not previously exist (as current evidence indicates for QA #7), the owner must classify first canonical materialization honestly.
 
 ## Scope before resume
 
