@@ -451,9 +451,12 @@ TEST BASELINE VERSION = v1.0
 SC-M01 TEST REQUIREMENTS = INCLUDED
 FINAL APPROVED CONTENT = YES
 HISTORICAL CONTENT INCLUDED = NO
-CONTENT CHANGE = NONE
+PUBLICATION TYPE = <OWNER DECISION>
+CONTENT CHANGE = <OWNER PROVENANCE-BASED DECISION>
+VERSION IMPACT = <OWNER DECISION>
 READY FOR SOURCE CODE CONSUMPTION = YES
 BLOCKER = NONE
+PROVENANCE = <OWNER SOURCE / APPROVAL REFERENCE>
 ```
 
 This input pack cannot satisfy issue #7 by itself.
@@ -698,3 +701,12 @@ TEST suffix mismatches = 0
 ```
 
 This is derived evidence only. It does not define expected results, create new TEST IDs, execute tests, or close #7. If any source blob changes, the index must be regenerated/reverified.
+
+
+## Owner acceptance checklist
+
+Before final publication, TESTS / QA should use:
+
+`governance/handoffs/SC-M01-QA-OWNER-ACCEPTANCE-CHECKLIST.md`
+
+It records the required provenance/content-change decision and A01–A20 acceptance items. This input pack remains non-authoritative.

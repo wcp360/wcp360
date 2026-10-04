@@ -88,6 +88,9 @@ FINAL SC-M01 CANONICAL TEST ARTIFACT = NOT MATERIALIZED / NOT CONFIRMED
 QA input support already committed:
 `governance/handoffs/SC-M01-QA-CANONICAL-INPUT-PACK.md`
 
+QA owner review aid:
+`governance/handoffs/SC-M01-QA-OWNER-ACCEPTANCE-CHECKLIST.md`
+
 Extracted input:
 - 86 TEST-API references;
 - 47 TEST-IPC references;
@@ -98,6 +101,8 @@ Extracted input:
 
 Input support: `governance/handoffs/SC-M01-QA-CANONICAL-INPUT-PACK.md`  
 Tracking: issue #7.
+
+Current evidence indicates that v1.0 metadata existed but no complete prior final QA body has been evidenced. QA must therefore declare publication provenance/content change explicitly; `CONTENT CHANGE = NONE` is not assumed.
 
 ### Engineering
 
@@ -111,7 +116,7 @@ Exact final owner export:
 WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md
 ```
 
-Owner status:
+Historical owner metadata:
 ```text
 FINAL APPROVED CONTENT = YES
 HISTORICAL CONTENT INCLUDED = NO
@@ -120,8 +125,10 @@ READY FOR SOURCE CODE CONSUMPTION = YES
 BLOCKER = NONE
 ```
 
+The exact final Engineering body is not currently recovered. The historical `CONTENT CHANGE = NONE` metadata may be reused only if Engineering can republish the exact retained final source with provenance. Any owner reconstruction/amendment must declare a real delta and version impact.
+
 Remaining:
-exact file body materialization/import.
+exact file body republication/materialization, or explicit owner reconstruction/amendment if the original cannot be recovered.
 
 Input support: `governance/handoffs/SC-M01-ENGINEERING-CANONICAL-INPUT-PACK.md`  
 Tracking: issue #9.
