@@ -18,7 +18,7 @@ Recovered historical evidence is tracked separately from current canonical autho
 | API transport | `SC-M01-API-TRANSPORT-DELTA-v0.2.md` | H01–H10 | HQ01–HQ15 = 15 |
 | Security Web/Authz | `SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.2.md` | S01–S09 | SQ01–SQ16 = 16 |
 | Toolchain / build inputs | SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md | F01–F10 | FQ01–FQ15 = 15 |
-| **Total** | 6 active proposal domains | **47 tracked decision points; 45 OPEN semantic decisions** | **85 proposed cases** |
+| **Total** | 6 active proposal domains | **47 tracked decision points; 44 OPEN semantic decisions** | **85 proposed cases** |
 
 All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 
@@ -28,8 +28,8 @@ All 85 cases are PLANNED. Application tests executed by this PR = **0**.
 
 ```text
 TRACKED DECISION POINTS = 47
-OPEN SEMANTIC OWNER DECISIONS = 45
-RECOVERED OWNER CONSENSUS REQUIRING REPUBLICATION = 1  (C01)
+OPEN SEMANTIC OWNER DECISIONS = 44
+RECOVERED OWNER CONSENSUS REQUIRING REPUBLICATION = 2  (C01, T01)
 ALREADY DEFINED IN CURRENT CANONICAL ARTIFACTS = 1     (C02)
 HISTORICAL ASSISTANT FREEZE / OWNER HARMONIZATION = B01–B05 + D01
 PROPOSED QA CASES = 85
@@ -44,7 +44,7 @@ APPLICATION TEST EXECUTIONS = 0
 | D02 | trusted authorization-context lifecycle | producer/resolver/binding/expiry/revocation | OPEN |
 | D03 | API→IPC target/revision/grant translation | typed mapping and owner references | OPEN |
 | D04 | parent/step audit and uncertain-result correlation | core traceability/durability is final; step/event/persistence relationships remain | OPEN / PARTIALLY DEFINED |
-| T01 | I/O timeout semantics | value 5s is FINAL; exact I/O phase/progress semantics remain | OPEN / PARTIALLY DEFINED |
+| T01 | I/O timeout semantics | recovered H3CM-X004: 5s per complete frame read/write; operation timeout separate | RECOVERED OWNER-FINAL — REPUBLISH/HARMONIZE |
 | T02 | `deadline_ms` representation | required field existence is FINAL; representation/clock/bounds remain | OPEN / PARTIALLY DEFINED |
 | T03 | effective operation-budget scope | default 30s/max 900s/per-operation limits are FINAL; composition/start/end phases remain | OPEN / PARTIALLY DEFINED |
 | T04 | phase/error boundary around canonical UNKNOWN_OUTCOME rule | post-dispatch uncertainty is FINAL; before-dispatch/error/result-recovery details remain | OPEN / PARTIALLY DEFINED |
@@ -113,7 +113,7 @@ Engineering co-owns F01/F02/F04–F08; Security reviews supply-chain/secret/priv
 | C01 | control socket physical identity | recovered M1: /run/wcp360/wcpd.sock, owner wcpd, group wcp360-control, mode 0660 | RECOVERED OWNER CONSENSUS — REPUBLISH/CONFIRM |
 | C04 | worker path to normal control boundary | direct IPC-B forbidden + no control group by default + normal control path required are FINAL; exact indirect mechanism remains | OPEN / PARTIALLY DEFINED |
 | S01–S04 | deploy/routing/TLS/proxy behavior | topology evidence | OPEN |
-| T01/T03 | socket timeout operational behavior | implementation constraints, not protocol redefinition | OPEN |
+| T01/T03 | socket timeout operational behavior | T01 recovered final; T03 composition/start/end remains owner work | T01 RECOVERED / T03 OPEN |
 
 ### DATABASE / DATA MODEL — dependent
 
