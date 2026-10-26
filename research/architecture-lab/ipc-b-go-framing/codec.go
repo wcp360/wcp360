@@ -24,6 +24,7 @@ import (
 const (
 	ProtocolVersion = "WCP360-IPC-B/1"
 	RequestMaxBytes = 65_536 // canonical IPC-B request payload maximum
+	ResponseMaxBytes = 262_144 // canonical IPC-B response payload maximum
 	// Research-only limits: depth and tokens are defensive hypotheses requiring
 	// Security/API owner review, NOT published normative IPC-B limits.
 	researchMaxDepth = 16
@@ -225,38 +226,48 @@ func fieldString(m map[string]any, name string) (string, error) {
 	return value, nil
 }
 
-// DecodeRequestFrame parses exactly one in-memory framed research message.
-// This function deliberately does not open/read a network connection. It
-// does not establish SO_PEERCRED, authn/authz, idempotency or real deadlines.
-func DecodeRequestFrame(frame []byte) (Parsed, error) {
-	var empty Parsed
+// decodeFrameMap validates the shared IPC-B physical envelope in memory only.
+// The caller separately validates request or response field sets.
+func decodeFrameMap(frame []byte, max uint32, kind string) (map[string]any, error) {
 	if len(frame) < 4 {
-		return empty, errors.New("missing frame length")
+		return nil, errors.New("missing frame length")
 	}
 	length := binary.BigEndian.Uint32(frame[:4])
-	if length == 0 || length > RequestMaxBytes {
-		return empty, errors.New("invalid request frame length")
+	if length == 0 || length > max {
+		return nil, fmt.Errorf("invalid %s frame length", kind)
 	}
 	if len(frame) != int(length)+4 {
-		return empty, errors.New("truncated or trailing request frame")
+		return nil, fmt.Errorf("truncated or trailing %s frame", kind)
 	}
 	body := frame[4:]
 	if !utf8.Valid(body) {
-		return empty, errors.New("invalid UTF-8 request")
+		return nil, fmt.Errorf("invalid UTF-8 %s", kind)
 	}
 	decoder := json.NewDecoder(bytes.NewReader(body))
 	decoder.UseNumber()
 	tokens := 0
 	parsed, err := parseValue(decoder, 0, &tokens)
 	if err != nil {
-		return empty, err
+		return nil, err
 	}
 	if _, err := decoder.Token(); err != io.EOF {
-		return empty, errors.New("trailing JSON or invalid request")
+		return nil, fmt.Errorf("trailing JSON or invalid %s", kind)
 	}
-	request, ok := parsed.(map[string]any)
+	object, ok := parsed.(map[string]any)
 	if !ok {
-		return empty, errors.New("request must be JSON object")
+		return nil, fmt.Errorf("%s must be JSON object", kind)
+	}
+	return object, nil
+}
+
+// DecodeRequestFrame parses exactly one in-memory framed research message.
+// This function deliberately does not open/read a network connection. It
+// does not establish SO_PEERCRED, authn/authz, idempotency or real deadlines.
+func DecodeRequestFrame(frame []byte) (Parsed, error) {
+	var empty Parsed
+	request, err := decodeFrameMap(frame, RequestMaxBytes, "request")
+	if err != nil {
+		return empty, err
 	}
 	for field := range requiredFields {
 		if _, present := request[field]; !present {
@@ -318,5 +329,114 @@ func DecodeRequestFrame(frame []byte) (Parsed, error) {
 		ResourceType: request["resource_type"].(string),
 		ResourceID: request["resource_id"].(string),
 		AuthorizationContextRef: request["authorization_context_ref"].(string),
+	}, nil
+}
+
+/* Response parsing is also INERT. It validates the canonical response
+envelope, not the truth of an external effect, audit evidence or outcome. */
+
+var responseRequiredFields = map[string]bool{
+	"protocol_version": true,
+	"request_id": true,
+	"correlation_id": true,
+	"ipc_operation_id": true,
+	"outcome": true,
+	"reconciliation_required": true,
+}
+var responseOptionalFields = map[string]bool{
+	"error_code": true,
+	"result": true,
+}
+var canonicalIPCErrorCodes = map[string]bool{
+	"IPC_CALLER_UNTRUSTED": true,
+	"IPC_SCHEMA_INVALID": true,
+	"IPC_OPERATION_NOT_ALLOWED": true,
+	"AUTHORIZATION_DENIED": true,
+	"VALIDATION_FAILED": true,
+	"RESOURCE_NOT_FOUND": true,
+	"RESOURCE_CONFLICT": true,
+	"CONCURRENCY_CONFLICT": true,
+	"OPERATION_TIMEOUT": true,
+	"DEPENDENCY_FAILURE": true,
+	"UNKNOWN_OUTCOME": true,
+	"INTERNAL_ERROR": true,
+}
+
+// ParsedResponse remains untrusted data until a separate caller compares
+// request/correlation IDs, authenticated peer, persisted intent, expected
+// operation/target, observed effect and durable audit evidence.
+type ParsedResponse struct {
+	RequestID string
+	CorrelationID string
+	Operation Reference
+	Outcome string
+	ErrorCode string
+	ReconciliationRequired bool
+	HasResult bool
+}
+
+// DecodeResponseFrame is an inert in-memory validation of one IPC-B response.
+// A parsed SUCCESS string does NOT prove the privileged effect succeeded.
+func DecodeResponseFrame(frame []byte) (ParsedResponse, error) {
+	var empty ParsedResponse
+	response, err := decodeFrameMap(frame, ResponseMaxBytes, "response")
+	if err != nil {
+		return empty, err
+	}
+	for field := range responseRequiredFields {
+		if _, ok := response[field]; !ok {
+			return empty, errors.New("required response field missing")
+		}
+	}
+	for field := range response {
+		if !responseRequiredFields[field] && !responseOptionalFields[field] {
+			return empty, errors.New("unknown response field")
+		}
+	}
+	version, err := fieldString(response, "protocol_version")
+	if err != nil || version != ProtocolVersion {
+		return empty, errors.New("unsupported IPC-B protocol version")
+	}
+	for _, name := range []string{"request_id", "correlation_id", "outcome"} {
+		if _, err := fieldString(response, name); err != nil {
+			return empty, err
+		}
+	}
+	operation, err := fieldString(response, "ipc_operation_id")
+	if err != nil || !typedID.MatchString(operation) {
+		return empty, errors.New("invalid response IPC-B operation")
+	}
+	validity, ok := response["reconciliation_required"].(bool)
+	if !ok {
+		return empty, errors.New("reconciliation_required must be boolean")
+	}
+	code := ""
+	if raw, present := response["error_code"]; present && raw != nil {
+		value, isString := raw.(string)
+		if !isString || !canonicalIPCErrorCodes[value] {
+			return empty, errors.New("unknown response error_code")
+		}
+		code = value
+	}
+	if (response["outcome"] == "UNKNOWN_OUTCOME" || code == "UNKNOWN_OUTCOME") && !validity {
+		return empty, errors.New("UNKNOWN_OUTCOME requires reconciliation")
+	}
+	catalog, err := loadAllowed()
+	if err != nil {
+		return empty, err
+	}
+	known, ok := catalog[operation]
+	if !ok {
+		return empty, errors.New("unknown IPC-B response operation")
+	}
+	_, hasResult := response["result"]
+	return ParsedResponse{
+		RequestID: response["request_id"].(string),
+		CorrelationID: response["correlation_id"].(string),
+		Operation: known,
+		Outcome: response["outcome"].(string),
+		ErrorCode: code,
+		ReconciliationRequired: validity,
+		HasResult: hasResult,
 	}, nil
 }
