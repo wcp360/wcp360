@@ -115,3 +115,19 @@ CODE-BASELINE = NONE
 ```
 
 This snapshot is coordination evidence, not an official new implementation baseline.
+
+
+## 8. Addendum — 2026-10-27 (new evidence only)
+
+The original 2026-10-26 snapshot above remains a dated reference rather than being overwritten.
+
+- **QA owner-review proposal #93** was published as a **P1 NON-CANONICAL** document in main (merge commit `078bdf5d71ab71c9c47094fce4bf7c7f18d87a87`): `governance/proposals/SC-M01-QA-A01-A20-OWNER-DECISION-PACKET-v0.1.md`. It presents all A01–A20 owner decisions and QI-01..07 execution-integrity choices, but is **not** the final `specifications/tests/` owner artifact.
+- **Go IPC-B/1 research PR #94** remains **DRAFT, UNMERGED** and non-production. Its source-derived 47-operation parser covers in-memory request/response framing, canonical error codes and syntactic UNKNOWN_OUTCOME→reconciliation conditions. GitHub Actions run [40420580435](https://github.com/yyogas/wcp360/actions/runs/40420580435) succeeded at head `0ae0fe5cf8c1bcb75be940053f12de21ff0e1344` (`go test` + `go vet`, Go 1.24.13 research runner). No daemon, socket, root effect, or privileged dispatch is implemented.
+- Owner artifacts remain **5/8**; #6 Database, #7 QA, #9 Engineering missing as source-ready canonical bodies. GitHub #91 and Security/API owner decisions remain open.
+- No owner approval, independent E3, code implementation authorization, SC-M01 resume or CODE-BASELINE is implied by these contributions.
+
+```text
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
