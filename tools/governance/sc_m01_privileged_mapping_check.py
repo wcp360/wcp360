@@ -35,6 +35,20 @@ PARENT_BINDING_OPEN = frozenset({
     "php_pool.remove",
     "php_fpm.reload",
 })
+EXPECTED_OPEN_PERMISSION_EXPRESSIONS = {
+    "filesystem.directory.create": "files.write + approved provisioning binding",
+    "filesystem.ownership.apply": "files.permissions.manage + approved provisioning binding",
+    "filesystem.permissions.apply": "files.permissions.manage + approved provisioning binding",
+    "filesystem.quota.apply": "iam.account_overrides.manage OR applications.runtime.manage",
+    "nginx_vhost.validate": "approved app/domain/admin binding",
+    "nginx_vhost.apply": "approved app/domain/admin binding",
+    "nginx_vhost.remove": "approved app/domain/admin binding",
+    "nginx.reload": "approved technical parent OR servers.services.manage",
+    "php_pool.validate": "approved app/admin binding",
+    "php_pool.apply": "approved app/admin binding",
+    "php_pool.remove": "approved app/admin binding",
+    "php_fpm.reload": "approved technical parent OR servers.services.manage",
+}
 ID_PATTERN = re.compile(r"^[a-z][a-z0-9_.-]{1,127}$")
 REQUIRED_COLUMNS = (
     "ipc_operation_id",
@@ -130,6 +144,10 @@ def validate(
                 raise ValueError("new unratified abstract permission binding: " + op)
             if not ("approved" in expression or " OR " in expression or " + " in expression) or "approved" not in row["origin_action_expression"]:
                 raise ValueError("abstract permission expression altered: " + op)
+            if expression != EXPECTED_OPEN_PERMISSION_EXPRESSIONS[op]:
+                raise ValueError("abstract permission expression altered: owner review required " + op)
+            if row["origin_action_expression"] != "same approved parent action":
+                raise ValueError("abstract permission parent action expression altered: " + op)
             needs_parent.append({
                 "ipc_operation_id": op,
                 "permission_expression": expression,
