@@ -55,17 +55,17 @@ These files live in `governance/` and are explicitly marked non-canonical; they 
 - **PR #90 (DRAFT):** cross-PR integration review with a new Security/IPC 47-operation mapping checker, 19 additional tests. The 21 files copied from previous PRs include material now archived in main. **PR #90 is NOT a release/owner authority** and should eventually be superseded or closed after properly reviewed target PR integration.
 - **PR #42 (OPEN):** repository security/CI guardrails, independent E3 and main enforcement still missing.
 
-E1 evidence at exact PR #90 head `77cab0819d1cc5765566d61e182f7fb3711b06e4`:
+E1 evidence at exact PR #90 head `b1ae801dbc82f0972ab94a9caf0156b86b0b82f1`:
 
 ```text
 FINGERPRINT TESTS = 13 PASS
 API/IPC/PERMISSION REFERENCE TESTS = 20 PASS
-SECURITY/IPC REFERENCE TESTS = 19 PASS
+SECURITY/IPC REFERENCE TESTS = 21 PASS
 INERT CONTROL PARSER RESEARCH TESTS = 37 PASS
-TOTAL NON-PRODUCT E1 UNIT TESTS = 89 PASS
+TOTAL NON-PRODUCT E1 UNIT TESTS = 91 PASS
 ```
 
-GitHub Actions run: https://github.com/yyogas/wcp360/actions/runs/40415474997
+GitHub Actions run: https://github.com/yyogas/wcp360/actions/runs/40417038572
 
 All four PR-triggered E1 workflows succeeded at the tested PR #90 SHA. These are repository validation/research tests, not actual WCP360 product QA, security certification, independent E3 or implementation readiness.
 
