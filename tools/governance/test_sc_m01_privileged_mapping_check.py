@@ -34,6 +34,7 @@ class SecurityIpcMappingTests(unittest.TestCase):
         self.assertEqual(report["security_operations"], 47)
         self.assertEqual(report["ipc_operations"], 47)
         self.assertEqual(report["active_permissions"], 82)
+        self.assertEqual(report["audit_event_type_references"], 48)
         self.assertEqual(report["direct_security_permission_expressions"], 35)
         self.assertEqual(report["parent_binding_owner_decisions_required"], 12)
         self.assertFalse(report["execution_permission_granted"])
@@ -49,7 +50,7 @@ class SecurityIpcMappingTests(unittest.TestCase):
     def test_missing_ipc_operation_is_rejected(self):
         s, i, p = self.source_copy()
         i[0]["ipc_operation_id"] = "madeup.operation"
-        with self.assertRaisesRegex(ValueError, "inventories diverge"):
+        with self.assertRaisesRegex(ValueError, "operation IDs diverge"):
             validate(s, i, p)
 
     def test_extra_security_operation_is_rejected(self):
@@ -74,7 +75,7 @@ class SecurityIpcMappingTests(unittest.TestCase):
         s, i, p = self.source_copy()
         candidate = next(r for r in s if r["ipc_operation_id"] == "nginx.reload")
         candidate["permission_expression"] = "servers.services.manage"
-        with self.assertRaisesRegex(ValueError, "binding changed"):
+        with self.assertRaisesRegex(ValueError, "previously abstract binding"):
             validate(s, i, p)
 
     def test_parent_mapping_without_approved_binding_fails(self):
@@ -89,6 +90,19 @@ class SecurityIpcMappingTests(unittest.TestCase):
         candidate = next(r for r in s if r["ipc_operation_id"] == "nginx.reload")
         candidate["permission_expression"] = "unknown.root"
         with self.assertRaisesRegex(ValueError, "abstract permission"):
+            validate(s, i, p)
+
+    def test_reboot_two_event_lifecycle_is_explicit(self):
+        report = examine(ROOT)
+        self.assertEqual(
+            report["reboot_audit_lifecycle"],
+            "server.reboot.requested + server.reboot.completed",
+        )
+
+    def test_unknown_multi_event_audit_expression_is_rejected(self):
+        s, i, p = self.source_copy()
+        s[0]["audit_event_id"] = "some.event + second.event"
+        with self.assertRaisesRegex(ValueError, "invalid audit_event_id"):
             validate(s, i, p)
 
     def test_duplicate_audit_event_identity_is_rejected(self):
