@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 from sc_m01_preflight import (
-    REQUIRED_IDS, check_manifest, git_blob_sha, inspect, main,
+    ALLOWED_PREFIXES, REQUIRED_IDS, check_manifest, git_blob_sha, inspect, main,
 )
 
 
@@ -17,7 +17,7 @@ class PreflightTests(unittest.TestCase):
         self.repo = Path(self.tmp.name)
         self.entries = []
         for name in sorted(REQUIRED_IDS):
-            path = f"specifications/{name.lower()}.md"
+            path = f"{ALLOWED_PREFIXES[name]}fixture-{name.lower()}.md"
             target = self.repo / path
             target.parent.mkdir(parents=True, exist_ok=True)
             content = f"sample {name}\n".encode("utf-8")
@@ -72,7 +72,9 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual(report["artifacts"][0]["status"], "PATH_NOT_DEFINED")
 
     def test_parent_traversal_is_rejected(self) -> None:
-        self.entries[0]["path"] = "../outside.md"
+        self.entries[0]["path"] = (
+            ALLOWED_PREFIXES[self.entries[0]["id"]] + "../../outside.md"
+        )
         with self.assertRaisesRegex(ValueError, "unsafe repository path"):
             inspect(self.repo, self.manifest)
 
@@ -90,6 +92,27 @@ class PreflightTests(unittest.TestCase):
         target = self.repo / self.entries[0]["path"]
         target.unlink()
         target.symlink_to(self.repo.parent)
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            inspect(self.repo, self.manifest)
+
+    def test_wrong_owner_directory_is_rejected(self) -> None:
+        self.entries[0]["path"] = "governance/proposals/not-canonical.md"
+        with self.assertRaisesRegex(ValueError, "outside canonical"):
+            check_manifest(self.manifest)
+
+    def test_non_string_artifact_id_is_rejected(self) -> None:
+        self.entries[0]["id"] = {"unexpected": "object"}
+        with self.assertRaisesRegex(ValueError, "artifact id"):
+            check_manifest(self.manifest)
+
+    def test_nested_symlink_is_rejected(self) -> None:
+        entry = self.entries[0]
+        original = self.repo / entry["path"]
+        alias = original.parent / "alias"
+        alias.symlink_to(original.parent, target_is_directory=True)
+        entry["path"] = (
+            ALLOWED_PREFIXES[entry["id"]] + "alias/" + original.name
+        )
         with self.assertRaisesRegex(ValueError, "symlink"):
             inspect(self.repo, self.manifest)
 
