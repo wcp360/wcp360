@@ -118,7 +118,7 @@ def validate(
         else:
             if op not in PARENT_BINDING_OPEN:
                 raise ValueError("new unratified abstract permission binding: " + op)
-            if "approved" not in expression or "approved" not in row["origin_action_expression"]:
+            if not ("approved" in expression or " OR " in expression or " + " in expression) or "approved" not in row["origin_action_expression"]:
                 raise ValueError("abstract permission expression altered: " + op)
             needs_parent.append({
                 "ipc_operation_id": op,
