@@ -17,7 +17,11 @@ from typing import Any, Mapping
 CANDIDATE_VERSION = "WCP360-CONTROL/1-CANDIDATE"
 CANDIDATE_REQUEST_MAX = 32768
 # These illustrative C06 operation IDs are NOT registered implementation IDs.
-CANDIDATE_OPERATIONS = frozenset(("status.read", "job.intent.submit"))
+CANDIDATE_OPERATION_ACTIONS = {
+    "status.read": frozenset(("applications.read",)),
+    "job.intent.submit": frozenset(("applications.create",)),
+}
+CANDIDATE_OPERATIONS = frozenset(CANDIDATE_OPERATION_ACTIONS)
 PEER_TO_SURFACE_FIXTURE = {
     "wcp360-user": "WCP-USER",
     "wcp360-admin": "WCP-ADMIN",
@@ -120,6 +124,8 @@ def decode_candidate_frame(
             _deny("invalid typed identifier")
     if request["control_operation_id"] not in CANDIDATE_OPERATIONS:
         _deny("unknown control operation: no fallback")
+    if request["action_id"] not in CANDIDATE_OPERATION_ACTIONS[request["control_operation_id"]]:
+        _deny("unapproved synthetic action-to-operation binding")
     if "expected_revision" in request:
         if type(request["expected_revision"]) is not int or request["expected_revision"] < 1:
             _deny("invalid expected_revision")
