@@ -148,7 +148,7 @@ func TestResponseDuplicateKeysAndSensitiveResultRejected(t *testing.T) {
 }
 
 func TestRequestAndResponseSchemasCannotBeMixed(t *testing.T) {
-	expectResponseReject(t,fixtureFrame(t,fixture()),"unknown response field")
+	expectResponseReject(t,fixtureFrame(t,fixture()),"required response field missing")
 	expectReject(t,responseFrame(t,responseFixture()),"required request field missing")
 }
 
