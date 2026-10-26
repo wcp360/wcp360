@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -183,7 +182,7 @@ func TestMalformedFramesFailClosed(t *testing.T) {
 		{"truncated", raw[:len(raw)-1], "truncated or trailing request frame"},
 		{"trailing", append(append([]byte{}, raw...), byte(1)), "truncated or trailing request frame"},
 		{"invalid-utf8", framed([]byte{0xff}), "invalid UTF-8 request"},
-		{"invalid-json", framed([]byte("{")), "malformed JSON token"},
+		{"invalid-json", framed([]byte("{")), "invalid JSON object termination"},
 		{"json-array", framed([]byte("[]")), "request must be JSON object"},
 		{"json-null", framed([]byte("null")), "request must be JSON object"},
 		{"multiple-objects", framed([]byte("{} {}")), "trailing JSON"},
@@ -198,7 +197,7 @@ func TestDuplicateJSONKeysRejectedAtEveryDepth(t *testing.T) {
 	cases := [][]byte{
 		[]byte("{\"protocol_version\":1,\"protocol_version\":2}"),
 		[]byte("{\"payload\":{\"a\":1,\"a\":2}}"),
-		[]byte("{\"payload\":{\"a\":{\"role\":1,\"role\":2}}}"),
+		[]byte("{\"payload\":{\"a\":{\"nested\":1,\"nested\":2}}}"),
 		[]byte("{\"payload\":{\"name\":1,\"\\u006eame\":2}}"),
 	}
 	for _, data := range cases {
