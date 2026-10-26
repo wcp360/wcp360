@@ -16,13 +16,13 @@ The final `WCP360-IPC-B/1` privileged-IPC specification already defines:
 - canonical request fields `protocol_version,op_version,request_id,correlation_id,job_id?,action_id,ipc_operation_id,resource_type,resource_id,authorization_context_ref,deadline_ms,payload`;
 - strict schema validation: no malformed JSON, no duplicate keys, no unknown operation, no generic execution fallback;
 - only `wcpd` as an authenticated client of the root-minimal `wcp-privd`, with kernel `SO_PEERCRED` and expected service/cgroup verification;
-- exactly **47** allowlisted privileged IPC operation IDs.
+- exactly **47** allowlisted privileged IPC operation IDs; plus the canonical response envelope and 12 IPC error codes.
 
 The experiment checks *some* syntactic invariants in isolation, before any official Go/compiler/runtime/framework choice is ratified. It adds no daemon, socket, process, OS mutation, deployment, privileged adapter or root code.
 
 ## Files
 
-`codec.go`: pure in-memory framing/JSON parser + typed-ID allowlist **without a dispatcher**. Its return value is merely untrusted parsed data.
+`codec.go`: pure in-memory framing/JSON parser for **both requests and responses**, with exact IPC-B request/response size bounds, canonical 12-code error registry, typed-ID allowlist and **no dispatcher**. Both returned objects are merely untrusted parsed data.
 
 `operations.json`: noncanonical snapshot of all 47 operation IDs and accompanying metadata **derived exactly from**:
 
@@ -30,7 +30,7 @@ The experiment checks *some* syntactic invariants in isolation, before any offic
 
 Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 IDs and verify this SHA from the current source Markdown.
 
-`codec_test.go`: negative framing/parser tests and a seeded fuzz function. No test performs privileged execution.
+`codec_test.go` and `response_test.go`: negative framing/parser tests, including explicit UNKNOWN_OUTCOME→reconciliation rejection and two seeded fuzz functions. No test performs privileged execution.
 
 `go.mod`: stand-alone research module with Go standard library only. Its `go 1.23` compatibility declaration is **not** WCP360's final toolchain decision. See F01–F10 proposals/ENG #9.
 
@@ -54,8 +54,8 @@ The GitHub Actions workflow uses an ephemeral runner and logs the Go version. A 
 - Per-operation `payload` fields/types/target registry and revision checks are NOT validated here. The 47 source rows have detailed schemas requiring a separate owner-approved implementation.
 - `op_version` and `deadline_ms` are carried as syntactically present *opaque values* to avoid inventing the still-open T02/T03 semantics.
 - Research-only parser depth/token limits are defensive hypotheses and NOT canonical protocol constraints.
-- No persistent idempotency/jobs/audit, no OS side effect, no IPC-B socket lifecycle, no `UNKNOWN_OUTCOME` reconciliation.
-- No developer/compiler version from this experiment becomes the production stack. No test PASS is claimed for WCP360 product QA.
+- No persistent idempotency/jobs/audit, no OS side effect, no IPC-B socket lifecycle or actual `UNKNOWN_OUTCOME` reconciliation. The response parser **rejects** a syntactic UNKNOWN_OUTCOME that falsely sets `reconciliation_required = false`; it cannot prove the real reconciliation happened.
+- No developer/compiler version from this experiment becomes the production stack. A response with `outcome: SUCCEEDED` is unverified parsed data, **not** proof of a real successful privileged effect. No test PASS is claimed for WCP360 product QA.
 
 ## Safety implications
 
