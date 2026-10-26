@@ -1,0 +1,322 @@
+// Package ipcbframe contains an inert research-only decoder for the already
+// specified WCP360-IPC-B/1 physical frame and operation-ID inventory.
+//
+// This is NOT WCP360 production code. It cannot access sockets, peer creds,
+// secrets, PostgreSQL, systemd, filesystems, root or any privileged primitive.
+// The parser's "valid" result conveys no authorization or dispatch right.
+// Production integration requires final owner-approved contracts, tests and
+// explicit SC-M01 authorization (CODE-BASELINE remains NONE).
+package ipcbframe
+
+import (
+	"bytes"
+	_ "embed"
+	"encoding/binary"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"regexp"
+	"strings"
+	"unicode/utf8"
+)
+
+const (
+	ProtocolVersion = "WCP360-IPC-B/1"
+	RequestMaxBytes = 65_536 // canonical IPC-B request payload maximum
+	// Research-only limits: depth and tokens are defensive hypotheses requiring
+	// Security/API owner review, NOT published normative IPC-B limits.
+	researchMaxDepth = 16
+	researchMaxTokens = 4096
+)
+
+//go:embed operations.json
+var operationsJSON []byte
+
+type operationEntry struct {
+	ContractID     string `json:"contract_id"`
+	IPCOperationID string `json:"ipc_operation_id"`
+	TestID         string `json:"test_id"`
+}
+
+type researchCatalog struct {
+	Status            string           `json:"status"`
+	SourceContract    string           `json:"source_contract_version"`
+	SourceGitBlobSHA  string           `json:"source_git_blob_sha"`
+	Operations        []operationEntry `json:"operations"`
+}
+
+type Reference struct {
+	ContractID string
+	OperationID string
+	TestID string
+}
+
+// Parsed is deliberately a data-only research result.
+// No code path accepts a Parsed value as authorization or executable command.
+type Parsed struct {
+	RequestID     string
+	CorrelationID string
+	Operation     Reference
+	ActionID      string
+	ResourceType  string
+	ResourceID    string
+	// Opaque context reference only, never a bearer credential.
+	AuthorizationContextRef string
+}
+
+var typedID = regexp.MustCompile("^[a-z][a-z0-9_.-]{1,127}$")
+
+var requiredFields = map[string]bool{
+	"protocol_version": true,
+	"op_version": true,
+	"request_id": true,
+	"correlation_id": true,
+	"action_id": true,
+	"ipc_operation_id": true,
+	"resource_type": true,
+	"resource_id": true,
+	"authorization_context_ref": true,
+	"deadline_ms": true,
+	"payload": true,
+}
+
+var optionalFields = map[string]bool{"job_id": true}
+
+// Forbidden caller-supplied keys are a research rejection subset. The real
+// canonical per-operation payload schema must be validated separately by its
+// final owner-approved handler; this package has NO privileged dispatcher.
+var forbiddenKeys = map[string]bool{
+	"shell": true,
+	"shell.exec": true,
+	"exec": true,
+	"command": true,
+	"command_string": true,
+	"executable": true,
+	"executable_path": true,
+	"argv": true,
+	"env": true,
+	"environment": true,
+	"working_directory": true,
+	"sudo": true,
+	"systemctl": true,
+	"service_name": true,
+	"private_key": true,
+	"token": true,
+	"bearer_token": true,
+	"password": true,
+	"cookie": true,
+	"role": true,
+	"permission_id": true,
+	"raw_sql": true,
+	"signal": true,
+	"signal_number": true,
+	"absolute_path": true,
+	"target_path": true,
+	"filesystem_path": true,
+}
+
+func loadAllowed() (map[string]Reference, error) {
+	var catalog researchCatalog
+	if err := json.Unmarshal(operationsJSON, &catalog); err != nil {
+		return nil, errors.New("research operation manifest not readable")
+	}
+	if catalog.Status != "DERIVED_RESEARCH_ONLY_NONCANONICAL" ||
+		catalog.SourceContract != ProtocolVersion ||
+		len(catalog.Operations) != 47 {
+		return nil, errors.New("research operation manifest provenance/count mismatch")
+	}
+	result := make(map[string]Reference, len(catalog.Operations))
+	contractIDs := make(map[string]bool)
+	for _, x := range catalog.Operations {
+		if !typedID.MatchString(x.IPCOperationID) ||
+			!strings.HasPrefix(x.ContractID, "IPC-WCP-") ||
+			x.TestID != strings.Replace(x.ContractID, "IPC-WCP-", "TEST-IPC-", 1) {
+			return nil, errors.New("research operation catalog identifier mismatch")
+		}
+		if _, ok := result[x.IPCOperationID]; ok || contractIDs[x.ContractID] {
+			return nil, errors.New("research operation catalog duplicate")
+		}
+		result[x.IPCOperationID] = Reference{
+			ContractID: x.ContractID,
+			OperationID: x.IPCOperationID,
+			TestID: x.TestID,
+		}
+		contractIDs[x.ContractID] = true
+	}
+	return result, nil
+}
+
+// parseValue rejects duplicate keys recursively, in particular unicode-escaped
+// aliases of a field name. encoding/json.Unmarshal alone accepts duplicates.
+func parseValue(dec *json.Decoder, depth int, tokens *int) (any, error) {
+	if depth > researchMaxDepth || *tokens >= researchMaxTokens {
+		return nil, errors.New("research parser nesting/token limit exceeded")
+	}
+	tok, err := dec.Token()
+	if err != nil {
+		return nil, errors.New("malformed JSON token")
+	}
+	*tokens++
+	switch v := tok.(type) {
+	case json.Delim:
+		switch v {
+		case '{':
+			object := make(map[string]any)
+			for dec.More() {
+				keyValue, err := dec.Token()
+				if err != nil {
+					return nil, errors.New("malformed JSON object key")
+				}
+				key, ok := keyValue.(string)
+				if !ok {
+					return nil, errors.New("non-string JSON object key")
+				}
+				*tokens++
+				if *tokens >= researchMaxTokens {
+					return nil, errors.New("research token limit exceeded")
+				}
+				if _, exists := object[key]; exists {
+					return nil, errors.New("duplicate JSON object key")
+				}
+				if forbiddenKeys[strings.ToLower(key)] {
+					return nil, errors.New("forbidden caller-controlled field")
+				}
+				value, err := parseValue(dec, depth+1, tokens)
+				if err != nil {
+					return nil, err
+				}
+				object[key] = value
+			}
+			end, err := dec.Token()
+			if err != nil || end != json.Delim('}') {
+				return nil, errors.New("invalid JSON object termination")
+			}
+			return object, nil
+		case '[':
+			array := make([]any, 0)
+			for dec.More() {
+				child, err := parseValue(dec, depth+1, tokens)
+				if err != nil {
+					return nil, err
+				}
+				array = append(array, child)
+			}
+			end, err := dec.Token()
+			if err != nil || end != json.Delim(']') {
+				return nil, errors.New("invalid JSON array termination")
+			}
+			return array, nil
+		default:
+			return nil, errors.New("unexpected JSON closing delimiter")
+		}
+	case json.Number, string, bool, nil:
+		return v, nil
+	default:
+		return nil, errors.New("unsupported JSON token")
+	}
+}
+
+func fieldString(m map[string]any, name string) (string, error) {
+	value, ok := m[name].(string)
+	if !ok || value == "" || strings.ContainsRune(value, rune(0)) {
+		return "", fmt.Errorf("%s: missing/invalid string", name)
+	}
+	return value, nil
+}
+
+// DecodeRequestFrame parses exactly one in-memory framed research message.
+// This function deliberately does not open/read a network connection. It
+// does not establish SO_PEERCRED, authn/authz, idempotency or real deadlines.
+func DecodeRequestFrame(frame []byte) (Parsed, error) {
+	var empty Parsed
+	if len(frame) < 4 {
+		return empty, errors.New("missing frame length")
+	}
+	length := binary.BigEndian.Uint32(frame[:4])
+	if length == 0 || length > RequestMaxBytes {
+		return empty, errors.New("invalid request frame length")
+	}
+	if len(frame) != int(length)+4 {
+		return empty, errors.New("truncated or trailing request frame")
+	}
+	body := frame[4:]
+	if !utf8.Valid(body) {
+		return empty, errors.New("invalid UTF-8 request")
+	}
+	decoder := json.NewDecoder(bytes.NewReader(body))
+	decoder.UseNumber()
+	tokens := 0
+	parsed, err := parseValue(decoder, 0, &tokens)
+	if err != nil {
+		return empty, err
+	}
+	if _, err := decoder.Token(); err != io.EOF {
+		return empty, errors.New("trailing JSON or invalid request")
+	}
+	request, ok := parsed.(map[string]any)
+	if !ok {
+		return empty, errors.New("request must be JSON object")
+	}
+	for field := range requiredFields {
+		if _, present := request[field]; !present {
+			return empty, errors.New("required request field missing")
+		}
+	}
+	for field := range request {
+		if !requiredFields[field] && !optionalFields[field] {
+			return empty, errors.New("unknown request field")
+		}
+	}
+	protocol, err := fieldString(request, "protocol_version")
+	if err != nil || protocol != ProtocolVersion {
+		return empty, errors.New("unsupported IPC-B protocol version")
+	}
+	for _, field := range []string{"op_version", "deadline_ms"} {
+		if request[field] == nil {
+			return empty, errors.New("required opaque version/deadline field missing")
+		}
+	}
+	if _, ok := request["payload"].(map[string]any); !ok {
+		return empty, errors.New("IPC-B payload must be object")
+	}
+	for _, field := range []string{"request_id", "correlation_id",
+		"authorization_context_ref", "resource_id"} {
+		if _, err := fieldString(request, field); err != nil {
+			return empty, err
+		}
+	}
+	if optionalJob, present := request["job_id"]; present {
+		if _, ok := optionalJob.(string); !ok || optionalJob == "" {
+			return empty, errors.New("optional job_id must be nonempty string")
+		}
+	}
+	for _, field := range []string{"action_id", "resource_type", "ipc_operation_id"} {
+		value, err := fieldString(request, field)
+		if err != nil || !typedID.MatchString(value) {
+			return empty, errors.New("invalid typed IPC-B identifier")
+		}
+	}
+	catalog, err := loadAllowed()
+	if err != nil {
+		return empty, err
+	}
+	op := request["ipc_operation_id"].(string)
+	registered, ok := catalog[op]
+	if !ok {
+		return empty, errors.New("unknown IPC-B operation; no fallback")
+	}
+	// IMPORTANT: Returning this Parsed object does not validate per-operation
+	// payload schemas, permission/action binding, peer identity, tenant/resource
+	// scope, active authorization context, deadline meaning or retry semantics.
+	// It must NEVER trigger system/privileged side effects.
+	return Parsed{
+		RequestID: request["request_id"].(string),
+		CorrelationID: request["correlation_id"].(string),
+		Operation: registered,
+		ActionID: request["action_id"].(string),
+		ResourceType: request["resource_type"].(string),
+		ResourceID: request["resource_id"].(string),
+		AuthorizationContextRef: request["authorization_context_ref"].(string),
+	}, nil
+}
