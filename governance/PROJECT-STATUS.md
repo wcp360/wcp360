@@ -3,6 +3,10 @@
 **Reference date:** 2026-10-04  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
+**Latest coordination refresh:** 2026-10-26 (G1, NON-CANONICAL)
+**Current SC-M01 coordination snapshot:** [2026-10-26 readiness](SC-M01-CURRENT-READINESS-2026-10-26.md)
+
+> Sections below preserve the detailed 2026-10-04 project audit/status record. For subsequent publication and CI evidence, consult the 2026-10-26 snapshot. No baseline or SC-M01 code gate is changed by that newer coordination file.
 
 ## 1. Baseline state
 
@@ -333,3 +337,17 @@ Current coordination additionally uses:
 - QA A01→A20 conformance evidence.
 
 The remaining progress is owner publication/harmonization, real independent review and actual GitHub enforcement, not another broad documentation audit.
+
+
+## 11. Coordination update — 2026-10-26
+
+Current evidence is indexed in `governance/SC-M01-CURRENT-READINESS-2026-10-26.md`.
+
+- Merged proposal/governance-only PRs **#83, #84, #85, #89** are `NON-CANONICAL`; E0+E2 publication per current merge policy, not domain-owner final approval.
+- Draft E1/research PRs **#86, #87, #88, #90** remain unmerged. Integrated PR #90 achieved **89/89 non-product reference/research tests** at its recorded head and CI run 40415474997; this is not production QA or E3.
+- Parent/privileged authorization ambiguity identified for **12 of 47** IPC operations and tracked in issue **#91**; no generic execution or parent authorization inferred from abstract Security expressions.
+- Database **#6**, QA **#7**, Engineering **#9** still require final owner-authored implementation artifacts.
+- `5 / 8` canonical files published; `SC-M01 PAUSED — TARGETED EVIDENCE`; `SC-M02 NOT AUTHORIZED`; `CODE-BASELINE NONE`.
+- All Audit/Architecture Review findings retain their pre-existing status unless independently verified and explicitly closed.
+
+This coordination update does not authorize implementation, modify `WCP360-BM-0001 FINAL` or promote historical/recovered content.
