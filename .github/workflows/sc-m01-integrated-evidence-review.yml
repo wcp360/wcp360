@@ -1,0 +1,44 @@
+name: SC-M01 integrated noncanonical evidence review
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/sc-m01-integrated-evidence-review.yml"
+      - ".github/workflows/sc-m01-governance-preflight.yml"
+      - ".github/workflows/sc-m01-contract-traceability.yml"
+      - ".github/workflows/sc-m01-control-protocol-research.yml"
+      - "governance/integration/**"
+      - "governance/verification/**"
+      - "tools/governance/**"
+      - "research/architecture-lab/sc-m01-control-protocol/**"
+
+permissions:
+  contents: read
+
+jobs:
+  sc-m01-cross-pr-e1:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout isolated review candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Show Python standard library runtime
+        run: python3 --version
+      - name: Compile tooling and inert research
+        run: python3 -m compileall -q tools/governance research/architecture-lab/sc-m01-control-protocol
+      - name: SC-M01 canonical input fingerprint preflight unit tests
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_preflight.py' -v
+      - name: API/IPC/Permission source-reference mutation tests
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_contract_traceability.py' -v
+      - name: Security/IPC 47-operation parent binding mutation tests
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_privileged_mapping_check.py' -v
+      - name: C03/C06/C07 inert parser research negative tests
+        run: python3 -m unittest discover -s research/architecture-lab/sc-m01-control-protocol -p 'test_inert_codec.py' -v
+      - name: Verify 86/47/82 published-source traceability snapshot
+        run: python3 tools/governance/sc_m01_contract_traceability.py --mode check
+      - name: Audit 47 privileged Security/IPC operation references
+        run: python3 tools/governance/sc_m01_privileged_mapping_check.py
+      - name: Report 5-of-8 artifact fingerprint evidence only
+        run: python3 tools/governance/sc_m01_preflight.py --format json
