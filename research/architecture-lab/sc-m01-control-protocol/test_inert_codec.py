@@ -43,6 +43,19 @@ class InertControlCandidateTests(unittest.TestCase):
             "resource_id": RES_UUID,
         }
 
+    def submit_context(self):
+        return dict(self.ctx, action_id="applications.create")
+
+    def submit_request(self, **updates):
+        request = dict(
+            self.req,
+            action_id="applications.create",
+            control_operation_id="job.intent.submit",
+            payload={"intent_ref": INTENT_UUID},
+        )
+        request.update(updates)
+        return request
+
     def run_decode(self, request=None, *, peer="wcp360-user", context=None, now=100):
         return decode_candidate_frame(
             make_candidate_fixture_frame(self.req if request is None else request),
@@ -166,46 +179,53 @@ class InertControlCandidateTests(unittest.TestCase):
                  dict(self.req, payload={"something": "data"}))
 
     def test_submit_requires_idempotency(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   payload={"intent_ref": INTENT_UUID})
-        self.bad("missing or unbounded candidate idempotency", req)
+        self.bad("missing or unbounded candidate idempotency",
+                 self.submit_request(), context=self.submit_context())
+
+    def test_submit_denies_mismatched_action_binding(self):
+        candidate = self.submit_request(action_id="applications.read",
+                                        idempotency_key="key")
+        self.bad("unapproved synthetic action-to-operation binding",
+                 candidate, context=self.ctx)
 
     def test_submit_rejects_caller_command(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   idempotency_key="key",
-                   payload={"intent_ref": INTENT_UUID, "command": "echo"})
-        self.bad("forbidden caller-controlled field", req)
+        self.bad("forbidden caller-controlled field",
+                 self.submit_request(
+                     idempotency_key="key",
+                     payload={"intent_ref": INTENT_UUID, "command": "echo"},
+                 ), context=self.submit_context())
 
     def test_submit_rejects_unregistered_input(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   idempotency_key="key",
-                   payload={"intent_ref": INTENT_UUID, "new_field": True})
-        self.bad("registered intent_ref", req)
+        self.bad("registered intent_ref",
+                 self.submit_request(
+                     idempotency_key="key",
+                     payload={"intent_ref": INTENT_UUID, "new_field": True},
+                 ), context=self.submit_context())
 
     def test_submit_accepts_only_fixture_intent_reference(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   idempotency_key="key",
-                   payload={"intent_ref": INTENT_UUID})
-        parsed = self.run_decode(req)
+        parsed = self.run_decode(
+            self.submit_request(idempotency_key="key"),
+            context=self.submit_context(),
+        )
         self.assertEqual(parsed["payload"]["intent_ref"], INTENT_UUID)
 
     def test_nested_sensitive_field_fails(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   idempotency_key="key",
-                   payload={"intent_ref": INTENT_UUID, "data": {"sudo": "systemctl"}})
-        self.bad("forbidden caller-controlled field", req)
+        self.bad("forbidden caller-controlled field",
+                 self.submit_request(
+                     idempotency_key="key",
+                     payload={"intent_ref": INTENT_UUID,
+                              "data": {"sudo": "systemctl"}},
+                 ), context=self.submit_context())
 
     def test_submit_idempotency_too_long_fails(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   idempotency_key="k" * 129,
-                   payload={"intent_ref": INTENT_UUID})
-        self.bad("missing or unbounded candidate idempotency", req)
+        self.bad("missing or unbounded candidate idempotency",
+                 self.submit_request(idempotency_key="k" * 129),
+                 context=self.submit_context())
 
     def test_submit_rejects_nonascii_idempotency(self):
-        req = dict(self.req, control_operation_id="job.intent.submit",
-                   idempotency_key="clé",
-                   payload={"intent_ref": INTENT_UUID})
-        self.bad("non-printable idempotency", req)
+        self.bad("non-printable idempotency",
+                 self.submit_request(idempotency_key="clé"),
+                 context=self.submit_context())
 
     def assert_reject_frame(self, raw):
         with self.assertRaises(ValueError):
