@@ -17,6 +17,10 @@ SECURITY_PATH = (
     "WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
 )
 TITLE = "## 9. Privileged Operation Security Matrix — 47 ACTIVE operations"
+MULTI_EVENT_LIFECYCLES = {
+    "server.reboot": "server.reboot.requested + server.reboot.completed",
+    "server.shutdown": "server.shutdown.requested + server.shutdown.completed",
+}
 PARENT_BINDING_OPEN = frozenset({
     "filesystem.directory.create",
     "filesystem.ownership.apply",
@@ -104,12 +108,10 @@ def validate(
         op = row["ipc_operation_id"]
         expression = row["permission_expression"]
         audit_expression = row["audit_event_id"]
-        if op == "server.reboot" and audit_expression == (
-            "server.reboot.requested + server.reboot.completed"
-        ):
-            # This is a two-event lifecycle annotation in the FINAL source,
-            # NOT one type ID and NOT an implementation authorization.
-            events.extend(["server.reboot.requested", "server.reboot.completed"])
+        if op in MULTI_EVENT_LIFECYCLES and audit_expression == MULTI_EVENT_LIFECYCLES[op]:
+            # Two-event lifecycle annotations in the FINAL Security source:
+            # requested + completed, never a single audit_event_id.
+            events.extend(audit_expression.split(" + "))
         elif ID_PATTERN.fullmatch(audit_expression):
             events.append(audit_expression)
         else:
@@ -139,7 +141,7 @@ def validate(
         raise ValueError("unresolved parent-binding set changed without review")
     if len(set(events)) != len(events):
         raise ValueError("audit event semantic IDs collide")
-    if len(events) != 48:
+    if len(events) != 49:
         raise ValueError("unexpected audit event occurrence-type count")
     return {
         "security_ipc_operations_match": True,
@@ -147,7 +149,8 @@ def validate(
         "ipc_operations": len(ipc),
         "active_permissions": len(known),
         "audit_event_type_references": len(events),
-        "reboot_audit_lifecycle": "server.reboot.requested + server.reboot.completed",
+        "reboot_audit_lifecycle": MULTI_EVENT_LIFECYCLES["server.reboot"],
+        "shutdown_audit_lifecycle": MULTI_EVENT_LIFECYCLES["server.shutdown"],
         "direct_security_permission_expressions": len(direct),
         "parent_binding_owner_decisions_required": len(needs_parent),
         "open_parent_bindings": needs_parent,
