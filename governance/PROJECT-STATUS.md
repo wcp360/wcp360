@@ -3,7 +3,7 @@
 **Reference date:** 2026-10-04  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
-**Latest coordination refresh:** 2026-10-26 (G1, NON-CANONICAL)
+**Latest coordination refresh:** 2026-10-27 addendum (G1, NON-CANONICAL)
 **Current SC-M01 coordination snapshot:** [2026-10-26 readiness](SC-M01-CURRENT-READINESS-2026-10-26.md)
 
 > Sections below preserve the detailed 2026-10-04 project audit/status record. For subsequent publication and CI evidence, consult the 2026-10-26 snapshot. No baseline or SC-M01 code gate is changed by that newer coordination file.
@@ -351,3 +351,13 @@ Current evidence is indexed in `governance/SC-M01-CURRENT-READINESS-2026-10-26.m
 - All Audit/Architecture Review findings retain their pre-existing status unless independently verified and explicitly closed.
 
 This coordination update does not authorize implementation, modify `WCP360-BM-0001 FINAL` or promote historical/recovered content.
+
+
+## 12. Targeted SC-M01 addendum — 2026-10-27
+
+- QA owner signoff matrix P1 proposal **#93 MERGED into main** (`078bdf5d71ab71c9c47094fce4bf7c7f18d87a87`). **Not** the final Tests/QA owner canonical artifact.
+- IPC-B request/response framing **Go R&D #94** remains DRAFT/UNMERGED; E1 source-derived parsing tests + `go vet` succeeded in run `40420580435`. No real peer authentication, authorization, DB, socket or root effects; Go 1.24.13 runner is not an approved production F02 toolchain.
+- No change to `5/8`, Database #6 / QA #7 / Engineering #9 blockers, or `CODE-BASELINE = NONE`.
+- Precise context: see the 2026-10-27 addendum of `governance/SC-M01-CURRENT-READINESS-2026-10-26.md`.
+
+This is G1 coordination metadata and does not change any owner-final contract, implementation authorization or independent-review finding.
