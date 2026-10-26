@@ -85,6 +85,20 @@ class SecurityIpcMappingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "abstract permission"):
             validate(s, i, p)
 
+    def test_fake_approved_parent_cannot_replace_source_expression(self):
+        s, i, p = self.source_copy()
+        candidate = next(r for r in s if r["ipc_operation_id"] == "filesystem.directory.create")
+        candidate["permission_expression"] = "invented.root + approved provisioning binding"
+        with self.assertRaisesRegex(ValueError, "owner review required"):
+            validate(s, i, p)
+
+    def test_security_source_parent_expression_drift_rejected(self):
+        s, i, p = self.source_copy()
+        candidate = next(r for r in s if r["ipc_operation_id"] == "nginx_vhost.apply")
+        candidate["origin_action_expression"] = "different approved parent action"
+        with self.assertRaisesRegex(ValueError, "parent action expression altered"):
+            validate(s, i, p)
+
     def test_parent_mapping_with_unrecognized_expression_fails(self):
         s, i, p = self.source_copy()
         candidate = next(r for r in s if r["ipc_operation_id"] == "nginx.reload")
