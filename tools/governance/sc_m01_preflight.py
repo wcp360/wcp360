@@ -20,6 +20,16 @@ REQUIRED_IDS = frozenset({
     "DATABASE", "QA", "DEVOPS", "ENGINEERING",
 })
 PIN = re.compile(r"^[0-9a-f]{40}$")
+ALLOWED_PREFIXES = {
+    "API": "specifications/api/",
+    "IPC": "specifications/ipc/",
+    "PERMISSIONS": "specifications/security/",
+    "SECURITY": "specifications/security/",
+    "DATABASE": "specifications/database/",
+    "QA": "specifications/tests/",
+    "DEVOPS": "specifications/devops/",
+    "ENGINEERING": "specifications/engineering/",
+}
 DEFAULT_MANIFEST = (
     "governance/verification/"
     "SC-M01-CANONICAL-INPUT-FINGERPRINTS-2026-10-26.json"
@@ -43,8 +53,11 @@ def _safe_repo_file(repo: Path, relative: str) -> Path:
         raise ValueError("unsafe repository path")
     root = repo.resolve()
     target = root / relative
-    if target.is_symlink():
-        raise ValueError("symlink artifact path is forbidden")
+    current = root
+    for component in Path(relative).parts:
+        current = current / component
+        if current.is_symlink():
+            raise ValueError("symlink artifact path is forbidden")
     resolved = target.resolve(strict=False)
     if not resolved.is_relative_to(root):
         raise ValueError("artifact path escapes repository")
@@ -58,6 +71,8 @@ def check_manifest(data: dict[str, Any]) -> list[dict[str, Any]]:
     if not isinstance(artifacts, list) or len(artifacts) != 8:
         raise ValueError("expected exactly eight artifact entries")
     ids = [a.get("id") if isinstance(a, dict) else None for a in artifacts]
+    if any(not isinstance(artifact_id, str) for artifact_id in ids):
+        raise ValueError("artifact id must be a string")
     if len(set(ids)) != 8 or set(ids) != REQUIRED_IDS:
         raise ValueError("artifact set differs from SC-M01 required 8")
     for item in artifacts:
@@ -66,6 +81,8 @@ def check_manifest(data: dict[str, Any]) -> list[dict[str, Any]]:
         path = item.get("path")
         if path is not None and not isinstance(path, str):
             raise ValueError("artifact path must be a string or null")
+        if path is not None and not path.startswith(ALLOWED_PREFIXES[item["id"]]):
+            raise ValueError("artifact path outside canonical owner directory")
         expected = item.get("expected_git_blob_sha")
         if expected is not None and (
             not isinstance(expected, str) or not PIN.fullmatch(expected)
