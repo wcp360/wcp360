@@ -344,7 +344,7 @@ The remaining progress is owner publication/harmonization, real independent revi
 Current evidence is indexed in `governance/SC-M01-CURRENT-READINESS-2026-10-26.md`.
 
 - Merged proposal/governance-only PRs **#83, #84, #85, #89** are `NON-CANONICAL`; E0+E2 publication per current merge policy, not domain-owner final approval.
-- Draft E1/research PRs **#86, #87, #88, #90** remain unmerged. Integrated PR #90 achieved **89/89 non-product reference/research tests** at its recorded head and CI run 40415474997; this is not production QA or E3.
+- Draft E1/research PRs **#86, #87, #88, #90** remain unmerged. Integrated PR #90 achieved **91/91 non-product reference/research tests** at its recorded head and CI run 40417038572; this is not production QA or E3.
 - Parent/privileged authorization ambiguity identified for **12 of 47** IPC operations and tracked in issue **#91**; no generic execution or parent authorization inferred from abstract Security expressions.
 - Database **#6**, QA **#7**, Engineering **#9** still require final owner-authored implementation artifacts.
 - `5 / 8` canonical files published; `SC-M01 PAUSED — TARGETED EVIDENCE`; `SC-M02 NOT AUTHORIZED`; `CODE-BASELINE NONE`.
