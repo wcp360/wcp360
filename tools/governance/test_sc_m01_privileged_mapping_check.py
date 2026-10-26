@@ -34,7 +34,7 @@ class SecurityIpcMappingTests(unittest.TestCase):
         self.assertEqual(report["security_operations"], 47)
         self.assertEqual(report["ipc_operations"], 47)
         self.assertEqual(report["active_permissions"], 82)
-        self.assertEqual(report["audit_event_type_references"], 48)
+        self.assertEqual(report["audit_event_type_references"], 49)
         self.assertEqual(report["direct_security_permission_expressions"], 35)
         self.assertEqual(report["parent_binding_owner_decisions_required"], 12)
         self.assertFalse(report["execution_permission_granted"])
@@ -97,6 +97,13 @@ class SecurityIpcMappingTests(unittest.TestCase):
         self.assertEqual(
             report["reboot_audit_lifecycle"],
             "server.reboot.requested + server.reboot.completed",
+        )
+
+    def test_shutdown_two_event_lifecycle_is_explicit(self):
+        report = examine(ROOT)
+        self.assertEqual(
+            report["shutdown_audit_lifecycle"],
+            "server.shutdown.requested + server.shutdown.completed",
         )
 
     def test_unknown_multi_event_audit_expression_is_rejected(self):
