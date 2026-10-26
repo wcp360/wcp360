@@ -103,9 +103,17 @@ def validate(
     for row in security:
         op = row["ipc_operation_id"]
         expression = row["permission_expression"]
-        if not ID_PATTERN.fullmatch(row["audit_event_id"]):
+        audit_expression = row["audit_event_id"]
+        if op == "server.reboot" and audit_expression == (
+            "server.reboot.requested + server.reboot.completed"
+        ):
+            # This is a two-event lifecycle annotation in the FINAL source,
+            # NOT one type ID and NOT an implementation authorization.
+            events.extend(["server.reboot.requested", "server.reboot.completed"])
+        elif ID_PATTERN.fullmatch(audit_expression):
+            events.append(audit_expression)
+        else:
             raise ValueError("invalid audit_event_id: " + op)
-        events.append(row["audit_event_id"])
         if row["scope"] not in {"T", "T/S", "S", "S/G", "C"}:
             raise ValueError("unexpected Security scope: " + op)
         if any(x not in {"E1", "E2", "E3", "E4", "E5", "E6"}
@@ -129,13 +137,17 @@ def validate(
             })
     if set(x["ipc_operation_id"] for x in needs_parent) != PARENT_BINDING_OPEN:
         raise ValueError("unresolved parent-binding set changed without review")
-    if len(set(events)) != 47:
+    if len(set(events)) != len(events):
         raise ValueError("audit event semantic IDs collide")
+    if len(events) != 48:
+        raise ValueError("unexpected audit event occurrence-type count")
     return {
         "security_ipc_operations_match": True,
         "security_operations": len(security),
         "ipc_operations": len(ipc),
         "active_permissions": len(known),
+        "audit_event_type_references": len(events),
+        "reboot_audit_lifecycle": "server.reboot.requested + server.reboot.completed",
         "direct_security_permission_expressions": len(direct),
         "parent_binding_owner_decisions_required": len(needs_parent),
         "open_parent_bindings": needs_parent,
