@@ -70,7 +70,7 @@ func TestInertHappyPathParsesDataNotAuthorization(t *testing.T) {
 		data.Operation.TestID != "TEST-IPC-1009" {
 		t.Fatalf("unexpected source-bound reference: %+v", data)
 	}
-	if data.AuthorizationContextRef == "" || data.ResourceID == "" {
+	if data.AuthorizationContextRef == "" || data.ResourceID == "" || data.Operation.ResourceType != "application_revision" {
 		t.Fatal("opaque references missing")
 	}
 	// This parser intentionally DOES NOT verify peer credentials or
@@ -130,11 +130,12 @@ func TestManifestMatchesSourceBlobAndAll47IDs(t *testing.T) {
 		contractID := strings.Trim(strings.TrimSpace(cells[1]), "\x60")
 		action := strings.Trim(strings.TrimSpace(cells[2]), "\x60")
 		op := strings.Trim(strings.TrimSpace(cells[4]), "\x60")
+		resourceType := strings.Trim(strings.TrimSpace(cells[5]), "\x60")
 		if !typedID.MatchString(op) {
 			t.Fatalf("bad source operation ID %q", op)
 		}
 		got, exists := catalog[op]
-		if !exists || got.ContractID != contractID || got.ActionID != action {
+		if !exists || got.ContractID != contractID || got.ActionID != action || got.ResourceType != resourceType {
 			t.Fatalf("missing/incorrect source operation %s/%s", op, contractID)
 		}
 		seen[op] = true
