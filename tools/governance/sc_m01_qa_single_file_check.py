@@ -141,6 +141,11 @@ def _verify_85_sourced_proposals(
             if path not in scenario_sources:
                 raise ReviewEvidenceError("historical scenario source unavailable")
             source_text, source_sha = scenario_sources[path]
+            # The annex's *provenance index*, not just each local case, must
+            # pin the correct source Git blob; a tampered header is material.
+            expected_index = "| " + tick + path + tick + " | " + tick + source_sha + tick + " |"
+            if expected_index not in annex:
+                raise ReviewEvidenceError("historical source SHA/path drift")
             for line in source_text.splitlines():
                 match = pattern.match(line)
                 if not match:
