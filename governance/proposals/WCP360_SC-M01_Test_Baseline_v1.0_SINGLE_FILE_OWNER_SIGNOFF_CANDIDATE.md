@@ -7688,6 +7688,1048 @@ The 85 scenario labels below come from the 2026-10-03 QA candidate §22; they ar
 | `FQ14` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
 | `FQ15` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
 
+
+## PART VI-A — 85 source-exact historical proposal scenario rows (NON-CANONICAL)
+
+**Purpose:** Part VI preserved all 85 proposal labels but not their actual source scenario wording. This annex includes the **verbatim original scenario row** found in the already-versioned P1 proposal artifacts. It does NOT turn a proposal case into an approved canonical TEST ID or assert the scenario is currently correct under owner-final architecture.
+
+**Authority and precedence:** All original rows below are **owner-pending proposals**. The last published canonical Security/API/IPC/DevOps contracts supersede any conflicting proposed behavior. The 2026-10-03 QA owner family outline and the 199 case records above remain P1 pending. QA must ACCEPT/AMEND/DISCARD/MERGE/SPLIT/DEFER cases under A17, with full fixture, exact expected outcome and no-effect evidence, then assign a canonical TEST ID only if QA approves.
+
+### Original proposal source blobs
+
+| Source document (existing P1) | Git blob SHA (integrity) |
+|---|---|
+| `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` | `2722238799c2cdee7d863e28b9d6b9728e510512` |
+| `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` | `8894b45aea7b19302b2838a77b42b070172e8b0d` |
+| `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923` |
+| `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` | `0ac59335fb3f2422f0e800a96370f6f3afc75313` |
+| `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` | `7e13a79a347b07981356295c2dc4977817e9e26d` |
+| `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | `c0953ce88e14ae08a16fdd5b4f604e992c8a5693` |
+| `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` | `abe573b629ca3c00862ff555d3e5df05d5cc76e0` |
+
+**Each entry below preserves the source row exactly, including its original fields.** No scenario value has been inferred or normalized here. No QA case has been executed.
+
+### C01 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C01 | Session ADMIN privilégiée valide ; parent reload ; cible et révision enregistrées | Éligible uniquement à service.reload si les autres gates passent | Aucun restart ; contexte/primitive/cible corrélés |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C02 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C02 | Même contexte mais substitution de service.restart | DENY pour ce parent | Aucun effet système ni fallback |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C03 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C03 | Parent restart valide vers service.restart, même cible | Éligible si tous les autres gates passent | Pas de duplication aveugle en cas de réponse perdue |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C04 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C04 | Permission services.manage valide mais action d'origine remplacée par ce même texte | Pas d'alias implicite ; refus sans liaison normative explicite | Pas de reconnaissance de droits à partir de l'égalité de chaînes |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C05 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C05 | Parent firewall.apply valide, bonne politique et révision | Éligible à apply | Pas de politique choisie librement par la sous-opération |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C06 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C06 | Même contexte firewall, serveur ou révision substitué | DENY ou conflit selon le cas précis à fixer | Aucun effet sur la cible substituée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C07 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C07 | Parent grants.set et set validé pour tenant A/base A/identité A | Seules les sous-étapes dérivées de ce set sont éligibles | Pas de SQL libre ni de privilèges hors du set |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C08 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C08 | Substitution tenant B, autre base ou autre identité avec le même contexte | DENY | Aucun effet sur moteur hébergé ; trace sûre corrélée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C09 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C09 | Appel direct de revoke sans parent set valide | DENY | La permission seule ne crée pas une opération publique autonome |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C10 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C10 | Délégation révoquée après enqueue avant effet | Réévaluation selon Security, puis refus si le droit a disparu | Pas d'exécution avec un droit périmé |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C11 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C11 | Parent runtime.update proposé comme autorisation de linux_user.delete sans preuve du workflow | Bloqué jusqu'à décision propriétaire ; aucune correspondance inventée | Pas de suppression Unix |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C12 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C12 | Droit parent valide mais MFA expirée, entitlement absent ou approbation manquante lorsqu'exigés | Refus/reprise d'auth approprié ; aucun ALLOW anticipé | Aucun effet ; code/message sûrs à définir dans l'API |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C13 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C13 — deux niveaux | Contexte grants.set authentique et lié à apply ; remplacer dans l'enveloppe l'action technique database_grant.apply par databases.grants.set | Refus du couple IPC non conforme sous l'option B ; origine conservée dans l'audit ; aucun effet | N03, TEST-IPC-1023 ; comparer cas témoin légitime et cas substitué |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C14 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C14 — substitution d'étape | Même contexte borné à apply ; demander revoke avec le couple IPC lexicalement correct | Refus de l'étape non autorisée par ce contexte précis ; aucune révocation. Le couple local IPC correct ne suffit pas | N03/N05, TEST-IPC-1024 ; audit corrélé au parent et à l'étape refusée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C15 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C15 — contexte indisponible | Le couple action/opération est correct mais la référence ne peut pas être résolue ou sa fiabilité vérifiée avant dispatch | Aucun effet ni fallback sur des droits déclarés par l'appelant ; code sûr à fixer selon D02 | N05/N24 selon classification QA ; aucune primitive déclenchée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C16 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C16 — révision périmée | Une révision attendue est autorisée ; l'état actif change avant effet | Conflit/refus avant effet selon contrat applicable ; pas d'écrasement de la nouvelle révision ; si le dispatch est déjà incertain, réconciliation distincte | N16, TEST-IPC-1026/1029 ; état observé inchangé par la requête périmée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### C17 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| C17 — résultat incertain | La primitive peut avoir modifié le système, mais sa réponse finale est perdue | UNKNOWN_OUTCOME/réconciliation ; pas de répétition aveugle ni de succès inventé ; conservation distincte de l'origine et de l'étape | N15/N18/N25, tests IPC des cinq lignes ; preuve pré-effet et preuve de reprise |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ01 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ01 | connexion impossible >1s | aucun dispatch ; erreur transport sûre ; aucune intention d'effet créée sauf politique explicitement définie |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ02 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ02 | client envoie un frame partiel puis bloque >5s | connexion close/refus ; zéro primitive |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ03 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ03 | request complète, deadline déjà expiré avant P4 | zéro primitive ; résultat déterministe, pas UNKNOWN_OUTCOME |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ04 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ04 | deadline demandé supérieur au timeout de la ligne | le plafond de l'opération gagne ; aucun allongement par le client |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ05 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ05 | opération 120s reste silencieuse >5s mais respecte son budget effectif | ne doit pas échouer uniquement parce que I/O TIMEOUT=5s sous option B |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ06 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ06 | deadline expire avant dispatch durable | zéro effet ; preuve d'absence de dispatch |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ07 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ07 | effet exécuté puis ACK/réponse finale perdue | UNKNOWN_OUTCOME ou résultat durable récupérable selon preuve ; aucun blind retry |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ08 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ08 | même demande logique réémise avec nouveau request_id après perte de réponse | ne doit pas provoquer un deuxième effet si l'idempotence durable indique une opération existante |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ09 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ09 | deux exécuteurs concurrents revendiquent la même opération à reprendre | un seul peut déclencher/réconcilier selon le contrat propriétaire ; aucun double effet |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### TQ10 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| TQ10 | réconciliation après restart conclut que l'effet a eu lieu | finalisation durable/audit cohérents ; ne pas redispatcher pour « confirmer » |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ01 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ01 | peer Unix non autorisé ouvre le control socket | refus avant traitement métier ; aucun enqueue/dispatch |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ02 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ02 | peer `wcp360-user` présente contexte surface ADMIN | refus ; aucun downgrade/fallback |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ03 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ03 | peer `wcp360-admin` présente contexte USER substitué pour contourner une règle | refus ou traitement selon contrat explicite, jamais changement silencieux de surface |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ04 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ04 | peer autorisé mais permission/action/ticket context inconnu | fail closed ; aucune opération privilégiée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ05 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ05 | ressource de la requête diffère de resource_id du contexte | refus ; aucune substitution de cible |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ06 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ06 | contexte révoqué après création, avant effet | revalidation applicable puis refus si droit disparu |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ07 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ07 | worker tente directement IPC-B | refus Unix/peer avant effet |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ08 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ08 | worker tente directement le control socket alors que W1 n'est pas approuvé | refus transport ; ne pas ajouter le groupe pour faire passer le test |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ09 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ09 | même job consommé simultanément par deux workers/composants | un seul claim/exécuteur selon contrat DB ; aucune duplication d'effet |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ10 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ10 | opération inconnue au control boundary | aucun fallback en shell, generic exec ou passthrough IPC-B |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ11 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ11 | daemon redémarre avec jobs/intents persistants | ne restaure pas aveuglément les locks éphémères ; reprise via état durable/réconciliation |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### CQ12 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| CQ12 | correlation_id réutilisé avec autre cible | aucun droit dérivé de la corrélation ; authorization binding indépendant |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ01 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ01 | mutation via GET | 0 mutation ; méthode refusée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ02 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ02 | champ inconnu | VALIDATION_FAILED |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ03 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ03 | champ requis manquant | VALIDATION_FAILED |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ04 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ04 | même clé idempotence, même requête | même résultat logique, pas deuxième effet |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ05 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ05 | même clé, requête différente | IDEMPOTENCY_CONFLICT |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ06 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ06 | header/body idempotence divergents si I2 retenu | refus avant mutation |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ07 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ07 | session USER sur route ADMIN | refus surface/auth |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ08 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ08 | cookie valide, CSRF manquant | 403/no mutation pour navigateur |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ09 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ09 | Origin incorrect | 403/no mutation |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ10 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ10 | token non-cookie avec CSRF absent | résultat selon contrat token, pas application mécanique de règle session |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ11 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ11 | champs d'une autre valeur `operation` inclus | validation refusée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ12 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ12 | cursor réutilisé avec autre tenant/filter | aucune fuite ; cursor refusé/invalide |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ13 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ13 | JobAccepted reçu | preuve que job/intention est durable, pas effet externe réussi |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ14 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ14 | erreur interne | aucun stack/path/secret ; correlation_id sûr |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### HQ15 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| HQ15 | réponse SecretCreated | no-store ; secret non récupérable ultérieurement si SHOW_ONCE/NEVER_REVEAL applicable |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ01 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ01 | USER et ADMIN sur hostnames distincts | chaque requête de surface n'expose/accepte que le credential attendu selon critère S04 |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ02 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ02 | même hostname / ports distincts dans fixture | démontrer que les ports seuls ne sont pas utilisés comme garantie de cookie |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ03 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ03 | cookie ADMIN envoyé à endpoint USER sans cookie USER | aucune auth USER dérivée ; aucun détail de session ADMIN divulgué |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ04 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ04 | cookie USER envoyé à endpoint ADMIN | aucune auth ADMIN dérivée |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ05 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ05 | cookies USER+ADMIN présents | sélection déterministe de la surface ; aucun fallback |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ06 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ06 | CSRF USER sur session ADMIN | refus sans mutation |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ07 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ07 | Origin USER vers mutation ADMIN | refus sans mutation |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ08 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ08 | rôle accorde permission mais entitlement absent | DENY final |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ09 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ09 | rôle accorde permission, tenant ownership invalide | DENY final |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ10 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ10 | rôle accorde permission + DENY explicite | DENY final |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ11 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ11 | override négatif + rôle positif | DENY/NOT_GRANTED selon modèle ratifié, jamais ALLOW par le rôle |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ12 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ12 | override positif + contrainte Security absente | DENY final |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ13 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ13 | délégation demande permission au-delà du reseller | DENY |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ14 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ14 | délégation révoquée entre enqueue et effet | refus à la revalidation ; aucun effet |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ15 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ15 | approval valide mais permission absente/DENY | aucun effet |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### SQ16 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| SQ16 | changement de contexte sans changement de permission | aucun droit nouveau dérivé du seul context switch |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ01 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ01 | clean checkout + declared toolchain | build/test bootstrap succeeds without undeclared local files |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ02 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ02 | missing lock file | official build rejected or owner-defined deterministic failure |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ03 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ03 | lock changed without manifest/dependency update | CI detects inconsistency |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ04 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ04 | dependency version floats to latest | release build policy rejects non-locked input |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ05 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ05 | unsupported runtime major | preflight/build fails clearly |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ06 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ06 | wrong architecture | build or package target rejected |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ07 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ07 | production secret present in source/config example | repository/security gate fails |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ08 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ08 | dependency from unapproved source | build fails before artifact promotion |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ09 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ09 | cache cleared | output remains semantically/bitwise reproducible according to chosen policy |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ10 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ10 | same commit + same inputs built twice | digest/reproducibility expectation holds |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ11 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ11 | frontend toolchain absent when declared unnecessary | backend/daemon foundation still builds |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ12 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ12 | Node present only as build dependency | production package has no undeclared Node runtime dependency |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ13 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ13 | static analysis tool failure | CI gate fails according to Engineering rule |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ14 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ14 | generated artifact edited without source change | drift check detects or regeneration overwrites deterministically |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+### FQ15 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
+
+**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
+
+**Verbatim proposed scenario row:**
+
+```text
+| FQ15 | artifact digest/signature mismatch | install/promotion path rejects artifact |
+```
+
+**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
+
+**Summary of this annex:** 17 Authorization + 10 Timeout + 12 Control + 15 HTTP + 16 Security Web + 15 Toolchain = **85 unapproved, non-executed local scenario labels**, not 85 new approved tests.
 ## PART VII — Final owner disposition / signature requirements (NOT SIGNED)
 
 The QA owner must explicitly approve, amend, reject or defer **each** obligation below. A CODEOWNER auto-notification, GitHub PR author comment, green CI or same-author E2 is not specialized owner approval.
