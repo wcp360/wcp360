@@ -7,6 +7,11 @@ on:
       - "tools/governance/test_sc_m01_contract_traceability.py"
       - "tools/governance/sc_m01_privileged_mapping_check.py"
       - "tools/governance/test_sc_m01_privileged_mapping_check.py"
+      - "tools/governance/sc_m01_qa_annex_consistency.py"
+      - "tools/governance/test_sc_m01_qa_annex_consistency.py"
+      - "governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json"
+      - "governance/proposals/SC-M01-QA-133-TEST-RECORDS-OWNER-CANDIDATE-v0.1.json"
+      - "governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json"
       - "governance/verification/SC-M01-CONTRACT-TRACEABILITY-2026-10-26.json"
       - "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
       - "specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md"
@@ -34,6 +39,10 @@ jobs:
         run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_privileged_mapping_check.py' -v
       - name: Verify 47 IPC-B operations against Security source
         run: python3 tools/governance/sc_m01_privileged_mapping_check.py
+      - name: 199 noncanonical QA source-linkage and fake-PASS negative tests
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_qa_annex_consistency.py' -v
+      - name: Verify owner-review QA reference candidates are pending, not PASS
+        run: python3 tools/governance/sc_m01_qa_annex_consistency.py --json
       - name: Verify exact reference traceability snapshot
         run: python3 tools/governance/sc_m01_contract_traceability.py --mode check
       - name: Reference-only summary
