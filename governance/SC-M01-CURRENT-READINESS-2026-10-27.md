@@ -152,3 +152,26 @@ SC-M01 = PAUSED — TARGETED EVIDENCE
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
+
+
+## 8. Late 2026-10-27 owner-case and Engineering signoff delta (G1)
+
+This dated addendum does NOT replace the 8/8 gate or any owner contract. The exact source records are indexed in `governance/SC-M01-OWNER-SIGNOFF-INPUTS-2026-10-27.json`.
+
+- **QA P1 #102 merged** as noncanonical proposed **N01..N26** negative test labels (26 exact Security v1.0 source matches) plus 40 WEB ID references with **NEW proposed per-ID scenario mappings**, *not* old source-approved per-ID assignments. Together with QA P1 #98, there are **199 source-linked owner-review records**. All BLOCKED/NOT_EXECUTED, zero actual product QA PASS/FAIL or owner signoff. QA #7 remains OPEN.
+- **R1 #87** added a read-only QA review-input source integrity validator + 20 adversarial tests on the 199-case corpus. [GitHub Actions 40587310504](https://github.com/yyogas/wcp360/actions/runs/40587310504) succeeded at `92f563c279b8444d380d745cf9e6f35691b1c641`: 20 API/IPC/Permission + 21 Security/IPC + 20 QA fake-PASS/provenance negative tests = **61 unit tests**. R1 E3 independent review MISSING; do not merge as an approved protected gate from E1 alone.
+- **Engineering #9 full 30-decision proposal** (20 ENG-R + 10 F toolchain choices) has been archived as **P1 NON-CANONICAL** via merged [PR #103](https://github.com/yyogas/wcp360/pull/103), merge commit `1ba2aaad018c0e9e3fdf512dd0a396fa01125cc4`, with **0/30 owner dispositions approved**. The full original v0.2 is still unrecovered and proposed v0.3 is NOT ratified. Source and dependency content are more reviewable but do not count as the eighth owner artifact.
+- **Database #6** still lacks original complete v1.0 physical source or a fully owner-ratified complete versioned reconstruction; existing 36 fragment inventory and table decisions do not count as one source-ready DB artifact.
+- **Security/API #91** still has 12 parent/provisioning/OR origin-operation bindings without final typed owner approval.
+- **No independent E3 reviewers** were registered for open R1 candidates #42/#86/#87/#88/#94 when inspected. This is a separate repository/Engineering review dependency, not a permission to self-approve.
+
+```text
+REQUIRED FINAL OWNER ARTIFACTS = 8
+MATERIALIZED + APPROVED IN MAIN = 5
+OWNER-FINAL DATABASE / TESTS-QA / ENGINEERING = PENDING
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
+
+Only domain-owner ratification with exact versioned FINAL artifacts, independent reviews and MASTER's explicit SC-M01 go/no-go can change this status.
