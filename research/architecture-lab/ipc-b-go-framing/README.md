@@ -28,7 +28,7 @@ The experiment checks *some* syntactic invariants in isolation, before any offic
 
 `specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md`
 
-Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 operation IDs **and their distinct action IDs** and verify this SHA from the current source Markdown. The parser now rejects any mismatched `action_id` ↔ `ipc_operation_id` pair even if both names look plausible; 19 of 47 canonical pairs intentionally use distinct strings. This is reference consistency only, not a permission grant.
+Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 operation IDs, **their distinct action IDs and resource identifier categories**, and verify this SHA from the current source Markdown. The parser now rejects any mismatched `action_id` ↔ `ipc_operation_id` pair even if both names look plausible; 19 of 47 canonical pairs intentionally use distinct strings. It also checks the declared `resource_type` category against the same source row for all 47 operations. **Neither check proves resource existence, tenant ownership, authorization, canonical target resolution or actual permission grants.**
 
 `codec_test.go`, `response_test.go`, and `payload_test.go`: negative framing/parser tests, **47/47 IPC-B operation field-name tests** and action→operation binding tests, explicit UNKNOWN_OUTCOME→reconciliation rejection and two seeded fuzz functions. No test performs privileged execution.
 
