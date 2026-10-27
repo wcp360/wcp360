@@ -76,9 +76,21 @@ func TestUnknownOutcomeRequiresReconciliation(t *testing.T) {
 	a["error_code"] = "UNKNOWN_OUTCOME"
 	expectResponseReject(t, responseFrame(t,a), "requires reconciliation")
 	a["reconciliation_required"] = true
+	// A definite SUCCEEDED outcome contradicts a declared UNKNOWN_OUTCOME
+	// error even if reconciliation_required is true (R&D fail-closed rule).
+	expectResponseReject(t, responseFrame(t,a), "UNKNOWN_OUTCOME error conflicts with definite outcome")
+	a["outcome"] = "UNKNOWN_OUTCOME"
 	if _, err := DecodeResponseFrame(responseFrame(t,a)); err != nil {
 		t.Fatalf("syntactic UNKNOWN_OUTCOME response wrongly rejected: %v",err)
 	}
+}
+
+func TestUnknownOutcomeErrorCannotClaimDefiniteFailure(t *testing.T) {
+	msg := responseFixture()
+	msg["outcome"] = "FAILED"
+	msg["error_code"] = "UNKNOWN_OUTCOME"
+	msg["reconciliation_required"] = true
+	expectResponseReject(t, responseFrame(t, msg), "UNKNOWN_OUTCOME error conflicts with definite outcome")
 }
 
 func TestResponseBadRequiredFields(t *testing.T) {
