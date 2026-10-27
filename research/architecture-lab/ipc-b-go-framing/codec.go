@@ -35,6 +35,7 @@ const (
 var operationsJSON []byte
 
 type operationEntry struct {
+	ValidatedInputSchema string `json:"validated_input_schema"`
 	ContractID     string `json:"contract_id"`
 	IPCOperationID string `json:"ipc_operation_id"`
 	TestID         string `json:"test_id"`
@@ -51,6 +52,7 @@ type Reference struct {
 	ContractID string
 	OperationID string
 	TestID string
+	ValidatedInputSchema string
 }
 
 // Parsed is deliberately a data-only research result.
@@ -138,14 +140,66 @@ func loadAllowed() (map[string]Reference, error) {
 		if _, ok := result[x.IPCOperationID]; ok || contractIDs[x.ContractID] {
 			return nil, errors.New("research operation catalog duplicate")
 		}
+		if _, _, err := splitPayloadSchemaFields(x.ValidatedInputSchema); err != nil {
+			return nil, fmt.Errorf("research operation input schema invalid: %w", err)
+		}
 		result[x.IPCOperationID] = Reference{
 			ContractID: x.ContractID,
 			OperationID: x.IPCOperationID,
 			TestID: x.TestID,
+			ValidatedInputSchema: x.ValidatedInputSchema,
 		}
 		contractIDs[x.ContractID] = true
 	}
 	return result, nil
+}
+
+// splitPayloadSchemaFields interprets only the flat declared FIELD NAMES from
+// the existing IPC-B owner export. It CANNOT establish field types or value
+// validity, authorization/tenant scope, path safety or real OS side effects.
+// It rejects unsupported nested/wildcard schema grammar instead of guessing.
+func splitPayloadSchemaFields(schema string) (map[string]bool, map[string]bool, error) {
+	if len(schema) < 3 || schema[0] != '{' || schema[len(schema)-1] != '}' {
+		return nil, nil, errors.New("unsupported operation schema envelope")
+	}
+	required, optional := map[string]bool{}, map[string]bool{}
+	parts := strings.Split(schema[1:len(schema)-1], ",")
+	if len(parts) == 0 {
+		return nil, nil, errors.New("empty operation schema")
+	}
+	for _, raw := range parts {
+		name := strings.TrimSpace(raw)
+		optionalField := strings.HasSuffix(name, "?")
+		if optionalField {
+			name = strings.TrimSuffix(name, "?")
+		}
+		if !typedID.MatchString(name) || forbiddenKeys[strings.ToLower(name)] {
+			return nil, nil, errors.New("invalid operation schema field")
+		}
+		if required[name] || optional[name] {
+			return nil, nil, errors.New("duplicate operation schema field")
+		}
+		if optionalField { optional[name] = true } else { required[name] = true }
+	}
+	return required, optional, nil
+}
+
+// validatePayloadFieldNames enforces required/allowed KEYS ONLY, not value
+// types or bound resource objects; returning success never authorizes dispatch.
+func validatePayloadFieldNames(operation Reference, raw map[string]any) error {
+	required, optional, err := splitPayloadSchemaFields(operation.ValidatedInputSchema)
+	if err != nil { return err }
+	for field := range required {
+		if _, ok := raw[field]; !ok {
+			return errors.New("required operation payload field missing")
+		}
+	}
+	for field := range raw {
+		if !required[field] && !optional[field] {
+			return errors.New("unknown operation payload field")
+		}
+	}
+	return nil
 }
 
 // parseValue rejects duplicate keys recursively, in particular unicode-escaped
@@ -316,6 +370,9 @@ func DecodeRequestFrame(frame []byte) (Parsed, error) {
 	registered, ok := catalog[op]
 	if !ok {
 		return empty, errors.New("unknown IPC-B operation; no fallback")
+	}
+	if err := validatePayloadFieldNames(registered, request["payload"].(map[string]any)); err != nil {
+		return empty, err
 	}
 	// IMPORTANT: Returning this Parsed object does not validate per-operation
 	// payload schemas, permission/action binding, peer identity, tenant/resource
