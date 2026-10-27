@@ -1,0 +1,52 @@
+name: SC-M01 QA sixth-artifact staging integrity (NOT approval)
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/sc-m01-qa-sixth-artifact-staging.yml"
+      - "specifications/tests/WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
+      - "governance/proposals/WCP360_SC-M01_Test_Baseline_v1.0_SINGLE_FILE_OWNER_SIGNOFF_CANDIDATE.md"
+permissions:
+  contents: read
+jobs:
+  qa-owner-staging-source-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Checkout review-only candidate, without stored credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Check exact QA candidate provenance and never-approve gate
+        shell: bash
+        run: |
+          python3 -I - <<'PY'
+          import hashlib
+          import pathlib
+          import re
+          root = pathlib.Path(".")
+          original = (root / "governance/proposals/WCP360_SC-M01_Test_Baseline_v1.0_SINGLE_FILE_OWNER_SIGNOFF_CANDIDATE.md").read_bytes()
+          staged = (root / "specifications/tests/WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md").read_bytes()
+          def gitblob(value):
+              return hashlib.sha1(b"blob " + str(len(value)).encode() + b"\x00" + value).hexdigest()
+          assert gitblob(original) == "99a23e7d59deff198615e606653a0acfb475e5f9", "SOURCE SHA DRIFT"
+          assert staged.endswith(original), "QA SOURCE COPY DRIFT"
+          header = staged[:-len(original)]
+          assert b"NOT CANONICAL / NOT FINAL" in header, "STAGING FLAG MISSING"
+          assert b"Final owner approval:** NOT PRESENT" in header, "OWNER STATUS PROMOTED"
+          assert b"MASTER gate:** 5/8" in header, "GATE STATUS PROMOTED"
+          assert b"CODE-BASELINE:** NONE" in header, "CODEBASELINE PROMOTED"
+          assert b"FINAL APPROVED CONTENT = NO" in original, "ORIGINAL QA CANDIDATE NOT PENDING"
+          text = original.decode("utf-8")
+          groups = {
+              "TEST-API": set(re.findall(r"\bTEST-API-[0-9]{4}\b", text)),
+              "TEST-IPC": set(re.findall(r"\bTEST-IPC-[0-9]{4}\b", text)),
+              "TEST-SEC-WEB": set(re.findall(r"\bTEST-SEC-WEB-[0-9]{3}\b", text)),
+              "N": set(re.findall(r"\bN(?:0[1-9]|1[0-9]|2[0-6])\b", text)),
+          }
+          expected = {"TEST-API": 86, "TEST-IPC": 47, "TEST-SEC-WEB": 40, "N": 26}
+          assert {k: len(v) for k,v in groups.items()} == expected, "QA IDENTIFIER COVERAGE CHANGED"
+          assert "## PART VI-A — 85 source-exact historical proposal scenario rows" in text, "85-SCENARIO PROVENANCE MISSING"
+          assert "P2 FIRST CANONICAL MATERIALIZATION" in text, "PROVENANCE CHOICE CANDIDATE MISSING"
+          print("QA STAGING SOURCE INTEGRITY PASS: 86 API + 47 IPC + 26 N + 40 WEB = 199 references")
+          print("NO OWNER APPROVAL; NO PRODUCT QA EXECUTION; 5/8; CODE-BASELINE NONE")
+          PY
