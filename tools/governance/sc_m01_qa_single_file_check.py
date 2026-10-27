@@ -79,16 +79,16 @@ def _validate_refs(text: str, prefix: str, records: list[dict],
             raise ReviewEvidenceError("source-linked TEST identity missing")
         stop = text.find("\n### ", start+len(marker))
         entry = text[start:stop if stop >= 0 else None]
-        if "**Status:** \`BLOCKED / NOT_EXECUTED\`" not in entry:
+        if "**Status:** `BLOCKED / NOT_EXECUTED`" not in entry:
             raise ReviewEvidenceError("QA review test status promoted or lost")
-        if "**Actual execution:** \`NONE\` — no PASS/FAIL." not in entry:
+        if "**Actual execution:** `NONE` — no PASS/FAIL." not in entry:
             raise ReviewEvidenceError("QA review execution evidence falsely promoted")
-        if f"| \`origin_contract_id\` | \`{contract_id}\` |" not in entry:
+        if f"| `origin_contract_id` | `{contract_id}` |" not in entry:
             raise ReviewEvidenceError("QA contract mapping drift")
         for key, v in rec["source_reference"].items():
             value = str(v) if v is not None else "NOT_SPECIFIED_IN_SOURCE"
-            value = value.replace("\`", "'")
-            expected_row = f"| {key} | \`{value}\` |"
+            value = value.replace("`", "'")
+            expected_row = f"| {key} | `{value}` |"
             if expected_row not in entry:
                 raise ReviewEvidenceError("QA typed source metadata altered")
         for scenario in rec.get("proposed_scenarios", []):
@@ -120,7 +120,7 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
     if "DO NOT COUNT THIS FILE IN 8/8" not in head:
         raise ReviewEvidenceError("QA 5/8 owner boundary warning missing")
     for p in INPUTS:
-        if f"\`{p}\` | \`{source_shas[p]}\`" not in source:
+        if f"`{p}` | `{source_shas[p]}`" not in source:
             raise ReviewEvidenceError("source provenance Git blob mismatch")
     if "<!-- BEGIN VERBATIM QA OWNER CANDIDATE SOURCE;" not in source:
         raise ReviewEvidenceError("original QA baseline source block missing")
@@ -180,7 +180,7 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
     count_85=0
     for prefix,n in families.items():
         for i in range(1,n+1):
-            label=f"\`{prefix}{i:02d}\`"
+            label=f"`{prefix}{i:02d}`"
             if p_85.count("| "+label+" |") != 1:
                 raise ReviewEvidenceError("85 local proposal intake entries drift")
             count_85 += 1
