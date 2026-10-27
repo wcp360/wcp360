@@ -1,0 +1,128 @@
+# WCP360 — SC-M01 Current Readiness — 2026-10-27
+
+**Status:** G1 MASTER COORDINATION SNAPSHOT — **NON-CANONICAL / NO IMPLEMENTATION GO**  
+**Repository:** `yyogas/wcp360`  
+**Main reference examined:** `a90b8a24ad29c5d43f16d83f3e18acd2e661b90b`  
+**Parent authority:** `manifests/WCP360-BM-0001.md` (`FINAL`)  
+**Owner decision gate:** [#13](https://github.com/yyogas/wcp360/issues/13)  
+**Independent audit tracker:** [#41](https://github.com/yyogas/wcp360/issues/41)
+
+This snapshot supersedes dated **coordination status** documents for day-to-day planning. It does **not** alter `WCP360-BM-0001`, implementation contracts, owner final decisions, review policy, or CODE-BASELINE. Older snapshots and cancelled Sprint 0/V4.1 remain historical-only.
+
+## 1. Canonical baseline and global SC-M01 gate
+
+```text
+WCP360-BM-0001 = FINAL
+DOC-BASELINE = v4.0.21.23
+DESIGN-BASELINE = V2.5.3.36.4
+
+REQUIRED OWNER IMPLEMENTATION ARTIFACTS = 8
+SOURCE-READY / MATERIALIZED IN MAIN = 5
+OWNER FINAL ARTIFACTS STILL MISSING = 3
+
+SOURCE CODE = PAUSED
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
+
+| Owner artifact | Version | Present in main? | Authority / next action |
+|---|---|---|---|
+| API CONTRACT | 1.0 | YES | Owner final, fixed typed API contracts |
+| IPC CONTRACT | WCP360-IPC-B/1 | YES | Owner final, bounded 47-operation privileged protocol |
+| PERMISSION REGISTRY | v1.0 | YES | Owner final, 82 active permissions |
+| SECURITY BASELINE | v1.0 | YES | Owner final, privilege/tenant/session boundary |
+| **DATABASE MODEL** | v1.0 metadata | **NO** | **#6:** exact full body or owner-amended/reconstructed complete physical contract |
+| **TEST BASELINE** | v1.0 metadata | **NO** | **#7:** QA owner acceptance A01–A20, final complete artifact and honest provenance |
+| DEVOPS BASELINE | v1.0 | YES | Owner final, Debian 13 amd64 and filesystem/Unix/socket baseline |
+| **ENGINEERING RULESET** | ENG-WCP-RULESET-0001 v0.2 metadata | **NO** | **#9:** complete retained final body or owner-amended full ruleset/version decision |
+
+**Present** means owner-final implementation artifact exists and is consumable at an approved path; recovered metadata, proposal/approval wording, candidate files or indexed fragments do not count.
+
+## 2. Priority order to unlock the first code
+
+| Rank | Owner / scope | Concrete deliverable required | Current material available | Blocking implication |
+|---|---|---|---|---|
+| **P0-A** | DATABASE #6 | Complete physical schema with exact PK/FK/composite tenant constraints, nullability, unique/check/delete semantics, indexes, transactions, concurrency/leases/fencing, durable audit/idempotency/outbox and retention/restore | P1 DB-R01..R15 owner draft in main (#84); 36 recovered partial table sections indexed as G0 (#96) | First DB migrations, jobs/leases and persistence code blocked |
+| **P0-B** | TESTS / QA #7 | Owner-ratified complete SC-M01 test baseline with A01–A20, test records/outcomes/evidence lifecycle, truthful publication type | Existing 2026-10-03 complete **candidate** + review checklist; P1 A01–A20/QI01..07 recommendations in main (#93); 86/47/82 reference index | First CODE-BASELINE/product QA gate blocked |
+| **P0-C** | ENGINEERING #9 | Retained exact final ENG v0.2 body OR explicit complete owner-amended ruleset with F01..F10 toolchain/CI/DoD/security/quality decisions and version impact | P1 ENG-R01..20 proposal (#85) + Debian13 F01–F10 options (#89) in main; historical owner metadata | First buildable application/runtime/repository skeleton blocked |
+| **P0-D** | SECURITY + API/IPC #91 | Exact approved 12 parent/provisioning/OR permission→origin action→IPC operation tuples with surface/scope/resource constraints and negative tests | G1/P1 precise owner HANDOFF in main (#95); Security/IPC source mapping 47/47 in focused R1 PR #87 | Those privileged dispatcher bindings blocked (other direct rows still need full checks) |
+| **P0-E** | API/IPC + SECURITY + DEVOPS | C01 republication and C03 peer→surface, C06 control wire protocol, C07 business/orchestration/durable intent split as applicable | P1 alternatives in main (#95); inert Python R&D #88 | First functional backend→wcpd control flow blocked |
+| **P0-F** | ENGINEERING + independent reviewer / DevOps/Security | Actual E3 exact-SHA reviews of R1 tooling and first implementation; enforce branch checks/protection | PR #42 repository guardrails still open; #86/#87/#88/#94 R1/research validation candidates | Critical R1/I1/S1 merges and first CODE-BASELINE review blocked |
+| P1 | Documentation #16 | Physical archive DOC v4.0.21.23 import/provenance | 147-file materialized mirror + Design mirror in main | Tracked separately, **not** SC-M01 global 8/8 gate blocker by current governance |
+
+**Owner decision hierarchy:** FINAL owner source > ratified new owner delta with version impact > P1/G1 proposal > G0 historical recovery. Source Code must not interpret lower-level material as a higher-level authority.
+
+## 3. What has been meaningfully published in main
+
+The following are **G0/G1/P1 non-authoritative** publication merges, never normative owner contract replacements:
+
+- PR #83: owner handoff, independent gate and first-code M01-00..10 dependency plan.
+- PR #84: DB-R01..15 owner decision draft, not a physical database model.
+- PR #85: ENG-R01..20 ruleset candidate, not a recovered full Engineering final.
+- PR #89: F01..10 Debian13 toolchain R&D options, not final PHP/Go/PostgreSQL/Node selection.
+- PR #93: QA A01–A20/P1-P2-P3 owner signoff recommendations, not Tests/QA final.
+- PR #95: C03/C06/C07 control owner options and 12 privileged parent-binding owner handoff.
+- PR #96: strictly derived, line-referenced historical PostgreSQL table-fragment index: 36 named sections in eight schemas; 33 partial typed first blocks, two untyped inventories, one name-only. **No complete table/full model is proved.**
+
+The G0/G1/P1 publication review level is **E0 authored + E2 same-author** under `governance/REVIEW-MERGE-POLICY.md`. E2 must never be reported as independent E3 approval.
+
+## 4. Code and test preparation retained separately, NOT merged
+
+| PR | Candidate | Verified subset and limitations | Review status |
+|---|---|---|---|
+| #42 | Repo secret/publication guardrails | Existing E1 CI tested, no enforced main protection inferred | R1, E3 missing |
+| #86 | 8-artifact source fingerprint validator | 13 non-product negative tests in its last green E1 run; 5 published source pins | R1, E3 missing |
+| #87 | API/IPC/permission + Security/IPC typed reference checks | **20 + 21 = 41** E1 tests PASS on `93671d5c5f3971d1eb775f8dfc24f20f1a8ad7bd` in [run 40474749578](https://github.com/yyogas/wcp360/actions/runs/40474749578); 86/47/82 coverage, 12 abstract privilege expressions reported | R1, E3 missing |
+| #88 | Inert Python backend→wcpd control parser options | 37 synthetic parser checks, no socket or actual peer credentials | Research + tooling, owner C03/C06/C07 and E3 pending |
+| #94 | Pure Go IPC-B request/response framing research | [run 40421435103](https://github.com/yyogas/wcp360/actions/runs/40421435103): `go test` + `go vet` + actual bounded fuzzing (request 11 execs, response 75,421 execs); no daemon/root/OS effect | Research-only, F02 toolchain owner/E3 pending |
+
+Former integration PR **#90 = CLOSED WITHOUT MERGE**, superseded by focused #86/#87/#88 and main P1 docs. Its 91-test E1 combined evidence remains GitHub history but cannot be counted as production QA.
+
+**Do not sum these tests into SC-M01 product QA PASS.** They establish limited reference, framing and inert rejection behavior only.
+
+## 5. Previously confirmed architectural and security invariants
+
+```text
+WCP-USER != WCP-ADMIN
+
+account_id != organization_id != tenant_id
+
+CONTROL-PLANE POSTGRESQL
+!= HOSTED DB ENGINES
+!= TENANT / APPLICATION DATABASE CONTENT
+
+backend → wcpd(non-root)
+→ bounded authenticated IPC-B
+→ wcp-privd(minimal root)
+→ allowlisted typed privileged primitive
+
+shell.exec / arbitrary command / generic sudo/systemctl = FORBIDDEN
+unknown permission/action/IPC operation = DENY / NO EFFECT
+timeout != definite failure
+retry != reconciliation
+rollback != compensation
+```
+
+Security v1.0 and IPC-B/1 match all **47** declared privileged operation IDs. Security permission expressions contain **35 directly named permission IDs** and **12 owner-dependent parent/provisioning/OR expressions** (issue #91). `server.reboot` and `server.shutdown` each refer to both `requested` and `completed` audit event types (49 event-type refs across 47 operations). No generic privileged execution or automatic mapping is allowed.
+
+## 6. M01-00 / M01-01 readiness decision
+
+**Current answer: NOT AUTHORIZED.** Before the first executable foundation PR:
+
+1. Materialize all three missing complete owner-final DB/QA/Engineering files, with exact version/path/source Git SHA/provenance, honest content-change classification, cross-domain review and owner-ready statements.
+2. Independently verify 8/8 in `specifications/`; reconcile `WCP360-BM-0001` version impact where a new owner amendment is adopted.
+3. Accept only the component-specific semantic decisions needed for the first M01-00/01 slice; do not globally block on unrelated future-module decisions, but never bypass a real blocker for the chosen component.
+4. Enforce code-review policy on the exact implementation candidate (E1 + independent E3). Release/package/install work needs separate DevOps/QA evidence.
+5. Record an explicit MASTER `SC-M01 RESUME AUTHORIZATION` attached to an exact Git SHA. Only then begin executable first code.
+
+Until then:
+
+```text
+SC-M01 OWNER ARTIFACT GATE = 5/8
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
+
+This file is a coordination record, not a new implementation baseline.
