@@ -4,9 +4,9 @@
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
 **Latest coordination refresh:** 2026-10-27 addendum (G1, NON-CANONICAL)
-**Current SC-M01 coordination snapshot:** [2026-10-26 readiness](SC-M01-CURRENT-READINESS-2026-10-26.md)
+**Current SC-M01 coordination snapshot:** [2026-10-27 readiness](SC-M01-CURRENT-READINESS-2026-10-27.md)
 
-> Sections below preserve the detailed 2026-10-04 project audit/status record. For subsequent publication and CI evidence, consult the 2026-10-26 snapshot. No baseline or SC-M01 code gate is changed by that newer coordination file.
+> Sections below preserve the detailed 2026-10-04 project audit/status record. For subsequent publication and CI evidence, consult the 2026-10-27 snapshot; 2026-10-26 remains historical. No baseline or SC-M01 code gate is changed by that newer coordination file.
 
 ## 1. Baseline state
 
@@ -361,3 +361,20 @@ This coordination update does not authorize implementation, modify `WCP360-BM-00
 - Precise context: see the 2026-10-27 addendum of `governance/SC-M01-CURRENT-READINESS-2026-10-26.md`.
 
 This is G1 coordination metadata and does not change any owner-final contract, implementation authorization or independent-review finding.
+
+
+## 13. Current priority closure index — 2026-10-27
+
+The latest **non-normative** readiness and ranked owner dependency table is:
+
+`governance/SC-M01-CURRENT-READINESS-2026-10-27.md`
+
+Confirmed G0/G1/P1 publication advances:
+- PR #95 P1/G1 owner decision material for C03/C06/C07 and the 12 open Security↔IPC parent bindings, merged as **NON-CANONICAL**.
+- PR #96 G0 historical recovered Database fragment index, 36 observed table sections from incomplete historical recovery; **not** the full owner-final DB contract.
+- Former PR #90 closed unmerged after unique Security/IPC checker/test code was moved byte-identically to focused draft PR #87. PR #87 E1 run 40474749578: 20+21=41 non-product tests PASS; E3 absent.
+- Current draft tool/research PR #42/#86/#87/#88/#94 remain unmerged and do not constitute executable WCP360 source baseline.
+
+The following remain OPEN and materially block SC-M01 readiness: #6 Database, #7 Tests/QA, #9 Engineering, #91 Security/API exact parent bindings and appropriate component contracts and independent review. Global gate remains `5/8`; `SC-M01 PAUSED`; `SC-M02 NOT AUTHORIZED`; `CODE-BASELINE NONE`.
+
+This update is G1 coordination. No requirement, canonical schema, security policy or API contract is silently changed.
