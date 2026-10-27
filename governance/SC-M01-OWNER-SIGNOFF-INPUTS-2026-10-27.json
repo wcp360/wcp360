@@ -84,5 +84,49 @@
     "Do not fill missing exact prior source bytes from assistant general knowledge or cancelled Sprint 0.",
     "Never mark tests PASS without execution against exact SHA/environment.",
     "Independent E3 requires genuinely independent technical review; same-author E2 or CI E1 is not E3."
-  ]
+  ],
+  "latest_coordination_update": "2026-10-27 late",
+  "qa_security_annex": {
+    "source_status": "P1_NONCANONICAL_COMMITTED_IN_MAIN",
+    "pull_request": 102,
+    "merge_commit_sha": "bde5b8e9b10870f76439f76358b16aaa7528f501",
+    "json_path": "governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json",
+    "git_blob_sha": "e56db7549d8b30ebffd3687265e92964bfd1acdf",
+    "source_contract": "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+    "source_git_blob_sha": "6d74f2f363524511424f839ca7262143c2af95ab",
+    "existing_N_catalog_labels": 26,
+    "existing_WEB_id_range": 40,
+    "per_id_WEB_mapping_owner_status": "NEW_PROPOSAL_PENDING_QA_APPROVAL",
+    "combined_qa_review_reference_records": 199,
+    "actual_product_tests_executed": 0,
+    "passed": 0,
+    "owner_approval": false
+  },
+  "qa_source_integrity_e1": {
+    "pr": 87,
+    "head_sha": "92f563c279b8444d380d745cf9e6f35691b1c641",
+    "workflow_url": "https://github.com/yyogas/wcp360/actions/runs/40587310504",
+    "status": "SUCCESS_NONPRODUCT_E1_ONLY",
+    "unit_tests_passed": 61,
+    "api_ipc_reference_tests": 20,
+    "security_ipc_reference_tests": 21,
+    "qa_199_reference_integrity_tests": 20,
+    "e3_independent_review": false,
+    "owner_qa_final_approval": false
+  },
+  "engineering_full_candidate": {
+    "pull_request": 103,
+    "current_status": "DRAFT_OPEN_UNMERGED_P1_NONCANONICAL",
+    "source_branch": "proposal/sc-m01-eng-consolidated-owner-review-20261027",
+    "candidate_path": "governance/proposals/SC-M01-ENGINEERING-v0.3-CONSOLIDATED-FULL-OWNER-REVIEW-CANDIDATE.md",
+    "candidate_branch_git_blob_sha": "d202099091c927156585ac2c2ba886db8c61ec32",
+    "eng_rules_proposed": 20,
+    "toolchain_decisions_proposed": 10,
+    "owner_rule_dispositions_approved": 0,
+    "historical_full_v0_2_body_recovered": false,
+    "version_v0_3_approved": false,
+    "ready_for_source_code": false,
+    "owner_approval": false,
+    "e3_independent_review": false
+  }
 }
