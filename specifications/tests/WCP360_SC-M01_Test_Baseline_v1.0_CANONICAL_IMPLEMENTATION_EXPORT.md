@@ -1,121 +1,88 @@
-# QA owner review staging — NOT CANONICAL / NOT FINAL
+# WCP360 — SC-M01 Test Baseline v1.0 — CANONICAL IMPLEMENTATION EXPORT
 
-**Branch-only proposed sixth implementation artifact.**
-**Owner:** WCP360 — TESTS / QA
-**Status:** DRAFT — OWNER DECISIONS A01–A20 / QI-01–QI-07 / 199 records / 85 proposal labels PENDING
-**Source Git blob:** `99a23e7d59deff198615e606653a0acfb475e5f9` (`governance/proposals/WCP360_SC-M01_Test_Baseline_v1.0_SINGLE_FILE_OWNER_SIGNOFF_CANDIDATE.md`)
-**Publication type:** PROPOSED P2 FIRST CANONICAL MATERIALIZATION — NOT ACCEPTED
-**Approved final version:** NOT CONFIRMED
-**Final owner approval:** NOT PRESENT
-**Independent cross-domain review:** NOT PRESENT
-**Source-code ready:** NO
-**MASTER gate:** 5/8 — NOT ADVANCED
-**CODE-BASELINE:** NONE
-
-**HOLD:** The remainder is a fully materialized 2026-10-28 self-contained QA owner *candidate*. The entire document remains NON-CANONICAL until TESTS / QA individually ratifies required dispositions, expected outcomes and test applicability, honestly chooses provenance and version, and an independent reviewer accepts the actual final SHA. This branch-only file must NOT be merged to main as-is, and mere presence of the proposed final filename must NEVER increment the gate.
-
----
-
-# WCP360 — SC-M01 Test Baseline v1.0 — Complete Single-File QA Owner Review Candidate
-
-**Publication date:** 2026-10-28  
-**Classification:** **P1 NON-CANONICAL / QA OWNER ACCEPTANCE REQUIRED — NOT FINAL**  
-**Intended owner:** WCP360 — TESTS / QA  
-**Issue:** #7; MASTER #13; independent Audit #41  
-**Scope:** SC-M01 FIRST IMPLEMENTATION FOUNDATION only  
+**Owner:** WCP360 — TESTS / QA  
+**Status:** **FINAL APPROVED — CANONICAL IMPLEMENTATION AUTHORITY**  
+**Owner approval date:** 2026-10-28  
+**Scope:** SC-M01 — FIRST IMPLEMENTATION FOUNDATION only  
 **Baseline:** WCP360-BM-0001 FINAL / DOC v4.0.21.23 / DESIGN V2.5.3.36.4 / CODE NONE  
-**Publication provenance proposal:** **P2 FIRST CANONICAL MATERIALIZATION** (NOT selected by QA)  
-**Final target:** `specifications/tests/<QA-owner-approved-name>.md` — unreserved until actual owner decision  
+**TEST BASELINE VERSION:** `v1.0`  
+**PUBLICATION TYPE:** **P2 — FIRST CANONICAL MATERIALIZATION / OWNER APPROVAL**  
+**CONTENT CHANGE:** **INITIAL CANONICAL CONTENT**  
+**VERSION IMPACT:** **NONE — retain the already-published Test Baseline identifier v1.0**  
+**Historical exact prior complete final body:** NOT EVIDENCED  
+**Historical content included:** NO — historical proposal bodies are excluded; only provenance and owner disposition are retained  
+**Product tests actually executed:** 0  
+**PASS:** 0  
+**FAIL:** 0  
+**CODE-BASELINE:** NONE  
+**Source Code authorization:** NOT GRANTED BY THIS ARTIFACT  
+**MASTER gate:** remains 5/8 until MASTER verifies this owner-final publication; this artifact is eligible to be counted as the sixth owner artifact after MASTER verification.
 
-> **DO NOT COUNT THIS FILE IN 8/8.** QA has NOT ratified A01–A20, QI-01..07, the individual WEB number-to-scenario assignments, N expected error projections, 85 proposal labels or the publication provenance. There is NO historical complete prior final Test Baseline found. No actual WCP360 application tests ran. Every case here is PLANNED/BLOCKED and NOT_EXECUTED; no PASS/FAIL.
+## Provenance
 
-## 0. What this single file materializes
+This is an honest first canonical materialization. It does **not** claim byte-identical recovery of a previous final Test Baseline body.
 
-This self-contained review candidate combines **the verbatim complete 2026-10-03 QA baseline proposal structure**, **133 existing source-referenced TEST-API/TEST-IPC records**, **26 canonical N-label source texts and proposed negative expectations**, **40 proposed mappings over the existing TEST-SEC-WEB-001..040 range**, plus an **85-label proposal intake matrix**. It includes record schemas, test levels, lifecycle/evidence rules, negative/no-effect assertions, dependency blockers, original authority paths, and a final QA owner decision sheet.
-
-**Important distinctions:** 133 existing TEST-IDs are only source references, not executed tests. N01–N26 are 26 existing *labels*, not approved new `TEST-SEC-...` IDs. The `TEST-SEC-WEB-001..040` range exists, but the mapping to specific browser scenarios is a **NEW PROPOSAL**, not previously approved. The 85 local proposal labels are not canonical tests and cannot be counted as separate test cases until QA triage. 199 = reference/case records, NOT a claim of runnable complete test coverage.
-
-### Exact source provenance (Git blob SHA)
-
-| Document | Git blob SHA | Role / authority |
+| Source | Git blob SHA | Use |
 |---|---|---|
-| `governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md` | `fe2e93ade5541808ff0a0c718ef5c74fb0b2356b` | P1/G1 source/proposal (NOT FINAL) |
-| `governance/proposals/SC-M01-QA-133-TEST-RECORDS-OWNER-CANDIDATE-v0.1.json` | `fd1c570c396cebc2b20b3c89c96ca9b033fc2dc1` | P1/G1 source/proposal (NOT FINAL) |
-| `governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json` | `e56db7549d8b30ebffd3687265e92964bfd1acdf` | P1/G1 source/proposal (NOT FINAL) |
-| `governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json` | `e039c8d7842df2192b0ecb41abf653000d74d116` | P1/G1 source/proposal (NOT FINAL) |
-| `governance/proposals/SC-M01-QA-A01-A20-OWNER-DECISION-PACKET-v0.1.md` | `5d951d53410d4ab5ee1e922524f85f1479e60ec5` | P1/G1 source/proposal (NOT FINAL) |
-| `specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md` | final owner API 1.0 | Owner-final logical API authority; no HTTP route invention |
-| `specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md` | `fec9c74e8413db822662e47c76c40486e282334f` | Owner-final IPC-B/1 authority |
-| `specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md` | `6d74f2f363524511424f839ca7262143c2af95ab` | Owner-final Security v1.0 authority |
+| `governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md` | `fe2e93ade5541808ff0a0c718ef5c74fb0b2356b` | QA structure reviewed and owner-amended |
+| `governance/proposals/SC-M01-QA-133-TEST-RECORDS-OWNER-CANDIDATE-v0.1.json` | `fd1c570c396cebc2b20b3c89c96ca9b033fc2dc1` | 86 API + 47 IPC review records |
+| `governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json` | `e56db7549d8b30ebffd3687265e92964bfd1acdf` | N01–N26 + proposed WEB mappings |
+| `governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json` | `e039c8d7842df2192b0ecb41abf653000d74d116` | machine-derived API/IPC/permission source relationships |
+| `governance/proposals/SC-M01-QA-A01-A20-OWNER-DECISION-PACKET-v0.1.md` | `5d951d53410d4ab5ee1e922524f85f1479e60ec5` | decision packet reviewed, not treated as prior approval |
+| API Contract v1.0 | `4893c5191b4928ecfa5a70f4dc14b39a8939fcea` | canonical API source |
+| IPC Contract WCP360-IPC-B/1 | `fec9c74e8413db822662e47c76c40486e282334f` | canonical IPC source |
+| Permission Registry v1.0 | `81f3d425f36470167aba4bfb7ba069268626342f` | canonical permission source |
+| Security Baseline v1.0 | `6d74f2f363524511424f839ca7262143c2af95ab` | canonical security source |
+| DevOps Baseline v1.0 | `61edf698c50cf58779b75ba02fba913bf8276c61` | canonical platform source |
 
-### Source-comparison prerequisites and current evidence
+## Source verification performed for owner approval
 
-- Source coverage index contains 86 API contracts, 47 IPC contracts and 82 ACTIVE permission IDs. Full per-record source fields below are copied from the already checked P1 candidate JSON; this is not automatically the source-of-truth for semantics.
-- For every case: final fixture execution is prohibited until owner-approved HTTP transport, physical DB and trusted security context are available for that activated slice.
-- The owner may ratify this P2 first materialization only with **honest content-change classification**: `CONTENT CHANGE = INITIAL CANONICAL CONTENT` (or clearly owner-approved equivalent), not `CONTENT CHANGE = NONE` as if a prior final source was byte-identically recovered.
-- A new version (P3) requires MASTER baseline change; original exact previously approved full document (P1) requires actual exact source evidence.
+- API records: **86 / 86** exact `TEST-API ↔ API-WCP` relationships and source fields matched the canonical coverage index.
+- IPC records: **47 / 47** exact `TEST-IPC ↔ IPC-WCP` relationships and all source fields matched the canonical coverage index.
+- Active permissions: **82 / 82** represented through **86** API bindings; missing active permissions: **0**.
+- Security negative labels: **26 / 26** exact matches to Security v1.0 §14.
+- WEB range: **40 / 40 unique IDs**; TESTS / QA approves the one-to-one mapping in PART V.
+- Historical proposal rows: **85 / 85** source-exact rows reviewed; final triage is in PART VI; historical bodies are excluded.
+- Product execution: **NONE**. No PASS/FAIL is inferred from document review, CI, source matching, or owner approval.
 
-## PART I — Complete inherited QA owner candidate baseline (verbatim content, noncanonical)
 
-The following source is preserved **verbatim** from the 2026-10-03 candidate for reviewer traceability. Its own metadata and owner-approval template remain candidate text, not proof of any accepted decision.
+## 1. Final owner decision matrix — A01–A20
 
-<!-- BEGIN VERBATIM QA OWNER CANDIDATE SOURCE; BLOB fe2e93ade5541808ff0a0c718ef5c74fb0b2356b -->
-# WCP360 — SC-M01 Test Baseline v1.0 — QA Owner Candidate
+| ID | Decision | Final QA disposition |
+|---|---|---|
+| **A01** | **AMEND** | Select P2 FIRST CANONICAL MATERIALIZATION / OWNER APPROVAL; retain Test Baseline v1.0; publish exact final path under specifications/tests/; CONTENT CHANGE = INITIAL CANONICAL CONTENT. |
+| **A02** | **ACCEPT** | PLANNED/READY/BLOCKED/PASS/FAIL lifecycle retained; PASS/FAIL require execution. |
+| **A03** | **AMEND** | Required record fields accepted; inheritance is allowed only through an explicit source/version/section pointer and cannot hide required assertions. |
+| **A04** | **AMEND** | Exact-SHA/environment evidence envelope accepted; durable retention is mandatory, but no numeric retention duration/storage backend/digest algorithm is invented here. |
+| **A05** | **ACCEPT** | UNIT/CONTRACT/INTEGRATION/SECURITY/E2E/RECOVERY/INSTALL-BUILD distinction retained; tags remain separate from test level. |
+| **A06** | **AMEND** | 86/86 TEST-API anchors accepted after field-by-field source verification. Logical contract assertions are accepted; transport route/method/status/DTO assertions stay BLOCKED where the activated owner contract does not define them. |
+| **A07** | **ACCEPT** | 47/47 TEST-IPC anchors accepted after exact source verification; bounded primitive, peer, framing, authz, timeout, idempotency, concurrency, UNKNOWN_OUTCOME and reconciliation obligations retained. |
+| **A08** | **AMEND** | Mixed evidence strategy fixed: 82/82 permissions are covered through their 86 API bindings plus dedicated authorization/tenant/delegation/entitlement negative assertions; lexical equality never substitutes typed binding. |
+| **A09** | **AMEND** | N01–N26 labels and behavioral/no-effect expectations accepted. Candidate safe error codes are not made normative unless an owner-final contract fixes them; those projections remain BLOCKED otherwise. |
+| **A10** | **AMEND** | Approve the 40 one-to-one TEST-SEC-WEB-001..040 mappings in PART V as QA-owned mapping. Design mapping is READY; product execution remains NOT_EXECUTED, and topology-specific assertions may remain BLOCKED. |
+| **A11** | **ACCEPT** | Physical DB PK/FK/UNIQUE/CHECK/transaction/lease/outbox/recovery assertions remain BLOCKED on Database #6 where exact owner-final physical definitions are unavailable. |
+| **A12** | **ACCEPT** | Exact Engineering toolchain/static-analysis/threshold/DoD gates remain BLOCKED on Engineering #9. |
+| **A13** | **ACCEPT** | Failure-injection matrix and UNKNOWN_OUTCOME semantics retained; no blind retry. |
+| **A14** | **ACCEPT** | Semantic idempotency rules retained; persistence-specific assertions remain BLOCKED where Database #6 is required. |
+| **A15** | **ACCEPT** | Foundation-scoped repository/bootstrap/secret/generated-asset/product-root/CI guardrail tests retained; repository CI is not product PASS evidence. |
+| **A16** | **AMEND** | Debian GNU/Linux 13 (trixie) / amd64 target is accepted from DevOps v1.0; exact language/toolchain pins and owner quality gates remain BLOCKED on Engineering #9. |
+| **A17** | **AMEND** | All 85 historical proposal rows were source-verified 85/85 and individually triaged below: 64 MERGE/REUSE into existing QA anchors; 21 BLOCKED/DEFER with exact owner dependency; no new TEST ID invented. |
+| **A18** | **ACCEPT** | Failure-visible CI reporting and exact selection/environment/result accounting retained. |
+| **A19** | **ACCEPT** | Bug regression lifecycle plus attempt history/flaky/quarantine/determinism/isolation/rerun eligibility retained. |
+| **A20** | **ACCEPT** | Exact-SHA first CODE-BASELINE QA gate retained; QA publication does not authorize Source Code or SC-M02. |
 
-**Status:** OWNER CANDIDATE — REVIEW REQUIRED — NOT CANONICAL  
-**Prepared for:** WCP360 — TESTS / QA  
-**Reference:** WCP360-BM-0001 FINAL / SC-M01 TARGETED EVIDENCE  
-**Candidate date:** 2026-10-03
+## 2. Execution-integrity decision matrix — QI01–QI07
 
-This document is a complete candidate structure for the final SC-M01 Test Baseline v1.0.
+| ID | Decision | Final QA disposition |
+|---|---|---|
+| **QI-01** | **ACCEPT** | Attempt history is immutable evidence; rerun never erases earlier failed/blocked attempt metadata. |
+| **QI-02** | **ACCEPT** | Failure classification distinguishes product defect, infrastructure, nondeterminism/flaky and operator/environment failure. |
+| **QI-03** | **ACCEPT** | Quarantine is metadata, never PASS; required quarantined assertions cannot contribute silently to a full-baseline PASS. |
+| **QI-04** | **ACCEPT** | Clock/seed and other reproducibility inputs are explicit and retained when material. |
+| **QI-05** | **ACCEPT** | Per-attempt tenant/resource/DB/schema/filesystem/socket fixtures must be isolated; privileged state cannot leak across tests. |
+| **QI-06** | **AMEND** | Evidence must remain durable/auditable after ephemeral CI expiry and always redact secrets. Exact retention duration/storage backend/digest selection is non-blocking owner follow-up, not invented here. |
+| **QI-07** | **ACCEPT** | Material code/tool/contract changes require explicit prior-evidence applicability review before reuse. |
 
-It does not close issue #7.
-
-Only TESTS / QA may review, amend, approve and publish the final canonical artifact under specifications/tests/.
-
-No PASS or FAIL result is created by this document.
-
-## 1. Proposed baseline metadata
-
-The owner should ratify or amend:
-
-    TEST BASELINE VERSION = v1.0
-    SCOPE = SC-M01 — FIRST IMPLEMENTATION FOUNDATION
-    OWNER = WCP360 — TESTS / QA
-    CODE-BASELINE = NONE
-
-Allowed test lifecycle states:
-
-    PLANNED
-    READY
-    BLOCKED
-    PASS
-    FAIL
-
-Rules:
-
-- PASS requires actual execution against an exact candidate SHA and environment.
-- FAIL requires actual execution and a reproducible failing assertion.
-- READY means all non-implementation prerequisites are available.
-- BLOCKED must identify the exact missing dependency.
-- PLANNED means test intent exists but one or more prerequisites are not yet ready.
-- No test result may be inferred from document presence, code review or owner approval alone.
-
-## 2. Source authority
-
-The final QA baseline must consume, not redefine:
-
-- API Contract 1.0;
-- IPC Contract WCP360-IPC-B/1;
-- Permission Registry v1.0;
-- Security Baseline v1.0;
-- DevOps Baseline v1.0;
-- Database Model v1.0 when issue #6 is materialized;
-- Engineering Ruleset v0.2 when issue #9 is materialized;
-- SC-M01 scope and current governance;
-- owner decisions accepted from the merged proposal/recovery work.
-
-Proposal documents are test-design input only until the relevant owner decision is canonical.
 
 ## 3. Mandatory test-record schema
 
@@ -619,27 +586,11 @@ Bug closure cycle:
 
 A review-only assertion is insufficient when executable verification is possible.
 
-## 22. Proposal-case intake
 
-The merged SC-M01 owner-decision pack contains 85 local PLANNED scenario labels:
+## 22. Historical proposal intake — final owner rule
 
-    Authorization C01–C17 = 17
-    Timeout/idempotency TQ01–TQ10 = 10
-    Control boundary CQ01–CQ12 = 12
-    API transport HQ01–HQ15 = 15
-    Security Web/Authz SQ01–SQ16 = 16
-    Toolchain/build FQ01–FQ15 = 15
+Historical proposal labels are not canonical TEST IDs. Their source-exact rows were reviewed 85/85 and are dispositioned individually in PART VI. No historical option overrides an owner-final API/IPC/Security/DevOps contract.
 
-These labels are not canonical TEST IDs.
-
-QA owner workflow:
-
-1. discard cases invalidated by owner decisions;
-2. merge duplicates with existing TEST-API/TEST-IPC/Nxx/WEB cases;
-3. split compound cases when one assertion cannot isolate the failure cause;
-4. assign canonical IDs only after expected behavior is owner-approved;
-5. mark dependency BLOCKED where #6/#9 or another owner decision is required;
-6. preserve source traceability to the decision that created the obligation.
 
 ## 23. Test status transitions
 
@@ -791,96 +742,52 @@ QA evidence must show:
 
 SC-M01 completion does not authorize SC-M02.
 
-## 26. Current dependency matrix
 
-### Database #6
+## 26. Current unresolved dependencies
 
-Blocks exact physical tests for:
-- table/column/constraint/index assertions;
-- idempotency persistence;
-- job/lease/fencing persistence;
-- transaction/outbox/audit durability details;
-- reconciliation storage.
+These dependencies do **not** prevent publication of the QA owner baseline, but affected execution assertions remain `BLOCKED` until the responsible owner publishes the needed contract.
 
-### Engineering #9
+### Database #6 — BLOCKED where physical persistence is required
+- exact PK/FK/UNIQUE/CHECK/table/column assertions;
+- physical tenant-aware constraints;
+- transaction/outbox/audit atomicity details;
+- durable idempotency/job/lease/fencing storage;
+- physical reconciliation/restore fixtures.
 
-Blocks exact owner rules for:
-- directory/layering quality;
-- toolchain/static analysis;
-- thresholds;
-- review/merge/DoD;
-- some build gates.
+### Engineering #9 — BLOCKED where exact toolchain/quality gates are required
+- exact language/runtime/tool versions beyond the DevOps-supported OS target;
+- static-analysis tool set and thresholds;
+- exact build/test commands and code-quality thresholds;
+- review/merge/DoD rules that belong to Engineering.
 
-### Open owner semantics
+### Slice-specific owner decisions — BLOCKED only when activated and still absent
+- HTTP route/method/status/DTO projection not defined by API 1.0;
+- deadline representation/budget composition beyond the fixed IPC timeout invariants;
+- backend/worker → wcpd control-wire details not fixed by an owner-final contract;
+- topology/proxy/WSS assertions not fixed by the activated Security/API deployment contract;
+- exact negative error code where Security/API/IPC does not fix one.
 
-May block affected tests:
-- HTTP transport mapping;
-- timeout/deadline phases;
-- control protocol/context;
-- web topology;
-- authorization override/delegation composition;
-- toolchain selections.
+No missing dependency may be guessed merely to make a test READY.
 
-These do not justify inventing expected behavior.
+## 27. Canonical publication checklist
 
-## 27. Candidate final-publication checklist
-
-Before TESTS / QA promotes a final artifact, verify:
-
-- owner is TESTS / QA;
-- version v1.0;
-- scope is SC-M01 First Implementation Foundation;
-- every canonical existing TEST-API and TEST-IPC reference is accounted for;
-- 82 permissions covered appropriately;
-- N01–N26 retained;
-- TEST-SEC-WEB-001→040 retained/mapped;
-- DB/Engineering blocked clauses identified rather than guessed;
-- 85 proposal cases triaged;
-- test-record schema defined;
-- execution evidence schema defined;
-- no fabricated PASS/FAIL;
-- historic/candidate material clearly separated;
-- artifact is self-contained and directly consumable by Source Code/CI once dependencies exist.
-
-## 28. Owner publication decision
-
-TESTS / QA must choose the final filename and publish under specifications/tests/.
-
-Suggested candidate name only, not reserved:
-
-    WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
-
-Owner should explicitly state:
-
-    OWNER = WCP360 — TESTS / QA
-    TEST BASELINE VERSION = v1.0
-    SC-M01 TEST REQUIREMENTS = INCLUDED
-    FINAL APPROVED CONTENT = YES
-    HISTORICAL CONTENT INCLUDED = NO
-    CONTENT CHANGE = <OWNER DECISION>
-    READY FOR SOURCE CODE CONSUMPTION = YES
-    BLOCKER = NONE or exact remaining blocker
-    PROVENANCE = <OWNER SOURCE>
-    COMMIT = <GITHUB SHA>
-
-Until owner publication:
-
-    THIS FILE = OWNER CANDIDATE ONLY
-    ISSUE #7 = OPEN
-    SC-M01 EVIDENCE = 5 / 8
-    SOURCE CODE = PAUSED
-    SC-M02 = NOT AUTHORIZED
-    CODE-BASELINE = NONE
+- TESTS / QA owner approval: **YES**.
+- Test Baseline version: **v1.0**.
+- Publication provenance: **P2 first canonical materialization**.
+- 86 API records accounted for: **YES**.
+- 47 IPC records accounted for: **YES**.
+- 82 active permissions represented: **YES**.
+- N01–N26 retained and behaviorally approved: **YES**.
+- TEST-SEC-WEB-001→040 individually mapped by QA: **YES**.
+- 85 historical proposals individually triaged: **YES — 64 MERGE / 21 BLOCKED**.
+- DB/Engineering/slice-specific blocked clauses preserved: **YES**.
+- Test-record schema and execution-evidence schema: **YES**.
+- Fabricated PASS/FAIL: **NONE**.
+- Historical proposal bodies included: **NO**.
+- Source Code authorization: **NO — MASTER owns resume/implementation authorization**.
 
 
-## Canonical coverage index — generated evidence
-
-A derived source-coverage index is available at:
-
-- `governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.md`
-- `governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json`
-
-At source main `4ff664a3157e662c174260e1fd35429738188f0c`, it verifies mechanically:
+## Canonical source-coverage verification
 
 ```text
 API contracts = 86
@@ -892,18 +799,19 @@ permissions with API binding = 82
 missing active permissions = 0
 unknown API permissions = 0
 TEST suffix mismatches = 0
+product executions = 0
+PASS = 0
+FAIL = 0
 ```
 
-This is derived evidence only. It does not define expected results, create new TEST IDs, execute tests, or close #7. If any source blob changes, the index must be regenerated/reverified.
-<!-- END VERBATIM QA OWNER CANDIDATE SOURCE -->
 
-## PART II — 86 canonical API test-ID *review records* (not executed)
+## PART II — 86 owner-approved API test specification records (not executed)
 
 The following 86 records preserve source typed relationships and contain **proposed** positive/negative assertions only. No transport route/status codes, actual fixtures or DB columns are manufactured. QA must accept/amend each record before final use.
 
 ### TEST-API-0101 — API-WCP-0101
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -924,7 +832,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0101` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -933,19 +841,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0102 — API-WCP-0102
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -966,7 +873,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0102` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -977,20 +884,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0103 — API-WCP-0103
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1011,7 +917,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0103` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1022,20 +928,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0104 — API-WCP-0104
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1056,7 +961,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0104` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1067,20 +972,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0105 — API-WCP-0105
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1101,7 +1005,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0105` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1113,20 +1017,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0106 — API-WCP-0106
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1147,7 +1050,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0106` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1158,20 +1061,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0201 — API-WCP-0201
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1192,7 +1094,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0201` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1201,19 +1103,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0202 — API-WCP-0202
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1234,7 +1135,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0202` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1245,20 +1146,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0203 — API-WCP-0203
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1279,7 +1179,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0203` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1290,20 +1190,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0001 — API-WCP-0001
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1324,7 +1223,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0001` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1335,20 +1234,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0204 — API-WCP-0204
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1369,7 +1267,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0204` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1380,20 +1278,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0205 — API-WCP-0205
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1414,7 +1311,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0205` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1425,20 +1322,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0301 — API-WCP-0301
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1459,7 +1355,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0301` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1468,19 +1364,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0302 — API-WCP-0302
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1501,7 +1396,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0302` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1512,20 +1407,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0303 — API-WCP-0303
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1546,7 +1440,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0303` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1558,20 +1452,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0304 — API-WCP-0304
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1592,7 +1485,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0304` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1603,20 +1496,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0305 — API-WCP-0305
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1637,7 +1529,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0305` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1648,20 +1540,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0306 — API-WCP-0306
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1682,7 +1573,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0306` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1694,20 +1585,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0307 — API-WCP-0307
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1728,7 +1618,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0307` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1739,20 +1629,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0308 — API-WCP-0308
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1773,7 +1662,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0308` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1785,20 +1674,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0401 — API-WCP-0401
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1819,7 +1707,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0401` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1828,19 +1716,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0402 — API-WCP-0402
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1861,7 +1748,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0402` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1872,20 +1759,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0403 — API-WCP-0403
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1906,7 +1792,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0403` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1917,20 +1803,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0404 — API-WCP-0404
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1951,7 +1836,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0404` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -1962,20 +1847,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0405 — API-WCP-0405
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -1996,7 +1880,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0405` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2007,20 +1891,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0406 — API-WCP-0406
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2041,7 +1924,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0406` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2052,20 +1935,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0407 — API-WCP-0407
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2086,7 +1968,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0407` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2097,20 +1979,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0501 — API-WCP-0501
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2131,7 +2012,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0501` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2140,19 +2021,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0502 — API-WCP-0502
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2173,7 +2053,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0502` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2184,20 +2064,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0503 — API-WCP-0503
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2218,7 +2097,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0503` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2230,20 +2109,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0504 — API-WCP-0504
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2264,7 +2142,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0504` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2275,20 +2153,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0505 — API-WCP-0505
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2309,7 +2186,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0505` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2320,20 +2197,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0601 — API-WCP-0601
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2354,7 +2230,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0601` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2363,19 +2239,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0602 — API-WCP-0602
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2396,7 +2271,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0602` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2407,20 +2282,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0603 — API-WCP-0603
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2441,7 +2315,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0603` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2452,20 +2326,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0604 — API-WCP-0604
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2486,7 +2359,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0604` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2498,20 +2371,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0605 — API-WCP-0605
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2532,7 +2404,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0605` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2543,20 +2415,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0701 — API-WCP-0701
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2577,7 +2448,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0701` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2588,20 +2459,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0702 — API-WCP-0702
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2622,7 +2492,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0702` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2633,20 +2503,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0703 — API-WCP-0703
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2667,7 +2536,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0703` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2678,20 +2547,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0704 — API-WCP-0704
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2712,7 +2580,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0704` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2723,20 +2591,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0705 — API-WCP-0705
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2757,7 +2624,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0705` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2768,20 +2635,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0706 — API-WCP-0706
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2802,7 +2668,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0706` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2813,19 +2679,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0707 — API-WCP-0707
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2846,7 +2711,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0707` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2858,20 +2723,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0708 — API-WCP-0708
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2892,7 +2756,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0708` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2904,19 +2768,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0709 — API-WCP-0709
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2937,7 +2800,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0709` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2948,20 +2811,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0801 — API-WCP-0801
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -2982,7 +2844,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0801` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -2991,19 +2853,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0802 — API-WCP-0802
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3024,7 +2885,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0802` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3036,20 +2897,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0803 — API-WCP-0803
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3070,7 +2930,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0803` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3082,20 +2942,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0002 — API-WCP-0002
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3116,7 +2975,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0002` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3128,20 +2987,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0804 — API-WCP-0804
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3162,7 +3020,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0804` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3171,19 +3029,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0805 — API-WCP-0805
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3204,7 +3061,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0805` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3216,20 +3073,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0806 — API-WCP-0806
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3250,7 +3106,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0806` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3259,19 +3115,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0807 — API-WCP-0807
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3292,7 +3147,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0807` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3304,20 +3159,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0808 — API-WCP-0808
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3338,7 +3192,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0808` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3347,19 +3201,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0809 — API-WCP-0809
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3380,7 +3233,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0809` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3392,20 +3245,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0810 — API-WCP-0810
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3426,7 +3278,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0810` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3438,20 +3290,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0811 — API-WCP-0811
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3472,7 +3323,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0811` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3481,19 +3332,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0812 — API-WCP-0812
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3514,7 +3364,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0812` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3526,20 +3376,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0813 — API-WCP-0813
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3560,7 +3409,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0813` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3569,19 +3418,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0003 — API-WCP-0003
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3602,7 +3450,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0003` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3614,20 +3462,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0007 — API-WCP-0007
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3648,7 +3495,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0007` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3660,20 +3507,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0814 — API-WCP-0814
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3694,7 +3540,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0814` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3705,20 +3551,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0815 — API-WCP-0815
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3739,7 +3584,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0815` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3748,19 +3593,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0816 — API-WCP-0816
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3781,7 +3625,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0816` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3793,20 +3637,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0901 — API-WCP-0901
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3827,7 +3670,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0901` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3838,20 +3681,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0902 — API-WCP-0902
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3872,7 +3714,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0902` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3883,20 +3725,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0903 — API-WCP-0903
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3917,7 +3758,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0903` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3928,20 +3769,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0904 — API-WCP-0904
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -3962,7 +3802,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0904` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -3973,20 +3813,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0905 — API-WCP-0905
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4007,7 +3846,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0905` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4018,20 +3857,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0906 — API-WCP-0906
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4052,7 +3890,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0906` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4063,20 +3901,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0004 — API-WCP-0004
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4097,7 +3934,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0004` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4106,19 +3943,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0005 — API-WCP-0005
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4139,7 +3975,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0005` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4150,20 +3986,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1001 — API-WCP-1001
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4184,7 +4019,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1001` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4195,20 +4030,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1002 — API-WCP-1002
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4229,7 +4063,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1002` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4240,20 +4074,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1003 — API-WCP-1003
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4274,7 +4107,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1003` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4285,20 +4118,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1004 — API-WCP-1004
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4319,7 +4151,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1004` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4330,19 +4162,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1005 — API-WCP-1005
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4363,7 +4194,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1005` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4374,19 +4205,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1006 — API-WCP-1006
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4407,7 +4237,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1006` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4416,19 +4246,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1007 — API-WCP-1007
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4449,7 +4278,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1007` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4460,20 +4289,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1008 — API-WCP-1008
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4494,7 +4322,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1008` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4503,19 +4331,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1009 — API-WCP-1009
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4536,7 +4363,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1009` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4548,20 +4375,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1010 — API-WCP-1010
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4582,7 +4408,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1010` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4593,20 +4419,19 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0006 — API-WCP-0006
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4627,7 +4452,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0006` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4636,18 +4461,17 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-0008 — API-WCP-0008
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4668,7 +4492,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-0008` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4679,19 +4503,18 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-API-1011 — API-WCP-1011
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** API Contract 1.0.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** API Contract 1.0.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4712,7 +4535,7 @@ The following 86 records preserve source typed relationships and contain **propo
 | compatibility | `C1/D0` |
 | `origin_contract_id` | `API-WCP-1011` |
 
-**Proposed expected / negative scenarios (not accepted fixtures):**
+**Owner-approved logical expected / negative scenarios (execution fixtures not yet run):**
 - correct authenticated authorized scope → returns logical response shape from existing API contract; precise route/HTTP status not invented
 - unknown request field or malformed logical request → VALIDATION_FAILED and no mutation
 - wrong origin surface/unauthenticated principal → no unauthorized data disclosure or effect; safe AUTHENTICATION_REQUIRED/AUTHORIZATION_DENIED projection as applicable
@@ -4723,24 +4546,24 @@ The following 86 records preserve source typed relationships and contain **propo
 
 **Forbidden side effects:** unauthorized OS or DB mutation; privileged fallback; cross-tenant data disclosure; secret/token/raw credential log; fabricated success on uncertain external effect.
 
-**Pending owner / test blockers:**
-- TESTS / QA #7 — owner-approved expected-result and assertion schema
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not present / no executable API route
 - Database #6 for durable job/outbox/transaction assertions where applicable
 - Security S01–S04 for exact session/CSRF/Origin/cookie topology
 - API owner H01–H10 exact HTTP transport binding when activated
 
-**Executable fixture status:** BLOCKED — no accepted HTTP transport route, no SC-M01 implementation.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no SC-M01 implementation exists. HTTP route/method/status/DTO assertions remain `BLOCKED` where the activated owner contract does not define them; logical API contract assertions above are accepted.
 **Planned evidence:** Exact implementation SHA and environment; request + safe response; durable state/audit/trace assert when applicable; all reruns/attempts retained.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
-## PART III — 47 canonical IPC test-ID *review records* (not executed)
+
+## PART III — 47 owner-approved IPC-B test specification records (not executed)
 
 IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, the source field-name schema and no generic primitive. The per-field **value types** and real authorization/reconciliation are NOT validated in these P1 proposals. Each listed scenario is not a final accepted TEST-IPC case.
 
 ### TEST-IPC-1001 — IPC-WCP-1001
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4756,7 +4579,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inspect/reconcile identity registry↔OS` |
 | `origin_contract_id` | `IPC-WCP-1001` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4766,19 +4589,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1002 — IPC-WCP-1002
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4794,7 +4616,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe lock state` |
 | `origin_contract_id` | `IPC-WCP-1002` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4804,19 +4626,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1003 — IPC-WCP-1003
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4832,7 +4653,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe lock state` |
 | `origin_contract_id` | `IPC-WCP-1003` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4842,19 +4663,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1004 — IPC-WCP-1004
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4870,7 +4690,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inspect user/home state` |
 | `origin_contract_id` | `IPC-WCP-1004` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4880,19 +4700,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1005 — IPC-WCP-1005
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4908,7 +4727,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe existence/profile` |
 | `origin_contract_id` | `IPC-WCP-1005` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4918,20 +4737,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1006 — IPC-WCP-1006
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4947,7 +4765,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe owner/group` |
 | `origin_contract_id` | `IPC-WCP-1006` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4957,20 +4775,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1007 — IPC-WCP-1007
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -4986,7 +4803,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe permission profile` |
 | `origin_contract_id` | `IPC-WCP-1007` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -4996,20 +4813,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1008 — IPC-WCP-1008
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5025,7 +4841,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe quota` |
 | `origin_contract_id` | `IPC-WCP-1008` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5035,20 +4851,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1009 — IPC-WCP-1009
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5064,7 +4879,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `validation result` |
 | `origin_contract_id` | `IPC-WCP-1009` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5074,20 +4889,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1010 — IPC-WCP-1010
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5103,7 +4917,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `compare active revision/rollback previous revision` |
 | `origin_contract_id` | `IPC-WCP-1010` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5113,20 +4927,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1011 — IPC-WCP-1011
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5142,7 +4955,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inspect managed target` |
 | `origin_contract_id` | `IPC-WCP-1011` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5152,20 +4965,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1012 — IPC-WCP-1012
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5181,7 +4993,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `verify service health/revision` |
 | `origin_contract_id` | `IPC-WCP-1012` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5191,20 +5003,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1013 — IPC-WCP-1013
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5220,7 +5031,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `validation result` |
 | `origin_contract_id` | `IPC-WCP-1013` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5230,20 +5041,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1014 — IPC-WCP-1014
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5259,7 +5069,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `compare active revision` |
 | `origin_contract_id` | `IPC-WCP-1014` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5269,20 +5079,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1015 — IPC-WCP-1015
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5298,7 +5107,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe pool state` |
 | `origin_contract_id` | `IPC-WCP-1015` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5308,20 +5117,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1016 — IPC-WCP-1016
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5337,7 +5145,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `verify health/config revision` |
 | `origin_contract_id` | `IPC-WCP-1016` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5347,20 +5155,19 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Security/API #91 exact parent permission/action/target binding owner decision
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1017 — IPC-WCP-1017
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5376,7 +5183,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `verify deployed fingerprint` |
 | `origin_contract_id` | `IPC-WCP-1017` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5386,19 +5193,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1018 — IPC-WCP-1018
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5414,7 +5220,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inspect target state` |
 | `origin_contract_id` | `IPC-WCP-1018` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5424,19 +5230,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1019 — IPC-WCP-1019
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5452,7 +5257,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inspect hosted-engine inventory` |
 | `origin_contract_id` | `IPC-WCP-1019` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5462,19 +5267,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1020 — IPC-WCP-1020
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5490,7 +5294,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inspect hosted-engine inventory` |
 | `origin_contract_id` | `IPC-WCP-1020` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5500,19 +5304,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1021 — IPC-WCP-1021
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5528,7 +5331,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `reconcile identity state` |
 | `origin_contract_id` | `IPC-WCP-1021` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5538,19 +5341,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1022 — IPC-WCP-1022
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5566,7 +5368,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe identity state` |
 | `origin_contract_id` | `IPC-WCP-1022` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5576,19 +5378,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1023 — IPC-WCP-1023
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5604,7 +5405,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `compare observed grants` |
 | `origin_contract_id` | `IPC-WCP-1023` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5614,19 +5415,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1024 — IPC-WCP-1024
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5642,7 +5442,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `compare observed grants` |
 | `origin_contract_id` | `IPC-WCP-1024` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5652,19 +5452,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1025 — IPC-WCP-1025
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5680,7 +5479,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `validation result` |
 | `origin_contract_id` | `IPC-WCP-1025` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5690,19 +5489,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1026 — IPC-WCP-1026
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5718,7 +5516,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe active policy` |
 | `origin_contract_id` | `IPC-WCP-1026` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5728,19 +5526,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1027 — IPC-WCP-1027
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5756,7 +5553,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `verify target revision` |
 | `origin_contract_id` | `IPC-WCP-1027` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5766,19 +5563,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1028 — IPC-WCP-1028
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5794,7 +5590,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `read-only verification` |
 | `origin_contract_id` | `IPC-WCP-1028` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5804,19 +5600,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1029 — IPC-WCP-1029
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5832,7 +5627,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `health/config observation` |
 | `origin_contract_id` | `IPC-WCP-1029` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5842,19 +5637,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1030 — IPC-WCP-1030
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5870,7 +5664,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `health/process-generation observation` |
 | `origin_contract_id` | `IPC-WCP-1030` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5880,19 +5674,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1031 — IPC-WCP-1031
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5908,7 +5701,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `refresh-state observation` |
 | `origin_contract_id` | `IPC-WCP-1031` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5918,19 +5711,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1032 — IPC-WCP-1032
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5946,7 +5738,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `plan reconciliation` |
 | `origin_contract_id` | `IPC-WCP-1032` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5956,19 +5748,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1033 — IPC-WCP-1033
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -5984,7 +5775,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `inventory/plan reconciliation` |
 | `origin_contract_id` | `IPC-WCP-1033` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -5994,19 +5785,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1034 — IPC-WCP-1034
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6022,7 +5812,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe hold state` |
 | `origin_contract_id` | `IPC-WCP-1034` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6032,19 +5822,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1035 — IPC-WCP-1035
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6060,7 +5849,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe hold state` |
 | `origin_contract_id` | `IPC-WCP-1035` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6070,19 +5859,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1036 — IPC-WCP-1036
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6098,7 +5886,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `reconcile boot identity/health` |
 | `origin_contract_id` | `IPC-WCP-1036` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6108,19 +5896,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1037 — IPC-WCP-1037
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6136,7 +5923,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `out-of-band/health observation` |
 | `origin_contract_id` | `IPC-WCP-1037` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6146,19 +5933,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1038 — IPC-WCP-1038
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6174,7 +5960,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe same process instance` |
 | `origin_contract_id` | `IPC-WCP-1038` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6184,19 +5970,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1039 — IPC-WCP-1039
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6212,7 +5997,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe same process instance` |
 | `origin_contract_id` | `IPC-WCP-1039` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6222,19 +6007,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1040 — IPC-WCP-1040
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6250,7 +6034,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe provider size; never shrink` |
 | `origin_contract_id` | `IPC-WCP-1040` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6260,19 +6044,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1041 — IPC-WCP-1041
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6288,7 +6071,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe filesystem size` |
 | `origin_contract_id` | `IPC-WCP-1041` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6298,19 +6081,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1042 — IPC-WCP-1042
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6326,7 +6108,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `verification only` |
 | `origin_contract_id` | `IPC-WCP-1042` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6336,19 +6118,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1043 — IPC-WCP-1043
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6364,7 +6145,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe workloads/node state` |
 | `origin_contract_id` | `IPC-WCP-1043` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6374,19 +6155,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1044 — IPC-WCP-1044
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6402,7 +6182,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe state` |
 | `origin_contract_id` | `IPC-WCP-1044` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6412,19 +6192,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1045 — IPC-WCP-1045
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6440,7 +6219,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `observe readiness` |
 | `origin_contract_id` | `IPC-WCP-1045` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6450,19 +6229,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1046 — IPC-WCP-1046
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6478,7 +6256,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `topology reconciliation` |
 | `origin_contract_id` | `IPC-WCP-1046` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6488,19 +6266,18 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
 ### TEST-IPC-1047 — IPC-WCP-1047
 
-**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`. **Level:** CONTRACT + SECURITY proposed. **Version:** IPC-B/1.
+**Status:** `PLANNED / NOT_EXECUTED`; QA owner decision `ACCEPT`. **Level:** CONTRACT + SECURITY. **Version:** IPC-B/1.
 
 | Source field | Exact source-derived value |
 |---|---|
@@ -6516,7 +6293,7 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 | reconciliation | `verify final topology` |
 | `origin_contract_id` | `IPC-WCP-1047` |
 
-**Proposed positive/negative scenarios:**
+**Owner-approved positive/negative scenarios:**
 - authentic wcpd peer + fresh trusted authorization context + exact action/operation/resource binding → only registered bounded primitive eligibility; no caller-chosen command
 - unknown operation or malformed version/framing/JSON/schema → no privileged dispatch, no OS/DB mutation and recorded security evidence
 - wrong Unix peer/service context, wrong surface, missing/revoked auth context or cross-tenant target → fail closed before privileged effect
@@ -6526,2304 +6303,1229 @@ IPC-B/1 already defines exact 47 `ipc_operation_id` names, the paired action, th
 
 **Forbidden side effects:** any unregistered privileged primitive execution; dynamic shell/systemctl/sudo proxy; cross-tenant resource mutation; secret/credential/log leakage; un-audited external effect.
 
-**Blocked on:**
-- TESTS / QA #7 — owner-accepted test records
+**Execution dependencies / blocked subassertions:**
 - SC-M01 implementation not yet authorized
 - Security peer+service and target authorization require actual wcpd/wcp-privd components
 - Database #6 when job/lease/idempotency/audit/reconciliation persistence is implicated
 
-**Executable fixture status:** BLOCKED — no live wcp-privd; inert research parsers not a privileged effect test.
+**Executable fixture status:** `PLANNED / NOT_EXECUTED` — no live SC-M01 privileged implementation exists; inert research parsers are not product effect tests. Dependency-specific persistence/handler assertions listed above remain `BLOCKED`.
 **Planned evidence:** Exact candidate SHA; safe peer/permission denial, operation effect instrumentation, correlated audit/job/trace, replay/recovery attempt history.
 **Actual execution:** `NONE` — no PASS/FAIL.
 
-## PART IV — N01..N26: original privileged-negative *labels* plus pending expectations
 
-The N01–N26 labels and original text below match the final Security v1.0 §14 catalog. Exact error-code projections, fixture and component rejection points remain **NEW QA / Security / API owner decision proposals**, not approved TEST IDs.
+## PART IV — N01..N26 privileged-negative labels with QA-approved behavioral expectations
+
+The N01–N26 labels and original text below match the final Security v1.0 §14 catalog. TESTS / QA approves the behavioral expectation and forbidden-effect assertion for each label. These labels remain Security catalog labels, not newly invented canonical TEST IDs. Exact error-code projections remain `BLOCKED` unless an applicable owner-final API/IPC/Security contract fixes that code.
 
 ### N01 — unauthorized Unix peer
 
 **Original Security v1.0 catalog label:** unauthorized Unix peer.
 
-**PROPOSED test title:** IPC peer authentication. **PROPOSED negative behavior:** SO_PEERCRED must match exact wcpd UID and expected service identity; unknown peer refused.
+**QA-approved test title:** IPC peer authentication. **QA-approved negative behavior:** SO_PEERCRED must match exact wcpd UID and expected service identity; unknown peer refused.
 
-**Error classification candidate (NOT OWNER FINAL):** `IPC_CALLER_UNTRUSTED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IPC_CALLER_UNTRUSTED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N02 — wrong surface
 
 **Original Security v1.0 catalog label:** wrong surface.
 
-**PROPOSED test title:** Surface isolation. **PROPOSED negative behavior:** Wrong USER/ADMIN surface claim or peer/session cross-over is denied, no privilege fallback.
+**QA-approved test title:** Surface isolation. **QA-approved negative behavior:** Wrong USER/ADMIN surface claim or peer/session cross-over is denied, no privilege fallback.
 
-**Error classification candidate (NOT OWNER FINAL):** `AUTHORIZATION_DENIED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `AUTHORIZATION_DENIED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N03 — bad permission/action binding
 
 **Original Security v1.0 catalog label:** bad permission/action binding.
 
-**PROPOSED test title:** Typed authorization binding. **PROPOSED negative behavior:** Action/permission/IPC operation tuple mismatch denies dispatch, does not fall back by string similarity.
+**QA-approved test title:** Typed authorization binding. **QA-approved negative behavior:** Action/permission/IPC operation tuple mismatch denies dispatch, does not fall back by string similarity.
 
-**Error classification candidate (NOT OWNER FINAL):** `AUTHORIZATION_DENIED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `AUTHORIZATION_DENIED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N04 — cross-Tenant target
 
 **Original Security v1.0 catalog label:** cross-Tenant target.
 
-**PROPOSED test title:** Tenant ownership. **PROPOSED negative behavior:** Target resource not owned/authorized by trusted Tenant context denied.
+**QA-approved test title:** Tenant ownership. **QA-approved negative behavior:** Target resource not owned/authorized by trusted Tenant context denied.
 
-**Error classification candidate (NOT OWNER FINAL):** `AUTHORIZATION_DENIED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `AUTHORIZATION_DENIED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N05 — invalid ownership/membership/delegation
 
 **Original Security v1.0 catalog label:** invalid ownership/membership/delegation.
 
-**PROPOSED test title:** Delegation and ownership. **PROPOSED negative behavior:** Missing/expired/revoked delegation or membership never supplies substitute authority.
+**QA-approved test title:** Delegation and ownership. **QA-approved negative behavior:** Missing/expired/revoked delegation or membership never supplies substitute authority.
 
-**Error classification candidate (NOT OWNER FINAL):** `AUTHORIZATION_DENIED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `AUTHORIZATION_DENIED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N06 — malformed schema
 
 **Original Security v1.0 catalog label:** malformed schema.
 
-**PROPOSED test title:** IPC-B strict schema. **PROPOSED negative behavior:** Malformed frame, duplicate key, malformed UTF-8, unknown fields or invalid types rejected before side effect.
+**QA-approved test title:** IPC-B strict schema. **QA-approved negative behavior:** Malformed frame, duplicate key, malformed UTF-8, unknown fields or invalid types rejected before side effect.
 
-**Error classification candidate (NOT OWNER FINAL):** `IPC_SCHEMA_INVALID`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IPC_SCHEMA_INVALID`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N07 — unknown IPC operation
 
 **Original Security v1.0 catalog label:** unknown IPC operation.
 
-**PROPOSED test title:** IPC-B allowlist. **PROPOSED negative behavior:** Unknown IPC operation rejected with no dynamic fallback.
+**QA-approved test title:** IPC-B allowlist. **QA-approved negative behavior:** Unknown IPC operation rejected with no dynamic fallback.
 
-**Error classification candidate (NOT OWNER FINAL):** `IPC_OPERATION_NOT_ALLOWED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IPC_OPERATION_NOT_ALLOWED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N08 — arbitrary command/executable
 
 **Original Security v1.0 catalog label:** arbitrary command/executable.
 
-**PROPOSED test title:** Generic command execution ban. **PROPOSED negative behavior:** Caller-provided shell/argv/executable/command/sudo invocation cannot be dispatched.
+**QA-approved test title:** Generic command execution ban. **QA-approved negative behavior:** Caller-provided shell/argv/executable/command/sudo invocation cannot be dispatched.
 
-**Error classification candidate (NOT OWNER FINAL):** `IPC_OPERATION_NOT_ALLOWED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IPC_OPERATION_NOT_ALLOWED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N09 — path traversal
 
 **Original Security v1.0 catalog label:** path traversal.
 
-**PROPOSED test title:** Filesystem path traversal. **PROPOSED negative behavior:** Traversal/absolute paths outside typed managed registry forbidden.
+**QA-approved test title:** Filesystem path traversal. **QA-approved negative behavior:** Traversal/absolute paths outside typed managed registry forbidden.
 
-**Error classification candidate (NOT OWNER FINAL):** `VALIDATION_FAILED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `VALIDATION_FAILED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N10 — symlink/mount/TOCTOU escape
 
 **Original Security v1.0 catalog label:** symlink/mount/TOCTOU escape.
 
-**PROPOSED test title:** Filesystem TOCTOU. **PROPOSED negative behavior:** Symlink/mount swap and path escape denied at use time; no outside-target mutation.
+**QA-approved test title:** Filesystem TOCTOU. **QA-approved negative behavior:** Symlink/mount swap and path escape denied at use time; no outside-target mutation.
 
-**Error classification candidate (NOT OWNER FINAL):** `VALIDATION_FAILED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `VALIDATION_FAILED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N11 — arbitrary signal
 
 **Original Security v1.0 catalog label:** arbitrary signal.
 
-**PROPOSED test title:** Signal boundedness. **PROPOSED negative behavior:** Caller cannot supply signal number or arbitrary process signal.
+**QA-approved test title:** Signal boundedness. **QA-approved negative behavior:** Caller cannot supply signal number or arbitrary process signal.
 
-**Error classification candidate (NOT OWNER FINAL):** `VALIDATION_FAILED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `VALIDATION_FAILED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N12 — arbitrary systemd unit
 
 **Original Security v1.0 catalog label:** arbitrary systemd unit.
 
-**PROPOSED test title:** Service registry. **PROPOSED negative behavior:** Caller cannot provide arbitrary systemd unit name; only registered service_id.
+**QA-approved test title:** Service registry. **QA-approved negative behavior:** Caller cannot provide arbitrary systemd unit name; only registered service_id.
 
-**Error classification candidate (NOT OWNER FINAL):** `IPC_OPERATION_NOT_ALLOWED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IPC_OPERATION_NOT_ALLOWED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N13 — arbitrary package argv/tampered plan
 
 **Original Security v1.0 catalog label:** arbitrary package argv/tampered plan.
 
-**PROPOSED test title:** Package plan integrity. **PROPOSED negative behavior:** Tampered plan, arbitrary argv/package selection rejected.
+**QA-approved test title:** Package plan integrity. **QA-approved negative behavior:** Tampered plan, arbitrary argv/package selection rejected.
 
-**Error classification candidate (NOT OWNER FINAL):** `VALIDATION_FAILED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `VALIDATION_FAILED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N14 — duplicate/idempotency violation
 
 **Original Security v1.0 catalog label:** duplicate/idempotency violation.
 
-**PROPOSED test title:** Durable idempotency. **PROPOSED negative behavior:** Same key/different request conflicts; duplicate same semantic request does not repeat effects.
+**QA-approved test title:** Durable idempotency. **QA-approved negative behavior:** Same key/different request conflicts; duplicate same semantic request does not repeat effects.
 
-**Error classification candidate (NOT OWNER FINAL):** `IDEMPOTENCY_CONFLICT`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IDEMPOTENCY_CONFLICT`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N15 — timeout/lost ACK → UNKNOWN_OUTCOME
 
 **Original Security v1.0 catalog label:** timeout/lost ACK → UNKNOWN_OUTCOME.
 
-**PROPOSED test title:** Lost acknowledgment. **PROPOSED negative behavior:** Post-dispatch ambiguous effect becomes UNKNOWN_OUTCOME and requires reconciliation, never definite FAIL/success.
+**QA-approved test title:** Lost acknowledgment. **QA-approved negative behavior:** Post-dispatch ambiguous effect becomes UNKNOWN_OUTCOME and requires reconciliation, never definite FAIL/success.
 
-**Error classification candidate (NOT OWNER FINAL):** `UNKNOWN_OUTCOME`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `UNKNOWN_OUTCOME`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N16 — concurrent conflict
 
 **Original Security v1.0 catalog label:** concurrent conflict.
 
-**PROPOSED test title:** Concurrency fencing. **PROPOSED negative behavior:** Stale expected revision/fencing and concurrent owner race do not overwrite newer state.
+**QA-approved test title:** Concurrency fencing. **QA-approved negative behavior:** Stale expected revision/fencing and concurrent owner race do not overwrite newer state.
 
-**Error classification candidate (NOT OWNER FINAL):** `CONCURRENCY_CONFLICT`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `CONCURRENCY_CONFLICT`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N17 — mandatory audit unavailable
 
 **Original Security v1.0 catalog label:** mandatory audit unavailable.
 
-**PROPOSED test title:** Mandatory audit durability. **PROPOSED negative behavior:** Failure to commit required audit/outbox evidence prevents committed pure DB mutation; external effects retain durable uncertainty evidence.
+**QA-approved test title:** Mandatory audit durability. **QA-approved negative behavior:** Failure to commit required audit/outbox evidence prevents committed pure DB mutation; external effects retain durable uncertainty evidence.
 
-**Error classification candidate (NOT OWNER FINAL):** `DEPENDENCY_FAILURE`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `DEPENDENCY_FAILURE`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N18 — reconciliation after uncertainty
 
 **Original Security v1.0 catalog label:** reconciliation after uncertainty.
 
-**PROPOSED test title:** Reconciliation after uncertainty. **PROPOSED negative behavior:** No destructive re-dispatch before persisted observed-state reconciliation.
+**QA-approved test title:** Reconciliation after uncertainty. **QA-approved negative behavior:** No destructive re-dispatch before persisted observed-state reconciliation.
 
-**Error classification candidate (NOT OWNER FINAL):** `UNKNOWN_OUTCOME`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `UNKNOWN_OUTCOME`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N19 — secret echo
 
 **Original Security v1.0 catalog label:** secret echo.
 
-**PROPOSED test title:** Secret redaction. **PROPOSED negative behavior:** Secrets/cookies/raw tokens/keys not echoed in response/log/audit/events.
+**QA-approved test title:** Secret redaction. **QA-approved negative behavior:** Secrets/cookies/raw tokens/keys not echoed in response/log/audit/events.
 
-**Error classification candidate (NOT OWNER FINAL):** `INTERNAL_ERROR`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `INTERNAL_ERROR`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N20 — parameter boundary
 
 **Original Security v1.0 catalog label:** parameter boundary.
 
-**PROPOSED test title:** Typed parameter bounds. **PROPOSED negative behavior:** Oversized or malformed parameter values rejected before privileged operation.
+**QA-approved test title:** Typed parameter bounds. **QA-approved negative behavior:** Oversized or malformed parameter values rejected before privileged operation.
 
-**Error classification candidate (NOT OWNER FINAL):** `VALIDATION_FAILED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `VALIDATION_FAILED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N21 — arbitrary SQL
 
 **Original Security v1.0 catalog label:** arbitrary SQL.
 
-**PROPOSED test title:** Hosted database command safety. **PROPOSED negative behavior:** Untrusted arbitrary SQL forbidden in database privileged operation.
+**QA-approved test title:** Hosted database command safety. **QA-approved negative behavior:** Untrusted arbitrary SQL forbidden in database privileged operation.
 
-**Error classification candidate (NOT OWNER FINAL):** `VALIDATION_FAILED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `VALIDATION_FAILED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N22 — stale PID/PID reuse
 
 **Original Security v1.0 catalog label:** stale PID/PID reuse.
 
-**PROPOSED test title:** Process identity revalidation. **PROPOSED negative behavior:** Stale PID or PID reuse cannot terminate another process; require registered instance identity.
+**QA-approved test title:** Process identity revalidation. **QA-approved negative behavior:** Stale PID or PID reuse cannot terminate another process; require registered instance identity.
 
-**Error classification candidate (NOT OWNER FINAL):** `CONCURRENCY_CONFLICT`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `CONCURRENCY_CONFLICT`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N23 — unregistered service ID
 
 **Original Security v1.0 catalog label:** unregistered service ID.
 
-**PROPOSED test title:** Service identifier registry. **PROPOSED negative behavior:** Unregistered service_id not mapped to dynamic systemd command.
+**QA-approved test title:** Service identifier registry. **QA-approved negative behavior:** Unregistered service_id not mapped to dynamic systemd command.
 
-**Error classification candidate (NOT OWNER FINAL):** `IPC_OPERATION_NOT_ALLOWED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `IPC_OPERATION_NOT_ALLOWED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N24 — invalid/stale resource ID
 
 **Original Security v1.0 catalog label:** invalid/stale resource ID.
 
-**PROPOSED test title:** Resource identifier validation. **PROPOSED negative behavior:** Unknown/stale/resource cross-tenant identity rejected, no target substitution.
+**QA-approved test title:** Resource identifier validation. **QA-approved negative behavior:** Unknown/stale/resource cross-tenant identity rejected, no target substitution.
 
-**Error classification candidate (NOT OWNER FINAL):** `RESOURCE_NOT_FOUND`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `RESOURCE_NOT_FOUND`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N25 — destructive blind retry
 
 **Original Security v1.0 catalog label:** destructive blind retry.
 
-**PROPOSED test title:** Destructive retry safety. **PROPOSED negative behavior:** UNKNOWN_OUTCOME or lost response cannot automatically replay destructive operation.
+**QA-approved test title:** Destructive retry safety. **QA-approved negative behavior:** UNKNOWN_OUTCOME or lost response cannot automatically replay destructive operation.
 
-**Error classification candidate (NOT OWNER FINAL):** `UNKNOWN_OUTCOME`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `UNKNOWN_OUTCOME`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
 ### N26 — privilege downgrade/fallback
 
 **Original Security v1.0 catalog label:** privilege downgrade/fallback.
 
-**PROPOSED test title:** Privilege downgrade/fallback. **PROPOSED negative behavior:** No fallback from privileged to generic/root shortcut or ambiguous origin identity.
+**QA-approved test title:** Privilege downgrade/fallback. **QA-approved negative behavior:** No fallback from privileged to generic/root shortcut or ambiguous origin identity.
 
-**Error classification candidate (NOT OWNER FINAL):** `AUTHORIZATION_DENIED`. OWNER MUST CONFIRM exact error code and HTTP/IPC outcome for activated operation.
+**Error classification candidate (NON-NORMATIVE UNTIL SOURCE-FIXED):** `AUTHORIZATION_DENIED`. Exact error/transport projection remains `BLOCKED` unless the activated owner-final contract defines it.
 
 **Forbidden side effects:** no unauthorized privileged OS/filesystem/service/db mutation; no cross-tenant data exposure; no sensitive secret leakage.
 
 **Evidence to retain once runnable:** exact actor/surface/tenant/peer context; correct rejection component and error; instrumented zero-effect assertion; redacted immutable security/audit evidence; tested SHA/environment and failure attempt history.
 
-**Dependencies:** TESTS / QA A09 final case mapping and fixture; Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
-**Status:** `BLOCKED / NOT_EXECUTED`, owner approval `FALSE`.
+**Dependencies:** Security / IPC owner target-specific and exact error/denial semantics; SC-M01 implementation + E3 review.
+**Status:** `PLANNED / NOT_EXECUTED`; behavioral expectation `ACCEPT`; exact error projection `BLOCKED` when not source-defined.
 
-## PART V — 40 reserved WEB security IDs with NEW proposed per-ID scenario allocations
 
-**Warning:** only the `TEST-SEC-WEB-001..040` range and thematic security properties are owner-final. This file does **not** establish that the source assigned these specific scenario titles or expected behaviors to those specific numbers. All number-to-scenario allocations below are candidates for QA ACCEPT/AMEND/REPLACE.
+## PART V — 40 QA-approved WEB security per-ID scenario mappings
 
-### TEST-SEC-WEB-001 — Wrong USER cookie on ADMIN (PROPOSED mapping)
+**Owner mapping decision:** Security v1.0 owns the reserved `TEST-SEC-WEB-001..040` range and thematic requirements. TESTS / QA now owns and approves the one-to-one number-to-scenario mapping below. This is a QA mapping decision; it is not represented as a historical Security per-ID assignment.
+
+### TEST-SEC-WEB-001 — Wrong USER cookie on ADMIN
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** USER cookie must never authenticate ADMIN even when browser presents it; no fallback to USER identity.
+**QA-approved expected behavior:** USER cookie must never authenticate ADMIN even when browser presents it; no fallback to USER identity.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-002 — Wrong ADMIN cookie on USER (PROPOSED mapping)
+### TEST-SEC-WEB-002 — Wrong ADMIN cookie on USER
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** ADMIN cookie must never authenticate USER or elevate USER scope.
+**QA-approved expected behavior:** ADMIN cookie must never authenticate USER or elevate USER scope.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-003 — Both surface credentials (PROPOSED mapping)
+### TEST-SEC-WEB-003 — Both surface credentials
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** When both cookies exist, backend uses exact current-origin surface and must not heuristically select a credential.
+**QA-approved expected behavior:** When both cookies exist, backend uses exact current-origin surface and must not heuristically select a credential.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-004 — Cookie attributes on both surfaces (PROPOSED mapping)
+### TEST-SEC-WEB-004 — Cookie attributes on both surfaces
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Both distinct __Host- cookies require Secure, HttpOnly, SameSite=Strict, Path=/, host-only, no Domain.
+**QA-approved expected behavior:** Both distinct __Host- cookies require Secure, HttpOnly, SameSite=Strict, Path=/, host-only, no Domain.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-005 — Independent server session namespaces (PROPOSED mapping)
+### TEST-SEC-WEB-005 — Independent server session namespaces
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** USER and ADMIN sessions have different server-side namespaces, surface claims and Unix runtime identities.
+**QA-approved expected behavior:** USER and ADMIN sessions have different server-side namespaces, surface claims and Unix runtime identities.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-006 — Session fixation (PROPOSED mapping)
+### TEST-SEC-WEB-006 — Session fixation
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Login always rotates opaque unpredictable ≥128-bit session identifier; old fixed session cannot authenticate.
+**QA-approved expected behavior:** Login always rotates opaque unpredictable ≥128-bit session identifier; old fixed session cannot authenticate.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-007 — Authentication-strength rotation (PROPOSED mapping)
+### TEST-SEC-WEB-007 — Authentication-strength rotation
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** MFA/auth-strength change rotates existing session ID and invalidates stale credential.
+**QA-approved expected behavior:** MFA/auth-strength change rotates existing session ID and invalidates stale credential.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-008 — Privilege/impersonation rotation (PROPOSED mapping)
+### TEST-SEC-WEB-008 — Privilege/impersonation rotation
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Elevation or impersonation start/end rotates credentials and separates child context.
+**QA-approved expected behavior:** Elevation or impersonation start/end rotates credentials and separates child context.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-009 — Idle timeout (PROPOSED mapping)
+### TEST-SEC-WEB-009 — Idle timeout
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** USER idle session expires after 30 min, ADMIN idle session after 15 min (evaluate server-side).
+**QA-approved expected behavior:** USER idle session expires after 30 min, ADMIN idle session after 15 min (evaluate server-side).
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-010 — Absolute lifetime (PROPOSED mapping)
+### TEST-SEC-WEB-010 — Absolute lifetime
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** USER absolute session lifetime ≤12h, ADMIN ≤8h; no renewal past absolute expiration.
+**QA-approved expected behavior:** USER absolute session lifetime ≤12h, ADMIN ≤8h; no renewal past absolute expiration.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-011 — Remember-me prohibition (PROPOSED mapping)
+### TEST-SEC-WEB-011 — Remember-me prohibition
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** USER remember-me disabled at baseline, ADMIN remember-me forbidden.
+**QA-approved expected behavior:** USER remember-me disabled at baseline, ADMIN remember-me forbidden.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-012 — Admin MFA login (PROPOSED mapping)
+### TEST-SEC-WEB-012 — Admin MFA login
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** WCP-ADMIN login must require MFA before authorized session use.
+**QA-approved expected behavior:** WCP-ADMIN login must require MFA before authorized session use.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-013 — Fresh MFA elevated action (PROPOSED mapping)
+### TEST-SEC-WEB-013 — Fresh MFA elevated action
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** ADMIN high-impact actions require fresh MFA ≤5min; USER high-risk when required ≤10min.
+**QA-approved expected behavior:** ADMIN high-impact actions require fresh MFA ≤5min; USER high-risk when required ≤10min.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-014 — Privileged child expiry (PROPOSED mapping)
+### TEST-SEC-WEB-014 — Privileged child expiry
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** ADMIN privileged child context idle ≤5min absolute ≤15min; never persistent role grants.
+**QA-approved expected behavior:** ADMIN privileged child context idle ≤5min absolute ≤15min; never persistent role grants.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-015 — Break-glass duration (PROPOSED mapping)
+### TEST-SEC-WEB-015 — Break-glass duration
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** ADMIN break-glass ≤15min without automatic extension; requires explicit scope/audit.
+**QA-approved expected behavior:** ADMIN break-glass ≤15min without automatic extension; requires explicit scope/audit.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-016 — CSRF token absent (PROPOSED mapping)
+### TEST-SEC-WEB-016 — CSRF token absent
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** State-changing browser request without valid synchronizer CSRF token receives 403, no mutation and security evidence.
+**QA-approved expected behavior:** State-changing browser request without valid synchronizer CSRF token receives 403, no mutation and security evidence.
 
 **Safe HTTP status:** 403 fixed by canonical source.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-017 — CSRF token wrong (PROPOSED mapping)
+### TEST-SEC-WEB-017 — CSRF token wrong
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** State-changing browser request with wrong CSRF/X-WCP-CSRF token receives 403, no mutation.
+**QA-approved expected behavior:** State-changing browser request with wrong CSRF/X-WCP-CSRF token receives 403, no mutation.
 
 **Safe HTTP status:** 403 fixed by canonical source.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-018 — Origin absent (PROPOSED mapping)
+### TEST-SEC-WEB-018 — Origin absent
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** State-changing browser request with missing exact Origin receives 403, no mutation.
+**QA-approved expected behavior:** State-changing browser request with missing exact Origin receives 403, no mutation.
 
 **Safe HTTP status:** 403 fixed by canonical source.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-019 — Origin mismatched (PROPOSED mapping)
+### TEST-SEC-WEB-019 — Origin mismatched
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** State-changing browser request with other-origin value receives 403, no mutation.
+**QA-approved expected behavior:** State-changing browser request with other-origin value receives 403, no mutation.
 
 **Safe HTTP status:** 403 fixed by canonical source.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-020 — No unsafe GET/HEAD/OPTIONS (PROPOSED mapping)
+### TEST-SEC-WEB-020 — No unsafe GET/HEAD/OPTIONS
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** GET, HEAD and OPTIONS cannot produce business-state mutation.
+**QA-approved expected behavior:** GET, HEAD and OPTIONS cannot produce business-state mutation.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-021 — Credentialed wildcard CORS (PROPOSED mapping)
+### TEST-SEC-WEB-021 — Credentialed wildcard CORS
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Session API does not allow wildcard credentialed cross-origin request; default is same-origin.
+**QA-approved expected behavior:** Session API does not allow wildcard credentialed cross-origin request; default is same-origin.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-022 — Untrusted HTML injection (PROPOSED mapping)
+### TEST-SEC-WEB-022 — Untrusted HTML injection
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Untrusted content context-encoded, not executed as script; approved rich HTML sanitized.
+**QA-approved expected behavior:** Untrusted content context-encoded, not executed as script; approved rich HTML sanitized.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-023 — Forbidden DOM execution APIs (PROPOSED mapping)
+### TEST-SEC-WEB-023 — Forbidden DOM execution APIs
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** No untrusted innerHTML/v-html/eval/new Function/javascript: URL/data-derived event-handler injection.
+**QA-approved expected behavior:** No untrusted innerHTML/v-html/eval/new Function/javascript: URL/data-derived event-handler injection.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-024 — CSP nonces and prohibited directives (PROPOSED mapping)
+### TEST-SEC-WEB-024 — CSP nonces and prohibited directives
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Per-response CSP nonce for script/style; no unsafe-eval/global unsafe-inline/unapproved external script.
+**QA-approved expected behavior:** Per-response CSP nonce for script/style; no unsafe-eval/global unsafe-inline/unapproved external script.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-025 — Frame exclusion (PROPOSED mapping)
+### TEST-SEC-WEB-025 — Frame exclusion
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** frame-ancestors none and X-Frame-Options DENY prevent framing.
+**QA-approved expected behavior:** frame-ancestors none and X-Frame-Options DENY prevent framing.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-026 — SSRF target scope (PROPOSED mapping)
+### TEST-SEC-WEB-026 — SSRF target scope
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** WCP-USER rejects loopback/private/link-local/metadata/unapproved non-global targets.
+**QA-approved expected behavior:** WCP-USER rejects loopback/private/link-local/metadata/unapproved non-global targets.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-027 — SSRF unsupported schemes (PROPOSED mapping)
+### TEST-SEC-WEB-027 — SSRF unsupported schemes
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Reject file/ftp/gopher/data/javascript/unix and unapproved scheme variants.
+**QA-approved expected behavior:** Reject file/ftp/gopher/data/javascript/unix and unapproved scheme variants.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-028 — SSRF DNS rebinding (PROPOSED mapping)
+### TEST-SEC-WEB-028 — SSRF DNS rebinding
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Resolve and validate every target DNS IP before connection; reject non-global DNS changes.
+**QA-approved expected behavior:** Resolve and validate every target DNS IP before connection; reject non-global DNS changes.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-029 — SSRF redirect policy (PROPOSED mapping)
+### TEST-SEC-WEB-029 — SSRF redirect policy
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Max three redirects; each redirect reparsed, re-resolved and revalidated.
+**QA-approved expected behavior:** Max three redirects; each redirect reparsed, re-resolved and revalidated.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-030 — Admin diagnostics registered endpoints (PROPOSED mapping)
+### TEST-SEC-WEB-030 — Admin diagnostics registered endpoints
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** WCP-ADMIN internal diagnostics only by registered server/node/service/endpoint ID, not arbitrary URL.
+**QA-approved expected behavior:** WCP-ADMIN internal diagnostics only by registered server/node/service/endpoint ID, not arbitrary URL.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-031 — Open redirect external/bypass (PROPOSED mapping)
+### TEST-SEC-WEB-031 — Open redirect external/bypass
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Reject external, scheme-relative, encoded/backslash/userinfo-host redirects; allow internal named/normalized same-origin routes only.
+**QA-approved expected behavior:** Reject external, scheme-relative, encoded/backslash/userinfo-host redirects; allow internal named/normalized same-origin routes only.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-032 — Upload unsafe archive and staging (PROPOSED mapping)
+### TEST-SEC-WEB-032 — Upload unsafe archive and staging
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Reject traversal, symlink/hardlink/device entries, client filename as path authority, executable staging or protected WCP directory.
+**QA-approved expected behavior:** Reject traversal, symlink/hardlink/device entries, client filename as path authority, executable staging or protected WCP directory.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-033 — Download reauthorization (PROPOSED mapping)
+### TEST-SEC-WEB-033 — Download reauthorization
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Authorize every download at request time, no raw browser path or cross-tenant disclosure.
+**QA-approved expected behavior:** Authorize every download at request time, no raw browser path or cross-tenant disclosure.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-034 — SHOW_ONCE secret retrieval (PROPOSED mapping)
+### TEST-SEC-WEB-034 — SHOW_ONCE secret retrieval
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** SHOW_ONCE response Cache-Control no-store; never place secret in log/audit/notification/export.
+**QA-approved expected behavior:** SHOW_ONCE response Cache-Control no-store; never place secret in log/audit/notification/export.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-035 — NEVER_REVEAL secret retrieval (PROPOSED mapping)
+### TEST-SEC-WEB-035 — NEVER_REVEAL secret retrieval
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** NEVER_REVEAL has no retrieval endpoint; never expose credentials or private keys.
+**QA-approved expected behavior:** NEVER_REVEAL has no retrieval endpoint; never expose credentials or private keys.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-036 — Safe error projection (PROPOSED mapping)
+### TEST-SEC-WEB-036 — Safe error projection
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Normal errors only stable safe error_code/message/correlation_id/field details; no stack trace/SQL/path/command/token.
+**QA-approved expected behavior:** Normal errors only stable safe error_code/message/correlation_id/field details; no stack trace/SQL/path/command/token.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-037 — Authenticated caching (PROPOSED mapping)
+### TEST-SEC-WEB-037 — Authenticated caching
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Authenticated HTML/sensitive APIs use Cache-Control no-store.
+**QA-approved expected behavior:** Authenticated HTML/sensitive APIs use Cache-Control no-store.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-038 — Logout and delegation revocation (PROPOSED mapping)
+### TEST-SEC-WEB-038 — Logout and delegation revocation
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Logout revokes server session/CSRF/channels and ADMIN privilege/impersonation/break-glass; delegation revocation enforced from current state.
+**QA-approved expected behavior:** Logout revokes server session/CSRF/channels and ADMIN privilege/impersonation/break-glass; delegation revocation enforced from current state.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-039 — Reseller privilege non-escalation (PROPOSED mapping)
+### TEST-SEC-WEB-039 — Reseller privilege non-escalation
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Reseller delegated access does not imply Tenant ownership or permit ADMIN privileges; plan/policy deny not bypassed.
+**QA-approved expected behavior:** Reseller delegated access does not imply Tenant ownership or permit ADMIN privileges; plan/policy deny not bypassed.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-### TEST-SEC-WEB-040 — Rate limit never grants access (PROPOSED mapping)
+### TEST-SEC-WEB-040 — Rate limit never grants access
 
 **Source reference:** Security Baseline v1.0 §13/§14; `TEST-SEC-WEB-001..040` is a reserved range, NOT a ratified per-ID behavior map.
 
-**Proposed expected behavior:** Security endpoint rate-limit class enforced in addition to authorization, no account enumeration or rate-limit-as-auth shortcut.
+**QA-approved expected behavior:** Security endpoint rate-limit class enforced in addition to authorization, no account enumeration or rate-limit-as-auth shortcut.
 
 **Safe HTTP status:** NO specific HTTP status invented; QA/API to ratify.
 
-**Fixture:** QA owner must provide specific browser, origin, cookie, HTTP request, session and API transport topology; final failure cause.
+**Execution fixture:** `PLANNED / NOT_EXECUTED` — instantiate the applicable browser/origin/cookie/session/API topology for the exact candidate SHA. Topology-specific assertions remain `BLOCKED` only when the activated owner contract leaves that topology unspecified.
 
 **Forbidden effects:** no cross-surface session privilege; no unauthorized business or system mutation; no sensitive secret/log/cookie leakage.
 
 **Evidence:** tested SHA, browser/request/response safe trace; server-side accepted surface and session result; instrumented no-unauthorized-effect assertion; audit/safe security event and attempt history.
 
-**Dependencies:** TESTS / QA A10 per-ID mapping acceptance; Security / API S01–S04 current topology and proxy/WSS decisions for affected cases; SC-M01 actual implementation.
-**Status:** `BLOCKED / NOT_EXECUTED`, one-to-one mapping `OWNER NOT APPROVED`.
+**Dependencies:** SC-M01 actual implementation; any topology-specific owner decision explicitly required by the activated slice.
+**Status:** `READY / NOT_EXECUTED`; one-to-one mapping `OWNER APPROVED — TESTS / QA`.
 
-## PART VI — 85 historical proposed scenario labels, each requiring QA triage
 
-The 85 scenario labels below come from the 2026-10-03 QA candidate §22; they are **not canonical TEST IDs**, and their exact individual assertion text was NOT provided by that source. No new expected behavior is inferred here. QA must choose for each `REUSE_EXISTING / MERGE / SPLIT / DISCARD / DEFER / CREATE_NEW_OWNER_APPROVED_ID` and document source of the decision.
+## PART VI — Final QA disposition of the 85 historical proposal labels
 
-| Local proposal label | Source family (existing) | QA triage | Resulting canonical test/owner decision |
+The 85 historical rows were reviewed against their exact source wording. Their verbatim historical bodies are intentionally **not republished** in this canonical artifact. Provenance stays in Git; this section records only the owner disposition. No label below becomes a new TEST ID unless explicitly stated (none are created here).
+
+| Label | QA disposition | Canonical reuse / merge target | Blocking dependency |
 |---|---|---|---|
-| `C01` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C02` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C03` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C04` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C05` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C06` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C07` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C08` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C09` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C10` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C11` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C12` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C13` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C14` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C15` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C16` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `C17` | Authorization | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ01` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ02` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ03` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ04` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ05` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ06` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ07` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ08` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ09` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `TQ10` | Timeout / idempotency | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ01` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ02` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ03` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ04` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ05` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ06` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ07` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ08` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ09` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ10` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ11` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `CQ12` | Control boundary | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ01` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ02` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ03` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ04` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ05` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ06` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ07` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ08` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ09` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ10` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ11` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ12` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ13` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ14` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `HQ15` | API transport | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ01` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ02` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ03` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ04` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ05` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ06` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ07` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ08` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ09` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ10` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ11` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ12` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ13` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ14` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ15` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `SQ16` | Security web / authz | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ01` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ02` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ03` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ04` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ05` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ06` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ07` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ08` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ09` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ10` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ11` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ12` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ13` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ14` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-| `FQ15` | Toolchain / build | **PENDING QA TRIAGE** | `NOT_ASSIGNED` |
-
-
-## PART VI-A — 85 source-exact historical proposal scenario rows (NON-CANONICAL)
-
-**Purpose:** Part VI preserved all 85 proposal labels but not their actual source scenario wording. This annex includes the **verbatim original scenario row** found in the already-versioned P1 proposal artifacts. It does NOT turn a proposal case into an approved canonical TEST ID or assert the scenario is currently correct under owner-final architecture.
-
-**Authority and precedence:** All original rows below are **owner-pending proposals**. The last published canonical Security/API/IPC/DevOps contracts supersede any conflicting proposed behavior. The 2026-10-03 QA owner family outline and the 199 case records above remain P1 pending. QA must ACCEPT/AMEND/DISCARD/MERGE/SPLIT/DEFER cases under A17, with full fixture, exact expected outcome and no-effect evidence, then assign a canonical TEST ID only if QA approves.
-
-### Original proposal source blobs
-
-| Source document (existing P1) | Git blob SHA (integrity) |
-|---|---|
-| `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` | `2722238799c2cdee7d863e28b9d6b9728e510512` |
-| `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` | `8894b45aea7b19302b2838a77b42b070172e8b0d` |
-| `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` | `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923` |
-| `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` | `0ac59335fb3f2422f0e800a96370f6f3afc75313` |
-| `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` | `7e13a79a347b07981356295c2dc4977817e9e26d` |
-| `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` | `c0953ce88e14ae08a16fdd5b4f604e992c8a5693` |
-| `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` | `abe573b629ca3c00862ff555d3e5df05d5cc76e0` |
-
-**Each entry below preserves the source row exactly, including its original fields.** No scenario value has been inferred or normalized here. No QA case has been executed.
-
-### C01 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C01 | Session ADMIN privilégiée valide ; parent reload ; cible et révision enregistrées | Éligible uniquement à service.reload si les autres gates passent | Aucun restart ; contexte/primitive/cible corrélés |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C02 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C02 | Même contexte mais substitution de service.restart | DENY pour ce parent | Aucun effet système ni fallback |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C03 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C03 | Parent restart valide vers service.restart, même cible | Éligible si tous les autres gates passent | Pas de duplication aveugle en cas de réponse perdue |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C04 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C04 | Permission services.manage valide mais action d'origine remplacée par ce même texte | Pas d'alias implicite ; refus sans liaison normative explicite | Pas de reconnaissance de droits à partir de l'égalité de chaînes |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C05 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C05 | Parent firewall.apply valide, bonne politique et révision | Éligible à apply | Pas de politique choisie librement par la sous-opération |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C06 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C06 | Même contexte firewall, serveur ou révision substitué | DENY ou conflit selon le cas précis à fixer | Aucun effet sur la cible substituée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C07 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C07 | Parent grants.set et set validé pour tenant A/base A/identité A | Seules les sous-étapes dérivées de ce set sont éligibles | Pas de SQL libre ni de privilèges hors du set |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C08 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C08 | Substitution tenant B, autre base ou autre identité avec le même contexte | DENY | Aucun effet sur moteur hébergé ; trace sûre corrélée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C09 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C09 | Appel direct de revoke sans parent set valide | DENY | La permission seule ne crée pas une opération publique autonome |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C10 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C10 | Délégation révoquée après enqueue avant effet | Réévaluation selon Security, puis refus si le droit a disparu | Pas d'exécution avec un droit périmé |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C11 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C11 | Parent runtime.update proposé comme autorisation de linux_user.delete sans preuve du workflow | Bloqué jusqu'à décision propriétaire ; aucune correspondance inventée | Pas de suppression Unix |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C12 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md` — blob `2722238799c2cdee7d863e28b9d6b9728e510512`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C12 | Droit parent valide mais MFA expirée, entitlement absent ou approbation manquante lorsqu'exigés | Refus/reprise d'auth approprié ; aucun ALLOW anticipé | Aucun effet ; code/message sûrs à définir dans l'API |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C13 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C13 — deux niveaux | Contexte grants.set authentique et lié à apply ; remplacer dans l'enveloppe l'action technique database_grant.apply par databases.grants.set | Refus du couple IPC non conforme sous l'option B ; origine conservée dans l'audit ; aucun effet | N03, TEST-IPC-1023 ; comparer cas témoin légitime et cas substitué |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C14 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C14 — substitution d'étape | Même contexte borné à apply ; demander revoke avec le couple IPC lexicalement correct | Refus de l'étape non autorisée par ce contexte précis ; aucune révocation. Le couple local IPC correct ne suffit pas | N03/N05, TEST-IPC-1024 ; audit corrélé au parent et à l'étape refusée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C15 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C15 — contexte indisponible | Le couple action/opération est correct mais la référence ne peut pas être résolue ou sa fiabilité vérifiée avant dispatch | Aucun effet ni fallback sur des droits déclarés par l'appelant ; code sûr à fixer selon D02 | N05/N24 selon classification QA ; aucune primitive déclenchée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C16 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C16 — révision périmée | Une révision attendue est autorisée ; l'état actif change avant effet | Conflit/refus avant effet selon contrat applicable ; pas d'écrasement de la nouvelle révision ; si le dispatch est déjà incertain, réconciliation distincte | N16, TEST-IPC-1026/1029 ; état observé inchangé par la requête périmée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### C17 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md` — blob `8894b45aea7b19302b2838a77b42b070172e8b0d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| C17 — résultat incertain | La primitive peut avoir modifié le système, mais sa réponse finale est perdue | UNKNOWN_OUTCOME/réconciliation ; pas de répétition aveugle ni de succès inventé ; conservation distincte de l'origine et de l'étape | N15/N18/N25, tests IPC des cinq lignes ; preuve pré-effet et preuve de reprise |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ01 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ01 | connexion impossible >1s | aucun dispatch ; erreur transport sûre ; aucune intention d'effet créée sauf politique explicitement définie |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ02 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ02 | client envoie un frame partiel puis bloque >5s | connexion close/refus ; zéro primitive |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ03 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ03 | request complète, deadline déjà expiré avant P4 | zéro primitive ; résultat déterministe, pas UNKNOWN_OUTCOME |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ04 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ04 | deadline demandé supérieur au timeout de la ligne | le plafond de l'opération gagne ; aucun allongement par le client |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ05 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ05 | opération 120s reste silencieuse >5s mais respecte son budget effectif | ne doit pas échouer uniquement parce que I/O TIMEOUT=5s sous option B |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ06 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ06 | deadline expire avant dispatch durable | zéro effet ; preuve d'absence de dispatch |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ07 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ07 | effet exécuté puis ACK/réponse finale perdue | UNKNOWN_OUTCOME ou résultat durable récupérable selon preuve ; aucun blind retry |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ08 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ08 | même demande logique réémise avec nouveau request_id après perte de réponse | ne doit pas provoquer un deuxième effet si l'idempotence durable indique une opération existante |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ09 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ09 | deux exécuteurs concurrents revendiquent la même opération à reprendre | un seul peut déclencher/réconcilier selon le contrat propriétaire ; aucun double effet |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### TQ10 — Timeout, idempotency and reconciliation (TQ01–TQ10) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md` — blob `1339e13b2d2ea86c0c8cc2053274aeac5f4e7923`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| TQ10 | réconciliation après restart conclut que l'effet a eu lieu | finalisation durable/audit cohérents ; ne pas redispatcher pour « confirmer » |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ01 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ01 | peer Unix non autorisé ouvre le control socket | refus avant traitement métier ; aucun enqueue/dispatch |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ02 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ02 | peer `wcp360-user` présente contexte surface ADMIN | refus ; aucun downgrade/fallback |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ03 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ03 | peer `wcp360-admin` présente contexte USER substitué pour contourner une règle | refus ou traitement selon contrat explicite, jamais changement silencieux de surface |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ04 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ04 | peer autorisé mais permission/action/ticket context inconnu | fail closed ; aucune opération privilégiée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ05 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ05 | ressource de la requête diffère de resource_id du contexte | refus ; aucune substitution de cible |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ06 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ06 | contexte révoqué après création, avant effet | revalidation applicable puis refus si droit disparu |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ07 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ07 | worker tente directement IPC-B | refus Unix/peer avant effet |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ08 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ08 | worker tente directement le control socket alors que W1 n'est pas approuvé | refus transport ; ne pas ajouter le groupe pour faire passer le test |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ09 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ09 | même job consommé simultanément par deux workers/composants | un seul claim/exécuteur selon contrat DB ; aucune duplication d'effet |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ10 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ10 | opération inconnue au control boundary | aucun fallback en shell, generic exec ou passthrough IPC-B |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ11 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ11 | daemon redémarre avec jobs/intents persistants | ne restaure pas aveuglément les locks éphémères ; reprise via état durable/réconciliation |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### CQ12 — Backend / wcpd control trust boundary (CQ01–CQ12) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md` — blob `0ac59335fb3f2422f0e800a96370f6f3afc75313`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| CQ12 | correlation_id réutilisé avec autre cible | aucun droit dérivé de la corrélation ; authorization binding indépendant |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ01 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ01 | mutation via GET | 0 mutation ; méthode refusée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ02 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ02 | champ inconnu | VALIDATION_FAILED |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ03 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ03 | champ requis manquant | VALIDATION_FAILED |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ04 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ04 | même clé idempotence, même requête | même résultat logique, pas deuxième effet |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ05 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ05 | même clé, requête différente | IDEMPOTENCY_CONFLICT |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ06 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ06 | header/body idempotence divergents si I2 retenu | refus avant mutation |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ07 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ07 | session USER sur route ADMIN | refus surface/auth |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ08 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ08 | cookie valide, CSRF manquant | 403/no mutation pour navigateur |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ09 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ09 | Origin incorrect | 403/no mutation |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ10 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ10 | token non-cookie avec CSRF absent | résultat selon contrat token, pas application mécanique de règle session |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ11 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ11 | champs d'une autre valeur `operation` inclus | validation refusée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ12 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ12 | cursor réutilisé avec autre tenant/filter | aucune fuite ; cursor refusé/invalide |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ13 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ13 | JobAccepted reçu | preuve que job/intention est durable, pas effet externe réussi |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ14 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ14 | erreur interne | aucun stack/path/secret ; correlation_id sûr |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### HQ15 — HTTP transport, validation, CSRF, safe errors (HQ01–HQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md` — blob `7e13a79a347b07981356295c2dc4977817e9e26d`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| HQ15 | réponse SecretCreated | no-store ; secret non récupérable ultérieurement si SHOW_ONCE/NEVER_REVEAL applicable |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ01 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ01 | USER et ADMIN sur hostnames distincts | chaque requête de surface n'expose/accepte que le credential attendu selon critère S04 |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ02 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ02 | même hostname / ports distincts dans fixture | démontrer que les ports seuls ne sont pas utilisés comme garantie de cookie |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ03 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ03 | cookie ADMIN envoyé à endpoint USER sans cookie USER | aucune auth USER dérivée ; aucun détail de session ADMIN divulgué |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ04 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ04 | cookie USER envoyé à endpoint ADMIN | aucune auth ADMIN dérivée |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ05 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ05 | cookies USER+ADMIN présents | sélection déterministe de la surface ; aucun fallback |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ06 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ06 | CSRF USER sur session ADMIN | refus sans mutation |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ07 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ07 | Origin USER vers mutation ADMIN | refus sans mutation |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ08 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ08 | rôle accorde permission mais entitlement absent | DENY final |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ09 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ09 | rôle accorde permission, tenant ownership invalide | DENY final |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ10 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ10 | rôle accorde permission + DENY explicite | DENY final |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ11 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ11 | override négatif + rôle positif | DENY/NOT_GRANTED selon modèle ratifié, jamais ALLOW par le rôle |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ12 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ12 | override positif + contrainte Security absente | DENY final |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ13 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ13 | délégation demande permission au-delà du reseller | DENY |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ14 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ14 | délégation révoquée entre enqueue et effet | refus à la revalidation ; aucun effet |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ15 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ15 | approval valide mais permission absente/DENY | aucun effet |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### SQ16 — Web surface, IAM, tenant authorization (SQ01–SQ16) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md` — blob `c0953ce88e14ae08a16fdd5b4f604e992c8a5693`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| SQ16 | changement de contexte sans changement de permission | aucun droit nouveau dérivé du seul context switch |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ01 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ01 | clean checkout + declared toolchain | build/test bootstrap succeeds without undeclared local files |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ02 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ02 | missing lock file | official build rejected or owner-defined deterministic failure |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ03 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ03 | lock changed without manifest/dependency update | CI detects inconsistency |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ04 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ04 | dependency version floats to latest | release build policy rejects non-locked input |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ05 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ05 | unsupported runtime major | preflight/build fails clearly |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ06 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ06 | wrong architecture | build or package target rejected |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ07 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ07 | production secret present in source/config example | repository/security gate fails |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ08 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ08 | dependency from unapproved source | build fails before artifact promotion |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ09 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ09 | cache cleared | output remains semantically/bitwise reproducible according to chosen policy |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ10 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ10 | same commit + same inputs built twice | digest/reproducibility expectation holds |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ11 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ11 | frontend toolchain absent when declared unnecessary | backend/daemon foundation still builds |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ12 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ12 | Node present only as build dependency | production package has no undeclared Node runtime dependency |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ13 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ13 | static analysis tool failure | CI gate fails according to Engineering rule |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ14 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ14 | generated artifact edited without source change | drift check detects or regeneration overwrites deterministically |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-### FQ15 — Build and toolchain QA case candidates (FQ01–FQ15) (historical PROPOSAL)
-
-**Source:** `governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md` — blob `abe573b629ca3c00862ff555d3e5df05d5cc76e0`.
-
-**Verbatim proposed scenario row:**
-
-```text
-| FQ15 | artifact digest/signature mismatch | install/promotion path rejects artifact |
-```
-
-**Owner triage:** `PENDING`; **canonical TEST ID:** `NOT_ASSIGNED` (unless separately referenced by QA); **execution:** `NOT_EXECUTED`; **owner approval:** `NO`.
-
-**Summary of this annex:** 17 Authorization + 10 Timeout + 12 Control + 15 HTTP + 16 Security Web + 15 Toolchain = **85 unapproved, non-executed local scenario labels**, not 85 new approved tests.
-## PART VII — Final owner disposition / signature requirements (NOT SIGNED)
-
-The QA owner must explicitly approve, amend, reject or defer **each** obligation below. A CODEOWNER auto-notification, GitHub PR author comment, green CI or same-author E2 is not specialized owner approval.
-
-| Owner decision | Candidate disposition | Actual owner result | Owner evidence |
-|---|---|---|---|
-| A01 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A02 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A03 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A04 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A05 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A06 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A07 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A08 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A09 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A10 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A11 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A12 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A13 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A14 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A15 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A16 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A17 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A18 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A19 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| A20 (existing QA checklist) | Proposed by separate A01–A20 packet | **PENDING** | `NONE` |
-| QI-01 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| QI-02 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| QI-03 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| QI-04 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| QI-05 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| QI-06 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| QI-07 (execution integrity) | Proposed by separate source | **PENDING** | `NONE` |
-| Provenance P1/P2/P3 | P2 first canonical materialization suggested | **PENDING** | `NONE` |
-| 86 TEST-API case assertions | source-referenced / blocked | **PENDING** | `NONE` |
-| 47 TEST-IPC case assertions | source-referenced / blocked | **PENDING** | `NONE` |
-| N01..N26 negative cases | original labels + proposed error mapping | **PENDING** | `NONE` |
-| WEB001..040 per-ID allocations | **NEW** proposed mapping | **PENDING** | `NONE` |
-| 85 proposed historical labels | reuse/merge/split/discard/defer | **PENDING** | `NONE` |
-| DB/DevOps/Engineering/Failure/recovery test-family applicability | Candidate outline in PART I | **PENDING** | `NONE` |
-| Complete code-baseline QA evidence DoD | Candidate outline in PART I | **PENDING** | `NONE` |
-
-### Owner publication block (intentionally unsigned)
-
-```text
-ARTIFACT CLASSIFICATION = P1 OWNER REVIEW CANDIDATE — NOT FINAL
-TARGET OWNER = WCP360 — TESTS / QA
-TEST BASELINE = v1.0 PROPOSAL
-FINAL APPROVED CONTENT = NO
-OWNER PUBLICATION APPROVAL = NOT PRESENT
-OWNER EXACT QA DECISIONS = PENDING
-CONTENT CHANGE = UNDECIDED BY OWNER — P2 RECOMMENDED
-HISTORICAL EXACT PRIOR FINAL BODY = NOT EVIDENCED
+| `C01` | **MERGE** | TEST-API-0802 + TEST-IPC-1029 | NONE |
+| `C02` | **MERGE** | TEST-API-0802/0803 + TEST-IPC-1029/1030 + N03 | NONE |
+| `C03` | **MERGE** | TEST-API-0803 + TEST-IPC-1030 + N15/N25 | NONE |
+| `C04` | **MERGE** | N03 + affected TEST-API typed authorization binding | NONE |
+| `C05` | **MERGE** | TEST-API-0809 + TEST-IPC-1025/1026 | NONE |
+| `C06` | **MERGE** | TEST-API-0809 + TEST-IPC-1026 + N16/N24 | NONE |
+| `C07` | **MERGE** | TEST-API-0305 + TEST-IPC-1023/1024 + N21 | NONE |
+| `C08` | **MERGE** | TEST-API-0305 + TEST-IPC-1023/1024 + N04/N05 | NONE |
+| `C09` | **MERGE** | TEST-IPC-1024 + N03 | NONE |
+| `C10` | **MERGE** | N05 + authorization revalidation | Database #6 for durable enqueue/effect-state fixture where required |
+| `C11` | **BLOCKED** | NONE | No owner-final applications.runtime.update → linux_user.delete parent workflow mapping; do not invent it. |
+| `C12` | **MERGE** | TEST-SEC-WEB-013 + authorization negative suite | NONE |
+| `C13` | **MERGE** | TEST-API-0305 + TEST-IPC-1023 + N03 | NONE |
+| `C14` | **MERGE** | TEST-IPC-1023/1024 + N03/N05 | NONE |
+| `C15` | **MERGE** | N05/N24 + IPC authorization-context rejection | NONE |
+| `C16` | **MERGE** | N16 + affected IPC stale-revision/concurrency assertions | NONE |
+| `C17` | **MERGE** | N15/N18/N25 + affected IPC UNKNOWN_OUTCOME/reconciliation assertions | NONE |
+| `TQ01` | **MERGE** | IPC connect-timeout contract + no-dispatch assertion | NONE |
+| `TQ02` | **MERGE** | IPC framing/I-O timeout + N06 | NONE |
+| `TQ03` | **MERGE** | IPC pre-dispatch deadline + zero-effect assertion | deadline representation/budget composition remains BLOCKED if not fixed by activated API/IPC owner contract |
+| `TQ04` | **MERGE** | IPC operation-timeout cap | deadline/budget composition remains BLOCKED if not fixed by activated API/IPC owner contract |
+| `TQ05` | **MERGE** | IPC I/O-vs-operation-timeout assertion | deadline/budget composition remains BLOCKED if not fixed by activated API/IPC owner contract |
+| `TQ06` | **MERGE** | IPC pre-dispatch timeout/no-effect | deadline representation/budget composition remains BLOCKED if not fixed by activated API/IPC owner contract |
+| `TQ07` | **MERGE** | N15/N18/N25 + applicable TEST-IPC UNKNOWN_OUTCOME | NONE |
+| `TQ08` | **MERGE** | N14/N25 + applicable idempotency contract | NONE |
+| `TQ09` | **MERGE** | N16 + applicable concurrency/claim test | Database #6 for physical claim/fencing persistence |
+| `TQ10` | **MERGE** | N18/N25 + reconciliation test | Database #6 for physical durable recovery state |
+| `CQ01` | **MERGE** | N01 + control-peer rejection | NONE |
+| `CQ02` | **MERGE** | N02 + WCP-USER/WCP-ADMIN boundary | NONE |
+| `CQ03` | **MERGE** | N02/N03 + typed surface/context assertion | NONE |
+| `CQ04` | **MERGE** | N03/N05 + fail-closed authorization context | NONE |
+| `CQ05` | **MERGE** | N24 + resource-binding assertion | NONE |
+| `CQ06` | **MERGE** | N05 + authorization revalidation | NONE |
+| `CQ07` | **MERGE** | N01/N26 + privileged boundary | NONE |
+| `CQ08` | **BLOCKED** | NONE | Backend/worker → wcpd control-wire and worker path not owner-final for this historical scenario. |
+| `CQ09` | **BLOCKED** | N16 + concurrency family | Database #6 physical job-claim/fencing contract required. |
+| `CQ10` | **MERGE** | N07/N08 + no-generic-fallback assertion | NONE |
+| `CQ11` | **BLOCKED** | N18 + recovery family | Database #6 physical jobs/intents/lease recovery contract required. |
+| `CQ12` | **MERGE** | N03 + correlation-id non-authorization assertion | NONE |
+| `HQ01` | **MERGE** | TEST-SEC-WEB-020 | NONE |
+| `HQ02` | **MERGE** | Applicable TEST-API request-schema validation | NONE |
+| `HQ03` | **MERGE** | Applicable TEST-API request-schema validation | NONE |
+| `HQ04` | **MERGE** | N14 + mutating TEST-API idempotency assertions | NONE |
+| `HQ05` | **MERGE** | N14 + mutating TEST-API idempotency assertions | NONE |
+| `HQ06` | **BLOCKED** | NONE | Exact header/body dual-source idempotency transport rule is not owner-final; do not select historical option I2 by QA. |
+| `HQ07` | **MERGE** | TEST-SEC-WEB-001/002 + authorization surface tests | NONE |
+| `HQ08` | **MERGE** | TEST-SEC-WEB-016 | NONE |
+| `HQ09` | **MERGE** | TEST-SEC-WEB-019 | NONE |
+| `HQ10` | **BLOCKED** | NONE | Separate non-cookie token-auth/CSRF transport contract not owner-final for this scenario. |
+| `HQ11` | **MERGE** | Applicable TEST-API strict-schema validation | NONE |
+| `HQ12` | **MERGE** | Applicable list/cursor tenant-scope authorization assertion | NONE |
+| `HQ13` | **MERGE** | Mutating TEST-API JobAccepted + durable-intent assertion | Database #6 for exact physical persistence proof. |
+| `HQ14` | **MERGE** | TEST-SEC-WEB-036 | NONE |
+| `HQ15` | **MERGE** | TEST-SEC-WEB-034/035 | NONE |
+| `SQ01` | **MERGE** | TEST-SEC-WEB-001..005 | NONE |
+| `SQ02` | **MERGE** | TEST-SEC-WEB-004/005 | NONE |
+| `SQ03` | **MERGE** | TEST-SEC-WEB-002 | NONE |
+| `SQ04` | **MERGE** | TEST-SEC-WEB-001 | NONE |
+| `SQ05` | **MERGE** | TEST-SEC-WEB-003 | NONE |
+| `SQ06` | **MERGE** | TEST-SEC-WEB-016/017 + surface isolation | NONE |
+| `SQ07` | **MERGE** | TEST-SEC-WEB-019 | NONE |
+| `SQ08` | **MERGE** | Authorization entitlement-negative coverage | NONE |
+| `SQ09` | **MERGE** | N04/N05 + cross-tenant authorization | NONE |
+| `SQ10` | **MERGE** | Authorization explicit-DENY coverage | NONE |
+| `SQ11` | **MERGE** | Authorization override/deny coverage | NONE |
+| `SQ12` | **MERGE** | Authorization security-gate coverage | NONE |
+| `SQ13` | **MERGE** | TEST-SEC-WEB-039 | NONE |
+| `SQ14` | **MERGE** | TEST-SEC-WEB-038 + N05 | NONE |
+| `SQ15` | **MERGE** | Authorization permission/approval negative coverage | NONE |
+| `SQ16` | **MERGE** | Authorization context-switch non-escalation coverage | NONE |
+| `FQ01` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ02` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ03` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ04` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ05` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ06` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ07` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ08` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ09` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ10` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ11` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ12` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ13` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ14` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+| `FQ15` | **BLOCKED** | A15/A16 build-toolchain family | Engineering #9 owner-final rules/toolchain gates are not yet canonical in main. |
+
+Triage totals: **64 MERGE / 21 BLOCKED = 85**. Historical source rows verified byte-textually against their cited source files: **85 / 85**.
+
+
+# FINAL OWNER APPROVAL
+
+```text
+OWNER = WCP360 — TESTS / QA
+ARTIFACT = specifications/tests/WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
+TEST BASELINE VERSION = v1.0
+SCOPE = SC-M01 — FIRST IMPLEMENTATION FOUNDATION
+FINAL APPROVED CONTENT = YES
+HISTORICAL CONTENT INCLUDED = NO
+PUBLICATION TYPE = P2 — FIRST CANONICAL MATERIALIZATION / OWNER APPROVAL
+CONTENT CHANGE = INITIAL CANONICAL CONTENT
+VERSION IMPACT = NONE — retain v1.0
+A01–A20 = INDIVIDUALLY DECIDED
+QI01–QI07 = INDIVIDUALLY DECIDED
 REVIEW CASE RECORDS = 199
-HISTORICAL NONCANONICAL SCENARIO LABELS = 85
-SOURCE_REFS API = 86
-SOURCE_REFS IPC = 47
-SOURCE_PERMISSIONS = 82
+API RECORDS VERIFIED = 86 / 86
+IPC RECORDS VERIFIED = 47 / 47
+N LABELS VERIFIED = 26 / 26
+WEB MAPPINGS APPROVED = 40 / 40
+HISTORICAL PROPOSALS TRIAGED = 85 / 85
+HISTORICAL TRIAGE = 64 MERGE / 21 BLOCKED
 PRODUCT TESTS ACTUALLY EXECUTED = 0
 RESULT PASS = 0
 RESULT FAIL = 0
-IMPLEMENTATION-DEPENDENT CASE STATUS = PLANNED/BLOCKED
-FINAL SPECIFICATIONS/TESTS/ ARTIFACT = NOT PUBLISHED
-QA ISSUE #7 = OPEN
-MASTER SC-M01 IMPLEMENTATION GATE = 5/8
-SC-M01 = PAUSED — TARGETED EVIDENCE
-SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
+READY FOR SOURCE CODE CONSUMPTION = YES AS QA SPECIFICATION INPUT; EXECUTION REMAINS SUBJECT TO MASTER AUTHORIZATION AND ACTIVATED DEPENDENCIES
+BLOCKER TO QA OWNER PUBLICATION = NONE
+MASTER GATE = 5/8 UNTIL MASTER VERIFIES THIS PUBLICATION
 ```
 
-### Required next owner action to advance 5/8 → 6/8
+## Independent / cross-domain review still required
 
-1. **TESTS / QA** validates the full source and all applicable accepted/inherited records in this single-file candidate. It must retain explicit `BLOCKED` state for unavailable DB/Engineering/HTTP topology decisions and never fabricate results.
-2. Owner selects **P1** only with a proven byte-identical previously approved complete source, **P2** for honest first canonical materialization of the accepted/modified content, or **P3** with explicit version/MASTER change. The old v1.0 version metadata alone cannot establish P1.
-3. Owner records explicit A01–A20/QI01–07 decisions, approves/replaces the WEB ID mapping and N outcome matrix, triages the 85 local labels, signs final scope and applicability of other planned QA families.
-4. On acceptance, owner publishes a **complete, self-contained approved** file in `specifications/tests/`, references exact source owner approval/version/commit SHA, updates GitHub issue #7 and returns it to MASTER; independent specialized cross-review where applicable.
-5. MASTER verifies actual final owner artifact in `main` and source readiness, only then updates the 8-artifact gate from **5/8 to 6/8**. This draft may **not** be renamed FINAL by the assistant to satisfy a numerical target.
+Owner approval is not an E3 independent review.
 
-**No application code, migrations, runtime execution, or branch-protection claims are produced by this P1 materialization.**
+- **Security / Hardening:** independently review the final N01–N26 behavioral mapping, WEB001–040 mapping and any activated exact denial/error projection.
+- **API / IPC / Contracts:** review activated HTTP transport assertions and operation-specific timeout/retry/idempotency/error projections where the logical contract is insufficient.
+- **Database / Data Model:** review and unblock physical DB assertions once #6 is owner-final/materialized.
+- **Engineering / Code Review:** review and unblock FQ/toolchain/build-quality assertions once #9 is owner-final/materialized.
+- **Audit / Architecture Review:** independent exact-SHA verification remains required by the wider SC-M01 audit process before MASTER treats owner publication as independently verified.
+
+This final owner approval does not execute product tests and does not authorize SC-M01 resume, SC-M02, or a CODE-BASELINE.
