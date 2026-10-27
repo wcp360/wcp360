@@ -341,10 +341,17 @@ func DecodeRequestFrame(frame []byte) (Parsed, error) {
 	if err != nil || protocol != ProtocolVersion {
 		return empty, errors.New("unsupported IPC-B protocol version")
 	}
-	for _, field := range []string{"op_version", "deadline_ms"} {
-		if request[field] == nil {
-			return empty, errors.New("required opaque version/deadline field missing")
-		}
+	// IPC-B/1 §8 explicitly fixes op_version to the INTEGER 1.
+	// Numeric 1.0, string "1", bool, null and any other version are rejected.
+	// This checks a published protocol fact, not an invented owner decision.
+	versionNumber, ok := request["op_version"].(json.Number)
+	if !ok || versionNumber.String() != "1" {
+		return empty, errors.New("unsupported IPC-B op_version")
+	}
+	// Cumulative deadline semantics remain owner-dependent; this research
+	// parser requires a value but does not validate its clock/budget meaning.
+	if request["deadline_ms"] == nil {
+		return empty, errors.New("required opaque deadline_ms field missing")
 	}
 	if _, ok := request["payload"].(map[string]any); !ok {
 		return empty, errors.New("IPC-B payload must be object")
