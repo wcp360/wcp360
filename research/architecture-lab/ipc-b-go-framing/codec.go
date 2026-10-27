@@ -523,3 +523,31 @@ func DecodeResponseFrame(frame []byte) (ParsedResponse, error) {
 		HasResult: hasResult,
 	}, nil
 }
+
+
+// MatchRequestResponseIdentifiers verifies that two independently parsed,
+// UNTRUSTED in-memory envelopes carry matching canonical correlation fields.
+//
+// This does not authenticate either envelope, validate peer credentials,
+// prove an action was executed, accept the stated outcome, validate a tenant,
+// authorize a privileged operation or persist an audit record. The caller
+// must still apply all owner-final policy and state/reconciliation checks.
+// The function never dispatches an operation or performs any I/O.
+func MatchRequestResponseIdentifiers(request Parsed, response ParsedResponse) error {
+	if request.RequestID == "" || request.CorrelationID == "" ||
+		request.Operation.OperationID == "" ||
+		response.RequestID == "" || response.CorrelationID == "" ||
+		response.Operation.OperationID == "" {
+		return errors.New("missing request/response correlation identity")
+	}
+	if request.RequestID != response.RequestID {
+		return errors.New("request_id mismatch")
+	}
+	if request.CorrelationID != response.CorrelationID {
+		return errors.New("correlation_id mismatch")
+	}
+	if request.Operation.OperationID != response.Operation.OperationID {
+		return errors.New("ipc_operation_id mismatch")
+	}
+	return nil
+}
