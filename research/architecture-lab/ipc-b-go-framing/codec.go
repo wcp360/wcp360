@@ -504,6 +504,13 @@ func DecodeResponseFrame(frame []byte) (ParsedResponse, error) {
 	if (response["outcome"] == "UNKNOWN_OUTCOME" || code == "UNKNOWN_OUTCOME") && !validity {
 		return empty, errors.New("UNKNOWN_OUTCOME requires reconciliation")
 	}
+	// Conservative R&D fail-closed check (not a new final outcome enum):
+	// an explicit UNKNOWN_OUTCOME error cannot simultaneously assert a
+	// definite successful/failed outcome. API/IPC must ratify the complete
+	// outcome/error-code compatibility matrix before production use.
+	if code == "UNKNOWN_OUTCOME" && response["outcome"] != "UNKNOWN_OUTCOME" {
+		return empty, errors.New("UNKNOWN_OUTCOME error conflicts with definite outcome")
+	}
 	catalog, err := loadAllowed()
 	if err != nil {
 		return empty, err
