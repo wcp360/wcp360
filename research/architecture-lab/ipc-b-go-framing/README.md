@@ -28,9 +28,9 @@ The experiment checks *some* syntactic invariants in isolation, before any offic
 
 `specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md`
 
-Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 IDs and verify this SHA from the current source Markdown.
+Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 operation IDs **and their distinct action IDs** and verify this SHA from the current source Markdown.
 
-`codec_test.go`, `response_test.go`, and `payload_test.go`: negative framing/parser tests, **47/47 IPC-B operation field-name tests**, explicit UNKNOWN_OUTCOME→reconciliation rejection and two seeded fuzz functions. No test performs privileged execution.
+`codec_test.go`, `response_test.go`, and `payload_test.go`: negative framing/parser tests, **47/47 IPC-B operation field-name tests** and action→operation binding tests, explicit UNKNOWN_OUTCOME→reconciliation rejection and two seeded fuzz functions. No test performs privileged execution.
 
 `go.mod`: stand-alone research module with Go standard library only. Its `go 1.23` compatibility declaration is **not** WCP360's final toolchain decision. See F01–F10 proposals/ENG #9.
 
@@ -49,7 +49,7 @@ The GitHub Actions workflow uses an ephemeral runner and logs the Go version. A 
 
 - Kernel peer identity: NO `SO_PEERCRED` implementation. A valid frame from an unauthorized peer is still **DENY** by the real contract.
 - `authorization_context_ref` is NOT a bearer credential; this POC does not resolve, authenticate or revalidate it.
-- A known `ipc_operation_id` does NOT authorize its use. Permission/action/job/tenant/resource, MFA, approval, delegation and parent bindings remain separate mandatory checks.
+- A known `ipc_operation_id` does NOT authorize its use. The inert parser now checks **the exact canonical `action_id` associated with that operation ID** (19/47 pairs intentionally use different strings) and rejects a wrong pair; this is *source-reference consistency*, NOT a security grant. Live permission/action/job/tenant/resource/MFA/delegation/parent-binding authorization remains a separate mandatory check.
 - Twelve Security matrix operations still require exact approved parent/provisioning/OR→typed tuple resolution in issue #91.
 - **Per-operation `payload` REQUIRED/OPTIONAL FIELD NAMES are now checked** against flat `validated_input_schema` declarations for all 47 source operations (46 schemas with all-required fields; 1 schema with an optional `config_revision_id?`). Missing/unknown field names fail. **Value types, canonicalization, target registry/revision checks, resource resolution and real authorization are NOT validated.** The `TestNoProposedPayloadTypeCanAuthorizeAnOperation` test explicitly demonstrates an integer can still pass a field-name-only check for an ID field. An owner-approved typed implementation must reject invalid values before any effect.
 - `op_version` and `deadline_ms` are carried as syntactically present *opaque values* to avoid inventing the still-open T02/T03 semantics.
