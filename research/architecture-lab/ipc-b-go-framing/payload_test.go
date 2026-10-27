@@ -29,10 +29,18 @@ func TestAll47OperationPayloadNameSchemas(t *testing.T) {
 			for key := range reqFields { payload[key]="synthetic-only" }
 			req:=fixture()
 			req["ipc_operation_id"]=id
+			req["action_id"]=operation.ActionID
 			req["payload"]=payload
-			if got,err:=DecodeRequestFrame(fixtureFrame(t,req));err!=nil || got.Operation.OperationID!=id {
-				t.Fatalf("source schema fixture failed: got %+v, err %v",got,err)
+			if got,err:=DecodeRequestFrame(fixtureFrame(t,req));err!=nil || got.Operation.OperationID!=id || got.Operation.ActionID!=operation.ActionID {
+				t.Fatalf("source action/operation/schema fixture failed: got %+v, err %v",got,err)
 			}
+			// An operation listed in the source is insufficient when paired with
+			// an unrelated action_id, even though this is only an inert parser.
+			wrong:=fixture()
+			wrong["ipc_operation_id"]=id
+			wrong["action_id"]="unregistered.for.this.operation"
+			wrong["payload"]=payload
+			expectReject(t,fixtureFrame(t,wrong),"action_id / ipc_operation_id source binding mismatch")
 			for missing := range reqFields {
 				broken:=make(map[string]any)
 				for name,value:=range payload {if name!=missing {broken[name]=value}}
