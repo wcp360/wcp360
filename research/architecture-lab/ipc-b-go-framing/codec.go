@@ -36,6 +36,7 @@ var operationsJSON []byte
 
 type operationEntry struct {
 	ValidatedInputSchema string `json:"validated_input_schema"`
+	ActionID string `json:"action_id"`
 	ContractID     string `json:"contract_id"`
 	IPCOperationID string `json:"ipc_operation_id"`
 	TestID         string `json:"test_id"`
@@ -50,6 +51,7 @@ type researchCatalog struct {
 
 type Reference struct {
 	ContractID string
+	ActionID string
 	OperationID string
 	TestID string
 	ValidatedInputSchema string
@@ -133,6 +135,7 @@ func loadAllowed() (map[string]Reference, error) {
 	contractIDs := make(map[string]bool)
 	for _, x := range catalog.Operations {
 		if !typedID.MatchString(x.IPCOperationID) ||
+			!typedID.MatchString(x.ActionID) ||
 			!strings.HasPrefix(x.ContractID, "IPC-WCP-") ||
 			x.TestID != strings.Replace(x.ContractID, "IPC-WCP-", "TEST-IPC-", 1) {
 			return nil, errors.New("research operation catalog identifier mismatch")
@@ -145,6 +148,7 @@ func loadAllowed() (map[string]Reference, error) {
 		}
 		result[x.IPCOperationID] = Reference{
 			ContractID: x.ContractID,
+			ActionID: x.ActionID,
 			OperationID: x.IPCOperationID,
 			TestID: x.TestID,
 			ValidatedInputSchema: x.ValidatedInputSchema,
@@ -370,6 +374,11 @@ func DecodeRequestFrame(frame []byte) (Parsed, error) {
 	registered, ok := catalog[op]
 	if !ok {
 		return empty, errors.New("unknown IPC-B operation; no fallback")
+	}
+	// A valid IPC operation alone grants no privilege. Reject even syntactically
+	// when its caller-supplied action differs from the canonical IPC-B row.
+	if request["action_id"].(string) != registered.ActionID {
+		return empty, errors.New("action_id / ipc_operation_id source binding mismatch")
 	}
 	if err := validatePayloadFieldNames(registered, request["payload"].(map[string]any)); err != nil {
 		return empty, err
