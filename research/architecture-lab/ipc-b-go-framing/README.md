@@ -28,7 +28,7 @@ The experiment checks *some* syntactic invariants in isolation, before any offic
 
 `specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md`
 
-Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 operation IDs **and their distinct action IDs** and verify this SHA from the current source Markdown.
+Blob SHA at generation: `fec9c74e8413db822662e47c76c40486e282334f`. The manifest has its own source-SHA field; Go tests re-extract all 47 operation IDs **and their distinct action IDs** and verify this SHA from the current source Markdown. The parser now rejects any mismatched `action_id` ↔ `ipc_operation_id` pair even if both names look plausible; 19 of 47 canonical pairs intentionally use distinct strings. This is reference consistency only, not a permission grant.
 
 `codec_test.go`, `response_test.go`, and `payload_test.go`: negative framing/parser tests, **47/47 IPC-B operation field-name tests** and action→operation binding tests, explicit UNKNOWN_OUTCOME→reconciliation rejection and two seeded fuzz functions. No test performs privileged execution.
 
@@ -52,7 +52,7 @@ The GitHub Actions workflow uses an ephemeral runner and logs the Go version. A 
 - A known `ipc_operation_id` does NOT authorize its use. The inert parser now checks **the exact canonical `action_id` associated with that operation ID** (19/47 pairs intentionally use different strings) and rejects a wrong pair; this is *source-reference consistency*, NOT a security grant. Live permission/action/job/tenant/resource/MFA/delegation/parent-binding authorization remains a separate mandatory check.
 - Twelve Security matrix operations still require exact approved parent/provisioning/OR→typed tuple resolution in issue #91.
 - **Per-operation `payload` REQUIRED/OPTIONAL FIELD NAMES are now checked** against flat `validated_input_schema` declarations for all 47 source operations (46 schemas with all-required fields; 1 schema with an optional `config_revision_id?`). Missing/unknown field names fail. **Value types, canonicalization, target registry/revision checks, resource resolution and real authorization are NOT validated.** The `TestNoProposedPayloadTypeCanAuthorizeAnOperation` test explicitly demonstrates an integer can still pass a field-name-only check for an ID field. An owner-approved typed implementation must reject invalid values before any effect.
-- `op_version` and `deadline_ms` are carried as syntactically present *opaque values* to avoid inventing the still-open T02/T03 semantics.
+- The published IPC-B/1 **§8 fixes `op_version` to integer `1`**; the parser now rejects strings, other integers, floating aliases, booleans and null. Only `deadline_ms` remains opaque at this research stage because actual T02/T03 clock/budget composition has unresolved owner semantics.
 - Research-only parser depth/token limits are defensive hypotheses and NOT canonical protocol constraints.
 - No persistent idempotency/jobs/audit, no OS side effect, no IPC-B socket lifecycle or actual `UNKNOWN_OUTCOME` reconciliation. The response parser **rejects** a syntactic UNKNOWN_OUTCOME that falsely sets `reconciliation_required = false`; it cannot prove the real reconciliation happened.
 - No developer/compiler version from this experiment becomes the production stack. A response with `outcome: SUCCEEDED` is unverified parsed data, **not** proof of a real successful privileged effect. No test PASS is claimed for WCP360 product QA.
