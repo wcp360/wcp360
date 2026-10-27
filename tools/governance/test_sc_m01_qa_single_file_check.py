@@ -60,21 +60,21 @@ class SingleFileQAOwnerCandidateTests(unittest.TestCase):
             self.check(doc=text)
 
     def test_api_source_permission_tamper_fails(self):
-        doc=self.document.replace("| permission_id | \`applications.read\` |",
-                                  "| permission_id | \`root.unbounded\` |",1)
+        doc=self.document.replace("| permission_id | `applications.read` |",
+                                  "| permission_id | `root.unbounded` |",1)
         with self.assertRaisesRegex(ReviewEvidenceError,"typed source metadata altered"):
             self.check(doc=doc)
 
     def test_ipc_source_contract_field_tamper_fails(self):
-        doc=self.document.replace("| \`origin_contract_id\` | \`IPC-WCP-1001\` |",
-                                  "| \`origin_contract_id\` | \`IPC-WCP-9999\` |",1)
+        doc=self.document.replace("| `origin_contract_id` | `IPC-WCP-1001` |",
+                                  "| `origin_contract_id` | `IPC-WCP-9999` |",1)
         with self.assertRaisesRegex(ReviewEvidenceError,"QA contract mapping drift"):
             self.check(doc=doc)
 
     def test_new_fake_pass_in_api_record_rejected(self):
         doc=self.document.replace(
-            "**Status:** \`BLOCKED / NOT_EXECUTED\`; QA owner decision \`PENDING\`.",
-            "**Status:** \`PASS\`; QA owner decision \`APPROVED\`.",1)
+            "**Status:** `BLOCKED / NOT_EXECUTED`; QA owner decision `PENDING`.",
+            "**Status:** `PASS`; QA owner decision `APPROVED`.",1)
         with self.assertRaisesRegex(ReviewEvidenceError,"status promoted"):
             self.check(doc=doc)
 
@@ -131,15 +131,15 @@ class SingleFileQAOwnerCandidateTests(unittest.TestCase):
             self.check(doc=doc)
 
     def test_85_local_label_removed_fails(self):
-        doc=self.document.replace("| \`C01\` | Authorization | **PENDING QA TRIAGE**",
-                                  "| \`CXX\` | Authorization | **PENDING QA TRIAGE**",1)
+        doc=self.document.replace("| `C01` | Authorization | **PENDING QA TRIAGE**",
+                                  "| `CXX` | Authorization | **PENDING QA TRIAGE**",1)
         with self.assertRaisesRegex(ReviewEvidenceError,"85 local proposal"):
             self.check(doc=doc)
 
     def test_85_local_label_claimed_approved_fails(self):
         doc=self.document.replace(
-            "| \`C01\` | Authorization | **PENDING QA TRIAGE**",
-            "| \`C01\` | Authorization | **APPROVED**",1)
+            "| `C01` | Authorization | **PENDING QA TRIAGE**",
+            "| `C01` | Authorization | **APPROVED**",1)
         with self.assertRaisesRegex(ReviewEvidenceError,"85 proposal decisions"):
             self.check(doc=doc)
 
