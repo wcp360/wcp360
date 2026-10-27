@@ -30,8 +30,9 @@ func TestAll47OperationPayloadNameSchemas(t *testing.T) {
 			req:=fixture()
 			req["ipc_operation_id"]=id
 			req["action_id"]=operation.ActionID
+			req["resource_type"]=operation.ResourceType
 			req["payload"]=payload
-			if got,err:=DecodeRequestFrame(fixtureFrame(t,req));err!=nil || got.Operation.OperationID!=id || got.Operation.ActionID!=operation.ActionID {
+			if got,err:=DecodeRequestFrame(fixtureFrame(t,req));err!=nil || got.Operation.OperationID!=id || got.Operation.ActionID!=operation.ActionID || got.Operation.ResourceType!=operation.ResourceType {
 				t.Fatalf("source action/operation/schema fixture failed: got %+v, err %v",got,err)
 			}
 			// An operation listed in the source is insufficient when paired with
@@ -39,8 +40,15 @@ func TestAll47OperationPayloadNameSchemas(t *testing.T) {
 			wrong:=fixture()
 			wrong["ipc_operation_id"]=id
 			wrong["action_id"]="unregistered.for.this.operation"
+			wrong["resource_type"]=operation.ResourceType
 			wrong["payload"]=payload
 			expectReject(t,fixtureFrame(t,wrong),"action_id / ipc_operation_id source binding mismatch")
+			wrong = fixture()
+			wrong["ipc_operation_id"]=id
+			wrong["action_id"]=operation.ActionID
+			wrong["resource_type"]="wrong.resource"
+			wrong["payload"]=payload
+			expectReject(t,fixtureFrame(t,wrong),"resource_type / ipc_operation_id source binding mismatch")
 			for missing := range reqFields {
 				broken:=make(map[string]any)
 				for name,value:=range payload {if name!=missing {broken[name]=value}}
@@ -89,6 +97,7 @@ func TestDistinctCanonicalActionVsOperationNoAlias(t *testing.T) {
 	req := fixture()
 	req["ipc_operation_id"] = ref.OperationID
 	req["action_id"] = ref.ActionID
+	req["resource_type"] = ref.ResourceType
 	req["payload"] = payload
 	if got, err := DecodeRequestFrame(fixtureFrame(t, req)); err != nil || got.Operation.ActionID != ref.ActionID {
 		t.Fatalf("canonical distinct action/operation reference should parse as inert data: %+v %v", got, err)
