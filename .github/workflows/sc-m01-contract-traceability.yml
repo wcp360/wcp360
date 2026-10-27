@@ -9,6 +9,11 @@ on:
       - "tools/governance/test_sc_m01_privileged_mapping_check.py"
       - "tools/governance/sc_m01_qa_annex_consistency.py"
       - "tools/governance/test_sc_m01_qa_annex_consistency.py"
+      - "tools/governance/sc_m01_qa_single_file_check.py"
+      - "tools/governance/test_sc_m01_qa_single_file_check.py"
+      - "governance/proposals/WCP360_SC-M01_Test_Baseline_v1.0_SINGLE_FILE_OWNER_SIGNOFF_CANDIDATE.md"
+      - "governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md"
+      - "governance/proposals/SC-M01-QA-A01-A20-OWNER-DECISION-PACKET-v0.1.md"
       - "governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json"
       - "governance/proposals/SC-M01-QA-133-TEST-RECORDS-OWNER-CANDIDATE-v0.1.json"
       - "governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json"
@@ -43,6 +48,10 @@ jobs:
         run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_qa_annex_consistency.py' -v
       - name: Verify owner-review QA reference candidates are pending, not PASS
         run: python3 tools/governance/sc_m01_qa_annex_consistency.py --json
+      - name: Unit/adversarial review of 444KB QA owner signoff candidate
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_qa_single_file_check.py' -v
+      - name: Verify 199-case QA single-file proposal is complete but NOT FINAL
+        run: python3 tools/governance/sc_m01_qa_single_file_check.py --json
       - name: Verify exact reference traceability snapshot
         run: python3 tools/governance/sc_m01_contract_traceability.py --mode check
       - name: Reference-only summary
