@@ -66,6 +66,37 @@ func TestAll47OperationPayloadNameSchemas(t *testing.T) {
 	}
 }
 
+// This proves operation names cannot be used as action aliases: 19 of 47
+// IPC-B owner registry rows intentionally have a different typed action_id.
+func TestDistinctCanonicalActionVsOperationNoAlias(t *testing.T) {
+	catalog, err := loadAllowed()
+	if err != nil { t.Fatal(err) }
+	mismatchedRegistryNames := 0
+	for opID, ref := range catalog {
+		if opID != ref.ActionID { mismatchedRegistryNames++ }
+	}
+	if mismatchedRegistryNames != 19 {
+		t.Fatalf("canonical action/operation distinction drifted: %d different, expected 19", mismatchedRegistryNames)
+	}
+	ref, ok := catalog["server.reboot"]
+	if !ok || ref.ActionID != "servers.reboot" {
+		t.Fatal("reboot action_id / ipc_operation_id registry binding missing")
+	}
+	required, _, err := splitPayloadSchemaFields(ref.ValidatedInputSchema)
+	if err != nil { t.Fatal(err) }
+	payload := make(map[string]any)
+	for k := range required { payload[k] = "synthetic-only" }
+	req := fixture()
+	req["ipc_operation_id"] = ref.OperationID
+	req["action_id"] = ref.ActionID
+	req["payload"] = payload
+	if got, err := DecodeRequestFrame(fixtureFrame(t, req)); err != nil || got.Operation.ActionID != ref.ActionID {
+		t.Fatalf("canonical distinct action/operation reference should parse as inert data: %+v %v", got, err)
+	}
+	req["action_id"] = ref.OperationID // invalid cast between typed namespaces
+	expectReject(t, fixtureFrame(t, req), "action_id / ipc_operation_id source binding mismatch")
+}
+
 func TestPayloadSchemaCompilerFailsClosed(t *testing.T) {
 	badSchemas:=[]string{
 		"", "{}", "{bad,}", "bad", "{x,x}", "{x,x?}", "{x?,x}",
