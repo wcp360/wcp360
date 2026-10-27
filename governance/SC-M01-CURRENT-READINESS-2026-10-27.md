@@ -126,3 +126,29 @@ CODE-BASELINE = NONE
 ```
 
 This file is a coordination record, not a new implementation baseline.
+
+
+## 7. Latest owner handoff inputs (2026-10-27 late update)
+
+Owner decision material was further consolidated in `governance/SC-M01-OWNER-SIGNOFF-INPUTS-2026-10-27.json`, a **G1 noncanonical index of exact Git source blobs**, not an implementation manifest.
+
+The **three P1 candidate packages are now preserved in main**, without owner acceptance:
+
+| Owner | Source-review PR and merge | Exact additional decisions |
+|---|---|---|
+| DATABASE #6 | PR #100 merged `87e541d2830994207a06d53e4b285c7ea531def2` | 36 named recovered partial tables + DB-X01..10, original exact final v1.0 still unrecovered; v1.1 only a *proposed* amendment if owner approves |
+| TESTS/QA #7 | PR #98 merged `55a5421fdf1333e916f6b0ea8e8e429141018ad7` | 133 owner-review TEST-API/TEST-IPC records, all `BLOCKED / NOT_EXECUTED`; preserve N01..N26 and WEB001..040 separately |
+| ENGINEERING #9 | PR #99 merged `1c14eb11c42e1517128b9257d98f0d9ffa917ba6` | F01..10 explicit toolchain/CI options; **no runtime adopted**, possible owner-amended v0.3 proposal requires real content/version change declaration |
+
+The Go IPC-B inert R&D PR #94 now checks source-derived **required/optional field names for all 47 IPC-B operations**; E1 GitHub Actions [run 40482150906](https://github.com/yyogas/wcp360/actions/runs/40482150906) passed its tests, `go vet`, and short actual bounded fuzzing. This is **name-level only**, not field-value type validation, identity/authorization/resource verification, daemon implementation or product QA.
+
+The source review bundles **do not count towards 8/8**. Actual final owner artifacts remain absent for #6/#7/#9. Open #91 Security/API parent bindings and necessary C03/C06/C07 decisions remain component-specific blockers for privileged work. E3 independent review remains missing for R1/I1/S1.
+
+```text
+G1/P1 OWNER REVIEW PACKETS = PUBLISHED
+DB / QA / ENG FINAL OWNER SIGNOFF = MISSING
+SC-M01 GATE = 5 / 8
+SC-M01 = PAUSED — TARGETED EVIDENCE
+SC-M02 = NOT AUTHORIZED
+CODE-BASELINE = NONE
+```
