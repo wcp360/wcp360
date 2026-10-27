@@ -116,7 +116,7 @@
   },
   "engineering_full_candidate": {
     "pull_request": 103,
-    "current_status": "DRAFT_OPEN_UNMERGED_P1_NONCANONICAL",
+    "current_status": "MERGED_MAIN_P1_NONCANONICAL_PROPOSAL_ONLY",
     "source_branch": "proposal/sc-m01-eng-consolidated-owner-review-20261027",
     "candidate_path": "governance/proposals/SC-M01-ENGINEERING-v0.3-CONSOLIDATED-FULL-OWNER-REVIEW-CANDIDATE.md",
     "candidate_branch_git_blob_sha": "d202099091c927156585ac2c2ba886db8c61ec32",
@@ -127,6 +127,8 @@
     "version_v0_3_approved": false,
     "ready_for_source_code": false,
     "owner_approval": false,
-    "e3_independent_review": false
+    "e3_independent_review": false,
+    "main_merge_commit": "1ba2aaad018c0e9e3fdf512dd0a396fa01125cc4",
+    "candidate_main_git_blob_sha": "d202099091c927156585ac2c2ba886db8c61ec32"
   }
 }
