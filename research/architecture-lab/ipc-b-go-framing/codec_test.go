@@ -17,7 +17,7 @@ const canonSourcePath = "../../../specifications/ipc/WCP360_IPC_Contract_WCP360-
 func fixture() map[string]any {
 	return map[string]any{
 		"protocol_version": ProtocolVersion,
-		"op_version":      "1.0", // opaque research value; owner to ratify
+		"op_version":      1, // final IPC-B/1 §8 requires integer 1
 		"request_id":      "11111111-1111-4111-8111-111111111111",
 		"correlation_id":  "22222222-2222-4222-8222-222222222222",
 		"action_id":       "nginx_vhost.validate",
@@ -231,12 +231,35 @@ func TestWrongProtocolAndOperationRejected(t *testing.T) {
 	expectReject(t, fixtureFrame(t, req), "unknown IPC-B operation")
 }
 
-func TestOpaqueFieldsCannotBeMissingOrNull(t *testing.T) {
-	for _, field := range []string{"op_version", "deadline_ms"} {
-		req := fixture()
-		req[field] = nil
-		expectReject(t, fixtureFrame(t, req), "required opaque version/deadline field missing")
+func TestIPCOpVersionFixedToIntegerOne(t *testing.T) {
+	for name, value := range map[string]any{
+		"null": nil,
+		"zero": 0,
+		"two": 2,
+		"string-one": "1",
+		"string-decimal": "1.0",
+		"boolean": true,
+		"float-token": json.RawMessage("1.0"),
+		"exponent-token": json.RawMessage("1e0"),
+		"negative": -1,
+	} {
+		t.Run(name, func(t *testing.T) {
+			req := fixture()
+			req["op_version"] = value
+			expectReject(t, fixtureFrame(t, req), "unsupported IPC-B op_version")
+		})
 	}
+	req := fixture()
+	req["op_version"] = json.RawMessage("1")
+	if _, err := DecodeRequestFrame(fixtureFrame(t, req)); err != nil {
+		t.Fatalf("published op_version=1 token should parse: %v", err)
+	}
+}
+
+func TestOpaqueDeadlineFieldCannotBeNull(t *testing.T) {
+	req := fixture()
+	req["deadline_ms"] = nil
+	expectReject(t, fixtureFrame(t, req), "required opaque deadline_ms field missing")
 }
 
 func TestBrokenRequiredTypesRejected(t *testing.T) {
