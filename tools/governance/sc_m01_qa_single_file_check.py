@@ -38,6 +38,17 @@ DECISIONS = (
     "SC-M01-QA-A01-A20-OWNER-DECISION-PACKET-v0.1.md"
 )
 INPUTS = [ORIGINAL, API_IPC, NEG_WEB, QA_INDEX, DECISIONS]
+PROPOSED_CASE_SOURCES = {
+    "C": (17, (
+        "governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.1.md",
+        "governance/proposals/SC-M01-AUTHORIZATION-BINDINGS-DELTA-v0.2.md"
+    )),
+    "TQ": (10, ("governance/proposals/SC-M01-IPC-TIMEOUT-IDEMPOTENCY-DELTA-v0.1.md",)),
+    "CQ": (12, ("governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md",)),
+    "HQ": (15, ("governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md",)),
+    "SQ": (16, ("governance/proposals/SC-M01-SECURITY-WEB-AUTHZ-DELTA-v0.1.md",)),
+    "FQ": (15, ("governance/proposals/SC-M01-TOOLCHAIN-BUILD-DELTA-v0.1.md",))
+}
 
 MAX_DOC_BYTES = 700_000
 MAX_INPUT_BYTES = 700_000
@@ -109,9 +120,69 @@ def _validate_refs(text: str, prefix: str, records: list[dict],
     if {prefix+x for x in found_ids} != expected_ids:
         raise ReviewEvidenceError("QA source-linked TEST-ID set mismatch")
 
+def _verify_85_sourced_proposals(
+    part_vi: str,
+    scenario_sources: dict[str, tuple[str, str]],
+) -> int:
+    """Prove 85 historical proposal descriptors are copied verbatim, not final."""
+    marker = "## PART VI-A — 85 source-exact historical proposal scenario rows"
+    if marker not in part_vi or part_vi.count(marker) != 1:
+        raise ReviewEvidenceError("source-exact 85-scenario appendix missing")
+    annex = part_vi.split(marker, 1)[1]
+    tick = chr(96)
+    seen: set[str] = set()
+    for prefix, (expected, paths) in PROPOSED_CASE_SOURCES.items():
+        matching: dict[str, tuple[str, str, str]] = {}
+        pattern = re.compile(
+            r"^\|\s*(" + re.escape(prefix) +
+            r"[0-9]{2})(?:\s*—[^|]*)?\s*\|"
+        )
+        for path in paths:
+            if path not in scenario_sources:
+                raise ReviewEvidenceError("historical scenario source unavailable")
+            source_text, source_sha = scenario_sources[path]
+            for line in source_text.splitlines():
+                match = pattern.match(line)
+                if not match:
+                    continue
+                scenario_id = match.group(1)
+                if scenario_id in matching:
+                    raise ReviewEvidenceError("duplicate historical scenario source ID")
+                matching[scenario_id] = (line, path, source_sha)
+        if len(matching) != expected:
+            raise ReviewEvidenceError("historical proposal source inventory changed")
+        for i in range(1, expected + 1):
+            scenario_id = f"{prefix}{i:02d}"
+            if scenario_id not in matching:
+                raise ReviewEvidenceError("historical scenario source ID missing")
+            line, path, sha = matching[scenario_id]
+            heading = "### " + scenario_id + " — "
+            if len(re.findall(
+                "^" + re.escape(heading), annex, flags=re.M
+            )) != 1:
+                raise ReviewEvidenceError("historical QA scenario heading drift")
+            provenance = (
+                "**Source:** " + tick + path + tick +
+                " — blob " + tick + sha + tick + "."
+            )
+            if provenance not in annex:
+                raise ReviewEvidenceError("historical source SHA/path drift")
+            verbatim = tick * 3 + "text\n" + line + "\n" + tick * 3
+            if annex.count(verbatim) != 1:
+                raise ReviewEvidenceError("historical scenario row changed")
+            seen.add(scenario_id)
+    if len(seen) != 85 or annex.count("**Owner triage:** " + tick + "PENDING" + tick) != 85:
+        raise ReviewEvidenceError("85 historical proposals incorrectly approved")
+    if annex.count("**execution:** " + tick + "NOT_EXECUTED" + tick) != 85:
+        raise ReviewEvidenceError("historical scenario execution fabricated")
+    if annex.count("**owner approval:** " + tick + "NO" + tick) != 85:
+        raise ReviewEvidenceError("historical scenario owner signoff fabricated")
+    return 85
+
 def verify(source: str, original: str, api_ipc: dict[str, Any],
            neg_web: dict[str, Any], coverage: dict[str, Any],
-           decision_text: str, source_shas: dict[str, str]) -> dict[str, Any]:
+           decision_text: str, source_shas: dict[str, str],
+           scenario_sources: dict[str, tuple[str, str]] | None = None) -> dict[str, Any]:
     if len(source.encode("utf-8")) > MAX_DOC_BYTES:
         raise ReviewEvidenceError("QA single-file exceeds size guardrail")
     head = source.split("## PART I —",1)[0]
@@ -186,6 +257,8 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
             count_85 += 1
     if count_85 != 85 or p_85.count("**PENDING QA TRIAGE**") != 85:
         raise ReviewEvidenceError("85 proposal decisions were incorrectly closed")
+    if scenario_sources is not None:
+        _verify_85_sourced_proposals(p_85, scenario_sources)
     for prefix,n in (("A",20),("QI-",7)):
         for i in range(1,n+1):
             label=f"{prefix}{i:02d}"
@@ -221,6 +294,7 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
         "web_mapping_proposals":40,"local_proposal_triage_labels":85,
         "permission_registry_references":82,
         "specialized_qa_owner_approvals":0,
+        "verbatim_historical_scenario_rows_checked":85 if scenario_sources is not None else 0,
         "executed_product_tests":0,
         "governance_owner_artifact_gate":"5/8",
         "sc_m01":"PAUSED_TARGETED_EVIDENCE",
@@ -230,6 +304,14 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
 def inspect(root: Path) -> dict[str, Any]:
     candidate,_ = _read(root,CANDIDATE,MAX_DOC_BYTES)
     files = {p:_read(root,p,MAX_INPUT_BYTES) for p in INPUTS}
+    extra_paths = {
+        name for _,paths in PROPOSED_CASE_SOURCES.values() for name in paths
+    }
+    scenarios = {
+        name: (raw.decode("utf-8"), sha)
+        for name in sorted(extra_paths)
+        for raw,sha in [_read(root,name,MAX_INPUT_BYTES)]
+    }
     return verify(
         candidate.decode("utf-8"),
         files[ORIGINAL][0].decode("utf-8"),
@@ -237,7 +319,8 @@ def inspect(root: Path) -> dict[str, Any]:
         json.loads(files[NEG_WEB][0].decode("utf-8")),
         json.loads(files[QA_INDEX][0].decode("utf-8")),
         files[DECISIONS][0].decode("utf-8"),
-        {p:blobsha for p,(_,blobsha) in files.items()}
+        {p:blobsha for p,(_,blobsha) in files.items()},
+        scenario_sources=scenarios
     )
 
 def main(argv: list[str] | None = None) -> int:
