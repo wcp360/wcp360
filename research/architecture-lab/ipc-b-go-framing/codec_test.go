@@ -128,12 +128,13 @@ func TestManifestMatchesSourceBlobAndAll47IDs(t *testing.T) {
 			t.Fatalf("canonical IPC row has wrong width: %q", line)
 		}
 		contractID := strings.Trim(strings.TrimSpace(cells[1]), "\x60")
+		action := strings.Trim(strings.TrimSpace(cells[2]), "\x60")
 		op := strings.Trim(strings.TrimSpace(cells[4]), "\x60")
 		if !typedID.MatchString(op) {
 			t.Fatalf("bad source operation ID %q", op)
 		}
 		got, exists := catalog[op]
-		if !exists || got.ContractID != contractID {
+		if !exists || got.ContractID != contractID || got.ActionID != action {
 			t.Fatalf("missing/incorrect source operation %s/%s", op, contractID)
 		}
 		seen[op] = true
