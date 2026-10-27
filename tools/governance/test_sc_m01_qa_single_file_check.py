@@ -8,7 +8,7 @@ from pathlib import Path
 
 from sc_m01_qa_single_file_check import (
     CANDIDATE, ORIGINAL, API_IPC, NEG_WEB, QA_INDEX, DECISIONS,
-    INPUTS, ReviewEvidenceError, inspect, verify, _read
+    INPUTS, PROPOSED_CASE_SOURCES, ReviewEvidenceError, inspect, verify, _read
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,9 +23,15 @@ class SingleFileQAOwnerCandidateTests(unittest.TestCase):
         cls.coverage=json.loads((ROOT/QA_INDEX).read_text("utf-8"))
         cls.decisions=(ROOT/DECISIONS).read_text("utf-8")
         cls.hashes={p:_read(ROOT,p,700_000)[1] for p in INPUTS}
+        paths={p for _,names in PROPOSED_CASE_SOURCES.values() for p in names}
+        cls.scenarios={
+            path: (raw.decode("utf-8"), sha)
+            for path in sorted(paths)
+            for raw,sha in [_read(ROOT,path,700_000)]
+        }
 
     def check(self,doc=None,old=None,api=None,negative=None,coverage=None,
-              decisions=None,hashes=None):
+              decisions=None,hashes=None,scenarios=None):
         return verify(
             self.document if doc is None else doc,
             self.old if old is None else old,
@@ -33,7 +39,8 @@ class SingleFileQAOwnerCandidateTests(unittest.TestCase):
             self.neg_web if negative is None else negative,
             self.coverage if coverage is None else coverage,
             self.decisions if decisions is None else decisions,
-            self.hashes if hashes is None else hashes
+            self.hashes if hashes is None else hashes,
+            scenario_sources=self.scenarios if scenarios is None else scenarios
         )
 
     def test_exact_199_and_85_review_inventory_not_approved(self):
@@ -141,6 +148,68 @@ class SingleFileQAOwnerCandidateTests(unittest.TestCase):
             "| `C01` | Authorization | **PENDING QA TRIAGE**",
             "| `C01` | Authorization | **APPROVED**",1)
         with self.assertRaisesRegex(ReviewEvidenceError,"85 proposal decisions"):
+            self.check(doc=doc)
+
+    def test_all_85_historical_source_rows_verbatim(self):
+        out=self.check()
+        self.assertEqual(out["verbatim_historical_scenario_rows_checked"],85)
+
+    def test_one_historical_source_row_tamper_rejected(self):
+        row="| C01 | Session ADMIN privilégiée valide ; parent reload ; cible et révision enregistrées |"
+        self.assertIn(row,self.document)
+        doc=self.document.replace(row,"| C01 | forged approval |",1)
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical scenario row changed"):
+            self.check(doc=doc)
+
+    def test_one_historical_source_blob_sha_tamper_rejected(self):
+        sha="2722238799c2cdee7d863e28b9d6b9728e510512"
+        self.assertIn(sha,self.document)
+        # The earlier SOURCE-BLOB table is separate; this source is in annex.
+        annex_start=self.document.index("## PART VI-A —")
+        doc=(self.document[:annex_start] +
+             self.document[annex_start:].replace(sha,"0"*40,1))
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical source SHA/path drift"):
+            self.check(doc=doc)
+
+    def test_historical_case_fake_owner_approval_rejected(self):
+        doc=self.document.replace("**owner approval:** "+chr(96)+"NO"+chr(96),
+                                  "**owner approval:** "+chr(96)+"YES"+chr(96),1)
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical scenario owner signoff"):
+            self.check(doc=doc)
+
+    def test_historical_case_fake_execution_rejected(self):
+        doc=self.document.replace("**execution:** "+chr(96)+"NOT_EXECUTED"+chr(96),
+                                  "**execution:** "+chr(96)+"PASS"+chr(96),1)
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical scenario execution"):
+            self.check(doc=doc)
+
+    def test_historical_source_external_row_changed_rejected(self):
+        s=copy.deepcopy(self.scenarios)
+        target="governance/proposals/SC-M01-CONTROL-BOUNDARY-DELTA-v0.1.md"
+        body,sha=s[target]
+        s[target]=(body.replace("| CQ01 | peer Unix non autorisé",
+                               "| CQ01 | peer Unix désormais autorisé",1),sha)
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical scenario row changed"):
+            self.check(scenarios=s)
+
+    def test_missing_historical_source_file_rejected(self):
+        s=dict(self.scenarios)
+        s.pop("governance/proposals/SC-M01-API-TRANSPORT-DELTA-v0.1.md")
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical scenario source unavailable"):
+            self.check(scenarios=s)
+
+    def test_missing_complete_85_scenario_annex_rejected(self):
+        doc=self.document.replace(
+            "## PART VI-A — 85 source-exact historical proposal scenario rows",
+            "## FORGOTTEN HISTORICAL 85 ANNEX",1)
+        with self.assertRaisesRegex(ReviewEvidenceError,"source-exact 85-scenario appendix missing"):
+            self.check(doc=doc)
+
+    def test_duplicate_historical_case_heading_rejected(self):
+        doc=self.document.replace(
+            "### C01 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)",
+            "### C02 — Authorization origin/technical bindings (C01–C17) (historical PROPOSAL)",1)
+        with self.assertRaisesRegex(ReviewEvidenceError,"historical QA scenario heading drift"):
             self.check(doc=doc)
 
     def test_missing_owner_a01_decision_fails(self):
