@@ -5,10 +5,13 @@ on:
     paths:
       - "tools/governance/sc_m01_contract_traceability.py"
       - "tools/governance/test_sc_m01_contract_traceability.py"
+      - "tools/governance/sc_m01_privileged_mapping_check.py"
+      - "tools/governance/test_sc_m01_privileged_mapping_check.py"
       - "governance/verification/SC-M01-CONTRACT-TRACEABILITY-2026-10-26.json"
       - "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
       - "specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md"
       - "specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
+      - "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
       - ".github/workflows/sc-m01-contract-traceability.yml"
 
 permissions:
@@ -27,6 +30,10 @@ jobs:
         run: python3 --version
       - name: Unit / adversarial validation
         run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_contract_traceability.py' -v
+      - name: Negative Security↔IPC operation/parent binding tests
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_privileged_mapping_check.py' -v
+      - name: Verify 47 IPC-B operations against Security source
+        run: python3 tools/governance/sc_m01_privileged_mapping_check.py
       - name: Verify exact reference traceability snapshot
         run: python3 tools/governance/sc_m01_contract_traceability.py --mode check
       - name: Reference-only summary
