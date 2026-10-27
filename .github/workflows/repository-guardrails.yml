@@ -92,6 +92,17 @@ jobs:
       - name: Test staged-index scans and opt-in pre-commit hook
         shell: bash
         run: python3 -I tools/repository/test_staged_repository_secrets.py
+      - name: Verify opt-in hook is executable but not auto-installed
+        shell: bash
+        run: |
+          set -euo pipefail
+          mode="$(git ls-files --stage -- .githooks/pre-commit | cut -d' ' -f1)"
+          [[ "$mode" == "100755" ]]
+          [[ -f .githooks/pre-commit && -x .githooks/pre-commit ]]
+          if git config --local --get core.hooksPath >/dev/null; then
+            printf '%s\n' 'HOOKS_AUTO_INSTALL_FORBIDDEN' >&2
+            exit 1
+          fi
       - name: Inspect committed snapshot for selected secret patterns
         shell: bash
         run: python3 -I tools/repository/check_repository_secrets.py --ref HEAD --output "$RUNNER_TEMP/wcp360-repository-secrets.json"
