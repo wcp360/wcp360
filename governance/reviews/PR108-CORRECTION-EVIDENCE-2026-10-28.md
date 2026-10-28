@@ -5,6 +5,24 @@ Candidate: `5bb8bb988ec035e57edccef463d1f020703a9b7c`.
 Previous reviewed SHA: `281ccaa8694250fd06410f329dd79240096b82f1`.
 Review: https://github.com/yyogas/wcp360/pull/108#pullrequestreview-5676455437
 
+## Multi-agent hardening — latest candidate 71deefa2976a7005983d410907dc2050287be05f
+
+Three agents reviewed CLI correctness, CI/security and authorized requirements; root integrated and verified the changes. All review remains E2 same-account, not independent E3.
+
+- Candidate run https://github.com/yyogas/wcp360/actions/runs/40613003105: SUCCESS.
+- Integration run https://github.com/yyogas/wcp360/actions/runs/40613008116: SUCCESS; tested merge cc2581bc21013377d8e3b3242be633a98015ee51.
+- 13/13 nominal gates PASS on both runs; exact inventory checked.
+- Six disposable offline fixtures rejected at their expected gates: simulated wrong Go version, forbidden dependency, stale go.sum, formatting drift, vet diagnostic, failing unit test. Expected failures are isolated from nominal gates.tsv.
+- Host-directed scanner access is now blocked on INPUT; live host listener checks succeed before/after while the scanner connection fails. PR host REJECT counter = 2 packets. External egress denial, blocked DNS and disabled IPv6 remain verified.
+- Scanner linked modules must exactly match the committed version/h1 inventory. The previously recorded five-module closure remains unchanged.
+- Both runners produce wcpd SHA256 9bbb7a499d77d4bd77e12554e915064815fbfa10b2c020e9763f93621f1f5446 and scanner SHA256 6fb96c19707e3bcda959438f0b336cf2ea8da380250d34d6734c99e27692a71f.
+- PR evidence ZIP SHA256 6c13cddbb73b7b4d85f2c70cb2917713a2a3297a551ff7f398b429dafb70702d.
+- Push evidence ZIP SHA256 5d03a3c1a635b66071b5cee986cbf17fa3a6f6b5455aa57a16f40b834a661887.
+
+No additional CLI defect was found. No new runtime slice was authorized. The IP/port-vs-hostname policy and telemetry pseudo-version still require DevOps/Security disposition. Engineering reassessment and independent E3 remain required; MERGE HOLD, CODE-BASELINE NONE, SC-M02 NOT AUTHORIZED.
+
+The remaining sections document the previous candidate and retain its exact execution evidence.
+
 ## Executed results
 
 - Direct candidate: https://github.com/yyogas/wcp360/actions/runs/40611911884 — SUCCESS, attempt 1.
