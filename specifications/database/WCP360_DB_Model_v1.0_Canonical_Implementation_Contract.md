@@ -1129,7 +1129,7 @@ Terminal logical result linkage and idempotency state transition commit atomical
 Desired-state/operation intent + Job + required Outbox/Audit prerequisite are committed atomically before any external/privileged dispatch. If the transaction fails: no committed job and no external dispatch.
 
 ### TX-REV-01 — Revision mutation
-Mutations use expected_revision = current revision. Update succeeds only if the expected revision matches; success increments revision exactly once. Zero affected rows means CONCURRENT_MODIFICATION.
+Mutations use expected_revision = current revision. Update succeeds only if the expected revision matches; success increments revision exactly once. Zero affected rows due to a stale/mismatched revision means the canonical API error_code `CONCURRENCY_CONFLICT`.
 
 ### TX-RECON-01 — Reconciliation checkpoint
 Observed evidence, drift classification and reconciliation state changes commit atomically. A repair job is linked only after authorization prerequisites are durable. Repair completion is not terminal until re-observation verifies the target state.
@@ -1292,6 +1292,7 @@ Required QA assertions — implementation-dependent, status **READY/PLANNED**, n
 5. Unknown uppercase `NOT_A_CANONICAL_ERROR` is rejected by canonical registry membership.
 6. API contract ID `API-WCP-0101` is not accepted as an `ipc_operation_id` or `error_code`.
 7. Error codes round-trip without case transformation.
+8. A stale or mismatched `expected_revision` in TX-REV-01 is surfaced as canonical `CONCURRENCY_CONFLICT`; `CONCURRENT_MODIFICATION` is rejected as a non-canonical error code.
 
 ### DB-MV02 — WCP-USER / WCP-ADMIN session persistence separation
 
