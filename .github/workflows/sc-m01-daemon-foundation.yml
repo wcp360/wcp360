@@ -36,11 +36,22 @@ jobs:
           printf '%s  %s\n' "$GO_ARCHIVE_SHA256" "$task_dir/go.tar.gz" | sha256sum --check
           tar -xzf "$task_dir/go.tar.gz" -C "$task_dir/builder"
           mkdir -p "$task_dir/builder/tools"
+          export GOTOOLCHAIN=local GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org
+          export GOPRIVATE= GONOSUMDB= GOTOOLCHAIN=local CGO_ENABLED=0
+          export GOMODCACHE="$task_dir/scanner-module-cache" GOCACHE="$task_dir/scanner-build-cache"
           env GOTOOLCHAIN=local GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org \
             GOPRIVATE= GONOSUMDB= GOBIN="$task_dir/builder/tools" \
             "$task_dir/builder/go/bin/go" install golang.org/x/vuln/cmd/govulncheck@v1.9.0
           "$task_dir/builder/go/bin/go" version -m "$task_dir/builder/tools/govulncheck" \
             > "$task_dir/out/sc-m01/daemon/scanner-bootstrap.txt"
+          sha256sum "$task_dir/builder/tools/govulncheck" > "$task_dir/out/sc-m01/daemon/scanner.sha256"
+          awk '$1 == "mod" || $1 == "dep" {print $2 "@" $3}' \
+            "$task_dir/out/sc-m01/daemon/scanner-bootstrap.txt" > "$task_dir/scanner-modules.txt"
+          while read -r scanner_module; do
+            "$task_dir/builder/go/bin/go" mod download -json "$scanner_module"
+          done < "$task_dir/scanner-modules.txt" > "$task_dir/out/sc-m01/daemon/scanner-module-provenance.jsonl"
+          "$task_dir/builder/go/bin/go" -C "$GOMODCACHE/golang.org/x/vuln@v1.9.0" mod verify \
+            > "$task_dir/out/sc-m01/daemon/scanner-module-verify.txt"
           cat > "$task_dir/builder/Dockerfile" <<'DOCKERFILE'
           FROM debian@sha256:918311b7b6c4c6f68b232ba516584925f6c78ad82b6fd534b98979df6438e483
           COPY go/ /opt/go/
@@ -82,28 +93,48 @@ jobs:
         run: |
           set -euo pipefail
           task_dir="$(cat "$RUNNER_TEMP/wcp-task-dir")"
-          docker network create --subnet 172.30.99.0/24 wcp-vuln
+          docker network create --ipv6=false --subnet 172.30.99.0/24 wcp-vuln
+          service_ip="$(getent ahostsv4 vuln.go.dev | awk '{print $1}' | sort -u | head -n 1)"
+          test -n "$service_ip"
+          printf '%s\n' "$service_ip" | sudo tee "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt" > /dev/null
           sudo iptables -N WCPVULN
           sudo iptables -I DOCKER-USER 1 -s 172.30.99.0/24 -j WCPVULN
           sudo iptables -A WCPVULN -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-          getent ahostsv4 vuln.go.dev | awk '{print $1}' | sort -u \
-            | sudo tee "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt" > /dev/null
-          test -s "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
-          while read -r service_ip; do
-            sudo iptables -A WCPVULN -d "$service_ip" -p tcp --dport 443 -j ACCEPT
-          done < "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
+          sudo iptables -A WCPVULN -d "$service_ip" -p tcp --dport 443 -j ACCEPT
           sudo iptables -A WCPVULN -j REJECT
-          # TLS trust is transport configuration, mounted read-only and fingerprinted.
+          # A reachable external control proves denial is not endpoint unavailability.
+          timeout 5 bash -c 'exec 3<>/dev/tcp/1.1.1.1/443'
           sha256sum /etc/ssl/certs/ca-certificates.crt \
             | sudo tee "$task_dir/out/sc-m01/daemon/scanner-trust-bundle.sha256" > /dev/null
+          docker network inspect wcp-vuln \
+            | sudo tee "$task_dir/out/sc-m01/daemon/scanner-network.json" > /dev/null
           docker run --rm --platform linux/amd64 --user 10001:10001 \
-            --network wcp-vuln --cap-drop ALL --security-opt no-new-privileges \
+            --network wcp-vuln --dns 192.0.2.1 --add-host "vuln.go.dev:$service_ip" \
+            --sysctl net.ipv6.conf.all.disable_ipv6=1 --sysctl net.ipv6.conf.default.disable_ipv6=1 \
+            --cap-drop ALL --security-opt no-new-privileges \
             --read-only --pids-limit 128 --memory 2g \
             --tmpfs /tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 \
             --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
             --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
             --mount type=bind,src=/etc/ssl/certs/ca-certificates.crt,dst=/etc/ssl/certs/ca-certificates.crt,readonly \
             wcp-foundation-ci sh SOURCE/daemon/tools/scan.sh
+          sudo iptables -L WCPVULN -n -v -x \
+            | sudo tee "$task_dir/out/sc-m01/daemon/scanner-firewall-counters.txt"
+          # Both allowed scanner traffic and denied probe traffic must traverse this chain.
+          sudo iptables -L WCPVULN -n -v -x | awk \
+            '$3 == "ACCEPT" && /dpt:443/ && $1 > 0 {allowed=1} $3 == "REJECT" && $1 > 0 {denied=1} END {exit !(allowed && denied)}'
+      - name: Verify complete gate inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          task_dir="$RUNNER_TEMP/wcp-foundation"
+          printf '%s\n' daemon-toolchain daemon-no-third-party-runtime-deps daemon-mod-tidy \
+            daemon-mod-verify daemon-gofmt daemon-vet daemon-unit daemon-inert-import-boundary \
+            daemon-build daemon-smoke daemon-reproducible-build daemon-evidence daemon-vulncheck \
+            | sort > "$task_dir/expected-gates.txt"
+          awk -F '\t' 'NF != 3 || $2 != "PASS" || $3 != "0" {exit 1}' "$task_dir/out/sc-m01/daemon/gates.tsv"
+          cut -f1 "$task_dir/out/sc-m01/daemon/gates.tsv" | sort > "$task_dir/actual-gates.txt"
+          diff -u "$task_dir/expected-gates.txt" "$task_dir/actual-gates.txt"
       - name: Show gate evidence
         if: always()
         shell: bash
@@ -112,7 +143,7 @@ jobs:
           if test -f "$task_dir/out/sc-m01/daemon/gates.tsv"; then
             cat "$task_dir/out/sc-m01/daemon/gates.tsv"
           fi
-          for report in gofmt.txt vet.txt unit.jsonl vulnerability.txt; do
+          for report in gofmt.txt vet.txt unit.jsonl vulnerability.txt binary.sha256 provenance.txt scanner-bootstrap.txt scanner-module-verify.txt scanner.sha256 scanner-isolation.txt scanner-firewall-counters.txt; do
             if test -f "$task_dir/out/sc-m01/daemon/$report"; then
               printf '\nReport: %s\n' "$report"
               tail -n 80 "$task_dir/out/sc-m01/daemon/$report"

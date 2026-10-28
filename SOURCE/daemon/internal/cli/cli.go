@@ -29,14 +29,15 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			return reject(stderr)
 		}
 	}
-	if _, err := io.WriteString(stdout, message); err != nil {
+	if n, err := io.WriteString(stdout, message); err != nil || n != len(message) {
 		return 1
 	}
 	return 0
 }
 
 func reject(stderr io.Writer) int {
-	if _, err := io.WriteString(stderr, "wcpd: unsupported arguments; use --help\n"); err != nil {
+	const message = "wcpd: unsupported arguments; use --help\n"
+	if n, err := io.WriteString(stderr, message); err != nil || n != len(message) {
 		return 1
 	}
 	return 2

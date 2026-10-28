@@ -86,3 +86,17 @@ func TestOutputFailureIsNotSuccess(t *testing.T) {
 		}
 	}
 }
+
+type shortWriter struct{}
+
+func (shortWriter) Write(p []byte) (int, error) {
+	return len(p) - 1, nil
+}
+
+func TestShortWriteIsNotSuccess(t *testing.T) {
+	for _, args := range [][]string{nil, {"--version"}, {"--check"}, {"invalid"}, {"--help", "extra"}} {
+		if code := Run(args, shortWriter{}, shortWriter{}); code != 1 {
+			t.Errorf("args %q: exit = %d, want 1 for truncated output", args, code)
+		}
+	}
+}

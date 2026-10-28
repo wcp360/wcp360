@@ -39,6 +39,7 @@ pass
 
 gate=daemon-mod-tidy
 go -C SOURCE/daemon mod tidy -diff > "$output/mod-tidy.txt" 2>&1
+test ! -s "$output/mod-tidy.txt"
 pass
 gate=daemon-mod-verify
 go -C SOURCE/daemon mod download
