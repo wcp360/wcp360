@@ -1,5 +1,17 @@
 # WCP360 — Project Status
 
+## Limited source-code resume — 2026-10-28
+
+MASTER authorization: `3fd2f8007baa49c2454cc89c0a5488a57c77911b` in `manifests/WCP360-BM-0001.md`.
+
+SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY.
+The owner-approved daemon toolchain addendum v1.0 (commit `1ff4c195e75dade00cda13215b92ffe7576637b7`, blob `f8608d6258f87b8c1099b9b3a7e32ec95c72dc27`) supplies F02/F04/F06/F07/F08 for this slice.
+
+Implementation is published in `SOURCE/daemon/` on draft PR #108. Follow that PR for exact candidate SHA and executed CI results. Independent E3 remains required before I1/R1 merge. No wider component, service, privileged operation, database or web surface is activated.
+
+Canonical specification gate = 8/8 accepted. SC-M02 = NOT AUTHORIZED. CODE-BASELINE = NONE.
+Earlier PAUSED / missing-toolchain statements below describe the state before this limited authorization.
+
 ## MASTER canonical evidence acceptance — 2026-10-28
 
 CURRENT CANONICAL PUBLICATION = 8/8.

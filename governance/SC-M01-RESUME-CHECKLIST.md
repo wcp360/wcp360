@@ -6,8 +6,8 @@ Reference: `WCP360-BM-0001 FINAL / SC-M01 TARGETED EVIDENCE`
 
 ```text
 CANONICAL EVIDENCE = 8 / 8 ACCEPTED
-SOURCE CODE = PAUSED
-SC-M01 = PAUSED — IMPLEMENTATION SLICE / RESUME DECISION PENDING
+SOURCE CODE = STARTED ON DRAFT PR #108 — SOURCE/daemon/
+SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
@@ -23,7 +23,7 @@ CODE-BASELINE = NONE
 - [x] DevOps Baseline v1.0
 - [x] Engineering Ruleset ENG-WCP-RULESET-0001 v0.3 — successor to v0.2 explicitly accepted in manifest
 
-Latest MASTER evidence decision: `manifests/WCP360-BM-0001.md`, 2026-10-28. All eight publication inputs are accepted. Scope/activated decisions and explicit resume below still require verification; product tests and E3 are not claimed.
+Latest MASTER evidence decision: `manifests/WCP360-BM-0001.md`, 2026-10-28. All eight publication inputs are accepted. Selected-slice F02/F04/F06/F07/F08 are accepted under MASTER limited-resume commit 3fd2f8007baa49c2454cc89c0a5488a57c77911b and owner toolchain addendum blob f8608d6258f87b8c1099b9b3a7e32ec95c72dc27. Draft PR #108 contains implementation and exact-run CI evidence. E3 remains required before merge; the conditions below continue to apply to any additional slice.
 
 ## Per-artifact acceptance test
 
