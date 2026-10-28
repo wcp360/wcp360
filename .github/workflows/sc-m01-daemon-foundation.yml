@@ -73,7 +73,7 @@ jobs:
           docker run --rm --platform linux/amd64 --user 10001:10001 \
             --network none --cap-drop ALL --security-opt no-new-privileges \
             --read-only --pids-limit 128 --memory 2g \
-            --tmpfs /tmp:rw,nosuid,nodev,size=1g,mode=1777 \
+            --tmpfs /tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 \
             --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
             --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
             wcp-foundation-ci sh SOURCE/daemon/tools/check.sh
@@ -99,7 +99,7 @@ jobs:
           docker run --rm --platform linux/amd64 --user 10001:10001 \
             --network wcp-vuln --cap-drop ALL --security-opt no-new-privileges \
             --read-only --pids-limit 128 --memory 2g \
-            --tmpfs /tmp:rw,nosuid,nodev,size=1g,mode=1777 \
+            --tmpfs /tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 \
             --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
             --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
             --mount type=bind,src=/etc/ssl/certs/ca-certificates.crt,dst=/etc/ssl/certs/ca-certificates.crt,readonly \
