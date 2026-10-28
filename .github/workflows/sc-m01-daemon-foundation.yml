@@ -56,7 +56,6 @@ jobs:
           tar -xf "$task_dir/source.tar" -C "$task_dir/source"
           mkdir -p "$task_dir/source/out"
           chmod -R a+rX "$task_dir/source"
-          sudo chown -R 10001:10001 "$task_dir/out"
           {
             printf 'tested_commit=%s\n' "$(git rev-parse HEAD)"
             printf 'run_id=%s\nrun_attempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
@@ -65,6 +64,7 @@ jobs:
             docker image inspect --format '{{.Id}}' wcp-foundation-ci
             printf 'source_form=git-archive; VCS identity retained in evidence, not embedded\n'
           } > "$task_dir/out/sc-m01/daemon/provenance.txt"
+          sudo chown -R 10001:10001 "$task_dir/out"
       - name: Canonical offline build and unit gates
         shell: bash
         run: |
@@ -87,7 +87,7 @@ jobs:
           sudo iptables -I DOCKER-USER 1 -s 172.30.99.0/24 -j WCPVULN
           sudo iptables -A WCPVULN -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
           getent ahostsv4 vuln.go.dev | awk '{print $1}' | sort -u \
-            > "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
+            | sudo tee "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt" > /dev/null
           test -s "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
           while read -r service_ip; do
             sudo iptables -A WCPVULN -d "$service_ip" -p tcp --dport 443 -j ACCEPT
@@ -95,7 +95,7 @@ jobs:
           sudo iptables -A WCPVULN -j REJECT
           # TLS trust is transport configuration, mounted read-only and fingerprinted.
           sha256sum /etc/ssl/certs/ca-certificates.crt \
-            > "$task_dir/out/sc-m01/daemon/scanner-trust-bundle.sha256"
+            | sudo tee "$task_dir/out/sc-m01/daemon/scanner-trust-bundle.sha256" > /dev/null
           docker run --rm --platform linux/amd64 --user 10001:10001 \
             --network wcp-vuln --cap-drop ALL --security-opt no-new-privileges \
             --read-only --pids-limit 128 --memory 2g \
