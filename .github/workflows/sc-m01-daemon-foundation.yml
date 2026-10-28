@@ -1,0 +1,136 @@
+name: SC-M01 inert daemon foundation
+on:
+  pull_request:
+    paths: ['SOURCE/**', '.github/workflows/sc-m01-daemon-foundation.yml']
+  push:
+    branches: ['source/sc-m01-inert-daemon']
+    paths: ['SOURCE/**', '.github/workflows/sc-m01-daemon-foundation.yml']
+permissions:
+  contents: read
+concurrency:
+  group: sc-m01-daemon-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  daemon-foundation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GO_VERSION: '1.27.3'
+      GO_ARCHIVE_SHA256: '65efbc80fdc1fa2cd2631cad5b481777a68e8725f34e89f50fc6ac714e379b40'
+      DEBIAN_IMAGE: 'debian@sha256:918311b7b6c4c6f68b232ba516584925f6c78ad82b6fd534b98979df6438e483'
+    steps:
+      - name: Read-only checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Assemble trusted pinned toolchain (no product execution)
+        shell: bash
+        run: |
+          set -euo pipefail
+          task_dir="$RUNNER_TEMP/wcp-foundation"
+          mkdir -p "$task_dir/builder" "$task_dir/source" "$task_dir/out/sc-m01/daemon"
+          printf '%s\n' "$task_dir" > "$RUNNER_TEMP/wcp-task-dir"
+          curl --fail --location --proto '=https' --tlsv1.2 \
+            "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o "$task_dir/go.tar.gz"
+          printf '%s  %s\n' "$GO_ARCHIVE_SHA256" "$task_dir/go.tar.gz" | sha256sum --check
+          tar -xzf "$task_dir/go.tar.gz" -C "$task_dir/builder"
+          mkdir -p "$task_dir/builder/tools"
+          env GOTOOLCHAIN=local GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org \
+            GOPRIVATE= GONOSUMDB= GOBIN="$task_dir/builder/tools" \
+            "$task_dir/builder/go/bin/go" install golang.org/x/vuln/cmd/govulncheck@v1.9.0
+          "$task_dir/builder/go/bin/go" version -m "$task_dir/builder/tools/govulncheck" \
+            > "$task_dir/out/sc-m01/daemon/scanner-bootstrap.txt"
+          cat > "$task_dir/builder/Dockerfile" <<'DOCKERFILE'
+          FROM debian@sha256:918311b7b6c4c6f68b232ba516584925f6c78ad82b6fd534b98979df6438e483
+          COPY go/ /opt/go/
+          COPY tools/ /opt/tools/
+          ENV PATH="/opt/go/bin:/opt/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          USER 10001:10001
+          WORKDIR /workspace
+          DOCKERFILE
+          docker pull --platform linux/amd64 "$DEBIAN_IMAGE"
+          docker build --no-cache --network=none --platform linux/amd64 \
+            --tag wcp-foundation-ci "$task_dir/builder"
+          git archive --format=tar HEAD > "$task_dir/source.tar"
+          tar -xf "$task_dir/source.tar" -C "$task_dir/source"
+          mkdir -p "$task_dir/source/out"
+          chmod -R a+rX "$task_dir/source"
+          sudo chown -R 10001:10001 "$task_dir/out"
+          {
+            printf 'tested_commit=%s\n' "$(git rev-parse HEAD)"
+            printf 'run_id=%s\nrun_attempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+            printf 'base_image=%s\ngo_archive_sha256=%s\n' "$DEBIAN_IMAGE" "$GO_ARCHIVE_SHA256"
+            sha256sum "$task_dir/source.tar"
+            docker image inspect --format '{{.Id}}' wcp-foundation-ci
+            printf 'source_form=git-archive; VCS identity retained in evidence, not embedded\n'
+          } > "$task_dir/out/sc-m01/daemon/provenance.txt"
+      - name: Canonical offline build and unit gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          task_dir="$(cat "$RUNNER_TEMP/wcp-task-dir")"
+          docker run --rm --platform linux/amd64 --user 10001:10001 \
+            --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --pids-limit 128 --memory 2g \
+            --tmpfs /tmp:rw,nosuid,nodev,size=1g,mode=1777 \
+            --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
+            --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
+            wcp-foundation-ci sh SOURCE/daemon/tools/check.sh
+      - name: Vulnerability scan with allowlisted service egress
+        shell: bash
+        run: |
+          set -euo pipefail
+          task_dir="$(cat "$RUNNER_TEMP/wcp-task-dir")"
+          docker network create --subnet 172.30.99.0/24 wcp-vuln
+          sudo iptables -N WCPVULN
+          sudo iptables -I DOCKER-USER 1 -s 172.30.99.0/24 -j WCPVULN
+          sudo iptables -A WCPVULN -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+          getent ahostsv4 vuln.go.dev | awk '{print $1}' | sort -u \
+            > "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
+          test -s "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
+          while read -r service_ip; do
+            sudo iptables -A WCPVULN -d "$service_ip" -p tcp --dport 443 -j ACCEPT
+          done < "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt"
+          sudo iptables -A WCPVULN -j REJECT
+          # TLS trust is transport configuration, mounted read-only and fingerprinted.
+          sha256sum /etc/ssl/certs/ca-certificates.crt \
+            > "$task_dir/out/sc-m01/daemon/scanner-trust-bundle.sha256"
+          docker run --rm --platform linux/amd64 --user 10001:10001 \
+            --network wcp-vuln --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --pids-limit 128 --memory 2g \
+            --tmpfs /tmp:rw,nosuid,nodev,size=1g,mode=1777 \
+            --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
+            --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
+            --mount type=bind,src=/etc/ssl/certs/ca-certificates.crt,dst=/etc/ssl/certs/ca-certificates.crt,readonly \
+            wcp-foundation-ci sh SOURCE/daemon/tools/scan.sh
+      - name: Show gate evidence
+        if: always()
+        shell: bash
+        run: |
+          task_dir="$RUNNER_TEMP/wcp-foundation"
+          if test -f "$task_dir/out/sc-m01/daemon/gates.tsv"; then
+            cat "$task_dir/out/sc-m01/daemon/gates.tsv"
+          fi
+          for report in gofmt.txt vet.txt unit.jsonl vulnerability.txt; do
+            if test -f "$task_dir/out/sc-m01/daemon/$report"; then
+              printf '\nReport: %s\n' "$report"
+              tail -n 80 "$task_dir/out/sc-m01/daemon/$report"
+            fi
+          done
+      - name: Preserve exact-run evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sc-m01-daemon-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/wcp-foundation/out/sc-m01/daemon/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Remove scanner network
+        if: always()
+        shell: bash
+        run: |
+          docker network rm wcp-vuln >/dev/null 2>&1 || true
+          sudo iptables -D DOCKER-USER -s 172.30.99.0/24 -j WCPVULN 2>/dev/null || true
+          sudo iptables -F WCPVULN 2>/dev/null || true
+          sudo iptables -X WCPVULN 2>/dev/null || true
