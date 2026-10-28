@@ -1,5 +1,35 @@
 # WCP360 — Project Status
 
+## MASTER canonical evidence acceptance — 2026-10-28
+
+CURRENT CANONICAL PUBLICATION = 8/8.
+CURRENT MASTER-ACCEPTED SPECIFICATION INPUTS = 8/8.
+DATABASE DB-MV01 = RESOLVED AT SPECIFICATION LEVEL.
+DATABASE DB-MV02 = RESOLVED AT SPECIFICATION LEVEL.
+
+Database owner-final v1.0 artifact: `specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md`.
+Owner commit: `c2d4f96594fd3be7200128fff23bcfe811e7fd60`.
+Exact blob verified at that commit and in main: `2660e057bad1d00592c57f354b1f3745ccccbe7d`.
+
+Final delta verified as exactly the TX-REV-01 canonical CONCURRENCY_CONFLICT correction and its QA assertion. CONCURRENT_MODIFICATION occurs only in the explicit rejection assertion. The 23 canonical API error codes, namespace-specific grammar, registry FKs and separate USER/ADMIN session tables/claims/runtime-access rules remain intact. The seven other accepted artifact blobs were rechecked unchanged in main.
+
+Owner publication remains OWNER RECONSTRUCTION / AMENDMENT, REAL DELTA, v1.0 retained with explicit owner rationale, historical content excluded. MASTER accepts this corrected artifact as the eighth specification input. Database publication issue #6 may close. This supersedes the earlier 7/8 state and pending DB-MV01/DB-MV02 findings below; those entries remain historical evidence only.
+
+Verification class: E2 publication/content/cross-contract verification. Product execution = NONE; no PASS/FAIL or independent E3 approval is claimed. No migration or DDL is generated. Audit findings and applicable independent-review obligations are not closed by this publication decision.
+
+SC-M01 = PAUSED — IMPLEMENTATION SLICE / RESUME DECISION PENDING.
+SC-M02 = NOT AUTHORIZED.
+CODE-BASELINE = NONE.
+
+Before separately authorizing SC-M01, MASTER must select the first foundation slice and verify its activated toolchain, contract, security and other owner decisions. The completed eight-artifact publication gate does not supply missing component decisions or authorize implementation automatically.
+
+
+---
+
+## Historical status record
+
+The dated sections below predate the 2026-10-28 acceptance above. Their 5/8 and missing-owner-publication statements are historical, not current gate state.
+
 **Reference date:** 2026-10-04  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
