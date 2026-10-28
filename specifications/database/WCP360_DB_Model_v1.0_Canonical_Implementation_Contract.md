@@ -7,8 +7,8 @@ ARTIFACT = specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation
 VERSION = v1.0  
 STATUS = FINAL APPROVED CONTENT  
 PUBLICATION TYPE = OWNER RECONSTRUCTION / AMENDMENT  
-CONTENT CHANGE = REAL DELTA  
-VERSION IMPACT = NONE — v1.0 RETAINED; the delta materializes and makes implementation-critical details explicit without changing the approved architecture, tenancy model, state-authority boundary, or public API/IPC semantics.  
+CONTENT CHANGE = REAL DELTA — DB-MV01 / DB-MV02 TARGETED CONFORMANCE CORRECTION  
+VERSION IMPACT = NONE — v1.0 RETAINED; this pre-implementation correction aligns the physical contract with already-approved API v1.0 and Security v1.0 semantics and does not change the product architecture or public API/IPC contract.  
 HISTORICAL CONTENT INCLUDED = NO  
 READY FOR SOURCE CODE CONSUMPTION = YES, only if MASTER separately authorizes SC-M01.  
 CODE-BASELINE = NONE  
@@ -81,9 +81,182 @@ The public schema must not contain WCP360 business/control-plane tables.
 ## Global physical rules
 
 ### Identifiers
-Durable entity and occurrence identifiers use PostgreSQL UUID with UUIDv7 generation. IDs are opaque to clients. Typed registries use TEXT <= 128 characters and the canonical pattern ^[a-z][a-z0-9_.-]{1,127}$.
+Durable entity and occurrence identifiers use PostgreSQL UUID with UUIDv7 generation. IDs are opaque to clients.
 
-Distinct typed namespaces remain distinct: permission_id, action_id, job_type, event_id, audit_event_id, ipc_operation_id, error_code and entitlement_id.
+Typed namespaces use namespace-specific lexical contracts; there is no universal lowercase grammar:
+
+- `permission_id`, `action_id`, `job_type`, `event_id`, `audit_event_id`, `ipc_operation_id` and `entitlement_id`: `TEXT`, maximum 128 characters, grammar `^[a-z][a-z0-9_.-]{1,127}# WCP360 — Database Model v1.0 — Canonical Implementation Contract
+
+## Publication metadata
+
+OWNER = WCP360 — DATABASE / DATA MODEL  
+ARTIFACT = specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md  
+VERSION = v1.0  
+STATUS = FINAL APPROVED CONTENT  
+PUBLICATION TYPE = OWNER RECONSTRUCTION / AMENDMENT  
+CONTENT CHANGE = REAL DELTA — DB-MV01 / DB-MV02 TARGETED CONFORMANCE CORRECTION  
+VERSION IMPACT = NONE — v1.0 RETAINED; this pre-implementation correction aligns the physical contract with already-approved API v1.0 and Security v1.0 semantics and does not change the product architecture or public API/IPC contract.  
+HISTORICAL CONTENT INCLUDED = NO  
+READY FOR SOURCE CODE CONSUMPTION = YES, only if MASTER separately authorizes SC-M01.  
+CODE-BASELINE = NONE  
+SC-M01 RESUME AUTHORIZATION = NOT GRANTED BY THIS DOCUMENT  
+
+### Provenance
+
+1. Final owner metadata and a complete owner publication were previously confirmed in the DATABASE / DATA MODEL workstream.
+2. Historical GitHub recovery evidence preserves substantial verbatim fragments but is explicitly incomplete:
+   - governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md
+   - governance/evidence/SC-M01-DB-RECOVERED-TABLE-FRAGMENTS-2026-10-27.md
+   - source recovery blob 7e06ce38c2dd742cfec9669884d7f13b4b611f39
+3. The non-canonical review worksheet governance/proposals/SC-M01-DB-36-TABLE-PHYSICAL-OWNER-MATERIALIZATION-CANDIDATE-v0.1.md was used only to identify unresolved DB-R01..DB-R15 cells. It is not authority.
+4. This publication is therefore not claimed as byte-identical historical republication. DATABASE explicitly owns and approves the reconstruction/amendment choices below.
+
+No executable DDL or migration is contained here.
+
+## Hard invariants
+
+- account_id != organization_id != tenant_id
+- Tenant = security/data isolation boundary.
+- ownership != membership != delegation.
+- Reseller delegation != Tenant ownership.
+- CONTROL-PLANE POSTGRESQL != HOSTED DB ENGINES != TENANT / APPLICATION DB CONTENT.
+- PostgreSQL = authoritative logical control-plane state.
+- /var/lib/wcp360 = materialized / node-local / reconstructable.
+- /run/wcp360 = ephemeral runtime.
+- /var/cache/wcp360 = reconstructable cache.
+- Linux / services / filesystem = observed physical state.
+- audit_event_id = semantic audit event TYPE.
+- audit_record_id = immutable audit OCCURRENCE.
+- correlation_id is correlation only, never authorization.
+- retry != reconciliation; rollback != compensation; DB commit != external verified success; restore != replay.
+
+## DB-R01..DB-R15 owner decision matrix
+
+| ID | Topic | Decision | Final owner disposition |
+|---|---|---|---|
+| DB-R01 | CORE completeness | ACCEPT | All CORE tables, ownership/membership/delegation constraints, composite owner keys and delete behavior are explicitly materialized. |
+| DB-R02 | IAM completeness | AMEND | Full IAM table set, scope CHECKs, delegation binding, nullability and retention classes are now explicit. |
+| DB-R03 | INFRA completeness | ACCEPT | Servers, capabilities, managed resources, desired/observed state and quotas are explicit with scope/tenant constraints. |
+| DB-R04 | HOSTING completeness | ACCEPT | Ten hosted-resource tables are explicit with tenant-aware composite FKs and ownership invariants. |
+| DB-R05 | COMMERCIAL completeness | AMEND | Plan/subscription/entitlement persistence and delete/retention semantics are explicit; DB rows do not override Security authorization ceilings. |
+| DB-R06 | OPS completeness | AMEND | job_attempts, NULL-safe idempotency uniqueness, leases/fencing, outbox, event and reconciliation contracts are completed. |
+| DB-R07 | AUDIT completeness | AMEND | Immutable occurrence model, no-cascade evidence, exact correctness/query indexes and retention class are explicit. |
+| DB-R08 | BACKUP completeness | AMEND | backup_objects and restore_operations now have exact physical definitions and restore/reconciliation rules. |
+| DB-R09 | Global constraints | ACCEPT | UUIDv7, typed IDs, TIMESTAMPTZ, revision, JSONB boundaries, tenant composites, NOT NULL/CHECK and delete defaults are explicit. |
+| DB-R10 | Approved index catalogue | AMEND | Deterministic constraint/FK naming and exact additional correctness/worker/query indexes are now canonical. |
+| DB-R11 | Transaction boundaries | AMEND | Mutation/audit/outbox, idempotency claim/result, job enqueue, revision and reconciliation transactions are enumerated. |
+| DB-R12 | Concurrency / locking | AMEND | Optimistic revision, SKIP LOCKED claim, one-row lease target, monotonic fencing and stale-result rejection are explicit. |
+| DB-R13 | Retention / partitioning | AMEND | Per-class retention policy is explicit; v1.0 has no fixed numeric durations and no required partitioning. |
+| DB-R14 | Backup / restore | AMEND | Three backup classes, restore boundary, re-observation and no-blind-replay rules are explicit. |
+| DB-R15 | Migration boundary | AMEND | Model vs migration authority, compatibility classification, pre-upgrade backup, rollback/forward-fix and hosted-DB exclusion are explicit. |
+
+All fifteen items are resolved by this owner publication. No unresolved DB-R item remains.
+
+## PostgreSQL schema namespaces
+
+- wcp_core — Account / Organization / Tenant / Hosting Account and structural relations.
+- wcp_iam — identities, memberships, roles, permissions, delegations, sessions and API credential metadata.
+- wcp_infra — servers, managed resources, desired/observed state and quotas.
+- wcp_hosting — domains, websites, DNS, mail, certificates and hosted-database management metadata.
+- wcp_commercial — plans, subscriptions and entitlements.
+- wcp_ops — jobs, attempts, idempotency, leases, outbox, events, reconciliation and notifications.
+- wcp_audit — immutable audit occurrences.
+- wcp_backup — backup and restore metadata.
+
+The public schema must not contain WCP360 business/control-plane tables.
+
+## Global physical rules
+
+.
+- `error_code`: `TEXT`, maximum 128 characters, grammar `^[A-Z][A-Z0-9_]{1,127}# WCP360 — Database Model v1.0 — Canonical Implementation Contract
+
+## Publication metadata
+
+OWNER = WCP360 — DATABASE / DATA MODEL  
+ARTIFACT = specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md  
+VERSION = v1.0  
+STATUS = FINAL APPROVED CONTENT  
+PUBLICATION TYPE = OWNER RECONSTRUCTION / AMENDMENT  
+CONTENT CHANGE = REAL DELTA — DB-MV01 / DB-MV02 TARGETED CONFORMANCE CORRECTION  
+VERSION IMPACT = NONE — v1.0 RETAINED; this pre-implementation correction aligns the physical contract with already-approved API v1.0 and Security v1.0 semantics and does not change the product architecture or public API/IPC contract.  
+HISTORICAL CONTENT INCLUDED = NO  
+READY FOR SOURCE CODE CONSUMPTION = YES, only if MASTER separately authorizes SC-M01.  
+CODE-BASELINE = NONE  
+SC-M01 RESUME AUTHORIZATION = NOT GRANTED BY THIS DOCUMENT  
+
+### Provenance
+
+1. Final owner metadata and a complete owner publication were previously confirmed in the DATABASE / DATA MODEL workstream.
+2. Historical GitHub recovery evidence preserves substantial verbatim fragments but is explicitly incomplete:
+   - governance/recovery/SC-M01-RECOVERED-DB-FINAL-ARTIFACT-EVIDENCE.md
+   - governance/evidence/SC-M01-DB-RECOVERED-TABLE-FRAGMENTS-2026-10-27.md
+   - source recovery blob 7e06ce38c2dd742cfec9669884d7f13b4b611f39
+3. The non-canonical review worksheet governance/proposals/SC-M01-DB-36-TABLE-PHYSICAL-OWNER-MATERIALIZATION-CANDIDATE-v0.1.md was used only to identify unresolved DB-R01..DB-R15 cells. It is not authority.
+4. This publication is therefore not claimed as byte-identical historical republication. DATABASE explicitly owns and approves the reconstruction/amendment choices below.
+
+No executable DDL or migration is contained here.
+
+## Hard invariants
+
+- account_id != organization_id != tenant_id
+- Tenant = security/data isolation boundary.
+- ownership != membership != delegation.
+- Reseller delegation != Tenant ownership.
+- CONTROL-PLANE POSTGRESQL != HOSTED DB ENGINES != TENANT / APPLICATION DB CONTENT.
+- PostgreSQL = authoritative logical control-plane state.
+- /var/lib/wcp360 = materialized / node-local / reconstructable.
+- /run/wcp360 = ephemeral runtime.
+- /var/cache/wcp360 = reconstructable cache.
+- Linux / services / filesystem = observed physical state.
+- audit_event_id = semantic audit event TYPE.
+- audit_record_id = immutable audit OCCURRENCE.
+- correlation_id is correlation only, never authorization.
+- retry != reconciliation; rollback != compensation; DB commit != external verified success; restore != replay.
+
+## DB-R01..DB-R15 owner decision matrix
+
+| ID | Topic | Decision | Final owner disposition |
+|---|---|---|---|
+| DB-R01 | CORE completeness | ACCEPT | All CORE tables, ownership/membership/delegation constraints, composite owner keys and delete behavior are explicitly materialized. |
+| DB-R02 | IAM completeness | AMEND | Full IAM table set, scope CHECKs, delegation binding, nullability and retention classes are now explicit. |
+| DB-R03 | INFRA completeness | ACCEPT | Servers, capabilities, managed resources, desired/observed state and quotas are explicit with scope/tenant constraints. |
+| DB-R04 | HOSTING completeness | ACCEPT | Ten hosted-resource tables are explicit with tenant-aware composite FKs and ownership invariants. |
+| DB-R05 | COMMERCIAL completeness | AMEND | Plan/subscription/entitlement persistence and delete/retention semantics are explicit; DB rows do not override Security authorization ceilings. |
+| DB-R06 | OPS completeness | AMEND | job_attempts, NULL-safe idempotency uniqueness, leases/fencing, outbox, event and reconciliation contracts are completed. |
+| DB-R07 | AUDIT completeness | AMEND | Immutable occurrence model, no-cascade evidence, exact correctness/query indexes and retention class are explicit. |
+| DB-R08 | BACKUP completeness | AMEND | backup_objects and restore_operations now have exact physical definitions and restore/reconciliation rules. |
+| DB-R09 | Global constraints | ACCEPT | UUIDv7, typed IDs, TIMESTAMPTZ, revision, JSONB boundaries, tenant composites, NOT NULL/CHECK and delete defaults are explicit. |
+| DB-R10 | Approved index catalogue | AMEND | Deterministic constraint/FK naming and exact additional correctness/worker/query indexes are now canonical. |
+| DB-R11 | Transaction boundaries | AMEND | Mutation/audit/outbox, idempotency claim/result, job enqueue, revision and reconciliation transactions are enumerated. |
+| DB-R12 | Concurrency / locking | AMEND | Optimistic revision, SKIP LOCKED claim, one-row lease target, monotonic fencing and stale-result rejection are explicit. |
+| DB-R13 | Retention / partitioning | AMEND | Per-class retention policy is explicit; v1.0 has no fixed numeric durations and no required partitioning. |
+| DB-R14 | Backup / restore | AMEND | Three backup classes, restore boundary, re-observation and no-blind-replay rules are explicit. |
+| DB-R15 | Migration boundary | AMEND | Model vs migration authority, compatibility classification, pre-upgrade backup, rollback/forward-fix and hosted-DB exclusion are explicit. |
+
+All fifteen items are resolved by this owner publication. No unresolved DB-R item remains.
+
+## PostgreSQL schema namespaces
+
+- wcp_core — Account / Organization / Tenant / Hosting Account and structural relations.
+- wcp_iam — identities, memberships, roles, permissions, delegations, sessions and API credential metadata.
+- wcp_infra — servers, managed resources, desired/observed state and quotas.
+- wcp_hosting — domains, websites, DNS, mail, certificates and hosted-database management metadata.
+- wcp_commercial — plans, subscriptions and entitlements.
+- wcp_ops — jobs, attempts, idempotency, leases, outbox, events, reconciliation and notifications.
+- wcp_audit — immutable audit occurrences.
+- wcp_backup — backup and restore metadata.
+
+The public schema must not contain WCP360 business/control-plane tables.
+
+## Global physical rules
+
+, and membership in the canonical API v1.0 Error Registry persisted by `wcp_core.error_definitions`.
+- `audit_record_id`: UUID occurrence identity, not a typed text identifier.
+- `contract_id` is owner-defined contract metadata and is not `ipc_operation_id`; API contract identifiers such as `API-WCP-0101` retain their API-owned grammar and must never be normalized into a different typed namespace.
+
+Exact canonical error codes are preserved byte-for-byte. Database/application code must not lowercase, slugify or otherwise rename them.
+
+Distinct typed namespaces remain distinct: permission_id, action_id, job_type, event_id, audit_event_id, audit_record_id, ipc_operation_id, error_code and entitlement_id.
 
 ### Time, revision and state
 All authoritative instants use TIMESTAMPTZ. Mutable aggregate roots that require conflict detection carry revision BIGINT NOT NULL CHECK revision >= 1. Canonical lifecycle/state fields use TEXT constrained to their owner registry; Source Code may not invent states.
@@ -234,6 +407,47 @@ Owner rules:
 - UNIQUE(reseller_account_id, tenant_id): one logical delegation row per reseller/Tenant pair; lifecycle changes are versioned on that row.
 - Delegation never mutates tenants.account_id and never becomes ownership.
 
+### wcp_core.error_definitions
+
+| Column | Type | Nullability | Physical rule |
+|---|---|---|---|
+| error_code | TEXT | NOT NULL | PK; CHECK exact API v1.0 Error Registry membership |
+| api_contract_version | TEXT | NOT NULL | CHECK = '1.0' |
+
+Canonical allowed `error_code` values for DB Model v1.0:
+
+```text
+VALIDATION_FAILED
+AUTHENTICATION_REQUIRED
+AUTHORIZATION_DENIED
+ENTITLEMENT_REQUIRED
+POLICY_DENIED
+MFA_REQUIRED
+REAUTHENTICATION_REQUIRED
+APPROVAL_REQUIRED
+RESOURCE_NOT_FOUND
+RESOURCE_CONFLICT
+CONCURRENCY_CONFLICT
+IDEMPOTENCY_CONFLICT
+CANCELLATION_NOT_ALLOWED
+CONTRACT_VERSION_UNSUPPORTED
+RATE_LIMITED
+OPERATION_TIMEOUT
+DEPENDENCY_FAILURE
+SERVICE_UNAVAILABLE
+UNKNOWN_OUTCOME
+INTERNAL_ERROR
+IPC_OPERATION_NOT_ALLOWED
+IPC_CALLER_UNTRUSTED
+IPC_SCHEMA_INVALID
+```
+
+Owner rules:
+- This table is a physical mirror of the approved API v1.0 Error Registry, not a Database-owned replacement registry.
+- An unknown uppercase token is invalid even if it matches the lexical grammar.
+- Child `error_code` / `last_error_code` columns reference this primary key with `ON DELETE RESTRICT`.
+- API/Security contract identifiers are never inserted here unless they are canonical API `error_code` values.
+
 ### wcp_iam.users
 
 | Column | Type | Nullability | Physical rule |
@@ -360,12 +574,15 @@ Owner rules:
 Owner rules:
 - entitlement_id != permission_id. Database persistence does not grant authorization by itself.
 
-### wcp_iam.sessions
+### wcp_iam.user_sessions
+
+This relation is the canonical server-side session namespace for the WCP-USER surface.
 
 | Column | Type | Nullability | Physical rule |
 |---|---|---|---|
-| session_id | UUID | NOT NULL | PK; UUIDv7 |
+| session_id | UUID | NOT NULL | PK; UUIDv7; opaque bearer lookup identifier |
 | user_id | UUID | NOT NULL | FK -> users ON DELETE RESTRICT |
+| surface_claim | TEXT | NOT NULL | CHECK = 'WCP-USER' |
 | secret_verifier | BYTEA | NOT NULL | hashed/verifier material only |
 | session_state | TEXT | NOT NULL | canonical state registry |
 | auth_strength | INTEGER | NOT NULL | CHECK >= 0 |
@@ -375,7 +592,61 @@ Owner rules:
 | revoked_at | TIMESTAMPTZ | NULL |  |
 
 Owner rules:
-- Raw session token prohibited.
+- Server-side namespace = `wcp_iam.user_sessions`.
+- Security cookie binding = `__Host-wcp_user_session`.
+- Security surface claim = `WCP-USER`.
+- Runtime Unix identity = `wcp360-user:wcp360-user`.
+- The PostgreSQL credential used by the WCP-USER runtime MUST have session CRUD access to `wcp_iam.user_sessions` and MUST have no session CRUD/read access to `wcp_iam.admin_sessions`.
+- Raw session tokens are forbidden; only verifier/hash material is persisted.
+
+### wcp_iam.admin_sessions
+
+This relation is the canonical server-side session namespace for the WCP-ADMIN surface.
+
+| Column | Type | Nullability | Physical rule |
+|---|---|---|---|
+| session_id | UUID | NOT NULL | PK; UUIDv7; opaque bearer lookup identifier |
+| user_id | UUID | NOT NULL | FK -> users ON DELETE RESTRICT |
+| surface_claim | TEXT | NOT NULL | CHECK = 'WCP-ADMIN' |
+| secret_verifier | BYTEA | NOT NULL | hashed/verifier material only |
+| session_state | TEXT | NOT NULL | canonical state registry |
+| auth_strength | INTEGER | NOT NULL | CHECK >= 0 |
+| created_at | TIMESTAMPTZ | NOT NULL |  |
+| last_seen_at | TIMESTAMPTZ | NULL |  |
+| expires_at | TIMESTAMPTZ | NOT NULL | CHECK > created_at |
+| revoked_at | TIMESTAMPTZ | NULL |  |
+
+Owner rules:
+- Server-side namespace = `wcp_iam.admin_sessions`.
+- Security cookie binding = `__Host-wcp_admin_session`.
+- Security surface claim = `WCP-ADMIN`.
+- Runtime Unix identity = `wcp360-admin:wcp360-admin`.
+- The PostgreSQL credential used by the WCP-ADMIN runtime MUST have session CRUD access to `wcp_iam.admin_sessions` and MUST have no session CRUD/read access to `wcp_iam.user_sessions`.
+- Raw session tokens are forbidden; only verifier/hash material is persisted.
+
+### Session-surface enforcement
+
+The two relations are deliberately separate physical namespaces. Authentication lookup is surface-bound:
+
+```text
+WCP-USER request
+→ __Host-wcp_user_session
+→ WCP-USER origin validation
+→ wcp360-user runtime
+→ wcp_iam.user_sessions
+→ surface_claim = WCP-USER
+
+WCP-ADMIN request
+→ __Host-wcp_admin_session
+→ WCP-ADMIN origin validation
+→ wcp360-admin runtime
+→ wcp_iam.admin_sessions
+→ surface_claim = WCP-ADMIN
+```
+
+A session identifier from one table is never looked up in the other surface's relation. Cross-surface DB privileges are denied for normal web runtimes. A migration/maintenance principal may administer both relations but must not be usable as either web runtime credential.
+
+Therefore a valid USER session cannot authenticate an ADMIN request, and a valid ADMIN session cannot authenticate a USER request. Origin, cookie, timeout, MFA, rotation and CSRF enforcement remain Security-owned and are not redefined by Database.
 
 ### wcp_iam.api_credentials
 
@@ -708,7 +979,7 @@ Owner rules:
 | requested_by_user_id | UUID | NULL | FK -> users ON DELETE SET NULL |
 | job_state | TEXT | NOT NULL | canonical job state registry |
 | outcome_class | TEXT | NULL | bounded outcome class |
-| error_code | TEXT | NULL | typed error registry ID |
+| error_code | TEXT | NULL | FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT |
 | attempt_count | INTEGER | NOT NULL | CHECK >=0 |
 | max_attempts | INTEGER | NOT NULL | CHECK >=1 and attempt_count<=max_attempts |
 | available_at | TIMESTAMPTZ | NOT NULL |  |
@@ -735,7 +1006,7 @@ Owner rules:
 | started_at | TIMESTAMPTZ | NOT NULL |  |
 | finished_at | TIMESTAMPTZ | NULL |  |
 | outcome_class | TEXT | NULL | bounded outcome class |
-| error_code | TEXT | NULL | typed error registry ID |
+| error_code | TEXT | NULL | FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT |
 | correlation_id | UUID | NOT NULL |  |
 | created_at | TIMESTAMPTZ | NOT NULL |  |
 
@@ -797,7 +1068,7 @@ Owner rules:
 | attempt_count | INTEGER | NOT NULL | CHECK >=0 |
 | available_at | TIMESTAMPTZ | NOT NULL |  |
 | published_at | TIMESTAMPTZ | NULL |  |
-| last_error_code | TEXT | NULL | typed error registry ID |
+| last_error_code | TEXT | NULL | FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT |
 | correlation_id | UUID | NOT NULL |  |
 | created_at | TIMESTAMPTZ | NOT NULL |  |
 
@@ -939,7 +1210,7 @@ Owner rules:
 | reconciliation_required | BOOLEAN | NOT NULL |  |
 | reconciliation_id | UUID | NULL | FK -> reconciliation_runs ON DELETE SET NULL |
 | outcome_class | TEXT | NULL | bounded outcome |
-| error_code | TEXT | NULL | typed error ID |
+| error_code | TEXT | NULL | FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT |
 | correlation_id | UUID | NOT NULL |  |
 | started_at | TIMESTAMPTZ | NULL |  |
 | completed_at | TIMESTAMPTZ | NULL |  |
@@ -1092,7 +1363,7 @@ v1.0 intentionally defines policy classes rather than hard-coded numeric duratio
 Accounts, organizations, tenants, hosting accounts, managed resources, IAM assignments and commercial state are never time-purged merely because they are old. Purge requires explicit lifecycle completion and referential-safety checks.
 
 ### RET-SESSION
-Expired/revoked sessions and API credential metadata are purge-eligible only after Security policy allows it and no active incident/legal/audit hold requires them.
+Expired/revoked rows from both `wcp_iam.user_sessions` and `wcp_iam.admin_sessions`, plus API credential metadata, are purge-eligible only after Security policy allows it and no active incident/legal/audit hold requires them. A retention process must preserve the USER/ADMIN namespace boundary and must never move a session row across surfaces.
 
 ### RET-IDEMPOTENCY
 Idempotency rows are not purge-eligible before expires_at and never while RUNNING, UNKNOWN_OUTCOME or reconciliation remains unresolved. Reuse after purge is governed by API compatibility/security policy.
@@ -1164,6 +1435,67 @@ Required families:
 - TEST-DB-BACKUP/RESTORE: class separation, restore re-observation, no blind replay, tenant binding preserved.
 - TEST-DB-MIGRATION: clean install, forward migration, compatibility refusal, backup prerequisite, rollback when REVERSIBLE, forward-fix when FORWARD_ONLY.
 
+## DB-MV01 / DB-MV02 targeted correction validation
+
+### DB-MV01 — Typed identifier grammar
+
+Status: **CORRECTED / CROSS-CONTRACT CONFORMANT**
+
+API owner source used for validation:
+- `specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md`
+- canonical blob: `4893c5191b4928ecfa5a70f4dc14b39a8939fcea`
+- API Contract Version: `1.0`
+
+The Database contract now preserves the API Error Registry exactly, including uppercase codes such as `IDEMPOTENCY_CONFLICT`, `UNKNOWN_OUTCOME` and `IPC_SCHEMA_INVALID`. No API identifier is renamed or lowercased. `contract_id` remains distinct from `ipc_operation_id`.
+
+Required QA assertions — implementation-dependent, status **READY/PLANNED**, never PASS by this publication:
+1. Insert/reference of canonical `IDEMPOTENCY_CONFLICT` succeeds.
+2. Insert/reference of canonical `UNKNOWN_OUTCOME` succeeds.
+3. Insert/reference of canonical `IPC_SCHEMA_INVALID` succeeds.
+4. Lowercased `idempotency_conflict` is rejected.
+5. Unknown uppercase `NOT_A_CANONICAL_ERROR` is rejected by canonical registry membership.
+6. API contract ID `API-WCP-0101` is not accepted as an `ipc_operation_id` or `error_code`.
+7. Error codes round-trip without case transformation.
+
+### DB-MV02 — WCP-USER / WCP-ADMIN session persistence separation
+
+Status: **CORRECTED / CROSS-CONTRACT CONFORMANT**
+
+Security owner source used for validation:
+- `specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md`
+- canonical blob: `6d74f2f363524511424f839ca7262143c2af95ab`
+- Security Baseline Version: `v1.0`
+
+The Database representation now implements Security's required separate server-side session namespace and surface claim as two physical relations:
+- `wcp_iam.user_sessions` for WCP-USER;
+- `wcp_iam.admin_sessions` for WCP-ADMIN.
+
+It also records the canonical cookie/runtime mapping from Security and requires surface-specific PostgreSQL runtime credentials to have no cross-surface session-table access.
+
+Required QA assertions — implementation-dependent, status **READY/PLANNED**, never PASS by this publication:
+1. USER session creation persists only in `wcp_iam.user_sessions` with `surface_claim='WCP-USER'`.
+2. ADMIN session creation persists only in `wcp_iam.admin_sessions` with `surface_claim='WCP-ADMIN'`.
+3. Mismatched surface claims are rejected by DB CHECK constraints.
+4. USER runtime DB credential cannot SELECT/INSERT/UPDATE/DELETE `wcp_iam.admin_sessions`.
+5. ADMIN runtime DB credential cannot SELECT/INSERT/UPDATE/DELETE `wcp_iam.user_sessions`.
+6. A valid USER cookie/session identifier presented on ADMIN lookup resolves no ADMIN session and authentication fails closed.
+7. A valid ADMIN cookie/session identifier presented on USER lookup resolves no USER session and authentication fails closed.
+8. Session rotation/revocation remains within its original surface namespace.
+9. Security cookie names remain exactly `__Host-wcp_user_session` and `__Host-wcp_admin_session`; Database does not define an alternative.
+10. No web runtime uses a migration/maintenance DB principal capable of reading both session namespaces.
+
+### Cross-owner validation result
+
+```text
+API / IPC CANONICAL CONTRACT CHECK = CONFORMANT
+SECURITY CANONICAL BASELINE CHECK   = CONFORMANT
+API CONTENT CHANGE                 = NONE
+SECURITY CONTENT CHANGE            = NONE
+DATABASE CONTENT CHANGE            = TARGETED REAL DELTA
+```
+
+This is a compatibility validation against already-final owner artifacts. It does not modify or supersede API/Security authority.
+
 ## DB-R closure statement
 
 DB-R01 through DB-R15 are owner-approved by this publication. The recovered historical fragments remain evidence only and are not imported as independent authority.
@@ -1177,8 +1509,8 @@ ARTIFACT = specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation
 VERSION = v1.0  
 FINAL APPROVED CONTENT = YES  
 PUBLICATION TYPE = OWNER RECONSTRUCTION / AMENDMENT  
-CONTENT CHANGE = REAL DELTA  
-VERSION IMPACT = NONE — v1.0 retained; no approved architecture/public-contract semantics changed  
+CONTENT CHANGE = REAL DELTA — DB-MV01 / DB-MV02 TARGETED CONFORMANCE CORRECTION  
+VERSION IMPACT = NONE — v1.0 retained; correction is pre-implementation and aligns Database with existing API/Security v1.0 contracts without changing their semantics  
 HISTORICAL CONTENT INCLUDED = NO  
 READY FOR SOURCE CODE CONSUMPTION = YES, subject only to MASTER's separate SC-M01 authorization  
 BLOCKER = NONE  
