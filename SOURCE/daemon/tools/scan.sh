@@ -18,6 +18,11 @@ test "$(go version)" = 'go version go1.27.3 linux/amd64'
         exit 1
     fi
     echo 'External IPv4 endpoint blocked (host positive control succeeded)'
+    if timeout 5 bash -c 'exec 3<>/dev/tcp/172.30.99.1/18345'; then
+        echo 'FAIL: host gateway reachable'
+        exit 1
+    fi
+    echo 'Host gateway endpoint blocked (live host positive control succeeded)'
     if timeout 5 getent ahostsv4 example.com; then
         echo 'FAIL: arbitrary DNS resolution permitted'
         exit 1

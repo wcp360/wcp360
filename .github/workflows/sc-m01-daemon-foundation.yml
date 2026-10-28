@@ -44,6 +44,13 @@ jobs:
             "$task_dir/builder/go/bin/go" install golang.org/x/vuln/cmd/govulncheck@v1.9.0
           "$task_dir/builder/go/bin/go" version -m "$task_dir/builder/tools/govulncheck" \
             > "$task_dir/out/sc-m01/daemon/scanner-bootstrap.txt"
+          # The checked-in inventory is candidate data: compare it; never execute it.
+          awk '$1 == "mod" || $1 == "dep" {print $2 " " $3 " " $4}' \
+            "$task_dir/out/sc-m01/daemon/scanner-bootstrap.txt" | LC_ALL=C sort \
+            > "$task_dir/out/sc-m01/daemon/scanner-linked-modules.txt"
+          diff -u SOURCE/daemon/tools/govulncheck.modules \
+            "$task_dir/out/sc-m01/daemon/scanner-linked-modules.txt"
+          cp SOURCE/daemon/tools/govulncheck.modules "$task_dir/out/sc-m01/daemon/scanner-module-lock.txt"
           sha256sum "$task_dir/builder/tools/govulncheck" > "$task_dir/out/sc-m01/daemon/scanner.sha256"
           awk '$1 == "mod" || $1 == "dep" {print $2 "@" $3}' \
             "$task_dir/out/sc-m01/daemon/scanner-bootstrap.txt" > "$task_dir/scanner-modules.txt"
@@ -88,15 +95,39 @@ jobs:
             --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
             --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
             wcp-foundation-ci sh SOURCE/daemon/tools/check.sh
+      - name: Prove offline gates reject invalid fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          task_dir="$(cat "$RUNNER_TEMP/wcp-task-dir")"
+          docker run --rm --platform linux/amd64 --user 10001:10001 \
+            --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --pids-limit 128 --memory 2g \
+            --tmpfs /tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 \
+            --mount "type=bind,src=$task_dir/source,dst=/workspace,readonly" \
+            --mount "type=bind,src=$task_dir/out,dst=/workspace/out" \
+            wcp-foundation-ci sh SOURCE/daemon/tools/check-negative.sh
       - name: Vulnerability scan with allowlisted service egress
         shell: bash
         run: |
           set -euo pipefail
           task_dir="$(cat "$RUNNER_TEMP/wcp-task-dir")"
-          docker network create --ipv6=false --subnet 172.30.99.0/24 wcp-vuln
+          docker network create --ipv6=false --subnet 172.30.99.0/24 \
+            --opt com.docker.network.bridge.name=wcp-vuln-br wcp-vuln
           service_ip="$(getent ahostsv4 vuln.go.dev | awk '{print $1}' | sort -u | head -n 1)"
           test -n "$service_ip"
           printf '%s\n' "$service_ip" | sudo tee "$task_dir/out/sc-m01/daemon/vulnerability-service-ips.txt" > /dev/null
+          # Host-directed traffic uses INPUT, not Docker's forwarding chain.
+          sudo iptables -N WCPHOST
+          sudo iptables -A WCPHOST -j REJECT
+          sudo iptables -I INPUT 1 -i wcp-vuln-br -s 172.30.99.0/24 -j WCPHOST
+          # Empty-directory listener proves the host path is denied, not merely closed.
+          mkdir -p "$task_dir/host-probe-root"
+          python3 -m http.server 18345 --bind 172.30.99.1 --directory "$task_dir/host-probe-root" \
+            > "$task_dir/host-probe.log" 2>&1 &
+          printf '%s\n' "$!" > "$task_dir/host-probe.pid"
+          curl --noproxy '*' --fail --silent --show-error --retry 8 --retry-connrefused \
+            --retry-delay 1 --max-time 2 http://172.30.99.1:18345/ > "$task_dir/host-probe-positive.txt"
           sudo iptables -N WCPVULN
           sudo iptables -I DOCKER-USER 1 -s 172.30.99.0/24 -j WCPVULN
           sudo iptables -A WCPVULN -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
@@ -120,6 +151,13 @@ jobs:
             wcp-foundation-ci sh SOURCE/daemon/tools/scan.sh
           sudo iptables -L WCPVULN -n -v -x \
             | sudo tee "$task_dir/out/sc-m01/daemon/scanner-firewall-counters.txt"
+          sudo iptables -L WCPHOST -n -v -x \
+            | sudo tee "$task_dir/out/sc-m01/daemon/scanner-host-firewall-counters.txt"
+          sudo iptables -L WCPHOST -n -v -x | awk \
+            '$3 == "REJECT" && $1 > 0 {denied=1} END {exit !denied}'
+          # Prove the positive-control host listener remained alive throughout the scan.
+          curl --noproxy '*' --fail --silent --show-error --max-time 2 \
+            http://172.30.99.1:18345/ > /dev/null
           # Both allowed scanner traffic and denied probe traffic must traverse this chain.
           sudo iptables -L WCPVULN -n -v -x | awk \
             '$3 == "ACCEPT" && /dpt:443/ && $1 > 0 {allowed=1} $3 == "REJECT" && $1 > 0 {denied=1} END {exit !(allowed && denied)}'
@@ -143,7 +181,7 @@ jobs:
           if test -f "$task_dir/out/sc-m01/daemon/gates.tsv"; then
             cat "$task_dir/out/sc-m01/daemon/gates.tsv"
           fi
-          for report in gofmt.txt vet.txt unit.jsonl vulnerability.txt binary.sha256 provenance.txt scanner-bootstrap.txt scanner-module-verify.txt scanner.sha256 scanner-isolation.txt scanner-firewall-counters.txt; do
+          for report in negative-gates.tsv gofmt.txt vet.txt unit.jsonl vulnerability.txt binary.sha256 provenance.txt scanner-bootstrap.txt scanner-module-verify.txt scanner.sha256 scanner-isolation.txt scanner-firewall-counters.txt scanner-host-firewall-counters.txt scanner-linked-modules.txt; do
             if test -f "$task_dir/out/sc-m01/daemon/$report"; then
               printf '\nReport: %s\n' "$report"
               tail -n 80 "$task_dir/out/sc-m01/daemon/$report"
@@ -161,6 +199,13 @@ jobs:
         if: always()
         shell: bash
         run: |
+          task_dir="$RUNNER_TEMP/wcp-foundation"
+          if test -f "$task_dir/host-probe.pid"; then
+            kill "$(cat "$task_dir/host-probe.pid")" 2>/dev/null || true
+          fi
+          sudo iptables -D INPUT -i wcp-vuln-br -s 172.30.99.0/24 -j WCPHOST 2>/dev/null || true
+          sudo iptables -F WCPHOST 2>/dev/null || true
+          sudo iptables -X WCPHOST 2>/dev/null || true
           docker network rm wcp-vuln >/dev/null 2>&1 || true
           sudo iptables -D DOCKER-USER -s 172.30.99.0/24 -j WCPVULN 2>/dev/null || true
           sudo iptables -F WCPVULN 2>/dev/null || true

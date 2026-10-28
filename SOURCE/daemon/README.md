@@ -46,3 +46,11 @@ This is an IP/port boundary, not a TLS hostname-aware proxy. Redirects requiring
 Scanner bootstrap uses fresh caches, exact version v1.9.0, the checksum database with no VCS fallback, and records all linked transitive module versions/h1 sums, module download provenance and scanner binary SHA256. Upstream transitive pseudo-versions are exposed for owner review, not implicitly approved.
 
 The 13-entry gate inventory is checked for exact names, absence of duplicates and successful results. Reproducibility initially means two clean builds within one run; comparing binary hashes across the independent push and PR runners provides additional evidence, not a general reproducible-release guarantee. A durable review record must preserve executed SHA/run IDs, gate results, binary/scanner hashes and transitive checksums before merge; expiring ZIPs alone are insufficient.
+
+## Negative gate evidence and host isolation
+
+CI runs six deliberate-invalid fixtures in disposable writable copies inside a separate offline, nonroot container. They verify rejection at the exact expected gate: simulated wrong Go version output, forbidden dependency, stale unused go.sum entry, formatting drift, vet printf diagnostic and failing unit assertion. Expected fixture failures are recorded as REJECTED_AS_EXPECTED in negative-gates.tsv; they are not product failures and do not replace the normal candidate gate report.
+
+The scanner's host-directed traffic is denied on INPUT as well as external forwarded traffic on DOCKER-USER. An empty-directory host listener bound only to the dedicated bridge provides a live positive control; the scanner must fail to connect while host checks succeed before and after. Nonzero host REJECT counters are required. The temporary listener and rules are removed after the job.
+
+Linked scanner versions and h1 checksums must exactly match tools/govulncheck.modules. That file locks the previously observed upstream closure; owner review of the disclosed telemetry pseudo-version remains required.
