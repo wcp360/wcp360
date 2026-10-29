@@ -48,6 +48,8 @@ pass
 
 gate=daemon-gofmt
 gofmt -l SOURCE/daemon > "$output/gofmt.txt"
+gofmt -d SOURCE/daemon > "$output/gofmt.diff"
+if test -s "$output/gofmt.txt"; then cat "$output/gofmt.diff" >&2; fi
 test ! -s "$output/gofmt.txt"
 pass
 gate=daemon-vet
@@ -59,12 +61,12 @@ go -C SOURCE/daemon test -mod=readonly -count=1 -json \
 pass
 
 gate=daemon-inert-import-boundary
-# Production packages may import only the CLI boundary, io and os. This gate is
-# deliberately narrow and must be explicitly changed when another slice opens.
-go -C SOURCE/daemon list -f '{{join .Imports "\n"}}' ./cmd/wcpd ./internal/cli > "$output/imports.txt"
+# Pure domain packages may use only the explicit standard-library list below.
+# No socket, filesystem mutation, database driver or process executor is allowed.
+go -C SOURCE/daemon list -f '{{join .Imports "\n"}}' ./... > "$output/imports.txt"
 while IFS= read -r imported; do
     case "$imported" in
-        ''|io|os|github.com/yyogas/wcp360/daemon/internal/cli) ;;
+        ''|io|os|embed|encoding/json|errors|sort|time|github.com/yyogas/wcp360/daemon/internal/cli) ;;
         *) printf 'Unexpected production import: %s\n' "$imported" >&2; exit 1 ;;
     esac
 done < "$output/imports.txt"
