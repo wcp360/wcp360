@@ -66,7 +66,7 @@ gate=daemon-inert-import-boundary
 go -C SOURCE/daemon list -f '{{join .Imports "\n"}}' ./... > "$output/imports.txt"
 while IFS= read -r imported; do
     case "$imported" in
-        ''|io|os|embed|encoding/json|errors|sort|time|github.com/yyogas/wcp360/daemon/internal/cli) ;;
+        ''|io|os|embed|encoding/json|errors|sort|time|github.com/yyogas/wcp360/daemon/internal/cli|github.com/yyogas/wcp360/daemon/internal/contracts) ;;
         *) printf 'Unexpected production import: %s\n' "$imported" >&2; exit 1 ;;
     esac
 done < "$output/imports.txt"
@@ -89,6 +89,9 @@ set -e
 test "$rejected" = 2
 test ! -s "$output/rejected.stdout"
 test "$(cat "$output/rejected.stderr")" = 'wcpd: unsupported arguments; use --help'
+
+"$output/wcpd" --contracts > "$output/contracts.json"
+test "$(cat "$output/contracts.json")" = '{"permissions":82,"api_contracts":86,"ipc_operations":47,"error_codes":23}'
 pass
 
 gate=daemon-reproducible-build

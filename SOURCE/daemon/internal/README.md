@@ -1,7 +1,9 @@
 # Pure foundation components
 
 These packages are implementation candidates requested on 2026-10-29. They
-extend the inert foundation without changing the CLI or enabling any effect.
+extend the inert foundation with `wcpd --contracts` for offline inventory.
+The reported counts are contract metadata, not implemented endpoint counts.
+No listener or system effect is enabled; `--check` still reports disabled transport.
 They require Engineering and Security review before integration. PR #108's
 previous approvals do not apply to this new code. No production CODE-BASELINE
 or independent E3 review is declared.

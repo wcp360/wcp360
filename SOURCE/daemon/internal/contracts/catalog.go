@@ -208,3 +208,15 @@ func (c Catalog) MatchesAPIBinding(id APIID, permission PermissionID, action Act
 	a, ok := c.apis[id]
 	return ok && a.Permission == permission && a.Action == action
 }
+
+// Counts is inventory only, never implemented endpoint or granted permission counts.
+type Counts struct {
+	Permissions int `json:"permissions"`
+	APIs        int `json:"api_contracts"`
+	Operations  int `json:"ipc_operations"`
+	Errors      int `json:"error_codes"`
+}
+
+func (c Catalog) Counts() Counts {
+	return Counts{Permissions: len(c.permissions), APIs: len(c.apis), Operations: len(c.operations), Errors: len(c.errors)}
+}

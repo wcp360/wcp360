@@ -80,7 +80,7 @@ func (brokenWriter) Write([]byte) (int, error) {
 }
 
 func TestOutputFailureIsNotSuccess(t *testing.T) {
-	for _, args := range [][]string{nil, {"--version"}, {"--check"}, {"invalid"}} {
+	for _, args := range [][]string{nil, {"--version"}, {"--check"}, {"--contracts"}, {"invalid"}} {
 		if code := Run(args, brokenWriter{}, brokenWriter{}); code != 1 {
 			t.Errorf("args %q: exit = %d, want 1", args, code)
 		}
@@ -94,9 +94,20 @@ func (shortWriter) Write(p []byte) (int, error) {
 }
 
 func TestShortWriteIsNotSuccess(t *testing.T) {
-	for _, args := range [][]string{nil, {"--version"}, {"--check"}, {"invalid"}, {"--help", "extra"}} {
+	for _, args := range [][]string{nil, {"--version"}, {"--check"}, {"--contracts"}, {"invalid"}, {"--help", "extra"}} {
 		if code := Run(args, shortWriter{}, shortWriter{}); code != 1 {
 			t.Errorf("args %q: exit = %d, want 1 for truncated output", args, code)
 		}
+	}
+}
+
+func TestContractsReportsMetadataNotReadiness(t *testing.T) {
+	var out, diagnostic bytes.Buffer
+	if Run([]string{"--contracts"}, &out, &diagnostic) != 0 {
+		t.Fatal("contract inspection failed")
+	}
+	const want = "{\"permissions\":82,\"api_contracts\":86,\"ipc_operations\":47,\"error_codes\":23}\n"
+	if out.String() != want || diagnostic.Len() != 0 {
+		t.Fatalf("unexpected contract report: %s", out.String())
 	}
 }
