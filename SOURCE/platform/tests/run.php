@@ -26,6 +26,9 @@ use Wcp360\Transport\ExpectedOriginResolver;
 use Wcp360\Transport\SessionCsrfTokenVerifier;
 use Wcp360\Security\SecurityHeadersPolicy;
 use Wcp360\Security\SameOriginRedirectPolicy;
+use Wcp360\Security\FreshMfaPolicy;
+use Wcp360\Security\SessionLifetimePolicy;
+use Wcp360\Security\SessionKind;
 use Wcp360\Security\OutboundUrlPolicy;
 use Wcp360\Security\GlobalAddressPolicy;
 use Wcp360\Transport\RetryProfile;
@@ -673,6 +676,41 @@ $test('open redirect policy accepts only normalized same-origin relative paths',
     foreach (['https://evil.invalid/','//evil.invalid/','/%2fevil.invalid','/\\evil.invalid','/a/../admin','/%2e%2e/admin','javascript:alert(1)',''] as $target) {
         $expectViolation(static fn() => SameOriginRedirectPolicy::assertRelative($target));
     }
+});
+
+$test('session lifetime policy enforces canonical USER ADMIN privileged and break-glass windows', static function () use ($assert, $expectViolation): void {
+    $created = new DateTimeImmutable('2026-10-29T00:00:00Z');
+    $assert(!SessionLifetimePolicy::isExpired(SessionKind::User, $created, new DateTimeImmutable('2026-10-29T00:20:00Z'), new DateTimeImmutable('2026-10-29T00:49:59Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::User, $created, new DateTimeImmutable('2026-10-29T00:20:00Z'), new DateTimeImmutable('2026-10-29T00:50:00Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::User, $created, new DateTimeImmutable('2026-10-29T11:59:59Z'), new DateTimeImmutable('2026-10-29T12:00:00Z')));
+
+    $assert(!SessionLifetimePolicy::isExpired(SessionKind::Admin, $created, new DateTimeImmutable('2026-10-29T00:10:00Z'), new DateTimeImmutable('2026-10-29T00:24:59Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::Admin, $created, new DateTimeImmutable('2026-10-29T00:10:00Z'), new DateTimeImmutable('2026-10-29T00:25:00Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::Admin, $created, new DateTimeImmutable('2026-10-29T07:59:59Z'), new DateTimeImmutable('2026-10-29T08:00:00Z')));
+
+    $assert(!SessionLifetimePolicy::isExpired(SessionKind::PrivilegedAdmin, $created, new DateTimeImmutable('2026-10-29T00:04:00Z'), new DateTimeImmutable('2026-10-29T00:08:59Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::PrivilegedAdmin, $created, new DateTimeImmutable('2026-10-29T00:04:00Z'), new DateTimeImmutable('2026-10-29T00:09:00Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::PrivilegedAdmin, $created, new DateTimeImmutable('2026-10-29T00:14:59Z'), new DateTimeImmutable('2026-10-29T00:15:00Z')));
+
+    // Break-glass does not extend on activity: only the hard 15-minute window matters.
+    $assert(!SessionLifetimePolicy::isExpired(SessionKind::BreakGlass, $created, new DateTimeImmutable('2026-10-29T00:14:59Z'), new DateTimeImmutable('2026-10-29T00:14:59Z')));
+    $assert(SessionLifetimePolicy::isExpired(SessionKind::BreakGlass, $created, new DateTimeImmutable('2026-10-29T00:14:59Z'), new DateTimeImmutable('2026-10-29T00:15:00Z')));
+
+    $assert(SessionLifetimePolicy::mfaMandatoryAtLogin(Surface::Admin));
+    $assert(!SessionLifetimePolicy::mfaMandatoryAtLogin(Surface::User));
+    $assert(!SessionLifetimePolicy::rememberMeAllowed(Surface::User));
+    $assert(!SessionLifetimePolicy::rememberMeAllowed(Surface::Admin));
+    $expectViolation(static fn() => SessionLifetimePolicy::isExpired(SessionKind::User, $created, new DateTimeImmutable('2026-10-28T23:59:00Z'), $created));
+});
+
+$test('fresh MFA policy enforces 10-minute USER and 5-minute ADMIN high-risk windows', static function () use ($assert, $expectViolation): void {
+    $now = new DateTimeImmutable('2026-10-29T10:00:00Z');
+    $assert(FreshMfaPolicy::isFreshForHighRisk(Surface::User, new DateTimeImmutable('2026-10-29T09:50:00Z'), $now));
+    $assert(!FreshMfaPolicy::isFreshForHighRisk(Surface::User, new DateTimeImmutable('2026-10-29T09:49:59Z'), $now));
+    $assert(FreshMfaPolicy::isFreshForHighRisk(Surface::Admin, new DateTimeImmutable('2026-10-29T09:55:00Z'), $now));
+    $assert(!FreshMfaPolicy::isFreshForHighRisk(Surface::Admin, new DateTimeImmutable('2026-10-29T09:54:59Z'), $now));
+    $assert(FreshMfaPolicy::isFreshForHighRisk(Surface::User, new DateTimeImmutable('2020-01-01T00:00:00Z'), $now, false));
+    $expectViolation(static fn() => FreshMfaPolicy::isFreshForHighRisk(Surface::Policy, $now, $now));
 });
 
 $test('action registry rejects handlers outside canonical contract catalogue', static function () use ($contract, $expectViolation, $assert): void {
