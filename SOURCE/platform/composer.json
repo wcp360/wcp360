@@ -1,0 +1,17 @@
+{
+  "name": "wcp360/platform-kernel-candidate",
+  "description": "Framework-independent WCP360 application/domain kernel candidate derived from canonical contracts.",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.4 <8.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Wcp360\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "php tests/run.php"
+  }
+}

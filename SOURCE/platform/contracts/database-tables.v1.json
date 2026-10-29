@@ -1,0 +1,2948 @@
+{
+  "version": "v1.0",
+  "source_path": "specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md",
+  "source_blob_sha": "2660e057bad1d00592c57f354b1f3745ccccbe7d",
+  "count": 54,
+  "tables": [
+    {
+      "table": "wcp_core.accounts",
+      "columns": [
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.customer_profiles",
+      "columns": [
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; FK -> wcp_core.accounts(account_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.reseller_profiles",
+      "columns": [
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; FK -> wcp_core.accounts(account_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.organizations",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.account_organization_memberships",
+      "columns": [
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> accounts ON DELETE CASCADE"
+        },
+        {
+          "name": "organization_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> organizations ON DELETE CASCADE"
+        },
+        {
+          "name": "membership_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.tenants",
+      "columns": [
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> accounts(account_id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "tenant_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.organization_tenant_memberships",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> organizations ON DELETE CASCADE"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> tenants ON DELETE CASCADE"
+        },
+        {
+          "name": "membership_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.hosting_accounts",
+      "columns": [
+        {
+          "name": "hosting_account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> tenants(tenant_id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "system_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.reseller_tenant_delegations",
+      "columns": [
+        {
+          "name": "delegation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "reseller_account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> reseller_profiles(account_id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> tenants(tenant_id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "granted_by_account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "composite FK with tenant_id -> tenants(tenant_id, account_id)"
+        },
+        {
+          "name": "delegation_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "valid_from",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "valid_until",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR > valid_from"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_core.error_definitions",
+      "columns": [
+        {
+          "name": "error_code",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; CHECK exact API v1.0 Error Registry membership"
+        },
+        {
+          "name": "api_contract_version",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK = '1.0'"
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.users",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "primary_email_normalized",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.identities",
+      "columns": [
+        {
+          "name": "identity_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "provider_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "provider_subject",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "identity_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "verified_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.tenant_memberships",
+      "columns": [
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> tenants ON DELETE CASCADE"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "membership_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.permission_definitions",
+      "columns": [
+        {
+          "name": "permission_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; typed identifier <=128 chars"
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "registry_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >= 1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.roles",
+      "columns": [
+        {
+          "name": "role_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "role_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.role_permission_bindings",
+      "columns": [
+        {
+          "name": "role_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> roles ON DELETE CASCADE"
+        },
+        {
+          "name": "permission_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> permission_definitions ON DELETE RESTRICT"
+        },
+        {
+          "name": "effect",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK IN ('ALLOW','DENY')"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.role_assignments",
+      "columns": [
+        {
+          "name": "assignment_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "role_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> roles ON DELETE RESTRICT"
+        },
+        {
+          "name": "scope_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK GLOBAL/ACCOUNT/TENANT"
+        },
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> accounts ON DELETE RESTRICT when ACCOUNT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT when TENANT"
+        },
+        {
+          "name": "source_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK DIRECT/DELEGATED/SYSTEM"
+        },
+        {
+          "name": "delegation_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> reseller_tenant_delegations when DELEGATED"
+        },
+        {
+          "name": "assignment_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "valid_from",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "valid_until",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR > valid_from"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.delegation_permissions",
+      "columns": [
+        {
+          "name": "delegation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> reseller_tenant_delegations ON DELETE CASCADE"
+        },
+        {
+          "name": "permission_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> permission_definitions ON DELETE RESTRICT"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.entitlement_definitions",
+      "columns": [
+        {
+          "name": "entitlement_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; typed identifier"
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "value_schema_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "registry_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >= 1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.user_sessions",
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7; opaque bearer lookup identifier"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "surface_claim",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK = 'WCP-USER'"
+        },
+        {
+          "name": "secret_verifier",
+          "type": "BYTEA",
+          "nullability": "NOT NULL",
+          "physical_rule": "hashed/verifier material only"
+        },
+        {
+          "name": "session_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "auth_strength",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >= 0"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "last_seen_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK > created_at"
+        },
+        {
+          "name": "revoked_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.admin_sessions",
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7; opaque bearer lookup identifier"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "surface_claim",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK = 'WCP-ADMIN'"
+        },
+        {
+          "name": "secret_verifier",
+          "type": "BYTEA",
+          "nullability": "NOT NULL",
+          "physical_rule": "hashed/verifier material only"
+        },
+        {
+          "name": "session_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "auth_strength",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >= 0"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "last_seen_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK > created_at"
+        },
+        {
+          "name": "revoked_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_iam.api_credentials",
+      "columns": [
+        {
+          "name": "credential_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "scope_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK USER/ACCOUNT/TENANT"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> accounts ON DELETE RESTRICT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "public_identifier",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        },
+        {
+          "name": "secret_ref",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "reference only"
+        },
+        {
+          "name": "credential_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "revoked_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "last_used_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_infra.servers",
+      "columns": [
+        {
+          "name": "server_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "server_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_infra.server_capabilities",
+      "columns": [
+        {
+          "name": "server_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> servers ON DELETE CASCADE"
+        },
+        {
+          "name": "capability_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part"
+        },
+        {
+          "name": "enabled",
+          "type": "BOOLEAN",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "observed_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_infra.managed_resources",
+      "columns": [
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_type",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded canonical type"
+        },
+        {
+          "name": "scope_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "GLOBAL/SERVER/TENANT/HOSTING_ACCOUNT/TENANT_SERVER"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants"
+        },
+        {
+          "name": "hosting_account_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware composite FK -> hosting_accounts"
+        },
+        {
+          "name": "server_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> servers"
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK revision >= 1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_infra.resource_desired_states",
+      "columns": [
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; FK -> managed_resources ON DELETE CASCADE"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK when resource is tenant-scoped"
+        },
+        {
+          "name": "schema_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "schema_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "desired_revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "desired_payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "schema-versioned"
+        },
+        {
+          "name": "payload_hash",
+          "type": "BYTEA",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_by_user_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> users ON DELETE SET NULL"
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_infra.resource_observed_states",
+      "columns": [
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; FK -> managed_resources ON DELETE CASCADE"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK when resource is tenant-scoped"
+        },
+        {
+          "name": "schema_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "schema_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "observation_seq",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "observed_payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "schema-versioned"
+        },
+        {
+          "name": "payload_hash",
+          "type": "BYTEA",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "observed_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_infra.resource_quotas",
+      "columns": [
+        {
+          "name": "quota_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "quota_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "soft_limit",
+          "type": "BIGINT",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR >=0"
+        },
+        {
+          "name": "hard_limit",
+          "type": "BIGINT",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR >=0"
+        },
+        {
+          "name": "unit",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.domains",
+      "columns": [
+        {
+          "name": "domain_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "canonical_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE normalized IDNA/ASCII"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.websites",
+      "columns": [
+        {
+          "name": "website_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "hosting_account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "tenant-aware FK -> hosting_accounts"
+        },
+        {
+          "name": "primary_domain_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK -> domains"
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "runtime_profile_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded typed profile"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.dns_zones",
+      "columns": [
+        {
+          "name": "zone_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "domain_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "tenant-aware FK -> domains"
+        },
+        {
+          "name": "canonical_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.dns_records",
+      "columns": [
+        {
+          "name": "record_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "zone_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "tenant-aware FK -> dns_zones"
+        },
+        {
+          "name": "record_type",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical supported DNS type"
+        },
+        {
+          "name": "owner_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "record_value",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "ttl_seconds",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=0"
+        },
+        {
+          "name": "priority",
+          "type": "INTEGER",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR >=0"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.mail_domains",
+      "columns": [
+        {
+          "name": "mail_domain_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "domain_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "tenant-aware FK -> domains"
+        },
+        {
+          "name": "canonical_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.mailboxes",
+      "columns": [
+        {
+          "name": "mailbox_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "mail_domain_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "tenant-aware FK -> mail_domains"
+        },
+        {
+          "name": "local_part",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "auth_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded canonical value"
+        },
+        {
+          "name": "credential_ref",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "required when auth_kind=LOCAL"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.certificates",
+      "columns": [
+        {
+          "name": "certificate_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "server_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> servers"
+        },
+        {
+          "name": "common_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "serial_number",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "issuer_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "not_before",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "not_after",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK > not_before"
+        },
+        {
+          "name": "public_certificate",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "private_key_ref",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "reference only"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.hosted_db_engine_instances",
+      "columns": [
+        {
+          "name": "engine_instance_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; FK -> managed_resources"
+        },
+        {
+          "name": "server_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> servers ON DELETE RESTRICT"
+        },
+        {
+          "name": "engine_type",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK IN ('POSTGRESQL','MARIADB')"
+        },
+        {
+          "name": "engine_version",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "service_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "typed privileged-service reference"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.hosted_databases",
+      "columns": [
+        {
+          "name": "hosted_database_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE; tenant-aware FK -> managed_resources"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "engine_instance_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> hosted_db_engine_instances ON DELETE RESTRICT"
+        },
+        {
+          "name": "database_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "charset_name",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "collation_name",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_hosting.hosted_db_principals",
+      "columns": [
+        {
+          "name": "principal_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "hosted_database_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "tenant-aware FK -> hosted_databases"
+        },
+        {
+          "name": "principal_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "privilege_profile",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded typed profile"
+        },
+        {
+          "name": "credential_ref",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "reference only"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_commercial.plans",
+      "columns": [
+        {
+          "name": "plan_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "plan_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "UNIQUE"
+        },
+        {
+          "name": "display_name",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "lifecycle_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_commercial.plan_entitlements",
+      "columns": [
+        {
+          "name": "plan_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> plans ON DELETE CASCADE"
+        },
+        {
+          "name": "entitlement_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> entitlement_definitions ON DELETE RESTRICT"
+        },
+        {
+          "name": "value_payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "must validate entitlement value schema"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_commercial.subscriptions",
+      "columns": [
+        {
+          "name": "subscription_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> accounts ON DELETE RESTRICT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "composite with account_id -> tenants(tenant_id,account_id) when present"
+        },
+        {
+          "name": "plan_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> plans ON DELETE RESTRICT"
+        },
+        {
+          "name": "subscription_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "starts_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "ends_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR > starts_at"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_commercial.subscription_entitlements",
+      "columns": [
+        {
+          "name": "subscription_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> subscriptions ON DELETE CASCADE"
+        },
+        {
+          "name": "entitlement_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK part; FK -> entitlement_definitions ON DELETE RESTRICT"
+        },
+        {
+          "name": "override_payload",
+          "type": "JSONB",
+          "nullability": "NULL",
+          "physical_rule": "typed by entitlement schema"
+        },
+        {
+          "name": "state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state registry"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.jobs",
+      "columns": [
+        {
+          "name": "job_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "job_type",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "typed job registry ID"
+        },
+        {
+          "name": "action_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "typed action registry ID"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK when tenant_id present"
+        },
+        {
+          "name": "requested_by_user_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> users ON DELETE SET NULL"
+        },
+        {
+          "name": "job_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical job state registry"
+        },
+        {
+          "name": "outcome_class",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "bounded outcome class"
+        },
+        {
+          "name": "error_code",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT"
+        },
+        {
+          "name": "attempt_count",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=0"
+        },
+        {
+          "name": "max_attempts",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1 and attempt_count<=max_attempts"
+        },
+        {
+          "name": "available_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "started_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "completed_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "timeout_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "not authorization"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.job_attempts",
+      "columns": [
+        {
+          "name": "job_attempt_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "job_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> jobs ON DELETE CASCADE only when job retention purge is authorized"
+        },
+        {
+          "name": "attempt_no",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "worker_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded worker identity"
+        },
+        {
+          "name": "attempt_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical attempt state"
+        },
+        {
+          "name": "started_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "finished_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "outcome_class",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "bounded outcome class"
+        },
+        {
+          "name": "error_code",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT"
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.idempotency_records",
+      "columns": [
+        {
+          "name": "idempotency_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "scope_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "GLOBAL/ACCOUNT/TENANT"
+        },
+        {
+          "name": "account_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> accounts ON DELETE RESTRICT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "operation_namespace",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "idempotency_key",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "opaque caller key"
+        },
+        {
+          "name": "request_fingerprint",
+          "type": "BYTEA",
+          "nullability": "NOT NULL",
+          "physical_rule": "semantic request hash"
+        },
+        {
+          "name": "idempotency_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state"
+        },
+        {
+          "name": "result_reference",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "logical result reference"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK > created_at"
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.leases",
+      "columns": [
+        {
+          "name": "lease_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "target_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "JOB/RESOURCE"
+        },
+        {
+          "name": "job_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> jobs ON DELETE CASCADE when target_kind=JOB"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> managed_resources ON DELETE CASCADE when target_kind=RESOURCE"
+        },
+        {
+          "name": "owner_worker_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "fencing_token",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "acquired_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK > acquired_at"
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.outbox_records",
+      "columns": [
+        {
+          "name": "outbox_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "event_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "semantic event type"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "aggregate_type",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded canonical type"
+        },
+        {
+          "name": "aggregate_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "schema_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "schema-versioned, secret-safe"
+        },
+        {
+          "name": "delivery_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state"
+        },
+        {
+          "name": "attempt_count",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=0"
+        },
+        {
+          "name": "available_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "published_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "last_error_code",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT"
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.event_records",
+      "columns": [
+        {
+          "name": "event_record_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "event_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "semantic event type"
+        },
+        {
+          "name": "event_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK when tenant_id present"
+        },
+        {
+          "name": "payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "schema-versioned, secret-safe"
+        },
+        {
+          "name": "occurred_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "source_outbox_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> outbox_records ON DELETE SET NULL; UNIQUE when non-NULL"
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.reconciliation_runs",
+      "columns": [
+        {
+          "name": "reconciliation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> managed_resources ON DELETE RESTRICT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "must match resource tenant when scoped"
+        },
+        {
+          "name": "desired_revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "observed_sequence",
+          "type": "BIGINT",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR >=1"
+        },
+        {
+          "name": "drift_class",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded canonical class"
+        },
+        {
+          "name": "reconciliation_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state"
+        },
+        {
+          "name": "repair_job_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> jobs ON DELETE SET NULL"
+        },
+        {
+          "name": "manual_intervention",
+          "type": "BOOLEAN",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "started_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "completed_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_ops.notifications",
+      "columns": [
+        {
+          "name": "notification_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> users ON DELETE RESTRICT"
+        },
+        {
+          "name": "channel_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded channel"
+        },
+        {
+          "name": "template_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded template"
+        },
+        {
+          "name": "payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "secret-safe"
+        },
+        {
+          "name": "notification_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state"
+        },
+        {
+          "name": "scheduled_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "sent_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_audit.audit_records",
+      "columns": [
+        {
+          "name": "audit_record_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7 immutable occurrence"
+        },
+        {
+          "name": "audit_event_id",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "semantic audit event TYPE"
+        },
+        {
+          "name": "event_version",
+          "type": "INTEGER",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "occurred_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "actor_type",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "actor_user_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "retained reference; no cascade"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "retained scope reference; no cascade"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "retained resource reference; no cascade"
+        },
+        {
+          "name": "action_id",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "typed action ID"
+        },
+        {
+          "name": "outcome_class",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded outcome"
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "not authorization"
+        },
+        {
+          "name": "request_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "job_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "retained reference; no cascade"
+        },
+        {
+          "name": "workflow_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "trace_id",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "security_classification",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "safe_payload",
+          "type": "JSONB",
+          "nullability": "NOT NULL",
+          "physical_rule": "secret-redacted"
+        },
+        {
+          "name": "persisted_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_backup.backups",
+      "columns": [
+        {
+          "name": "backup_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "backup_class",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CONTROL_PLANE/HOSTED_DATABASE/WORKLOAD"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK when scoped"
+        },
+        {
+          "name": "backup_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state"
+        },
+        {
+          "name": "storage_ref",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "opaque storage reference, not arbitrary privileged path"
+        },
+        {
+          "name": "encryption_key_ref",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "secret reference only"
+        },
+        {
+          "name": "checksum_algorithm",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "checksum_value",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "size_bytes",
+          "type": "BIGINT",
+          "nullability": "NULL",
+          "physical_rule": "CHECK NULL OR >=0"
+        },
+        {
+          "name": "started_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "completed_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "retention_until",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        }
+      ]
+    },
+    {
+      "table": "wcp_backup.backup_objects",
+      "columns": [
+        {
+          "name": "backup_object_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "backup_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> backups ON DELETE CASCADE"
+        },
+        {
+          "name": "object_kind",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "bounded canonical kind"
+        },
+        {
+          "name": "object_ref",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "opaque object reference"
+        },
+        {
+          "name": "checksum_algorithm",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "checksum_value",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "size_bytes",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=0"
+        },
+        {
+          "name": "required_object",
+          "type": "BOOLEAN",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    },
+    {
+      "table": "wcp_backup.restore_operations",
+      "columns": [
+        {
+          "name": "restore_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "PK; UUIDv7"
+        },
+        {
+          "name": "backup_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": "FK -> backups ON DELETE RESTRICT"
+        },
+        {
+          "name": "tenant_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> tenants ON DELETE RESTRICT"
+        },
+        {
+          "name": "target_resource_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "tenant-aware FK when tenant scoped"
+        },
+        {
+          "name": "restore_state",
+          "type": "TEXT",
+          "nullability": "NOT NULL",
+          "physical_rule": "canonical state"
+        },
+        {
+          "name": "requested_by_user_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> users ON DELETE SET NULL"
+        },
+        {
+          "name": "reconciliation_required",
+          "type": "BOOLEAN",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "reconciliation_id",
+          "type": "UUID",
+          "nullability": "NULL",
+          "physical_rule": "FK -> reconciliation_runs ON DELETE SET NULL"
+        },
+        {
+          "name": "outcome_class",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "bounded outcome"
+        },
+        {
+          "name": "error_code",
+          "type": "TEXT",
+          "nullability": "NULL",
+          "physical_rule": "FK -> wcp_core.error_definitions(error_code) ON DELETE RESTRICT"
+        },
+        {
+          "name": "correlation_id",
+          "type": "UUID",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "started_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "completed_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NULL",
+          "physical_rule": ""
+        },
+        {
+          "name": "revision",
+          "type": "BIGINT",
+          "nullability": "NOT NULL",
+          "physical_rule": "CHECK >=1"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMPTZ",
+          "nullability": "NOT NULL",
+          "physical_rule": ""
+        }
+      ]
+    }
+  ]
+}

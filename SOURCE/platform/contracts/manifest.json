@@ -1,0 +1,32 @@
+{
+  "status": "DERIVED_IMPLEMENTATION_INPUTS_CANDIDATE",
+  "authority": "canonical Markdown specifications remain authoritative",
+  "permissions": {
+    "version": "v1.0",
+    "count": 82,
+    "blob": "81f3d425f36470167aba4bfb7ba069268626342f"
+  },
+  "api": {
+    "version": "1.0",
+    "count": 86,
+    "blob": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea"
+  },
+  "api_errors": {
+    "count": 23,
+    "blob": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea"
+  },
+  "ipc": {
+    "version": "WCP360-IPC-B/1",
+    "count": 47,
+    "blob": "fec9c74e8413db822662e47c76c40486e282334f"
+  },
+  "database": {
+    "version": "v1.0",
+    "table_count": 54,
+    "blob": "2660e057bad1d00592c57f354b1f3745ccccbe7d"
+  },
+  "security_sessions": {
+    "version": "v1.0",
+    "blob": "6d74f2f363524511424f839ca7262143c2af95ab"
+  }
+}
