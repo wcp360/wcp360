@@ -322,6 +322,45 @@ func decodeFrameMap(frame []byte, max uint32, kind string) (map[string]any, erro
 	return object, nil
 }
 
+// readBoundedFrame reads exactly one length-delimited frame from an arbitrary
+// io.Reader. It validates the announced payload size before allocating or
+// reading the body. Bytes after the first complete frame are intentionally
+// left unread so a caller may process a subsequent frame.
+//
+// This helper has no socket or timeout semantics. Production transport still
+// requires the canonical connect/I/O deadlines, SO_PEERCRED checks, service
+// identity verification and authorization before any privileged dispatch.
+func readBoundedFrame(r io.Reader, max uint32, kind string) ([]byte, error) {
+	if r == nil {
+		return nil, fmt.Errorf("%s frame reader is nil", kind)
+	}
+	header := make([]byte, 4)
+	if _, err := io.ReadFull(r, header); err != nil {
+		return nil, fmt.Errorf("truncated %s frame header", kind)
+	}
+	length := binary.BigEndian.Uint32(header)
+	if length == 0 || length > max {
+		return nil, fmt.Errorf("invalid %s frame length", kind)
+	}
+	frame := make([]byte, int(length)+4)
+	copy(frame[:4], header)
+	if _, err := io.ReadFull(r, frame[4:]); err != nil {
+		return nil, fmt.Errorf("truncated %s frame body", kind)
+	}
+	return frame, nil
+}
+
+// ReadRequestFrame is the research streaming counterpart to DecodeRequestFrame.
+// It performs bounded length-first reading only; it does not authenticate the
+// reader, apply deadlines, or confer authorization.
+func ReadRequestFrame(r io.Reader) (Parsed, error) {
+	frame, err := readBoundedFrame(r, RequestMaxBytes, "request")
+	if err != nil {
+		return Parsed{}, err
+	}
+	return DecodeRequestFrame(frame)
+}
+
 // DecodeRequestFrame parses exactly one in-memory framed research message.
 // This function deliberately does not open/read a network connection. It
 // does not establish SO_PEERCRED, authn/authz, idempotency or real deadlines.
