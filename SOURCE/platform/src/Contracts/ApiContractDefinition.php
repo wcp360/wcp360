@@ -38,7 +38,7 @@ final readonly class ApiContractDefinition
         if ($version !== '1.0') {
             throw new ContractViolation('unsupported API contract version');
         }
-        if (!in_array($surface, ['WCP-USER', 'WCP-ADMIN', 'BOTH', 'POLICY'], true)) {
+        if (!in_array($surface, ['WCP-USER', 'WCP-ADMIN', 'BOTH', 'POLICY', 'EMERGENCY'], true)) {
             throw new ContractViolation('unsupported API contract surface');
         }
         foreach ([$permissionId, $actionId, $resourceType, $authentication, $tenantScope, $testId] as $typedValue) {
@@ -83,6 +83,7 @@ final readonly class ApiContractDefinition
             'WCP-ADMIN' => $caller === Surface::Admin,
             'BOTH' => $caller === Surface::User || $caller === Surface::Admin,
             'POLICY' => $caller === Surface::Policy,
+            'EMERGENCY' => $caller === Surface::Emergency,
             default => false,
         };
     }

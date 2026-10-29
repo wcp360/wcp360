@@ -76,7 +76,7 @@ final readonly class SessionSurfacePolicy
         return match ($surface) {
             Surface::User => $this->userCookie,
             Surface::Admin => $this->adminCookie,
-            Surface::Policy => throw new ContractViolation('POLICY surface has no browser session cookie'),
+            Surface::Policy, Surface::Emergency => throw new ContractViolation('non-browser surface has no browser session cookie'),
         };
     }
 
@@ -93,7 +93,7 @@ final readonly class SessionSurfacePolicy
         return match ($surface) {
             Surface::User => $row['user'],
             Surface::Admin => $row['admin'],
-            Surface::Policy => throw new ContractViolation('POLICY surface has no browser session policy'),
+            Surface::Policy, Surface::Emergency => throw new ContractViolation('non-browser surface has no browser session policy'),
         };
     }
 }

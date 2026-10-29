@@ -9,4 +9,5 @@ enum Surface: string
     case User = 'WCP-USER';
     case Admin = 'WCP-ADMIN';
     case Policy = 'POLICY';
+    case Emergency = 'EMERGENCY';
 }

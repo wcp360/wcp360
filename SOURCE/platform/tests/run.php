@@ -376,6 +376,45 @@ $test('durable job submission enforces correlation and tenant before store', sta
     $expectViolation(static fn() => $service->submit($job, $wrongAudit));
 });
 
+
+$test('EMERGENCY is a distinct contract surface with no browser session cookie', static function () use ($assert, $perm, $expectViolation): void {
+    $definition = ApiContractDefinition::fromArray([
+        'contract_id' => 'API-WCP-0708', 'version' => '1.0', 'surface' => 'EMERGENCY',
+        'authentication' => 'AUTH-E', 'permission_id' => 'break_glass.use',
+        'action_id' => 'break_glass.start', 'resource_type' => 'break_glass_session',
+        'tenant_scope' => 'TS-P', 'request_schema' => '{reason,idempotency_key}',
+        'response_schema' => 'BreakGlassSessionView', 'errors' => 'E-P', 'timeout' => '15s',
+        'retry' => 'RN', 'idempotency' => 'key-required', 'audit' => 'AU5',
+        'security' => 'S-X', 'compatibility' => 'C1/D0', 'test_id' => 'TEST-API-0708',
+    ]);
+    $assert($definition->allowsSurface(Surface::Emergency));
+    $assert(!$definition->allowsSurface(Surface::Admin));
+    $permission = $perm('break_glass.use', 'POLICY / privileged');
+    $assert($permission->allowsSurface(Surface::Emergency));
+
+    $path = tempnam(sys_get_temp_dir(), 'wcp-session-');
+    if ($path === false) { throw new RuntimeException('temp file failure'); }
+    file_put_contents($path, json_encode([
+        'version'=>'v1.0','invariant'=>'WCP-USER session != WCP-ADMIN session',
+        'cookie_user'=>'__Host-wcp_user_session','cookie_admin'=>'__Host-wcp_admin_session',
+        'required_cookie_attributes'=>['Secure','HttpOnly','SameSite=Strict','Path=/','host-only','no Domain attribute'],
+        'policies'=>[
+            ['policy'=>'cookie','wcp_user'=>'__Host-wcp_user_session','wcp_admin'=>'__Host-wcp_admin_session'],
+            ['policy'=>'idle timeout','wcp_user'=>'30 min','wcp_admin'=>'15 min'],
+            ['policy'=>'absolute lifetime','wcp_user'=>'12 h','wcp_admin'=>'8 h'],
+            ['policy'=>'remember-me','wcp_user'=>'disabled baseline','wcp_admin'=>'forbidden'],
+            ['policy'=>'MFA at login','wcp_user'=>'policy/account dependent','wcp_admin'=>'mandatory'],
+            ['policy'=>'fresh MFA high-risk','wcp_user'=>'<=10 min when required','wcp_admin'=>'<=5 min'],
+            ['policy'=>'privileged child context','wcp_user'=>'unavailable','wcp_admin'=>'idle 5 min / absolute 15 min'],
+            ['policy'=>'break-glass','wcp_user'=>'unavailable','wcp_admin'=>'max 15 min, no auto-extension'],
+        ],
+    ], JSON_THROW_ON_ERROR));
+    try {
+        $policy = SessionSurfacePolicy::fromJsonFile($path);
+        $expectViolation(static fn() => $policy->cookieName(Surface::Emergency));
+    } finally { @unlink($path); }
+});
+
 $passed = 0;
 foreach ($tests as $name => $fn) {
     try {

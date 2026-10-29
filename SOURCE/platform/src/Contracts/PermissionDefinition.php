@@ -62,7 +62,7 @@ final readonly class PermissionDefinition
             return [Surface::Admin];
         }
         if (str_starts_with($upper, 'POLICY')) {
-            return [Surface::Policy];
+            return [Surface::Policy, Surface::Emergency];
         }
         throw new ContractViolation('unknown permission surface');
     }
