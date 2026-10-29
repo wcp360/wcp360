@@ -61,13 +61,16 @@ go -C SOURCE/daemon test -mod=readonly -count=1 -json \
 pass
 
 gate=daemon-inert-import-boundary
-# Pure domain packages may use only the explicit standard-library list below.
-# No socket, filesystem mutation, database driver or process executor is allowed.
-go -C SOURCE/daemon list -f '{{join .Imports "\n"}}' ./... > "$output/imports.txt"
-while IFS= read -r imported; do
-    case "$imported" in
-        ''|io|os|embed|encoding/json|errors|sort|time|github.com/yyogas/wcp360/daemon/internal/cli|github.com/yyogas/wcp360/daemon/internal/contracts) ;;
-        *) printf 'Unexpected production import: %s\n' "$imported" >&2; exit 1 ;;
+# Keep executable OS access confined to cmd/wcpd. Pure policies/catalogs cannot
+# acquire filesystem, process, socket, database or arbitrary package imports.
+go -C SOURCE/daemon list -f '{{ $pkg := .ImportPath }}{{range .Imports}}{{printf "%s %s\n" $pkg .}}{{end}}' ./... > "$output/imports.txt"
+while read -r package imported; do
+    case "$package:$imported" in
+        :|github.com/yyogas/wcp360/daemon/cmd/wcpd:os|github.com/yyogas/wcp360/daemon/cmd/wcpd:github.com/yyogas/wcp360/daemon/internal/cli) ;;
+        github.com/yyogas/wcp360/daemon/internal/cli:io|github.com/yyogas/wcp360/daemon/internal/cli:encoding/json|github.com/yyogas/wcp360/daemon/internal/cli:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
+        github.com/yyogas/wcp360/daemon/internal/contracts:embed|github.com/yyogas/wcp360/daemon/internal/contracts:encoding/json|github.com/yyogas/wcp360/daemon/internal/contracts:errors|github.com/yyogas/wcp360/daemon/internal/contracts:sort) ;;
+        github.com/yyogas/wcp360/daemon/internal/sessionpolicy:time) ;;
+        *) printf 'Unexpected production import: %s %s\n' "$package" "$imported" >&2; exit 1 ;;
     esac
 done < "$output/imports.txt"
 pass
