@@ -182,3 +182,22 @@ func FuzzDecodeResponseFrameNeverPanics(f *testing.F) {
 		_,_=DecodeResponseFrame(input)
 	})
 }
+
+
+func TestReadResponseFrameFromReader(t *testing.T) {
+	got, err := ReadResponseFrame(strings.NewReader(string(responseFrame(t, responseFixture()))))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Operation.OperationID != "nginx_vhost.validate" || got.Outcome != "SUCCEEDED" {
+		t.Fatalf("unexpected parsed response: %+v", got)
+	}
+}
+
+func TestReadResponseFrameRejectsTruncatedBody(t *testing.T) {
+	frame := responseFrame(t, responseFixture())
+	frame = frame[:len(frame)-1]
+	if _, err := ReadResponseFrame(strings.NewReader(string(frame))); err == nil || !strings.Contains(err.Error(), "truncated response frame body") {
+		t.Fatalf("expected truncated response body rejection, got %v", err)
+	}
+}
