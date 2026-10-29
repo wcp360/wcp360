@@ -24,6 +24,11 @@ not a new product runtime dependency. Input Git blob hashes are pinned in the
 generator and generated JSON. Source drift requires owner-reviewed pin changes.
 Go tests verify hashes and every generated row against the actual source files.
 
+Read retry decisions implement only RR with a maximum of two transport retries,
+429/503 handling, no retry for authentication/authorization/validation errors,
+no retry after exposing a response, and no automatic mutation/UNKNOWN_OUTCOME
+redispatch. Durable RK/RN handling remains unimplemented.
+
 ## sessionpolicy
 
 Pure time/surface predicates from Security v1.0 section 13: distinct cookie

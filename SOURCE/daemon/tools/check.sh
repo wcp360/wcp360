@@ -48,7 +48,7 @@ pass
 
 gate=daemon-gofmt
 gofmt -l SOURCE/daemon > "$output/gofmt.txt"
-gofmt -d SOURCE/daemon > "$output/gofmt.diff"
+gofmt -d SOURCE/daemon > "$output/gofmt.diff" || { cat "$output/gofmt.diff" >&2; exit 1; }
 if test -s "$output/gofmt.txt"; then cat "$output/gofmt.diff" >&2; fi
 test ! -s "$output/gofmt.txt"
 pass

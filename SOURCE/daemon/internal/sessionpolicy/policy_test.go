@@ -1,6 +1,9 @@
 package sessionpolicy
 
 import (
+	"crypto/sha1"
+	"fmt"
+	"os"
 	"testing"
 	"time"
 )
@@ -122,10 +125,13 @@ func TestPrivilegedChildBounds(t *testing.T) {
 		t.Fatal("valid child rejected")
 	}
 	for name, mutate := range map[string]func(*Privileged){
-		"zero":         func(c *Privileged) { *c = Privileged{} },
-		"revoked":      func(c *Privileged) { c.Revoked = true },
-		"absolute":     func(c *Privileged) { c.IssuedAt = testNow.Add(-15 * time.Minute) },
-		"idle":         func(c *Privileged) { c.IssuedAt = testNow.Add(-10 * time.Minute); c.LastSeen = testNow.Add(-5 * time.Minute) },
+		"zero":     func(c *Privileged) { *c = Privileged{} },
+		"revoked":  func(c *Privileged) { c.Revoked = true },
+		"absolute": func(c *Privileged) { c.IssuedAt = testNow.Add(-15 * time.Minute) },
+		"idle": func(c *Privileged) {
+			c.IssuedAt = testNow.Add(-10 * time.Minute)
+			c.LastSeen = testNow.Add(-5 * time.Minute)
+		},
 		"older-parent": func(c *Privileged) { c.IssuedAt = parent.IssuedAt.Add(-time.Second) },
 		"future":       func(c *Privileged) { c.LastSeen = testNow.Add(time.Second) },
 		"seen-before":  func(c *Privileged) { c.LastSeen = c.IssuedAt.Add(-time.Second) },
@@ -144,5 +150,16 @@ func TestPrivilegedChildBounds(t *testing.T) {
 	parent.Revoked = true
 	if ValidatePrivileged(parent, child, testNow) != AuthenticationRequired {
 		t.Fatal("revoked parent retained privilege")
+	}
+}
+
+func TestSecurityBaselineSourcePin(t *testing.T) {
+	data, err := os.ReadFile("../../../../specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md")
+	if err != nil {
+		t.Fatal(err)
+	}
+	header := []byte(fmt.Sprintf("blob %d\x00", len(data)))
+	if fmt.Sprintf("%x", sha1.Sum(append(header, data...))) != "6d74f2f363524511424f839ca7262143c2af95ab" {
+		t.Fatal("Security baseline changed; review session policies before updating the pin")
 	}
 }

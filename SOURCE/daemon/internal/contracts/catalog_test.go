@@ -141,8 +141,8 @@ func TestConcurrentCatalogRead(t *testing.T) {
 
 func TestRejectRegistryCorruption(t *testing.T) {
 	for name, mutate := range map[string]func(*document){
-		"schema":              func(d *document) { d.SchemaVersion++ },
-		"count":               func(d *document) { d.APIs = d.APIs[1:] },
+		"schema":               func(d *document) { d.SchemaVersion++ },
+		"count":                func(d *document) { d.APIs = d.APIs[1:] },
 		"permission-duplicate": func(d *document) { d.Permissions[1] = d.Permissions[0] },
 		"permission-inactive":  func(d *document) { d.Permissions[0].Status = "RETIRED" },
 		"permission-upper":     func(d *document) { d.Permissions[0].ID = "INVALID" },
