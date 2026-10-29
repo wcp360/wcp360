@@ -67,3 +67,7 @@ A returned `Parsed` object means only that a bounded, source-known syntactic req
 A positive research parser test is NOT an accepted `TEST-IPC-####` result. All implementation-dependent QA tests remain PLANNED/READY/BLOCKED.
 
 **No implicit Sprint 0 reuse, no CODE-BASELINE, and no SC-M01 resume.**
+
+## Bounded output experiment
+
+`writer.go` validates each complete request/response before the first write. It preserves the exact frame bytes and returns write errors or `io.ErrShortWrite` for incomplete/invalid counts without retrying. On any transport write failure, discard that transport; a partial write is not proof of non-execution. Transport authentication, deadlines and production dispatch remain outside this experiment. `writer_test.go` covers round trips, zero output on invalid input, partial writes, invalid counts and errors even after full byte counts. These tests are not product QA acceptance.
