@@ -42,7 +42,7 @@ final readonly class AuthorizationService
             );
         }
 
-        if (!$this->scopeGuard->allows($context, $request->resourceType, $request->resourceId)) {
+        if (!$this->scopeGuard->allows($context, $request)) {
             return AuthorizationDecision::deny(
                 CanonicalErrorCode::AuthorizationDenied,
                 'tenant/resource scope denied',

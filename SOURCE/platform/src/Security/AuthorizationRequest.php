@@ -6,11 +6,13 @@ namespace Wcp360\Security;
 
 final readonly class AuthorizationRequest
 {
+    /** @param array<string,mixed> $payload */
     public function __construct(
         public string $permissionId,
         public string $actionId,
         public string $resourceType,
-        public ?string $resourceId,
+        public string $tenantScope,
+        public array $payload,
     ) {
     }
 }

@@ -101,9 +101,9 @@ $contract = static fn(): ApiContractDefinition => ApiContractDefinition::fromArr
 ]);
 
 $allowScope = new class implements ScopeGuard {
-    public function allows(AuthorizationContext $context, string $resourceType, ?string $resourceId): bool
+    public function allows(AuthorizationContext $context, AuthorizationRequest $request): bool
     {
-        return $context->tenantId !== null && $resourceType !== '';
+        return $context->tenantId !== null && $request->resourceType !== '' && $request->tenantScope !== '';
     }
 };
 $allowPolicy = new class implements PolicyGuard {
@@ -159,7 +159,7 @@ $test('authorization fails closed on unknown permission', static function () use
         false,
         false,
     );
-    $decision = $service->decide($context, new AuthorizationRequest('ghost.permission', 'ghost.action', 'application', null));
+    $decision = $service->decide($context, new AuthorizationRequest('ghost.permission', 'ghost.action', 'application', 'TS-T', []));
     $assert(!$decision->allowed);
     $assert($decision->errorCode === CanonicalErrorCode::AuthorizationDenied);
 });
@@ -174,7 +174,7 @@ $test('authorization rejects cross-surface permission', static function () use (
         true,
         false,
     );
-    $decision = $service->decide($context, new AuthorizationRequest('applications.read', 'applications.read', 'application', null));
+    $decision = $service->decide($context, new AuthorizationRequest('applications.read', 'applications.read', 'application', 'TS-T', []));
     $assert(!$decision->allowed);
 });
 
@@ -216,6 +216,79 @@ $test('kernel executes only exact registered action after authorization', static
     $result = $kernel->execute('API-WCP-0101', ['tenant_id' => '22222222-2222-4222-8222-222222222222'], $context);
     $assert($result->ok);
     $assert($result->data['items'] === []);
+});
+
+$test('authorization scope receives full validated contract payload without resource-id guessing', static function () use ($assert, $perm, $allowPolicy): void {
+    $definition = ApiContractDefinition::fromArray([
+        'contract_id' => 'API-WCP-1008',
+        'version' => '1.0',
+        'surface' => 'BOTH',
+        'authentication' => 'AUTH-B',
+        'permission_id' => 'ssl.read',
+        'action_id' => 'ssl.read',
+        'resource_type' => 'certificate',
+        'tenant_scope' => 'TS-B',
+        'request_schema' => '{scope_type,scope_id,certificate_id?}',
+        'response_schema' => 'CertificateView/Collection',
+        'errors' => 'E-R',
+        'timeout' => '10s',
+        'retry' => 'RR',
+        'idempotency' => 'none',
+        'audit' => 'AU0',
+        'security' => 'S-T',
+        'compatibility' => 'C1/D0',
+        'test_id' => 'TEST-API-1008',
+    ]);
+
+    $captured = null;
+    $scope = new class($captured) implements ScopeGuard {
+        public ?AuthorizationRequest $captured = null;
+        public function __construct(?AuthorizationRequest &$captured) { $this->captured =& $captured; }
+        public function allows(AuthorizationContext $context, AuthorizationRequest $request): bool
+        {
+            $this->captured = $request;
+            return true;
+        }
+    };
+
+    $handler = new class implements ActionHandler {
+        public function actionId(): string { return 'ssl.read'; }
+        public function handle(array $input, AuthorizationContext $context): array { return ['ok' => true]; }
+    };
+
+    $contracts = new ApiContractRegistry([$definition]);
+    $service = new AuthorizationService(
+        new PermissionRegistry([$perm('ssl.read', 'BOTH / scope-bound')]),
+        $scope,
+        $allowPolicy,
+    );
+    $kernel = new PlatformKernel(
+        $contracts,
+        new AuthenticationService(),
+        $service,
+        new ActionRegistry(ActionCatalog::fromApiContracts($contracts), [$handler]),
+    );
+    $context = new AuthorizationContext(
+        Surface::User,
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        new Uuid('22222222-2222-4222-8222-222222222222'),
+        ['ssl.read'],
+        false,
+        false,
+    );
+    $payload = [
+        'scope_type' => 'TENANT',
+        'scope_id' => '22222222-2222-4222-8222-222222222222',
+        'certificate_id' => '33333333-3333-4333-8333-333333333333',
+    ];
+
+    $result = $kernel->execute('API-WCP-1008', $payload, $context);
+    $assert($result->ok);
+    $assert($captured instanceof AuthorizationRequest);
+    $assert($captured->tenantScope === 'TS-B');
+    $assert($captured->resourceType === 'certificate');
+    $assert($captured->payload === $payload);
+    $assert($captured->payload['certificate_id'] === '33333333-3333-4333-8333-333333333333');
 });
 
 $test('job record enforces attempt and revision invariants', static function () use ($expectViolation): void {

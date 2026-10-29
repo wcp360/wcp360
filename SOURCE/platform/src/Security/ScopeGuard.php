@@ -8,7 +8,6 @@ interface ScopeGuard
 {
     public function allows(
         AuthorizationContext $context,
-        string $resourceType,
-        ?string $resourceId,
+        AuthorizationRequest $request,
     ): bool;
 }

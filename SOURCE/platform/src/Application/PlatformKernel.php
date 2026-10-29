@@ -54,7 +54,8 @@ final readonly class PlatformKernel
                 $contract->permissionId,
                 $contract->actionId,
                 $contract->resourceType,
-                self::resourceIdFromPayload($payload),
+                $contract->tenantScope,
+                $payload,
             ),
         );
         if (!$decision->allowed) {
@@ -75,15 +76,4 @@ final readonly class PlatformKernel
         }
     }
 
-    /** @param array<string,mixed> $payload */
-    private static function resourceIdFromPayload(array $payload): ?string
-    {
-        foreach (['resource_id', 'application_id', 'domain_id', 'database_id', 'server_id', 'job_id'] as $field) {
-            $value = $payload[$field] ?? null;
-            if (is_string($value) && $value !== '') {
-                return $value;
-            }
-        }
-        return null;
-    }
 }
