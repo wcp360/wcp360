@@ -98,8 +98,10 @@ func TestInvalidIdempotencyScopeRejected(t *testing.T) {
 		{Scope: Global, Namespace: "a"},
 		{Scope: Global, OpaqueKey: "k"},
 	} {
-		if same, code := SameRequest(invalid, key(Global), []byte{1}, []byte{1}); same || code != "VALIDATION_FAILED" {
-			t.Fatal("invalid scope accepted")
+		for _, pair := range [][2]Key{{invalid, key(Global)}, {key(Global), invalid}} {
+			if same, code := SameRequest(pair[0], pair[1], []byte{1}, []byte{1}); same || code != "VALIDATION_FAILED" {
+				t.Fatal("invalid scope accepted")
+			}
 		}
 	}
 	for _, fingerprints := range [][2][]byte{{nil, {1}}, {{1}, nil}, {nil, nil}} {
@@ -211,5 +213,19 @@ func TestDatabaseContractSourcePin(t *testing.T) {
 	header := []byte(fmt.Sprintf("blob %d\x00", len(data)))
 	if fmt.Sprintf("%x", sha1.Sum(append(header, data...))) != "2660e057bad1d00592c57f354b1f3745ccccbe7d" {
 		t.Fatal("Database contract changed; review consistency guards before updating source pin")
+	}
+}
+
+func TestResourceLeaseCannotAuthorizeJobTarget(t *testing.T) {
+	resource := lease()
+	resource.Target = Target{Kind: Resource, ResourceID: ID{1}}
+	if CheckLeaseWrite(resource, resource, now) != "" {
+		t.Fatal("valid resource lease rejected")
+	}
+	if CheckLeaseWrite(resource, lease(), now) != "CONCURRENCY_CONFLICT" {
+		t.Fatal("resource lease used as a job lease")
+	}
+	if next, code := NextFence(resource, resource.Expires); code != "" || next != 2 {
+		t.Fatal("resource lease reclaim rejected")
 	}
 }
