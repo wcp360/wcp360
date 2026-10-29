@@ -9,6 +9,8 @@ use Wcp360\Application\ActionRegistry;
 use Wcp360\Application\PlatformKernel;
 use Wcp360\Security\AuthenticationService;
 use Wcp360\Database\DatabaseCatalog;
+use Wcp360\Database\RevisionMutationDecision;
+use Wcp360\Database\Revision;
 use Wcp360\Application\JobSubmissionService;
 use Wcp360\Ops\IdempotencyRecord;
 use Wcp360\Ops\IdempotencyScope;
@@ -711,6 +713,19 @@ $test('fresh MFA policy enforces 10-minute USER and 5-minute ADMIN high-risk win
     $assert(!FreshMfaPolicy::isFreshForHighRisk(Surface::Admin, new DateTimeImmutable('2026-10-29T09:54:59Z'), $now));
     $assert(FreshMfaPolicy::isFreshForHighRisk(Surface::User, new DateTimeImmutable('2020-01-01T00:00:00Z'), $now, false));
     $expectViolation(static fn() => FreshMfaPolicy::isFreshForHighRisk(Surface::Policy, $now, $now));
+});
+
+$test('TX-REV-01 maps stale expected revision to canonical CONCURRENCY_CONFLICT', static function () use ($assert, $expectViolation): void {
+    $current = new Revision(7);
+    $ok = RevisionMutationDecision::evaluate(new Revision(7), $current);
+    $assert($ok->allowed && $ok->errorCode === null && $ok->nextRevision?->value === 8);
+
+    $stale = RevisionMutationDecision::evaluate(new Revision(6), $current);
+    $assert(!$stale->allowed && $stale->nextRevision === null);
+    $assert($stale->errorCode === CanonicalErrorCode::ConcurrencyConflict);
+    $assert($stale->errorCode->value === 'CONCURRENCY_CONFLICT');
+    $assert(!in_array('CONCURRENT_MODIFICATION', array_map(static fn(CanonicalErrorCode $e): string => $e->value, CanonicalErrorCode::cases()), true));
+    $expectViolation(static fn() => new Revision(0));
 });
 
 $test('action registry rejects handlers outside canonical contract catalogue', static function () use ($contract, $expectViolation, $assert): void {
