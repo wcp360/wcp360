@@ -25,6 +25,9 @@ use Wcp360\Transport\SynchronizerCsrfGuard;
 use Wcp360\Transport\ExpectedOriginResolver;
 use Wcp360\Transport\SessionCsrfTokenVerifier;
 use Wcp360\Security\SecurityHeadersPolicy;
+use Wcp360\Security\SameOriginRedirectPolicy;
+use Wcp360\Security\OutboundUrlPolicy;
+use Wcp360\Security\GlobalAddressPolicy;
 use Wcp360\Transport\RetryProfile;
 use Wcp360\Contracts\ActionCatalog;
 use Wcp360\Contracts\ApiContractDefinition;
@@ -646,6 +649,30 @@ $test('security headers implement canonical CSP and browser isolation baseline',
     $assert($headers['Strict-Transport-Security'] === 'max-age=31536000');
     $expectViolation(static fn() => SecurityHeadersPolicy::headers('short'));
     $expectViolation(static fn() => SecurityHeadersPolicy::headers('AbCdEfGhIjKlMnOpQrStUvWxYz012345', ['https://not-wss.invalid/path']));
+});
+
+$test('SSRF policy rejects non-global destinations and bounds redirect revalidation', static function () use ($assert, $expectViolation): void {
+    $candidate = OutboundUrlPolicy::validateCandidate('https://example.com/resource?q=1');
+    $assert($candidate['scheme'] === 'https' && $candidate['host'] === 'example.com');
+    OutboundUrlPolicy::assertResolvedAddresses(['8.8.8.8', '2001:4860:4860::8888']);
+    OutboundUrlPolicy::assertRedirectCount(3);
+
+    foreach (['127.0.0.1','10.0.0.1','100.64.0.1','169.254.169.254','192.0.2.1','198.18.0.1','224.0.0.1','0.0.0.0','::1','fe80::1','ff02::1','2001:db8::1'] as $ip) {
+        $expectViolation(static fn() => GlobalAddressPolicy::assertGlobal($ip));
+    }
+    foreach (['file:///etc/passwd','gopher://example.com/','ftp://example.com/','data:text/plain,x','javascript:alert(1)','unix:///run/socket','https://user:pass@example.com/','https://127.0.0.1/'] as $url) {
+        $expectViolation(static fn() => OutboundUrlPolicy::validateCandidate($url));
+    }
+    $expectViolation(static fn() => OutboundUrlPolicy::assertResolvedAddresses(['8.8.8.8','10.0.0.1']));
+    $expectViolation(static fn() => OutboundUrlPolicy::assertRedirectCount(4));
+});
+
+$test('open redirect policy accepts only normalized same-origin relative paths', static function () use ($expectViolation): void {
+    SameOriginRedirectPolicy::assertRelative('/dashboard');
+    SameOriginRedirectPolicy::assertRelative('/applications?id=123#details');
+    foreach (['https://evil.invalid/','//evil.invalid/','/%2fevil.invalid','/\\evil.invalid','/a/../admin','/%2e%2e/admin','javascript:alert(1)',''] as $target) {
+        $expectViolation(static fn() => SameOriginRedirectPolicy::assertRelative($target));
+    }
 });
 
 $test('action registry rejects handlers outside canonical contract catalogue', static function () use ($contract, $expectViolation, $assert): void {

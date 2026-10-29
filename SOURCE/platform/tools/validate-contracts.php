@@ -28,8 +28,8 @@ $idempotency = $database->require('wcp_ops.idempotency_records');
 foreach (['scope_kind','operation_namespace','idempotency_key','request_fingerprint','revision'] as $column) {
     $idempotency->requireColumn($column);
 }
-$database->require('wcp_auth.user_sessions');
-$database->require('wcp_auth.admin_sessions');
+$database->require('wcp_iam.user_sessions');
+$database->require('wcp_iam.admin_sessions');
 SessionSurfacePolicy::fromJsonFile($contractsDir . '/session-surfaces.v1.json');
 
 foreach ($counts as $name => $count) {
