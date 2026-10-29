@@ -21,12 +21,19 @@ final readonly class ApiRequestEnvelope
         public OperationKind $operationKind,
         public bool $browserRequest,
         public ?string $idempotencyKey = null,
+        public ?string $origin = null,
+        public ?string $csrfToken = null,
     ) {
         if (!preg_match('/^API-WCP-\d{4}$/', $contractId)) {
             throw new ContractViolation('invalid API request contract id');
         }
         if ($idempotencyKey !== null && ($idempotencyKey === '' || str_contains($idempotencyKey, "\0"))) {
             throw new ContractViolation('invalid idempotency key');
+        }
+        foreach ([$origin, $csrfToken] as $transportValue) {
+            if ($transportValue !== null && ($transportValue === '' || str_contains($transportValue, "\0"))) {
+                throw new ContractViolation('invalid browser security transport value');
+            }
         }
     }
 }

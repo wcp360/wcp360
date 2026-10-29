@@ -21,6 +21,10 @@ use Wcp360\Transport\IdempotencyGuard;
 use Wcp360\Transport\RateLimitGuard;
 use Wcp360\Transport\RequestPolicyService;
 use Wcp360\Transport\RetryPolicy;
+use Wcp360\Transport\SynchronizerCsrfGuard;
+use Wcp360\Transport\ExpectedOriginResolver;
+use Wcp360\Transport\SessionCsrfTokenVerifier;
+use Wcp360\Security\SecurityHeadersPolicy;
 use Wcp360\Transport\RetryProfile;
 use Wcp360\Contracts\ActionCatalog;
 use Wcp360\Contracts\ApiContractDefinition;
@@ -579,6 +583,69 @@ $test('transport operation kind is constrained by canonical retry/idempotency pr
     $assert($mixed->allowsOperationKind(OperationKind::Mutation));
     $assert(!$mixed->requiresIdempotencyKey(OperationKind::Read));
     $assert($mixed->requiresIdempotencyKey(OperationKind::Mutation));
+});
+
+$test('synchronizer CSRF requires exact origin and session-bound token', static function () use ($assert): void {
+    $originResolver = new class implements ExpectedOriginResolver {
+        public function expectedOrigin(Surface $surface): string
+        {
+            return match ($surface) {
+                Surface::User => 'https://user.wcp360.invalid',
+                Surface::Admin => 'https://admin.wcp360.invalid',
+                default => 'https://policy.wcp360.invalid',
+            };
+        }
+    };
+    $tokenVerifier = new class implements SessionCsrfTokenVerifier {
+        public function verify(AuthorizationContext $authorization, string $presentedToken): bool
+        {
+            return hash_equals('session-bound-token-1234567890', $presentedToken);
+        }
+    };
+    $guard = new SynchronizerCsrfGuard($originResolver, $tokenVerifier);
+    $context = new AuthorizationContext(
+        Surface::User,
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        new Uuid('22222222-2222-4222-8222-222222222222'),
+        ['applications.create'], false, false,
+    );
+    $contract = ApiContractDefinition::fromArray([
+        'contract_id'=>'API-WCP-9010','version'=>'1.0','surface'=>'WCP-USER','authentication'=>'AUTH-U',
+        'permission_id'=>'applications.create','action_id'=>'applications.create','resource_type'=>'application','tenant_scope'=>'TS-T',
+        'request_schema'=>'{tenant_id,idempotency_key}','response_schema'=>'JobAccepted','errors'=>'E-M','timeout'=>'10s accept',
+        'retry'=>'RK','idempotency'=>'key-required','audit'=>'AU3','security'=>'S-T','compatibility'=>'C1/D0','test_id'=>'TEST-API-9010',
+    ]);
+    $request = new ApiRequestEnvelope(
+        'API-WCP-9010', ['tenant_id'=>'22222222-2222-4222-8222-222222222222','idempotency_key'=>'key'], $context,
+        new Uuid('33333333-3333-4333-8333-333333333333'), new Uuid('44444444-4444-4444-8444-444444444444'),
+        OperationKind::Mutation, true, 'key', 'https://user.wcp360.invalid', 'session-bound-token-1234567890',
+    );
+    $assert($guard->allows($request, $contract));
+    $badOrigin = new ApiRequestEnvelope(
+        $request->contractId, $request->payload, $context, $request->requestId, $request->correlationId,
+        OperationKind::Mutation, true, 'key', 'https://admin.wcp360.invalid', 'session-bound-token-1234567890',
+    );
+    $assert(!$guard->allows($badOrigin, $contract));
+    $badToken = new ApiRequestEnvelope(
+        $request->contractId, $request->payload, $context, $request->requestId, $request->correlationId,
+        OperationKind::Mutation, true, 'key', 'https://user.wcp360.invalid', 'wrong-token-1234567890',
+    );
+    $assert(!$guard->allows($badToken, $contract));
+    $assert(SynchronizerCsrfGuard::AJAX_HEADER === 'X-WCP-CSRF');
+});
+
+$test('security headers implement canonical CSP and browser isolation baseline', static function () use ($assert, $expectViolation): void {
+    $headers = SecurityHeadersPolicy::headers('AbCdEfGhIjKlMnOpQrStUvWxYz012345', ['wss://admin.wcp360.invalid']);
+    $csp = $headers['Content-Security-Policy'];
+    $assert(str_contains($csp, "default-src 'self'"));
+    $assert(str_contains($csp, "script-src 'self' 'nonce-AbCdEfGhIjKlMnOpQrStUvWxYz012345'"));
+    $assert(str_contains($csp, 'wss://admin.wcp360.invalid'));
+    $assert(!str_contains($csp, 'unsafe-inline') && !str_contains($csp, 'unsafe-eval'));
+    $assert($headers['X-Frame-Options'] === 'DENY');
+    $assert($headers['Referrer-Policy'] === 'no-referrer');
+    $assert($headers['Strict-Transport-Security'] === 'max-age=31536000');
+    $expectViolation(static fn() => SecurityHeadersPolicy::headers('short'));
+    $expectViolation(static fn() => SecurityHeadersPolicy::headers('AbCdEfGhIjKlMnOpQrStUvWxYz012345', ['https://not-wss.invalid/path']));
 });
 
 $test('action registry rejects handlers outside canonical contract catalogue', static function () use ($contract, $expectViolation, $assert): void {
