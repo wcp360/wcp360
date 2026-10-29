@@ -22,7 +22,7 @@ The experiment checks *some* syntactic invariants in isolation, before any offic
 
 ## Files
 
-`codec.go`: pure in-memory framing/JSON parser for **both requests and responses**, with exact IPC-B request/response size bounds, canonical 12-code error registry, typed-ID allowlist and **no dispatcher**. Both returned objects are merely untrusted parsed data.
+`codec.go`: pure in-memory framing/JSON parser for **both requests and responses**, plus bounded `io.Reader` helpers that validate the announced frame size before body allocation/read. The helpers support fragmented reads and reject truncated bodies, but intentionally implement no socket, timeout or peer-authentication semantics. Exact IPC-B request/response size bounds, canonical 12-code error registry, typed-ID allowlist and **no dispatcher** remain enforced. Both returned objects are merely untrusted parsed data.
 
 `operations.json`: noncanonical snapshot of all 47 operation IDs and accompanying metadata **derived exactly from**:
 
@@ -48,6 +48,7 @@ The GitHub Actions workflow uses an ephemeral runner and logs the Go version. A 
 
 ## Explicitly NOT validated
 
+- Streaming helpers validate frame length before allocating/reading the body and tolerate fragmented `io.Reader` delivery. They intentionally do **not** implement the canonical 1s connect timeout, 5s I/O timeout, connection lifecycle or socket authentication; those remain production transport responsibilities.
 - Kernel peer identity: NO `SO_PEERCRED` implementation. A valid frame from an unauthorized peer is still **DENY** by the real contract.
 - `authorization_context_ref` is NOT a bearer credential; this POC does not resolve, authenticate or revalidate it.
 - A known `ipc_operation_id` does NOT authorize its use. The inert parser now checks **the exact canonical `action_id` associated with that operation ID** (19/47 pairs intentionally use different strings) and rejects a wrong pair; this is *source-reference consistency*, NOT a security grant. Live permission/action/job/tenant/resource/MFA/delegation/parent-binding authorization remains a separate mandatory check.
