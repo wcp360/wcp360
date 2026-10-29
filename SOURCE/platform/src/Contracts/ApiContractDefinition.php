@@ -49,6 +49,15 @@ final readonly class ApiContractDefinition
                 throw new ContractViolation('API contract typed value missing/invalid');
             }
         }
+        $runtimeProfile = $retry . '|' . $idempotency;
+        if (!in_array($runtimeProfile, [
+            'RR|none',
+            'RK|key-required',
+            'RN|key-required',
+            'RK|key when mutating',
+        ], true)) {
+            throw new ContractViolation('unsupported API retry/idempotency runtime profile');
+        }
     }
 
     /** @param array<string,mixed> $row */
@@ -88,6 +97,26 @@ final readonly class ApiContractDefinition
             'POLICY' => $caller === Surface::Policy,
             'EMERGENCY' => $caller === Surface::Emergency,
             default => false,
+        };
+    }
+
+    public function allowsOperationKind(OperationKind $kind): bool
+    {
+        return match ($this->retry . '|' . $this->idempotency) {
+            'RR|none' => $kind === OperationKind::Read,
+            'RK|key-required', 'RN|key-required' => $kind === OperationKind::Mutation,
+            'RK|key when mutating' => true,
+            default => false,
+        };
+    }
+
+    public function requiresIdempotencyKey(OperationKind $kind): bool
+    {
+        return match ($this->idempotency) {
+            'none' => false,
+            'key-required' => true,
+            'key when mutating' => $kind === OperationKind::Mutation,
+            default => throw new ContractViolation('unsupported API idempotency profile'),
         };
     }
 }

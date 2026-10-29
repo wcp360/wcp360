@@ -25,6 +25,7 @@ use Wcp360\Transport\RetryProfile;
 use Wcp360\Contracts\ActionCatalog;
 use Wcp360\Contracts\ApiContractDefinition;
 use Wcp360\Contracts\ApiContractRegistry;
+use Wcp360\Contracts\OperationKind;
 use Wcp360\Contracts\PermissionDefinition;
 use Wcp360\Contracts\PermissionRegistry;
 use Wcp360\Contracts\RequestSchema;
@@ -519,7 +520,7 @@ $test('transport policy enforces rate CSRF and idempotency before kernel', stati
     );
     $mk = static fn(?string $key): ApiRequestEnvelope => new ApiRequestEnvelope(
         'API-WCP-0110',['tenant_id'=>'22222222-2222-4222-8222-222222222222','idempotency_key'=>'payload-key'],
-        $context,new Uuid('33333333-3333-4333-8333-333333333333'),new Uuid('44444444-4444-4444-8444-444444444444'),true,true,$key,
+        $context,new Uuid('33333333-3333-4333-8333-333333333333'),new Uuid('44444444-4444-4444-8444-444444444444'),OperationKind::Mutation,true,$key,
     );
     $response=$dispatcher->dispatch($mk('header-key'));
     $assert(!$response->ok && $response->errorCode===CanonicalErrorCode::AuthorizationDenied && !$handler->called);
@@ -549,6 +550,36 @@ $test('retry policy permits only bounded RR transport retry and reconciles RN un
     $assert(!RetryPolicy::requiresReconciliationBeforeExecutionRetry(RetryProfile::NoBlindRetry,CanonicalErrorCode::DependencyFailure));
 });
 
+
+$test('transport operation kind is constrained by canonical retry/idempotency profile', static function () use ($assert): void {
+    $base = [
+        'contract_id'=>'API-WCP-9001','version'=>'1.0','surface'=>'WCP-USER','authentication'=>'AUTH-U',
+        'permission_id'=>'applications.read','action_id'=>'applications.read','resource_type'=>'application','tenant_scope'=>'TS-T',
+        'request_schema'=>'{tenant_id}','response_schema'=>'View','errors'=>'E-R','timeout'=>'10s',
+        'audit'=>'AU0','security'=>'S-T','compatibility'=>'C1/D0','test_id'=>'TEST-API-9001',
+    ];
+    $read = ApiContractDefinition::fromArray($base + ['retry'=>'RR','idempotency'=>'none']);
+    $assert($read->allowsOperationKind(OperationKind::Read));
+    $assert(!$read->allowsOperationKind(OperationKind::Mutation));
+    $assert(!$read->requiresIdempotencyKey(OperationKind::Read));
+
+    $mutation = ApiContractDefinition::fromArray(array_replace($base, [
+        'contract_id'=>'API-WCP-9002','action_id'=>'applications.create','permission_id'=>'applications.create',
+        'retry'=>'RK','idempotency'=>'key-required','test_id'=>'TEST-API-9002',
+    ]));
+    $assert(!$mutation->allowsOperationKind(OperationKind::Read));
+    $assert($mutation->allowsOperationKind(OperationKind::Mutation));
+    $assert($mutation->requiresIdempotencyKey(OperationKind::Mutation));
+
+    $mixed = ApiContractDefinition::fromArray(array_replace($base, [
+        'contract_id'=>'API-WCP-9003','action_id'=>'security.sessions.manage','permission_id'=>'security.sessions.manage',
+        'resource_type'=>'session','retry'=>'RK','idempotency'=>'key when mutating','test_id'=>'TEST-API-9003',
+    ]));
+    $assert($mixed->allowsOperationKind(OperationKind::Read));
+    $assert($mixed->allowsOperationKind(OperationKind::Mutation));
+    $assert(!$mixed->requiresIdempotencyKey(OperationKind::Read));
+    $assert($mixed->requiresIdempotencyKey(OperationKind::Mutation));
+});
 
 $test('action registry rejects handlers outside canonical contract catalogue', static function () use ($contract, $expectViolation, $assert): void {
     $contracts = new ApiContractRegistry([$contract()]);

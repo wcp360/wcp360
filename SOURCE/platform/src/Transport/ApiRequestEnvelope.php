@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Wcp360\Transport;
 
+use Wcp360\Contracts\OperationKind;
 use Wcp360\Security\AuthorizationContext;
 use Wcp360\Shared\ContractViolation;
 use Wcp360\Shared\Uuid;
@@ -17,7 +18,7 @@ final readonly class ApiRequestEnvelope
         public AuthorizationContext $authorization,
         public Uuid $requestId,
         public Uuid $correlationId,
-        public bool $mutation,
+        public OperationKind $operationKind,
         public bool $browserRequest,
         public ?string $idempotencyKey = null,
     ) {
