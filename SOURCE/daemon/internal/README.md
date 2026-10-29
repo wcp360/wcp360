@@ -169,3 +169,20 @@ Tests use a fake store to verify round trips from the real cookie renderer,
 reloading after revocation, duplicate rejection before I/O, surface mismatch,
 expiry, MFA, missing records, backend failures and cancellation. These are
 component orchestration tests, not PostgreSQL or browser end-to-end evidence.
+
+## Combined browser session/mutation gate
+
+`CheckSessionMutation` joins the cookie-authentication and Origin/CSRF gates.
+BrowserSessionStore must return the session and its CSRF reference from ONE
+consistent authenticated snapshot. The coordinator performs one lookup and
+never returns CSRF material. It uses a trusted server clock before and after
+storage I/O, rejects backward clock movement, and rechecks session validity after
+I/O so expiry during lookup cannot be hidden by a request-start timestamp.
+
+The store interface is an internal adapter contract, not a new PostgreSQL schema
+or public API. Tests cover both surfaces, renderer-to-cookie-to-session round
+trips, CSRF rotation, duplicate cookies, wrong Origin, expiration during lookup,
+revocation, cancellation, storage failure and safe-method rejection with a fake
+store. This is component composition, not a live HTTP/PostgreSQL integration.
+No mutation is executed and no resource permission is granted. Authorization
+and revocation must still be rechecked at the eventual write boundary.
