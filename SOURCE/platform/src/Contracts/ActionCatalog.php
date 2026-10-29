@@ -70,6 +70,14 @@ final class ActionCatalog
     }
 
     /** @return list<string> */
+    public function actionIds(): array
+    {
+        $ids = array_keys($this->actions);
+        sort($ids);
+        return $ids;
+    }
+
+    /** @return list<string> */
     public function domains(): array
     {
         $domains = array_values(array_unique($this->actions));

@@ -10,6 +10,7 @@ Implemented now:
 - canonical permission registry loader;
 - canonical API-contract registry loader;
 - canonical action catalogue: 86 unique actions across 30 derived domains; handlers outside this catalogue are rejected;
+- 86 explicit canonical handler boundary classes: 17 read, 58 strict mutation, 11 mixed/manage; each receives only its typed port and never a caller-selected action ID;
 - request field-name validation derived from canonical contract schemas;
 - WCP-USER / WCP-ADMIN / POLICY surface separation;
 - fail-closed authorization composition through mandatory scope and policy guards;

@@ -40,6 +40,9 @@ jobs:
       - name: Verify generated registries against canonical Git blobs
         run: php SOURCE/platform/tools/validate-contracts.php
 
+      - name: Validate 86 explicit canonical action handler boundaries
+        run: php SOURCE/platform/tools/validate-handler-catalog.php
+
       - name: Enforce no generic execution primitive in product kernel
         run: php SOURCE/platform/tools/check-source-boundary.php
 
