@@ -1,0 +1,73 @@
+name: Full platform candidate verification
+
+on:
+  push:
+    branches:
+      - source/full-platform-candidate
+    paths:
+      - 'SOURCE/platform/**'
+      - 'SOURCE/ui/**'
+      - '.github/workflows/full-platform-candidate.yml'
+  pull_request:
+    paths:
+      - 'SOURCE/platform/**'
+      - 'SOURCE/ui/**'
+      - '.github/workflows/full-platform-candidate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  platform-kernel:
+    name: platform-kernel
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Record runner PHP version (candidate evidence only)
+        run: php -v
+
+      - name: Lint dependency-free PHP candidate
+        run: find SOURCE/platform/src SOURCE/platform/tests SOURCE/platform/tools -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Run platform kernel tests
+        run: php SOURCE/platform/tests/run.php
+
+      - name: Verify generated registries against canonical Git blobs
+        run: php SOURCE/platform/tools/validate-contracts.php
+
+      - name: Enforce no generic execution primitive in product kernel
+        run: php SOURCE/platform/tools/check-source-boundary.php
+
+  static-ui:
+    name: static-ui
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Validate USER/ADMIN shell separation and static-only boundary
+        shell: python
+        run: |
+          from pathlib import Path
+          user = Path('SOURCE/ui/wcp-user/index.html').read_text()
+          admin = Path('SOURCE/ui/wcp-admin/index.html').read_text()
+          js = Path('SOURCE/ui/shared/app.js').read_text()
+          css = Path('SOURCE/ui/shared/app.css').read_text()
+          assert 'WCP-USER' in user and 'WCP-ADMIN' not in user
+          assert 'WCP-ADMIN' in admin and 'WCP-USER' not in admin
+          assert 'name="viewport"' in user and 'name="viewport"' in admin
+          assert 'data-theme-toggle' in user and 'data-theme-toggle' in admin
+          assert 'localStorage' in js and 'wcp360-theme' in js
+          forbidden = ['wcp_user_session', 'wcp_admin_session', 'bearer_token', 'password=']
+          corpus = user + admin + js + css
+          for token in forbidden:
+              assert token not in corpus.lower(), token
+          print('PASS static WCP-USER/WCP-ADMIN shell boundary')

@@ -27,6 +27,15 @@ final readonly class PlatformKernel
     {
         try {
             $contract = $this->contracts->require($contractId);
+        } catch (ContractViolation) {
+            return OperationResult::failure(CanonicalErrorCode::ValidationFailed);
+        }
+
+        if (!$contract->allowsSurface($context->surface)) {
+            return OperationResult::failure(CanonicalErrorCode::AuthorizationDenied);
+        }
+
+        try {
             RequestSchema::validateFieldNames($contract, $payload);
         } catch (ContractViolation) {
             return OperationResult::failure(CanonicalErrorCode::ValidationFailed);
@@ -55,7 +64,6 @@ final readonly class PlatformKernel
         } catch (ContractViolation) {
             return OperationResult::failure(CanonicalErrorCode::ValidationFailed);
         } catch (Throwable) {
-            // Internal cause belongs in structured/redacted logging; never expose stack traces here.
             return OperationResult::failure(CanonicalErrorCode::InternalError);
         }
     }

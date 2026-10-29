@@ -7,6 +7,11 @@ require dirname(__DIR__) . '/bootstrap.php';
 use Wcp360\Application\ActionHandler;
 use Wcp360\Application\ActionRegistry;
 use Wcp360\Application\PlatformKernel;
+use Wcp360\Application\JobSubmissionService;
+use Wcp360\Ops\IdempotencyRecord;
+use Wcp360\Ops\IdempotencyScope;
+use Wcp360\Persistence\DurableJobStore;
+use Wcp360\Security\SessionSurfacePolicy;
 use Wcp360\Contracts\ApiContractDefinition;
 use Wcp360\Contracts\ApiContractRegistry;
 use Wcp360\Contracts\PermissionDefinition;
@@ -224,6 +229,151 @@ $test('audit metadata rejects obvious secret-bearing keys', static function () u
         new DateTimeImmutable(),
         ['token' => 'secret'],
     ));
+});
+
+
+$test('API contract surface denies cross-surface execution even for BOTH permission', static function () use ($assert, $perm, $allowScope, $allowPolicy): void {
+    $definition = ApiContractDefinition::fromArray([
+        'contract_id' => 'API-WCP-1006',
+        'version' => '1.0',
+        'surface' => 'WCP-USER',
+        'authentication' => 'AUTH-U',
+        'permission_id' => 'monitoring.read',
+        'action_id' => 'monitoring.read',
+        'resource_type' => 'monitoring',
+        'tenant_scope' => 'TS-B',
+        'request_schema' => '{tenant_id}',
+        'response_schema' => 'MonitoringView',
+        'errors' => 'E-R',
+        'timeout' => '10s',
+        'retry' => 'RR',
+        'idempotency' => 'none',
+        'audit' => 'AU0',
+        'security' => 'S-Q',
+        'compatibility' => 'C1/D0',
+        'test_id' => 'TEST-API-1006',
+    ]);
+    $handler = new class implements ActionHandler {
+        public function actionId(): string { return 'monitoring.read'; }
+        public function handle(array $input, AuthorizationContext $context): array { return ['unexpected' => true]; }
+    };
+    $service = new AuthorizationService(
+        new PermissionRegistry([$perm('monitoring.read', 'BOTH / scope-bound')]),
+        $allowScope,
+        $allowPolicy,
+    );
+    $kernel = new PlatformKernel(new ApiContractRegistry([$definition]), $service, new ActionRegistry([$handler]));
+    $context = new AuthorizationContext(
+        Surface::Admin,
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        new Uuid('22222222-2222-4222-8222-222222222222'),
+        ['monitoring.read'],
+        true,
+        false,
+    );
+    $result = $kernel->execute('API-WCP-1006', ['tenant_id' => '22222222-2222-4222-8222-222222222222'], $context);
+    $assert(!$result->ok && $result->errorCode === CanonicalErrorCode::AuthorizationDenied);
+});
+
+$test('session surface policy fixes distinct USER and ADMIN cookies', static function () use ($assert, $expectViolation): void {
+    $path = tempnam(sys_get_temp_dir(), 'wcp-session-');
+    if ($path === false) { throw new RuntimeException('temp file failure'); }
+    file_put_contents($path, json_encode([
+        'version' => 'v1.0',
+        'invariant' => 'WCP-USER session != WCP-ADMIN session',
+        'cookie_user' => '__Host-wcp_user_session',
+        'cookie_admin' => '__Host-wcp_admin_session',
+        'required_cookie_attributes' => ['Secure','HttpOnly','SameSite=Strict','Path=/','host-only','no Domain attribute'],
+        'policies' => [
+            ['policy'=>'cookie','wcp_user'=>'__Host-wcp_user_session','wcp_admin'=>'__Host-wcp_admin_session'],
+            ['policy'=>'idle timeout','wcp_user'=>'30 min','wcp_admin'=>'15 min'],
+            ['policy'=>'absolute lifetime','wcp_user'=>'12 h','wcp_admin'=>'8 h'],
+            ['policy'=>'remember-me','wcp_user'=>'disabled baseline','wcp_admin'=>'forbidden'],
+            ['policy'=>'MFA at login','wcp_user'=>'policy/account dependent','wcp_admin'=>'mandatory'],
+            ['policy'=>'fresh MFA high-risk','wcp_user'=>'<=10 min when required','wcp_admin'=>'<=5 min'],
+            ['policy'=>'privileged child context','wcp_user'=>'unavailable','wcp_admin'=>'idle 5 min / absolute 15 min'],
+            ['policy'=>'break-glass','wcp_user'=>'unavailable','wcp_admin'=>'max 15 min, no auto-extension'],
+        ],
+    ], JSON_THROW_ON_ERROR));
+    try {
+        $policy = SessionSurfacePolicy::fromJsonFile($path);
+        $assert($policy->cookieName(Surface::User) === '__Host-wcp_user_session');
+        $assert($policy->cookieName(Surface::Admin) === '__Host-wcp_admin_session');
+        $assert($policy->policy('MFA at login', Surface::Admin) === 'mandatory');
+        $expectViolation(static fn() => $policy->assertCookieName(Surface::Admin, '__Host-wcp_user_session'));
+        $expectViolation(static fn() => $policy->cookieName(Surface::Policy));
+    } finally {
+        @unlink($path);
+    }
+});
+
+$test('idempotency scope CHECK and fingerprint conflict are fail-closed', static function () use ($assert, $expectViolation): void {
+    $tenant = new Uuid('22222222-2222-4222-8222-222222222222');
+    $record = new IdempotencyRecord(
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        IdempotencyScope::Tenant,
+        null,
+        $tenant,
+        'applications.create',
+        'opaque-key',
+        'sha256:abc',
+        'ACQUIRED',
+        null,
+        new DateTimeImmutable('2026-10-29T09:00:00Z'),
+        new DateTimeImmutable('2026-10-30T09:00:00Z'),
+        1,
+    );
+    $assert(!$record->conflictsWithFingerprint('sha256:abc'));
+    $assert($record->conflictsWithFingerprint('sha256:different'));
+    $expectViolation(static fn() => new IdempotencyRecord(
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        IdempotencyScope::Tenant,
+        new Uuid('33333333-3333-4333-8333-333333333333'),
+        $tenant,
+        'applications.create', 'key', 'fingerprint', 'ACQUIRED', null,
+        new DateTimeImmutable('2026-10-29T09:00:00Z'),
+        new DateTimeImmutable('2026-10-30T09:00:00Z'),
+        1,
+    ));
+});
+
+$test('audit metadata rejects nested secret-bearing keys', static function () use ($expectViolation): void {
+    $expectViolation(static fn() => new AuditRecord(
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        'example.event', null, null, Surface::Admin, 'example.action', 'server', null,
+        new Uuid('22222222-2222-4222-8222-222222222222'),
+        new DateTimeImmutable(),
+        ['safe' => ['authorization' => 'Bearer secret']],
+    ));
+});
+
+$test('durable job submission enforces correlation and tenant before store', static function () use ($assert, $expectViolation): void {
+    $store = new class implements DurableJobStore {
+        public bool $called = false;
+        public function enqueue(JobRecord $job, AuditRecord $audit, ?IdempotencyRecord $idempotency): void { $this->called = true; }
+    };
+    $tenant = new Uuid('22222222-2222-4222-8222-222222222222');
+    $correlation = new Uuid('33333333-3333-4333-8333-333333333333');
+    $job = new JobRecord(
+        new Uuid('11111111-1111-4111-8111-111111111111'), $tenant,
+        'applications.create', 'applications.create', null, null, 'QUEUED', null, null,
+        0, 3, new DateTimeImmutable(), null, null, null, $correlation, 1,
+    );
+    $audit = new AuditRecord(
+        new Uuid('44444444-4444-4444-8444-444444444444'), 'application.create.requested',
+        $tenant, null, Surface::User, 'applications.create', 'application', null,
+        $correlation, new DateTimeImmutable(), [],
+    );
+    $service = new JobSubmissionService($store);
+    $service->submit($job, $audit);
+    $assert($store->called);
+
+    $wrongAudit = new AuditRecord(
+        new Uuid('55555555-5555-4555-8555-555555555555'), 'application.create.requested',
+        $tenant, null, Surface::User, 'applications.create', 'application', null,
+        new Uuid('66666666-6666-4666-8666-666666666666'), new DateTimeImmutable(), [],
+    );
+    $expectViolation(static fn() => $service->submit($job, $wrongAudit));
 });
 
 $passed = 0;

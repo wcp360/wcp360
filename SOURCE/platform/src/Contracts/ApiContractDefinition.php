@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wcp360\Contracts;
 
 use Wcp360\Shared\ContractViolation;
+use Wcp360\Shared\Surface;
 
 final readonly class ApiContractDefinition
 {
@@ -37,6 +38,14 @@ final readonly class ApiContractDefinition
         if ($version !== '1.0') {
             throw new ContractViolation('unsupported API contract version');
         }
+        if (!in_array($surface, ['WCP-USER', 'WCP-ADMIN', 'BOTH', 'POLICY'], true)) {
+            throw new ContractViolation('unsupported API contract surface');
+        }
+        foreach ([$permissionId, $actionId, $resourceType, $authentication, $tenantScope, $testId] as $typedValue) {
+            if ($typedValue === '' || str_contains($typedValue, "\0")) {
+                throw new ContractViolation('API contract typed value missing/invalid');
+            }
+        }
     }
 
     /** @param array<string,mixed> $row */
@@ -65,5 +74,16 @@ final readonly class ApiContractDefinition
             $required,
             $optional,
         );
+    }
+
+    public function allowsSurface(Surface $caller): bool
+    {
+        return match ($this->surface) {
+            'WCP-USER' => $caller === Surface::User,
+            'WCP-ADMIN' => $caller === Surface::Admin,
+            'BOTH' => $caller === Surface::User || $caller === Surface::Admin,
+            'POLICY' => $caller === Surface::Policy,
+            default => false,
+        };
     }
 }

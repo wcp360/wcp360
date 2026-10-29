@@ -28,3 +28,17 @@ php tests/run.php
 ```
 
 The current `composer.json` has **zero third-party dependencies**. The PHP 8.4 constraint is a development-candidate compatibility declaration only; it does not silently ratify the blocked full web-stack/toolchain decision.
+
+## Contract integrity and persistence boundaries
+
+The candidate now also includes:
+
+- direct verification of generated registry counts and Git blob fingerprints against the canonical Markdown sources;
+- API contract-surface enforcement in addition to permission-surface enforcement;
+- canonical USER/ADMIN session-cookie policy loading with strict cookie separation;
+- idempotency scope/value invariants matching the physical DB contract;
+- a `DurableJobStore` port encoding `TX-JOB-01` atomic enqueue semantics without selecting a database driver;
+- recursive audit metadata secret-key rejection;
+- a source-boundary scanner that rejects generic command/process execution primitives in the product kernel.
+
+No concrete PostgreSQL adapter, HTTP framework, session backend, queue driver or privileged executor is selected by these interfaces.
