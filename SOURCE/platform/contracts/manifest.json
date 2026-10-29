@@ -28,5 +28,11 @@
   "security_sessions": {
     "version": "v1.0",
     "blob": "6d74f2f363524511424f839ca7262143c2af95ab"
+  },
+  "actions": {
+    "version": "1.0",
+    "count": 86,
+    "domain_count": 30,
+    "blob": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea"
   }
 }

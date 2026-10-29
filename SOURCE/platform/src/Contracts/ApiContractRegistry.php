@@ -49,6 +49,12 @@ final class ApiContractRegistry
         return count($this->contracts);
     }
 
+    /** @return list<ApiContractDefinition> */
+    public function all(): array
+    {
+        return array_values($this->contracts);
+    }
+
     public function require(string $contractId): ApiContractDefinition
     {
         return $this->contracts[$contractId]

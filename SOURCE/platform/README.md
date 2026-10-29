@@ -9,6 +9,7 @@ Implemented now:
 - canonical API error-code enum (23 codes);
 - canonical permission registry loader;
 - canonical API-contract registry loader;
+- canonical action catalogue: 86 unique actions across 30 derived domains; handlers outside this catalogue are rejected;
 - request field-name validation derived from canonical contract schemas;
 - WCP-USER / WCP-ADMIN / POLICY surface separation;
 - fail-closed authorization composition through mandatory scope and policy guards;

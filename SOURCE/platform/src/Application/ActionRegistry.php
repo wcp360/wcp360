@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Wcp360\Application;
 
+use Wcp360\Contracts\ActionCatalog;
 use Wcp360\Shared\ContractViolation;
 
 final class ActionRegistry
@@ -12,7 +13,7 @@ final class ActionRegistry
     private array $handlers = [];
 
     /** @param iterable<ActionHandler> $handlers */
-    public function __construct(iterable $handlers = [])
+    public function __construct(private readonly ActionCatalog $catalog, iterable $handlers = [])
     {
         foreach ($handlers as $handler) {
             $this->register($handler);
@@ -22,14 +23,18 @@ final class ActionRegistry
     public function register(ActionHandler $handler): void
     {
         $id = $handler->actionId();
-        if ($id === '' || isset($this->handlers[$id])) {
-            throw new ContractViolation('invalid or duplicate action handler');
+        $this->catalog->require($id);
+        if (isset($this->handlers[$id])) {
+            throw new ContractViolation('duplicate action handler');
         }
         $this->handlers[$id] = $handler;
     }
 
     public function find(string $actionId): ?ActionHandler
     {
+        if (!$this->catalog->has($actionId)) {
+            return null;
+        }
         return $this->handlers[$actionId] ?? null;
     }
 }

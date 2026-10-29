@@ -22,6 +22,7 @@ use Wcp360\Transport\RateLimitGuard;
 use Wcp360\Transport\RequestPolicyService;
 use Wcp360\Transport\RetryPolicy;
 use Wcp360\Transport\RetryProfile;
+use Wcp360\Contracts\ActionCatalog;
 use Wcp360\Contracts\ApiContractDefinition;
 use Wcp360\Contracts\ApiContractRegistry;
 use Wcp360\Contracts\PermissionDefinition;
@@ -167,7 +168,7 @@ $test('authorization rejects cross-surface permission', static function () use (
 $test('kernel requires explicit registered handler', static function () use ($assert, $perm, $contract, $allowScope, $allowPolicy): void {
     $permissions = new PermissionRegistry([$perm('applications.read', 'WCP-USER')]);
     $service = new AuthorizationService($permissions, $allowScope, $allowPolicy);
-    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $service, new ActionRegistry());
+    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $service, new ActionRegistry(ActionCatalog::fromApiContracts(new ApiContractRegistry([$contract()]))));
     $context = new AuthorizationContext(
         Surface::User,
         new Uuid('11111111-1111-4111-8111-111111111111'),
@@ -190,7 +191,7 @@ $test('kernel executes only exact registered action after authorization', static
     };
     $permissions = new PermissionRegistry([$perm('applications.read', 'WCP-USER')]);
     $service = new AuthorizationService($permissions, $allowScope, $allowPolicy);
-    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $service, new ActionRegistry([$handler]));
+    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $service, new ActionRegistry(ActionCatalog::fromApiContracts(new ApiContractRegistry([$contract()])), [$handler]));
     $context = new AuthorizationContext(
         Surface::User,
         new Uuid('11111111-1111-4111-8111-111111111111'),
@@ -273,7 +274,7 @@ $test('API contract surface denies cross-surface execution even for BOTH permiss
         $allowScope,
         $allowPolicy,
     );
-    $kernel = new PlatformKernel(new ApiContractRegistry([$definition]), new AuthenticationService(), $service, new ActionRegistry([$handler]));
+    $kernel = new PlatformKernel(new ApiContractRegistry([$definition]), new AuthenticationService(), $service, new ActionRegistry(ActionCatalog::fromApiContracts(new ApiContractRegistry([$definition])), [$handler]));
     $context = new AuthorizationContext(
         Surface::Admin,
         new Uuid('11111111-1111-4111-8111-111111111111'),
@@ -464,7 +465,7 @@ $test('kernel rejects unauthenticated context before authorization/handler', sta
         public function handle(array $input, AuthorizationContext $context): array { $this->called = true; return []; }
     };
     $authz = new AuthorizationService(new PermissionRegistry([$perm('applications.read','WCP-USER')]), $allowScope, $allowPolicy);
-    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $authz, new ActionRegistry([$handler]));
+    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $authz, new ActionRegistry(ActionCatalog::fromApiContracts(new ApiContractRegistry([$contract()])), [$handler]));
     $context = new AuthorizationContext(
         Surface::User, new Uuid('11111111-1111-4111-8111-111111111111'),
         new Uuid('22222222-2222-4222-8222-222222222222'), ['applications.read'], false, false, false,
@@ -507,7 +508,7 @@ $test('transport policy enforces rate CSRF and idempotency before kernel', stati
     };
     $authz = new AuthorizationService(new PermissionRegistry([$perm('applications.create','WCP-USER')]), $allowScope, $allowPolicy);
     $contracts = new ApiContractRegistry([$definition]);
-    $kernel = new PlatformKernel($contracts, new AuthenticationService(), $authz, new ActionRegistry([$handler]));
+    $kernel = new PlatformKernel($contracts, new AuthenticationService(), $authz, new ActionRegistry(ActionCatalog::fromApiContracts($contracts), [$handler]));
     $csrf = new class implements CsrfGuard { public bool $allow=false; public function allows(ApiRequestEnvelope $r, ApiContractDefinition $c): bool { return $this->allow; } };
     $rate = new class implements RateLimitGuard { public bool $allow=true; public function allows(ApiRequestEnvelope $r, ApiContractDefinition $c): bool { return $this->allow; } };
     $idem = new class implements IdempotencyGuard { public bool $allow=true; public function allows(ApiRequestEnvelope $r, ApiContractDefinition $c): bool { return $this->allow; } };
@@ -546,6 +547,18 @@ $test('retry policy permits only bounded RR transport retry and reconciles RN un
     $assert(!RetryPolicy::mayRetryTransport(RetryProfile::NoBlindRetry,0,false,null));
     $assert(RetryPolicy::requiresReconciliationBeforeExecutionRetry(RetryProfile::NoBlindRetry,CanonicalErrorCode::UnknownOutcome));
     $assert(!RetryPolicy::requiresReconciliationBeforeExecutionRetry(RetryProfile::NoBlindRetry,CanonicalErrorCode::DependencyFailure));
+});
+
+
+$test('action registry rejects handlers outside canonical contract catalogue', static function () use ($contract, $expectViolation, $assert): void {
+    $contracts = new ApiContractRegistry([$contract()]);
+    $catalog = ActionCatalog::fromApiContracts($contracts);
+    $assert($catalog->count() === 1 && $catalog->domains() === ['applications']);
+    $bad = new class implements ActionHandler {
+        public function actionId(): string { return 'ghost.execute'; }
+        public function handle(array $input, AuthorizationContext $context): array { return []; }
+    };
+    $expectViolation(static fn() => new ActionRegistry($catalog, [$bad]));
 });
 
 $passed = 0;
