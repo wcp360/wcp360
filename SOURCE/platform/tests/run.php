@@ -14,6 +14,14 @@ use Wcp360\Ops\IdempotencyRecord;
 use Wcp360\Ops\IdempotencyScope;
 use Wcp360\Persistence\DurableJobStore;
 use Wcp360\Security\SessionSurfacePolicy;
+use Wcp360\Transport\ApiDispatcher;
+use Wcp360\Transport\ApiRequestEnvelope;
+use Wcp360\Transport\CsrfGuard;
+use Wcp360\Transport\IdempotencyGuard;
+use Wcp360\Transport\RateLimitGuard;
+use Wcp360\Transport\RequestPolicyService;
+use Wcp360\Transport\RetryPolicy;
+use Wcp360\Transport\RetryProfile;
 use Wcp360\Contracts\ApiContractDefinition;
 use Wcp360\Contracts\ApiContractRegistry;
 use Wcp360\Contracts\PermissionDefinition;
@@ -482,6 +490,62 @@ $test('structured logs are correlated and recursively secret-safe', static funct
         new Uuid('11111111-1111-4111-8111-111111111111'), null, null, null,
         ['nested' => ['client-secret' => 'must-not-log']],
     ));
+});
+
+
+$test('transport policy enforces rate CSRF and idempotency before kernel', static function () use ($assert, $perm, $allowScope, $allowPolicy): void {
+    $definition = ApiContractDefinition::fromArray([
+        'contract_id'=>'API-WCP-0110','version'=>'1.0','surface'=>'WCP-USER','authentication'=>'AUTH-U',
+        'permission_id'=>'applications.create','action_id'=>'applications.create','resource_type'=>'application','tenant_scope'=>'TS-T',
+        'request_schema'=>'{tenant_id,idempotency_key}','response_schema'=>'JobAccepted','errors'=>'E-M','timeout'=>'10s accept',
+        'retry'=>'RK','idempotency'=>'key-required','audit'=>'AU3','security'=>'S-T','compatibility'=>'C1/D0','test_id'=>'TEST-API-0110',
+    ]);
+    $handler = new class implements ActionHandler {
+        public bool $called = false;
+        public function actionId(): string { return 'applications.create'; }
+        public function handle(array $input, AuthorizationContext $context): array { $this->called=true; return ['accepted'=>true]; }
+    };
+    $authz = new AuthorizationService(new PermissionRegistry([$perm('applications.create','WCP-USER')]), $allowScope, $allowPolicy);
+    $contracts = new ApiContractRegistry([$definition]);
+    $kernel = new PlatformKernel($contracts, new AuthenticationService(), $authz, new ActionRegistry([$handler]));
+    $csrf = new class implements CsrfGuard { public bool $allow=false; public function allows(ApiRequestEnvelope $r, ApiContractDefinition $c): bool { return $this->allow; } };
+    $rate = new class implements RateLimitGuard { public bool $allow=true; public function allows(ApiRequestEnvelope $r, ApiContractDefinition $c): bool { return $this->allow; } };
+    $idem = new class implements IdempotencyGuard { public bool $allow=true; public function allows(ApiRequestEnvelope $r, ApiContractDefinition $c): bool { return $this->allow; } };
+    $dispatcher = new ApiDispatcher($contracts, new RequestPolicyService($csrf,$rate,$idem), $kernel);
+    $context = new AuthorizationContext(
+        Surface::User,new Uuid('11111111-1111-4111-8111-111111111111'),new Uuid('22222222-2222-4222-8222-222222222222'),
+        ['applications.create'],false,false,
+    );
+    $mk = static fn(?string $key): ApiRequestEnvelope => new ApiRequestEnvelope(
+        'API-WCP-0110',['tenant_id'=>'22222222-2222-4222-8222-222222222222','idempotency_key'=>'payload-key'],
+        $context,new Uuid('33333333-3333-4333-8333-333333333333'),new Uuid('44444444-4444-4444-8444-444444444444'),true,true,$key,
+    );
+    $response=$dispatcher->dispatch($mk('header-key'));
+    $assert(!$response->ok && $response->errorCode===CanonicalErrorCode::AuthorizationDenied && !$handler->called);
+    $csrf->allow=true;
+    $response=$dispatcher->dispatch($mk(null));
+    $assert(!$response->ok && $response->errorCode===CanonicalErrorCode::ValidationFailed && !$handler->called);
+    $idem->allow=false;
+    $response=$dispatcher->dispatch($mk('header-key'));
+    $assert(!$response->ok && $response->errorCode===CanonicalErrorCode::IdempotencyConflict && !$handler->called);
+    $idem->allow=true; $rate->allow=false;
+    $response=$dispatcher->dispatch($mk('header-key'));
+    $assert(!$response->ok && $response->errorCode===CanonicalErrorCode::RateLimited && !$handler->called);
+    $rate->allow=true;
+    $response=$dispatcher->dispatch($mk('header-key'));
+    $assert($response->ok && $handler->called);
+    $array=$response->toArray();
+    $assert($array['request_id']==='33333333-3333-4333-8333-333333333333');
+});
+
+$test('retry policy permits only bounded RR transport retry and reconciles RN unknown outcome', static function () use ($assert): void {
+    $assert(RetryPolicy::mayRetryTransport(RetryProfile::Read,0,false,null));
+    $assert(RetryPolicy::mayRetryTransport(RetryProfile::Read,1,true,CanonicalErrorCode::RateLimited));
+    $assert(!RetryPolicy::mayRetryTransport(RetryProfile::Read,2,false,null));
+    $assert(!RetryPolicy::mayRetryTransport(RetryProfile::KeyProtected,0,false,null));
+    $assert(!RetryPolicy::mayRetryTransport(RetryProfile::NoBlindRetry,0,false,null));
+    $assert(RetryPolicy::requiresReconciliationBeforeExecutionRetry(RetryProfile::NoBlindRetry,CanonicalErrorCode::UnknownOutcome));
+    $assert(!RetryPolicy::requiresReconciliationBeforeExecutionRetry(RetryProfile::NoBlindRetry,CanonicalErrorCode::DependencyFailure));
 });
 
 $passed = 0;
