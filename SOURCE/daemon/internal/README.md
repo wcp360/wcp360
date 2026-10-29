@@ -114,9 +114,33 @@ GET/HEAD/OPTIONS and unknown verbs cannot enter the mutation path. HTTPS-only
 origin configuration and this restricted method list require normal Security
 review with the rest of this new implementation. A successful check is only a
 browser prerequisite, not action/resource authorization or a durable audit.
-No HTTP server, endpoint, cookie issuance, CSRF token generation/storage, rate
+No HTTP server, endpoint, session creation, CSRF token generation/storage, rate
 limiter, database session adapter or API response mapping is implemented here.
 
 Regression tests cover shortened expiry, cross-session child reuse, missing
 session references, duplicate headers, CSRF rotation, cross-origin/lookalike
 hosts, malformed trusted configuration and safe-method mutation attempts.
+
+## Session cookie serialization
+
+`browserpolicy.SessionCookie` produces a single Set-Cookie value with the
+canonical surface-specific name, Secure, HttpOnly, SameSite=Strict and Path=/.
+There is no Domain, Expires or Max-Age option for normal session cookies.
+The concrete candidate token encoding is 32 cryptographically random bytes
+encoded as unpadded base64url (256 bits, above the canonical 128-bit minimum).
+This encoding is an implementation choice subject to Security review, not a
+change to the canonical contract. An all-zero uninitialized secret is rejected;
+nonzero input does not establish unpredictability. The session adapter MUST
+obtain cryptographic randomness, persist only a verifier, commit the correct
+surface/session binding, and handle rotation before delivering the header.
+Returned headers contain credentials and must never enter logs or diagnostics.
+
+`ClearSessionCookie` uses the same name/path/security flags and explicitly
+expires the browser cookie. Logout must ALSO revoke the stored session, CSRF
+state and session-bound channels; ADMIN logout revokes privileged, impersonation
+and break-glass contexts. Clearing a cookie alone does not implement logout.
+
+Tests parse the actual headers with Go's HTTP cookie parser, check both surfaces,
+nonpersistent issuance, exact deletion scope, secret round trips, every byte
+value against header injection, unknown surfaces and empty-secret rejection.
+Production imports remain pure: encoding/base64 is added, net/http is test-only.
