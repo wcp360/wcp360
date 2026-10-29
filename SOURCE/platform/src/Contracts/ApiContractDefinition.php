@@ -41,6 +41,9 @@ final readonly class ApiContractDefinition
         if (!in_array($surface, ['WCP-USER', 'WCP-ADMIN', 'BOTH', 'POLICY', 'EMERGENCY'], true)) {
             throw new ContractViolation('unsupported API contract surface');
         }
+        if (!in_array($authentication, ['AUTH-U', 'AUTH-A', 'AUTH-B', 'AUTH-P', 'AUTH-PRIV', 'AUTH-E'], true)) {
+            throw new ContractViolation('unsupported API authentication profile');
+        }
         foreach ([$permissionId, $actionId, $resourceType, $authentication, $tenantScope, $testId] as $typedValue) {
             if ($typedValue === '' || str_contains($typedValue, "\0")) {
                 throw new ContractViolation('API contract typed value missing/invalid');

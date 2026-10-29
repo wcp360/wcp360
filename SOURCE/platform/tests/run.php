@@ -7,6 +7,8 @@ require dirname(__DIR__) . '/bootstrap.php';
 use Wcp360\Application\ActionHandler;
 use Wcp360\Application\ActionRegistry;
 use Wcp360\Application\PlatformKernel;
+use Wcp360\Security\AuthenticationService;
+use Wcp360\Database\DatabaseCatalog;
 use Wcp360\Application\JobSubmissionService;
 use Wcp360\Ops\IdempotencyRecord;
 use Wcp360\Ops\IdempotencyScope;
@@ -19,6 +21,7 @@ use Wcp360\Contracts\PermissionRegistry;
 use Wcp360\Contracts\RequestSchema;
 use Wcp360\Ops\AuditRecord;
 use Wcp360\Ops\JobRecord;
+use Wcp360\Observability\StructuredLogRecord;
 use Wcp360\Security\AuthorizationContext;
 use Wcp360\Security\AuthorizationDecision;
 use Wcp360\Security\AuthorizationRequest;
@@ -156,7 +159,7 @@ $test('authorization rejects cross-surface permission', static function () use (
 $test('kernel requires explicit registered handler', static function () use ($assert, $perm, $contract, $allowScope, $allowPolicy): void {
     $permissions = new PermissionRegistry([$perm('applications.read', 'WCP-USER')]);
     $service = new AuthorizationService($permissions, $allowScope, $allowPolicy);
-    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), $service, new ActionRegistry());
+    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $service, new ActionRegistry());
     $context = new AuthorizationContext(
         Surface::User,
         new Uuid('11111111-1111-4111-8111-111111111111'),
@@ -179,7 +182,7 @@ $test('kernel executes only exact registered action after authorization', static
     };
     $permissions = new PermissionRegistry([$perm('applications.read', 'WCP-USER')]);
     $service = new AuthorizationService($permissions, $allowScope, $allowPolicy);
-    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), $service, new ActionRegistry([$handler]));
+    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $service, new ActionRegistry([$handler]));
     $context = new AuthorizationContext(
         Surface::User,
         new Uuid('11111111-1111-4111-8111-111111111111'),
@@ -262,7 +265,7 @@ $test('API contract surface denies cross-surface execution even for BOTH permiss
         $allowScope,
         $allowPolicy,
     );
-    $kernel = new PlatformKernel(new ApiContractRegistry([$definition]), $service, new ActionRegistry([$handler]));
+    $kernel = new PlatformKernel(new ApiContractRegistry([$definition]), new AuthenticationService(), $service, new ActionRegistry([$handler]));
     $context = new AuthorizationContext(
         Surface::Admin,
         new Uuid('11111111-1111-4111-8111-111111111111'),
@@ -413,6 +416,72 @@ $test('EMERGENCY is a distinct contract surface with no browser session cookie',
         $policy = SessionSurfacePolicy::fromJsonFile($path);
         $expectViolation(static fn() => $policy->cookieName(Surface::Emergency));
     } finally { @unlink($path); }
+});
+
+
+$test('authentication profiles enforce USER ADMIN POLICY PRIV and EMERGENCY semantics', static function () use ($assert): void {
+    $service = new AuthenticationService();
+    $mk = static fn(string $surface, string $auth): ApiContractDefinition => ApiContractDefinition::fromArray([
+        'contract_id'=>'API-WCP-0999','version'=>'1.0','surface'=>$surface,'authentication'=>$auth,
+        'permission_id'=>'example.read','action_id'=>'example.read','resource_type'=>'example','tenant_scope'=>'TS-G',
+        'request_schema'=>'{}','response_schema'=>'Example','errors'=>'E-R','timeout'=>'10s','retry'=>'RR',
+        'idempotency'=>'none','audit'=>'AU0','security'=>'S-Q','compatibility'=>'C1/D0','test_id'=>'TEST-API-0999',
+    ]);
+    $principal = new Uuid('11111111-1111-4111-8111-111111111111');
+    $admin = new AuthorizationContext(Surface::Admin, $principal, null, [], true, true, true, false, true);
+    $assert($service->decide($mk('WCP-ADMIN','AUTH-PRIV'), $admin)->allowed);
+    $adminNoReauth = new AuthorizationContext(Surface::Admin, $principal, null, [], true, true);
+    $d = $service->decide($mk('WCP-ADMIN','AUTH-PRIV'), $adminNoReauth);
+    $assert(!$d->allowed && $d->errorCode === CanonicalErrorCode::ReauthenticationRequired);
+
+    $policy = new AuthorizationContext(Surface::Policy, $principal, null, [], false, false, true, true);
+    $assert($service->decide($mk('POLICY','AUTH-P'), $policy)->allowed);
+
+    $emergency = new AuthorizationContext(
+        Surface::Emergency, $principal, null, ['break_glass.use'], true, true,
+        true, false, true, true, true, new DateTimeImmutable('2035-01-01T00:00:00Z'),
+    );
+    $assert($service->decide($mk('EMERGENCY','AUTH-E'), $emergency)->allowed);
+    $expired = new AuthorizationContext(
+        Surface::Emergency, $principal, null, ['break_glass.use'], true, true,
+        true, false, true, true, true, new DateTimeImmutable('2020-01-01T00:00:00Z'),
+    );
+    $assert(!$service->decide($mk('EMERGENCY','AUTH-E'), $expired)->allowed);
+});
+
+$test('kernel rejects unauthenticated context before authorization/handler', static function () use ($assert, $perm, $contract, $allowScope, $allowPolicy): void {
+    $handler = new class implements ActionHandler {
+        public bool $called = false;
+        public function actionId(): string { return 'applications.read'; }
+        public function handle(array $input, AuthorizationContext $context): array { $this->called = true; return []; }
+    };
+    $authz = new AuthorizationService(new PermissionRegistry([$perm('applications.read','WCP-USER')]), $allowScope, $allowPolicy);
+    $kernel = new PlatformKernel(new ApiContractRegistry([$contract()]), new AuthenticationService(), $authz, new ActionRegistry([$handler]));
+    $context = new AuthorizationContext(
+        Surface::User, new Uuid('11111111-1111-4111-8111-111111111111'),
+        new Uuid('22222222-2222-4222-8222-222222222222'), ['applications.read'], false, false, false,
+    );
+    $result = $kernel->execute('API-WCP-0101', ['tenant_id'=>'22222222-2222-4222-8222-222222222222'], $context);
+    $assert(!$result->ok && $result->errorCode === CanonicalErrorCode::AuthenticationRequired);
+    $assert(!$handler->called);
+});
+
+
+$test('structured logs are correlated and recursively secret-safe', static function () use ($assert, $expectViolation): void {
+    $record = new StructuredLogRecord(
+        new DateTimeImmutable('2026-10-29T09:00:00Z'), 'INFO', 'platform', 'request.accepted',
+        new Uuid('11111111-1111-4111-8111-111111111111'),
+        new Uuid('22222222-2222-4222-8222-222222222222'), null,
+        new Uuid('33333333-3333-4333-8333-333333333333'),
+        ['route' => 'API-WCP-0101'],
+    );
+    $data = $record->toArray();
+    $assert($data['correlation_id'] === '11111111-1111-4111-8111-111111111111');
+    $expectViolation(static fn() => new StructuredLogRecord(
+        new DateTimeImmutable(), 'INFO', 'platform', 'bad',
+        new Uuid('11111111-1111-4111-8111-111111111111'), null, null, null,
+        ['nested' => ['client-secret' => 'must-not-log']],
+    ));
 });
 
 $passed = 0;

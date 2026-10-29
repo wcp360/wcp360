@@ -7,6 +7,7 @@ namespace Wcp360\Application;
 use Throwable;
 use Wcp360\Contracts\ApiContractRegistry;
 use Wcp360\Contracts\RequestSchema;
+use Wcp360\Security\AuthenticationService;
 use Wcp360\Security\AuthorizationRequest;
 use Wcp360\Security\AuthorizationContext;
 use Wcp360\Security\AuthorizationService;
@@ -17,6 +18,7 @@ final readonly class PlatformKernel
 {
     public function __construct(
         private ApiContractRegistry $contracts,
+        private AuthenticationService $authentication,
         private AuthorizationService $authorization,
         private ActionRegistry $actions,
     ) {
@@ -33,6 +35,11 @@ final readonly class PlatformKernel
 
         if (!$contract->allowsSurface($context->surface)) {
             return OperationResult::failure(CanonicalErrorCode::AuthorizationDenied);
+        }
+
+        $authentication = $this->authentication->decide($contract, $context);
+        if (!$authentication->allowed) {
+            return OperationResult::failure($authentication->errorCode ?? CanonicalErrorCode::AuthenticationRequired);
         }
 
         try {
