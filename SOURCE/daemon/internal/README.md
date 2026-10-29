@@ -86,3 +86,37 @@ atomically against the current DB row in the same transaction as the write.
 Checking a snapshot in Go and later writing unconditionally is forbidden.
 Tests simulate competing snapshots; no PostgreSQL locking, SKIP LOCKED,
 transactional race, migration or durability PASS is claimed.
+
+## Session consolidation and browser mutation prerequisites
+
+Session validation now requires a nonzero persisted session reference and the
+stored `expires_at`, in addition to the canonical idle/absolute caps. A shorter
+stored expiry wins; a later stored expiry cannot extend those caps. Privileged
+contexts carry an explicit parent session reference and cannot be transferred
+to another ADMIN session, even with identical timestamps. These are internal
+DTO fields, not a new DB schema or a caller-supplied authority.
+
+The future session adapter must load these values from the correct surface
+store, bind MFA proof to the authenticated session, map a NULL last_seen_at to
+the applicable creation/initial-activity rule, and enforce rotation/revocation.
+Raw bearer tokens must not be used as the internal persisted row reference.
+Session errors now share the canonical `contracts.ErrorCode` type.
+
+`browserpolicy.Check` composes session validation with exact trusted-origin
+matching and constant-time synchronizer-token comparison, from Security v1.0
+section 13. Expected Origin comes from surface configuration, never incoming
+Host/forwarded headers. The adapter must pass all Origin/X-WCP-CSRF header values;
+missing, repeated or ambiguous values are rejected. No automatic trimming,
+origin normalization, wildcard or same-domain fallback is allowed.
+
+Supported mutation verbs are explicitly POST/PUT/PATCH/DELETE in this candidate;
+GET/HEAD/OPTIONS and unknown verbs cannot enter the mutation path. HTTPS-only
+origin configuration and this restricted method list require normal Security
+review with the rest of this new implementation. A successful check is only a
+browser prerequisite, not action/resource authorization or a durable audit.
+No HTTP server, endpoint, cookie issuance, CSRF token generation/storage, rate
+limiter, database session adapter or API response mapping is implemented here.
+
+Regression tests cover shortened expiry, cross-session child reuse, missing
+session references, duplicate headers, CSRF rotation, cross-origin/lookalike
+hosts, malformed trusted configuration and safe-method mutation attempts.

@@ -4,7 +4,11 @@
 // must be supplied by the eventual authenticated transport.
 package sessionpolicy
 
-import "time"
+import (
+	"time"
+
+	"github.com/yyogas/wcp360/daemon/internal/contracts"
+)
 
 type Surface string
 
@@ -13,7 +17,7 @@ const (
 	Admin Surface = "WCP-ADMIN"
 )
 
-type Failure string
+type Failure = contracts.ErrorCode
 
 const (
 	AuthenticationRequired Failure = "AUTHENTICATION_REQUIRED"
@@ -43,11 +47,15 @@ func For(surface Surface) (Policy, bool) {
 }
 
 // Session must be loaded from the appropriate surface-specific server store.
+// Reference identifies the persisted session row, never a raw secret/token.
+// ExpiresAt is the authoritative stored expiry and may shorten policy limits.
 // These are timestamps, not durations supplied by a browser. Validate never
 // updates LastSeen: persistence must not revive an expired session.
 type Session struct {
+	Reference   [16]byte
 	Surface     Surface
 	IssuedAt    time.Time
+	ExpiresAt   time.Time
 	LastSeen    time.Time
 	MFAAt       time.Time
 	MFARequired bool
@@ -56,10 +64,13 @@ type Session struct {
 
 func Validate(s Session, expected Surface, now time.Time) Failure {
 	p, ok := For(expected)
-	if !ok || s.Surface != expected || s.Revoked || now.IsZero() || s.IssuedAt.IsZero() || s.LastSeen.IsZero() {
+	if !ok || s.Reference == ([16]byte{}) || s.Surface != expected || s.Revoked || now.IsZero() || s.IssuedAt.IsZero() || s.LastSeen.IsZero() {
 		return AuthenticationRequired
 	}
 	if s.IssuedAt.After(now) || s.LastSeen.After(now) || s.LastSeen.Before(s.IssuedAt) {
+		return AuthenticationRequired
+	}
+	if !s.ExpiresAt.After(s.IssuedAt) || !now.Before(s.ExpiresAt) {
 		return AuthenticationRequired
 	}
 	if now.Sub(s.IssuedAt) >= p.Absolute || now.Sub(s.LastSeen) >= p.Idle {
@@ -90,9 +101,10 @@ func RequireFreshMFA(s Session, expected Surface, now time.Time) Failure {
 // Privileged is a child of a still-valid ADMIN session. This check does not
 // create privilege, extend expiry or replace action-specific authorization.
 type Privileged struct {
-	IssuedAt time.Time
-	LastSeen time.Time
-	Revoked  bool
+	ParentReference [16]byte
+	IssuedAt        time.Time
+	LastSeen        time.Time
+	Revoked         bool
 }
 
 func ValidatePrivileged(parent Session, child Privileged, now time.Time) Failure {
@@ -100,7 +112,7 @@ func ValidatePrivileged(parent Session, child Privileged, now time.Time) Failure
 		return failure
 	}
 	p, _ := For(Admin)
-	if child.Revoked || child.IssuedAt.IsZero() || child.LastSeen.IsZero() || child.IssuedAt.Before(parent.IssuedAt) || child.IssuedAt.After(now) || child.LastSeen.Before(child.IssuedAt) || child.LastSeen.After(now) {
+	if child.ParentReference != parent.Reference || child.Revoked || child.IssuedAt.IsZero() || child.LastSeen.IsZero() || child.IssuedAt.Before(parent.IssuedAt) || child.IssuedAt.After(now) || child.LastSeen.Before(child.IssuedAt) || child.LastSeen.After(now) {
 		return Reauthentication
 	}
 	if now.Sub(child.IssuedAt) >= p.PrivilegedExpiry || now.Sub(child.LastSeen) >= p.PrivilegedIdle {

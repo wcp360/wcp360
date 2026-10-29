@@ -11,7 +11,7 @@ import (
 var testNow = time.Date(2026, 10, 29, 12, 0, 0, 0, time.UTC)
 
 func live(surface Surface) Session {
-	return Session{Surface: surface, IssuedAt: testNow.Add(-time.Minute), LastSeen: testNow.Add(-time.Second), MFAAt: testNow.Add(-time.Minute)}
+	return Session{Reference: [16]byte{1}, ExpiresAt: testNow.Add(24 * time.Hour), Surface: surface, IssuedAt: testNow.Add(-time.Minute), LastSeen: testNow.Add(-time.Second), MFAAt: testNow.Add(-time.Minute)}
 }
 
 func TestSurfaceIsolation(t *testing.T) {
@@ -120,7 +120,7 @@ func TestMFARules(t *testing.T) {
 func TestPrivilegedChildBounds(t *testing.T) {
 	parent := live(Admin)
 	parent.IssuedAt = testNow.Add(-time.Hour)
-	child := Privileged{IssuedAt: testNow.Add(-time.Minute), LastSeen: testNow.Add(-time.Second)}
+	child := Privileged{ParentReference: parent.Reference, IssuedAt: testNow.Add(-time.Minute), LastSeen: testNow.Add(-time.Second)}
 	if ValidatePrivileged(parent, child, testNow) != "" {
 		t.Fatal("valid child rejected")
 	}
@@ -161,5 +161,44 @@ func TestSecurityBaselineSourcePin(t *testing.T) {
 	header := []byte(fmt.Sprintf("blob %d\x00", len(data)))
 	if fmt.Sprintf("%x", sha1.Sum(append(header, data...))) != "6d74f2f363524511424f839ca7262143c2af95ab" {
 		t.Fatal("Security baseline changed; review session policies before updating the pin")
+	}
+}
+
+func TestStoredExpirationCannotBeExtendedByPolicy(t *testing.T) {
+	for _, surface := range []Surface{User, Admin} {
+		s := live(surface)
+		for _, expiry := range []time.Time{time.Time{}, s.IssuedAt, testNow.Add(-time.Nanosecond), testNow} {
+			s.ExpiresAt = expiry
+			if Validate(s, surface, testNow) != AuthenticationRequired {
+				t.Fatal("stored expiry ignored")
+			}
+		}
+		s.ExpiresAt = testNow.Add(time.Nanosecond)
+		if Validate(s, surface, testNow) != "" {
+			t.Fatal("unexpired stored session rejected")
+		}
+		s.Reference = [16]byte{}
+		if Validate(s, surface, testNow) != AuthenticationRequired {
+			t.Fatal("missing session identity accepted")
+		}
+	}
+}
+
+func TestPrivilegedContextCannotMoveBetweenSessions(t *testing.T) {
+	parent := live(Admin)
+	child := Privileged{ParentReference: parent.Reference, IssuedAt: testNow, LastSeen: testNow}
+	other := parent
+	other.Reference = [16]byte{2}
+	if ValidatePrivileged(other, child, testNow) != Reauthentication {
+		t.Fatal("child accepted with another live ADMIN session")
+	}
+	child.ParentReference = [16]byte{}
+	if ValidatePrivileged(parent, child, testNow) != Reauthentication {
+		t.Fatal("unbound child accepted")
+	}
+	child.ParentReference = parent.Reference
+	parent.ExpiresAt = testNow
+	if ValidatePrivileged(parent, child, testNow) != AuthenticationRequired {
+		t.Fatal("child outlived shortened parent expiry")
 	}
 }

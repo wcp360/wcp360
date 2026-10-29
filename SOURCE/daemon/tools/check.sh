@@ -69,7 +69,8 @@ while read -r package imported; do
         :|github.com/yyogas/wcp360/daemon/cmd/wcpd:os|github.com/yyogas/wcp360/daemon/cmd/wcpd:github.com/yyogas/wcp360/daemon/internal/cli) ;;
         github.com/yyogas/wcp360/daemon/internal/cli:io|github.com/yyogas/wcp360/daemon/internal/cli:encoding/json|github.com/yyogas/wcp360/daemon/internal/cli:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
         github.com/yyogas/wcp360/daemon/internal/contracts:embed|github.com/yyogas/wcp360/daemon/internal/contracts:encoding/json|github.com/yyogas/wcp360/daemon/internal/contracts:errors|github.com/yyogas/wcp360/daemon/internal/contracts:sort) ;;
-        github.com/yyogas/wcp360/daemon/internal/sessionpolicy:time) ;;
+        github.com/yyogas/wcp360/daemon/internal/sessionpolicy:time|github.com/yyogas/wcp360/daemon/internal/sessionpolicy:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
+        github.com/yyogas/wcp360/daemon/internal/browserpolicy:crypto/subtle|github.com/yyogas/wcp360/daemon/internal/browserpolicy:net/url|github.com/yyogas/wcp360/daemon/internal/browserpolicy:strings|github.com/yyogas/wcp360/daemon/internal/browserpolicy:time|github.com/yyogas/wcp360/daemon/internal/browserpolicy:github.com/yyogas/wcp360/daemon/internal/contracts|github.com/yyogas/wcp360/daemon/internal/browserpolicy:github.com/yyogas/wcp360/daemon/internal/sessionpolicy) ;;
         github.com/yyogas/wcp360/daemon/internal/consistency:bytes|github.com/yyogas/wcp360/daemon/internal/consistency:time|github.com/yyogas/wcp360/daemon/internal/consistency:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
         *) printf 'Unexpected production import: %s %s\n' "$package" "$imported" >&2; exit 1 ;;
     esac
