@@ -144,3 +144,28 @@ Tests parse the actual headers with Go's HTTP cookie parser, check both surfaces
 nonpersistent issuance, exact deletion scope, secret round trips, every byte
 value against header injection, unknown surfaces and empty-secret rejection.
 Production imports remain pure: encoding/base64 is added, net/http is test-only.
+
+## Authoritative session lookup orchestration
+
+`browserpolicy.AuthenticateSession` decodes exactly one canonical 43-character
+unpadded base64url cookie into the candidate 32-byte secret, calls SessionStore
+for the trusted surface, then applies sessionpolicy.Validate. Duplicate,
+malformed, noncanonical and zero credentials never reach the store. Each call
+reloads server state; no session cache or LastSeen write is introduced. Failed
+lookups/policy checks return a zero Session. Storage errors and cancellations
+map to SERVICE_UNAVAILABLE without exposing database errors or credentials.
+
+SessionStore is an internal adapter interface, not a DB schema or public API.
+Its implementation MUST verify the secret using a persisted verifier, isolate
+USER/ADMIN namespaces, honor cancellation, and return current state. No concrete
+verifier algorithm, PostgreSQL implementation or HTTP handler is supplied.
+The HTTP adapter must preserve all occurrences of the configured cookie name
+and reject malformed Cookie headers before this call. Authentication success
+still requires current authorization and mutation-specific Origin/CSRF checks.
+Writes must recheck revocation and permissions at their transactional boundary;
+a valid read cannot authorize a later write after revocation.
+
+Tests use a fake store to verify round trips from the real cookie renderer,
+reloading after revocation, duplicate rejection before I/O, surface mismatch,
+expiry, MFA, missing records, backend failures and cancellation. These are
+component orchestration tests, not PostgreSQL or browser end-to-end evidence.
