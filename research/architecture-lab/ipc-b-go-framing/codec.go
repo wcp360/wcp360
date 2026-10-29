@@ -497,6 +497,17 @@ type ParsedResponse struct {
 	HasResult bool
 }
 
+// ReadResponseFrame is the research streaming counterpart to
+// DecodeResponseFrame. It shares the same pre-allocation length bound and
+// deliberately leaves any following frame bytes unread.
+func ReadResponseFrame(r io.Reader) (ParsedResponse, error) {
+	frame, err := readBoundedFrame(r, ResponseMaxBytes, "response")
+	if err != nil {
+		return ParsedResponse{}, err
+	}
+	return DecodeResponseFrame(frame)
+}
+
 // DecodeResponseFrame is an inert in-memory validation of one IPC-B response.
 // A parsed SUCCESS string does NOT prove the privileged effect succeeded.
 func DecodeResponseFrame(frame []byte) (ParsedResponse, error) {
