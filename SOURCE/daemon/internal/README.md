@@ -61,3 +61,28 @@ unknown lookup rejection, immutable concurrent reads, corrupted metadata,
 surface crossing, revocation, future timestamps, lifetime/MFA boundaries and
 privileged-child restrictions. Tests execute with the existing pinned daemon
 CI. These are component unit tests, not the canonical 199-case product suite.
+
+## consistency
+
+Pure predicates from Database Model v1.0, blob
+`2660e057bad1d00592c57f354b1f3745ccccbe7d`:
+
+- TX-REV-01: positive revisions, exactly one increment, stale expected revision
+  -> `CONCURRENCY_CONFLICT`, exhausted BIGINT counters reject without wrapping.
+- TX-IDEMP-01: GLOBAL/ACCOUNT/TENANT composite identity, exact opaque keys and
+  namespaces, semantic fingerprint equality/conflict without overwriting input.
+- Lease contract/concurrency: exact lease/target/worker/fencing identity,
+  authoritative expiration, expired-lease token increment, stale result denial.
+
+These are transactional adapter building blocks, not persistence. A positive
+comparison does not acquire an idempotency row or authorize replay. In particular
+RUNNING/UNKNOWN_OUTCOME and unresolved reconciliation cannot be made retryable
+by expiry. Request canonicalization/fingerprint algorithm is not defined here.
+IDs are already-decoded UUID values; boundary validation and foreign-key
+existence remain adapter responsibilities.
+
+Revision updates and lease reclaim/result writes MUST perform their comparisons
+atomically against the current DB row in the same transaction as the write.
+Checking a snapshot in Go and later writing unconditionally is forbidden.
+Tests simulate competing snapshots; no PostgreSQL locking, SKIP LOCKED,
+transactional race, migration or durability PASS is claimed.

@@ -70,6 +70,7 @@ while read -r package imported; do
         github.com/yyogas/wcp360/daemon/internal/cli:io|github.com/yyogas/wcp360/daemon/internal/cli:encoding/json|github.com/yyogas/wcp360/daemon/internal/cli:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
         github.com/yyogas/wcp360/daemon/internal/contracts:embed|github.com/yyogas/wcp360/daemon/internal/contracts:encoding/json|github.com/yyogas/wcp360/daemon/internal/contracts:errors|github.com/yyogas/wcp360/daemon/internal/contracts:sort) ;;
         github.com/yyogas/wcp360/daemon/internal/sessionpolicy:time) ;;
+        github.com/yyogas/wcp360/daemon/internal/consistency:bytes|github.com/yyogas/wcp360/daemon/internal/consistency:time|github.com/yyogas/wcp360/daemon/internal/consistency:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
         *) printf 'Unexpected production import: %s %s\n' "$package" "$imported" >&2; exit 1 ;;
     esac
 done < "$output/imports.txt"
