@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 	"testing"
+	"testing/iotest"
 )
 
 const canonSourcePath = "../../../specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md"
@@ -349,4 +350,46 @@ func FuzzDecodeRequestFrameNeverPanics(f *testing.F) {
 	f.Fuzz(func(t *testing.T, data []byte) {
 		_, _ = DecodeRequestFrame(data)
 	})
+}
+
+
+func TestReadRequestFrameHandlesFragmentedReader(t *testing.T) {
+	raw, err := json.Marshal(fixture())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := ReadRequestFrame(iotest.OneByteReader(strings.NewReader(string(framed(raw)))))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Operation.OperationID != "nginx_vhost.validate" {
+		t.Fatalf("unexpected parsed operation: %+v", got.Operation)
+	}
+}
+
+func TestReadRequestFrameRejectsOversizeBeforeReadingBody(t *testing.T) {
+	header := make([]byte, 4)
+	binary.BigEndian.PutUint32(header, RequestMaxBytes+1)
+	const sentinel = "must-remain-unread"
+	input := append(header, []byte(sentinel)...)
+	r := strings.NewReader(string(input))
+
+	if _, err := ReadRequestFrame(r); err == nil || !strings.Contains(err.Error(), "invalid request frame length") {
+		t.Fatalf("expected oversize length rejection, got %v", err)
+	}
+	if r.Len() != len(sentinel) {
+		t.Fatalf("oversize body was read before length rejection: remaining=%d want=%d", r.Len(), len(sentinel))
+	}
+}
+
+func TestReadRequestFrameRejectsTruncatedBody(t *testing.T) {
+	raw, err := json.Marshal(fixture())
+	if err != nil {
+		t.Fatal(err)
+	}
+	frame := framed(raw)
+	frame = frame[:len(frame)-1]
+	if _, err := ReadRequestFrame(strings.NewReader(string(frame))); err == nil || !strings.Contains(err.Error(), "truncated request frame body") {
+		t.Fatalf("expected truncated body rejection, got %v", err)
+	}
 }
