@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
     COMPOSER_NO_INTERACTION=1 COMPOSER_ROOT_VERSION=0.3.0-alpha
 RUN rm -f /etc/apt/sources.list /etc/apt/sources.list.d/* && \
     printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/%s/ bookworm main\ndeb [check-valid-until=no] https://snapshot.debian.org/archive/debian-security/%s/ bookworm-security main\n' "$DEBIAN_SNAPSHOT" "$DEBIAN_SNAPSHOT" > /etc/apt/sources.list && \
-    apt-get update && apt-get install -y --no-install-recommends python3 libonig-dev libzip-dev unzip xz-utils && \
+    apt-get update && apt-get install -y --no-install-recommends python3=3.11.2-1+b1 python3.11=3.11.2-6+deb12u9 python3.11-minimal=3.11.2-6+deb12u9 libonig-dev libzip-dev unzip xz-utils && \
     docker-php-ext-install -j2 mbstring zip && \
     curl -fsSLo /tmp/node.tar.xz "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz" && \
     echo "${NODE_SHA256}  /tmp/node.tar.xz" | sha256sum -c - && \
@@ -32,7 +32,7 @@ RUN cd /app && composer install --no-plugins --no-scripts --prefer-dist --no-pro
     rm -rf /root/.cache /root/.composer && \
     groupadd --gid 10001 fmtest && useradd --uid 10001 --gid 10001 --create-home fmtest && \
     mkdir /evidence && chmod 1777 /evidence && \
-    dpkg-query -W > /opt/dpkg-inventory.txt
+    dpkg-query -W -f='${binary:Package}\t${Version}\n' > /opt/dpkg-inventory.txt
 ENV HOME=/tmp/fm-home FM_PLAYWRIGHT_MODULE=/opt/browser/node_modules/playwright
 USER 10001:10001
 WORKDIR /app

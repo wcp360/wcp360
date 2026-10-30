@@ -9,6 +9,7 @@ La source machine est `tests/ci/toolchain.json`. Les digests désignent les mani
 | Élément | Candidat |
 |---|---|
 | PHP | 8.2.35, 8.3.36, 8.4.27 ; images officielles CLI Bookworm par digest |
+| Python | CPython 3.11.2 ; python3 3.11.2-1+b1, python3.11 et python3.11-minimal 3.11.2-6+deb12u9, versions assertées |
 | Composer | 2.11.1, PHAR vérifié par SHA-256 |
 | Node | v22.23.4 linux-x64, archive vérifiée par SHA-256 |
 | Playwright | 1.64.1 ; package-lock npm et intégrités, scripts npm désactivés |
@@ -16,7 +17,9 @@ La source machine est `tests/ci/toolchain.json`. Les digests désignent les mani
 | Paquets système | snapshot Debian et Debian Security 20261029T000000Z, signatures APT conservées |
 | Extensions exigées | json, fileinfo, session, ctype, iconv, filter, xml, dom, xmlwriter, libxml, mbstring, phar, tokenizer, zip |
 
-Les versions réelles PHP/Node/Composer et Chromium sont contrôlées avant un PASS. Toutes les extensions chargées et la version Python sont enregistrées. `composer check-platform-reqs` vérifie la plateforme réelle, y compris avec l'installation `--no-dev` ; le `config.platform.php` historique n'est pas une preuve de compatibilité.
+DevOps 6535401769 retient PHP 8.3.36 comme lane initiale obligatoire ; 8.2/8.4 sont des couvertures supplémentaires conservées dans le workflow, sans réduction des checks existants. QA peut exiger la matrice complète.
+
+Les versions réelles PHP/Node/Composer et Chromium sont contrôlées avant un PASS. Toutes les extensions chargées et la version Python sont enregistrées. L’inventaire dpkg complet (noms/versions) est conservé dans packages.json, en plus de son empreinte. `composer check-platform-reqs` vérifie la plateforme réelle, y compris avec l'installation `--no-dev` ; le `config.platform.php` historique n'est pas une preuve de compatibilité.
 
 Les 62 fichiers de l'import initial sont décrits dans `tests/ci/import-baseline.json`. La construction refuse toute modification non déclarée de cet import. Seuls README et les trois harnais HTTP/setup/navigateur sont autorisés à évoluer ici. `SOURCE-PROVENANCE.json` reste le relevé historique des octets du ZIP, distinct des octets normalisés de l'import Git. Les sources produit, le Composer lock et les rapports historiques restent inchangés.
 
@@ -32,7 +35,11 @@ Le profil `tests/ci/seccomp.json` dérive du profil Docker Playwright 1.64.1, bl
 
 ## Réseau, caches et secrets
 
-La préparation d'image est connectée : registres Docker/Microsoft, snapshot.debian.org, nodejs.org, getcomposer.org, registry.npmjs.org, Packagist/GitHub et leurs endpoints de distribution. TLS et empreintes disponibles sont vérifiés ; Composer utilise le lock sans scripts/plugins. Il n'y a **pas de filtre réseau par domaine** dans ce candidat. Cette limite demande une disposition DevOps/Security explicite si une allowlist réseau est exigée.
+La préparation d'image passe par un proxy CONNECT TLS à liste fermée, dont les domaines exacts sont dans `tests/ci/network_policy.json`. Aucun wildcard, port autre que 443, résolution vers IP non publique ou extension automatique sur redirection n'est accepté. Les destinations Composer dist proviennent des hosts du lock (api.github.com, redirection codeload.github.com). Les registres et CDN explicitement listés servent uniquement les images épinglées. Une destination nouvelle nécessite un delta revu ; l'échec ne provoque pas de repli réseau.
+
+Sur la VM jetable GitHub uniquement, `network_host.py` démarre le proxy sous UID 19001 distinct, configure Docker daemon et build avec ce proxy, puis interdit les connexions sortantes directes du daemon root et tout forwarding IPv4/IPv6 de conteneur. Le runner GitHub garde sa connexion de contrôle. Les accès au proxy sont limités au loopback et à l'interface Docker locale. Les tests restent `--network none`, sans proxy. Avant l'audit, l'accès au port acquisition est fermé aux conteneurs ; seul le proxy audit (repo.packagist.org et packagist.org) reste accessible. L'audit prouve l'accès HTTPS autorisé, le refus d'un domaine non listé et le blocage TCP/DNS direct ; les tests prouvent aussi le blocage TCP/DNS externe. Les règles sont retirées dans une étape `always()` avant l'export, et la VM est jetable. Les compteurs ne contiennent ni URL, ni headers, ni réponse brute.
+
+Cette politique est une implémentation candidate de FM113-13, soumise à relecture exacte DevOps/Security ; un succès de construction ne remplace pas cette revue. Ne jamais utiliser cet installateur réseau sur un hôte partagé ou de production.
 
 Pas de cache Actions restauré, pas de cache Docker de construction réutilisé (`--no-cache`), pas de cache Composer/npm transmis aux tests. Le cache de téléchargement d'une construction peut être utilisé pour sa seconde installation no-dev, puis supprimé. Un audit Composer connecté séparé interroge les avis de vulnérabilité ; une erreur réseau ou une réponse incomplète échoue. Les tests produit restent hors réseau. Les avis évoluent et sont datés, contrairement au lock.
 
@@ -43,30 +50,21 @@ Le workflow ne reçoit aucun secret métier, token d'installation ou identifiant
 Chaque lane doit produire :
 
 - Identité : SHA candidat, SHA checkout et parents (merge synthétique PR), image ID construit, versions Docker/noyau, verrouillage et empreinte seccomp.
-- Résultats : contrôles du harnais (onze tests de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
+- Résultats : contrôles du harnais (quinze tests de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
 - Audit : date, état, nombre de packages affectés/abandonnés ; un audit n'est pas une revue du code.
+
+Les compteurs JUnit proviennent de tous les éléments testcase (y compris les cas directement placés au-dessus de suites imbriquées). Ils sont enregistrés avant les assertions, même si PHPUnit sort en erreur. Les identifiants de cas sont SHA-256 tronqués de classname::name ; aucun message, chemin ou sortie de cas n’est exporté. Le cache PHPUnit est placé sous /tmp/phpunit-cache.
 
 Les sorties sont limitées à des JSON structurés, conservés 30 jours. Seuls ces JSON expurgés reçoivent le mode 0644 pour être lus par le runner ; le umask privé 077 reste appliqué aux données et diagnostics temporaires. COMPOSER_ROOT_VERSION fixe la version du paquet de test à 0.3.0-alpha sans modifier composer.json. Le parseur audit applique le schéma de Composer 2.11.1 (Auditor.php), refuse les réponses incomplètes, avis ignorés, dépôts injoignables et codes de sortie non nuls. Un processus de suite et ses descendants sont arrêtés en fin d'exécution ou au timeout ; les conteneurs sont supprimés après les étapes, et l'hôte est jetable. Aucun PASS de l'archive ne remplit ces exigences.
 
 ## Limites et décisions encore ouvertes
 
-Cette recette verrouille ses entrées et trace son image construite ; elle ne promet pas une reconstruction binaire identique. Le noyau, Docker et l'image de VM `ubuntu-22.04` sont gérés par GitHub et enregistrés, pas immuables. Il faut encore décider si DevOps exige une VM figée et une image finale publiée par digest avec rétention ; ce candidat ne publie aucune image.
+Cette recette verrouille ses entrées et trace son image construite ; elle ne promet pas une reconstruction binaire identique. DevOps 6535401769 accepte pour E1 initial le noyau/Docker non figés et l'absence d'image finale publiée, à condition de conserver l'identité du runner (ImageOS/ImageVersion), le noyau, Docker, l'inventaire dpkg complet et l'image ID liés au SHA/run. Une certification stable exige une image OCI retenue par digest ou une décision distincte. Le profil seccomp dérivé reste soumis à ratification Security ; aucune exception --no-sandbox de l'ancien SHA n'est transférée.
 
 Les diagnostics bruts ne sont pas exportés : un échec demande une reproduction isolée ou un diagnostic structuré supplémentaire, jamais la réactivation globale des logs de configuration. La taille du stockage temporaire et les durées sont bornées ; aucun test de charge gigaoctet n'est promis.
 
 LocalBackend reste limité à un propriétaire et une racine privée exclusive. Il n'est pas un adaptateur WCP multitenant. Aucun serveur public, CHOWN privilégié, daemon WCP, IPC, choix de production PHP ou validation F01 ne découle d'une lane verte. L'approbation E2 actualisée des propriétaires et E3 indépendant restent nécessaires selon les gates applicables.
 
-## Reproduction locale Linux avec Docker
+## Reproduction sur exécuteur jetable
 
-Depuis un checkout du SHA à tester, avec Docker Linux amd64 et Python 3 :
-
-```sh
-export FM_PHP_LANE=8.4
-export FM_CANDIDATE_SHA="$(git rev-parse HEAD)"
-export FM_EVIDENCE="$(mktemp -d)"
-python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py build
-python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py test
-python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py audit
-```
-
-Ne pas utiliser de répertoire de données réel comme FM_EVIDENCE. Répéter avec 8.2 et 8.3 pour la matrice complète. Les commandes Docker agissent sur un hôte de test jetable ; ne pas les exécuter sur un VPS client partagé.
+Le workflow racine constitue la procédure complète : checkout, réseau restreint, construction, tests, audit, restauration réseau et export. `host.py` exige désormais le reçu `/tmp/fm-egress/gateway` créé par la configuration réseau, sans mode permissif local. Une reproduction hors GitHub doit réimplémenter/faire revoir les mêmes limites et déclarer son identité ; ne pas simuler GITHUB_ACTIONS sur une machine de travail ou de production pour contourner le contrôle d'exécuteur jetable.

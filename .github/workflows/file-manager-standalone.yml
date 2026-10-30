@@ -27,6 +27,8 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
+      - name: Enforce acquisition and audit egress policy
+        run: sudo --preserve-env=GITHUB_ACTIONS,RUNNER_TEMP python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/network_host.py setup
       - name: Build candidate test environment from pinned inputs (cold cache)
         id: build
         run: python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py build
@@ -35,7 +37,12 @@ jobs:
         run: python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py test
       - name: Query dependency advisories separately (network required)
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py audit
+        run: |
+          sudo python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/network_host.py audit
+          python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py audit
+      - name: Restore disposable host networking and retain proxy counters
+        if: always()
+        run: sudo --preserve-env=RUNNER_TEMP python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/network_host.py cleanup
       - name: Retain structured evidence only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

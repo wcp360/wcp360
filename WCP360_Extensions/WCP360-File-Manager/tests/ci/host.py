@@ -33,6 +33,9 @@ if sys.argv[1]=='build':
                 'COMPOSER_VERSION':lock['composer'],'COMPOSER_SHA256':lock['composer_sha256'],
                 'DEBIAN_SNAPSHOT':LOCK['snapshot']}.items():
         args+=['--build-arg',k+'='+v]
+    gateway=Path('/tmp/fm-egress/gateway').read_text().strip()
+    for name in ['HTTP_PROXY','HTTPS_PROXY','http_proxy','https_proxy']:
+        args+=['--build-arg',name+'=http://'+gateway+':18080']
     run(args+[str(ROOT)],timeout=1500)
     identity={'checked_out_sha':capture(['git','rev-parse','HEAD']),
               'parents':capture(['git','show','-s','--format=%P','HEAD']).split(),
@@ -40,7 +43,8 @@ if sys.argv[1]=='build':
               'run':os.environ.get('GITHUB_RUN_ID'),'attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
               'image_id':capture(['docker','image','inspect','--format={{.Id}}',IMAGE]),
               'docker':capture(['docker','version','--format={{.Server.Version}}']),
-              'kernel':capture(['uname','-r']), 'lane':LANE,'toolchain':LOCK,
+              'kernel':capture(['uname','-r']), 'runner_image':os.environ.get('ImageOS'), 'runner_image_version':os.environ.get('ImageVersion'), 'lane':LANE,'toolchain':LOCK,
+              'egress_policy_sha256':hashlib.sha256((ROOT/'tests/ci/network_policy.json').read_bytes()).hexdigest(),
               'seccomp_sha256':hashlib.sha256((ROOT/'tests/ci/seccomp.json').read_bytes()).hexdigest()}
     if os.environ.get('GITHUB_EVENT_NAME')=='pull_request':
         assert len(identity['parents'])==2 and identity['parents'][1]==identity['candidate_sha']
@@ -56,6 +60,10 @@ elif sys.argv[1] in ['test','audit']:
           '--shm-size','512m','--tmpfs','/tmp:rw,nosuid,nodev,size=1g,mode=1777',
           '--mount','type=bind,src='+str(OUT)+',dst=/evidence',
           '--env','FM_PHP_LANE='+LANE, IMAGE,'python3','tests/ci/'+('audit.py' if audit else 'run.py')]
+    if audit:
+        gateway=Path('/tmp/fm-egress/gateway').read_text().strip()
+        at=args.index(IMAGE)
+        args[at:at]=['--env','https_proxy=http://'+gateway+':18081','--env','http_proxy=http://'+gateway+':18081']
     try:run(args,timeout=180 if audit else 900)
     finally:subprocess.run(['docker','rm','-f',NAME],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 else:raise SystemExit('UNKNOWN_STAGE')

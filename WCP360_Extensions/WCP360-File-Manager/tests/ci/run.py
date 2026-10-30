@@ -4,9 +4,11 @@ import json
 import os
 from pathlib import Path
 import sys
+import platform
 import xml.etree.ElementTree as ET
 from safe_process import execute
-from reporting import composer_version, write_report
+from network_probe import direct_denied
+from reporting import composer_version, write_report, junit_summary
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path('/evidence')
@@ -50,6 +52,7 @@ def main():
     assert status['Seccomp'].strip() == '2'
     REPORT['stage']='network'
     assert {p.name for p in Path('/sys/class/net').iterdir()} == {'lo'}
+    REPORT['network_probes']=direct_denied()
     REPORT['stage']='toolchain'
     lock = json.loads((ROOT/'tests/ci/toolchain.json').read_text())
     lane = os.environ['FM_PHP_LANE']
@@ -77,6 +80,15 @@ def main():
     }
     for e in ['json','fileinfo','session','ctype','iconv','filter','xml','dom','xmlwriter','libxml','mbstring','phar','tokenizer','zip']:
         assert e in [s.lower() for s in REPORT['environment']['php_extensions']]
+    REPORT['stage']='python-identity'
+    assert platform.python_implementation()==lock['python']['implementation']
+    assert platform.python_version()==lock['python']['version']
+    packages={}
+    for line in Path('/opt/dpkg-inventory.txt').read_text().splitlines():
+        name,version=line.split('\t')
+        packages[name]=version
+    for name,version in lock['python']['packages'].items(): assert packages[name]==version
+    write_report(OUT/'packages.json', {'packages':packages})
     REPORT['stage']='suites'
     suite('harness-boundaries', ['python3', '-m', 'unittest', 'discover', '-s', 'tests/ci', '-p', 'test_*.py'])
     suite('composer-validate', ['composer','--no-plugins','validate','--strict'])
@@ -88,13 +100,14 @@ def main():
     item.update(status='PASS',executed=len(files))
     for f in ['resources/public/app.js','resources/public/pro.js','tests/browser.cjs']:
         command(['node','--check',f])
-    suite('phpunit', ['php','vendor/bin/phpunit','--do-not-cache-result','--log-junit','/tmp/unit.xml'])
-    doc=ET.parse('/tmp/unit.xml')
-    leaf=[n for n in doc.iter('testsuite') if n.find('testsuite') is None]
-    numbers={k:sum(int(n.get(k,'0')) for n in leaf) for k in ['tests','assertions','failures','errors','skipped']}
-    assert numbers['tests'] >= 50 and numbers['assertions'] >= 122
-    assert numbers['failures'] == numbers['errors'] == numbers['skipped'] == 0
-    REPORT['suites'][-1].update(numbers)
+    item={'suite':'phpunit','status':'FAIL'}; REPORT['suites'].append(item)
+    unit=execute(['php','vendor/bin/phpunit','--do-not-cache-result','--cache-directory','/tmp/phpunit-cache','--log-junit','/tmp/unit.xml'],cwd=ROOT,seconds=180)
+    item.update(exit_code=unit['returncode'],timed_out=unit['timed_out'],output_limited=unit['output_limited'])
+    item.update(junit_summary(Path('/tmp/unit.xml')))
+    assert unit['returncode']==0 and not unit['timed_out'] and not unit['output_limited']
+    assert item['tests'] >= 50 and item['assertions'] >= 122
+    assert item['failures'] == item['errors'] == item['skipped'] == 0
+    item['status']='PASS'
     suite('setup', ['python3','tests/setup_smoke.py'], json_count=5)
     suite('http', ['python3','tests/http_smoke.py'], json_count=46)
     suite('runtime-platform', ['composer','--no-plugins','check-platform-reqs','--no-dev'], cwd=Path('/runtime'))

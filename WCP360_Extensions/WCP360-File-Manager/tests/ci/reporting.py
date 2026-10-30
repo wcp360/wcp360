@@ -36,3 +36,20 @@ def write_report(path, report):
     # Only the already-filtered report is shared with the host runner; private temp files stay 0600.
     path.write_text(json.dumps(report, indent=2) + '\n')
     path.chmod(0o644)
+
+
+def junit_summary(path):
+    import hashlib
+    import xml.etree.ElementTree as ET
+    if not path.is_file():
+        return {'junit':'MISSING','tests':0,'assertions':0,'errors':0,'failures':0,'skipped':0,'cases':[]}
+    root=ET.parse(path).getroot()
+    cases=list(root.iter('testcase'))
+    summary={'junit':'PARSED','tests':len(cases),'assertions':sum(int(n.get('assertions','0')) for n in cases),'errors':0,'failures':0,'skipped':0,'cases':[]}
+    for case in cases:
+        state='PASS'
+        for tag,key in [('failure','failures'),('error','errors'),('skipped','skipped')]:
+            if case.find(tag) is not None: summary[key]+=1;state=tag.upper()
+        identity=case.get('classname','')+'::'+case.get('name','')
+        summary['cases'].append({'id':hashlib.sha256(identity.encode()).hexdigest()[:16],'status':state})
+    return summary

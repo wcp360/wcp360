@@ -1,0 +1,21 @@
+{
+  "acquisition": [
+    "registry-1.docker.io",
+    "auth.docker.io",
+    "production.cloudfront.docker.com",
+    "mcr.microsoft.com",
+    "westus.data.mcr.microsoft.com",
+    "snapshot.debian.org",
+    "nodejs.org",
+    "getcomposer.org",
+    "registry.npmjs.org",
+    "repo.packagist.org",
+    "packagist.org",
+    "api.github.com",
+    "codeload.github.com"
+  ],
+  "audit": [
+    "repo.packagist.org",
+    "packagist.org"
+  ]
+}
