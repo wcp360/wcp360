@@ -87,6 +87,15 @@ def browser_failure(data):
         if type(launch.get('exit_code')) is int and -255<=launch['exit_code']<=255:filtered['exit_code']=launch['exit_code']
         if launch.get('signal') in ['SIGABRT','SIGSEGV','SIGTRAP','SIGSYS','SIGKILL','SIGTERM']:filtered['signal']=launch['signal']
         report['launch']=filtered
+        fatal=result.get('fatal',{})
+        filtered={}
+        for key in ['fatal','check','sandbox','unclassified_fatal']:
+            if type(fatal.get(key)) is bool:filtered[key]=fatal[key]
+        from pathlib import Path
+        components=json.loads((Path(__file__).parent/'chromium_diagnostic_sources.json').read_text())['components']
+        sites=fatal.get('sites',[])
+        filtered['sites']=[{'component':s['component'],'line':s['line']} for s in sites[:12] if isinstance(s,dict) and s.get('component') in components and type(s.get('line')) is int and 0<s['line']<=20000] if isinstance(sites,list) else []
+        report['fatal']=filtered
         return report
     except (ValueError,TypeError,AttributeError):
         return {'browser_code':'UNRECOGNIZED_REPORT'}

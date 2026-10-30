@@ -21,3 +21,12 @@ test('sandbox failures stay fixed and do not suggest bypass',()=>{
  assert.equal(classify(new Error('exit signal=SIGABRT SYNTHETIC_SECRET')),'BROWSER_SIGABRT');
  assert.equal(classify(new Error('exit signal=SIGSEGV SYNTHETIC_SECRET')),'BROWSER_SIGSEGV');
 });
+
+test('fatal sites use a reviewed static source registry, never raw messages',()=>{
+ const d=classify.fatal(new Error('[pid][err] FATAL:content/browser/zygote_host/zygote_host_impl_linux.cc:208] Check failed: SYNTHETIC_SECRET https://example.test/?sig=SYNTHETIC_SECRET sandbox'));
+ assert.deepEqual(d.sites,[{component:'ZYGOTE_HOST',line:208}]);assert(d.fatal&&d.check&&d.sandbox);
+ assert(!JSON.stringify(d).includes('SYNTHETIC_SECRET'));
+ const unknown=classify.fatal(new Error('FATAL:private/SYNTHETIC_SECRET.cc:12] SYNTHETIC_SECRET'));
+ assert(unknown.unclassified_fatal);assert.deepEqual(unknown.sites,[]);
+ assert(!JSON.stringify(unknown).includes('SYNTHETIC_SECRET'));
+});

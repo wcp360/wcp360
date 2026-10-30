@@ -68,6 +68,12 @@ class ReportingTest(unittest.TestCase):
         self.assertEqual(report['launch'],{'error_type':'Error','exit_code':127})
         self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
 
+    def test_fatal_sites_reject_unknown_components_and_arbitrary_fields(self):
+        data={'stage':'browser-launch','code':'BROWSER_SIGABRT','completed':0,'fatal':{'fatal':True,'secret':'SYNTHETIC_SECRET','sites':[{'component':'ZYGOTE_HOST','line':208,'message':'SYNTHETIC_SECRET'},{'component':'SYNTHETIC_SECRET','line':12}]}}
+        report=browser_failure(json.dumps(data).encode())
+        self.assertEqual(report['fatal']['sites'],[{'component':'ZYGOTE_HOST','line':208}])
+        self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
+
     def test_report_readable_despite_private_umask(self):
         with tempfile.TemporaryDirectory() as d:
             old = os.umask(0o077)

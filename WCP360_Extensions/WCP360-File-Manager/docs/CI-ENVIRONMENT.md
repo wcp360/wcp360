@@ -50,7 +50,7 @@ Le workflow ne reçoit aucun secret métier, token d'installation ou identifiant
 Chaque lane doit produire :
 
 - Identité : SHA candidat, SHA checkout et parents (merge synthétique PR), image ID construit, versions Docker/noyau, verrouillage et empreinte seccomp.
-- Résultats : contrôles du harnais (vingt tests Python et trois tests Node de diagnostic de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
+- Résultats : contrôles du harnais (vingt-et-un tests Python et quatre tests Node de diagnostic de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
 - Audit : date, état, nombre de packages affectés/abandonnés ; un audit n'est pas une revue du code.
 
 Les compteurs JUnit proviennent de tous les éléments testcase (y compris les cas directement placés au-dessus de suites imbriquées). Ils sont enregistrés avant les assertions, même si PHPUnit sort en erreur. Les identifiants de cas sont SHA-256 tronqués de classname::name ; aucun message, chemin ou sortie de cas n’est exporté. Le cache PHPUnit est placé sous /tmp/phpunit-cache.
@@ -82,3 +82,5 @@ Le filtrage ne constitue pas une sandbox générique de PR hostile : d'autres pr
 Le probe navigateur préalable reste privé : seul existent/exécutable, code ldd, nombre de bibliothèques introuvables, booléen ABI indisponible et métadonnées de lancement fermées (type/catégorie, code de sortie, signal connu) sont exportés. Aucun nom de bibliothèque, chemin, message ldd ou trace de lancement ne l'est. Les assertions sandbox et parcours restent identiques.
 
 Une sonde enfant Python appelle unshare(CLONE_NEWUSER) sous le même UID/non-root/seccomp/AppArmor/no-new-privileges. Elle ne modifie ni profil, ni sysctl, ni setuid ; le namespace éventuel disparaît avec l'enfant. Seuls UID initial, retour/errno, création booléenne et indicateurs AppArmor/userns lisibles sont rapportés. Un refus est une preuve de limite d'environnement, jamais une permission de désactiver la sandbox. Les catégories SUID_HELPER_UNUSABLE/SIGABRT/SIGSEGV/APPARMOR_DENIED proviennent de motifs fixes sans export de message.
+
+L'extraction FATAL est fermée par `chromium_diagnostic_sources.json`, douze composants dont les fichiers ont été consultés dans le tag primaire Chromium156.0.8078.4. Seuls booleans FATAL/CHECK/sandbox, identifiants de composants et numéros de ligne bornés sont exportés. Aucun chemin du message, expression CHECK, valeur, URL, querystring ou ligne brute. Une source inconnue produit unclassified_fatal et reste privée ; tout ajout à cette classification est un delta revu.

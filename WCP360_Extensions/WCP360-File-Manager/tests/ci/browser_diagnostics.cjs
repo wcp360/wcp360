@@ -27,3 +27,18 @@ module.exports.metadata=function(error){
  exit_code:exit?Number(exit[1]):null,
  signal:signal&&['SIGABRT','SIGSEGV','SIGTRAP','SIGSYS','SIGKILL','SIGTERM'].includes(signal[1])?signal[1]:null};
 };
+
+module.exports.fatal=function(error){
+ const text=String(error?.message||'');
+ const components=require('./chromium_diagnostic_sources.json').components;
+ const sites=[];
+ for(const [component,source] of Object.entries(components)){
+  const basename=source.split('/').at(-1).replaceAll('.','\\.');
+  const pattern=new RegExp('FATAL:(?:[a-zA-Z0-9_./-]+/)?'+basename+'[:(]([0-9]{1,5})','g');
+  for(const match of text.matchAll(pattern)){
+   const line=Number(match[1]);if(line>0&&line<=20000&&sites.length<12)sites.push({component,line});
+  }
+ }
+ const fatal=/\bFATAL\b|fatal error|Fatal glibc/.test(text);
+ return {fatal,check:/Check failed:|CHECK failed:/.test(text),sandbox:/sandbox/i.test(text),sites,unclassified_fatal:fatal&&sites.length===0};
+};
