@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import xml.etree.ElementTree as ET
 from safe_process import execute
+from reporting import composer_version, write_report
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path('/evidence')
@@ -38,20 +39,33 @@ def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
 def main():
     os.umask(0o077)
     Path(os.environ['HOME']).mkdir(exist_ok=True)
+    REPORT['stage']='uid'
     assert os.getuid() == 10001
     status = dict(line.split(':', 1) for line in Path('/proc/self/status').read_text().splitlines() if ':' in line)
+    REPORT['stage']='capabilities'
     assert int(status['CapEff'].strip(), 16) == 0
+    REPORT['stage']='no-new-privileges'
     assert status['NoNewPrivs'].strip() == '1'
+    REPORT['stage']='seccomp'
     assert status['Seccomp'].strip() == '2'
+    REPORT['stage']='network'
     assert {p.name for p in Path('/sys/class/net').iterdir()} == {'lo'}
+    REPORT['stage']='toolchain'
     lock = json.loads((ROOT/'tests/ci/toolchain.json').read_text())
     lane = os.environ['FM_PHP_LANE']
+    REPORT['stage']='php-version'
     actual_php = command(['php', '-r', 'echo PHP_VERSION;']).decode()
+    REPORT['stage']='node-version'
     actual_node = command(['node', '--version']).decode().strip()
-    actual_composer = command(['composer', '--no-plugins', '--version', '--no-ansi']).decode().split()[2]
+    REPORT['stage']='composer-version'
+    actual_composer = composer_version(command(['composer', '--no-plugins', '--version', '--no-ansi']))
+    REPORT['stage']='php-version-match'
     assert actual_php == lock['php'][lane]['version']
+    REPORT['stage']='node-version-match'
     assert actual_node == lock['tools']['node']
+    REPORT['stage']='composer-version-match'
     assert actual_composer == lock['tools']['composer']
+    REPORT['stage']='extensions'
     REPORT['environment'] = {
         'php': actual_php, 'node': actual_node, 'composer': actual_composer,
         'python': sys.version.split()[0], 'uid': os.getuid(), 'network': 'loopback-only',
@@ -63,7 +77,8 @@ def main():
     }
     for e in ['json','fileinfo','session','ctype','iconv','filter','xml','dom','xmlwriter','libxml','mbstring','phar','tokenizer','zip']:
         assert e in [s.lower() for s in REPORT['environment']['php_extensions']]
-    suite('harness-boundaries', ['python3', 'tests/ci/test_safe_process.py'])
+    REPORT['stage']='suites'
+    suite('harness-boundaries', ['python3', '-m', 'unittest', 'discover', '-s', 'tests/ci', '-p', 'test_*.py'])
     suite('composer-validate', ['composer','--no-plugins','validate','--strict'])
     suite('real-platform', ['composer','--no-plugins','check-platform-reqs'])
     item={'suite':'php-lint','status':'FAIL'}; REPORT['suites'].append(item)
@@ -98,6 +113,6 @@ if __name__ == '__main__':
         if REPORT['suites']: REPORT['suites'][-1]['status']='FAIL'
     finally:
         OUT.mkdir(exist_ok=True)
-        (OUT/'results.json').write_text(json.dumps(REPORT,indent=2)+'\n')
+        write_report(OUT/'results.json', REPORT)
         print(json.dumps(REPORT))
     sys.exit(0 if REPORT['status']=='PASS' else 1)

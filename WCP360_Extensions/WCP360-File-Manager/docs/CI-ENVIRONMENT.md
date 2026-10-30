@@ -36,17 +36,17 @@ La préparation d'image est connectée : registres Docker/Microsoft, snapshot.de
 
 Pas de cache Actions restauré, pas de cache Docker de construction réutilisé (`--no-cache`), pas de cache Composer/npm transmis aux tests. Le cache de téléchargement d'une construction peut être utilisé pour sa seconde installation no-dev, puis supprimé. Un audit Composer connecté séparé interroge les avis de vulnérabilité ; une erreur réseau ou une réponse incomplète échoue. Les tests produit restent hors réseau. Les avis évoluent et sont datés, contrairement au lock.
 
-Le workflow ne reçoit aucun secret métier, token d'installation ou identifiant tenant. Checkout possède seulement `contents: read` et ne conserve pas ses credentials. Les traces de construction contiennent les téléchargements et diagnostics des outils ; aucune configuration utilisateur réelle n'est fournie. Les sorties brutes des tests sont capturées dans un fichier temporaire privé et ne sont ni imprimées ni publiées. Les erreurs exportées utilisent des codes fixes. Pas de captures d'écran, JUnit brut, serveur.log, configuration, contenu fichier ou lien de partage dans les artefacts.
+Le workflow ne reçoit aucun secret métier, token d'installation ou identifiant tenant. Checkout possède seulement `contents: read` et ne conserve pas ses credentials. Les traces de construction contiennent les téléchargements et diagnostics des outils ; aucune configuration utilisateur réelle n'est fournie. Les sorties brutes des tests sont capturées dans deux fichiers temporaires privés distincts (stdout/stderr) et ne sont ni imprimées ni publiées. Les erreurs exportées utilisent des codes fixes. Pas de captures d'écran, JUnit brut, serveur.log, configuration, contenu fichier ou lien de partage dans les artefacts.
 
 ## Preuves attendues, sans PASS anticipé
 
 Chaque lane doit produire :
 
 - Identité : SHA candidat, SHA checkout et parents (merge synthétique PR), image ID construit, versions Docker/noyau, verrouillage et empreinte seccomp.
-- Résultats : contrôles du harnais (quatre tests de confidentialité/nettoyage), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
+- Résultats : contrôles du harnais (onze tests de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
 - Audit : date, état, nombre de packages affectés/abandonnés ; un audit n'est pas une revue du code.
 
-Les sorties sont limitées à des JSON structurés, conservés 30 jours. Un processus de suite et ses descendants sont arrêtés en fin d'exécution ou au timeout ; les conteneurs sont supprimés après les étapes, et l'hôte est jetable. Aucun PASS de l'archive ne remplit ces exigences.
+Les sorties sont limitées à des JSON structurés, conservés 30 jours. Seuls ces JSON expurgés reçoivent le mode 0644 pour être lus par le runner ; le umask privé 077 reste appliqué aux données et diagnostics temporaires. COMPOSER_ROOT_VERSION fixe la version du paquet de test à 0.3.0-alpha sans modifier composer.json. Le parseur audit applique le schéma de Composer 2.11.1 (Auditor.php), refuse les réponses incomplètes, avis ignorés, dépôts injoignables et codes de sortie non nuls. Un processus de suite et ses descendants sont arrêtés en fin d'exécution ou au timeout ; les conteneurs sont supprimés après les étapes, et l'hôte est jetable. Aucun PASS de l'archive ne remplit ces exigences.
 
 ## Limites et décisions encore ouvertes
 

@@ -10,7 +10,7 @@ ARG COMPOSER_SHA256
 ARG DEBIAN_SNAPSHOT
 ENV DEBIAN_FRONTEND=noninteractive PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 COMPOSER_ALLOW_SUPERUSER=1 \
-    COMPOSER_NO_INTERACTION=1
+    COMPOSER_NO_INTERACTION=1 COMPOSER_ROOT_VERSION=0.3.0-alpha
 RUN rm -f /etc/apt/sources.list /etc/apt/sources.list.d/* && \
     printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/%s/ bookworm main\ndeb [check-valid-until=no] https://snapshot.debian.org/archive/debian-security/%s/ bookworm-security main\n' "$DEBIAN_SNAPSHOT" "$DEBIAN_SNAPSHOT" > /etc/apt/sources.list && \
     apt-get update && apt-get install -y --no-install-recommends python3 libonig-dev libzip-dev unzip xz-utils && \

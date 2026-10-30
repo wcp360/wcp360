@@ -9,9 +9,9 @@ import tempfile
 
 
 def execute(command, *, cwd=None, seconds=120):
-    with tempfile.TemporaryFile() as output:
+    with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
         process = subprocess.Popen(command, cwd=cwd, stdout=output,
-                                   stderr=subprocess.STDOUT, start_new_session=True)
+                                   stderr=errors, start_new_session=True)
         timed_out = False
         try:
             process.wait(timeout=seconds)
@@ -24,7 +24,7 @@ def execute(command, *, cwd=None, seconds=120):
             except ProcessLookupError:
                 pass
             process.wait(timeout=10)
-        size = output.tell()
+        size = output.tell() + errors.tell()
         output.seek(0)
         # Bounded read; reject oversized diagnostics instead of leaking or truncating into PASS.
         data = output.read(4 * 1024 * 1024 + 1)
