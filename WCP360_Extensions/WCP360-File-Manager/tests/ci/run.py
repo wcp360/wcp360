@@ -41,6 +41,8 @@ def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
         if name == 'browser-sandboxed':
             item['browser_version'] = result['browser_version']
             item['browser_uid'] = result['browser_uid']
+            assert result['completed']==len(checks)
+            item['completed']=result['completed']
             item['sandbox'] = result['sandbox']
     item['status'] = 'PASS'
 
@@ -98,6 +100,7 @@ def main():
     write_report(OUT/'packages.json', {'packages':packages})
     REPORT['stage']='suites'
     suite('harness-boundaries', ['python3', '-m', 'unittest', 'discover', '-s', 'tests/ci', '-p', 'test_*.py'])
+    suite('chroot-context', ['python3','tests/ci/chroot_probe.py','allowed'])
     suite('composer-validate', ['composer','--no-plugins','validate','--strict'])
     suite('real-platform', ['composer','--no-plugins','check-platform-reqs'])
     item={'suite':'php-lint','status':'FAIL'}; REPORT['suites'].append(item)
