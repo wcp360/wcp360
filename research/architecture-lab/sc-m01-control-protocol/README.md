@@ -1,8 +1,9 @@
 # WCP360 — Inert control-protocol parser R&D fixture
 
-**Date:** 2026-10-26  
-**Status:** RESEARCH / PROOF-OF-CONCEPT ONLY — NOT CANONICAL — NOT SOURCE-CODE CONSUMABLE  
-**Owner for proposed contract review:** API / IPC / CONTRACTS + SECURITY / HARDENING + DEVOPS  
+**Historical research snapshot:** 2026-10-26
+**Applicability clarified:** 2026-10-30
+**Status:** RESEARCH / PROOF-OF-CONCEPT ONLY — NOT CANONICAL — NOT SOURCE-CODE CONSUMABLE
+**Owner for proposed contract review:** API / IPC / CONTRACTS + SECURITY / HARDENING + DEVOPS
 **Decisions:** C03, C06, C07; dependencies C01, C04, T02/T03/T04, DB #6, QA #7.
 
 The exploratory `inert_codec.py` checks candidate frame parsing and synthetic assertion consistency only. It does not open a Unix socket, read Linux `SO_PEERCRED`, validate real service/cgroups, authenticate any live user, authorize an API principal, send IPC-B, execute a system command, interact with PostgreSQL, dispatch a job, or persist audit evidence.
@@ -17,7 +18,7 @@ python3 -m unittest discover -s research/architecture-lab/sc-m01-control-protoco
 
 The synthetic trust fixture supplied to `decode_candidate_frame()` is a test input, **not a real trust mechanism**. Production controls require kernel peer verification, owner-approved trusted-context lifecycle/revocation, real RBAC/entitlement/tenant checks, DB durable intent and outbox, explicit IPC-B allowlist, state/revision/fencing and independent security review.
 
-The recommended proposal is at:
+The historical, non-normative proposal is at:
 
 `governance/proposals/SC-M01-CONTROL-BOUNDARY-C03-C06-C07-OWNER-OPTIONS-v0.1.md`
 
@@ -27,8 +28,12 @@ Tests cover parse/length/version/duplicate-key/UTF-8/NaN errors, unknown operati
 
 The candidate 32768-byte size limit, mock peer mappings and protocol version are not approved final values. A test PASS means only these selected parser assertions passed on an inert fixture.
 
+The following block and the memo's OPEN C03/C06/C07 wording record the 2026-10-26 research snapshot, not the current MASTER status:
+
 ```text
 SC-M01 = PAUSED — TARGETED EVIDENCE
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
+
+At integration main `580e9ed58286304ade30142caf9415f4b87c0c28`, MASTER has authorized only the separately reviewed inert daemon foundation. That GO does not authorize a control socket, protocol, listener, systemd/service value or privileged operation from this fixture. All C03/C06/C07 values here remain candidates; this README and its synthetic tests ratify none of them. A later implementation must use exact specialized-owner contracts and a separate MASTER GO. CODE-BASELINE remains NONE and SC-M02 remains NOT AUTHORIZED.

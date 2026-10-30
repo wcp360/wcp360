@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "SC-M01-OWNER-SIGNOFF-INPUTS-2026-10-27",
+  "publication_date": "2026-10-27",
+  "classification": "G1_COORDINATION_NONCANONICAL",
+  "reference_baselines": {
+    "master": "WCP360-BM-0001 FINAL",
+    "documentation": "v4.0.21.23",
+    "design": "V2.5.3.36.4",
+    "code": "NONE"
+  },
+  "sc_m01_gate": {
+    "required_owner_artifacts": 8,
+    "present_owner_final_in_main": 5,
+    "missing_owner_final": 3,
+    "status": "PAUSED_TARGETED_EVIDENCE",
+    "sc_m02": "NOT_AUTHORIZED"
+  },
+  "source_main_at_inspection": "87e541d2830994207a06d53e4b285c7ea531def2",
+  "owner_review_inputs": [
+    {
+      "owner": "WCP360 — DATABASE / DATA MODEL",
+      "domain": "DATABASE",
+      "issue": 6,
+      "candidate_path": "governance/proposals/SC-M01-DB-36-TABLE-PHYSICAL-OWNER-MATERIALIZATION-CANDIDATE-v0.1.md",
+      "candidate_git_blob_sha": "d6029138464f599a83c8a0954d016c571b026835",
+      "source_kind": "P1 PROPOSED PHYSICAL DECISIONS BASED ON INCOMPLETE RECOVERY",
+      "evidence": "36 historical table sections in 8 schemas, 33 partially typed blocks, 2 conceptual and 1 name-only; plus 10 new cross-table owner decision points",
+      "prior_final_provenance": "Historical v1.0 FINAL metadata exists; complete exact prior body unavailable",
+      "owner_required_return": "Approve exact retained previous final source OR reconstruct/decide complete physical model with real content/version impact, all 15 DB-R points, 10 DB-X points, full constraints/indexes/transactions and Security/API/QA/DevOps cross-review",
+      "final_target": "specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md OR explicitly owner-versioned alternative",
+      "candidate_owner_approval": false,
+      "final_source_present_in_main": false,
+      "ready_for_source_code": false
+    },
+    {
+      "owner": "WCP360 — TESTS / QA",
+      "domain": "QA",
+      "issue": 7,
+      "candidate_path": "governance/proposals/SC-M01-QA-133-TEST-RECORDS-OWNER-CANDIDATE-v0.1.json",
+      "candidate_git_blob_sha": "fd1c570c396cebc2b20b3c89c96ca9b033fc2dc1",
+      "source_kind": "P1 SOURCE-DERIVED 133 EXISTING TEST REFERENCES — ALL UNEXECUTED",
+      "evidence": "86 TEST-API and 47 TEST-IPC candidate records (133 unique), 82 active permissions referenced; all blocked and none executed. Companion A01–A20 and QI-01..07 owner proposal also in main.",
+      "prior_final_provenance": "Test Baseline v1.0 metadata exists; no prior complete FINAL SC-M01 QA body evidenced",
+      "owner_required_return": "Ratify A01–A20 and QI-01..07, determine P1/P2/P3 source provenance, preserve N01..N26 and TEST-SEC-WEB-001..040, define complete exact expected outcomes/fixtures/error/no-effect/evidence with transparent BLOCKED dependencies, publish final owner body",
+      "final_target": "specifications/tests/<QA-owner-chosen-final-test-baseline-filename>",
+      "candidate_owner_approval": false,
+      "final_source_present_in_main": false,
+      "ready_for_source_code": false,
+      "actual_product_tests_executed": 0
+    },
+    {
+      "owner": "WCP360 — ENGINEERING / CODE REVIEW",
+      "domain": "ENGINEERING",
+      "issue": 9,
+      "candidate_path": "governance/proposals/SC-M01-ENGINEERING-F01-F10-CANDIDATE-DECISION-v0.3.md",
+      "candidate_git_blob_sha": "4a4a3891303821d64de153f6210e7e7303a9eb9f",
+      "source_kind": "P1 NEW TOOLCHAIN/CI CHOICES CANDIDATE, NOT EXACT PRIOR RULESET",
+      "evidence": "Concrete F01–F10 architecture/toolchain alternatives under Debian13 plus ENG-R01..20 proposed rules in main; maintenance/security sources dated 2026-10-27",
+      "prior_final_provenance": "ENG-WCP-RULESET-0001 v0.2 FINAL metadata exists but exact final source body unavailable",
+      "owner_required_return": "Choose exact retained original v0.2 with provenance OR explicitly accept/amend complete new v0.3 ruleset, state content/version change, secure runtime versions/dependency locks/tools/CI thresholds/DoD, DevOps/Security/QA handoffs and independent review",
+      "final_target": "specifications/engineering/<Engineering-owner-final-export-filename>",
+      "candidate_owner_approval": false,
+      "final_source_present_in_main": false,
+      "ready_for_source_code": false
+    }
+  ],
+  "additional_component_decisions": {
+    "privileged_bindings_issue": 91,
+    "privileged_bindings_unapproved": 12,
+    "backend_wcpd_control_owner_decisions": [
+      "C01",
+      "C03",
+      "C06",
+      "C07"
+    ],
+    "independent_review_issue": 41,
+    "repository_guardrail_pull_request": 42,
+    "source_code_m01_01_allowed_now": false
+  },
+  "publication_rules": [
+    "These three candidate paths are not source-code authority. Main G1/P1 publication does not constitute domain owner approval.",
+    "All 8/8 owner-final implementation artifacts plus applicable first-slice semantic decisions and MASTER resume authorization are mandatory before SC-M01 production implementation.",
+    "Do not fill missing exact prior source bytes from assistant general knowledge or cancelled Sprint 0.",
+    "Never mark tests PASS without execution against exact SHA/environment.",
+    "Independent E3 requires genuinely independent technical review; same-author E2 or CI E1 is not E3."
+  ],
+  "latest_coordination_update": "2026-10-27 late",
+  "qa_security_annex": {
+    "source_status": "P1_NONCANONICAL_COMMITTED_IN_MAIN",
+    "pull_request": 102,
+    "merge_commit_sha": "bde5b8e9b10870f76439f76358b16aaa7528f501",
+    "json_path": "governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json",
+    "git_blob_sha": "e56db7549d8b30ebffd3687265e92964bfd1acdf",
+    "source_contract": "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+    "source_git_blob_sha": "6d74f2f363524511424f839ca7262143c2af95ab",
+    "existing_N_catalog_labels": 26,
+    "existing_WEB_id_range": 40,
+    "per_id_WEB_mapping_owner_status": "NEW_PROPOSAL_PENDING_QA_APPROVAL",
+    "combined_qa_review_reference_records": 199,
+    "actual_product_tests_executed": 0,
+    "passed": 0,
+    "owner_approval": false
+  },
+  "qa_source_integrity_e1": {
+    "pr": 87,
+    "head_sha": "92f563c279b8444d380d745cf9e6f35691b1c641",
+    "workflow_url": "https://github.com/yyogas/wcp360/actions/runs/40587310504",
+    "status": "SUCCESS_NONPRODUCT_E1_ONLY",
+    "unit_tests_passed": 61,
+    "api_ipc_reference_tests": 20,
+    "security_ipc_reference_tests": 21,
+    "qa_199_reference_integrity_tests": 20,
+    "e3_independent_review": false,
+    "owner_qa_final_approval": false
+  },
+  "engineering_full_candidate": {
+    "pull_request": 103,
+    "current_status": "MERGED_MAIN_P1_NONCANONICAL_PROPOSAL_ONLY",
+    "source_branch": "proposal/sc-m01-eng-consolidated-owner-review-20261027",
+    "candidate_path": "governance/proposals/SC-M01-ENGINEERING-v0.3-CONSOLIDATED-FULL-OWNER-REVIEW-CANDIDATE.md",
+    "candidate_branch_git_blob_sha": "d202099091c927156585ac2c2ba886db8c61ec32",
+    "eng_rules_proposed": 20,
+    "toolchain_decisions_proposed": 10,
+    "owner_rule_dispositions_approved": 0,
+    "historical_full_v0_2_body_recovered": false,
+    "version_v0_3_approved": false,
+    "ready_for_source_code": false,
+    "owner_approval": false,
+    "e3_independent_review": false,
+    "main_merge_commit": "1ba2aaad018c0e9e3fdf512dd0a396fa01125cc4",
+    "candidate_main_git_blob_sha": "d202099091c927156585ac2c2ba886db8c61ec32"
+  }
+}

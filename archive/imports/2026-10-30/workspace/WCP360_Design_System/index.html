@@ -1,0 +1,93 @@
+<!doctype html><html lang="en" data-theme="system"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WCP360 Design Reference — WCP360</title><link rel="stylesheet" href="assets/styles.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><link rel="stylesheet" href="assets/reference-ui.css"></head><body>
+<header class="header glass">
+ <a href="index.html" class="brand"><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#26C6DA"/><stop offset=".52" stop-color="#0072FF"/><stop offset="1" stop-color="#10B981"/></linearGradient></defs><circle cx="50" cy="50" r="39" fill="none" stroke="url(#g)" stroke-width="5"/><rect x="31" y="31" width="16" height="16" rx="4" fill="#3B82F6"/><rect x="53" y="31" width="16" height="16" rx="4" fill="none" stroke="#3B82F6" stroke-width="3"/><rect x="31" y="53" width="16" height="16" rx="4" fill="none" stroke="#10B981" stroke-width="3"/><rect x="53" y="53" width="16" height="16" rx="4" fill="url(#g)"/></svg><div class="brandmeta"><div><span class="brandname">WCP<span class="grad">360</span></span> <span class="tag">DESIGN SYSTEM</span></div><div class="tiny muted">Web Control Panel</div></div></a>
+ <div class="contexts"><select class="select mono"><option>srv-par-01 · EU-Paris</option><option>srv-fra-02 · EU-Frankfurt</option></select><select class="select"><option>example.com</option><option>shop.example.com</option></select></div>
+ <div class="search"><span class="icon">⌕</span><input id="globalSearch" placeholder="Recherche rapide — comptes, domaines, SSL, SSH…"><span class="kbd">⌘K</span></div>
+ <div class="header-actions"><button class="btn">WCP-ADMIN</button><a href="terminal.html" class="btn mono">›_ Shell</a><button class="iconbtn" onclick="toggleDrawer('notifDrawer')">♢</button><div class="theme-switch" aria-label="Appearance">
+<button type="button" data-theme-choice="system">System</button>
+<button type="button" data-theme-choice="light">Light</button>
+<button type="button" data-theme-choice="dark">Dark</button>
+</div><div class="avatar">W</div></div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+ <div class="nav-scroll">
+  <div class="group"><div class="group-title">WCP360</div><a data-nav class="nav" href="index.html"><span class="ico">⌂</span><span>Design Home</span></a></div>
+  <div class="group"><div class="group-title">WCP-USER</div><a data-nav class="nav" href="user-dashboard.html"><span class="ico">◫</span><span>Dashboard</span></a>
+<a data-nav class="nav" href="websites.html"><span class="ico">◎</span><span>Websites</span></a>
+<a data-nav class="nav" href="website-overview.html"><span class="ico">◉</span><span>Website Overview</span></a>
+<a data-nav class="nav" href="dns.html"><span class="ico">⌘</span><span>Domains & DNS</span></a>
+<a data-nav class="nav" href="security.html"><span class="ico">◇</span><span>Security</span></a></div>
+  <div class="group"><div class="group-title">WCP-ADMIN</div><a data-nav class="nav" href="admin-dashboard.html"><span class="ico">◫</span><span>Admin Dashboard</span></a>
+<a data-nav class="nav" href="servers.html"><span class="ico">▣</span><span>Servers</span></a>
+<a data-nav class="nav" href="server-overview.html"><span class="ico">▤</span><span>Server Overview</span></a>
+<a data-nav class="nav" href="monitoring.html"><span class="ico">⌁</span><span>Monitoring</span></a>
+<a data-nav class="nav" href="terminal.html"><span class="ico">›_</span><span>Terminal</span></a>
+<a data-nav class="nav" href="components.html"><span class="ico">◈</span><span>Components</span></a></div>
+ </div>
+ <div class="side-status"><div class="statusbox"><div style="display:flex;justify-content:space-between;margin-bottom:7px"><span class="small muted">Charge CPU</span><span class="mono cyan">0.42</span></div><div class="bar"><i style="width:28%"></i></div><div class="tiny muted" style="display:flex;justify-content:space-between;margin-top:8px"><span>Uptime 48d</span><span style="color:#43d5aa">● Optimal</span></div></div></div>
+</aside>
+<main class="main">
+ 
+ <div class="pagehead"><div><div class="crumb">WCP360 / Admin / WCP360 Design Reference</div><h1 class="title">WCP360 Design Reference</h1><div class="sub">Nouvelle base visuelle inspirée de l’exemple fourni.</div></div><div class="actions"><button class="btn">Exporter</button><button class="btn primary">Action principale</button></div></div>
+ 
+<div class="grid g3">
+ <div class="card glow span2"><div class="card-title"><h3>Nouvelle direction visuelle</h3><span class="badge info"><i class="dot"></i> Reference locked</span></div>
+ <div style="font-size:30px;font-weight:800;max-width:760px;letter-spacing:-.045em">Dark infrastructure UI, <span class="grad">WCP360 native</span>.</div>
+ <p class="muted" style="max-width:780px">Cette V2.4 reprend la densité, le glass sombre, le cyan/bleu/émeraude, les sélecteurs de contexte et l'esprit hosting-control-panel de la référence, mais restructure les rôles et les actions sensibles.</p></div>
+ <div class="card"><div class="card-title"><h3>Design tokens</h3><span class="tag">V2.4</span></div><div class="small mono">BG #090d16<br>Card #101726<br>Cyan #00C6FF<br>Blue #0072FF<br>Emerald #10B981</div></div>
+</div>
+<div class="card" style="margin-top:16px"><div class="card-title"><h3>Surfaces de référence</h3><span class="tiny muted">12 pages</span></div>
+<div class="quick-grid">
+<a class="tile" href="user-dashboard.html"><div class="ticon cyan">◫</div><b>WCP-USER</b><span>Dashboard client</span></a>
+<a class="tile" href="admin-dashboard.html"><div class="ticon amber">♛</div><b>WCP-ADMIN</b><span>Infrastructure</span></a>
+<a class="tile" href="websites.html"><div class="ticon" style="color:#60a5fa">◎</div><b>Websites</b><span>Hosting resources</span></a>
+<a class="tile" href="servers.html"><div class="ticon" style="color:#34d399">▣</div><b>Servers</b><span>Nodes & health</span></a>
+<a class="tile" href="terminal.html"><div class="ticon cyan">›_</div><b>Terminal</b><span>Privileged surface</span></a>
+<a class="tile" href="components.html"><div class="ticon purple">◈</div><b>Components</b><span>Gallery</span></a>
+</div></div>
+</main></div>
+<details class="special"><summary>✦ SPECIAL MENU</summary><div class="sbody"><a href="index.html">Design System Home</a><a href="user-dashboard.html">WCP-USER Dashboard</a><a href="admin-dashboard.html">WCP-ADMIN Dashboard</a><a href="websites.html">Websites</a><a href="website-overview.html">Website Overview</a><a href="dns.html">Domains & DNS</a><a href="servers.html">Servers</a><a href="server-overview.html">Server Overview</a><a href="monitoring.html">Monitoring</a><a href="security.html">Security Center</a><a href="terminal.html">Terminal</a><a href="components.html">Component Gallery</a><a href="email.html">Email</a><a href="databases.html">Databases</a><a href="backups.html">Backups</a><a href="file-manager.html">File Manager</a><a href="cron.html">Cron</a><a href="ssl.html">SSL/TLS</a><a href="users-roles.html">Users & Roles</a><a href="api-webhooks.html">API & Webhooks</a><a href="jobs.html">Jobs</a><a href="incidents.html">Incidents</a><a href="audit.html">Audit Log</a><a href="firewall.html">Firewall</a><a href="updates.html">Updates</a><a href="maintenance.html">Maintenance</a><a href="cluster.html">Cluster</a><a href="reseller.html">Reseller</a><a href="create-website.html">Create Website</a><a href="restore-backup.html">Restore Backup</a><a href="delete-resource.html">Delete Resource</a><a href="login.html">Login</a><a href="mfa.html">MFA</a></div></details>
+<script src="assets/app.js"></script>
+<div id="commandPalette" class="modalback" onclick="if(event.target===this)closeModal('commandPalette')">
+  <div class="modal command">
+    <input id="commandInput" placeholder="Rechercher une page, ressource ou action…">
+    <div class="command-results">
+      <div class="command-item"><span>◎ Ouvrir example.com</span><span class="tiny muted">Website</span></div>
+      <div class="command-item"><span>▣ Ouvrir srv-par-01</span><span class="tiny muted">Server</span></div>
+      <div class="command-item"><span>＋ Créer un site</span><span class="tiny muted">Action</span></div>
+      <div class="command-item"><span>›_ Ouvrir Terminal</span><span class="tiny muted">Privileged</span></div>
+    </div>
+  </div>
+</div>
+<div id="notifDrawer" class="drawer">
+  <div class="card-title"><h3>Notifications</h3><button class="iconbtn" onclick="toggleDrawer('notifDrawer')">×</button></div>
+  <div class="noticegrid">
+    <div class="notify"><b class="cyan">SSL renouvelé</b><span class="small muted">example.com · il y a 2 min</span></div>
+    <div class="notify"><b class="amber">Quota stockage élevé</b><span class="small muted">shop.example.com · 82%</span></div>
+    <div class="notify"><b class="red">Job échoué</b><span class="small muted">Backup · srv-par-04</span></div>
+  </div>
+</div>
+<script src="assets/reference-ui.js"></script>
+<div id="wcpCommandBackdrop" class="wcp-command-backdrop" role="dialog" aria-modal="true" aria-label="Command Center">
+  <div class="wcp-command-center">
+    <div class="wcp-command-search"><span class="material-symbols-rounded">search</span><input id="wcpCommandInput" placeholder="Search WCP360 or type a command…"><kbd>Esc</kbd></div>
+    <div class="wcp-command-scroll">
+      <div class="wcp-command-group">Quick actions</div>
+      <div class="wcp-command-result active"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">add_circle</span></div><div><div class="wcp-command-result-title">Create application</div><div class="wcp-command-result-sub">WCP-USER · guided provisioning</div></div><div class="wcp-command-result-hint">Action</div></div>
+      <div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">database</span></div><div><div class="wcp-command-result-title">Create database</div><div class="wcp-command-result-sub">Current application context</div></div><div class="wcp-command-result-hint">Action</div></div>
+      <div class="wcp-command-group">Recent resources</div>
+      <div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">web</span></div><div><div class="wcp-command-result-title">example.com</div><div class="wcp-command-result-sub">Application · Production · Healthy</div></div><div class="wcp-command-result-hint">Open</div></div>
+      <div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">dns</span></div><div><div class="wcp-command-result-title">srv-par-01</div><div class="wcp-command-result-sub">Server · EU-PROD · Healthy</div></div><div class="wcp-command-result-hint">Open</div></div>
+      <div class="wcp-command-group">Commands</div>
+      <div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">restart_alt</span></div><div><div class="wcp-command-result-title">Restart PHP-FPM</div><div class="wcp-command-result-sub">Preview → Confirm → Execute → Audit</div></div><div class="wcp-command-result-hint">Review</div></div>
+    </div>
+    <div class="wcp-command-footer"><span>↑↓ navigate · Enter preview · Esc close</span><span>Privileges are never bypassed</span></div>
+  </div>
+</div>
+<div id="wcpDrawerBackdrop" class="wcp-drawer-backdrop"></div>
+<aside id="wcpJobsDrawer" class="wcp-side-drawer"><div class="wcp-drawer-head"><div><div class="wcp-drawer-title">Job Center</div><div class="wcp-drawer-sub">Persistent server-side operations</div></div><button class="wcp-close-btn" data-close-drawer><span class="material-symbols-rounded">close</span></button></div><div class="wcp-drawer-body"><div class="wcp-job-list"><div class="wcp-job-card"><div class="wcp-job-top"><div><div class="wcp-job-name">Deploy example.com</div><div class="wcp-job-meta">JOB-94821 · Requested by Yann</div></div><span class="wcp-status processing">Running</span></div><div class="wcp-progress"><i style="width:72%"></i></div><div class="wcp-job-steps"><div class="wcp-job-step done"><span class="material-symbols-rounded">check_circle</span>Validate configuration</div><div class="wcp-job-step done"><span class="material-symbols-rounded">check_circle</span>Create snapshot</div><div class="wcp-job-step running"><span class="material-symbols-rounded">progress_activity</span>Restart PHP-FPM</div><div class="wcp-job-step"><span class="material-symbols-rounded">radio_button_unchecked</span>Health check</div></div></div><div class="wcp-job-card"><div class="wcp-job-top"><div><div class="wcp-job-name">Backup api.example.com</div><div class="wcp-job-meta">JOB-94804 · 02:41 elapsed</div></div><span class="wcp-status processing">Running</span></div><div class="wcp-progress"><i style="width:68%"></i></div></div></div></div></aside>
+<aside id="wcpCreateDrawer" class="wcp-side-drawer"><div class="wcp-drawer-head"><div><div class="wcp-drawer-title">Create</div><div class="wcp-drawer-sub">Start from your current context</div></div><button class="wcp-close-btn" data-close-drawer><span class="material-symbols-rounded">close</span></button></div><div class="wcp-drawer-body"><div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">web</span></div><div><div class="wcp-command-result-title">Application</div><div class="wcp-command-result-sub">Website or web service</div></div></div><div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">database</span></div><div><div class="wcp-command-result-title">Database</div><div class="wcp-command-result-sub">MariaDB / PostgreSQL</div></div></div><div class="wcp-command-result"><div class="wcp-command-result-icon"><span class="material-symbols-rounded">language</span></div><div><div class="wcp-command-result-title">Domain</div><div class="wcp-command-result-sub">Attach domain + SSL</div></div></div></div></aside>
+<div id="wcpToastStack" class="wcp-toast-stack"></div>
+</body></html>
