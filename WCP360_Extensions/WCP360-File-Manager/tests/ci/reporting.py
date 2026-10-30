@@ -68,17 +68,17 @@ def build_summary(result):
 def browser_failure(data):
     try:
         result=json.loads(data)
-        stages={'initialization','php-readiness','browser-launch','browser-preflight','browser-version','browser-identity','sandbox-attestation','ui'}
-        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED','BROWSER_ABI_UNAVAILABLE','BROWSER_LIBRARY_MISSING','SANDBOX_UNAVAILABLE','CRASHPAD_CONFIGURATION','BROWSER_PERMISSION_DENIED','BROWSER_SIGTRAP','BROWSER_LAUNCH_TIMEOUT'}
+        stages={'initialization','php-readiness','browser-launch','browser-preflight','userns-probe','browser-version','browser-identity','sandbox-attestation','ui'}
+        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED','BROWSER_ABI_UNAVAILABLE','BROWSER_LIBRARY_MISSING','SANDBOX_UNAVAILABLE','CRASHPAD_CONFIGURATION','BROWSER_PERMISSION_DENIED','BROWSER_SIGTRAP','BROWSER_LAUNCH_TIMEOUT','SUID_HELPER_UNUSABLE','APPARMOR_DENIED','BROWSER_SIGSEGV','BROWSER_SIGABRT'}
         if result.get('stage') not in stages or result.get('code') not in codes or type(result.get('completed')) is not int or not 0<=result['completed']<=28:
             raise ValueError('SCHEMA')
         report={'browser_stage':result['stage'],'browser_code':result['code'],'completed':result['completed']}
         probe=result.get('probe',{})
         filtered={}
-        for key in ['binary_exists','binary_executable','abi_unavailable']:
+        for key in ['binary_exists','binary_executable','abi_unavailable','userns_created','apparmor_enforcing']:
             if type(probe.get(key)) is bool:filtered[key]=probe[key]
-        for key in ['ldd_exit','missing_libraries']:
-            if type(probe.get(key)) is int and -999<=probe[key]<=10000:filtered[key]=probe[key]
+        for key in ['ldd_exit','missing_libraries','userns_probe_exit','userns_errno','userns_uid','apparmor_restrict_userns','userns_clone_enabled']:
+            if type(probe.get(key)) is int and -999<=probe[key]<=10001:filtered[key]=probe[key]
         report['probe']=filtered
         launch=result.get('launch',{})
         filtered={}

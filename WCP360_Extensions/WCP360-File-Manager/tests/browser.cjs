@@ -26,6 +26,11 @@ let ciStage='initialization',ciCompleted=0,ciProbe={};
  ciProbe.ldd_exit=Number.isInteger(dynamic.status)?dynamic.status:-999;
  ciProbe.missing_libraries=(loader.match(/=> not found/g)||[]).length;
  ciProbe.abi_unavailable=/GLIBC_[0-9].*not found/.test(loader);
+ ciStage='userns-probe';const ns=cp.spawnSync('python3',['-c',"import ctypes,json,os; c=ctypes.CDLL(None,use_errno=True); c.unshare.argtypes=[ctypes.c_int]; c.unshare.restype=ctypes.c_int; uid=os.getuid(); result=c.unshare(0x10000000); print(json.dumps({'uid':uid,'created':result==0,'errno':ctypes.get_errno() if result else 0}))"],{encoding:'utf8',timeout:15000});
+ ciProbe.userns_probe_exit=Number.isInteger(ns.status)?ns.status:-999;
+ if(ns.status===0){const n=JSON.parse(ns.stdout);if(typeof n.created==='boolean'&&Number.isInteger(n.errno)&&Number.isInteger(n.uid)){ciProbe.userns_created=n.created;ciProbe.userns_errno=n.errno;ciProbe.userns_uid=n.uid;}}
+ for(const [key,file] of [['apparmor_restrict_userns','/proc/sys/kernel/apparmor_restrict_unprivileged_userns'],['userns_clone_enabled','/proc/sys/kernel/unprivileged_userns_clone']]){try{const value=Number(fs.readFileSync(file,'utf8').trim());if(value===0||value===1)ciProbe[key]=value;}catch{}}
+ try{ciProbe.apparmor_enforcing=fs.readFileSync('/proc/self/attr/current','utf8').includes('(enforce)');}catch{}
  ciStage='browser-launch';browser=await chromium.launch({headless:true,channel:'chromium',chromiumSandbox:true,timeout:30000});
  ciStage='browser-version';const ciLock=JSON.parse(fs.readFileSync(path.join(__dirname,'ci/toolchain.json'),'utf8'));
  assert.strictEqual(browser.version(),ciLock.chromium.version);assert.strictEqual(require((process.env.FM_PLAYWRIGHT_MODULE||'playwright')+'/package.json').version,ciLock.playwright);

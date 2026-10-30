@@ -14,3 +14,10 @@ test('launch metadata excludes arbitrary diagnostic text',()=>{
  assert(!JSON.stringify(classify.metadata(e)).includes('SYNTHETIC_SECRET'));
  assert.equal(classify(new Error('Timeout 30000ms exceeded SYNTHETIC_SECRET')),'BROWSER_LAUNCH_TIMEOUT');
 });
+
+test('sandbox failures stay fixed and do not suggest bypass',()=>{
+ assert.equal(classify(new Error('The SUID sandbox helper binary was found, but is not configured correctly. SYNTHETIC_SECRET')),'SUID_HELPER_UNUSABLE');
+ assert.equal(classify(new Error('apparmor denied SYNTHETIC_SECRET')),'APPARMOR_DENIED');
+ assert.equal(classify(new Error('exit signal=SIGABRT SYNTHETIC_SECRET')),'BROWSER_SIGABRT');
+ assert.equal(classify(new Error('exit signal=SIGSEGV SYNTHETIC_SECRET')),'BROWSER_SIGSEGV');
+});
