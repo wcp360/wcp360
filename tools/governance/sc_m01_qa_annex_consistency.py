@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Validate proposed QA review references, never execute product tests.
+"""Validate historical proposed QA references, never execute product tests.
 
 This tool does not approve mappings or release SC-M01 implementation.
+Current final QA v1.0 validation is outside this historical proposal check.
 """
 from __future__ import annotations
 
@@ -146,6 +147,8 @@ def verify(index: dict, index_sha: str, q133: dict, q66: dict,
     if q66.get("registry_counts", {}).get("product_tests_executed") != 0:
         raise ValueError("invented QA product execution")
     return {
+        "evidence_scope": "HISTORICAL_PROPOSAL_CORPUS_ONLY",
+        "current_final_qa_validation": "NOT_PERFORMED",
         "status": "P1_QA_REFERENCE_INTEGRITY_VERIFIED_NOT_PRODUCT_QA",
         "source_reference_count": 199,
         "api":86, "ipc":47, "security_negative":26, "browser_mapping_proposal":40,

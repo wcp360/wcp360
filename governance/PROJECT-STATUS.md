@@ -1,8 +1,54 @@
 # WCP360 — Project Status
 
+## Limited source-code resume — 2026-10-28
+
+MASTER authorization: `3fd2f8007baa49c2454cc89c0a5488a57c77911b` in `manifests/WCP360-BM-0001.md`.
+
+SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY.
+The owner-approved daemon toolchain addendum v1.0 (commit `1ff4c195e75dade00cda13215b92ffe7576637b7`, blob `f8608d6258f87b8c1099b9b3a7e32ec95c72dc27`) supplies F02/F04/F06/F07/F08 for this slice.
+
+Implementation is published in `SOURCE/daemon/` on draft PR #108. Follow that PR for exact candidate SHA and executed CI results. Independent E3 remains required before I1/R1 merge. No wider component, service, privileged operation, database or web surface is activated.
+
+Canonical specification gate = 8/8 accepted. SC-M02 = NOT AUTHORIZED. CODE-BASELINE = NONE.
+Earlier PAUSED / missing-toolchain statements below describe the state before this limited authorization.
+
+## MASTER canonical evidence acceptance — 2026-10-28
+
+CURRENT CANONICAL PUBLICATION = 8/8.
+CURRENT MASTER-ACCEPTED SPECIFICATION INPUTS = 8/8.
+DATABASE DB-MV01 = RESOLVED AT SPECIFICATION LEVEL.
+DATABASE DB-MV02 = RESOLVED AT SPECIFICATION LEVEL.
+
+Database owner-final v1.0 artifact: `specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md`.
+Owner commit: `c2d4f96594fd3be7200128fff23bcfe811e7fd60`.
+Exact blob verified at that commit and in main: `2660e057bad1d00592c57f354b1f3745ccccbe7d`.
+
+Final delta verified as exactly the TX-REV-01 canonical CONCURRENCY_CONFLICT correction and its QA assertion. CONCURRENT_MODIFICATION occurs only in the explicit rejection assertion. The 23 canonical API error codes, namespace-specific grammar, registry FKs and separate USER/ADMIN session tables/claims/runtime-access rules remain intact. The seven other accepted artifact blobs were rechecked unchanged in main.
+
+Owner publication remains OWNER RECONSTRUCTION / AMENDMENT, REAL DELTA, v1.0 retained with explicit owner rationale, historical content excluded. MASTER accepts this corrected artifact as the eighth specification input. Database publication issue #6 may close. This supersedes the earlier 7/8 state and pending DB-MV01/DB-MV02 findings below; those entries remain historical evidence only.
+
+Verification class: E2 publication/content/cross-contract verification. Product execution = NONE; no PASS/FAIL or independent E3 approval is claimed. No migration or DDL is generated. Audit findings and applicable independent-review obligations are not closed by this publication decision.
+
+SC-M01 = PAUSED — IMPLEMENTATION SLICE / RESUME DECISION PENDING.
+SC-M02 = NOT AUTHORIZED.
+CODE-BASELINE = NONE.
+
+Before separately authorizing SC-M01, MASTER must select the first foundation slice and verify its activated toolchain, contract, security and other owner decisions. The completed eight-artifact publication gate does not supply missing component decisions or authorize implementation automatically.
+
+
+---
+
+## Historical status record
+
+The dated sections below predate the 2026-10-28 acceptance above. Their 5/8 and missing-owner-publication statements are historical, not current gate state.
+
 **Reference date:** 2026-10-04  
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
+**Latest coordination refresh:** 2026-10-27 addendum (G1, NON-CANONICAL)
+**Current SC-M01 coordination snapshot:** [2026-10-27 readiness](SC-M01-CURRENT-READINESS-2026-10-27.md)
+
+> Sections below preserve the detailed 2026-10-04 project audit/status record. For subsequent publication and CI evidence, consult the 2026-10-27 snapshot; 2026-10-26 remains historical. No baseline or SC-M01 code gate is changed by that newer coordination file.
 
 ## 1. Baseline state
 
@@ -333,3 +379,44 @@ Current coordination additionally uses:
 - QA A01→A20 conformance evidence.
 
 The remaining progress is owner publication/harmonization, real independent review and actual GitHub enforcement, not another broad documentation audit.
+
+
+## 11. Coordination update — 2026-10-26
+
+Current evidence is indexed in `governance/SC-M01-CURRENT-READINESS-2026-10-26.md`.
+
+- Merged proposal/governance-only PRs **#83, #84, #85, #89** are `NON-CANONICAL`; E0+E2 publication per current merge policy, not domain-owner final approval.
+- Draft E1/research PRs **#86, #87, #88, #90** remain unmerged. Integrated PR #90 achieved **91/91 non-product reference/research tests** at its recorded head and CI run 40417038572; this is not production QA or E3.
+- Parent/privileged authorization ambiguity identified for **12 of 47** IPC operations and tracked in issue **#91**; no generic execution or parent authorization inferred from abstract Security expressions.
+- Database **#6**, QA **#7**, Engineering **#9** still require final owner-authored implementation artifacts.
+- `5 / 8` canonical files published; `SC-M01 PAUSED — TARGETED EVIDENCE`; `SC-M02 NOT AUTHORIZED`; `CODE-BASELINE NONE`.
+- All Audit/Architecture Review findings retain their pre-existing status unless independently verified and explicitly closed.
+
+This coordination update does not authorize implementation, modify `WCP360-BM-0001 FINAL` or promote historical/recovered content.
+
+
+## 12. Targeted SC-M01 addendum — 2026-10-27
+
+- QA owner signoff matrix P1 proposal **#93 MERGED into main** (`078bdf5d71ab71c9c47094fce4bf7c7f18d87a87`). **Not** the final Tests/QA owner canonical artifact.
+- IPC-B request/response framing **Go R&D #94** remains DRAFT/UNMERGED; E1 source-derived parsing tests + `go vet` succeeded in run `40420580435`. No real peer authentication, authorization, DB, socket or root effects; Go 1.24.13 runner is not an approved production F02 toolchain.
+- No change to `5/8`, Database #6 / QA #7 / Engineering #9 blockers, or `CODE-BASELINE = NONE`.
+- Precise context: see the 2026-10-27 addendum of `governance/SC-M01-CURRENT-READINESS-2026-10-26.md`.
+
+This is G1 coordination metadata and does not change any owner-final contract, implementation authorization or independent-review finding.
+
+
+## 13. Current priority closure index — 2026-10-27
+
+The latest **non-normative** readiness and ranked owner dependency table is:
+
+`governance/SC-M01-CURRENT-READINESS-2026-10-27.md`
+
+Confirmed G0/G1/P1 publication advances:
+- PR #95 P1/G1 owner decision material for C03/C06/C07 and the 12 open Security↔IPC parent bindings, merged as **NON-CANONICAL**.
+- PR #96 G0 historical recovered Database fragment index, 36 observed table sections from incomplete historical recovery; **not** the full owner-final DB contract.
+- Former PR #90 closed unmerged after unique Security/IPC checker/test code was moved byte-identically to focused draft PR #87. PR #87 E1 run 40474749578: 20+21=41 non-product tests PASS; E3 absent.
+- Current draft tool/research PR #42/#86/#87/#88/#94 remain unmerged and do not constitute executable WCP360 source baseline.
+
+The following remain OPEN and materially block SC-M01 readiness: #6 Database, #7 Tests/QA, #9 Engineering, #91 Security/API exact parent bindings and appropriate component contracts and independent review. Global gate remains `5/8`; `SC-M01 PAUSED`; `SC-M02 NOT AUTHORIZED`; `CODE-BASELINE NONE`.
+
+This update is G1 coordination. No requirement, canonical schema, security policy or API contract is silently changed.

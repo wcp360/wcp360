@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Read-only QA P1 single-file source-completeness check (NOT QA approval).
+"""Read-only historical QA P1 source-completeness check (NOT QA approval).
 
 Validates derived source relationships and owner-pending flags. It cannot
 determine whether proposed assertions are correct, approved or executable.
-This is repository tooling, not WCP360 product application code.
+This is repository tooling, not WCP360 product application code. The final
+QA v1.0 owner export is outside this historical proposal check.
 """
 from __future__ import annotations
 
@@ -294,6 +295,8 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
     if "P1 / P2 / P3" not in decision_text:
         raise ReviewEvidenceError("QA owner publication provenance options absent")
     return {
+        "evidence_scope":"HISTORICAL_PROPOSAL_CORPUS_ONLY",
+        "current_final_qa_validation":"NOT_PERFORMED",
         "status":"PASS_SOURCE_COMPLETENESS_ONLY_NONCANONICAL",
         "api_records":86,"ipc_records":47,"negative_labels":26,
         "web_mapping_proposals":40,"local_proposal_triage_labels":85,
@@ -341,9 +344,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(report,indent=2,sort_keys=True))
     else:
-        print("QA P1 owner-review file source-consistent: 199 case records, "
+        print("HISTORICAL QA P1 proposal source-consistent: 199 case records, "
               "85 triage labels, zero owner approvals, zero executed product tests; "
-              "NOT QA FINAL OR 6/8.")
+              "HISTORICAL 5/8 ONLY; CURRENT FINAL QA NOT VALIDATED.")
     return 0
 
 if __name__=="__main__":
