@@ -1,0 +1,103 @@
+"""Bounded, offline, non-root test runner. Exports only structured allowlisted results."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+import xml.etree.ElementTree as ET
+from safe_process import execute
+
+ROOT = Path(__file__).resolve().parents[2]
+OUT = Path('/evidence')
+REPORT = {'status': 'FAIL', 'scope': 'STANDALONE_ALPHA_ONLY', 'suites': []}
+
+
+def command(args, cwd=ROOT, seconds=180):
+    r = execute(args, cwd=cwd, seconds=seconds)
+    if r['returncode'] != 0 or r['timed_out'] or r['output_limited']:
+        raise RuntimeError('COMMAND_FAILED')
+    return r['data']
+
+
+def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
+    item = {'suite': name, 'status': 'FAIL'}
+    REPORT['suites'].append(item)
+    data = command(args, cwd=cwd, seconds=seconds)
+    if json_count is not None:
+        result = json.loads(data)
+        checks = result['checks']
+        if result['status'] != 'PASS' or len(checks) != json_count:
+            raise RuntimeError('COUNT_MISMATCH')
+        item['executed'] = len(checks)
+        if name == 'browser-sandboxed':
+            item['browser_version'] = result['browser_version']
+            item['sandbox'] = result['sandbox']
+    item['status'] = 'PASS'
+
+
+def main():
+    os.umask(0o077)
+    Path(os.environ['HOME']).mkdir(exist_ok=True)
+    assert os.getuid() == 10001
+    status = dict(line.split(':', 1) for line in Path('/proc/self/status').read_text().splitlines() if ':' in line)
+    assert int(status['CapEff'].strip(), 16) == 0
+    assert status['NoNewPrivs'].strip() == '1'
+    assert status['Seccomp'].strip() == '2'
+    assert {p.name for p in Path('/sys/class/net').iterdir()} == {'lo'}
+    lock = json.loads((ROOT/'tests/ci/toolchain.json').read_text())
+    lane = os.environ['FM_PHP_LANE']
+    actual_php = command(['php', '-r', 'echo PHP_VERSION;']).decode()
+    actual_node = command(['node', '--version']).decode().strip()
+    actual_composer = command(['composer', '--no-plugins', '--version', '--no-ansi']).decode().split()[2]
+    assert actual_php == lock['php'][lane]['version']
+    assert actual_node == lock['tools']['node']
+    assert actual_composer == lock['tools']['composer']
+    REPORT['environment'] = {
+        'php': actual_php, 'node': actual_node, 'composer': actual_composer,
+        'python': sys.version.split()[0], 'uid': os.getuid(), 'network': 'loopback-only',
+        'capabilities': 'none', 'no_new_privileges': True,
+        'php_extensions': json.loads(command(['php', '-r', 'echo json_encode(get_loaded_extensions());'])),
+        'composer_lock_sha256': hashlib.sha256((ROOT/'composer.lock').read_bytes()).hexdigest(),
+        'npm_lock_sha256': hashlib.sha256((ROOT/'tests/ci/package-lock.json').read_bytes()).hexdigest(),
+        'dpkg_inventory_sha256': hashlib.sha256(Path('/opt/dpkg-inventory.txt').read_bytes()).hexdigest(),
+    }
+    for e in ['json','fileinfo','session','ctype','iconv','filter','xml','dom','xmlwriter','libxml','mbstring','phar','tokenizer','zip']:
+        assert e in [s.lower() for s in REPORT['environment']['php_extensions']]
+    suite('harness-boundaries', ['python3', 'tests/ci/test_safe_process.py'])
+    suite('composer-validate', ['composer','--no-plugins','validate','--strict'])
+    suite('real-platform', ['composer','--no-plugins','check-platform-reqs'])
+    item={'suite':'php-lint','status':'FAIL'}; REPORT['suites'].append(item)
+    files=sorted(p for d in ['src','standalone','tests'] for p in (ROOT/d).rglob('*.php'))
+    assert files
+    for f in files: command(['php','-l',str(f)])
+    item.update(status='PASS',executed=len(files))
+    for f in ['resources/public/app.js','resources/public/pro.js','tests/browser.cjs']:
+        command(['node','--check',f])
+    suite('phpunit', ['php','vendor/bin/phpunit','--do-not-cache-result','--log-junit','/tmp/unit.xml'])
+    doc=ET.parse('/tmp/unit.xml')
+    leaf=[n for n in doc.iter('testsuite') if n.find('testsuite') is None]
+    numbers={k:sum(int(n.get(k,'0')) for n in leaf) for k in ['tests','assertions','failures','errors','skipped']}
+    assert numbers['tests'] >= 50 and numbers['assertions'] >= 122
+    assert numbers['failures'] == numbers['errors'] == numbers['skipped'] == 0
+    REPORT['suites'][-1].update(numbers)
+    suite('setup', ['python3','tests/setup_smoke.py'], json_count=5)
+    suite('http', ['python3','tests/http_smoke.py'], json_count=46)
+    suite('runtime-platform', ['composer','--no-plugins','check-platform-reqs','--no-dev'], cwd=Path('/runtime'))
+    suite('runtime-http-no-dev', ['python3','tests/http_smoke.py'], cwd=Path('/runtime'),json_count=46)
+    suite('runtime-setup-no-dev', ['python3','tests/setup_smoke.py'], cwd=Path('/runtime'),json_count=5)
+    suite('browser-sandboxed', ['node','tests/browser.cjs'], json_count=28, seconds=300)
+    REPORT['status']='PASS'
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception:
+        # No exception text, source lines, responses, credentials or raw child output in artifacts.
+        REPORT['failure']='TEST_GATE_FAILED'
+        if REPORT['suites']: REPORT['suites'][-1]['status']='FAIL'
+    finally:
+        OUT.mkdir(exist_ok=True)
+        (OUT/'results.json').write_text(json.dumps(REPORT,indent=2)+'\n')
+        print(json.dumps(REPORT))
+    sys.exit(0 if REPORT['status']=='PASS' else 1)

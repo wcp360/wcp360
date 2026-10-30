@@ -1,0 +1,48 @@
+name: File Manager standalone candidate
+on:
+  pull_request:
+    paths:
+      - 'WCP360_Extensions/WCP360-File-Manager/**'
+      - '.github/workflows/file-manager-standalone.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fm-standalone-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  standalone:
+    name: standalone-php-${{ matrix.php }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+    env:
+      FM_PHP_LANE: ${{ matrix.php }}
+      FM_CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      FM_EVIDENCE: ${{ runner.temp }}/fm-evidence
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Build candidate test environment from pinned inputs (cold cache)
+        id: build
+        run: python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py build
+      - name: Run offline tests as non-root with sandboxed Chromium
+        if: steps.build.outcome == 'success'
+        run: python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py test
+      - name: Query dependency advisories separately (network required)
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: python3 WCP360_Extensions/WCP360-File-Manager/tests/ci/host.py audit
+      - name: Retain structured evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fm-standalone-${{ matrix.php }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fm-evidence/*.json
+          if-no-files-found: warn
+          retention-days: 30
+# This workflow supplies candidate E1 only. No release, deployment, F01 or owner approval.
