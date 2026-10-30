@@ -93,6 +93,8 @@ The current repository/project status is maintained in:
 
 `governance/PROJECT-STATUS.md`
 
+For the latest reviewable SC-M01 owner priorities, unresolved 8/8 evidence and current non-production CI/research state, read [SC-M01 Current Readiness — 2026-10-27](governance/SC-M01-CURRENT-READINESS-2026-10-27.md). This coordination snapshot does not replace canonical owner contracts or authorize production coding.
+
 ## Publication verification — 2026-10-02
 
 See the [publication verification report](governance/publication/PUBLICATION-VERIFICATION-2026-10-02.md) for exact commits, paths, hashes, CI evidence and remaining source gaps.

@@ -1,13 +1,16 @@
 """Deterministic no-network tests of SC-M01 *worktree-only* artifact preflight."""
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import tempfile
 import unittest
 from pathlib import Path
 
 from sc_m01_preflight import (
-    ALLOWED_PREFIXES, REQUIRED_IDS, check_manifest, git_blob_sha, inspect, main,
+    ALLOWED_PREFIXES, DEFAULT_MANIFEST, REQUIRED_IDS, check_manifest,
+    git_blob_sha, inspect, main,
 )
 
 
@@ -129,6 +132,96 @@ class PreflightTests(unittest.TestCase):
                 "--require-all-pinned",
             ]), 2
         )
+
+
+class CurrentSnapshotTests(unittest.TestCase):
+    """Exercise published canonical bytes and strict CLI failure semantics."""
+
+    def setUp(self) -> None:
+        self.source_repo = Path(__file__).resolve().parents[2]
+        self.data = json.loads(
+            (self.source_repo / DEFAULT_MANIFEST).read_text(encoding="utf-8")
+        )
+        self.tmp = tempfile.TemporaryDirectory()
+        self.repo = Path(self.tmp.name)
+
+    def tearDown(self) -> None:
+        self.tmp.cleanup()
+
+    def copy_sources(self) -> None:
+        for entry in check_manifest(self.data):
+            source = (self.source_repo / entry["path"]).resolve()
+            target = (self.repo / entry["path"]).resolve()
+            self.assertTrue(source.is_relative_to(self.source_repo))
+            self.assertTrue(target.is_relative_to(self.repo))
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(source.read_bytes())
+        manifest = self.repo / DEFAULT_MANIFEST
+        manifest.parent.mkdir(parents=True, exist_ok=True)
+        manifest.write_text(json.dumps(self.data), encoding="utf-8")
+
+    def strict_report(self, repo: Path) -> tuple[int, dict]:
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = main([
+                "--repo", str(repo), "--format", "json", "--require-all-pinned",
+            ])
+        return code, json.loads(output.getvalue())
+
+    def assert_no_authority_claim(self, report: dict) -> None:
+        for field in (
+            "owner_approval_verified", "e3_independent_review_verified",
+            "source_code_gate_released",
+        ):
+            self.assertFalse(report[field], field)
+        self.assertEqual(report["implementation_authorization"], "NONE")
+
+    def test_default_current_snapshot_matches_eight_without_approval(self) -> None:
+        code, report = self.strict_report(self.source_repo)
+        self.assertEqual(code, 0)
+        self.assertEqual(report["exact_pins_matching"], 8)
+        self.assertEqual(report["physically_present_in_worktree"], 8)
+        self.assertTrue(report["fingerprint_preflight_complete"])
+        self.assertEqual(
+            report["manifest_source_main_sha"],
+            "580e9ed58286304ade30142caf9415f4b87c0c28",
+        )
+        self.assert_no_authority_claim(report)
+
+    def test_modified_final_database_fails_strict_cli(self) -> None:
+        self.copy_sources()
+        entry = next(e for e in self.data["artifacts"] if e["id"] == "DATABASE")
+        target = self.repo / entry["path"]
+        target.write_bytes(target.read_bytes() + b"\n")
+        code, report = self.strict_report(self.repo)
+        self.assertEqual(code, 2)
+        self.assertEqual(report["exact_pins_matching"], 7)
+        database = next(r for r in report["artifacts"] if r["id"] == "DATABASE")
+        self.assertEqual(database["status"], "HASH_MISMATCH")
+        self.assert_no_authority_claim(report)
+
+    def test_missing_final_qa_fails_strict_cli(self) -> None:
+        self.copy_sources()
+        entry = next(e for e in self.data["artifacts"] if e["id"] == "QA")
+        (self.repo / entry["path"]).unlink()
+        code, report = self.strict_report(self.repo)
+        self.assertEqual(code, 2)
+        self.assertEqual(report["exact_pins_matching"], 7)
+        qa = next(r for r in report["artifacts"] if r["id"] == "QA")
+        self.assertEqual(qa["status"], "NOT_PRESENT")
+        self.assert_no_authority_claim(report)
+
+    def test_historical_snapshot_still_has_only_five_configured_pins(self) -> None:
+        old = self.source_repo / (
+            "governance/verification/"
+            "SC-M01-CANONICAL-INPUT-FINGERPRINTS-2026-10-26.json"
+        )
+        report = inspect(
+            self.source_repo, json.loads(old.read_text(encoding="utf-8"))
+        )
+        self.assertEqual(report["exact_pins_matching"], 5)
+        self.assertFalse(report["fingerprint_preflight_complete"])
+        self.assert_no_authority_claim(report)
 
 
 if __name__ == "__main__":

@@ -24,5 +24,5 @@ jobs:
         run: python3 --version
       - name: Unit tests (no network or WCP daemon)
         run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_preflight.py' -v
-      - name: Report local pinned files (informational only)
-        run: python3 tools/governance/sc_m01_preflight.py --format json
+      - name: Require eight exact pinned inputs (not owner approval or E3)
+        run: python3 tools/governance/sc_m01_preflight.py --format json --require-all-pinned

@@ -5,9 +5,9 @@ Reference: `WCP360-BM-0001 FINAL / SC-M01 TARGETED EVIDENCE`
 ## Current status
 
 ```text
-CANONICAL EVIDENCE = 5 / 8
-SOURCE CODE = PAUSED
-SC-M01 = PAUSED — TARGETED EVIDENCE
+CANONICAL EVIDENCE = 8 / 8 ACCEPTED
+SOURCE CODE = STARTED ON DRAFT PR #108 — SOURCE/daemon/
+SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
@@ -18,10 +18,12 @@ CODE-BASELINE = NONE
 - [x] IPC Contract WCP360-IPC-B/1
 - [x] Permission Registry v1.0
 - [x] Security Baseline v1.0
-- [ ] DB Model v1.0 — owner final, exact file body import pending
-- [ ] Test Baseline v1.0 / SC-M01 requirements — final artifact publication/materialization pending
+- [x] DB Model v1.0 — corrected owner artifact accepted; blob 2660e057bad1d00592c57f354b1f3745ccccbe7d
+- [x] Test Baseline v1.0 / SC-M01 requirements — owner-final publication accepted
 - [x] DevOps Baseline v1.0
-- [ ] Engineering Ruleset ENG-WCP-RULESET-0001 v0.2 — owner final, exact file body import pending
+- [x] Engineering Ruleset ENG-WCP-RULESET-0001 v0.3 — successor to v0.2 explicitly accepted in manifest
+
+Latest MASTER evidence decision: `manifests/WCP360-BM-0001.md`, 2026-10-28. All eight publication inputs are accepted. Selected-slice F02/F04/F06/F07/F08 are accepted under MASTER limited-resume commit 3fd2f8007baa49c2454cc89c0a5488a57c77911b and owner toolchain addendum blob f8608d6258f87b8c1099b9b3a7e32ec95c72dc27. Draft PR #108 contains implementation and exact-run CI evidence. E3 remains required before merge; the conditions below continue to apply to any additional slice.
 
 ## Per-artifact acceptance test
 

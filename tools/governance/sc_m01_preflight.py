@@ -32,7 +32,7 @@ ALLOWED_PREFIXES = {
 }
 DEFAULT_MANIFEST = (
     "governance/verification/"
-    "SC-M01-CANONICAL-INPUT-FINGERPRINTS-2026-10-26.json"
+    "SC-M01-CANONICAL-INPUT-FINGERPRINTS-2026-10-30.json"
 )
 
 
@@ -151,7 +151,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--format", choices=("text", "json"), default="text")
     parser.add_argument(
         "--require-all-pinned", action="store_true",
-        help="return exit 2 unless all eight local artifacts match an approved pin",
+        help="return exit 2 unless all eight local artifacts match configured pins",
     )
     args = parser.parse_args(argv)
 
