@@ -5,6 +5,8 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+from safe_process import execute
+from reporting import write_report, build_summary
 
 ROOT=Path(__file__).resolve().parents[2]
 LOCK=json.loads((ROOT/'tests/ci/toolchain.json').read_text())
@@ -36,7 +38,10 @@ if sys.argv[1]=='build':
     gateway=Path('/tmp/fm-egress/gateway').read_text().strip()
     for name in ['HTTP_PROXY','HTTPS_PROXY','http_proxy','https_proxy']:
         args+=['--build-arg',name+'=http://'+gateway+':18080']
-    run(args+[str(ROOT)],timeout=1500)
+    built=execute(args+[str(ROOT)],seconds=1500)
+    receipt=build_summary(built)
+    write_report(OUT/'build.json',receipt);print(json.dumps(receipt))
+    if receipt['status']!='PASS':raise SystemExit(1)
     identity={'checked_out_sha':capture(['git','rev-parse','HEAD']),
               'parents':capture(['git','show','-s','--format=%P','HEAD']).split(),
               'candidate_sha':os.environ['FM_CANDIDATE_SHA'],

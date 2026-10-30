@@ -50,7 +50,7 @@ Le workflow ne reçoit aucun secret métier, token d'installation ou identifiant
 Chaque lane doit produire :
 
 - Identité : SHA candidat, SHA checkout et parents (merge synthétique PR), image ID construit, versions Docker/noyau, verrouillage et empreinte seccomp.
-- Résultats : contrôles du harnais (quinze tests de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
+- Résultats : contrôles du harnais (dix-sept tests de confidentialité/nettoyage et parsing), lint, validation Composer, PHPUnit (au moins 50 tests/122 assertions, aucun skip), setup (5), HTTP (46), HTTP/setup sans dépendances dev (46/5), navigateur (28), sandbox et version navigateur.
 - Audit : date, état, nombre de packages affectés/abandonnés ; un audit n'est pas une revue du code.
 
 Les compteurs JUnit proviennent de tous les éléments testcase (y compris les cas directement placés au-dessus de suites imbriquées). Ils sont enregistrés avant les assertions, même si PHPUnit sort en erreur. Les identifiants de cas sont SHA-256 tronqués de classname::name ; aucun message, chemin ou sortie de cas n’est exporté. Le cache PHPUnit est placé sous /tmp/phpunit-cache.
@@ -68,3 +68,9 @@ LocalBackend reste limité à un propriétaire et une racine privée exclusive. 
 ## Reproduction sur exécuteur jetable
 
 Le workflow racine constitue la procédure complète : checkout, réseau restreint, construction, tests, audit, restauration réseau et export. `host.py` exige désormais le reçu `/tmp/fm-egress/gateway` créé par la configuration réseau, sans mode permissif local. Une reproduction hors GitHub doit réimplémenter/faire revoir les mêmes limites et déclarer son identité ; ne pas simuler GITHUB_ACTIONS sur une machine de travail ou de production pour contourner le contrôle d'exécuteur jetable.
+
+## Provenance du delta régional MCR
+
+Le manifeste amd64 `d65108d1a8095d8b0c4a5e32bf1807a40a5ce90ff0c78473e1116b1c243235e8` référence le blob config `d8e19ba36e1441fcd3f8a6d3d84c1eeb713ed5f1f46476918b9c3c1c6e765ead`. Les redirections proviennent de GET HTTPS sur le registre primaire, sans accepter automatiquement la destination : westus observé lors de la préparation locale ; centralus observé job124362403834 ; eastus observé job124362404062 (run41143290937), refusés initialement et conservés comme preuve ; westeurope confirmé par vérification primaire complémentaire du coordinateur sur le même blob. Seuls ces noms exacts sont listés. La redirection Docker observée est production.cloudfront.docker.com. Aucun wildcard régional.
+
+Les diagnostics bruts de construction sont désormais également privés, car les erreurs du registre peuvent contenir une URL SAS temporaire. Seuls des codes fixes et l'état de construction sont exportés dans build.json. Les rapports navigateur d'échec sont limités à une étape/code allowlistés et un compteur ; aucune exception Chromium brute.

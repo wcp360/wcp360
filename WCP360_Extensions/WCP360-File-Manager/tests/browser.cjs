@@ -2,6 +2,7 @@
 const http=require('http');
 const fs=require('fs'),path=require('path'),cp=require('child_process'),assert=require('assert');
 const {chromium}=require(process.env.FM_PLAYWRIGHT_MODULE||'playwright');
+let ciStage='initialization',ciCompleted=0;
 (async()=>{
  const source=path.resolve(__dirname,'..'),tmp=fs.mkdtempSync('/tmp/fm-ui-');
  fs.cpSync(source,tmp,{recursive:true,filter:p=>!['vendor','var','.phpunit.cache'].includes(path.basename(p))});fs.symlinkSync(source+'/vendor',tmp+'/vendor');
@@ -13,19 +14,19 @@ const {chromium}=require(process.env.FM_PLAYWRIGHT_MODULE||'playwright');
  const server=cp.spawn('php',['-S','127.0.0.1:8879','-t','standalone/public','standalone/public/index.php'],{cwd:tmp,stdio:'ignore'});let browser;const checks=[];
  try{
  // The container must support the sandbox. No automatic unsandboxed fallback.
- const deadline=Date.now()+15000;
+ ciStage='php-readiness';const deadline=Date.now()+15000;
  for(;;){
   if(server.exitCode!==null)throw new Error('SERVER_EXITED');
   const ready=await new Promise(resolve=>{const r=http.get('http://127.0.0.1:8879/login',res=>{res.resume();resolve(res.statusCode===200);});r.setTimeout(500,()=>r.destroy());r.on('error',()=>resolve(false));});
   if(ready)break;if(Date.now()>deadline)throw new Error('SERVER_NOT_READY');await new Promise(r=>setTimeout(r,100));
  }
- browser=await chromium.launch({headless:true,channel:'chromium',chromiumSandbox:true,timeout:30000});
- const ciLock=JSON.parse(fs.readFileSync(path.join(__dirname,'ci/toolchain.json'),'utf8'));
+ ciStage='browser-launch';browser=await chromium.launch({headless:true,channel:'chromium',chromiumSandbox:true,timeout:30000});
+ ciStage='browser-version';const ciLock=JSON.parse(fs.readFileSync(path.join(__dirname,'ci/toolchain.json'),'utf8'));
  assert.strictEqual(browser.version(),ciLock.chromium.version);assert.strictEqual(require((process.env.FM_PLAYWRIGHT_MODULE||'playwright')+'/package.json').version,ciLock.playwright);
- const sandbox=await browser.newPage();await sandbox.goto('chrome://sandbox');
+ ciStage='sandbox-attestation';const sandbox=await browser.newPage();await sandbox.goto('chrome://sandbox');
  const sandboxText=await sandbox.locator('body').innerText();
  assert.match(sandboxText,/Namespace sandbox\s+Yes/i);assert.match(sandboxText,/Seccomp-BPF sandbox\s+Yes/i);await sandbox.close();const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
- await page.goto('http://127.0.0.1:8879/login');await page.screenshot({path:tmp+'/fm030-login.png',fullPage:true});await page.locator('[name=_username]').fill('tester');await page.locator('[name=_password]').fill('browser-test-password');await page.getByRole('button',{name:'Se connecter'}).click();
+ ciStage='ui';await page.goto('http://127.0.0.1:8879/login');await page.screenshot({path:tmp+'/fm030-login.png',fullPage:true});await page.locator('[name=_username]').fill('tester');await page.locator('[name=_password]').fill('browser-test-password');await page.getByRole('button',{name:'Se connecter'}).click();
  const rows=page.locator('#rows'),row=name=>rows.locator('tr').filter({has:page.getByRole('button',{name,exact:true})});
  const open=name=>rows.getByRole('button',{name,exact:true}).click();
  const select=async name=>{await row(name).locator('input[type=checkbox]').check();};
@@ -70,6 +71,6 @@ const {chromium}=require(process.env.FM_PLAYWRIGHT_MODULE||'playwright');
  await page.screenshot({path:tmp+'/fm030-desktop.png',fullPage:true});await page.setViewportSize({width:390,height:844});await page.screenshot({path:tmp+'/fm030-mobile.png',fullPage:true});assert.strictEqual(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks.push('mobile viewport no overflow');
  await page.locator('#optionsBtn').click();await page.locator('#optionsTabs').getByRole('button',{name:'Vue d’ensemble',exact:true}).click();await page.screenshot({path:tmp+'/fm030-options-mobile.png',fullPage:true});assert.strictEqual(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks.push('mobile Options viewport');await page.locator('#closeOptions').click();
  assert.deepStrictEqual(errors,[]);checks.push('no JavaScript runtime errors');console.log(JSON.stringify({status:'PASS',browser:'Chromium',browser_version:browser.version(),sandbox:{namespace:true,seccomp_bpf:true},count:checks.length,checks},null,2));
- }catch(e){if(browser){const pages=browser.contexts()[0]?.pages();if(pages?.[0])await pages[0].screenshot({path:tmp+'/fm030-failure.png',fullPage:true});}throw e;}
+ }catch(e){ciCompleted=checks.length;if(browser){const pages=browser.contexts()[0]?.pages();if(pages?.[0])await pages[0].screenshot({path:tmp+'/fm030-failure.png',fullPage:true});}throw e;}
  finally{try{if(browser)await browser.close();}finally{server.kill('SIGKILL');fs.rmSync(tmp,{recursive:true,force:true});}}
-})().catch(e=>{console.error('BROWSER_SUITE_FAILED');process.exit(1)});
+})().catch(e=>{const code=ciStage==='browser-launch'&&String(e.message).includes('Operation not permitted')?'NAMESPACE_DENIED':ciStage==='browser-launch'&&String(e.message).includes("Executable doesn't exist")?'BROWSER_BINARY_MISSING':'BROWSER_SUITE_FAILED';console.log(JSON.stringify({status:'FAIL',stage:ciStage,completed:ciCompleted,code}));process.exit(1)});

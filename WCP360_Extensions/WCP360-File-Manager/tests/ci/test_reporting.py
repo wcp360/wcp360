@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from reporting import audit_result, composer_version, write_report
+from reporting import audit_result, composer_version, write_report, build_summary, browser_failure
 from safe_process import execute
 
 
@@ -47,6 +47,17 @@ class ReportingTest(unittest.TestCase):
         report = audit_result(self.result(data))
         self.assertEqual(report['status'], 'FAIL')
         self.assertNotIn('SYNTHETIC_SECRET', json.dumps(report))
+
+    def test_build_failure_never_exports_signed_urls(self):
+        result={'returncode':1,'timed_out':False,'output_limited':False,'data':b'', 'private_stderr':b'Forbidden https://region.data.mcr.microsoft.com/blob?sig=SYNTHETIC_SECRET'}
+        report=build_summary(result)
+        self.assertEqual(report['diagnostic_codes'],['PROXY_OR_UPSTREAM_FORBIDDEN'])
+        self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
+
+    def test_browser_failure_schema_never_echoes_arbitrary_text(self):
+        result=browser_failure(b'{"stage":"SYNTHETIC_SECRET","code":"SYNTHETIC_SECRET","completed":0}')
+        self.assertNotIn('SYNTHETIC_SECRET',json.dumps(result))
+        self.assertEqual(result['browser_code'],'UNRECOGNIZED_REPORT')
 
     def test_report_readable_despite_private_umask(self):
         with tempfile.TemporaryDirectory() as d:

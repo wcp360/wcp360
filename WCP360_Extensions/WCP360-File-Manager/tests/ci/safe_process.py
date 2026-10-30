@@ -28,9 +28,12 @@ def execute(command, *, cwd=None, seconds=120):
         output.seek(0)
         # Bounded read; reject oversized diagnostics instead of leaking or truncating into PASS.
         data = output.read(4 * 1024 * 1024 + 1)
+        errors.seek(0)
+        private_errors=errors.read(4 * 1024 * 1024 + 1)
         return {
             'returncode': process.returncode,
             'timed_out': timed_out,
             'output_limited': size > 4 * 1024 * 1024,
             'data': data,
+            'private_stderr': private_errors,
         }

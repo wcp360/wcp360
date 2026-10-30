@@ -8,7 +8,7 @@ import platform
 import xml.etree.ElementTree as ET
 from safe_process import execute
 from network_probe import direct_denied
-from reporting import composer_version, write_report, junit_summary
+from reporting import composer_version, write_report, junit_summary, browser_failure
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path('/evidence')
@@ -25,7 +25,13 @@ def command(args, cwd=ROOT, seconds=180):
 def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
     item = {'suite': name, 'status': 'FAIL'}
     REPORT['suites'].append(item)
-    data = command(args, cwd=cwd, seconds=seconds)
+    result_process=execute(args,cwd=cwd,seconds=seconds)
+    item.update(exit_code=result_process['returncode'],timed_out=result_process['timed_out'],output_limited=result_process['output_limited'])
+    data=result_process['data']
+    if name=='browser-sandboxed' and result_process['returncode']!=0:
+        item.update(browser_failure(data))
+    if result_process['returncode']!=0 or result_process['timed_out'] or result_process['output_limited']:
+        raise RuntimeError('COMMAND_FAILED')
     if json_count is not None:
         result = json.loads(data)
         checks = result['checks']

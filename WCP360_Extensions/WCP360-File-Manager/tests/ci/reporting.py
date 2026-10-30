@@ -53,3 +53,25 @@ def junit_summary(path):
         identity=case.get('classname','')+'::'+case.get('name','')
         summary['cases'].append({'id':hashlib.sha256(identity.encode()).hexdigest()[:16],'status':state})
     return summary
+
+
+def build_summary(result):
+    # Registry errors can include signed blob URLs. Keep the entire raw build log private.
+    raw=result['data']+result.get('private_stderr',b'')
+    codes=[]
+    for needle,code in [(b'Forbidden','PROXY_OR_UPSTREAM_FORBIDDEN'),(b'Could not resolve','DNS_FAILED'),(b'Failed to fetch','APT_FETCH_FAILED'),(b'Unable to locate package','APT_PACKAGE_MISSING'),(b'did NOT match','CHECKSUM_MISMATCH'),(b'Connection refused','CONNECTION_REFUSED'),(b'Connection timed out','CONNECTION_TIMEOUT'),(b'No matching distribution','DEPENDENCY_MISSING')]:
+        if needle in raw:codes.append(code)
+    ok=result['returncode']==0 and not result['timed_out'] and not result['output_limited']
+    return {'status':'PASS' if ok else 'FAIL','exit_code':result['returncode'],'timed_out':result['timed_out'],'output_limited':result['output_limited'],'diagnostic_codes':codes}
+
+
+def browser_failure(data):
+    try:
+        result=json.loads(data)
+        stages={'initialization','php-readiness','browser-launch','browser-version','sandbox-attestation','ui'}
+        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED'}
+        if result.get('stage') not in stages or result.get('code') not in codes or type(result.get('completed')) is not int or not 0<=result['completed']<=28:
+            raise ValueError('SCHEMA')
+        return {'browser_stage':result['stage'],'browser_code':result['code'],'completed':result['completed']}
+    except (ValueError,TypeError,AttributeError):
+        return {'browser_code':'UNRECOGNIZED_REPORT'}

@@ -12,7 +12,10 @@
     "repo.packagist.org",
     "packagist.org",
     "api.github.com",
-    "codeload.github.com"
+    "codeload.github.com",
+    "eastus.data.mcr.microsoft.com",
+    "centralus.data.mcr.microsoft.com",
+    "westeurope.data.mcr.microsoft.com"
   ],
   "audit": [
     "repo.packagist.org",
