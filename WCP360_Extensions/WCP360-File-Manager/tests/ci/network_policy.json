@@ -4,7 +4,6 @@
     "auth.docker.io",
     "production.cloudfront.docker.com",
     "mcr.microsoft.com",
-    "westus.data.mcr.microsoft.com",
     "snapshot.debian.org",
     "nodejs.org",
     "getcomposer.org",
@@ -12,13 +11,14 @@
     "repo.packagist.org",
     "packagist.org",
     "api.github.com",
-    "codeload.github.com",
-    "eastus.data.mcr.microsoft.com",
-    "centralus.data.mcr.microsoft.com",
-    "westeurope.data.mcr.microsoft.com"
+    "codeload.github.com"
   ],
   "audit": [
     "repo.packagist.org",
     "packagist.org"
-  ]
+  ],
+  "acquisition_classes": [
+    "mcr-single-label"
+  ],
+  "owner_disposition": "https://github.com/yyogas/wcp360/pull/113#issuecomment-6535573110"
 }

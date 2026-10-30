@@ -68,8 +68,8 @@ def build_summary(result):
 def browser_failure(data):
     try:
         result=json.loads(data)
-        stages={'initialization','php-readiness','browser-launch','browser-version','sandbox-attestation','ui'}
-        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED'}
+        stages={'initialization','php-readiness','browser-launch','browser-version','browser-identity','sandbox-attestation','ui'}
+        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED','BROWSER_ABI_UNAVAILABLE','BROWSER_LIBRARY_MISSING','SANDBOX_UNAVAILABLE','CRASHPAD_CONFIGURATION','BROWSER_PERMISSION_DENIED','BROWSER_SIGTRAP'}
         if result.get('stage') not in stages or result.get('code') not in codes or type(result.get('completed')) is not int or not 0<=result['completed']<=28:
             raise ValueError('SCHEMA')
         return {'browser_stage':result['stage'],'browser_code':result['code'],'completed':result['completed']}

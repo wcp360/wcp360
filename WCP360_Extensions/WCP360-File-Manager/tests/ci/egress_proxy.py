@@ -2,6 +2,7 @@
 import ipaddress
 import json
 import os
+import re
 from pathlib import Path
 import select
 import signal
@@ -16,11 +17,18 @@ COUNTS={'acquisition':{},'audit':{},'denied':0}
 LOCK=threading.Lock()
 
 
-def allowed_target(authority, hosts):
+def allowed_target(authority, hosts, *, mcr_class=False):
     parts=authority.split(':')
-    if len(parts)!=2 or parts[1]!='443' or parts[0] not in hosts:
-        raise ValueError('DESTINATION_DENIED')
-    return parts[0]
+    if len(parts)!=2 or parts[1]!='443':raise ValueError('DESTINATION_DENIED')
+    host=parts[0]
+    regional=mcr_class and re.fullmatch(r'[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.data\.mcr\.microsoft\.com',host) is not None
+    if host not in hosts and not regional:raise ValueError('DESTINATION_DENIED')
+    return host
+
+
+def validate_addresses(addresses):
+    if not addresses or any(not ipaddress.ip_address(a[4][0]).is_global for a in addresses):
+        raise ValueError('ADDRESS_DENIED')
 
 
 class Proxy(socketserver.StreamRequestHandler):
@@ -32,14 +40,14 @@ class Proxy(socketserver.StreamRequestHandler):
             if len(line)>8192: raise ValueError('REQUEST_LIMIT')
             method,authority,version=line.decode('ascii').strip().split(' ')
             if method!='CONNECT' or version not in ('HTTP/1.0','HTTP/1.1'):raise ValueError('METHOD')
-            host=allowed_target(authority,POLICY[phase])
+            host=allowed_target(authority,POLICY[phase],mcr_class=phase=='acquisition' and POLICY.get('acquisition_classes')==['mcr-single-label'])
             total=0
             while True:
                 line=self.rfile.readline(8193);total+=len(line)
                 if total>16384 or not line:raise ValueError('HEADERS')
                 if line in (b'\r\n',b'\n'):break
             addresses=socket.getaddrinfo(host,443,type=socket.SOCK_STREAM)
-            if not addresses or any(not ipaddress.ip_address(a[4][0]).is_global for a in addresses):raise ValueError('ADDRESS_DENIED')
+            validate_addresses(addresses)
             # Pin the resolved address for this connection; do not resolve again after validation.
             upstream=None
             for family,kind,proto,_,address in addresses:
@@ -73,7 +81,7 @@ class Server(socketserver.ThreadingTCPServer):
 
 
 def stop(*args):
-    # Hostnames come only from the checked-in allowlist; no URLs, headers or credentials.
+    # Hostnames match the checked-in exact list or approved single-label MCR class; no URLs, headers or credentials.
     Path(sys.argv[2]).write_text(json.dumps(COUNTS,sort_keys=True)+'\n')
     os._exit(0)
 

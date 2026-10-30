@@ -8,6 +8,7 @@ import socket
 import subprocess
 import sys
 import time
+from network_probe import direct_denied
 
 HERE=Path(__file__).resolve().parent
 STATE=Path('/tmp/fm-egress')
@@ -62,11 +63,8 @@ def setup():
     ipt('iptables','-D','FORWARD','-j','FM_FORWARD');ipt('iptables','-I','FORWARD','1','-j','FM_FORWARD')
     gateway=subprocess.check_output(['docker','network','inspect','bridge','--format={{(index .IPAM.Config 0).Gateway}}'],text=True).strip()
     (STATE/'gateway').write_text(gateway)
-    try:
-        with socket.create_connection(('1.1.1.1',443),timeout=2):pass
-    except OSError:pass
-    else:raise RuntimeError('DIRECT_DAEMON_EGRESS_OPEN')
-    print(json.dumps({'network_policy':'ENFORCED','proxy_uid':int(PROXY_UID),'direct_container_egress':'DENY','direct_daemon_egress':'DENY'}))
+    probes=direct_denied()
+    print(json.dumps({'network_policy':'ENFORCED','proxy_uid':int(PROXY_UID),'direct_container_egress':'DENY','direct_daemon_egress':'DENY','root_probes':probes}))
 
 
 def cleanup():

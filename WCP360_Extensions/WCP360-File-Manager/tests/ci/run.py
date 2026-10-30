@@ -40,6 +40,7 @@ def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
         item['executed'] = len(checks)
         if name == 'browser-sandboxed':
             item['browser_version'] = result['browser_version']
+            item['browser_uid'] = result['browser_uid']
             item['sandbox'] = result['sandbox']
     item['status'] = 'PASS'
 
@@ -119,6 +120,7 @@ def main():
     suite('runtime-platform', ['composer','--no-plugins','check-platform-reqs','--no-dev'], cwd=Path('/runtime'))
     suite('runtime-http-no-dev', ['python3','tests/http_smoke.py'], cwd=Path('/runtime'),json_count=46)
     suite('runtime-setup-no-dev', ['python3','tests/setup_smoke.py'], cwd=Path('/runtime'),json_count=5)
+    suite('browser-diagnostic-fixtures', ['node','--test','tests/ci/browser_diagnostics.test.cjs'])
     suite('browser-sandboxed', ['node','tests/browser.cjs'], json_count=28, seconds=300)
     REPORT['status']='PASS'
 

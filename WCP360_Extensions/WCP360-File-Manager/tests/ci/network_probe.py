@@ -5,10 +5,11 @@ from urllib.error import HTTPError
 
 
 def direct_denied():
-    try:
-        with socket.create_connection(('1.1.1.1',443),timeout=2):pass
-    except OSError:pass
-    else:raise RuntimeError('DIRECT_EGRESS_OPEN')
+    for address in [('1.1.1.1',443),('2606:4700:4700::1111',443)]:
+        try:
+            with socket.create_connection(address,timeout=2):pass
+        except OSError:pass
+        else:raise RuntimeError('DIRECT_EGRESS_OPEN')
     with socket.socket(socket.AF_INET,socket.SOCK_DGRAM) as s:
         s.settimeout(2)
         # DNS query for example.com A, sent to an external resolver (no system resolver fallback).
@@ -16,7 +17,7 @@ def direct_denied():
         try:s.sendto(packet,('8.8.8.8',53));s.recvfrom(512)
         except OSError:pass
         else:raise RuntimeError('DIRECT_DNS_OPEN')
-    return {'external_tcp_blocked':True,'external_dns_blocked':True}
+    return {'external_tcp_blocked':True,'external_ipv4_tcp_blocked':True,'external_ipv6_tcp_blocked':True,'external_dns_blocked':True}
 
 
 def proxy_probe(proxy):
