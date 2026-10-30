@@ -78,15 +78,7 @@ sha256sum "$output/wcpd" > "$output/binary.sha256"
 pass
 
 gate=daemon-smoke
-"$output/wcpd" --check > "$output/smoke-status.json"
-test "$(cat "$output/smoke-status.json")" = '{"component":"wcpd","mode":"inert-foundation","control_transport":"disabled","privileged_operations":"disabled"}'
-set +e
-"$output/wcpd" --listen=forbidden > "$output/rejected.stdout" 2> "$output/rejected.stderr"
-rejected=$?
-set -e
-test "$rejected" = 2
-test ! -s "$output/rejected.stdout"
-test "$(cat "$output/rejected.stderr")" = 'wcpd: unsupported arguments; use --help'
+sh SOURCE/daemon/tools/check-cli.sh
 pass
 
 gate=daemon-reproducible-build

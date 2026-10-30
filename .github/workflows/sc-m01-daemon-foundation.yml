@@ -181,7 +181,7 @@ jobs:
           if test -f "$task_dir/out/sc-m01/daemon/gates.tsv"; then
             cat "$task_dir/out/sc-m01/daemon/gates.tsv"
           fi
-          for report in negative-gates.tsv gofmt.txt vet.txt unit.jsonl vulnerability.txt binary.sha256 provenance.txt scanner-bootstrap.txt scanner-module-verify.txt scanner.sha256 scanner-isolation.txt scanner-firewall-counters.txt scanner-host-firewall-counters.txt scanner-linked-modules.txt; do
+          for report in cli-process.tsv negative-gates.tsv gofmt.txt vet.txt unit.jsonl vulnerability.txt binary.sha256 provenance.txt scanner-bootstrap.txt scanner-module-verify.txt scanner.sha256 scanner-isolation.txt scanner-firewall-counters.txt scanner-host-firewall-counters.txt scanner-linked-modules.txt; do
             if test -f "$task_dir/out/sc-m01/daemon/$report"; then
               printf '\nReport: %s\n' "$report"
               tail -n 80 "$task_dir/out/sc-m01/daemon/$report"
