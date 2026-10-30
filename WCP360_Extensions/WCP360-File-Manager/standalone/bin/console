@@ -1,0 +1,5 @@
+#!/usr/bin/env php
+<?php
+require dirname(__DIR__).'/bootstrap.php';
+$kernel=new Wcp360\FileManager\Standalone\Kernel('prod',false);
+(new Symfony\Bundle\FrameworkBundle\Console\Application($kernel))->run();

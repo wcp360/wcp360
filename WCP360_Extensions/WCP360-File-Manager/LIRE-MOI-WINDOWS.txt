@@ -1,0 +1,64 @@
+WCP360 FILE MANAGER - TEST AVEC LE PHP DE XAMPP
+Version 0.3.0 alpha Pro - paquet avec dependances incluses
+
+1. Extrayez COMPLETEMENT ce ZIP dans un nouveau dossier, par exemple :
+   C:\WCP360\FileManager
+   Evitez htdocs, OneDrive et Program Files pour ce test.
+   Ne fusionnez pas ce ZIP avec votre ancien dossier.
+
+2. Double-cliquez sur DEMARRER-WINDOWS.bat.
+   Le script cherche PHP dans C:\xampp, D:\xampp, E:\xampp puis dans PATH.
+   Si besoin, il vous demande le chemin de votre php.exe.
+
+3. Au premier lancement, choisissez un identifiant (Entree = admin).
+   COPIEZ LE MOT DE PASSE AFFICHE et conservez-le.
+   Aucun mot de passe commun ni compte preinstalle n'est inclus.
+
+4. Quand la fenetre indique que le serveur est demarre, ouvrez :
+   http://127.0.0.1:8088/
+
+5. Connectez-vous avec l'identifiant et le mot de passe affiches.
+   Testez + Fichier, + Dossier, puis les cases de selection et Copier/Coller.
+   Le clic droit ou le bouton ... ouvre les actions. La vue Grille est disponible.
+
+Gardez la fenetre noire ouverte pendant le test. Ctrl+C pour arreter.
+Pour relancer : double-cliquez sur le meme fichier BAT. Votre configuration
+et vos fichiers sont conserves dans standalone\var.
+
+PAS BESOIN de demarrer Apache ou MySQL dans XAMPP.
+PAS BESOIN d'installer Composer : le dossier vendor est inclus.
+Ne pas ouvrir localhost/wcp360-file-manager ni index.html pour utiliser l'app.
+Le script utilise PHP de XAMPP, avec son propre serveur local sur le port 8088.
+
+PREREQUIS
+PHP 8.2 ou plus recent. Le diagnostic indique votre version et le php.ini utilise.
+Si extension fileinfo manquante : ouvrez le php.ini indique, recherchez
+;extension=fileinfo et retirez le point-virgule, enregistrez, puis relancez BAT.
+Ne modifiez pas d'autres parametres au hasard.
+
+SI UNE ERREUR APPARAIT
+La fenetre reste ouverte : copiez le texte ou envoyez une capture de l'erreur.
+Si port 8088 occupe : fermez l'ancienne fenetre de ce gestionnaire.
+Si la connexion au site est refusee : la fenetre serveur doit rester ouverte.
+
+IMPORTANT
+Version pour essais locaux, pas pour hebergement public ou multi-tenant.
+Le serveur ecoute seulement 127.0.0.1. Aucun fichier systeme ou dossier personnel
+n'est expose par defaut. Le dossier gere commence vide.
+Les tests PHP/API ont ete executes sous Linux/PHP 8.3. L'execution native
+Windows et le double-clic BAT restent a verifier sur votre PC.
+
+MISE A JOUR DEPUIS 0.1.1 : voir MISE-A-JOUR.txt avant de copier votre configuration.
+
+OPTIONS PRO
+Cliquez sur Options en haut a droite. Selectionnez un seul fichier/dossier
+pour CHMOD, historique, instantane ou partage.
+Sous Windows, CHMOD Linux et UID/GID ne sont pas applicables : ils ne sont
+pas simules. Le quota est applicatif, pas un quota NTFS/Linux.
+Pour l'instantane ZIP, activez extension=zip dans le php.ini si necessaire.
+Sur 127.0.0.1, un lien partage ne fonctionne que depuis votre PC. Le partage
+externe exige une instance deployee en HTTPS avec acces reseau controle.
+Le bouton Verrouiller se trouve dans l'editeur. Le verrou expire apres
+15 minutes sans renouvellement ; fermez normalement l'editeur pour le liberer.
+Pour liberer l'espace de la corbeille : selectionnez les elements puis clic
+droit (ou ...) > Supprimer definitivement. Cette action n'est pas reversible.

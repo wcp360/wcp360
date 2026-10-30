@@ -1,0 +1,10 @@
+PHPUnit 10.5.66 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.6
+Configuration: /tmp/wcp360-file-manager-v030/phpunit.xml
+
+..................................................                50 / 50 (100%)
+
+Time: 00:01.087, Memory: 28.00 MB
+
+OK (50 tests, 122 assertions)

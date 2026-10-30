@@ -1,0 +1,4 @@
+/vendor/
+/standalone/var/
+/standalone/.env.local
+/.phpunit.cache/

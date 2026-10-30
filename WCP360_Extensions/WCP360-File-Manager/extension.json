@@ -1,0 +1,18 @@
+{
+  "name": "wcp360/file-manager",
+  "version": "0.3.0-alpha-pro",
+  "status": "development",
+  "runtime": {
+    "php": "^8.2",
+    "symfony": "^7.4"
+  },
+  "modes": {
+    "standalone": "implemented-single-owner-private-storage",
+    "symfony": "host-adapter-required",
+    "wcp360": "blocked-pending-contracts-and-adapter"
+  },
+  "privileged_operations": [],
+  "public_distribution_candidate": true,
+  "official_wcp360_baseline": false,
+  "target": "Local testing; Windows launcher included; Windows execution unverified"
+}

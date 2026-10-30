@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/tmp/wcp360-file-manager-v030/phpunit.xml" tests="50" assertions="122" errors="0" failures="0" skipped="0" time="1.083828">
+    <testsuite name="File Manager" tests="50" assertions="122" errors="0" failures="0" skipped="0" time="1.083828">
+      <testsuite name="LocalBackendTest" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" tests="50" assertions="122" errors="0" failures="0" skipped="0" time="1.083828">
+        <testcase name="testCreateSaveConflictAndDownload" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="21" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.006349"/>
+        <testsuite name="LocalBackendTest::testInvalidPaths" tests="19" assertions="19" errors="0" failures="0" skipped="0" time="0.005058">
+          <testcase name="testInvalidPaths with data set #0" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000367"/>
+          <testcase name="testInvalidPaths with data set #1" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000329"/>
+          <testcase name="testInvalidPaths with data set #2" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000244"/>
+          <testcase name="testInvalidPaths with data set #3" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000221"/>
+          <testcase name="testInvalidPaths with data set #4" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000208"/>
+          <testcase name="testInvalidPaths with data set #5" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000283"/>
+          <testcase name="testInvalidPaths with data set #6" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000220"/>
+          <testcase name="testInvalidPaths with data set #7" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000322"/>
+          <testcase name="testInvalidPaths with data set #8" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000254"/>
+          <testcase name="testInvalidPaths with data set #9" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000220"/>
+          <testcase name="testInvalidPaths with data set #10" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000343"/>
+          <testcase name="testInvalidPaths with data set #11" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000240"/>
+          <testcase name="testInvalidPaths with data set #12" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000255"/>
+          <testcase name="testInvalidPaths with data set #13" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000219"/>
+          <testcase name="testInvalidPaths with data set #14" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000212"/>
+          <testcase name="testInvalidPaths with data set #15" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000253"/>
+          <testcase name="testInvalidPaths with data set #16" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000226"/>
+          <testcase name="testInvalidPaths with data set #17" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000430"/>
+          <testcase name="testInvalidPaths with data set #18" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="32" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000212"/>
+        </testsuite>
+        <testcase name="testSiblingPrefixAndSymlinks" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="33" class="LocalBackendTest" classname="LocalBackendTest" assertions="3" time="0.000352"/>
+        <testcase name="testDanglingSymlink" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="41" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000244"/>
+        <testcase name="testHardlinks" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="43" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000220"/>
+        <testcase name="testTenantAndSubjectAndReadonly" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="45" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.000536"/>
+        <testcase name="testRenameTrashRestoreCollision" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="51" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.001385"/>
+        <testcase name="testEmptyDirectoryRestore" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="63" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000696"/>
+        <testcase name="testNonEmptyDirectoryAndRoot" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="65" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.001015"/>
+        <testcase name="testNoOverwriteAndMissingParent" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="75" class="LocalBackendTest" classname="LocalBackendTest" assertions="2" time="0.000520"/>
+        <testcase name="testTextAndUploadLimits" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="81" class="LocalBackendTest" classname="LocalBackendTest" assertions="5" time="0.009731"/>
+        <testcase name="testDotfiles" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="89" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000461"/>
+        <testcase name="testPaginationAndSearch" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="91" class="LocalBackendTest" classname="LocalBackendTest" assertions="3" time="0.004268"/>
+        <testcase name="testCorbeilleIdentifierTraversal" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="93" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000345"/>
+        <testcase name="testWindowsBoundaryNormalization" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="95" class="LocalBackendTest" classname="LocalBackendTest" assertions="2" time="0.000301"/>
+        <testcase name="testNestedStateRejected" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="101" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.000557"/>
+        <testcase name="testDirectoryCopyAndOriginalIndependence" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="103" class="LocalBackendTest" classname="LocalBackendTest" assertions="6" time="0.001737"/>
+        <testcase name="testCopyRejectsLinksWithoutLeavingStaging" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="115" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.000501"/>
+        <testcase name="testCopySizeAndDepthLimits" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="122" class="LocalBackendTest" classname="LocalBackendTest" assertions="3" time="0.004821"/>
+        <testcase name="testHiddenDirectoryFilterAndProperties" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="129" class="LocalBackendTest" classname="LocalBackendTest" assertions="9" time="0.000962"/>
+        <testcase name="testChmodAdminAndRecursiveFilter" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="142" class="LocalBackendTest" classname="LocalBackendTest" assertions="7" time="0.000906"/>
+        <testcase name="testQuotaPreventsDataWrite" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="153" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.005162"/>
+        <testcase name="testVersionRestoreAndOptimisticConcurrency" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="161" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.001601"/>
+        <testcase name="testVersionRetentionBound" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="169" class="LocalBackendTest" classname="LocalBackendTest" assertions="1" time="0.009468"/>
+        <testcase name="testContentSearchNoSnippetsAndLinkEscape" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="174" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.000894"/>
+        <testcase name="testLockBlocksOtherEditorAndParentMutation" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="179" class="LocalBackendTest" classname="LocalBackendTest" assertions="3" time="0.001228"/>
+        <testcase name="testAuditIncludesPathIpButNoSecrets" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="187" class="LocalBackendTest" classname="LocalBackendTest" assertions="3" time="0.000684"/>
+        <testcase name="testSnapshotContents" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="192" class="LocalBackendTest" classname="LocalBackendTest" assertions="2" time="0.001045"/>
+        <testcase name="testProtectedShareIsImmutableAndRevocable" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="197" class="LocalBackendTest" classname="LocalBackendTest" assertions="3" time="0.168321"/>
+        <testcase name="testShareDownloadLimitAndThrottling" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="205" class="LocalBackendTest" classname="LocalBackendTest" assertions="7" time="0.686690"/>
+        <testcase name="testTrashPurgeRequiresAdminAndRemovesTree" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="213" class="LocalBackendTest" classname="LocalBackendTest" assertions="4" time="0.000934"/>
+        <testcase name="testLongSharePasswordsAreNotTruncated" file="/tmp/wcp360-file-manager-v030/tests/LocalBackendTest.php" line="221" class="LocalBackendTest" classname="LocalBackendTest" assertions="2" time="0.166838"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

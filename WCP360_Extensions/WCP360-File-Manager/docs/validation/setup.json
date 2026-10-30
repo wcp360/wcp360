@@ -1,0 +1,1 @@
+{"status": "PASS", "checks": ["setup generation", "generated password verifies", "existing setup protected", "space in path", "relocation safe"]}

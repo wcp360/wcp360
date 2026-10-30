@@ -1,0 +1,3 @@
+# This package is launched by DEMARRER-WINDOWS.bat on loopback.
+# Prevent accidental source/config exposure if extracted into Apache htdocs.
+Require all denied
