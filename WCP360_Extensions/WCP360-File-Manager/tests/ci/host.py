@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[2]
 LOCK=json.loads((ROOT/'tests/ci/toolchain.json').read_text())
 LANE=os.environ['FM_PHP_LANE']
 assert LANE in LOCK['php']
-OUT=Path(os.environ['FM_EVIDENCE']).resolve()
+OUT=Path(os.environ.get('FM_EVIDENCE', str(Path(os.environ.get('RUNNER_TEMP','/tmp'))/'fm-evidence'))).resolve()
 OUT.mkdir(parents=True,exist_ok=True);OUT.chmod(0o777)
 IMAGE='fm-ci:'+LANE
 NAME='fm-test-'+os.environ.get('GITHUB_RUN_ID','local')+'-'+LANE
