@@ -92,9 +92,15 @@ def browser_failure(data):
         for key in ['fatal','check','sandbox','unclassified_fatal']:
             if type(fatal.get(key)) is bool:filtered[key]=fatal[key]
         from pathlib import Path
-        components=json.loads((Path(__file__).parent/'chromium_diagnostic_sources.json').read_text())['components']
+        registry=json.loads((Path(__file__).parent/'chromium_diagnostic_sources.json').read_text());components=registry['components']
         sites=fatal.get('sites',[])
         filtered['sites']=[{'component':s['component'],'line':s['line']} for s in sites[:12] if isinstance(s,dict) and s.get('component') in components and type(s.get('line')) is int and 0<s['line']<=20000] if isinstance(sites,list) else []
+        raw=fatal.get('raw_check_codes',[])
+        filtered['raw_check_codes']=[c for c in raw[:6] if isinstance(c,str) and c in registry['raw_checks']] if isinstance(raw,list) else []
+        exits=fatal.get('zygote_exit_codes',[])
+        filtered['zygote_exit_codes']=[c for c in exits[:4] if type(c) is int and -255<=c<=255] if isinstance(exits,list) else []
+        sites=fatal.get('check_sites',[])
+        filtered['check_sites']=[{'component':s['component'],'line':s['line']} for s in sites[:12] if isinstance(s,dict) and s.get('component') in components and type(s.get('line')) is int and 0<s['line']<=20000] if isinstance(sites,list) else []
         report['fatal']=filtered
         return report
     except (ValueError,TypeError,AttributeError):

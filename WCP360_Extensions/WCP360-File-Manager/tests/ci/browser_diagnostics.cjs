@@ -30,7 +30,7 @@ module.exports.metadata=function(error){
 
 module.exports.fatal=function(error){
  const text=String(error?.message||'');
- const components=require('./chromium_diagnostic_sources.json').components;
+ const registry=require('./chromium_diagnostic_sources.json'),components=registry.components;
  const sites=[];
  for(const [component,source] of Object.entries(components)){
   const basename=source.split('/').at(-1).replaceAll('.','\\.');
@@ -39,6 +39,16 @@ module.exports.fatal=function(error){
    const line=Number(match[1]);if(line>0&&line<=20000&&sites.length<12)sites.push({component,line});
   }
  }
+ const raw_check_codes=Object.entries(registry.raw_checks).filter(([code,condition])=>text.includes('Check failed: '+condition)).map(([code])=>code);
+ const zygote_exit_codes=[...new Set([...text.matchAll(/Zygote process exited prematurely with exit code (-?[0-9]{1,3})/g)].map(m=>Number(m[1])).filter(n=>n>=-255&&n<=255))].slice(0,4);
+ const check_sites=[];
+ for(const line of text.split('\n').filter(l=>/Check failed:|RAW_CHECK|CHECK failed:/.test(l))){
+  for(const [component,source] of Object.entries(components)){
+   const basename=source.split('/').at(-1).replaceAll('.','\\.');
+   const match=line.match(new RegExp(basename+'[:(]([0-9]{1,5})'));
+   if(match&&Number(match[1])>0&&Number(match[1])<=20000&&check_sites.length<12)check_sites.push({component,line:Number(match[1])});
+  }
+ }
  const fatal=/\bFATAL\b|fatal error|Fatal glibc/.test(text);
- return {fatal,check:/Check failed:|CHECK failed:/.test(text),sandbox:/sandbox/i.test(text),sites,unclassified_fatal:fatal&&sites.length===0};
+ return {fatal,check:/Check failed:|CHECK failed:/.test(text),sandbox:/sandbox/i.test(text),sites,check_sites,raw_check_codes,zygote_exit_codes,unclassified_fatal:fatal&&sites.length===0};
 };

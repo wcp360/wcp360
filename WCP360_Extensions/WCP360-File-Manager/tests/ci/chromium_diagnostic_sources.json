@@ -13,6 +13,16 @@
     "PLATFORM_THREAD": "base/threading/platform_thread_posix.cc",
     "PROCESS_LAUNCH": "base/process/launch_posix.cc",
     "SHARED_MEMORY": "base/memory/platform_shared_memory_region_posix.cc",
-    "BROWSER_MAIN_LINUX": "chrome/browser/chrome_browser_main_linux.cc"
-  }
+    "BROWSER_MAIN_LINUX": "chrome/browser/chrome_browser_main_linux.cc",
+    "NAMESPACE_UTILS": "sandbox/linux/services/namespace_utils.cc"
+  },
+  "raw_checks": {
+    "RAW_CHROOT_FDINFO": "sys_chroot(\"/proc/self/fdinfo/\") == 0",
+    "RAW_CHDIR_ROOT": "chdir(\"/\") == 0",
+    "RAW_DENY_SETGROUPS": "NamespaceUtils::DenySetgroups()",
+    "RAW_WRITE_UID_MAP": "NamespaceUtils::WriteToIdMapFile(\"/proc/self/uid_map\", uid_)",
+    "RAW_WRITE_GID_MAP": "NamespaceUtils::WriteToIdMapFile(\"/proc/self/gid_map\", gid_)",
+    "RAW_CLOSE_ID_MAP": "IGNORE_EINTR(close(fd)) == 0"
+  },
+  "raw_check_format_source": "base/check.h (RAW_CHECK uses only a stringified condition, without source location)"
 }

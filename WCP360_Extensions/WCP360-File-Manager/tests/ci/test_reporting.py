@@ -74,6 +74,13 @@ class ReportingTest(unittest.TestCase):
         self.assertEqual(report['fatal']['sites'],[{'component':'ZYGOTE_HOST','line':208}])
         self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
 
+    def test_child_checks_and_exit_codes_reject_arbitrary_values(self):
+        data={'stage':'browser-launch','code':'BROWSER_SIGABRT','completed':0,'fatal':{'raw_check_codes':['RAW_CHROOT_FDINFO','SYNTHETIC_SECRET'],'zygote_exit_codes':[134,'SYNTHETIC_SECRET',99999],'check_sites':[{'component':'NAMESPACE_UTILS','line':42,'text':'SYNTHETIC_SECRET'}]}}
+        report=browser_failure(json.dumps(data).encode())
+        self.assertEqual(report['fatal']['raw_check_codes'],['RAW_CHROOT_FDINFO'])
+        self.assertEqual(report['fatal']['zygote_exit_codes'],[134])
+        self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
+
     def test_report_readable_despite_private_umask(self):
         with tempfile.TemporaryDirectory() as d:
             old = os.umask(0o077)

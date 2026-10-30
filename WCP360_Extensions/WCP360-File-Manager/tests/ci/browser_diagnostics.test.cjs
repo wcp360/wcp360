@@ -30,3 +30,10 @@ test('fatal sites use a reviewed static source registry, never raw messages',()=
  assert(unknown.unclassified_fatal);assert.deepEqual(unknown.sites,[]);
  assert(!JSON.stringify(unknown).includes('SYNTHETIC_SECRET'));
 });
+
+test('child RAW_CHECK and zygote exits export only static codes and bounded integers',()=>{
+ const e=new Error('Check failed: sys_chroot("/proc/self/fdinfo/") == 0\nZygote process exited prematurely with exit code 134\nSYNTHETIC_SECRET https://example.test/?sig=SYNTHETIC_SECRET');
+ const d=classify.fatal(e);assert.deepEqual(d.raw_check_codes,['RAW_CHROOT_FDINFO']);assert.deepEqual(d.zygote_exit_codes,[134]);
+ assert(!JSON.stringify(d).includes('/proc/'));assert(!JSON.stringify(d).includes('SYNTHETIC_SECRET'));
+ assert.deepEqual(classify.fatal(new Error('Check failed: SYNTHETIC_SECRET')).raw_check_codes,[]);
+});
