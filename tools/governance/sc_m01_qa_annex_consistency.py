@@ -148,6 +148,7 @@ def verify(index: dict, index_sha: str, q133: dict, q66: dict,
         raise ValueError("invented QA product execution")
     return {
         "evidence_scope": "HISTORICAL_PROPOSAL_CORPUS_ONLY",
+        "evidence_as_of": "2026-10-26",
         "current_final_qa_validation": "NOT_PERFORMED",
         "status": "P1_QA_REFERENCE_INTEGRITY_VERIFIED_NOT_PRODUCT_QA",
         "source_reference_count": 199,

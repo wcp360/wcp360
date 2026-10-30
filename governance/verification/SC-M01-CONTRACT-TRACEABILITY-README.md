@@ -77,6 +77,8 @@ At consolidated main `580e9ed58286304ade30142caf9415f4b87c0c28`, TESTS / QA has 
 
 Git blob: `e0cdf924c5d7353624c069552f921f587cad8561`.
 
+Reports date the historical scope with `evidence_as_of=2026-10-26`. The single-file report uses `historical_governance_owner_artifact_gate` and `historical_sc_m01`; it publishes no unqualified current gate field. The workflow continues to check current API/IPC/permission source consistency and historical QA corpus integrity only.
+
 This publication supersedes the old QA-missing condition as a current statement. It does not rewrite the historical proposal files. The annex and single-file checkers validate only their historical proposal corpus, including its 199 reference records and 85 proposal rows. Their JSON and workflow labels explicitly identify that scope.
 
 **Final QA v1.0 source-integrity, semantic validation, acceptance and product execution are outside these historical checkers.** The final path/blob above is a provenance reference, not an executed integrity result. This PR does not infer a current 8/8 decision, owner approval, MASTER GO or product PASS from the historical reports. Current authority must be read from the approved owner artifacts and MASTER decisions at the integration SHA.

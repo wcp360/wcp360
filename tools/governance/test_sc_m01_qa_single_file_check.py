@@ -52,7 +52,7 @@ class SingleFileQAOwnerCandidateTests(unittest.TestCase):
                          (86,47,26,40,85))
         self.assertEqual(outcome["specialized_qa_owner_approvals"],0)
         self.assertEqual(outcome["executed_product_tests"],0)
-        self.assertEqual(outcome["governance_owner_artifact_gate"],"5/8")
+        self.assertEqual(outcome["historical_governance_owner_artifact_gate"],"5/8")
 
     def test_drop_api_record_fails(self):
         text=self.document.replace("### TEST-API-0101 — API-WCP-0101",

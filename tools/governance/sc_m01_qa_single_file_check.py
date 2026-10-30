@@ -296,6 +296,7 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
         raise ReviewEvidenceError("QA owner publication provenance options absent")
     return {
         "evidence_scope":"HISTORICAL_PROPOSAL_CORPUS_ONLY",
+        "evidence_as_of":"2026-10-26",
         "current_final_qa_validation":"NOT_PERFORMED",
         "status":"PASS_SOURCE_COMPLETENESS_ONLY_NONCANONICAL",
         "api_records":86,"ipc_records":47,"negative_labels":26,
@@ -304,8 +305,8 @@ def verify(source: str, original: str, api_ipc: dict[str, Any],
         "specialized_qa_owner_approvals":0,
         "verbatim_historical_scenario_rows_checked":85 if scenario_sources is not None else 0,
         "executed_product_tests":0,
-        "governance_owner_artifact_gate":"5/8",
-        "sc_m01":"PAUSED_TARGETED_EVIDENCE",
+        "historical_governance_owner_artifact_gate":"5/8",
+        "historical_sc_m01":"PAUSED_TARGETED_EVIDENCE",
         "code_baseline":"NONE"
     }
 
