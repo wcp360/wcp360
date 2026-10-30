@@ -2,7 +2,7 @@
 const http=require('http');
 const fs=require('fs'),path=require('path'),cp=require('child_process'),assert=require('assert');
 const {chromium}=require(process.env.FM_PLAYWRIGHT_MODULE||'playwright');
-let ciStage='initialization',ciCompleted=0;
+let ciStage='initialization',ciCompleted=0,ciProbe={};
 (async()=>{
  const source=path.resolve(__dirname,'..'),tmp=fs.mkdtempSync('/tmp/fm-ui-');
  fs.cpSync(source,tmp,{recursive:true,filter:p=>!['vendor','var','.phpunit.cache'].includes(path.basename(p))});fs.symlinkSync(source+'/vendor',tmp+'/vendor');
@@ -20,6 +20,12 @@ let ciStage='initialization',ciCompleted=0;
   const ready=await new Promise(resolve=>{const r=http.get('http://127.0.0.1:8879/login',res=>{res.resume();resolve(res.statusCode===200);});r.setTimeout(500,()=>r.destroy());r.on('error',()=>resolve(false));});
   if(ready)break;if(Date.now()>deadline)throw new Error('SERVER_NOT_READY');await new Promise(r=>setTimeout(r,100));
  }
+ ciStage='browser-preflight';const executable=chromium.executablePath();
+ ciProbe.binary_exists=fs.existsSync(executable);try{fs.accessSync(executable,fs.constants.X_OK);ciProbe.binary_executable=true;}catch{ciProbe.binary_executable=false;}
+ const dynamic=cp.spawnSync('ldd',[executable],{encoding:'utf8',timeout:15000});const loader=String(dynamic.stdout||'')+String(dynamic.stderr||'');
+ ciProbe.ldd_exit=Number.isInteger(dynamic.status)?dynamic.status:-999;
+ ciProbe.missing_libraries=(loader.match(/=> not found/g)||[]).length;
+ ciProbe.abi_unavailable=/GLIBC_[0-9].*not found/.test(loader);
  ciStage='browser-launch';browser=await chromium.launch({headless:true,channel:'chromium',chromiumSandbox:true,timeout:30000});
  ciStage='browser-version';const ciLock=JSON.parse(fs.readFileSync(path.join(__dirname,'ci/toolchain.json'),'utf8'));
  assert.strictEqual(browser.version(),ciLock.chromium.version);assert.strictEqual(require((process.env.FM_PLAYWRIGHT_MODULE||'playwright')+'/package.json').version,ciLock.playwright);
@@ -74,4 +80,4 @@ let ciStage='initialization',ciCompleted=0;
  assert.deepStrictEqual(errors,[]);checks.push('no JavaScript runtime errors');console.log(JSON.stringify({status:'PASS',browser:'Chromium',browser_version:browser.version(),browser_uid:uid,sandbox:{namespace:true,seccomp_bpf:true},count:checks.length,checks},null,2));
  }catch(e){ciCompleted=checks.length;if(browser){const pages=browser.contexts()[0]?.pages();if(pages?.[0])await pages[0].screenshot({path:tmp+'/fm030-failure.png',fullPage:true});}throw e;}
  finally{try{if(browser)await browser.close();}finally{server.kill('SIGKILL');fs.rmSync(tmp,{recursive:true,force:true});}}
-})().catch(e=>{const code=require('./ci/browser_diagnostics.cjs')(e);console.log(JSON.stringify({status:'FAIL',stage:ciStage,completed:ciCompleted,code}));process.exit(1)});
+})().catch(e=>{const code=require('./ci/browser_diagnostics.cjs')(e);console.log(JSON.stringify({status:'FAIL',stage:ciStage,completed:ciCompleted,code,probe:ciProbe,launch:require('./ci/browser_diagnostics.cjs').metadata(e)}));process.exit(1)});

@@ -59,6 +59,15 @@ class ReportingTest(unittest.TestCase):
         self.assertNotIn('SYNTHETIC_SECRET',json.dumps(result))
         self.assertEqual(result['browser_code'],'UNRECOGNIZED_REPORT')
 
+    def test_browser_probe_drops_unknown_or_wrong_type_fields(self):
+        data={'stage':'browser-launch','code':'BROWSER_SUITE_FAILED','completed':0,
+              'probe':{'binary_exists':True,'ldd_exit':0,'secret':'SYNTHETIC_SECRET','missing_libraries':'SYNTHETIC_SECRET'},
+              'launch':{'error_type':'Error','signal':'SYNTHETIC_SECRET','exit_code':127,'secret':'SYNTHETIC_SECRET'}}
+        report=browser_failure(json.dumps(data).encode())
+        self.assertEqual(report['probe'],{'binary_exists':True,'ldd_exit':0})
+        self.assertEqual(report['launch'],{'error_type':'Error','exit_code':127})
+        self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
+
     def test_report_readable_despite_private_umask(self):
         with tempfile.TemporaryDirectory() as d:
             old = os.umask(0o077)

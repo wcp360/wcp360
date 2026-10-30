@@ -7,3 +7,10 @@ test('browser diagnostics export only fixed codes',()=>{
   assert(!classify(new Error(text+' SYNTHETIC_SECRET')).includes('SYNTHETIC_SECRET'));
  }
 });
+
+test('launch metadata excludes arbitrary diagnostic text',()=>{
+ const e=new Error('<launched> pid=123 <process did exit: exitCode=127, signal=SIGABRT> SYNTHETIC_SECRET');
+ assert.deepEqual(classify.metadata(e),{error_type:'Error',launched:true,exit_code:127,signal:'SIGABRT'});
+ assert(!JSON.stringify(classify.metadata(e)).includes('SYNTHETIC_SECRET'));
+ assert.equal(classify(new Error('Timeout 30000ms exceeded SYNTHETIC_SECRET')),'BROWSER_LAUNCH_TIMEOUT');
+});

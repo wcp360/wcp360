@@ -68,10 +68,25 @@ def build_summary(result):
 def browser_failure(data):
     try:
         result=json.loads(data)
-        stages={'initialization','php-readiness','browser-launch','browser-version','browser-identity','sandbox-attestation','ui'}
-        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED','BROWSER_ABI_UNAVAILABLE','BROWSER_LIBRARY_MISSING','SANDBOX_UNAVAILABLE','CRASHPAD_CONFIGURATION','BROWSER_PERMISSION_DENIED','BROWSER_SIGTRAP'}
+        stages={'initialization','php-readiness','browser-launch','browser-preflight','browser-version','browser-identity','sandbox-attestation','ui'}
+        codes={'NAMESPACE_DENIED','BROWSER_BINARY_MISSING','BROWSER_SUITE_FAILED','BROWSER_ABI_UNAVAILABLE','BROWSER_LIBRARY_MISSING','SANDBOX_UNAVAILABLE','CRASHPAD_CONFIGURATION','BROWSER_PERMISSION_DENIED','BROWSER_SIGTRAP','BROWSER_LAUNCH_TIMEOUT'}
         if result.get('stage') not in stages or result.get('code') not in codes or type(result.get('completed')) is not int or not 0<=result['completed']<=28:
             raise ValueError('SCHEMA')
-        return {'browser_stage':result['stage'],'browser_code':result['code'],'completed':result['completed']}
+        report={'browser_stage':result['stage'],'browser_code':result['code'],'completed':result['completed']}
+        probe=result.get('probe',{})
+        filtered={}
+        for key in ['binary_exists','binary_executable','abi_unavailable']:
+            if type(probe.get(key)) is bool:filtered[key]=probe[key]
+        for key in ['ldd_exit','missing_libraries']:
+            if type(probe.get(key)) is int and -999<=probe[key]<=10000:filtered[key]=probe[key]
+        report['probe']=filtered
+        launch=result.get('launch',{})
+        filtered={}
+        if launch.get('error_type') in ['Error','TypeError','TimeoutError','OTHER']:filtered['error_type']=launch['error_type']
+        if type(launch.get('launched')) is bool:filtered['launched']=launch['launched']
+        if type(launch.get('exit_code')) is int and -255<=launch['exit_code']<=255:filtered['exit_code']=launch['exit_code']
+        if launch.get('signal') in ['SIGABRT','SIGSEGV','SIGTRAP','SIGSYS','SIGKILL','SIGTERM']:filtered['signal']=launch['signal']
+        report['launch']=filtered
+        return report
     except (ValueError,TypeError,AttributeError):
         return {'browser_code':'UNRECOGNIZED_REPORT'}
