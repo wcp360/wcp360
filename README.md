@@ -1417,8 +1417,6 @@ wcp360/
 │   └── README.md
 ├── WCP360_Design_System/
 ├── WCP360_Developper/
-├── WCP360_Internal_Management/
-├── WCP360_Official_Website/
 ├── WCP360_Plugins/
 ├── WCP360_Release/
 │   ├── README.md
@@ -1436,13 +1434,13 @@ wcp360/
 
 ### Imported workspace directories
 
+The active main tree contains the four directories below. Internal Management and Official Website were removed from main on October 31, 2026; their local workspace copies are outside this repository publication.
+
 | Directory | Imported contents | Delivery boundary |
 | :--- | :--- | :--- |
 | [WCP360_Core](WCP360_Core/README.md) | Reserved implementation directory with a README. | No production Core code or installer is supplied by this placeholder. |
 | [WCP360_Design_System](WCP360_Design_System/README.md) | 351 files: panel UI prototype, assets, and design notes. | Demo behavior and visual reference; not the target Symfony implementation. |
 | [WCP360_Developper](WCP360_Developper/README.md) | 1,803 files of developer/product documentation and historical snapshots. | Canonical implementation authority remains under `specifications/` and the current manifest. |
-| [WCP360_Internal_Management](WCP360_Internal_Management/README.md) | 9 files for the private vendor-side UI prototype. | Keep separate from customer distribution artifacts; this is not a customer plugin or a production vendor service. |
-| [WCP360_Official_Website](WCP360_Official_Website/README-WCP360.md) | 443 files: website sources, assets, and PHP API prototypes. | Website source publication does not deploy the site or configure its services. |
 | [WCP360_Plugins](WCP360_Plugins/) | 73 files, including File Manager sources, four archives, and Insights Connector. | Development packages; loose `vendor/` dependencies are excluded and installed from manifests where needed. |
 
 This import preserves workspace source files and package archives. It does not establish a production release, a CODE-BASELINE, independent review, or Core integration.
@@ -1457,26 +1455,26 @@ Other candidate sources remain on their branches. The following branch locations
 
 ## GitHub branches
 
-Branches observed on **October 31, 2026**. `main` is the default branch; prefixes group work by purpose. Branch existence does not establish a merge, independent approval, or a version release.
+All **14 branches** were reconciled on **October 31, 2026**: two documentation branches consolidated, one historical integration bundle retained, and ten open PR candidates kept at their exact review SHAs. Read the [branch reconciliation and dependency diagram](governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) or its [complete path/blob evidence](governance/branches/BRANCH-RECONCILIATION-2026-10-31.json).
 
-| Branch | Contents or purpose |
+| Branch | Current disposition |
 | :--- | :--- |
-| [`main`](https://github.com/yyogas/wcp360/tree/main) | Default reference for specifications, contracts, governance, and documentation. |
-| [`audit/closure-matrix-refresh-2026-10-03`](https://github.com/yyogas/wcp360/tree/audit/closure-matrix-refresh-2026-10-03) | Tracks closure of audit findings in the closure matrix. |
-| [`design-system/import-v2.5.3.36.4-markdown`](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown) | Import of Design System V2.5.3.36.4 Markdown documents. |
-| [`extensions/file-manager-v0.3.0-import`](https://github.com/yyogas/wcp360/tree/extensions/file-manager-v0.3.0-import) | Standalone File Manager 0.3.0 alpha sources published for review. |
-| [`integration/sc-m01-owner-readiness-20261026`](https://github.com/yyogas/wcp360/tree/integration/sc-m01-owner-readiness-20261026) | Cross-domain SC-M01 integration and readiness work. |
-| [`maintenance/sc-m01-repository-guardrails`](https://github.com/yyogas/wcp360/tree/maintenance/sc-m01-repository-guardrails) | Maintenance of repository and publication controls. |
-| [`research/sc-m01-control-protocol-options-20261026`](https://github.com/yyogas/wcp360/tree/research/sc-m01-control-protocol-options-20261026) | Research into the backend–wcpd control protocol. |
-| [`research/sc-m01-ipcb-go-framing-20261027`](https://github.com/yyogas/wcp360/tree/research/sc-m01-ipcb-go-framing-20261027) | Research into IPC-B framing and parsing in Go. |
-| [`source/full-platform-candidate`](https://github.com/yyogas/wcp360/tree/source/full-platform-candidate) | PHP 8.4 kernel, static interface, and inert daemon: non-production candidates. |
-| [`source/sc-m01-domain-foundation`](https://github.com/yyogas/wcp360/tree/source/sc-m01-domain-foundation) | SC-M01 application domain foundation work. |
-| [`source/sc-m01-inert-daemon`](https://github.com/yyogas/wcp360/tree/source/sc-m01-inert-daemon) | Go CLI foundation for wcpd, without a listener, database, or privileged actions. |
-| [`test/sc-m01-cli-process-contract`](https://github.com/yyogas/wcp360/tree/test/sc-m01-cli-process-contract) | Tests for the CLI contract and process behavior. |
-| [`tooling/sc-m01-contract-traceability-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-contract-traceability-20261026) | Contract traceability and consistency tooling. |
-| [`tooling/sc-m01-preflight-checks-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-preflight-checks-20261026) | Artifact presence and integrity preflight checks. |
+| [`audit/closure-matrix-refresh-2026-10-03`](https://github.com/yyogas/wcp360/tree/audit/closure-matrix-refresh-2026-10-03) | Integrated as a dated historical closure matrix; no audit closure claimed. |
+| [`design-system/import-v2.5.3.36.4-markdown`](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown) | Consolidated: 20 existing identical documents reused; 2 metadata files archived. |
+| [`extensions/file-manager-v0.3.0-import`](https://github.com/yyogas/wcp360/tree/extensions/file-manager-v0.3.0-import) | [PR #113](https://github.com/yyogas/wcp360/pull/113): path reconciliation, final owner revalidation and independent review pending. |
+| [`integration/sc-m01-owner-readiness-20261026`](https://github.com/yyogas/wcp360/tree/integration/sc-m01-owner-readiness-20261026) | Historical bundle; [PR #90](https://github.com/yyogas/wcp360/pull/90) closed without merge. Current narrow PRs take precedence. |
+| [`main`](https://github.com/yyogas/wcp360/tree/main) | Reference; existing source imports and canonical contracts preserved. |
+| [`maintenance/sc-m01-repository-guardrails`](https://github.com/yyogas/wcp360/tree/maintenance/sc-m01-repository-guardrails) | [PR #42](https://github.com/yyogas/wcp360/pull/42): independent review and current-base checks pending. |
+| [`research/sc-m01-control-protocol-options-20261026`](https://github.com/yyogas/wcp360/tree/research/sc-m01-control-protocol-options-20261026) | [PR #88](https://github.com/yyogas/wcp360/pull/88): research only; independent review pending. |
+| [`research/sc-m01-ipcb-go-framing-20261027`](https://github.com/yyogas/wcp360/tree/research/sc-m01-ipcb-go-framing-20261027) | [PR #94](https://github.com/yyogas/wcp360/pull/94): research only; independent review pending. |
+| [`source/full-platform-candidate`](https://github.com/yyogas/wcp360/tree/source/full-platform-candidate) | Draft [PR #109](https://github.com/yyogas/wcp360/pull/109): wider scope decisions and independent review pending. |
+| [`source/sc-m01-domain-foundation`](https://github.com/yyogas/wcp360/tree/source/sc-m01-domain-foundation) | Draft [PR #110](https://github.com/yyogas/wcp360/pull/110): stacked on #108; wider scope decisions and independent review pending. |
+| [`source/sc-m01-inert-daemon`](https://github.com/yyogas/wcp360/tree/source/sc-m01-inert-daemon) | [PR #108](https://github.com/yyogas/wcp360/pull/108): selected inert slice; independent review pending. |
+| [`test/sc-m01-cli-process-contract`](https://github.com/yyogas/wcp360/tree/test/sc-m01-cli-process-contract) | [PR #114](https://github.com/yyogas/wcp360/pull/114): stacked on #108; independent review pending. |
+| [`tooling/sc-m01-contract-traceability-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-contract-traceability-20261026) | [PR #87](https://github.com/yyogas/wcp360/pull/87): historical reference tooling; independent review pending. |
+| [`tooling/sc-m01-preflight-checks-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-preflight-checks-20261026) | Draft [PR #86](https://github.com/yyogas/wcp360/pull/86): read-only 8/8 preflight; independent review pending. |
 
-To follow a component, read its README and applicable governance decisions before using its sources. Research, integration, and tooling branches are not installable panel releases.
+Research, source candidates and tooling branches require the applicable scope, test and review decisions before promotion. Branch existence, a successful historical workflow or GitHub's mergeable flag does not establish independent approval or an installable release. No branch was deleted.
 
 ## Documentation and contributing
 
@@ -1489,7 +1487,7 @@ To follow a component, read its README and applicable governance decisions befor
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Inspect release preparation | [Version directories, guarded installer templates, installation guides, and the latest link](WCP360_Release/README.md). |
-| Explore the imported workspace | [Core](WCP360_Core/README.md), [Design System](WCP360_Design_System/README.md), [developer documentation](WCP360_Developper/README.md), [Internal prototype](WCP360_Internal_Management/README.md), [website](WCP360_Official_Website/README-WCP360.md), and [plugins](WCP360_Plugins/). |
+| Explore the imported workspace | [Core](WCP360_Core/README.md), [Design System](WCP360_Design_System/README.md), [developer documentation](WCP360_Developper/README.md), and [plugins](WCP360_Plugins/). |
 | Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
 | Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
 | Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |

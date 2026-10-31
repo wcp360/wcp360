@@ -1,5 +1,9 @@
 # WCP360 — Project Status
 
+## Repository branch reconciliation — 2026-10-31
+
+[All 14 branches, content resolutions and remaining merge conditions](branches/BRANCH-RECONCILIATION-2026-10-31.md) are recorded with exact heads, path/blob evidence, PR dependencies and existing CI/review identities. Two documentation branches are consolidated; the closed #90 integration bundle is retained as historical; ten code/tooling/research PR candidates remain unmerged. Independent E3 remains missing; #113 additionally needs package-path reconciliation and final owner revalidation, and #109/#110 require wider scope decisions. Existing canonical contracts and the narrow MASTER authorization are unchanged. No branch deletion, code baseline, audit closure or release is declared.
+
 ## Limited source-code resume — 2026-10-28
 
 MASTER authorization: `3fd2f8007baa49c2454cc89c0a5488a57c77911b` in `manifests/WCP360-BM-0001.md`.
@@ -7,7 +11,7 @@ MASTER authorization: `3fd2f8007baa49c2454cc89c0a5488a57c77911b` in `manifests/W
 SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY.
 The owner-approved daemon toolchain addendum v1.0 (commit `1ff4c195e75dade00cda13215b92ffe7576637b7`, blob `f8608d6258f87b8c1099b9b3a7e32ec95c72dc27`) supplies F02/F04/F06/F07/F08 for this slice.
 
-Implementation is published in `SOURCE/daemon/` on draft PR #108. Follow that PR for exact candidate SHA and executed CI results. Independent E3 remains required before I1/R1 merge. No wider component, service, privileged operation, database or web surface is activated.
+The inert implementation candidate is published in `SOURCE/daemon/` on open, ready-for-review PR #108. Follow that PR for exact candidate SHA and executed CI results. Independent E3 remains required before I1/R1 merge. No wider component, service, privileged operation, database or web surface is activated.
 
 Canonical specification gate = 8/8 accepted. SC-M02 = NOT AUTHORIZED. CODE-BASELINE = NONE.
 Earlier PAUSED / missing-toolchain statements below describe the state before this limited authorization.
