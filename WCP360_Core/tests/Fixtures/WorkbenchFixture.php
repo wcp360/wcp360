@@ -8,13 +8,13 @@ use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 final class WorkbenchFixture
 {
     public const PASSWORD='local-test-password-only-2026';
-    public static function reset(Connection $db):array
+    public static function reset(Connection $db,bool $applicationServers=true):array
     {
         $sqlite=$db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\SQLitePlatform;
         if(!$sqlite && $db->fetchOne('SELECT current_database()')!=='wcp360_test')throw new \RuntimeException('Fixture cleanup requires the dedicated wcp360_test database.');
         if($sqlite)$db->executeStatement('PRAGMA foreign_keys = ON');
-        foreach(['plugins','audit','jobs','sites','memberships','tenants','accounts','users'] as $table)$db->executeStatement('DROP TABLE IF EXISTS wcp_candidate_'.$table);
-        foreach(array_merge(WorkbenchSchema::statements($db),WorkbenchSchema::auditStatements($db)) as $sql)$db->executeStatement($sql);
+        foreach(['runtime_settings','plugins','audit','jobs','sites','memberships','tenants','accounts','users'] as $table)$db->executeStatement('DROP TABLE IF EXISTS wcp_candidate_'.$table);
+        foreach(array_merge(WorkbenchSchema::statements($db),WorkbenchSchema::auditStatements($db),($applicationServers?\Wcp360\Core\Module\Hosting\Infrastructure\ApplicationServerSchema::statements():[])) as $sql)$db->executeStatement($sql);
         $hash=password_hash(self::PASSWORD,PASSWORD_ARGON2ID,['memory_cost'=>8192,'time_cost'=>1]);
         $users=[];$tenants=[];
         foreach(['alice','bob','admin']as $name){

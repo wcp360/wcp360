@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Wcp360\Core\Module\Operations\Application;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer;
+use Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy;
 final readonly class RunHostingPlan
 {
-    public function __construct(private WorkbenchStore $store,private GoPlanRenderer $renderer) {}
+    public function __construct(private WorkbenchStore $store,private GoPlanRenderer $renderer,private ApplicationServerPolicy $policy) {}
     public function runOne(): ?string
     {
         $db=$this->store->db;
@@ -22,8 +23,10 @@ final readonly class RunHostingPlan
         $state='SUCCEEDED'; $result=null;
         try{
             $this->store->requirePermission($job['actor_id'],$job['tenant_id']);
-            $host=$db->fetchOne('SELECT hostname FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',[$job['site_id'],$job['tenant_id']]);
-            $result=json_encode($this->renderer->render($job['site_id'],$host),JSON_THROW_ON_ERROR);
+            $site=$db->fetchAssociative('SELECT hostname,application_server,worker_acknowledged FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',[$job['site_id'],$job['tenant_id']]);
+            if(!$site)throw new \RuntimeException('Plan site unavailable.');
+            $server=$this->policy->select($site['application_server'],'php_fpm',(bool)$site['worker_acknowledged']);
+            $result=json_encode($this->renderer->render($job['site_id'],$site['hostname'],$server,(bool)$site['worker_acknowledged']),JSON_THROW_ON_ERROR);
         }catch(\Throwable){$state='FAILED';}
         $db->transactional(function()use($db,$job,$state,$result):void{
             // Recheck revocation before publishing even this non-privileged plan.

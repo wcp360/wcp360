@@ -97,10 +97,19 @@ The outbox/delivery path represents durable publication to configured workers; i
 | Go `wcp-privd` | Minimal root broker for registered, typed, bounded system primitives. |
 | Python | Specialized diagnostics and automation under approved non-root identities, inputs, dependencies, and resource budgets. |
 | Nginx | HTTPS termination and routing for configured panel origins and hosted applications. |
-| PHP-FPM | Separate panel runtime pools and account-isolated hosted PHP application pools. |
+| PHP-FPM | Initial default: separate panel runtime pools and account-isolated hosted PHP application pools. |
+| FrankenPHP / Caddy Worker | Optional explicitly compatible hosted applications, one dedicated non-root process/identity per site behind Nginx over a Unix socket; separate from the system daemons. |
 | Debian 13 / amd64 | Initial target operating-system and architecture boundary defined by the baseline. |
 
 These are target selections. Exact framework/package revisions, build inputs, runtime extensions, and compatibility matrices belong to each qualified component release. The current inert daemon has its own narrowly approved toolchain.
+
+## Hosted application-server selection
+
+PHP-FPM remains the initial default for hosted PHP applications. The candidate adds an ADMIN global default for new plans and a per-site override; a tenant may host several applications using different engines. FrankenPHP Worker is explicitly opt-in and requires a compatible bootstrap and per-request cleanup. Compatibility and performance must be measured for each application.
+
+The hosted-site selector does not convert the Core's current request-scoped bootstrap to worker mode. ADMIN/USER persistent runtimes require a separate reviewed integration and cross-request identity/session qualification. Caddy/FrankenPHP does not replace wcpd or wcp-privd, and worker threads are not tenant isolation boundaries.
+
+See [application-server profiles](documentation/development/APPLICATION-SERVERS.md) for source locations, candidate checks, safe-switch requirements and platform status. Debian 13 is the candidate test target; Ubuntu and AlmaLinux require separate adapters and qualification, including SELinux policy on AlmaLinux.
 
 ## Core structure
 

@@ -19,30 +19,49 @@ func run(input io.Reader, output io.Writer) int {
 	if e != nil || token != json.Delim('{') {
 		return 2
 	}
-	fields := map[string]string{}
+	fields := map[string]json.RawMessage{}
 	for d.More() {
 		token, e = d.Token()
 		if e != nil {
 			return 2
 		}
 		key, ok := token.(string)
-		if !ok || (key != "site_id" && key != "hostname") {
+		if !ok || (key != "site_id" && key != "hostname" && key != "application_server" && key != "worker_acknowledged") {
 			return 2
 		}
 		if _, exists := fields[key]; exists {
 			return 2
 		}
-		var value string
-		if d.Decode(&value) != nil {
+		var value json.RawMessage
+		if d.Decode(&value) != nil || string(value) == "null" {
 			return 2
 		}
 		fields[key] = value
 	}
 	token, e = d.Token()
-	if e != nil || token != json.Delim('}') || d.Decode(new(any)) != io.EOF || len(fields) != 2 {
+	if e != nil || token != json.Delim('}') || d.Decode(new(any)) != io.EOF {
 		return 2
 	}
-	plan, e := planner.Render(planner.Request{SiteID: fields["site_id"], Hostname: fields["hostname"]})
+	var r planner.Request
+	if len(fields["site_id"]) == 0 || len(fields["hostname"]) == 0 {
+		return 2
+	}
+	if json.Unmarshal(fields["site_id"], &r.SiteID) != nil || json.Unmarshal(fields["hostname"], &r.Hostname) != nil {
+		return 2
+	}
+	mode := "php_fpm"
+	if value, ok := fields["application_server"]; ok {
+		if json.Unmarshal(value, &mode) != nil {
+			return 2
+		}
+	}
+	acknowledged := false
+	if value, ok := fields["worker_acknowledged"]; ok {
+		if json.Unmarshal(value, &acknowledged) != nil {
+			return 2
+		}
+	}
+	plan, e := planner.RenderRuntime(r, mode, acknowledged)
 	if e != nil {
 		return 2
 	}

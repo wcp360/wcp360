@@ -11,7 +11,7 @@ final readonly class PluginRegistry
     public function installed():array{return $this->store->db->fetchAllAssociative('SELECT id,version,state FROM wcp_candidate_plugins ORDER BY id');}
     public function transition(string $actor,string $id,string $action):void
     {
-        if(!$this->store->db->fetchOne("SELECT 1 FROM wcp_candidate_users WHERE id=? AND context='admin' AND active=1",[$actor]))throw new AccessDeniedHttpException();
+        $this->store->requireAdmin($actor);
         if($id!=='wcp360-reference-report' || !in_array($action,['install','enable','disable','uninstall'],true))throw new \InvalidArgumentException('Unknown candidate package or operation.');
         // No hooks, plugin includes, network fetch, dependency installation or command execution in the Core.
         $hash=null;
@@ -24,8 +24,7 @@ final readonly class PluginRegistry
         }
         $db=$this->store->db;
         $db->transactional(function()use($db,$actor,$id,$action,$hash):void{
-            $lock=$db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform?' FOR UPDATE':'';
-            if(!$db->fetchOne("SELECT id FROM wcp_candidate_users WHERE id=? AND context='admin' AND active=1".$lock,[$actor]))throw new AccessDeniedHttpException();
+            $this->store->requireAdmin($actor,true);
             $old=$db->fetchAssociative('SELECT * FROM wcp_candidate_plugins WHERE id=?',[$id]);
             if($action==='install'){
                 if($old)throw new ConflictHttpException('Already installed.');

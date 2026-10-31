@@ -1,0 +1,9 @@
+{# Shared selector: settings allow concrete values; sites may inherit the global default. #}
+<label for="{{ field_id }}">Serveur d’application</label>
+<select id="{{ field_id }}" name="application_server" aria-describedby="{{ field_id }}-help">
+{% if allow_inherit %}<option value="inherit">Défaut global — {{ runtime_settings.application_server == 'php_fpm' ? 'PHP-FPM' : 'FrankenPHP Worker' }}</option>{% endif %}
+<option value="php_fpm"{% if selected == 'php_fpm' %} selected{% endif %}>PHP-FPM — compatibilité classique</option>
+<option value="frankenphp_worker"{% if selected == 'frankenphp_worker' %} selected{% endif %}{% if not worker_plans_enabled %} disabled{% endif %}>FrankenPHP Worker — application compatible requise</option>
+</select>
+<p id="{{ field_id }}-help" class="field-help">PHP-FPM est le choix initial. Le mode worker conserve l’application en mémoire : son état doit être réinitialisé entre les requêtes. Les performances dépendent de l’application.</p>
+{% if not worker_plans_enabled %}<p class="field-help">Les plans FrankenPHP sont désactivés sur cette installation de développement.</p>{% endif %}

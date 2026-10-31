@@ -1,6 +1,6 @@
 # Find and change Core code
 
-Start here to locate a change. This index documents the intended source locations; the directories currently contain documentation scaffolds, not a complete Symfony application or deployable Linux configurations.
+Start here to locate a change. This index documents the intended source locations; the experimental Symfony candidate implements the selected paths in the [run guide](../documentation/development/EXECUTABLE-CANDIDATE.md); other domains remain documentation scaffolds. Production Linux provisioning is not implemented.
 
 The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21 functional domains to their Core owners and distinguishes proposed plugins from missing source folders.
 
@@ -16,6 +16,7 @@ The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21
 | Symfony packages, service wiring or routes | [Application configuration](config/README.md) | config/packages/, config/routes/ and reviewed service imports |
 | ADMIN, USER or worker identity/settings | [Runtime contexts](config/contexts/README.md) | Explicit per-context access, sessions, secrets and connections |
 | Nginx/Apache virtual hosts or PHP pools | [Linux services](resources/services/README.md) | nginx/, apache/, php-fpm/ and the Hosting module |
+| PHP-FPM / FrankenPHP Worker selection | [Application-server guide](../documentation/development/APPLICATION-SERVERS.md) | Hosting policy, Platform default settings, shared Twig field and Go candidate templates |
 | Mail servers and spam policy | [Mail](src/Module/Mail/README.md) | postfix/, dovecot/, rspamd/ resources plus the owning adapter |
 | MySQL, MariaDB or PostgreSQL service settings | [Data](src/Module/Data/README.md) | mysql/, mariadb/, postgresql/ resources; tenant and control-plane grants stay separate |
 | Redis, DNS, SSH, firewall or supervision | [Service index](resources/services/README.md) | Typed adapter and approved agent operations, not a PHP shell call |
@@ -50,6 +51,7 @@ WCP360_Core/
 │       ├── nginx/
 │       ├── apache/
 │       ├── php-fpm/
+│       ├── frankenphp/
 │       ├── postfix/
 │       ├── dovecot/
 │       ├── rspamd/
@@ -101,7 +103,7 @@ WCP360_Core/
     └── Fixtures/
 ```
 
-When an approved bootstrap exists, Composer manifests/locks will be real root files, vendor/ will be generated and ignored, and var/ will hold disposable application-local state. These generated directories and empty manifests are not created as placeholders.
+The candidate has real Composer manifests/locks and a bootstrap; vendor/ is generated and ignored, and var/ holds disposable candidate state. No generated dependency or runtime directory is a source placeholder.
 
 ## Example: change a site's PHP version
 

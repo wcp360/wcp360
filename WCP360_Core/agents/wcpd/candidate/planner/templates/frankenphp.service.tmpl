@@ -1,0 +1,39 @@
+# Inert candidate template; not installed by the panel.
+# The reviewed provisioner must add Nginx to this site's group, never the reverse.
+[Unit]
+Description=WCP360 candidate FrankenPHP worker {{.ID}}
+After=network.target
+
+[Service]
+Type=simple
+User={{.User}}
+Group={{.User}}
+WorkingDirectory=/srv/wcp360-candidate/vhosts/{{.ID}}/public
+ExecStart=/usr/local/bin/frankenphp run --config /var/lib/wcp360-candidate/frankenphp/{{.ID}}/Caddyfile --adapter caddyfile
+Environment=MAX_REQUESTS=500
+Environment=XDG_CONFIG_HOME=/var/lib/wcp360-frankenphp/{{.ID}}/config
+Environment=XDG_DATA_HOME=/var/lib/wcp360-frankenphp/{{.ID}}/data
+RuntimeDirectory=wcp360-frankenphp/{{.ID}}
+RuntimeDirectoryMode=0750
+StateDirectory=wcp360-frankenphp/{{.ID}}
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=60
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+MemoryMax=768M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

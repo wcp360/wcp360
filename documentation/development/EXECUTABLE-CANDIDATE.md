@@ -22,6 +22,10 @@ The candidate uses deliberately separate wcp_candidate_* tables and /workbench r
 | SDK and plugin | Strict standalone summary decoder; detached report process; install/enable/disable/uninstall metadata; lifecycle and tenant-boundary tests, including disable/uninstall with an unavailable package; Core works without plugins. | Signed packages, installation storage, process supervision, scoped service credentials, revocation, compatibility and upgrade policy. |
 | Installation and release | Non-root development installer, interactive account wizard, preflight, backup, migration upgrade and empty-database restore rehearsal; CI has read-only repository permissions and no publishing step. | Fresh-system installer, production recovery, migration review, complete functional/security acceptance, independent E3 and a reviewed release publisher. No stable version or latest pointer is produced. |
 
+## Hosted application-server profiles
+
+PHP-FPM remains the initial default. A global ADMIN setting and a per-site override now prepare either PHP-FPM or explicitly compatible FrankenPHP Worker plans. Worker planning is opt-in, acknowledgement is required, and changes to the global default preserve existing sites/jobs. See [Application servers](APPLICATION-SERVERS.md) for setup, process isolation, compatibility, platform boundaries and remaining activation work.
+
 ## Run with Docker Compose
 
 Install Docker with Compose, then open a terminal at WCP360_Build/environments/core-candidate. Generate a private .env file with independent random hexadecimal values:
@@ -80,7 +84,7 @@ php bin/console asset-map:compile
 (cd agents/wcpd/candidate/planner && go test ./... && go vet ./...)
 ~~~
 
-The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM and backup/restore probes. The first complete run passed; see [PR #116](https://github.com/yyogas/wcp360/pull/116) for results bound to the latest candidate head. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
+The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM, FrankenPHP Worker and backup/restore probes. The first complete run passed; see [PR #116](https://github.com/yyogas/wcp360/pull/116) for results bound to the latest candidate head. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
 
 The backup helpers accept only wcp360_workbench or wcp360_test. The restore helper accepts only an empty wcp360_restore_test database and a verified backup under Core var/backups. Supply PGHOST/PGUSER/PGPASSWORD securely; never put credentials in a command line or commit them. Stop all candidate workers before using wcp:candidate:work --reconcile-interrupted. This marks interrupted jobs UNKNOWN_OUTCOME and does not resubmit them.
 
@@ -101,7 +105,7 @@ flowchart LR
   T --> W[Separate worker]
   W --> R[Recheck actor permission]
   R --> G[Fixed Go plan builder]
-  G --> P[Nginx / PHP-FPM plan]
+  G --> P[Nginx + PHP-FPM or FrankenPHP Worker plan]
   P --> D[Durable result + audit]
   D --> B
   C[Disposable Linux probe] --> N[Real Nginx and isolated PHP-FPM]

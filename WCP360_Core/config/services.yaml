@@ -2,6 +2,7 @@ parameters:
     env(WCP_CONTEXT): user
     env(WCP_CANDIDATE): '0'
     env(WCP_PUBLIC_HOST): user.localhost
+    env(WCP_ALLOW_FRANKENPHP_PLANS): '0'
 services:
     _defaults:
         autowire: true
@@ -24,3 +25,6 @@ services:
     Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer:
         arguments:
             $binary: '%env(resolve:WCP_PLANNER)%'
+    Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy:
+        arguments:
+            $workerPlansEnabled: '%env(bool:WCP_ALLOW_FRANKENPHP_PLANS)%'

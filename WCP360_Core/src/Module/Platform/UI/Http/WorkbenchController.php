@@ -11,6 +11,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan;
+use Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy;
+use Wcp360\Core\Module\Platform\Application\ApplicationServerSettings;
 use Wcp360\Core\Module\ExtensionManagement\Application\PluginRegistry;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 final class WorkbenchController extends AbstractController
@@ -30,13 +32,25 @@ final class WorkbenchController extends AbstractController
     #[Route('/logout',name:'wcp_logout',methods:['POST'])]
     public function logout():never{throw new \LogicException('Handled by Symfony Security.');}
     #[Route('/',name:'wcp_dashboard',methods:['GET'])]
-    public function index(Request $request,WorkbenchStore $store,RuntimeContext $runtime,PluginRegistry $plugins):Response
+    public function index(Request $request,WorkbenchStore $store,RuntimeContext $runtime,PluginRegistry $plugins,ApplicationServerSettings $settings,ApplicationServerPolicy $policy):Response
     {
         $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
         $tenants=$runtime->context==='user'?$store->tenants($user->id):[];
         $tenant=$request->query->getString('tenant',$tenants[0]['id']??'');
         $jobs=$tenant!==''?$store->jobs($user->id,$tenant):[];
-        return $this->render('user/dashboard.html.twig',['idempotency_key'=>WorkbenchStore::id(),'context'=>$runtime->context,'tenants'=>$tenants,'tenant'=>$tenant,'jobs'=>$jobs,'plugins'=>$runtime->context==='admin'?$plugins->installed():[]]);
+        return $this->render('user/dashboard.html.twig',['idempotency_key'=>WorkbenchStore::id(),'context'=>$runtime->context,'tenants'=>$tenants,'tenant'=>$tenant,'jobs'=>$jobs,'runtime_settings'=>$settings->current(),'worker_plans_enabled'=>$policy->workerPlansEnabled,'plugins'=>$runtime->context==='admin'?$plugins->installed():[]]);
+    }
+
+    #[Route('/workbench/settings/application-server',name:'wcp_application_server',methods:['POST'])]
+    public function applicationServer(Request $request,ApplicationServerSettings $settings):Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if(!$this->isCsrfTokenValid('application-server',$request->request->getString('_token')))throw $this->createAccessDeniedException('Invalid CSRF token.');
+        $fields=$request->request->all();
+        if(array_diff(array_keys($fields),['_token','application_server','revision']) || !isset($fields['application_server'],$fields['revision']) || !is_string($fields['application_server']) || !is_string($fields['revision']) || !preg_match('/^[1-9][0-9]{0,8}$/D',$fields['revision']))throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('Invalid runtime settings.');
+        $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
+        $settings->change($user->id,$fields['application_server'],(int)$fields['revision']);
+        return $this->redirectToRoute('wcp_dashboard',[],303);
     }
     #[Route('/workbench/plans',name:'wcp_plan',methods:['POST'])]
     public function submit(Request $request,SubmitHostingPlan $submit):Response

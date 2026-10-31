@@ -8,6 +8,8 @@ The Core owns essential hosting, local administration/recovery and the extension
 
 Start with the [change-location index](NAVIGATION.md) to find a function, command, dependency or Linux-service configuration. The [dependency guide](DEPENDENCIES.md) identifies manifests, locks and generated libraries.
 
+See [application-server profiles](../documentation/development/APPLICATION-SERVERS.md) for PHP-FPM defaults, per-site FrankenPHP Worker plans, compatibility and runtime-isolation requirements.
+
 ## Source layout
 
 ```text
@@ -36,7 +38,7 @@ WCP360_Core/
 │   ├── packages/
 │   ├── routes/
 │   └── contexts/
-├── resources/services/          # Sixteen documented Linux-service source locations
+├── resources/services/          # Seventeen documented Linux-service source locations
 ├── templates/
 │   ├── admin/
 │   ├── user/
@@ -85,7 +87,7 @@ The [capability-to-owner map](CAPABILITY-MAP.md) accounts for all 233 README cap
 
 ## Configuration and commands
 
-Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all thirteen built-in domains and sixteen service-resource locations to their owners.
+Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all thirteen built-in domains and seventeen service-resource locations to their owners.
 
 Business functions are cohesive services in the owning module. CLI adapters belong in that module's UI/Console layer and call the same authorized use cases as HTTP. bin contains entry points; agents contain the accepted controlled system operations. See the [command guide](bin/README.md).
 
@@ -96,7 +98,7 @@ Business functions are cohesive services in the owning module. CLI adapters belo
 - [Installer source map](installer/README.md): preflight, recipes, supported upgrades, interrupted-install recovery and historical scaffolds.
 - [Test source map](tests/README.md): unit, contract, integration, security, lifecycle, installation, browser and synthetic-fixture locations.
 
-These directories contain navigation/responsibility documents. They do not supply executable suites, a Symfony bootstrap, deployable service configuration or a working installer. Create actual implementation files with their accepted contracts and relevant verification. Generated dependencies/caches and machine state remain outside versioned source.
+The candidate implements a Symfony bootstrap, selected application suites, inert hosting configuration plans and development-only installer/recovery helpers. Other domains remain navigation/responsibility documents; they are not completed features or production-qualified adapters. Generated dependencies/caches and machine state remain outside versioned source.
 
 ## Development boundaries
 

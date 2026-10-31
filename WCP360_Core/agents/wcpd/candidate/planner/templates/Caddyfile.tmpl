@@ -1,0 +1,28 @@
+# Candidate only. Edge TLS belongs to Nginx; no public Caddy listener or admin API.
+{
+    admin off
+    auto_https off
+    frankenphp {
+        num_threads 2
+        max_threads 3
+        max_requests 500
+        php_ini {
+            memory_limit 256M
+            expose_php Off
+            opcache.enable 1
+        }
+        worker {
+            file /srv/wcp360-candidate/vhosts/{{.ID}}/public/index.php
+            num 1
+            env MAX_REQUESTS 500
+            max_consecutive_failures 3
+        }
+    }
+}
+http://{{.Host}}:8081 {
+    bind unix//run/wcp360-frankenphp/{{.ID}}/http.sock|0660
+    root * /srv/wcp360-candidate/vhosts/{{.ID}}/public
+    @hidden path_regexp hidden (^|/)\.
+    respond @hidden 403
+    php_server
+}

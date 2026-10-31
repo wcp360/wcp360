@@ -33,6 +33,7 @@ services:
       APP_SECRET: ${WCP_USER_SECRET:?Generate a unique user-context secret}
       WCP_CONTEXT: user
       WCP_PUBLIC_HOST: user.localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
       DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
     ports: ['127.0.0.1:8080:8080']
   admin:
@@ -42,6 +43,7 @@ services:
       APP_SECRET: ${WCP_ADMIN_SECRET:?Generate a separate admin-context secret}
       WCP_CONTEXT: admin
       WCP_PUBLIC_HOST: admin.localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
       DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
     ports: ['127.0.0.1:8081:8080']
   worker:
@@ -51,6 +53,7 @@ services:
       APP_SECRET: ${WCP_WORKER_SECRET:?Generate a separate worker-context secret}
       WCP_CONTEXT: worker
       WCP_PUBLIC_HOST: localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
       DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
     command: [sh, -ec, 'while true; do php bin/console wcp:candidate:work; sleep 2; done']
   setup:
@@ -63,6 +66,7 @@ services:
       APP_SECRET: ${WCP_SETUP_SECRET:?Generate a separate setup-context secret}
       WCP_CONTEXT: setup
       WCP_PUBLIC_HOST: localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
       DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
     command: [php, bin/console, wcp:candidate:enroll]
 volumes:

@@ -1,12 +1,13 @@
 # Linux-service source directory
 
-This index makes the service's template, owning PHP domain and target configuration boundary easy to locate. **All entries are documented source reservations.** A directory is not evidence that an adapter is implemented, selected, installed or permitted to run.
+This index makes the service's template, owning PHP domain and target configuration boundary easy to locate. Entries identify source ownership. The candidate PHP-FPM and FrankenPHP renderers are explicitly linked; other entries remain documented source reservations. A directory is not evidence that an adapter is implemented, selected, installed or permitted to run.
 
 | Service resources | Owner | Intended contents |
 | :--- | :--- | :--- |
 | [Nginx](nginx/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Reverse proxy, managed virtual hosts, upstreams, TLS references and FastCGI integration. |
 | [Apache HTTP Server](apache/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Virtual hosts, approved modules, reverse-proxy integration and per-site policy. |
 | [PHP-FPM](php-fpm/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Per-version pool models, PHP directives, process limits and socket ownership. |
+| [FrankenPHP Worker](frankenphp/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Optional per-site worker plans, Caddy Unix-socket profile and dedicated process supervision. |
 | [Postfix](postfix/README.md) | [Mail](../../src/Module/Mail/README.md) | SMTP routing, relay policy, domain maps, queue integration and TLS references. |
 | [Dovecot](dovecot/README.md) | [Mail](../../src/Module/Mail/README.md) | IMAP/POP service policy, authentication adapters, mailbox locations and TLS references. |
 | [Rspamd](rspamd/README.md) | [Mail](../../src/Module/Mail/README.md) | Approved spam/antivirus integration, policy, learning endpoints and rate limits. |
