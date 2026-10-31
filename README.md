@@ -8,21 +8,24 @@
 [![Modular architecture](https://img.shields.io/badge/Architecture-Modular-4263EB?style=flat-square)](#modular-and-extensible-design)
 [![Security design: least privilege](https://img.shields.io/badge/Security%20design-Least%20privilege-0F766E?style=flat-square)](#security-architecture)
 
-[![Target frontend: PHP and Symfony](https://img.shields.io/badge/Frontend-PHP%20%2F%20Symfony-1F2937?style=flat-square&logo=symfony&logoColor=white)](#frontend-architecture)
+[![Target frontend: PHP 8.4 and Symfony](https://img.shields.io/badge/Frontend-PHP%208.4%20%2F%20Symfony-1F2937?style=flat-square&logo=symfony&logoColor=white)](#frontend-architecture)
 [![Target templates: Twig](https://img.shields.io/badge/Templates-Twig-BACF29?style=flat-square)](#frontend-architecture)
 [![Target interactions: Symfony UX](https://img.shields.io/badge/Interactions-Turbo%20%2B%20Stimulus-7C3AED?style=flat-square)](#frontend-architecture)
 [![Target components: Twig Components](https://img.shields.io/badge/Components-Twig%20Components-059669?style=flat-square)](#frontend-architecture)
 [![Target assets: AssetMapper](https://img.shields.io/badge/Assets-AssetMapper-475569?style=flat-square)](#frontend-architecture)
 [![Target styling: Tailwind CSS](https://img.shields.io/badge/Styles-Tailwind%20CSS-0891B2?style=flat-square&logo=tailwindcss&logoColor=white)](#frontend-architecture)
 
-[![Target database: PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)](#technology-stack-and-responsibilities)
+[![Target database: PostgreSQL 17](https://img.shields.io/badge/Database-PostgreSQL%2017-4169E1?style=flat-square&logo=postgresql&logoColor=white)](#backend-architecture)
+[![Target persistence: Doctrine ORM](https://img.shields.io/badge/Persistence-Doctrine%20ORM-FC6A31?style=flat-square)](#backend-architecture)
+[![Target jobs: Symfony Messenger](https://img.shields.io/badge/Jobs-Symfony%20Messenger-475569?style=flat-square)](#backend-architecture)
+[![Target operating system: Debian 13](https://img.shields.io/badge/OS-Debian%2013-A81D33?style=flat-square&logo=debian&logoColor=white)](#technical-requirements)
 [![Optional job transport: Redis](https://img.shields.io/badge/Queue-Redis%20%28optional%29-DC382D?style=flat-square&logo=redis&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target system agent: Go](https://img.shields.io/badge/Agent-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target diagnostics: Python](https://img.shields.io/badge/Diagnostics-Python-3776AB?style=flat-square&logo=python&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
-[Frontend](#frontend-architecture) · [Architecture](#architecture-and-operation-flow) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
+[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](#architecture-and-operation-flow) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
 
 </div>
 
@@ -36,7 +39,7 @@ WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, 
 | :--- | :--- | :--- |
 | **233 documented capabilities** across 21 domains | **WCP-ADMIN** for server operations and **WCP-USER** for customers and resellers | **149 catalog entries** covering optional modules, connectors, recipes, and engine adapters |
 
-The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. PostgreSQL stores Core data; optional Redis transports jobs; Go performs controlled system operations; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications.
+The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. Go agents perform controlled system operations on Debian 13; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications.
 
 > [!NOTE]
 > **In development — status documented on October 31, 2026.** This README describes the target architecture. The existing prototypes and candidate sources still require integration and qualification. See [Current project status](#current-project-status) and the [current manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) for the authorized development scope.
@@ -48,6 +51,8 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Modular and extensible design](#modular-and-extensible-design)
 - [Technology stack and responsibilities](#technology-stack-and-responsibilities)
 - [Frontend architecture](#frontend-architecture)
+- [Backend architecture](#backend-architecture)
+- [Performance and reliability](#performance-and-reliability)
 - [Architecture and operation flow](#architecture-and-operation-flow)
 - [Security architecture](#security-architecture)
 - [Required panel capabilities](#required-panel-capabilities)
@@ -126,9 +131,9 @@ The following defines the **project's target stack**.
 | Component | Responsibility |
 | :--- | :--- |
 | Frontend | PHP/Symfony-rendered pages, Twig components, forms, navigation, and charts |
-| Symfony | Controllers, domain services, authentication, authorization, forms, and APIs |
-| PostgreSQL | Persistent data and relationships |
-| Redis | Asynchronous job transport, when needed |
+| PHP 8.4 / Symfony | Controllers, domain services, authentication, authorization, forms, and APIs |
+| PostgreSQL 17 | Core data and relationships, accessed through controlled persistence adapters |
+| Redis | Optional transport for Symfony Messenger jobs |
 | Go | Controlled system operations |
 | Python | Diagnostics and specialized automation |
 | Nginx | Web server and reverse proxy |
@@ -139,9 +144,9 @@ The following defines the **project's target stack**.
 | Component | Use in the panel |
 | :--- | :--- |
 | **Frontend** | Render WCP-USER and WCP-ADMIN with Symfony/Twig and shared UI components. Turbo, Stimulus, and selected Live Components add browser interactions while server-side services retain authority. |
-| **Symfony** | Receive requests, validate data, enforce business rules and permissions, expose APIs, and coordinate processing. Business architecture remains organized into reusable domains. |
-| **PostgreSQL** | Persist Core business state: accounts, plans, resources, relationships, policies, and operation tracking. Customer-hosted databases belong to a separate domain. |
-| **Redis** | Provide message transport when justified. Redis remains optional: the job mechanism must have an alternative durable transport. Authoritative business data remains in PostgreSQL. |
+| **PHP 8.4 / Symfony** | Handle requests, validate data, enforce domain rules and permissions, expose APIs, and coordinate Messenger jobs through reusable application services. |
+| **PostgreSQL 17 / Doctrine** | Persist Core metadata through repository interfaces, Doctrine ORM/DBAL, transactions, and versioned migrations. Customer-hosted databases belong to a separate domain. |
+| **Redis** | Provide a configured Symfony Messenger transport when selected. A Doctrine database-backed transport is an alternative deployment mode. Authoritative business and job state remains persistent; transport changes require controlled recovery. |
 | **Go** | Implement system agents and contract-defined operations: validation, service status, controlled configuration application, and result reporting. |
 | **Python** | Run specialized diagnostics or automation as identified jobs with validated inputs, limits, and usable results. Python receives no unrestricted privileged server access. |
 | **Nginx** | Serve web resources, terminate HTTPS connections according to configuration, and route requests to authorized services. |
@@ -207,6 +212,114 @@ presentation/
 
 The current HTML/CSS/vanilla-JavaScript prototype remains the visual and behavioral reference. The target implementation moves shared rendering and form behavior into Symfony/Twig, with JavaScript confined to the browser interactions that require it.
 
+## Backend architecture
+
+The backend target combines **PHP 8.4 / Symfony**, **Doctrine ORM and DBAL over PostgreSQL 17**, **Symfony Messenger**, and the Go agents **`wcpd` / `wcp-privd`** on **Debian 13**. PHP handles application decisions and persistence; Go implements bounded system operations through a separate privilege boundary.
+
+Debian 13 includes PHP 8.4 and PostgreSQL 17, making these versions a coherent distribution-aligned target. Exact package revisions, Symfony compatibility, and updates must be pinned and tested for each release. [Debian 13 release information](https://www.debian.org/News/2025/20250809).
+
+### Backend responsibilities and runtime identities
+
+| Layer | Responsibility | Runtime identity |
+| :--- | :--- | :--- |
+| Symfony application | Controllers, request DTOs, forms, authentication, authorization, APIs, and domain use cases. | Dedicated non-root ADMIN or USER PHP-FPM identity. |
+| Persistence adapter | Map panel metadata through repositories, Doctrine ORM/DBAL, transactions, and migrations. | Restricted PostgreSQL application role. |
+| Messenger workers | Process authorized asynchronous jobs, track outcomes, and coordinate retries and recovery. | Dedicated non-root worker identity. |
+| `wcpd` | Validate control requests, coordinate approved adapters, inspect state, and reconcile operations. | Dedicated non-root daemon identity. |
+| `wcp-privd` | Execute only registered primitives that require elevated OS privileges. | Minimal root broker with a closed action registry. |
+| Python diagnostics | Specialized checks or automation with validated inputs and bounded execution. | Dedicated non-root identity and approved environment. |
+
+The application flow remains explicit:
+
+```text
+Controller / request DTO
+    -> application service
+    -> authorization and domain rules
+    -> repository, message handler, or daemon client
+    -> bounded infrastructure operation
+    -> verified result, audit, and reconciliation
+```
+
+### PostgreSQL 17 and Doctrine persistence
+
+Doctrine is the selected persistence direction for Core metadata: identities, hosting accounts, plans, resources, relationships, policies, and operation records. Mapping belongs behind repository interfaces so controllers and business rules do not become coupled to ad hoc SQL. [Symfony and Doctrine](https://symfony.com/doc/current/doctrine.html).
+
+| Concern | Required behavior |
+| :--- | :--- |
+| Entity ownership | Preserve explicit account ownership and scope in queries and commands. |
+| Database integrity | Use constraints, indexes, transactions, and controlled concurrency alongside application validation. |
+| Query behavior | Paginate inventories, select needed data, and inspect query plans and N+1 patterns under representative workloads. |
+| Schema evolution | Review versioned migrations, test them against representative data, and verify backup/recovery before risky changes. |
+| Rollback | Declare whether data and schema changes are reversible; use a tested recovery procedure when they are not. |
+
+Migrations organize change; their safety depends on the migration contents, transaction support, and recovery procedure. Transactional and all-or-nothing settings must be evaluated for the operations involved. [Doctrine Migrations configuration](https://www.doctrine-project.org/projects/doctrine-migrations/en/current/reference/configuration.html).
+
+Customer databases remain separate from the Core PostgreSQL database and its credentials.
+
+### Messenger and asynchronous jobs
+
+Messages must be routed to an asynchronous transport: installing Messenger alone does not make every handler asynchronous. Redis is an optional transport; a database-backed Doctrine transport provides another deployment option. Deliveries may repeat, so handlers need stable idempotency rules. [Symfony Messenger](https://symfony.com/doc/current/messenger.html).
+
+| Concern | WCP360 requirement |
+| :--- | :--- |
+| User response | Return a tracked job reference after authorization and durable acceptance; show actual progress and completion separately. |
+| Persistence and dispatch | Coordinate committed business state with message publication, using a transactional outbox or an equivalent validated design. |
+| Worker lifecycle | Supervise workers, bound concurrency and retries, retain failed-job evidence, and support controlled restarts. |
+| Transport changes | Configure and test queue migration and recovery; do not silently switch queues during an outage. |
+| Resource consumption | Separate archive, backup, provisioning, and diagnostic workloads so one expensive job cannot exhaust the panel. |
+
+Archives, database provisioning, and certificate operations are examples of tracked work. An archive under a hosting account identity or an authorized database-adapter request does not automatically require root; only the specific privileged primitive crosses the broker boundary.
+
+### Go agents and IPC protection
+
+**`wcpd` runs without root. `wcp-privd` is the small root component.** A closed action ID, typed parameters, and validated resource context replace arbitrary command strings. The broker independently checks relevant constraints before an effect.
+
+Socket transport, caller authentication, and encryption are separate concerns. Local Unix-domain IPC needs approved peer-identity, access-control, and framing rules; describing a socket alone does not establish encryption. Any network control channel requires authenticated encryption under the approved protocol. [Linux Unix-domain socket behavior](https://man7.org/linux/man-pages/man7/unix.7.html).
+
+No new listener, IPC runtime, or privileged operation is activated by this documentation. The current source status remains the [inert daemon foundation](#current-project-status).
+
+### Trusted Core modules and isolated extensions
+
+| Component type | Integration rule |
+| :--- | :--- |
+| Reviewed Core module or dependency | Register vetted services, controllers, forms, and persistence adapters during the controlled application build. |
+| Detached extension | Run outside the Core process with its own identity and data; use declared APIs, events, and jobs. |
+| Provider adapter | Translate authorized operations to a provider contract with scoped credentials and explicit failure handling. |
+| Extension manifest | Declare identity, compatibility, routes, permissions, data, and lifecycle; a manifest is not an authorization grant or permission to inject arbitrary Core services. |
+
+This distinction preserves Symfony's component reuse while keeping third-party extension code outside the privileged application runtime.
+
+## Performance and reliability
+
+This division of responsibilities is suitable for a hosting control panel: request handling, relational state, background work, and privileged effects can be managed separately. Actual speed, memory use, and capacity must be measured on the implemented system.
+
+### PHP execution and database efficiency
+
+| Mechanism | Intended benefit | Qualification |
+| :--- | :--- | :--- |
+| PHP 8.4 and OPcache | Reuse compiled bytecode and reduce repeated script parsing/compilation. | Enable and size OPcache for the deployed release; inspect cache behavior and request profiles. |
+| Symfony production caches | Reuse prepared container, routing, and Twig artifacts. | Warm caches for the release and keep debug/profiling settings appropriate to the environment. |
+| JIT | Optional optimization for workloads that demonstrate a benefit. | Keep it disabled until representative benchmarks justify enabling it; PHP 8.4 disables JIT by default. |
+| PostgreSQL queries | Limit transferred data, query count, lock contention, and expensive scans. | Measure plans, indexes, pagination, connection use, and concurrency. |
+| Worker separation | Keep long operations out of normal page-response paths. | Measure queue wait, execution time, failures, and resource budgets independently. |
+| Bounded Go operations | Use explicit concurrency, cancellation, and timeouts for control-plane operations. | OS, disk, network, and service latency still determine completion time. |
+
+OPcache caches bytecode; database calls, filesystem operations, authorization, and rendering still require work. [PHP OPcache documentation](https://www.php.net/manual/en/book.opcache.php). JIT is optional and disabled by default in PHP 8.4. [PHP 8.4 configuration changes](https://www.php.net/manual/en/migration84.incompatible.php).
+
+### Evidence to collect
+
+| Measurement | What it establishes |
+| :--- | :--- |
+| Page and API p50 / p95 / p99 latency | Response behavior under a stated workload, cache state, and concurrency. |
+| PHP-FPM and worker memory | Capacity planning, pool sizing, and limits under normal and peak load. |
+| Database query count and duration | Query regressions, N+1 behavior, locks, and expensive inventory screens. |
+| Queue wait and execution duration | Difference between accepted work, pending work, and completed effects. |
+| Agent and service-operation duration | End-to-end cost of validated low-level operations, including external I/O. |
+| Failure and recovery behavior | Outcomes after worker crashes, repeated messages, interrupted changes, and provider outages. |
+| Resource isolation under load | Whether a heavy account or extension affects other tenants or panel availability. |
+
+Benchmark reports must identify hardware, versions, dataset, enabled services, concurrency, and failure conditions. No production throughput or latency guarantee is established by the current prototypes.
+
 ## Architecture and operation flow
 
 The browser receives HTML rendered by Symfony/Twig. Turbo and Stimulus enhance navigation and selected interactions. The same domain services authorize page requests, partial updates, APIs, and jobs.
@@ -214,13 +327,15 @@ The browser receives HTML rendered by Symfony/Twig. Turbo and Stimulus enhance n
 ```mermaid
 flowchart TB
     UI["Browser<br/>Turbo and Stimulus"] --> NGINX["Nginx<br/>HTTPS and routing"]
-    NGINX --> PANEL["Dedicated panel PHP-FPM pools"]
+    NGINX --> PANEL["Panel PHP 8.4-FPM<br/>Dedicated ADMIN and USER pools"]
     PANEL --> APP["Symfony<br/>Controllers, Security, Forms, APIs"]
     APP --> TWIG["Twig and shared UI components"]
     TWIG -->|"Rendered HTML / Frames / Streams"| UI
     NGINX --> TENANTS["Isolated customer PHP-FPM pools<br/>Hosted applications"]
-    APP --> PG[("PostgreSQL<br/>Persistent business state")]
-    APP --> JOBS["Jobs and reconciliation"]
+    APP --> ORM["Doctrine ORM / DBAL"]
+    ORM --> PG[("PostgreSQL 17<br/>Persistent business state")]
+    APP --> JOBS["Symfony Messenger<br/>Jobs and reconciliation"]
+    JOBS -->|"State and outbox"| PG
     JOBS -. "Optional transport" .-> REDIS[("Redis")]
     JOBS --> GO["Go / wcpd<br/>Non-root agent"]
     JOBS --> PY["Python<br/>Specialized diagnostics"]
@@ -262,13 +377,15 @@ These boundaries follow the project's ADMIN/USER isolation, broker, and extensio
 | Control | Required behavior |
 | :--- | :--- |
 | Initial owner setup | Use an explicit, local, single-use bootstrap mechanism. Do not ship a default administrator password. |
-| Password handling | Use Symfony password hashing and controlled reset flows; never store recoverable passwords for panel identities. |
-| Multifactor access | Require MFA for privileged production access according to policy. Enroll and revoke factors through reauthenticated flows. |
+| Password handling | Configure Symfony password hashing and tested costs; use Argon2id only when supported and selected, or the validated auto policy. Never store recoverable panel passwords. |
+| Multifactor access | Integrate and configure an MFA mechanism explicitly; enforce privileged-access policy, factor enrollment, revocation, and recovery through reauthenticated flows. |
 | Recovery codes | Store recovery material securely, enforce single use, and audit factor recovery without logging the codes. |
 | Session cookies | Use Secure, HttpOnly, host-scoped cookies with explicit SameSite settings; separate ADMIN and USER cookie namespaces. |
 | Session lifetime | Rotate session IDs after login and elevation. Enforce idle and absolute expiration, logout, per-session revocation, and revoke-all. |
 | Sensitive changes | Require recent reauthentication for factor changes, secret disclosure, destructive actions, and critical network or security configuration. |
 | Browser storage | Keep session IDs, API credentials, and provider secrets out of localStorage, sessionStorage, URLs, and client-side preference data. |
+
+MFA needs an explicit integration, such as a reviewed [SchebTwoFactorBundle](https://symfony.com/bundles/SchebTwoFactorBundle); it is not activated by the framework name. Password behavior depends on the selected [Symfony hasher](https://symfony.com/doc/current/security/passwords.html) and available runtime algorithms.
 
 Cookie attributes and session lifecycle follow [OWASP session guidance](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html); bootstrap and surface separation remain project-specific requirements.
 
@@ -339,6 +456,8 @@ This is the target privileged-operation model. The currently authorized daemon r
 | Previews and downloads | Treat HTML, SVG, scripts, and active documents as untrusted. Use safe download headers or isolated preview origins instead of privileged inline rendering. |
 | Quotas and atomic changes | Check capacity before and during transfers; use safe temporary files and verified replacement where required. |
 | Deletion and restore | Check dependencies, ownership, and the exact target again; retain an explicit audit and a supported recovery path. |
+
+A `realpath()` result followed by a string-prefix check is not sufficient confinement for a tenant-writable tree: names can change between validation and access. Use an account-aware resolver and race-resistant operations; the kernel facilities available for restricted path resolution must be evaluated by the implementation. [Linux openat2 semantics](https://man7.org/linux/man-pages/man2/openat2.2.html).
 
 Panel attachment handling follows [OWASP file-upload guidance](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html); customer application code additionally follows WCP360's hosting-account isolation contract.
 
@@ -1070,3 +1189,269 @@ An engine used by websites, mailboxes, databases, or volumes cannot be removed l
 | FOSSBilling | Map plans, customers, and commercial lifecycle changes to Core commands. | Connector |
 | HostBill | Connect the commercial catalog and track provisioning operations. | Connector |
 | Billable usage export | Explicitly transform measurements into commercial records, units, periods, and reconciliation checks. | Module |
+| Payments / accounting / CRM | Potential connections to selected commercial tools without moving their sensitive data into the Core. | Connector pack |
+| Third-party product licenses | Track LiteSpeed, CloudLinux, Imunify360, or other entitlements; follow the capabilities declared by each integration. | Connector pack |
+
+### Support, customer portal, and consented diagnostics
+
+| Module, connector, or adapter | Planned functions | Type |
+| :--- | :--- | :--- |
+| Ticketing / helpdesk | Tickets, conversations, attachments, assignment, internal notes, and links to relevant resources. | Connector or module |
+| Knowledge base | Contextual articles, search, and help related to the current module. | Module |
+| Status page | Publish incidents and maintenance with information appropriate to the intended audience. | Module |
+| Insights Connector | Selected collection, consent, redaction, review, and diagnostic report delivery without general remote administration. | Connector |
+| Operations reports | Periodic health, capacity, backup, and action reports within the recipient's scope. | Module |
+
+### Personal data, retention, and governance
+
+| Module, connector, or adapter | Planned functions | Type |
+| :--- | :--- | :--- |
+| Data requests | Inventory, collection, review, and export of data within the requested scope. | Module |
+| Erasure and anonymization | Plan affected resources, exceptions, validation, and evidence of completed operations. | Module |
+| Retention and deletion holds | Policies, dependencies, deadlines, and explicit blocking of incompatible purges. | Module |
+| Data residency and movement | Assignments, destination restrictions, and export controls according to configured policy. | Module |
+| Enhanced audit archiving | Export, integrity verification, and purpose-appropriate archive storage beyond mandatory local auditing. | Module |
+
+### Automation, infrastructure as code, and AI assistance
+
+| Module, connector, or adapter | Planned functions | Type |
+| :--- | :--- | :--- |
+| Playbooks | Versioned steps, parameters, preconditions, reliable dry runs, results, and controlled recovery. | Module |
+| Event-driven rules | Triggers, conditions, authorized actions, limits, and loop prevention. | Module |
+| Terraform / OpenTofu | Provider using public APIs, state mapping, plans, and concurrent-change handling. | Connector |
+| Ansible collection | Modules and roles using authorized contracts, structured results, and machine-credential handling. | Connector |
+| Read-only AI assistance | Explain logs and diagnostics, identify consulted data, and separate generated results from measured facts. | Module |
+| AI missions with approval | Action plan, scope, permissions, human approval of mutations, and audited results; no implicit privileged shell. | Module |
+| ChatOps | Bounded commands through an authenticated channel, effect confirmation, and correlation with panel jobs. | Connector |
+| Energy optimization | Move flexible jobs according to capacity and availability constraints, with explained decisions. | Module |
+
+### Customization and productivity
+
+| Module, connector, or adapter | Planned functions | Type |
+| :--- | :--- | :--- |
+| Reseller white labeling | Branding and messages within the reseller's scope without changing security boundaries. | Module |
+| Theme packs | Token- and component-compatible variants, accessibility checks, and return to the standard theme. | UI pack |
+| Translations and terminology | Language packs, key validation, local formats, and RTL support where planned. | UI pack |
+| Custom dashboards | Authorized widgets and role-specific views without a second resource-editing authority. | Module |
+| Optional web terminal | Session restricted to an explicitly authorized identity and scope, expiration, and redacted audit metadata. | Module |
+
+### Alternative Core engine adapters
+
+These adapters implement Core services. The selected engine is replaceable; the hosting function remains essential.
+
+| Module, connector, or adapter | Planned functions | Type |
+| :--- | :--- | :--- |
+| Apache | Map the site model, virtual hosts, and authorized settings to another web engine. | Core adapter |
+| LiteSpeed / OpenLiteSpeed | Versions, configuration, and compatible functions; any license belongs to the third-party product. | Core adapter |
+| BIND / PowerDNS / Knot / NSD | Translate the Core DNS model to the selected engine, validating each engine's own capabilities. | Core adapter |
+| Postfix / Exim / Dovecot | Drivers for selected SMTP/IMAP services, configuration, queues, identities, and operation status. | Core adapter |
+| nftables / firewalld | Manage the firewall backend actually active without maintaining competing configurations. | Core adapter |
+| AppArmor / SELinux | Read status and available controls while retaining each system's own policy model. | Core adapter |
+| Native isolation / chroot / LVE / CageFS | Map actual capabilities, limits, and constraints to the chosen engine without claiming identical isolation. | Core adapter |
+
+### Managed PHP and PostgreSQL extensions
+
+WCP360 plugins are distinct from language or database-engine extensions. The panel should also manage those extensions through explicit adapters and policies. The following examples are catalog items to evaluate, not minimum panel dependencies or modules already available on every server.
+
+| Technical family | Example capabilities | Expected management |
+| :--- | :--- | :--- |
+| PHP — database access | PDO and PostgreSQL / MySQL drivers, mysqli depending on the applications | List modules per PHP version and check site dependencies. |
+| PHP — networking and exchanges | cURL, OpenSSL, SOAP | Expose availability and runtime constraints without permitting blocked destinations. |
+| PHP — text and data | intl, mbstring, XML, bcmath | Manage application requirements and check compatibility with the assigned version. |
+| PHP — images and media | GD, Imagick | Check libraries, processing limits, and authorized resource consumption. |
+| PHP — files and archives | fileinfo, ZIP | Connect capabilities to authorized file operations and size limits. |
+| PHP — caching and performance | OPcache, APCu, Redis client | Distinguish opcode caching, application caching, and access to a Redis service. |
+| PostgreSQL — observation | pg_stat_statements and other available modules | Manage availability, permissions, and engine impact before activation. |
+| PostgreSQL — application functions | pgcrypto, uuid-ossp, or engine-provided extensions | Check compatibility, dependencies, and per-database privilege requirements. |
+| PostgreSQL — specialized data | PostGIS or other domain-specific extensions | Provide a controlled catalog; installation depends on the backend and platform policy. |
+
+Availability comes from the detected engine and packages. Activation may require a reload, privileges, or migration; the interface must not claim dynamic disablement when the backend does not support it.
+
+### Required WCP360 plugin contract
+
+| Contract element | Required declarations |
+| :--- | :--- |
+| Identity and provenance | Stable identifier, type, publisher, version, source, and description. |
+| Compatibility | Accepted Core, API, and runtime versions; dependencies and incompatibilities. |
+| Permissions | Requested actions and resources; visible permission differences during updates. |
+| Interface | Declared routes, navigation entries, translations, components, and UI assets. |
+| Commands and jobs | Permitted operations, parameters, limits, progress, and recovery strategy. |
+| Events | Consumed or emitted events and expected delivery guarantees. |
+| Data and migrations | Owned namespace, schemas, backup, and migration strategy. |
+| Identity and execution | Dedicated process, resource quotas, duration, and isolation. |
+| Network and secrets | Required destinations, secret references, and scoped credentials. |
+| Health and failure | Checks, timeouts, circuit breaking, and behavior when the module is unavailable. |
+| Trust chain | Signatures, integrity, provenance, dependency inventory, and revocation. |
+| Removal lifecycle | Draining, data retention/export, and conditions for safe rollback. |
+
+### Extension management and lifecycle
+
+The **Software & Extensions** manager should display available, installed, active, stopped, unavailable, and quarantined extensions. A catalog may distribute bundled or third-party extensions without becoming necessary for existing websites to operate.
+
+| Stage | Expected checks |
+| :--- | :--- |
+| Discovery | Publisher, version, description, compatibility, dependencies, and requested capabilities. |
+| Installation | Signature, integrity, provenance, permissions, and extension-owned migrations. |
+| Activation | Health verification, route publication, and startup of isolated workers. |
+| Execution | Dedicated identity, limited resources, controlled network access, and logging. |
+| Update | Contract compatibility, permission changes, migration, and rollback options. |
+| Disablement | Withdraw routes, reject new jobs, and drain ongoing work. |
+| Quarantine | Block extension access and retain diagnostic evidence. |
+| Uninstallation | Check dependencies and explicitly choose export, retention, or deletion of extension data. |
+
+An extension does not replace authorization controls, write directly to Core tables, or receive an arbitrary privileged shell. Its removal must preserve existing websites, domains, mailboxes, databases, and local backups.
+
+## Technical requirements
+
+### Target environment for the complete panel
+
+These requirements describe the environment to assemble and qualify for the intended product; they are not an already available deployment procedure.
+
+| Requirement | Prerequisite |
+| :--- | :--- |
+| Operating system | Debian 13 with tested service, network, user, package, and storage management. |
+| Web access | Nginx, HTTPS configuration, a panel hostname, and appropriate DNS resolution. |
+| Frontend | PHP/Symfony, Twig, Symfony UX, AssetMapper, and a pinned standalone Tailwind compiler prepared in the build environment. |
+| Backend | PHP 8.4, a compatible pinned Symfony release, Composer, OPcache, and the extensions required by component manifests. |
+| PHP execution | PHP-FPM, separating the panel from customer application pools. |
+| Core data | PostgreSQL 17, Doctrine ORM/DBAL and Migrations, restricted database identities, backups, and tested migration procedures. |
+| Asynchronous processing | Symfony Messenger, supervised workers, and a configured durable transport; Redis is optional, with a database-backed deployment alternative. |
+| System agent | Go binary built with the toolchain and contracts validated for the distributed version. |
+| Specialized diagnostics | Python and isolated dependencies only for jobs that require them. |
+| Hosting services | DNS, mail, and customer database engines compatible with enabled adapters. |
+| Operations | Storage for data, logs, and backups; retention policy and recovery access. |
+
+Versions and dependencies must be pinned in each component's manifests. **No minimum CPU, RAM, or disk configuration has yet been qualified for the complete panel in production.**
+
+### Requirements for currently available components
+
+| Current use | Required |
+| :--- | :--- |
+| Read or clone the repository | Browser, repository access, and Git for source checkout. |
+| Explore the local HTML prototype | Browser with JavaScript and local storage; an HTTP server. The workspace provides a Windows PowerShell launcher. |
+| Study the candidate kernel | PHP 8.4 and the relevant branch README; this candidate is not the complete Symfony platform described above. |
+| Run File Manager from GitHub sources | PHP `^8.2`, `json` and `fileinfo` extensions, Composer, and Symfony `^7.4` dependencies. The PHP `zip` extension is required for ZIP features. |
+| Build the inert daemon | Canonical Debian 13.7 / linux/amd64 environment, Go 1.27.3, pinned image and toolchain, and builds under UID/GID 10001 as documented in its README. |
+
+Node.js is used by existing prototype audit tools. The selected Symfony frontend uses AssetMapper and a standalone Tailwind compiler; production serving does not require a Node.js runtime.
+
+## Current project status
+
+The stack and catalogs above describe the target. They must be distinguished from the delivery status of each component.
+
+| Component | Documented status |
+| :--- | :--- |
+| Specifications, contracts, and governance | Present in `main`, with decision and evidence tracking. |
+| Panel prototype | HTML/CSS/JavaScript in the design workspace, with local demo interactions and data. |
+| Selected frontend target | PHP/Symfony, Twig, Symfony UX, and shared Twig components; implementation and integration remain to be completed. |
+| Selected backend target | PHP 8.4 / Symfony, Doctrine ORM/DBAL, PostgreSQL 17, and Messenger with an approved transport; these target integrations are not established by the inert foundation alone. |
+| Application kernel and interface | Candidate sources in `source/full-platform-candidate`, including a framework-independent PHP 8.4 kernel and static interface. |
+| `wcpd` daemon | Inert Go CLI foundation: help, version, and local checks; no listener or privileged effects. |
+| File Manager 0.3.0 alpha Pro | Standalone PHP/Symfony application on a dedicated branch; WCP360 integration blocked pending contracts and an adapter. |
+| Insights Connector | Optional design-workspace prototype, disabled by default; its local presence does not constitute publication in `main`. |
+| Complete platform | Symfony/Twig presentation, Doctrine/PostgreSQL 17 persistence, Messenger, agents, and hosting services still require integration and qualification; no production release is claimed here. |
+
+The current standalone File Manager uses **private, single-owner storage modified exclusively by that module**. This mode is not a multi-tenant backend for directories concurrently modified through SSH, FTP, or customer applications.
+
+## Explore and get started
+
+### Clone the repository
+
+Repository access is required. From a terminal with Git installed:
+
+```sh
+git clone https://github.com/yyogas/wcp360.git
+cd wcp360
+git branch --all
+```
+
+Start with the [current manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md), then consult the branch for the component you want to study. `main` is not an installer for the complete panel.
+
+### Install standalone File Manager dependencies
+
+From the clone root, in PowerShell, when checking out this branch for the first time:
+
+```powershell
+git switch --track origin/extensions/file-manager-v0.3.0-import
+Set-Location WCP360_Extensions/WCP360-File-Manager
+composer install --no-dev --prefer-dist
+```
+
+Then read the [File Manager README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md) to configure storage and use the appropriate launcher. GitHub sources do not include `vendor/`. For development and module tests, use `composer install` with development dependencies.
+
+### Open the design workspace prototype
+
+This procedure applies to the **local workspace containing `WCP360_Design_System/`**, whose layout differs from the GitHub repository. Cloning `main` alone does not provide that directory.
+
+From the workspace root on Windows:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\WCP360_Design_System\serve-prototype.ps1"
+```
+
+Open <http://127.0.0.1:8790/>. Keep the same hostname and port to share demo state between pages. `Ctrl+C` stops the server. Interface actions simulate the panel; they do not configure the server's Linux services.
+
+## Repository layout
+
+Layout observed at the root of `main`:
+
+```text
+wcp360/
+├── .github/
+├── .gitignore
+├── README.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── archive/
+├── contracts/
+├── documentation/
+├── governance/
+├── manifests/
+├── specifications/
+└── src/
+```
+
+Candidate sources are distributed across their branches. Their presence does not imply integration into `main`:
+
+| Location | Reference branch |
+| :--- | :--- |
+| `SOURCE/platform/`, `SOURCE/ui/`, `SOURCE/daemon/` | `source/full-platform-candidate` |
+| `SOURCE/daemon/` — inert CLI foundation | `source/sc-m01-inert-daemon` |
+| `WCP360_Extensions/WCP360-File-Manager/` | `extensions/file-manager-v0.3.0-import` |
+
+## GitHub branches
+
+Branches observed on **October 31, 2026**. `main` is the default branch; prefixes group work by purpose. Branch existence does not establish a merge, independent approval, or a version release.
+
+| Branch | Contents or purpose |
+| :--- | :--- |
+| [`main`](https://github.com/yyogas/wcp360/tree/main) | Default reference for specifications, contracts, governance, and documentation. |
+| [`audit/closure-matrix-refresh-2026-10-03`](https://github.com/yyogas/wcp360/tree/audit/closure-matrix-refresh-2026-10-03) | Tracks closure of audit findings in the closure matrix. |
+| [`design-system/import-v2.5.3.36.4-markdown`](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown) | Import of Design System V2.5.3.36.4 Markdown documents. |
+| [`extensions/file-manager-v0.3.0-import`](https://github.com/yyogas/wcp360/tree/extensions/file-manager-v0.3.0-import) | Standalone File Manager 0.3.0 alpha sources published for review. |
+| [`integration/sc-m01-owner-readiness-20261026`](https://github.com/yyogas/wcp360/tree/integration/sc-m01-owner-readiness-20261026) | Cross-domain SC-M01 integration and readiness work. |
+| [`maintenance/sc-m01-repository-guardrails`](https://github.com/yyogas/wcp360/tree/maintenance/sc-m01-repository-guardrails) | Maintenance of repository and publication controls. |
+| [`research/sc-m01-control-protocol-options-20261026`](https://github.com/yyogas/wcp360/tree/research/sc-m01-control-protocol-options-20261026) | Research into the backend–wcpd control protocol. |
+| [`research/sc-m01-ipcb-go-framing-20261027`](https://github.com/yyogas/wcp360/tree/research/sc-m01-ipcb-go-framing-20261027) | Research into IPC-B framing and parsing in Go. |
+| [`source/full-platform-candidate`](https://github.com/yyogas/wcp360/tree/source/full-platform-candidate) | PHP 8.4 kernel, static interface, and inert daemon: non-production candidates. |
+| [`source/sc-m01-domain-foundation`](https://github.com/yyogas/wcp360/tree/source/sc-m01-domain-foundation) | SC-M01 application domain foundation work. |
+| [`source/sc-m01-inert-daemon`](https://github.com/yyogas/wcp360/tree/source/sc-m01-inert-daemon) | Go CLI foundation for wcpd, without a listener, database, or privileged actions. |
+| [`test/sc-m01-cli-process-contract`](https://github.com/yyogas/wcp360/tree/test/sc-m01-cli-process-contract) | Tests for the CLI contract and process behavior. |
+| [`tooling/sc-m01-contract-traceability-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-contract-traceability-20261026) | Contract traceability and consistency tooling. |
+| [`tooling/sc-m01-preflight-checks-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-preflight-checks-20261026) | Artifact presence and integrity preflight checks. |
+
+To follow a component, read its README and applicable governance decisions before using its sources. Research, integration, and tooling branches are not installable panel releases.
+
+## Documentation and contributing
+
+| Need | Reference |
+| :--- | :--- |
+| Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/governance/PROJECT-STATUS.md). |
+| Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
+| Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
+| Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
+| Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md). |
+| Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
+| Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
+
+Contributions should identify the component, its contract, and the checks performed. A working interface, a passing local test, or a source branch does not replace the review and promotion required by project governance.
