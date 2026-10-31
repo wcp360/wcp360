@@ -1,1062 +1,1072 @@
+<div align="center">
+
 # WCP360 — Web Control Panel 360
 
-**Un panneau d’hébergement web modulaire et évolutif, conçu pour administrer des serveurs, des services et des comptes depuis une interface unifiée.**
+**Modular hosting management. A shared Symfony foundation. Controlled system operations.**
 
-WCP360 vise un périmètre comparable à cPanel ou Plesk : gérer les utilisateurs, sites, domaines, DNS, certificats, messagerie, bases de données, fichiers, sauvegardes et services système. Son architecture associe un **Core autonome**, des **modules métier** et des **extensions facultatives**.
+[![Project status: in development](https://img.shields.io/badge/Status-In%20development-E89B25?style=flat-square)](#current-project-status)
+[![Modular architecture](https://img.shields.io/badge/Architecture-Modular-4263EB?style=flat-square)](#modular-and-extensible-design)
+[![Security design: least privilege](https://img.shields.io/badge/Security%20design-Least%20privilege-0F766E?style=flat-square)](#security-architecture)
 
-La stack cible repose sur **un frontend web, Symfony, PostgreSQL, Redis lorsque nécessaire, Go, Python, Nginx et PHP-FPM**. Chaque composant possède une responsabilité précise, afin de faire évoluer l’interface, la logique métier et les opérations système séparément.
+[![Target frontend: PHP and Symfony](https://img.shields.io/badge/Frontend-PHP%20%2F%20Symfony-1F2937?style=flat-square&logo=symfony&logoColor=white)](#frontend-architecture)
+[![Target templates: Twig](https://img.shields.io/badge/Templates-Twig-BACF29?style=flat-square)](#frontend-architecture)
+[![Target interactions: Symfony UX](https://img.shields.io/badge/Interactions-Turbo%20%2B%20Stimulus-7C3AED?style=flat-square)](#frontend-architecture)
+[![Target components: Twig Components](https://img.shields.io/badge/Components-Twig%20Components-059669?style=flat-square)](#frontend-architecture)
+[![Target assets: AssetMapper](https://img.shields.io/badge/Assets-AssetMapper-475569?style=flat-square)](#frontend-architecture)
+[![Target styling: Tailwind CSS](https://img.shields.io/badge/Styles-Tailwind%20CSS-0891B2?style=flat-square&logo=tailwindcss&logoColor=white)](#frontend-architecture)
 
-> **Projet en développement — état documenté au 31 octobre 2026.** Ce README présente le produit cible et son organisation. Les prototypes, sources candidates et composants consultables sont distingués dans [État actuel du projet](#état-actuel-du-projet). Le [manifeste courant](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) décrit le périmètre de développement autorisé.
+[![Target database: PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)](#technology-stack-and-responsibilities)
+[![Optional job transport: Redis](https://img.shields.io/badge/Queue-Redis%20%28optional%29-DC382D?style=flat-square&logo=redis&logoColor=white)](#technology-stack-and-responsibilities)
+[![Target system agent: Go](https://img.shields.io/badge/Agent-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](#technology-stack-and-responsibilities)
+[![Target diagnostics: Python](https://img.shields.io/badge/Diagnostics-Python-3776AB?style=flat-square&logo=python&logoColor=white)](#technology-stack-and-responsibilities)
+[![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
+[![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
-## Sommaire
+[Frontend](#frontend-architecture) · [Architecture](#architecture-and-operation-flow) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
 
-- [Le projet, son rôle et son public](#le-projet-son-rôle-et-son-public)
-- [Pourquoi WCP360](#pourquoi-wcp360)
-- [Un projet modulaire et évolutif](#un-projet-modulaire-et-évolutif)
-- [Stack technique et responsabilités](#stack-technique-et-responsabilités)
-- [Architecture et circulation des opérations](#architecture-et-circulation-des-opérations)
-- [Fonctionnalités nécessaires au panneau](#fonctionnalités-nécessaires-au-panneau)
-- [Composants et services réutilisables](#composants-et-services-réutilisables)
-- [Extensions et plugins possibles et à prévoir](#extensions-et-plugins-possibles-et-à-prévoir)
-- [Prérequis techniques](#prérequis-techniques)
-- [État actuel du projet](#état-actuel-du-projet)
-- [Explorer et démarrer](#explorer-et-démarrer)
-- [Organisation du dépôt](#organisation-du-dépôt)
-- [Branches GitHub](#branches-github)
-- [Documentation et contribution](#documentation-et-contribution)
+</div>
 
-## Le projet, son rôle et son public
+---
 
-WCP360 a pour rôle de simplifier les opérations quotidiennes d’un hébergement : créer un compte, lui attribuer une offre, publier un site, configurer un domaine, créer une boîte mail, restaurer une sauvegarde ou diagnostiquer un service.
+**A modular, extensible web hosting control panel designed to manage servers, services, and accounts through a unified interface.**
 
-Le panneau doit présenter les ressources, les droits et l’état réel des opérations de manière cohérente. Les tâches longues sont suivies ; les actions sensibles sont autorisées et journalisées ; les réglages communs sont réutilisés par les différents modules.
+WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, DNS, certificates, mail, databases, files, backups, and system services. Its architecture combines an **autonomous Core**, **domain modules**, and **optional extensions**.
 
-| Public | Utilisation |
-| :--- | :--- |
-| Administrateurs système | Installer, configurer, surveiller et maintenir les services du serveur. |
-| Hébergeurs | Gérer les comptes, offres, quotas, ressources et services de leurs clients. |
-| Revendeurs et agences web | Administrer plusieurs clients et sites dans le périmètre qui leur est délégué. |
-| Clients d’hébergement | Gérer leurs sites, domaines, fichiers, bases de données, messagerie et sauvegardes. |
-| Développeurs et intégrateurs | Créer des extensions, connecter des services et automatiser les opérations autorisées. |
-
-| Ensemble | Responsabilité |
-| :--- | :--- |
-| **WCP360 Core** | Noyau installé sur le serveur, fonctions essentielles d’hébergement et services communs. |
-| **WCP-USER** | Interface des clients et revendeurs, limitée aux ressources et capacités qui leur sont attribuées. |
-| **WCP-ADMIN** | Interface d’administration du serveur, des services et des politiques globales. |
-| **WCP360 Internal** | Services privés de l’éditeur : licences, catalogue, construction, distribution et support. Ensemble séparé du produit installé chez le client. |
-| **Extensions et adaptateurs** | Capacités facultatives, connecteurs fournisseurs et intégrations spécialisées. |
-
-Les niveaux ROOT, RESELLER et USER désignent des périmètres du panneau. Le rôle ROOT du panneau n’accorde pas automatiquement un accès général au compte `root` Linux.
-
-## Pourquoi WCP360
-
-Le projet cherche à réunir dans un même panneau les opérations d’hébergement habituellement réparties entre plusieurs outils, tout en gardant une séparation claire entre les comptes et les responsabilités techniques.
-
-Sa conception répond à cinq besoins :
-
-- **Centraliser les opérations** : retrouver les ressources, paramètres, tâches et journaux depuis une navigation organisée.
-- **Réutiliser les mécanismes communs** : développer une fois les formulaires, tableaux, permissions, notifications et traitements.
-- **Conserver l’autonomie du serveur** : les fonctions essentielles continuent lorsque les intégrations facultatives sont indisponibles.
-- **Étendre le produit** : ajouter des fonctionnalités et fournisseurs au moyen de contrats documentés.
-- **Accompagner l’évolution** : faire évoluer les modules, données et interfaces avec des versions, migrations et procédures de retour maîtrisées.
-
-## Un projet modulaire et évolutif
-
-### Trois niveaux de modularité
-
-| Niveau | Contenu | Règle |
+| Product scope | Application surfaces | Extension model |
 | :--- | :--- | :--- |
-| **Fondations communes** | Identité, permissions, configuration, données, API, jobs, événements, audit et composants UI. | Tous les modules utilisent les mêmes mécanismes transverses. |
-| **Modules métier du Core** | Comptes, sites, domaines, DNS, TLS, mail, bases, fichiers, sauvegardes locales et exploitation système. | Chaque domaine possède ses données de référence, ses actions et ses responsabilités. |
-| **Extensions facultatives** | Automatisation avancée, fournisseurs externes, services commerciaux et outils spécialisés. | Elles peuvent être désactivées sans interrompre les fonctions essentielles du Core. |
+| **233 documented capabilities** across 21 domains | **WCP-ADMIN** for server operations and **WCP-USER** for customers and resellers | **149 catalog entries** covering optional modules, connectors, recipes, and engine adapters |
 
-**Modulaire** signifie qu’une fonctionnalité possède une frontière identifiable : un contrat, des permissions, des données, des opérations et une interface. Un module métier du Core reste indispensable au produit ; une extension reste facultative.
+The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. PostgreSQL stores Core data; optional Redis transports jobs; Go performs controlled system operations; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications.
 
-**Évolutif** signifie que ces frontières permettent d’ajouter une capacité, remplacer un adaptateur ou faire évoluer une implémentation sans réécrire l’ensemble du panneau. Le versionnement des API, les migrations de données, les contrôles de compatibilité et les tests de contrats doivent accompagner ces changements.
+> [!NOTE]
+> **In development — status documented on October 31, 2026.** This README describes the target architecture. The existing prototypes and candidate sources still require integration and qualification. See [Current project status](#current-project-status) and the [current manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) for the authorized development scope.
 
-### Principes d’organisation
+## Contents
 
-- Une ressource possède un propriétaire métier et un point d’édition de référence. Les tableaux de bord et réglages globaux y renvoient.
-- WCP-USER et WCP-ADMIN partagent les contrats et composants communs, avec des routes, sessions et autorisations adaptées à leur surface.
-- Les fournisseurs sont reliés par des adaptateurs : un changement de fournisseur ne doit pas changer la logique métier du Core.
-- Les extensions possèdent leurs données et leurs traitements isolés. Elles utilisent les API et jobs autorisés pour agir sur les ressources du Core.
-- Une extension indisponible retire ses routes et ses nouvelles tâches ; le Core et les services d’hébergement existants restent utilisables.
-- Les services privés WCP360 Internal ne sont pas des plugins installables sur les serveurs clients.
+- [Project purpose and audience](#project-purpose-and-audience)
+- [Why WCP360](#why-wcp360)
+- [Modular and extensible design](#modular-and-extensible-design)
+- [Technology stack and responsibilities](#technology-stack-and-responsibilities)
+- [Frontend architecture](#frontend-architecture)
+- [Architecture and operation flow](#architecture-and-operation-flow)
+- [Security architecture](#security-architecture)
+- [Required panel capabilities](#required-panel-capabilities)
+- [Reusable components and services](#reusable-components-and-services)
+- [Potential and planned extensions and plugins](#potential-and-planned-extensions-and-plugins)
+- [Technical requirements](#technical-requirements)
+- [Current project status](#current-project-status)
+- [Explore and get started](#explore-and-get-started)
+- [Repository layout](#repository-layout)
+- [GitHub branches](#github-branches)
+- [Documentation and contributing](#documentation-and-contributing)
 
-## Stack technique et responsabilités
+## Project purpose and audience
 
-La répartition suivante définit la **stack cible du projet**.
+WCP360 aims to simplify everyday hosting operations: create an account, assign a plan, publish a website, configure a domain, create a mailbox, restore a backup, or diagnose a service.
 
-| Composant | Responsabilité |
-| :--------- | :----------------------------------------------- |
-| Frontend | Affichage, navigation, formulaires, graphiques |
-| Symfony | Logique métier, utilisateurs, autorisations, API |
-| PostgreSQL | Données persistantes et relations |
-| Redis | Transport de tâches asynchrones, si nécessaire |
-| Go | Opérations système contrôlées |
-| Python | Diagnostics et automatisations spécialisées |
-| Nginx | Serveur web et reverse proxy |
-| PHP-FPM | Exécution isolée des applications PHP hébergées |
+The panel should present resources, permissions, and actual operation status consistently. Long-running jobs are tracked; sensitive actions are authorized and audited; shared settings are reused across modules.
 
-### Rôle des composants dans WCP360
-
-| Composant | Utilisation dans le panneau |
+| Audience | Use |
 | :--- | :--- |
-| **Frontend** | Présenter WCP-USER et WCP-ADMIN, les composants du Design System, les états des opérations et les graphiques de consommation. Le prototype utilise HTML, CSS et JavaScript. |
-| **Symfony** | Recevoir les requêtes, valider les données, appliquer les règles métier et permissions, exposer les API et coordonner les traitements. L’architecture métier reste organisée en domaines réutilisables. |
-| **PostgreSQL** | Conserver l’état métier du Core : comptes, offres, ressources, relations, politiques et suivi des opérations. Les bases hébergées des clients constituent un domaine distinct. |
-| **Redis** | Fournir un transport de messages lorsque les besoins le justifient. Redis reste facultatif : le mécanisme de jobs doit disposer d’un transport durable alternatif. Les données métier de référence restent dans PostgreSQL. |
-| **Go** | Porter les agents système et les opérations définies par contrat : validation, état des services, application contrôlée de configurations et remontée de résultats. |
-| **Python** | Porter des diagnostics ou automatisations spécialisés exécutés comme tâches identifiées, avec entrées validées, limites et résultats exploitables. Python ne reçoit pas un accès général privilégié au serveur. |
-| **Nginx** | Servir les ressources web, terminer les connexions HTTPS selon la configuration et diriger les requêtes vers les services autorisés. |
-| **PHP-FPM** | Exécuter les applications PHP des comptes dans des pools isolés. Le runtime du panneau dispose de son propre périmètre, distinct des applications hébergées. |
+| System administrators | Install, configure, monitor, and maintain server services. |
+| Hosting providers | Manage customer accounts, plans, quotas, resources, and services. |
+| Resellers and web agencies | Administer multiple customers and websites within their delegated scope. |
+| Hosting customers | Manage their websites, domains, files, databases, mail, and backups. |
+| Developers and integrators | Build extensions, connect services, and automate authorized operations. |
 
-Symfony porte la décision métier ; Go applique les opérations système autorisées ; Python intervient pour les traitements spécialisés. Le frontend n’exécute pas directement ces opérations sur le serveur.
+| Component group | Responsibility |
+| :--- | :--- |
+| **WCP360 Core** | Server-installed foundation, essential hosting capabilities, and shared services. |
+| **WCP-USER** | Customer and reseller interface restricted to assigned resources and capabilities. |
+| **WCP-ADMIN** | Administration interface for the server, services, and global policies. |
+| **WCP360 Internal** | Private vendor services: licensing, catalog, builds, distribution, and support. Separate from the product installed on customer servers. |
+| **Extensions and adapters** | Optional capabilities, provider connectors, and specialized integrations. |
 
-## Architecture et circulation des opérations
+ROOT, RESELLER, and USER denote panel scopes. The panel's ROOT role does not automatically grant unrestricted access to the Linux `root` account.
 
-Ce schéma décrit l’architecture cible, avec Redis et les traitements Python utilisés selon les besoins.
+## Why WCP360
+
+The project brings hosting operations commonly spread across multiple tools into one panel while maintaining clear boundaries between accounts and technical responsibilities.
+
+Its design addresses five needs:
+
+- **Centralize operations**: find resources, settings, jobs, and logs through organized navigation.
+- **Reuse shared mechanisms**: build forms, tables, permissions, notifications, and processing mechanisms once.
+- **Preserve server autonomy**: essential functions continue when optional integrations are unavailable.
+- **Extend the product**: add capabilities and providers through documented contracts.
+- **Support ongoing evolution**: change modules, data, and interfaces through versioning, migrations, and controlled recovery procedures.
+
+## Modular and extensible design
+
+### Three levels of modularity
+
+| Level | Contents | Rule |
+| :--- | :--- | :--- |
+| **Shared foundations** | Identity, permissions, configuration, data, APIs, jobs, events, auditing, and UI components. | All modules use the same cross-cutting mechanisms. |
+| **Core domain modules** | Accounts, websites, domains, DNS, TLS, mail, databases, files, local backups, and system operations. | Each domain owns its authoritative data, actions, and responsibilities. |
+| **Optional extensions** | Advanced automation, external providers, commercial services, and specialized tools. | They can be disabled without interrupting essential Core functions. |
+
+**Modular** means a capability has an identifiable boundary: a contract, permissions, data, operations, and an interface. A Core domain module remains essential to the product; an extension remains optional.
+
+**Extensible** means these boundaries allow new capabilities, replacement adapters, or implementation changes without rewriting the entire panel. API versioning, data migrations, compatibility checks, and contract tests must accompany those changes.
+
+### Organization principles
+
+- Each resource has a domain owner and one authoritative editing interface. Dashboards and global settings link to it.
+- WCP-USER and WCP-ADMIN share contracts and components while retaining surface-specific routes, sessions, and authorization.
+- Providers connect through adapters: switching a provider should not change Core business logic.
+- Extensions own isolated data and workers. They use authorized APIs and jobs to act on Core resources.
+- An unavailable extension withdraws its routes and new jobs; the Core and existing hosting services remain usable.
+- Private WCP360 Internal services are not installable plugins for customer servers.
+
+## Technology stack and responsibilities
+
+The following defines the **project's target stack**.
+
+| Component | Responsibility |
+| :--- | :--- |
+| Frontend | PHP/Symfony-rendered pages, Twig components, forms, navigation, and charts |
+| Symfony | Controllers, domain services, authentication, authorization, forms, and APIs |
+| PostgreSQL | Persistent data and relationships |
+| Redis | Asynchronous job transport, when needed |
+| Go | Controlled system operations |
+| Python | Diagnostics and specialized automation |
+| Nginx | Web server and reverse proxy |
+| PHP-FPM | Isolated execution of hosted PHP applications |
+
+### How the components work in WCP360
+
+| Component | Use in the panel |
+| :--- | :--- |
+| **Frontend** | Render WCP-USER and WCP-ADMIN with Symfony/Twig and shared UI components. Turbo, Stimulus, and selected Live Components add browser interactions while server-side services retain authority. |
+| **Symfony** | Receive requests, validate data, enforce business rules and permissions, expose APIs, and coordinate processing. Business architecture remains organized into reusable domains. |
+| **PostgreSQL** | Persist Core business state: accounts, plans, resources, relationships, policies, and operation tracking. Customer-hosted databases belong to a separate domain. |
+| **Redis** | Provide message transport when justified. Redis remains optional: the job mechanism must have an alternative durable transport. Authoritative business data remains in PostgreSQL. |
+| **Go** | Implement system agents and contract-defined operations: validation, service status, controlled configuration application, and result reporting. |
+| **Python** | Run specialized diagnostics or automation as identified jobs with validated inputs, limits, and usable results. Python receives no unrestricted privileged server access. |
+| **Nginx** | Serve web resources, terminate HTTPS connections according to configuration, and route requests to authorized services. |
+| **PHP-FPM** | Execute account PHP applications in isolated pools. The panel runtime has its own scope, separate from hosted applications. |
+
+Symfony renders the interface and applies business rules; Go performs authorized system operations; Python handles specialized processing. Twig templates and browser controllers never execute system operations directly.
+
+## Frontend architecture
+
+### PHP and Symfony frontend stack
+
+**Symfony renders the WCP360 frontend on the server through Twig.** Symfony UX adds navigation, partial updates, reusable components, and focused browser interactions. Controllers, forms, components, APIs, and jobs call the same domain services and authorization rules.
+
+This follows Symfony's documented [PHP and Twig frontend approach](https://symfony.com/doc/current/frontend.html).
+
+| Layer | Selected technology | Role in WCP360 |
+| :--- | :--- | :--- |
+| Application and routing | PHP / Symfony | Render ADMIN and USER routes, resolve context, authorize requests, and call domain services. |
+| Templates | [Twig](https://symfony.com/doc/current/templates.html) | Layouts, domain views, escaped output, form themes, and reusable presentation. |
+| Components | [Symfony UX Twig Components](https://symfony.com/bundles/ux-twig-component) | Shared tables, dialogs, status badges, resource cards, menus, and permission-aware presentation. |
+| Navigation and partial updates | [Symfony UX Turbo](https://symfony.com/bundles/ux-turbo) | Page navigation, scoped Frames, and targeted Streams using server-rendered HTML. |
+| Browser interactions | [StimulusBundle](https://symfony.com/bundles/StimulusBundle) | Small controllers for dialogs, selections, uploads, clipboard actions, and measured job refreshes. |
+| Reactive PHP components | [Symfony UX Live Components](https://symfony.com/bundles/ux-live-component) | Selected interactive filters and forms whose state is processed in PHP; server authorization applies on every action. |
+| Forms and validation | [Symfony Form](https://symfony.com/doc/current/forms.html), Validator, and Security CSRF | Shared form types, field errors, constraints, and protected mutations. |
+| Assets | [AssetMapper](https://symfony.com/doc/current/frontend/asset_mapper.html) | Import maps, versioned JavaScript/CSS, and local production assets served by Nginx. |
+| Styling | WCP360 CSS variables and [TailwindBundle](https://symfony.com/bundles/TailwindBundle) | Preserve design tokens, themes, density, and responsive layouts; prepare CSS using the pinned standalone Tailwind binary. |
+| Charts | [Symfony UX Chart.js](https://symfony.com/bundles/ux-chartjs) | Configure charts in PHP and display authorized usage and service measurements. |
+| Localization | Symfony Translation and Intl | Shared messages, locale-aware dates/numbers, and translated interfaces. |
+| Verification | [Symfony testing tools](https://symfony.com/doc/current/testing.html) and [Panther](https://symfony.com/doc/current/testing/end_to_end.html) | PHP unit/integration tests, form and authorization tests, and real-browser interaction checks. |
+
+AssetMapper and the standalone Tailwind integration allow this frontend toolchain to run without a Node.js build dependency. Asset preparation belongs to development and release builds; the production web application must not download or update its own dependencies. [TailwindBundle deployment guidance](https://symfony.com/bundles/TailwindBundle).
+
+### Shared presentation and module ownership
+
+The UI library exposes WCP360 components such as `DataTable`, `FormPanel`, `ConfirmDialog`, `ResourceStatus`, and `JobProgress`. Domain modules consume these shared Twig/PHP components. Pagination, filtering, validation, accessibility, and confirmation behavior are maintained centrally.
+
+The following is an intended implementation layout, rather than directories already present in `main`:
+
+```text
+presentation/
+├── admin/              # ADMIN controllers, routes, forms, and templates
+├── user/               # USER controllers, routes, forms, and templates
+├── shared/
+│   ├── components/     # Twig/PHP UI components
+│   ├── form-types/     # Reusable Symfony forms and themes
+│   ├── translations/   # Messages and formatting
+│   └── assets/         # Design tokens and Stimulus controllers
+└── modules/            # Domain presentation calling shared services
+```
+
+| Boundary | Implementation rule |
+| :--- | :--- |
+| ADMIN and USER | Separate bootstraps, Unix identities, PHP-FPM pools, session namespaces, and authorization contexts. |
+| Page, Frame, and API | Recheck the same permissions and account ownership; a partial request is not a trusted shortcut. |
+| Twig Components | Own presentation and call approved services; templates never run shell commands or arbitrary SQL. |
+| Live Components | Explicitly declare writable state; validate changed resource IDs, arguments, and permissions on every action. |
+| Forms | Reuse Symfony form types and server constraints; browser validation improves feedback but does not authorize mutations. |
+| Turbo and Stimulus | Use one mechanism per interaction and managed controller lifecycles to prevent duplicate handlers and submissions. |
+| Table state | Store non-sensitive filters in validated query parameters; keep permissions, secrets, and authoritative resource state on the server. |
+| Job progress | Show server-confirmed states and measured progress, with bounded polling or authorized stream subscriptions. |
+| Extensions | Accept declared contributions and reviewed assets; untrusted templates or scripts never enter the privileged shell. |
+| Accessibility | Verify labels, focus, keyboard operation, dialogs, contrast, and reduced motion in the assembled interface. |
+
+The current HTML/CSS/vanilla-JavaScript prototype remains the visual and behavioral reference. The target implementation moves shared rendering and form behavior into Symfony/Twig, with JavaScript confined to the browser interactions that require it.
+
+## Architecture and operation flow
+
+The browser receives HTML rendered by Symfony/Twig. Turbo and Stimulus enhance navigation and selected interactions. The same domain services authorize page requests, partial updates, APIs, and jobs.
 
 ```mermaid
 flowchart TB
-    UI["Frontend<br/>WCP-USER et WCP-ADMIN"] --> NGINX["Nginx<br/>Serveur web et reverse proxy"]
-    NGINX --> PANEL["Runtime PHP-FPM du panneau"]
-    PANEL --> APP["Symfony<br/>Métier, utilisateurs, autorisations, API"]
-    NGINX --> TENANTS["Pools PHP-FPM isolés<br/>Applications hébergées"]
-    APP --> PG[("PostgreSQL<br/>État métier persistant")]
-    APP --> JOBS["Jobs et réconciliation"]
-    JOBS -. "Transport facultatif" .-> REDIS[("Redis")]
-    JOBS --> GO["Go / wcpd<br/>Agent non-root"]
-    JOBS --> PY["Python<br/>Diagnostics spécialisés"]
-    GO -->|"IPC borné et authentifié"| PRIV["wcp-privd<br/>Opérations privilégiées limitées"]
-    PRIV --> HOST["Services Linux<br/>Web, DNS, mail, stockage"]
-    EXT["Extensions isolées"] -->|"API, événements et jobs autorisés"| APP
+    UI["Browser<br/>Turbo and Stimulus"] --> NGINX["Nginx<br/>HTTPS and routing"]
+    NGINX --> PANEL["Dedicated panel PHP-FPM pools"]
+    PANEL --> APP["Symfony<br/>Controllers, Security, Forms, APIs"]
+    APP --> TWIG["Twig and shared UI components"]
+    TWIG -->|"Rendered HTML / Frames / Streams"| UI
+    NGINX --> TENANTS["Isolated customer PHP-FPM pools<br/>Hosted applications"]
+    APP --> PG[("PostgreSQL<br/>Persistent business state")]
+    APP --> JOBS["Jobs and reconciliation"]
+    JOBS -. "Optional transport" .-> REDIS[("Redis")]
+    JOBS --> GO["Go / wcpd<br/>Non-root agent"]
+    JOBS --> PY["Python<br/>Specialized diagnostics"]
+    GO -->|"Bounded, authenticated IPC"| PRIV["wcp-privd<br/>Limited privileged operations"]
+    PRIV --> HOST["Linux services<br/>Web, DNS, mail, storage"]
+    EXT["Isolated extensions"] -->|"Authorized APIs, events, and jobs"| APP
 ```
 
-Une opération suit un parcours explicite :
+Rendered responses return through the configured Nginx application origin. ADMIN and USER retain separate security contexts and PHP-FPM identities even when they share component and domain libraries.
 
-1. L’utilisateur effectue une action depuis le frontend.
-2. Symfony valide la requête, les droits et les règles métier du domaine.
-3. L’état demandé est enregistré ; une opération longue reçoit un identifiant de job.
-4. Le traitement est confié au service approprié : logique applicative, agent Go ou diagnostic Python.
-5. Les éventuels effets privilégiés passent par des primitives limitées du broker, après contrôle.
-6. Le résultat est journalisé, rapproché de l’état réel et présenté dans l’interface.
+1. Nginx routes a browser request to the intended Symfony application.
+2. Symfony authenticates the session, verifies account ownership and permissions, and validates mutation input and request protection.
+3. The domain service reads or records the requested state and creates a durable job for long-running work.
+4. Approved workers, Go agents, or Python diagnostics perform their bounded operations; privileged effects pass through the broker.
+5. Results are audited and reconciled with observed state.
+6. Twig renders the updated view or Turbo response; authorized refreshes show server-confirmed job results.
 
-Les tâches doivent pouvoir signaler leur progression, leurs erreurs et les possibilités de reprise. Les nouvelles tentatives ne doivent pas produire plusieurs fois le même effet.
+Retries must not repeat the same effect. The diagram describes the target: the currently authorized daemon remains an inert CLI without a listener or privileged operations.
 
-Le diagramme ne décrit pas un assemblage déjà livré : le daemon actuellement autorisé reste une CLI inerte, sans listener ni opérations privilégiées.
+## Security architecture
 
-## Fonctionnalités nécessaires au panneau
+Security belongs to the Core: authentication, tenant isolation, authorization, path confinement, controlled system operations, and recovery cannot depend on an optional plugin. The requirements below describe the intended implementation and its acceptance evidence; they are not a claim that the current prototype has passed a security assessment.
 
-Le catalogue suivant détaille **233 capacités fonctionnelles réparties en 21 domaines**. Il décrit le périmètre à couvrir, pas un état de livraison. Les fonctions avancées facultatives sont développées dans le [catalogue des extensions](#extensions-et-plugins-possibles-et-à-prévoir).
+### Trust boundaries and deployment isolation
 
-Pour chaque domaine, WCP-ADMIN administre les politiques et ressources du serveur ; WCP-USER ne voit que les ressources et actions qui lui sont attribuées. Les variantes dépendent des capacités effectivement détectées. Une action doit être autorisée côté backend, produire un résultat vérifié et rejoindre le centre de tâches lorsqu’elle est longue.
-
-| Domaine fonctionnel | Capacités décrites |
+| Control | Required behavior |
 | :--- | :--- |
-| [Authentification et protection des accès](#authentification-et-protection-des-accès) | 10 |
-| [Permissions, délégation et séparation des comptes](#permissions-délégation-et-séparation-des-comptes) | 10 |
-| [Clients, revendeurs et cycle de vie des comptes](#clients-revendeurs-et-cycle-de-vie-des-comptes) | 10 |
-| [Offres, quotas et mesure des consommations](#offres-quotas-et-mesure-des-consommations) | 10 |
-| [Sites web, hôtes virtuels et routage HTTP](#sites-web-hôtes-virtuels-et-routage-http) | 12 |
-| [Domaines, DNS faisant autorité et résolution](#domaines-dns-faisant-autorité-et-résolution) | 13 |
-| [Certificats, ACME et politiques TLS](#certificats-acme-et-politiques-tls) | 10 |
-| [PHP, PHP-FPM et dépendances des sites](#php-php-fpm-et-dépendances-des-sites) | 11 |
-| [Bases de données et accès aux moteurs](#bases-de-données-et-accès-aux-moteurs) | 13 |
-| [Messagerie et délivrabilité](#messagerie-et-délivrabilité) | 18 |
-| [Gestion des fichiers et transferts web](#gestion-des-fichiers-et-transferts-web) | 13 |
-| [SSH, SFTP et accès techniques](#ssh-sftp-et-accès-techniques) | 9 |
-| [Sauvegardes locales, restauration et rétention](#sauvegardes-locales-restauration-et-rétention) | 12 |
-| [Migration et transfert entre instances](#migration-et-transfert-entre-instances) | 10 |
-| [Système, services, paquets et stockage local](#système-services-paquets-et-stockage-local) | 12 |
-| [Réseau, adresses IP et pare-feu](#réseau-adresses-ip-et-pare-feu) | 10 |
-| [Sécurité, secrets et conformité du socle](#sécurité-secrets-et-conformité-du-socle) | 10 |
-| [Métriques, alertes, incidents et diagnostics](#métriques-alertes-incidents-et-diagnostics) | 10 |
-| [Jobs, réconciliation et opérations longues](#jobs-réconciliation-et-opérations-longues) | 10 |
-| [Configuration, API et échanges applicatifs](#configuration-api-et-échanges-applicatifs) | 10 |
-| [Installation, mises à jour et autonomie du panneau](#installation-mises-à-jour-et-autonomie-du-panneau) | 10 |
+| ADMIN and USER | Use separate Unix identities, PHP-FPM pools, session namespaces, route contexts, and rate limits. A USER session must never authenticate an ADMIN request. |
+| Panel and hosted applications | Separate control-panel origins, document roots, runtime identities, and credentials from customer applications. Customer code cannot write panel releases or read panel secrets. |
+| Web application and system agents | Run PHP, workers, and wcpd without root. Network-facing controllers never call the privileged broker directly. |
+| Agent and privileged broker | Authenticate the caller and validate a closed operation contract at the broker boundary. Broker access is restricted to the approved local control path. |
+| Core and extensions | Isolate workers, data, network access, and credentials. An extension cannot change Core authorization or write Core tables directly. |
+| Customer server and Internal | Private vendor services remain separate. Diagnostics require explicit sharing; their availability cannot become a prerequisite for local recovery. |
 
-### Authentification et protection des accès
+These boundaries follow the project's ADMIN/USER isolation, broker, and extension contracts.
 
-| Capacité | Opérations à couvrir |
+### Identity, sessions, and recovery controls
+
+| Control | Required behavior |
 | :--- | :--- |
-| Connexion et déconnexion | Authentifier le compte, expliquer les échecs sans révéler l’existence d’autres utilisateurs et terminer la session. |
-| Authentification multifacteur | Enrôler, vérifier et révoquer les facteurs ; appliquer les exigences liées au rôle. |
-| Passkeys / WebAuthn | Prévoir un mécanisme de connexion supplémentaire lorsque le backend et la politique le permettent. |
-| Récupération d’accès | Gérer les codes de secours et procédures de récupération sans contourner les contrôles du compte. |
-| Gestion des sessions | Lister les sessions, leur activité et leur origine ; révoquer une session ou les autres sessions. |
-| Réauthentification sensible | Exiger une vérification supplémentaire avant changement d’identité, révélation de secret ou destruction importante. |
-| Protection contre les abus | Limiter les tentatives, appliquer les délais et journaliser les blocages temporaires. |
-| Mots de passe | Modifier ou réinitialiser les secrets de connexion avec expiration et révocation adaptées. |
-| Historique de connexion | Consulter les succès, échecs et changements de facteurs dans le périmètre autorisé. |
-| Accès de récupération local | Conserver une procédure documentée utilisable lorsqu’un fournisseur externe ou une extension est indisponible. |
+| Initial owner setup | Use an explicit, local, single-use bootstrap mechanism. Do not ship a default administrator password. |
+| Password handling | Use Symfony password hashing and controlled reset flows; never store recoverable passwords for panel identities. |
+| Multifactor access | Require MFA for privileged production access according to policy. Enroll and revoke factors through reauthenticated flows. |
+| Recovery codes | Store recovery material securely, enforce single use, and audit factor recovery without logging the codes. |
+| Session cookies | Use Secure, HttpOnly, host-scoped cookies with explicit SameSite settings; separate ADMIN and USER cookie namespaces. |
+| Session lifetime | Rotate session IDs after login and elevation. Enforce idle and absolute expiration, logout, per-session revocation, and revoke-all. |
+| Sensitive changes | Require recent reauthentication for factor changes, secret disclosure, destructive actions, and critical network or security configuration. |
+| Browser storage | Keep session IDs, API credentials, and provider secrets out of localStorage, sessionStorage, URLs, and client-side preference data. |
 
-### Permissions, délégation et séparation des comptes
+Cookie attributes and session lifecycle follow [OWASP session guidance](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html); bootstrap and surface separation remain project-specific requirements.
 
-| Capacité | Opérations à couvrir |
+### Authorization and tenant isolation controls
+
+| Control | Required behavior |
 | :--- | :--- |
-| Rôles ROOT / RESELLER / USER | Définir les responsabilités de chaque rôle sans confondre rôle applicatif et identité Linux. |
-| Permissions par action | Séparer lecture, création, modification, suppression, export et opérations sensibles. |
-| Contrôle des propriétaires | Vérifier l’appartenance du compte, du domaine et de chaque ressource à chaque requête. |
-| Délégation revendeur | Limiter un revendeur à ses clients et au plafond fixé par l’administrateur. |
-| Héritage des politiques | Résoudre les contraintes serveur, offre, revendeur, compte et ressource dans un ordre explicite. |
-| Permissions effectives | Afficher pourquoi une action est autorisée, interdite ou limitée. |
-| Isolation des données | Empêcher les accès directs ou indirects aux fichiers, bases, journaux et tâches d’un autre compte. |
-| Mode support / impersonation | Conserver l’initiateur réel, la cible et le périmètre ; afficher un bandeau et une sortie immédiate. |
-| Comptes de service | Attribuer une identité machine, des droits limités, une expiration et des identifiants révocables. |
-| Révocation et changement de rôle | Retirer les droits effectifs et invalider les accès concernés sans laisser de permission implicite. |
+| Default decision | Use Symfony Security voters and domain policies; deny access unless the action, actor, ownership, delegation, and effective policy explicitly allow it. |
+| Every entry point | Apply the same checks to full pages, API requests, Turbo Frames, Live Actions, exports, downloads, and bulk operations. |
+| Object ownership | Resolve resource IDs within the authorized account scope. Guess-resistant IDs do not replace ownership checks. |
+| Reseller ceilings | Restrict delegated actions to owned customers and the administrator's ceiling; reject attempts to widen inherited permissions. |
+| Queued work | Revalidate relevant permissions, ownership, and resource version before a queued operation applies changes. |
+| Support impersonation | Retain real and effective actor identities, show a persistent session banner, and restrict sensitive actions during impersonation. |
+| Presentation | Twig visibility checks improve the interface; Symfony domain authorization remains authoritative even when a button is hidden. |
 
-### Clients, revendeurs et cycle de vie des comptes
+The enforcement model uses [Symfony voters](https://symfony.com/doc/current/security/voters.html) and follows [OWASP authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html).
 
-| Capacité | Opérations à couvrir |
+### Twig, Turbo, and browser protections
+
+| Control | Required behavior |
 | :--- | :--- |
-| Création d’un compte | Vérifier identifiants, propriétaire, offre, domaine initial et capacité avant le provisionnement. |
-| Onboarding | Suivre les étapes nécessaires à l’ouverture de l’hébergement et les ressources effectivement créées. |
-| Fiche client | Centraliser identité de contact, langue, fuseau, ressources rattachées et historique autorisé. |
-| Inventaire des ressources | Retrouver sites, domaines, bases, boîtes, accès, sauvegardes et tâches d’un compte. |
-| Suspension ciblée | Définir les services affectés, le motif et les ressources conservées. |
-| Réactivation | Contrôler les prérequis et remettre en service les capacités autorisées. |
-| Fermeture et suppression | Présenter dépendances, données concernées, sauvegardes et règles de conservation avant retrait. |
-| Transfert de propriétaire | Vérifier droits, quotas, conflits et ressources dépendantes lors d’un changement d’affectation. |
-| Comptes de démonstration | Utiliser des données et actions simulées sans produire d’effets réels sur les services. |
-| Comptes d’essai | Prévoir expiration, limites et conversion sans suppression silencieuse des données. |
+| Template trust | Render reviewed Twig templates only. Never treat tenant content or extension input as executable template source. |
+| Output handling | Keep contextual escaping enabled. Restrict raw HTML to reviewed, trusted content; validate URLs and avoid unsafe DOM insertion in Stimulus. |
+| Symfony forms | Keep CSRF protection enabled for cookie-authenticated state changes; custom mutation endpoints need explicit protection. GET requests must not mutate resources. |
+| Live Actions | Retain the bundle's request-header and same-origin protection. Do not enable permissive CORS; validate writable properties, resource IDs, and action arguments. |
+| Content Security Policy | Use an application-tested CSP with explicit script and connection sources, protection against framing, and reviewed nonces or hashes for necessary import-map/bootstrap scripts. |
+| Origin and proxy handling | Validate intended origins and configure trusted hosts/proxies explicitly. Do not let arbitrary forwarded headers redefine the application origin. |
+| Sensitive page caching | Send private/no-store responses as appropriate and disable Turbo snapshot caching for sensitive pages. Clear relevant browser state when logging out or switching accounts. |
+| Browser capabilities | Set appropriate content-type, referrer, and permissions headers. Limit privileged browser features to actual UI requirements. |
 
-### Offres, quotas et mesure des consommations
+See [Symfony output escaping](https://symfony.com/doc/current/templates.html), [Symfony CSRF protection](https://symfony.com/doc/current/security/csrf.html), [Live Action protection](https://symfony.com/bundles/ux-live-component#actions-and-csrf-protection), [Turbo cache controls](https://turbo.hotwired.dev/handbook/building), and [OWASP CSP guidance](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html).
 
-| Capacité | Opérations à couvrir |
+### APIs, forms, webhooks, and resource limits
+
+| Control | Required behavior |
 | :--- | :--- |
-| Catalogue d’offres | Créer, versionner et affecter des ensembles cohérents de capacités d’hébergement. |
-| Limites de ressources | Gérer nombres de sites, domaines, bases, boîtes, comptes techniques et tâches autorisés. |
-| Stockage et inodes | Distinguer espace alloué, occupation, nombre de fichiers et limites effectives. |
-| Bande passante | Suivre volumes, périodes de mesure, seuils et remise à zéro selon la politique. |
-| CPU, RAM et processus | Exposer les plafonds réellement applicables et la consommation collectée par le backend. |
-| I/O et connexions | Gérer les limites prises en charge, sans annoncer une isolation non fournie par le système. |
-| Surclassement et exceptions | Appliquer une dérogation autorisée, sa justification et son retour à l’héritage. |
-| Dépassements | Distinguer proximité de limite, dépassement, limitation effective et suspension. |
-| Historique de consommation | Conserver intervalle, unité, source et fraîcheur pour chaque mesure. |
-| Export d’usage | Produire des relevés exploitables par un connecteur commercial ; distinguer consommation et facturation. |
+| Typed input contracts | Validate request shape, lengths, ranges, enums, and writable fields. Reject attempts to set ownership, roles, or hidden administrative fields. |
+| Database requests | Use parameterized queries/repositories and allowlisted sort fields. Never build SQL identifiers or fragments from unchecked browser input. |
+| Machine access | Use scoped service accounts, expirations, rotation, and revocation. Keep machine-token authentication distinct from browser session authentication. |
+| Webhook authenticity | Verify signatures over the expected payload, timestamp/replay rules, provider identity, and the scope of the triggered action. |
+| Duplicate delivery | Use idempotency keys and recorded outcomes so retries cannot repeat provisioning, deletion, or other sensitive effects. |
+| Abuse budgets | Bound request size, pagination, concurrent exports, upload size, expensive diagnostics, and retry rates by identity and resource. |
+| Error responses | Return stable error codes and correlation IDs; keep stack traces, SQL, paths, secrets, and cross-account existence details out of public responses. |
 
-### Sites web, hôtes virtuels et routage HTTP
+### System agents and privileged operation controls
 
-| Capacité | Opérations à couvrir |
+| Control | Required behavior |
 | :--- | :--- |
-| Provisionnement d’un site | Créer les ressources, vérifier le domaine, la racine, le runtime et les droits avant publication. |
-| Racines documentaires | Valider les chemins et empêcher la sortie du périmètre du compte. |
-| Sites statiques et PHP | Configurer le traitement adapté au type de site et au runtime attribué. |
-| Configuration Nginx | Générer des configurations structurées, vérifier leur syntaxe puis appliquer les changements. |
-| Sous-domaines et alias web | Rattacher les noms autorisés sans doublon ni collision entre comptes. |
-| Redirections | Gérer destinations, codes et passage à HTTPS avec contrôle des boucles et de la portée. |
-| Reverse proxy | Définir destinations autorisées, upstreams, délais et contrôles de disponibilité pris en charge. |
-| Règles par site | Encadrer index, pages d’erreur, limites de requête et paramètres autorisés. |
-| Accès aux répertoires | Prévoir protections d’accès et restrictions de publication selon les capacités du moteur. |
-| Cache et compression | Configurer les fonctions disponibles, purger le cache du site et afficher les mesures collectées. |
-| Journaux HTTP | Consulter erreurs et accès du site avec filtres, rétention et masquage appropriés. |
-| Application et retour de configuration | Présenter le diff, valider, recharger puis conserver une configuration de récupération lorsque possible. |
+| Minimal root component | Keep wcp-privd limited to privileged primitives. It has no web session handling, templates, general business logic, or command interpreter. |
+| Closed action registry | Accept registered action IDs, typed arguments, and a validated resource context. Reject arbitrary shell, executable names, systemd units, paths, or opaque command strings. |
+| Independent validation | The broker rechecks caller identity and relevant constraints; a request is not trusted merely because PHP or wcpd sent it. |
+| Execution limits | Bound message size, operation time, output size, process count, and retries. Record the job and resource associated with an effect. |
+| Replay and concurrency | Bind operations to authenticated request/job context and apply the contract's replay, version, idempotency, and locking rules. |
+| Python diagnostics | Run under dedicated non-root identities with approved inputs, working directories, dependencies, and network access. |
+| Review of new primitives | Require contract review and negative cases before adding a privileged operation. No extension receives a generic root shell. |
 
-### Domaines, DNS faisant autorité et résolution
+This is the target privileged-operation model. The currently authorized daemon remains inert, as documented in [Current project status](#current-project-status).
 
-| Capacité | Opérations à couvrir |
+### Files, uploads, archives, and hosted code
+
+| Control | Required behavior |
 | :--- | :--- |
-| Inventaire des domaines | Conserver propriétaire, rattachements, état local et observations externes séparément. |
-| Validation des noms | Normaliser les noms, prendre en compte les domaines internationalisés et détecter les collisions. |
-| Zones et enregistrements | Gérer A, AAAA, CNAME, MX, TXT, SRV, NS, CAA et PTR selon le type de zone. |
-| SOA, TTL et numéros de série | Valider les valeurs et suivre la version de zone effectivement publiée. |
-| Modèles de zones | Appliquer des modèles à la création et montrer les modifications sans écraser les exceptions. |
-| Import et export de zones | Valider les données, détecter les conflits et conserver un résultat par enregistrement. |
-| DNSSEC | Gérer les capacités de signature, clés et informations DS avec suivi des changements. |
-| Serveurs de noms et glue | Vérifier délégations, adresses des nameservers et éléments à transmettre au registrar. |
-| DNS primaire et secondaire | Suivre publication, notifications et transferts autorisés AXFR/IXFR/TSIG. |
-| Diagnostic de résolution | Comparer observations, propagation et état publié avec source et horodatage. |
-| Reverse DNS | Suivre les PTR et indiquer si la modification dépend d’un fournisseur externe. |
-| CAA, TLSA et DANE | Valider les enregistrements et dépendances de sécurité lorsque ces capacités sont prises en charge. |
-| Dérive de configuration DNS | Détecter un écart entre état demandé et état observé puis proposer une réconciliation contrôlée. |
+| Resource-to-path resolution | Resolve resource IDs through a central account-aware path resolver; do not accept arbitrary Linux paths from public requests. |
+| Filesystem boundaries | Use account-confined, race-resistant operations where paths can change concurrently; enforce ownership, file type, symlink/hardlink, and mount policies. |
+| Uploads into the panel | Store attachments and diagnostics outside panel execution roots. Validate expected file types, limits, and publication behavior. |
+| Hosted application code | PHP uploads may be legitimate inside a customer's site, but must execute only under that site's isolated runtime, never under the panel's PHP-FPM identity. |
+| Archives | Prevent path traversal and out-of-scope extraction; bound expanded size, file count, nesting, and processing time. |
+| Previews and downloads | Treat HTML, SVG, scripts, and active documents as untrusted. Use safe download headers or isolated preview origins instead of privileged inline rendering. |
+| Quotas and atomic changes | Check capacity before and during transfers; use safe temporary files and verified replacement where required. |
+| Deletion and restore | Check dependencies, ownership, and the exact target again; retain an explicit audit and a supported recovery path. |
 
-### Certificats, ACME et politiques TLS
+Panel attachment handling follows [OWASP file-upload guidance](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html); customer application code additionally follows WCP360's hosting-account isolation contract.
 
-| Capacité | Opérations à couvrir |
+### Secrets, database identities, and encryption
+
+| Control | Required behavior |
 | :--- | :--- |
-| Inventaire des certificats | Lister noms couverts, émetteur, validité, empreinte et services affectés. |
-| Comptes et autorités ACME | Configurer les comptes et autorités compatibles sans dépendre d’un fournisseur unique. |
-| Demandes et challenges | Suivre commandes, étapes HTTP-01 ou DNS-01 et erreurs de validation. |
-| Certificats wildcard | Vérifier qu’un mécanisme de validation compatible est disponible. |
-| Renouvellement | Planifier les tentatives, signaler les échecs et éviter les boucles de renouvellement. |
-| Import et CSR | Importer certificats et chaînes ou générer une demande avec gestion encadrée des clés. |
-| Déploiement multi-service | Affecter un certificat au web, au mail ou au panneau et vérifier son activation. |
-| Profils TLS | Appliquer des profils de protocoles et paramètres supportés, avec contrôle de compatibilité. |
-| Expiration et rotation | Alerter, remplacer les éléments arrivant à échéance et suivre les références encore utilisées. |
-| Vérification après application | Confirmer chaîne et service présentés ; distinguer certificat stocké et certificat réellement déployé. |
+| Secret references | Expose references to application services, not raw secrets in templates, job parameters, or diagnostic exports. |
+| Local secret separation | Keep Core secrets outside release code, separated by consumer under the project's secret-store layout with minimal ownership and ACLs. |
+| Excluded locations | Do not put Core secrets in Git, versioned environment files, URLs, logs, traces, audit payloads, or browser storage. |
+| Database privileges | Use dedicated application identities and scoped grants. The runtime must not use a database superuser or customer database credentials. |
+| Tenant-aware access | Apply ownership restrictions in repositories and commands; additional database isolation must be configured and tested rather than assumed. |
+| Encryption and keys | Use maintained cryptographic libraries and managed key references for protected data and backups; document rotation and recovery. |
+| Credential lifecycle | Track consumers, expiration, rotation, revocation, and recovery without displaying existing credentials by default. |
 
-### PHP, PHP-FPM et dépendances des sites
+### Networking, SSRF, and provider connections
 
-| Capacité | Opérations à couvrir |
+| Control | Required behavior |
 | :--- | :--- |
-| Versions de PHP | Inventorier les versions disponibles, leurs sources et les applications qui en dépendent. |
-| Affectation par site | Choisir un runtime autorisé et vérifier les incompatibilités avant changement. |
-| Pools PHP-FPM | Gérer identité, socket, mode de processus, capacité et limites propres au compte. |
-| Paramètres PHP | Éditer les directives permises : mémoire, temps, uploads et autres paramètres validés par schéma. |
-| Configuration effective | Afficher valeur héritée, surcharge locale et rechargement requis. |
-| Extensions PHP | Lister, activer ou retirer les modules autorisés selon version, dépendances et impact. |
-| OPcache et diagnostic | Exposer les paramètres et mesures disponibles sans mélanger plusieurs pools ou comptes. |
-| PHP en ligne de commande | Associer la version CLI aux tâches autorisées sans la confondre avec le runtime web. |
-| Composer | Installer les dépendances d’un projet dans son identité et son répertoire, avec journal de résultat. |
-| Démarrage et santé | Vérifier état du pool, échecs, saturation, erreurs et besoin de redémarrage. |
-| Changement de version | Préparer le contrôle de compatibilité et le retour lorsque l’application et le backend le permettent. |
+| Public connector destinations | Allow approved schemes, hosts, ports, and operations. Block access to unrelated loopback, link-local, metadata, and private control endpoints. |
+| Infrastructure destinations | Private service addresses require an explicitly authorized infrastructure adapter and inventory scope; they are not enabled by accepting any submitted URL. |
+| DNS and redirects | Validate resolved destinations and connection behavior; reject or revalidate redirects and rebinding-sensitive destinations. |
+| Outbound limits | Apply egress policy, connection/read timeouts, response-size limits, and bounded retries per connector. |
+| TLS identity | Verify certificates and peer identity; do not silently disable verification to make a provider connection succeed. |
+| Network changes | Validate before application, preserve a recovery path, and verify reachability after firewall, SSH, address, or route changes. |
 
-### Bases de données et accès aux moteurs
+Destination validation and egress restrictions follow [OWASP SSRF prevention guidance](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html), with explicit exceptions for authorized infrastructure management.
 
-| Capacité | Opérations à couvrir |
+### Extension isolation and supply-chain controls
+
+| Control | Required behavior |
 | :--- | :--- |
-| Inventaire des moteurs | Détecter version, état et capacités réellement installées. |
-| Création de bases | Affecter propriétaire, moteur, options compatibles et limites de l’offre. |
-| Utilisateurs et identifiants | Créer, renouveler ou révoquer les accès sans exposer les mots de passe dans les journaux. |
-| Privilèges | Gérer les droits par base et distinguer droits d’usage et administration du moteur. |
-| Accès distants | Encadrer adresses autorisées, chiffrement et règles d’accès réseau. |
-| Import de données | Vérifier format, taille, espace disponible et résultat de l’import. |
-| Export de données | Produire un export cohérent, protégé et soumis aux droits du propriétaire. |
-| Sauvegarde et restauration | Coordonner les opérations avec le moteur et les points de reprise du compte. |
-| Connexions et verrous | Exposer les diagnostics disponibles et limiter les actions de terminaison aux droits prévus. |
-| Requêtes lentes | Présenter mesures et requêtes filtrées avec source et masquage des données sensibles. |
-| Extensions PostgreSQL | Gérer les modules disponibles par base avec contrôle des dépendances et privilèges. |
-| Suppression et dépendances | Identifier utilisateurs, applications et sauvegardes concernés avant destruction. |
-| Séparation des données du panneau | Isoler la base PostgreSQL du Core des bases hébergées pour les clients. |
+| Package admission | Check publisher, compatibility, signature, integrity, provenance, dependencies, and requested capabilities before installation. |
+| Runtime isolation | Use a dedicated identity, resource budget, network policy, secret scope, and data namespace per extension. |
+| UI trust | Do not auto-load third-party extension code as Core Symfony bundles. Only reviewed assets and declared UI contributions enter the privileged interface. |
+| Permissions on update | Show newly requested capabilities and reject undeclared privilege expansion. |
+| Failure and quarantine | Withdraw routes and new jobs, stop outbound access when quarantined, and preserve Core availability and diagnostic evidence. |
+| Dependencies and builds | Pin dependency inputs, retain an inventory/SBOM, check advisories and leaked secrets, and build signed artifacts in an isolated release environment. |
+| Removal | Drain work and explicitly retain, export, or delete extension-owned data; never cascade into unrelated Core resources. |
 
-### Messagerie et délivrabilité
+### Configuration application and release safety
 
-| Capacité | Opérations à couvrir |
+| Control | Required behavior |
 | :--- | :--- |
-| Domaines mail | Activer ou désactiver l’hébergement mail et vérifier les prérequis DNS. |
-| Boîtes mail | Créer, modifier, suspendre, supprimer et suivre la consommation des boîtes. |
-| Quotas et limites d’envoi | Définir stockage et plafonds d’usage selon compte, domaine ou boîte. |
-| Alias et listes de destinataires | Valider les adresses et les relations sans exposer d’autres comptes. |
-| Redirections et catch-all | Contrôler destinations, boucles et politique de transfert externe. |
-| Répondeurs d’absence | Définir période, texte et fréquence selon le moteur. |
-| Filtres Sieve | Construire des règles ordonnées et validées pour classement, redirection et autres actions permises. |
-| SMTP, IMAP et authentification | Présenter paramètres clients, état des services et configuration sécurisée. |
-| Autoconfig et Autodiscover | Préparer les informations de configuration compatibles pour les clients mail. |
-| Accès webmail | Créer un parcours d’accès autorisé vers le client configuré sans exposer un mot de passe général. |
-| File d’attente | Filtrer les messages différés, comprendre les motifs et effectuer les actions autorisées. |
-| SPF, DKIM et DMARC | Vérifier la configuration, publier les éléments requis et suivre les problèmes par domaine. |
-| Rotation des clés DKIM | Préparer et vérifier le changement de sélecteur et les enregistrements associés. |
-| Protection mail de base | Appliquer les règles antispam, contrôle des abus et protections disponibles dans le socle choisi. |
-| Abus et réputation sortante | Relier anomalies d’envoi à leurs comptes ; limiter ou suspendre selon la politique. |
-| MTA-STS et TLS-RPT | Gérer les politiques et observations lorsque les services compatibles sont activés. |
-| Diagnostic de délivrabilité | Corréler PTR, DNS, TLS, rejets et observations externes sans promettre la livraison. |
-| Journaux mail | Autoriser la consultation du périmètre prévu et masquer les données sensibles. |
+| Configuration preparation | Generate into a controlled temporary location, set ownership/mode, validate syntax, and present the intended diff. |
+| Safe application | Retain a recovery point, perform the required durable/atomic replacement, reload the permitted service, and verify health. |
+| Failure handling | Do not replace the last working configuration with invalid output; recover, verify, and audit the failure. |
+| Immutable releases | Distribute versioned, verified code and prepared assets with compatibility and migration information. |
+| Production dependency policy | No web-triggered git pull, composer update, improvised builds, or runtime downloads of application dependencies. |
+| Migration and rollback | Check data compatibility and recovery prerequisites; a package rollback must not pretend to reverse an irreversible schema change. |
+| Deployment isolation | Test service-specific sandbox profiles and explicit writable paths; do not apply one unverified hardening profile to every process. |
 
-### Gestion des fichiers et transferts web
+### Audit, incident handling, and recovery
 
-| Capacité | Opérations à couvrir |
+| Control | Required behavior |
 | :--- | :--- |
-| Explorateur | Afficher arborescence, fil d’Ariane, métadonnées, fichiers cachés autorisés et navigation contextualisée. |
-| Création et renommage | Créer fichiers et dossiers, renommer et vérifier les conflits. |
-| Copie et déplacement | Contrôler espace, destination, droits et résultat de chaque élément. |
-| Téléversement | Gérer progression, collisions, limites et résultat par fichier ; reprise uniquement si le backend la fournit. |
-| Téléchargement | Contrôler la ressource, la portée du transfert et la durée des liens éventuels. |
-| Éditeur de texte | Prévoir coloration, recherche/remplacement, encodage, état modifié et sauvegarde. |
-| Conflits d’édition | Détecter les changements concurrents et éviter l’écrasement silencieux d’une version. |
-| Archives | Créer ou extraire les formats supportés avec limites de taille, nombre de fichiers et chemins. |
-| Permissions de fichiers | Éditer modes et identités autorisés sans contourner l’isolation du compte. |
-| Suppression et corbeille | Distinguer suppression réversible et définitive selon le stockage. |
-| Recherche et calcul d’espace | Rechercher dans les limites autorisées et produire les opérations coûteuses comme tâches suivies. |
-| Protection des chemins | Contrôler liens symboliques, traversées de répertoire et chemins d’archives côté serveur. |
-| Historique des opérations | Retrouver acteur, cible, résultat et éventuel point de récupération. |
+| Attribution | Record real/effective actor, resource, action, timestamp, outcome, and correlation/job ID. |
+| Audit access | Prevent ordinary application users from rewriting history; govern retention, export, and purge separately. |
+| Sensitive-data minimization | Redact credentials and content not required for the investigation, including support bundles and AI outputs. |
+| Local alerting | Keep in-panel alerts and verified ROOT email fallback usable without external messaging plugins. |
+| Containment | Provide authorized session revocation, credential rotation, account/extension quarantine, and evidence preservation. |
+| Backup recovery | Verify backup readability, test supported restores, protect recovery material, and document emergency access. |
+| Support and AI | Share diagnostics explicitly; apply the same permissions and approval rules to generated recommendations and automated actions. |
 
-### SSH, SFTP et accès techniques
+### Security implementation acceptance
 
-| Capacité | Opérations à couvrir |
+Each implementation must provide reproducible evidence for the relevant cases below, including negative cases. A framework default, hidden button, successful local build, or security badge does not replace those checks.
+
+| Case | Required result |
 | :--- | :--- |
-| Configuration SSH du serveur | Gérer paramètres autorisés, écoute et politiques d’authentification. |
-| Clés utilisateurs | Importer, affecter, révoquer et tracer les clés du propriétaire. |
-| Comptes SFTP | Définir identité, racine accessible, droits et restrictions. |
-| Accès shell délégué | Distinguer compte SFTP seul et shell autorisé ; appliquer le périmètre de l’offre. |
-| Restrictions d’accès | Définir utilisateurs/groupes autorisés et contraintes prises en charge. |
-| Anti-verrouillage administratif | Valider la configuration avant rechargement et conserver un chemin de récupération. |
-| Clés d’hôte SSH | Inventorier empreintes, échéances éventuelles et procédure de rotation. |
-| Sessions et journaux | Suivre les connexions autorisées et révoquer les accès selon les capacités. |
-| Rotation des identifiants | Retirer les anciens accès et vérifier les dépendances des automatismes. |
+| Cross-surface session reuse | A USER cookie cannot authenticate ADMIN pages, Frames, APIs, or Live Actions. |
+| Cross-account resource access | Guessed IDs, bulk selections, exports, downloads, and queued work cannot reach another tenant's resources. |
+| Mutation forgery | Missing/invalid CSRF protection, untrusted origins, and forged Live Action requests are rejected by the relevant endpoint. |
+| Template and browser injection | Untrusted fields, filenames, HTML, and extension content cannot become executable privileged Twig or browser code. |
+| Unauthorized privileged operation | Unknown action IDs, free command strings, arbitrary units, and out-of-scope paths are rejected before an effect. |
+| Filesystem escape | Symlink/hardlink races and malicious archives cannot escape the authorized root. |
+| Connector escape | Redirects, resolved addresses, and metadata/control endpoints cannot bypass destination policy. |
+| Repeated or interrupted jobs | Retries, restarts, and partial failures do not repeat a destructive or provisioning effect. |
+| Invalid configuration | A failed syntax or health check leaves a recoverable working configuration and a recorded failure. |
+| Untrusted extension or release | Unsigned, incompatible, or privilege-expanding packages cannot be silently activated. |
+| Secret leakage | Logs, errors, HTML, audit records, browser storage, and support exports contain no raw credentials. |
+| Recovery and dependency outage | Documented local sign-in, export, recovery, and existing hosting continue when optional integrations are unavailable. |
 
-### Sauvegardes locales, restauration et rétention
+Report suspected vulnerabilities using the repository’s [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md).
 
-| Capacité | Opérations à couvrir |
+## Required panel capabilities
+
+The following catalog details **233 functional capabilities across 21 domains**. It describes the intended scope, not delivery status. Advanced optional functions are detailed in the [extension catalog](#potential-and-planned-extensions-and-plugins).
+
+For each domain, WCP-ADMIN manages server policies and resources; WCP-USER sees only assigned resources and actions. Variants depend on capabilities actually detected. Actions must be authorized by the backend, produce verified results, and appear in the task center when long-running.
+
+| Functional domain | Capabilities described |
 | :--- | :--- |
-| Politiques de sauvegarde | Choisir ressources, horaires, rétention, propriétaire et contraintes de capacité. |
-| Sauvegarde par ressource | Couvrir fichiers, bases, mail, DNS et configuration selon le périmètre sélectionné. |
-| Points de reprise | Conserver identifiant, date, contenu, moteur, emplacement et état de vérification. |
-| Exécution et progression | Suivre étapes, erreurs partielles, durée et espace consommé. |
-| Cohérence des données | Coordonner les mécanismes propres aux bases et services concernés. |
-| Chiffrement | Gérer les références de clés et procédures de récupération selon les capacités du moteur. |
-| Vérification | Contrôler intégrité et lisibilité ; distinguer sauvegarde produite et sauvegarde vérifiée. |
-| Rétention et purge | Présenter les points conservés ou supprimés avant changement de politique. |
-| Restauration ciblée | Choisir fichiers, bases, boîtes ou compte entier avec contrôle des conflits. |
-| Préparation de restauration | Vérifier droits, capacité, dépendances et effet sur les données existantes. |
-| Résultat de restauration | Confirmer les ressources rétablies et signaler les éléments nécessitant une intervention. |
-| Accès autonome à la reprise | Conserver les sauvegardes et restaurations locales utilisables sans connecteur distant. |
+| [Authentication and access protection](#authentication-and-access-protection) | 10 |
+| [Permissions, delegation, and account separation](#permissions-delegation-and-account-separation) | 10 |
+| [Customers, resellers, and account lifecycle](#customers-resellers-and-account-lifecycle) | 10 |
+| [Hosting plans, quotas, and usage metering](#hosting-plans-quotas-and-usage-metering) | 10 |
+| [Websites, virtual hosts, and HTTP routing](#websites-virtual-hosts-and-http-routing) | 12 |
+| [Domains, authoritative DNS, and resolution](#domains-authoritative-dns-and-resolution) | 13 |
+| [Certificates, ACME, and TLS policies](#certificates-acme-and-tls-policies) | 10 |
+| [PHP, PHP-FPM, and site dependencies](#php-php-fpm-and-site-dependencies) | 11 |
+| [Databases and engine access](#databases-and-engine-access) | 13 |
+| [Mail services and deliverability](#mail-services-and-deliverability) | 18 |
+| [File management and web transfers](#file-management-and-web-transfers) | 13 |
+| [SSH, SFTP, and technical access](#ssh-sftp-and-technical-access) | 9 |
+| [Local backups, restoration, and retention](#local-backups-restoration-and-retention) | 12 |
+| [Migration and transfers between instances](#migration-and-transfers-between-instances) | 10 |
+| [System, services, packages, and local storage](#system-services-packages-and-local-storage) | 12 |
+| [Networking, IP addresses, and firewall](#networking-ip-addresses-and-firewall) | 10 |
+| [Security, secrets, and baseline compliance](#security-secrets-and-baseline-compliance) | 10 |
+| [Metrics, alerts, incidents, and diagnostics](#metrics-alerts-incidents-and-diagnostics) | 10 |
+| [Jobs, reconciliation, and long-running operations](#jobs-reconciliation-and-long-running-operations) | 10 |
+| [Configuration, APIs, and application exchanges](#configuration-apis-and-application-exchanges) | 10 |
+| [Installation, updates, and panel autonomy](#installation-updates-and-panel-autonomy) | 10 |
 
-### Migration et transfert entre instances
+### Authentication and access protection
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Inventaire de la source | Découvrir comptes, domaines, fichiers, bases, mail, DNS, certificats et tâches. |
-| Contrôle de compatibilité | Identifier versions, fonctions absentes et éléments non transférables. |
-| Correspondance des ressources | Associer comptes, offres, chemins, IP et moteurs de destination. |
-| Capacité de destination | Vérifier espace, quotas, ressources et collisions avant transfert. |
-| Transfert suivi | Exécuter des tâches avec progression et résultat par ressource. |
-| Synchronisation finale | Prévoir le rattrapage des changements lorsque le protocole de transfert le permet. |
-| Préparation de bascule | Documenter DNS, interruption éventuelle et vérifications avant mise en service. |
-| Validation après transfert | Comparer éléments importés et services ; produire un rapport de contrôle. |
-| Reprise et nettoyage | Distinguer transfert incomplet, retour possible et suppression finale des données temporaires. |
-| Formats externes | Utiliser des importateurs spécialisés pour les autres panneaux ; ne pas supposer leurs formats compatibles. |
+| Sign-in and sign-out | Authenticate the account, explain failures without revealing other users, and end the session. |
+| Multifactor authentication | Enroll, verify, and revoke factors; enforce the requirements associated with each role. |
+| Passkeys / WebAuthn | Support an additional sign-in mechanism when the backend and policy allow it. |
+| Access recovery | Manage recovery codes and documented recovery procedures without bypassing account controls. |
+| Session management | List sessions, activity, and origin; revoke an individual session or other sessions. |
+| Sensitive-action reauthentication | Require additional verification before identity changes, secret disclosure, or significant destructive operations. |
+| Abuse protection | Limit attempts, enforce delays, and record temporary lockouts. |
+| Passwords | Change or reset sign-in credentials with appropriate expiration and revocation. |
+| Sign-in history | Review successful attempts, failures, and factor changes within the authorized scope. |
+| Local recovery access | Maintain a documented procedure that remains usable when an external provider or extension is unavailable. |
 
-### Système, services, paquets et stockage local
+### Permissions, delegation, and account separation
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Identité du serveur | Afficher OS, architecture, noyau, hostname, FQDN, fuseau et état de l’horloge. |
-| Utilisateurs et groupes système | Gérer les identités nécessaires aux services et comptes par des opérations limitées. |
-| Services | Lire l’état et effectuer start, stop, reload, restart ou activation au démarrage selon les droits. |
-| Dépendances des services | Identifier les ressources affectées avant arrêt ou changement de configuration. |
-| Processus | Afficher propriétaire, consommation et actions autorisées sans exposer de secrets dans les arguments. |
-| Paquets et dépôts | Lister versions et sources ; exécuter des transactions de paquets validées et suivies. |
-| Mises à jour de sécurité | Identifier les avis applicables et le besoin de redémarrage avec preuve de la source. |
-| Planification système | Administrer les tâches et timers autorisés, leurs propriétaires et leur historique. |
-| Volumes et montages | Afficher capacité, système de fichiers, options et dépendances avant démontage. |
-| Capacité et santé disque | Surveiller espace, inodes, erreurs I/O et signaux SMART lorsqu’ils sont disponibles. |
-| Journaux système | Filtrer journal et fichiers, appliquer rétention et accès selon le rôle. |
-| Maintenance et redémarrage | Préparer l’impact sur les services, conserver les moyens de reprise et vérifier le retour de santé. |
+| ROOT / RESELLER / USER roles | Define each role's responsibilities without confusing an application role with a Linux identity. |
+| Action-level permissions | Separate read, create, update, delete, export, and sensitive-operation permissions. |
+| Ownership checks | Verify account, domain, and resource ownership on every request. |
+| Reseller delegation | Limit each reseller to their own customers and the ceiling set by the administrator. |
+| Policy inheritance | Resolve server, plan, reseller, account, and resource constraints in an explicit order. |
+| Effective permissions | Show why an action is allowed, denied, or restricted. |
+| Data isolation | Prevent direct or indirect access to another account's files, databases, logs, and jobs. |
+| Support mode / impersonation | Retain the real initiator, target, and scope; display a persistent banner and an immediate exit. |
+| Service accounts | Assign a machine identity, limited permissions, an expiration, and revocable credentials. |
+| Revocation and role changes | Remove effective permissions and invalidate affected access without leaving implicit grants. |
 
-### Réseau, adresses IP et pare-feu
+### Customers, resellers, and account lifecycle
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Inventaire des interfaces | Exposer liens, état, adresses, MTU et backend de configuration détecté. |
-| IPv4 et IPv6 | Administrer adresses et préfixes avec validation de format, propriétaire et usage. |
-| Pools IP et réservations | Allouer, réserver et libérer les adresses sans collision. |
-| Routes et passerelles | Contrôler les modifications et leurs effets sur la connectivité du panneau. |
-| Résolveurs et nommage local | Administrer les paramètres pris en charge sans confondre résolveur et serveur DNS faisant autorité. |
-| Ports et sockets | Identifier écoute, service et exposition réseau autorisée. |
-| Règles de pare-feu | Gérer règles, profils, source active et vérification après application. |
-| Blocages et exceptions | Consulter restrictions, expiration et déblocages autorisés. |
-| Diagnostic réseau | Exposer tests de résolution, connectivité et chemin réseau avec cibles validées. |
-| Changements réseau sensibles | Prévoir validation, contrôle d’accès restant et récupération en cas de perte de connexion. |
+| Account creation | Check identifiers, owner, plan, initial domain, and available capacity before provisioning. |
+| Onboarding | Track the steps required to activate hosting and the resources actually created. |
+| Customer profile | Centralize contact details, language, time zone, assigned resources, and authorized history. |
+| Resource inventory | Find an account's sites, domains, databases, mailboxes, access credentials, backups, and jobs. |
+| Targeted suspension | Define affected services, the reason, and the resources retained. |
+| Reactivation | Check prerequisites and restore authorized capabilities. |
+| Closure and deletion | Present dependencies, affected data, backups, and retention rules before removal. |
+| Ownership transfer | Check permissions, quotas, conflicts, and dependent resources when changing ownership. |
+| Demo accounts | Use simulated data and actions without affecting real services. |
+| Trial accounts | Support expiration, limits, and conversion without silently deleting data. |
 
-### Sécurité, secrets et conformité du socle
+### Hosting plans, quotas, and usage metering
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Centre de sécurité | Agréger les constats en conservant source, preuve, périmètre et date. |
-| Durcissement de base | Contrôler les paramètres requis et proposer des changements compatibles avec le serveur. |
-| Prévention des attaques de connexion | Piloter les protections retenues et leurs exceptions sans second inventaire divergent. |
-| Intégration des protections installées | Détecter moteur antispam, scanner ou contrôle MAC ; annoncer seulement les fonctions disponibles. |
-| Secrets applicatifs | Référencer et protéger les identifiants des services, fournisseurs et comptes techniques. |
-| Masquage des données sensibles | Filtrer secrets et contenu sensible dans logs, audit, erreurs, exports et diagnostics. |
-| Clés et certificats internes | Gérer portée, rotation et révocation des identités techniques du panneau. |
-| Validation des requêtes | Contrôler entrées, pièces jointes, sessions, origines et opérations sensibles côté serveur. |
-| Audit des changements | Conserver acteur réel, délégation éventuelle, ressource, action et résultat. |
-| Conservation des preuves | Encadrer accès, rétention, export et modification des politiques d’audit. |
+| Plan catalog | Create, version, and assign consistent sets of hosting capabilities. |
+| Resource limits | Manage permitted numbers of sites, domains, databases, mailboxes, technical accounts, and jobs. |
+| Storage and inodes | Distinguish allocated space, actual usage, file counts, and effective limits. |
+| Bandwidth | Track volumes, measurement periods, thresholds, and resets according to policy. |
+| CPU, RAM, and processes | Expose limits that can actually be enforced and usage collected by the backend. |
+| I/O and connections | Manage supported limits without claiming isolation that the system does not provide. |
+| Upgrades and exceptions | Apply an authorized override, record its justification, and support returning to inherited values. |
+| Limit violations | Distinguish approaching a limit, exceeding it, active throttling, and suspension. |
+| Usage history | Retain the interval, unit, source, and freshness of each measurement. |
+| Usage export | Produce records for commercial connectors; distinguish resource consumption from billing. |
 
-### Métriques, alertes, incidents et diagnostics
+### Websites, virtual hosts, and HTTP routing
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Santé du serveur | Distinguer sain, dégradé, indisponible et inconnu à partir des contrôles réellement collectés. |
-| Métriques système | Suivre CPU, RAM, stockage, réseau et saturation avec unités et période de mesure. |
-| Métriques par compte | Restreindre les données aux ressources possédées et aux droits délégués. |
-| Historique et tendances | Comparer périodes et distinguer mesure récente, retardée ou manquante. |
-| Vérifications de services | Contrôler disponibilité et état applicatif des services activés. |
-| Règles d’alerte | Définir seuils, fenêtres, destinataires et déduplication des événements. |
-| Centre de notifications | Consulter, filtrer et acquitter les événements selon le rôle. |
-| Relais d’alerte local | Maintenir notifications du panneau et adresse ROOT vérifiée sans extension externe. |
-| Gestion des incidents | Relier symptômes, ressources, tâches correctives et événements de maintenance. |
-| Dossiers de diagnostic | Collecter les éléments nécessaires à une intervention, avec filtrage et partage explicite. |
+| Site provisioning | Create resources and check the domain, document root, runtime, and permissions before publication. |
+| Document roots | Validate paths and prevent access outside the account's scope. |
+| Static and PHP sites | Configure request handling for the site's type and assigned runtime. |
+| Nginx configuration | Generate structured configuration, check its syntax, and apply changes. |
+| Web subdomains and aliases | Bind authorized names without duplicates or cross-account collisions. |
+| Redirects | Manage destinations, status codes, and HTTPS redirects with loop and scope checks. |
+| Reverse proxy | Define allowed destinations, upstreams, timeouts, and supported availability checks. |
+| Per-site rules | Control index files, error pages, request limits, and permitted settings. |
+| Directory access | Support access protection and publication restrictions according to engine capabilities. |
+| Caching and compression | Configure available functions, purge the site's cache, and display collected measurements. |
+| HTTP logs | Review site access and error logs with filtering, retention, and appropriate redaction. |
+| Configuration apply and recovery | Present a diff, validate, reload, and retain a recovery configuration when possible. |
 
-### Jobs, réconciliation et opérations longues
+### Domains, authoritative DNS, and resolution
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Centre de tâches | Lister opérations, propriétaire, ressource, étape, progression et résultat. |
-| Persistance des tâches | Conserver l’état et les tentatives malgré une interruption du worker. |
-| Idempotence | Reconnaître une demande répétée et éviter de reproduire un effet système. |
-| Verrous et concurrence | Empêcher les modifications incompatibles d’une même ressource. |
-| Préconditions | Contrôler capacité, dépendances et droits avant application. |
-| Étapes et checkpoints | Suivre les opérations partielles et les points de reprise. |
-| Reprise et nouvelles tentatives | Limiter les répétitions et distinguer erreur transitoire et intervention nécessaire. |
-| Annulation et compensation | Exposer les actions possibles selon l’étape et la sécurité technique de l’opération. |
-| Délais et budgets de ressources | Limiter durée, consommation et appels vers les services dépendants. |
-| Réconciliation | Comparer état demandé et état observé puis résoudre les écarts par opérations autorisées. |
+| Domain inventory | Keep ownership, bindings, local state, and external observations separate. |
+| Name validation | Normalize names, handle internationalized domains, and detect collisions. |
+| Zones and records | Manage A, AAAA, CNAME, MX, TXT, SRV, NS, CAA, and PTR records as appropriate for the zone. |
+| SOA, TTL, and serial numbers | Validate values and track the zone version actually published. |
+| Zone templates | Apply templates at creation and show changes without overwriting exceptions. |
+| Zone import and export | Validate data, detect conflicts, and retain a result for each record. |
+| DNSSEC | Manage supported signing capabilities, keys, and DS information with change tracking. |
+| Nameservers and glue | Check delegation, nameserver addresses, and information to submit to the registrar. |
+| Primary and secondary DNS | Track publication, notifications, and authorized AXFR/IXFR/TSIG transfers. |
+| Resolution diagnostics | Compare observations, propagation, and published state with source and timestamp. |
+| Reverse DNS | Track PTR records and indicate whether changes depend on an external provider. |
+| CAA, TLSA, and DANE | Validate records and security dependencies when these capabilities are supported. |
+| DNS configuration drift | Detect differences between desired and observed state and offer controlled reconciliation. |
 
-### Configuration, API et échanges applicatifs
+### Certificates, ACME, and TLS policies
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Configuration hiérarchique | Afficher valeur effective, origine, surcharge et retour à l’héritage. |
-| Validation de configuration | Vérifier schéma, contraintes et dépendances avant sauvegarde. |
-| Diff et application | Distinguer modification préparée, application en attente et état réellement actif. |
-| API REST | Exposer les opérations de domaine avec pagination, filtres, erreurs et contrats cohérents. |
-| Identifiants et corrélation | Relier requêtes, jobs, événements et effets sur les ressources. |
-| Jetons et restrictions | Gérer portée, expiration, dernière utilisation et contraintes réseau prises en charge. |
-| Webhooks sortants | Signer les événements, suivre livraisons et reprises, protéger les secrets. |
-| Webhooks entrants | Vérifier source, authenticité, rejeu et droits de l’action déclenchée. |
-| Import et export structurés | Valider les formats, traiter les erreurs par élément et respecter les droits sur les données. |
-| Détection des capacités | Adapter API et interface aux moteurs, versions et fonctions effectivement disponibles. |
+| Certificate inventory | List covered names, issuer, validity, fingerprint, and assigned services. |
+| ACME accounts and authorities | Configure compatible accounts and authorities without relying on a single provider. |
+| Orders and challenges | Track orders, HTTP-01 or DNS-01 steps, and validation errors. |
+| Wildcard certificates | Verify that a compatible validation mechanism is available. |
+| Renewal | Schedule attempts, report failures, and avoid renewal loops. |
+| Import and CSR | Import certificates and chains or generate a request with controlled key handling. |
+| Deployment across services | Assign a certificate to web, mail, or the panel and verify activation. |
+| TLS profiles | Apply supported protocol and parameter profiles with compatibility checks. |
+| Expiration and rotation | Alert, replace expiring material, and track references still in use. |
+| Post-application verification | Confirm the chain and service presented; distinguish stored certificates from certificates actually deployed. |
 
-### Installation, mises à jour et autonomie du panneau
+### PHP, PHP-FPM, and site dependencies
 
-| Capacité | Opérations à couvrir |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Contrôle des prérequis | Vérifier environnement, accès, réseau, stockage et composants avant installation. |
-| État d’installation | Présenter étapes accomplies, erreurs et procédure de reprise. |
-| Configuration initiale | Créer l’accès administratif, les paramètres locaux et les moyens de récupération. |
-| Vérification des mises à jour | Contrôler signature, intégrité, compatibilité et provenance des artefacts. |
-| Migrations du panneau | Préparer les changements de schéma et les vérifications nécessaires à leur application. |
-| Maintenance contrôlée | Informer des opérations en cours et préserver les fonctions de diagnostic et de récupération. |
-| Retour de version | Documenter les possibilités réelles de retour du code et des données, sans promettre un rollback universel. |
-| État des droits de licence | Afficher état et échéance des capacités commerciales sans exposer les clés. |
-| Indépendance des extensions | Conserver connexion, hébergement existant, export et récupération lorsque les modules facultatifs sont arrêtés. |
-| Disponibilité des services privés | Limiter l’impact d’une indisponibilité du catalogue, des licences ou du support aux opérations qui en dépendent. |
+| PHP versions | Inventory available versions, their sources, and the applications that depend on them. |
+| Per-site assignment | Select an authorized runtime and check incompatibilities before switching. |
+| PHP-FPM pools | Manage identity, socket, process mode, capacity, and account-specific limits. |
+| PHP settings | Edit permitted directives: memory, timeouts, uploads, and other schema-validated settings. |
+| Effective configuration | Show inherited values, local overrides, and required reloads. |
+| PHP extensions | List, enable, or remove permitted modules according to version, dependencies, and impact. |
+| OPcache and diagnostics | Expose available settings and measurements without mixing pools or accounts. |
+| Command-line PHP | Associate the CLI version with authorized tasks without confusing it with the web runtime. |
+| Composer | Install project dependencies under the project's identity and directory, with a recorded outcome. |
+| Startup and health | Check pool status, failures, saturation, errors, and restart requirements. |
+| Version changes | Prepare compatibility checks and recovery when the application and backend support them. |
 
-## Composants et services réutilisables
+### Databases and engine access
 
-WCP360 Core, les interfaces et les extensions doivent consommer des contrats et composants partagés. Les règles sensibles restent appliquées côté serveur, y compris lorsque le frontend masque une action.
-
-### Bibliothèque d’interface
-
-| Composant | Usage |
+| Capability | Operations to cover |
 | :--- | :--- |
-| DataTable / DataGrid | Listes de comptes, sites, domaines, bases, services et extensions. |
-| Pagination et tri multicritère | Parcours des listes et tri par nom, état, date ou consommation. |
-| Recherche et filtres avancés | Recherche globale ou contextuelle et combinaison de critères. |
-| Form Builder et validation | Champs cohérents, formulaires réutilisables et erreurs compréhensibles. |
-| Modales et confirmations | Création, édition et confirmation des opérations sensibles. |
-| Notifications et toasts | Résultat d’une action, avertissements utiles et accès au suivi des tâches. |
-| Actions groupées | Opérations sur plusieurs ressources avec permissions et résultat par élément. |
-| Exports CSV / JSON | Export des données autorisées et des rapports. |
-| Colonnes et vues enregistrées | Colonnes visibles, ordre d’affichage, filtres et préférences de consultation. |
-| Graphiques et indicateurs | Consommation, historique, disponibilité et progression des opérations. |
-| Palette de commandes | Accès rapide aux pages et actions disponibles pour l’utilisateur. |
-| Thèmes et traductions | Mode clair/sombre, préférences, terminologie commune et internationalisation. |
-| Accessibilité et responsive | Navigation clavier, focus, lecteurs d’écran, contrastes et adaptation mobile/tablette. |
-| États d’interface | Chargement, liste vide, erreur, accès refusé, traitement en cours et service indisponible. |
+| Engine inventory | Detect installed versions, status, and actual capabilities. |
+| Database creation | Assign an owner, engine, compatible options, and plan limits. |
+| Users and credentials | Create, rotate, or revoke access without exposing passwords in logs. |
+| Privileges | Manage per-database grants and distinguish usage rights from engine administration. |
+| Remote access | Control allowed addresses, encryption, and network access rules. |
+| Data import | Check format, size, available space, and import results. |
+| Data export | Produce a consistent, protected export subject to the owner's permissions. |
+| Backup and restore | Coordinate operations with the engine and account recovery points. |
+| Connections and locks | Expose available diagnostics and restrict termination actions to authorized permissions. |
+| Slow queries | Present measurements and filtered queries with sources and sensitive-data redaction. |
+| PostgreSQL extensions | Manage available modules per database with dependency and privilege checks. |
+| Deletion and dependencies | Identify affected users, applications, and backups before destruction. |
+| Panel data separation | Isolate the Core PostgreSQL database from customer-hosted databases. |
 
-### Services applicatifs communs
+### Mail services and deliverability
 
-| Service | Responsabilité |
+| Capability | Operations to cover |
 | :--- | :--- |
-| API et contrats de données | Entrées/sorties validées, pagination, erreurs cohérentes et versionnement des interfaces. |
-| Accès aux données | Repositories, transactions, relations, migrations et séparation des données par propriétaire. |
-| Résolution des politiques | Calcul des droits et limites entre politique serveur, offre, revendeur et compte. |
-| Jobs durables | Verrous, idempotence, nouvelles tentatives limitées, délais, progression, reprise et annulation lorsque possible. |
-| Événements et webhooks | Diffusion contrôlée des changements, signatures, suivi et gestion des échecs de livraison. |
-| Configuration | Valeurs par défaut, paramètres par périmètre et validation des changements. |
-| Audit et observabilité | Corrélation des requêtes, tâches et effets système ; masquage des données sensibles. |
-| Gestion des extensions | Manifeste, compatibilité, permissions, installation, activation, santé, mise à jour et désinstallation. |
-| SDK et conformité | Contrats réutilisables et vérifications de compatibilité pour les développeurs d’extensions. |
+| Mail domains | Enable or disable mail hosting and check DNS prerequisites. |
+| Mailboxes | Create, update, suspend, delete, and track mailbox usage. |
+| Quotas and sending limits | Define storage and usage ceilings by account, domain, or mailbox. |
+| Aliases and recipient groups | Validate addresses and relationships without exposing other accounts. |
+| Forwarders and catch-all | Check destinations, loops, and external-forwarding policy. |
+| Vacation replies | Define the schedule, content, and frequency according to engine support. |
+| Sieve filters | Build ordered, validated rules for filing, forwarding, and other permitted actions. |
+| SMTP, IMAP, and authentication | Present client settings, service status, and secure configuration. |
+| Autoconfig and Autodiscover | Prepare compatible configuration information for mail clients. |
+| Webmail access | Create an authorized access flow to the configured client without exposing a general password. |
+| Mail queue | Filter deferred messages, understand reasons, and perform authorized actions. |
+| SPF, DKIM, and DMARC | Check configuration, publish required records, and track problems by domain. |
+| DKIM key rotation | Prepare and verify selector changes and associated records. |
+| Baseline mail protection | Apply spam controls, abuse checks, and protections available in the selected baseline. |
+| Outbound abuse and reputation | Associate sending anomalies with accounts; throttle or suspend according to policy. |
+| MTA-STS and TLS-RPT | Manage policies and observations when compatible services are enabled. |
+| Deliverability diagnostics | Correlate PTR, DNS, TLS, rejections, and external observations without guaranteeing delivery. |
+| Mail logs | Authorize access within the intended scope and redact sensitive data. |
 
-## Extensions et plugins possibles et à prévoir
+### File management and web transfers
 
-Le catalogue ci-dessous regroupe **149 entrées dans 21 familles** : 142 modules, connecteurs, recettes ou adaptateurs de capacités facultatives, et 7 entrées d’adaptateurs de moteurs du Core. Une entrée peut désigner un pack de pilotes ou de recettes ; ce nombre ne correspond pas à des plugins déjà publiés.
-
-Ces éléments constituent un périmètre de conception et des pistes d’intégration. Les noms de produits illustrent les cibles possibles ; les versions, licences, fonctions et compatibilités restent à qualifier pour chaque intégration. Les composants déjà présents sont indiqués dans [État actuel du projet](#état-actuel-du-projet).
-
-### Nature des extensions et frontières du Core
-
-| Nature | Responsabilité |
+| Capability | Operations to cover |
 | :--- | :--- |
-| Module | Ajoute un parcours ou une fonction facultative, avec ses propres données, routes et traitements. |
-| Connecteur | Relie le panneau à un fournisseur ou à un système externe par un contrat limité. |
-| Adaptateur | Traduit les commandes et états d’un moteur ; il déclare ses capacités réelles. |
-| Recettes | Décrivent des paramètres, dépendances et étapes pour un installateur commun ; chaque application ne nécessite pas un nouvel installateur. |
-| Pack UI | Apporte présentation ou traductions via les composants et points d’extension autorisés. |
-| Adaptateur Core | Implémente un service indispensable avec un moteur remplaçable ; il ne rend pas ce service facultatif. |
+| File explorer | Show a directory tree, breadcrumbs, metadata, permitted hidden files, and contextual navigation. |
+| Creation and renaming | Create files and directories, rename items, and check conflicts. |
+| Copy and move | Check capacity, destination, permissions, and the result for each item. |
+| Uploads | Handle progress, collisions, limits, and per-file results; offer resuming only when the backend supports it. |
+| Downloads | Check the resource, transfer scope, and lifetime of any generated links. |
+| Text editor | Support highlighting, search and replace, encoding, unsaved changes, and saving. |
+| Edit conflicts | Detect concurrent changes and prevent silent overwriting of another version. |
+| Archives | Create or extract supported formats with limits on size, file count, and paths. |
+| File permissions | Edit permitted modes and identities without bypassing account isolation. |
+| Deletion and trash | Distinguish recoverable deletion from permanent removal according to storage capabilities. |
+| Search and size calculation | Search within authorized limits and run costly operations as tracked jobs. |
+| Path protection | Check symbolic links, directory traversal, and archive paths on the server. |
+| Operation history | Track the actor, target, result, and any available recovery point. |
 
-Le Core conserve authentification, autorisation, comptes, quotas, sites, DNS, TLS, mail de base, bases, fichiers/SFTP, sauvegardes locales, jobs, audit et exploitation essentielle. **Désactiver une extension de gestion ne doit ni supprimer ses ressources ni interrompre les services d’hébergement existants.**
+### SSH, SFTP, and technical access
 
-Un moteur utilisé par des sites, boîtes, bases ou volumes ne peut pas être retiré comme un simple module d’interface : son remplacement exige une migration et la vérification des dépendances. Une fonction ne devient pas facultative parce que son implémentation passe par un adaptateur.
-
-| Famille | Entrées décrites |
+| Capability | Operations to cover |
 | :--- | :--- |
-| [Applications, CMS et outils de sites](#applications-cms-et-outils-de-sites) | 7 |
-| [Runtimes, dépendances et workers applicatifs](#runtimes-dépendances-et-workers-applicatifs) | 9 |
-| [Git, CI/CD et chaîne de livraison](#git-cicd-et-chaîne-de-livraison) | 8 |
-| [Domaines, DNS externes et certificats spécialisés](#domaines-dns-externes-et-certificats-spécialisés) | 10 |
-| [Messagerie avancée et clients webmail](#messagerie-avancée-et-clients-webmail) | 9 |
-| [Outils de bases de données et données avancées](#outils-de-bases-de-données-et-données-avancées) | 8 |
-| [Sauvegardes distantes, moteurs et assurance de reprise](#sauvegardes-distantes-moteurs-et-assurance-de-reprise) | 9 |
-| [Protection avancée, scanners et investigation](#protection-avancée-scanners-et-investigation) | 10 |
-| [Identité d’entreprise et coffres de secrets](#identité-dentreprise-et-coffres-de-secrets) | 5 |
-| [Observabilité et supervision externe](#observabilité-et-supervision-externe) | 7 |
-| [Notifications, communication et astreinte](#notifications-communication-et-astreinte) | 4 |
-| [Stockage partagé et moteurs spécialisés](#stockage-partagé-et-moteurs-spécialisés) | 7 |
-| [Virtualisation, conteneurs et clusters](#virtualisation-conteneurs-et-clusters) | 8 |
-| [Réseau avancé, équilibrage et disponibilité](#réseau-avancé-équilibrage-et-disponibilité) | 7 |
-| [Datacenter et matériel](#datacenter-et-matériel) | 4 |
-| [Facturation, commerce et licences tierces](#facturation-commerce-et-licences-tierces) | 7 |
-| [Support, portail client et diagnostics consentis](#support-portail-client-et-diagnostics-consentis) | 5 |
-| [Données personnelles, conservation et gouvernance](#données-personnelles-conservation-et-gouvernance) | 5 |
-| [Automatisation, infrastructure déclarative et assistance IA](#automatisation-infrastructure-déclarative-et-assistance-ia) | 8 |
-| [Personnalisation et productivité](#personnalisation-et-productivité) | 5 |
-| [Adaptateurs de moteurs alternatifs du Core](#adaptateurs-de-moteurs-alternatifs-du-core) | 7 |
+| Server SSH configuration | Manage permitted settings, listening addresses, and authentication policies. |
+| User keys | Import, assign, revoke, and track keys belonging to the owner. |
+| SFTP accounts | Define identity, accessible root, permissions, and restrictions. |
+| Delegated shell access | Distinguish SFTP-only accounts from authorized shells; apply the hosting plan's scope. |
+| Access restrictions | Define allowed users and groups and supported constraints. |
+| Administrator lockout prevention | Validate configuration before reloading and retain a recovery path. |
+| SSH host keys | Inventory fingerprints, any relevant expiration dates, and rotation procedures. |
+| Sessions and logs | Track authorized connections and revoke access according to available capabilities. |
+| Credential rotation | Remove old access and check automation dependencies. |
 
-### Applications, CMS et outils de sites
+### Local backups, restoration, and retention
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Capability | Operations to cover |
+| :--- | :--- |
+| Backup policies | Select resources, schedules, retention, owner, and capacity constraints. |
+| Per-resource backups | Cover files, databases, mail, DNS, and configuration within the selected scope. |
+| Recovery points | Retain identifier, date, contents, engine, location, and verification status. |
+| Execution and progress | Track steps, partial failures, duration, and storage consumption. |
+| Data consistency | Coordinate mechanisms specific to the databases and services involved. |
+| Encryption | Manage key references and recovery procedures according to engine capabilities. |
+| Verification | Check integrity and readability; distinguish a completed backup from a verified backup. |
+| Retention and pruning | Show recovery points to retain or delete before changing policy. |
+| Targeted restoration | Select files, databases, mailboxes, or an entire account with conflict checks. |
+| Restore preparation | Check permissions, capacity, dependencies, and the effect on existing data. |
+| Restore results | Confirm recovered resources and identify items requiring intervention. |
+| Independent recovery access | Keep local backup and restore usable without a remote connector. |
+
+### Migration and transfers between instances
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Source inventory | Discover accounts, domains, files, databases, mail, DNS, certificates, and scheduled tasks. |
+| Compatibility checks | Identify versions, missing capabilities, and items that cannot be transferred. |
+| Resource mapping | Map destination accounts, plans, paths, IP addresses, and engines. |
+| Destination capacity | Check space, quotas, resources, and collisions before transfer. |
+| Tracked transfers | Run jobs with progress and per-resource results. |
+| Final synchronization | Support catching up with changes when the transfer protocol allows it. |
+| Cutover preparation | Document DNS changes, any downtime, and checks before activation. |
+| Post-transfer validation | Compare imported items and services; produce a verification report. |
+| Recovery and cleanup | Distinguish incomplete transfers, available recovery options, and final removal of temporary data. |
+| External formats | Use specialized importers for other panels; do not assume format compatibility. |
+
+### System, services, packages, and local storage
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Server identity | Show OS, architecture, kernel, hostname, FQDN, time zone, and clock status. |
+| System users and groups | Manage identities needed by services and accounts through bounded operations. |
+| Services | Read status and perform start, stop, reload, restart, or boot-enablement actions according to permissions. |
+| Service dependencies | Identify affected resources before stopping a service or changing configuration. |
+| Processes | Show owner, usage, and authorized actions without exposing secrets in arguments. |
+| Packages and repositories | List versions and sources; execute validated, tracked package transactions. |
+| Security updates | Identify applicable advisories and reboot requirements with source evidence. |
+| System scheduling | Administer authorized jobs and timers, their owners, and their history. |
+| Volumes and mounts | Show capacity, filesystem, options, and dependencies before unmounting. |
+| Disk capacity and health | Monitor space, inodes, I/O errors, and SMART signals when available. |
+| System logs | Filter journal and file logs; apply retention and access according to role. |
+| Maintenance and reboot | Prepare service impact, retain recovery options, and verify restored health. |
+
+### Networking, IP addresses, and firewall
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Interface inventory | Expose links, status, addresses, MTU, and the detected configuration backend. |
+| IPv4 and IPv6 | Manage addresses and prefixes with format, ownership, and usage validation. |
+| IP pools and reservations | Allocate, reserve, and release addresses without collisions. |
+| Routes and gateways | Control changes and their effect on panel connectivity. |
+| Resolvers and local naming | Manage supported settings without confusing resolvers with authoritative DNS servers. |
+| Ports and sockets | Identify listening endpoints, services, and authorized network exposure. |
+| Firewall rules | Manage rules, profiles, the active configuration source, and post-application checks. |
+| Blocks and exceptions | Review restrictions, expiration, and authorized unblocking. |
+| Network diagnostics | Expose resolution, connectivity, and route tests with validated targets. |
+| Sensitive network changes | Provide validation, checks that access remains available, and recovery after connectivity loss. |
+
+### Security, secrets, and baseline compliance
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Security center | Aggregate findings while retaining source, evidence, scope, and date. |
+| Baseline hardening | Check required settings and propose changes compatible with the server. |
+| Sign-in attack prevention | Manage the selected protections and exceptions without a second conflicting inventory. |
+| Installed protection integrations | Detect spam engines, scanners, or MAC controls; expose only available functions. |
+| Application secrets | Reference and protect service, provider, and technical-account credentials. |
+| Sensitive-data redaction | Filter secrets and sensitive content from logs, audit records, errors, exports, and diagnostics. |
+| Internal keys and certificates | Manage scope, rotation, and revocation of the panel's technical identities. |
+| Request validation | Check inputs, attachments, sessions, origins, and sensitive operations on the server. |
+| Change auditing | Retain the real actor, any delegation, resource, action, and outcome. |
+| Evidence retention | Control access, retention, export, and changes to audit policies. |
+
+### Metrics, alerts, incidents, and diagnostics
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Server health | Distinguish healthy, degraded, unavailable, and unknown states using checks actually collected. |
+| System metrics | Track CPU, RAM, storage, network, and saturation with units and measurement periods. |
+| Per-account metrics | Restrict data to owned resources and delegated permissions. |
+| History and trends | Compare periods and distinguish recent, delayed, or missing measurements. |
+| Service checks | Check availability and application-level health of enabled services. |
+| Alert rules | Define thresholds, windows, recipients, and event deduplication. |
+| Notification center | Review, filter, and acknowledge events according to role. |
+| Local alert fallback | Maintain panel notifications and a verified ROOT email address without an external extension. |
+| Incident management | Associate symptoms, resources, remediation jobs, and maintenance events. |
+| Diagnostic bundles | Collect information needed for intervention, with filtering and explicit sharing. |
+
+### Jobs, reconciliation, and long-running operations
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Task center | List operations, owner, resource, step, progress, and outcome. |
+| Job persistence | Retain state and attempts across worker interruptions. |
+| Idempotency | Recognize repeated requests and avoid repeating a system effect. |
+| Locks and concurrency | Prevent incompatible changes to the same resource. |
+| Preconditions | Check capacity, dependencies, and permissions before application. |
+| Steps and checkpoints | Track partial operations and recovery checkpoints. |
+| Recovery and retries | Limit retries and distinguish transient errors from cases requiring intervention. |
+| Cancellation and compensation | Expose available actions according to the current step and technical safety. |
+| Timeouts and resource budgets | Limit duration, consumption, and calls to dependent services. |
+| Reconciliation | Compare desired and observed state and resolve differences through authorized operations. |
+
+### Configuration, APIs, and application exchanges
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Hierarchical configuration | Show effective values, origin, overrides, and return to inheritance. |
+| Configuration validation | Check schemas, constraints, and dependencies before saving. |
+| Diff and apply | Distinguish prepared changes, pending application, and the state actually active. |
+| REST API | Expose domain operations with consistent pagination, filters, errors, and contracts. |
+| Identifiers and correlation | Connect requests, jobs, events, and resource effects. |
+| Tokens and restrictions | Manage scope, expiration, last use, and supported network constraints. |
+| Outbound webhooks | Sign events, track deliveries and retries, and protect secrets. |
+| Inbound webhooks | Verify source, authenticity, replay protection, and authorization for the triggered action. |
+| Structured import and export | Validate formats, handle per-item errors, and enforce data permissions. |
+| Capability detection | Adapt APIs and interfaces to engines, versions, and functions actually available. |
+
+### Installation, updates, and panel autonomy
+
+| Capability | Operations to cover |
+| :--- | :--- |
+| Prerequisite checks | Check the environment, access, network, storage, and components before installation. |
+| Installation status | Show completed steps, errors, and recovery procedures. |
+| Initial configuration | Create administrative access, local settings, and recovery options. |
+| Update verification | Check artifact signatures, integrity, compatibility, and provenance. |
+| Panel migrations | Prepare schema changes and the checks needed to apply them. |
+| Controlled maintenance | Report operations in progress and preserve diagnostic and recovery functions. |
+| Version rollback | Document actual code and data recovery options without promising universal rollback. |
+| License entitlement status | Show the status and expiration of commercial capabilities without exposing keys. |
+| Extension independence | Preserve sign-in, existing hosting services, export, and recovery when optional modules are stopped. |
+| Private-service availability | Limit the impact of catalog, licensing, or support outages to operations that depend on those services. |
+
+## Reusable components and services
+
+WCP360 Core, its interfaces, and extensions should use shared contracts and components. Sensitive rules remain enforced on the server, including when the frontend hides an action.
+
+### UI library
+
+| Component | Use |
+| :--- | :--- |
+| DataTable / DataGrid | Lists of accounts, sites, domains, databases, services, and extensions. |
+| Pagination and multi-column sorting | Browse lists and sort by name, status, date, or usage. |
+| Search and advanced filters | Global or contextual search and combined criteria. |
+| Form Builder and validation | Consistent fields, reusable forms, and understandable errors. |
+| Modals and confirmations | Create, edit, and confirm sensitive operations. |
+| Notifications and toasts | Action results, useful warnings, and access to job tracking. |
+| Bulk actions | Operate on multiple resources with permission checks and per-item outcomes. |
+| CSV / JSON exports | Export authorized data and reports. |
+| Columns and saved views | Visible columns, display order, filters, and browsing preferences. |
+| Charts and indicators | Usage, history, availability, and operation progress. |
+| Command palette | Quick access to pages and actions available to the user. |
+| Themes and translations | Light/dark modes, preferences, shared terminology, and internationalization. |
+| Accessibility and responsive design | Keyboard navigation, focus, screen readers, contrast, and mobile/tablet layouts. |
+| Interface states | Loading, empty lists, errors, access denied, processing, and service unavailable. |
+
+### Shared application services
+
+| Service | Responsibility |
+| :--- | :--- |
+| API and data contracts | Validated inputs/outputs, pagination, consistent errors, and interface versioning. |
+| Data access | Repositories, transactions, relationships, migrations, and ownership-based data separation. |
+| Policy resolution | Resolve permissions and limits across server policy, plan, reseller, and account. |
+| Durable jobs | Locks, idempotency, bounded retries, timeouts, progress, recovery, and cancellation where possible. |
+| Events and webhooks | Controlled change delivery, signatures, tracking, and delivery-failure handling. |
+| Configuration | Defaults, scoped settings, and change validation. |
+| Audit and observability | Correlate requests, jobs, and system effects; redact sensitive data. |
+| Extension management | Manifest, compatibility, permissions, installation, activation, health, updates, and removal. |
+| SDK and conformance | Reusable contracts and compatibility checks for extension developers. |
+
+## Potential and planned extensions and plugins
+
+The catalog below contains **149 entries across 21 families**: 142 modules, connectors, recipes, or adapters for optional capabilities, and 7 entries for Core engine adapters. An entry may represent a pack of drivers or recipes; this is not a count of already published plugins.
+
+These items describe a design scope and potential integrations. Product names illustrate possible targets; versions, licenses, functions, and compatibility must be qualified for each integration. Components already present are identified in [Current project status](#current-project-status).
+
+### Extension types and Core boundaries
+
+| Type | Responsibility |
+| :--- | :--- |
+| Module | Adds an optional workflow or function with its own data, routes, and workers. |
+| Connector | Links the panel to a provider or external system through a limited contract. |
+| Adapter | Translates an engine's commands and states and declares its actual capabilities. |
+| Recipes | Describe parameters, dependencies, and steps for a shared installer; each application does not require a new installer. |
+| UI pack | Adds presentation or translations through authorized components and extension points. |
+| Core adapter | Implements an essential service using a replaceable engine; it does not make the service optional. |
+
+The Core retains authentication, authorization, accounts, quotas, websites, DNS, TLS, baseline mail, databases, files/SFTP, local backups, jobs, auditing, and essential operations. **Disabling a management extension must neither delete its resources nor interrupt existing hosting services.**
+
+An engine used by websites, mailboxes, databases, or volumes cannot be removed like an interface module: replacement requires migration and dependency checks. A function does not become optional because its implementation uses an adapter.
+
+| Family | Entries described |
+| :--- | :--- |
+| [Applications, CMS platforms, and site tools](#applications-cms-platforms-and-site-tools) | 7 |
+| [Runtimes, dependencies, and application workers](#runtimes-dependencies-and-application-workers) | 9 |
+| [Git, CI/CD, and delivery pipelines](#git-cicd-and-delivery-pipelines) | 8 |
+| [Domains, external DNS, and specialized certificates](#domains-external-dns-and-specialized-certificates) | 10 |
+| [Advanced mail and webmail clients](#advanced-mail-and-webmail-clients) | 9 |
+| [Database tools and advanced data services](#database-tools-and-advanced-data-services) | 8 |
+| [Remote backups, engines, and recovery assurance](#remote-backups-engines-and-recovery-assurance) | 9 |
+| [Advanced protection, scanners, and investigation](#advanced-protection-scanners-and-investigation) | 10 |
+| [Enterprise identity and secret vaults](#enterprise-identity-and-secret-vaults) | 5 |
+| [Observability and external monitoring](#observability-and-external-monitoring) | 7 |
+| [Notifications, communication, and on-call services](#notifications-communication-and-on-call-services) | 4 |
+| [Shared storage and specialized engines](#shared-storage-and-specialized-engines) | 7 |
+| [Virtualization, containers, and clusters](#virtualization-containers-and-clusters) | 8 |
+| [Advanced networking, load balancing, and availability](#advanced-networking-load-balancing-and-availability) | 7 |
+| [Datacenter and hardware](#datacenter-and-hardware) | 4 |
+| [Billing, commerce, and third-party licenses](#billing-commerce-and-third-party-licenses) | 7 |
+| [Support, customer portal, and consented diagnostics](#support-customer-portal-and-consented-diagnostics) | 5 |
+| [Personal data, retention, and governance](#personal-data-retention-and-governance) | 5 |
+| [Automation, infrastructure as code, and AI assistance](#automation-infrastructure-as-code-and-ai-assistance) | 8 |
+| [Customization and productivity](#customization-and-productivity) | 5 |
+| [Alternative Core engine adapters](#alternative-core-engine-adapters) | 7 |
+
+### Applications, CMS platforms, and site tools
+
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Installateur d’applications | Catalogue de recettes, versions compatibles, dépendances, installation, mise à jour, retrait et rapport par instance. | Module |
-| WordPress Toolkit | Inventaire multi-sites, cœur/plugins/thèmes, mises à jour contrôlées, maintenance, durcissement et suivi des vulnérabilités. | Module |
-| Recettes CMS et e-commerce | Paquets d’intégration pour WordPress, Drupal, Joomla, PrestaShop ou autres applications, avec paramètres et vérifications propres à chaque recette. | Recettes |
-| Recettes d’applications métier | Déploiements guidés d’applications collaboratives, analytiques ou métier ; ressources, dépendances et procédures de mise à jour déclarées. | Recettes |
-| Staging et clones de sites | Copie fichiers/base, changement d’URL, isolation des environnements et comparaison avant promotion. | Module |
-| Mises à jour applicatives vérifiées | Sauvegarde préalable, tests en environnement isolé et validation avant promotion lorsque le moteur applicatif le permet. | Module |
-| Gestion de parc applicatif | Vues croisées de versions, dépendances, état et actions groupées sur les applications autorisées. | Module |
+| Application installer | Recipe catalog, compatible versions, dependencies, installation, updates, removal, and per-instance reports. | Module |
+| WordPress Toolkit | Multi-site inventory, core/plugins/themes, controlled updates, maintenance, hardening, and vulnerability tracking. | Module |
+| CMS and e-commerce recipes | Integration packages for WordPress, Drupal, Joomla, PrestaShop, or other applications, with recipe-specific settings and checks. | Recipes |
+| Business application recipes | Guided deployment of collaboration, analytics, or business applications with declared resources, dependencies, and update procedures. | Recipes |
+| Site staging and cloning | File/database copying, URL changes, environment isolation, and comparison before promotion. | Module |
+| Verified application updates | Pre-update backup, isolated testing, and validation before promotion when the application engine allows it. | Module |
+| Application fleet management | Cross-application views of versions, dependencies, health, and bulk actions on authorized applications. | Module |
 
-### Runtimes, dépendances et workers applicatifs
+### Runtimes, dependencies, and application workers
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Applications Node.js | Versions, entrypoint, variables, installation de dépendances, processus, redémarrage et journaux. | Adaptateur |
-| Applications Python WSGI/ASGI | Environnement isolé, dépendances, module d’entrée, serveur applicatif, santé et journaux. | Adaptateur |
-| Applications Ruby / Passenger | Versions, bundles, environnement, intégration au moteur web et commandes de cycle de vie autorisées. | Adaptateur |
-| Applications Go hébergées | Déploiement de binaires, environnement, ports internes, supervision et contrôles de disponibilité. | Adaptateur |
-| Gestionnaires de dépendances | Adaptateurs Composer, npm, pip ou Bundler, exécutés dans l’identité du projet avec résultats et contraintes de ressources. | Pack d’adaptateurs |
-| Workers des applications clientes | Processus de fond dédiés, supervision, concurrence, redémarrage et journaux ; séparés des workers internes du panneau. | Module |
-| Services Redis pour clients | Instances ou espaces d’accès, identifiants, limites mémoire, métriques et opérations autorisées. | Adaptateur |
-| Services Memcached pour clients | Affectations, mémoire, connexions, état et purge limitée au périmètre réellement isolable. | Adaptateur |
-| Messagerie RabbitMQ | Vhosts, utilisateurs, droits, files et observabilité selon le backend ; service facultatif distinct du transport interne des jobs. | Adaptateur |
+| Node.js applications | Versions, entrypoint, variables, dependency installation, processes, restart, and logs. | Adapter |
+| Python WSGI/ASGI applications | Isolated environment, dependencies, entry module, application server, health, and logs. | Adapter |
+| Ruby / Passenger applications | Versions, bundles, environment, web-engine integration, and authorized lifecycle commands. | Adapter |
+| Hosted Go applications | Binary deployment, environment, internal ports, supervision, and availability checks. | Adapter |
+| Dependency managers | Composer, npm, pip, or Bundler adapters running under the project's identity with results and resource constraints. | Adapter pack |
+| Customer application workers | Dedicated background processes, supervision, concurrency, restart, and logs; separate from the panel's internal workers. | Module |
+| Customer Redis services | Instances or access scopes, credentials, memory limits, metrics, and authorized operations. | Adapter |
+| Customer Memcached services | Assignments, memory, connections, status, and purging limited to scopes that can actually be isolated. | Adapter |
+| RabbitMQ messaging | Virtual hosts, users, permissions, queues, and backend-specific observability; an optional service separate from internal job transport. | Adapter |
 
-### Git, CI/CD et chaîne de livraison
+### Git, CI/CD, and delivery pipelines
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Dépôts Git | Connexions, branches autorisées, clés de déploiement, synchronisation et historique par projet. | Module |
-| Connecteurs GitHub / GitLab / Bitbucket | Authentification fournisseur, webhooks vérifiés, dépôts accessibles et déclencheurs de livraison. | Pack de connecteurs |
-| Pipelines de déploiement | Étapes versionnées, préconditions, artefacts, validations, promotion et retour de version supporté. | Module |
-| Runners isolés | Identités dédiées, ressources limitées, secrets injectés par référence et nettoyage des environnements de travail. | Module |
-| Registres d’artefacts et d’images | Récupération d’artefacts autorisés, provenance, empreintes et suivi de la version déployée. | Connecteur |
-| Environnements de prévisualisation | Création temporaire par branche, limites, expiration et nettoyage contrôlé des ressources. | Module |
-| Analyse des dépendances | Inventaire, versions, licences déclarées et avis de vulnérabilité issus de sources configurées. | Module |
-| Secrets de déploiement externes | Connexion à un coffre de secrets, portée par projet, rotation et absence de valeurs en clair dans les journaux. | Connecteur |
+| Git repositories | Connections, authorized branches, deployment keys, synchronization, and per-project history. | Module |
+| GitHub / GitLab / Bitbucket connectors | Provider authentication, verified webhooks, accessible repositories, and delivery triggers. | Connector pack |
+| Deployment pipelines | Versioned steps, preconditions, artifacts, checks, promotion, and supported rollback. | Module |
+| Isolated runners | Dedicated identities, limited resources, secrets injected by reference, and workspace cleanup. | Module |
+| Artifact and image registries | Authorized artifact retrieval, provenance, checksums, and tracking of deployed versions. | Connector |
+| Preview environments | Temporary per-branch environments, limits, expiration, and controlled resource cleanup. | Module |
+| Dependency analysis | Inventory, versions, declared licenses, and vulnerability advisories from configured sources. | Module |
+| External deployment secrets | Secret-vault connections, project-specific scope, rotation, and no plaintext values in logs. | Connector |
 
-### Domaines, DNS externes et certificats spécialisés
+### Domains, external DNS, and specialized certificates
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| DNS Cloudflare | Gestion déléguée des zones, enregistrements, synchronisation, conflits et journal des appels. | Connecteur |
-| DNS Route 53 | Adaptation des zones et autorisations fournisseur au modèle de domaine du panneau. | Connecteur |
-| Autres fournisseurs DNS | Contrat commun et pilotes spécifiques ; découverte des capacités, limites et état de synchronisation. | Pack de connecteurs |
-| Registrars de domaines | Enregistrement, transfert, renouvellement, contacts et nameservers selon l’API ; pilotes Dynadot, Spaceship ou ResellerClub possibles. | Pack de connecteurs |
-| RDAP / WHOIS | Observations de registre, échéances et statuts avec source et date, distincts de l’état local du domaine. | Connecteur |
-| CDN et edge | Rattachement d’origine, cache, purge, règles et contrôle de propagation selon le fournisseur. | Connecteur |
-| Routage global | Règles géographiques, pondération et contrôles de santé externes au routage local du serveur. | Module |
-| Challenges DNS-01 fournisseurs | Automatisation des challenges ACME avec identifiants restreints aux zones autorisées. | Pack d’adaptateurs |
-| Autorités ACME supplémentaires | Configuration d’autorités compatibles, comptes, politiques et suivi des demandes ; le socle TLS reste dans le Core. | Adaptateur |
-| Surveillance des domaines | Regroupement des échéances, changements observés de délégation et contrôles externes de cohérence. | Module |
+| Cloudflare DNS | Delegated management of zones, records, synchronization, conflicts, and API call history. | Connector |
+| Route 53 DNS | Map provider zones and permissions to the panel's domain model. | Connector |
+| Other DNS providers | Shared contracts with provider-specific drivers; capability discovery, limits, and synchronization status. | Connector pack |
+| Domain registrars | Registration, transfer, renewal, contacts, and nameservers according to the API; possible drivers include Dynadot, Spaceship, and ResellerClub. | Connector pack |
+| RDAP / WHOIS | Registry observations, expiration dates, and status with source and timestamp, separate from local domain state. | Connector |
+| CDN and edge | Origin binding, caching, purging, rules, and propagation checks according to provider support. | Connector |
+| Global traffic routing | Geographic rules, weighting, and external health checks beyond the server's local routing. | Module |
+| Provider DNS-01 challenges | Automate ACME challenges using credentials restricted to authorized zones. | Adapter pack |
+| Additional ACME authorities | Configure compatible authorities, accounts, policies, and order tracking; baseline TLS remains in the Core. | Adapter |
+| Domain monitoring | Aggregate expiration dates, observed delegation changes, and external consistency checks. | Module |
 
-### Messagerie avancée et clients webmail
+### Advanced mail and webmail clients
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Roundcube | Installation ou raccordement, accès sécurisé, configuration et suivi de santé du client. | Adaptateur |
-| SnappyMail | Intégration du client, lancement autorisé, compatibilité et cycle de mise à jour indépendant. | Adaptateur |
-| SOGo | Connexion à une suite collaborative, accès aux fonctions exposées et configuration selon les capacités retenues. | Adaptateur |
-| Relais SMTP externes | Pilotes fournisseurs, règles d’acheminement, identifiants limités et retours de livraison ; Brevo est une piste de connecteur. | Pack de connecteurs |
-| Analyse des rapports DMARC | Ingestion de rapports, agrégation par domaine, sources d’envoi et tendances ; distincte de la publication DMARC du Core. | Module |
-| BIMI et identité de marque mail | Vérifications DNS et prérequis du mécanisme ; aucune garantie d’affichage ou de délivrabilité. | Module |
-| Listes de diffusion | Raccordement à un moteur de listes, abonnements et modération sans utiliser les alias comme substitut implicite. | Adaptateur |
-| Passerelles MailGuard / sécurité mail | Filtres tiers, quarantaine, règles et observations en complément des protections mail locales. | Connecteur |
-| Migration de boîtes externes | Correspondance des comptes, transfert des messages, reprise, contrôles de volumes et rapport par boîte. | Module |
+| Roundcube | Installation or connection, secure access, configuration, and client health tracking. | Adapter |
+| SnappyMail | Client integration, authorized launch, compatibility, and an independent update lifecycle. | Adapter |
+| SOGo | Connect a collaboration suite, expose supported functions, and configure selected capabilities. | Adapter |
+| External SMTP relays | Provider drivers, routing rules, limited credentials, and delivery feedback; Brevo is a possible connector. | Connector pack |
+| DMARC report analysis | Report ingestion, per-domain aggregation, sending sources, and trends; separate from Core DMARC publication. | Module |
+| BIMI and mail brand identity | DNS and prerequisite checks for the mechanism; no guarantee of display or deliverability. | Module |
+| Mailing lists | Connect a list engine, subscriptions, and moderation without treating aliases as an implicit substitute. | Adapter |
+| MailGuard / mail security gateways | Third-party filters, quarantine, rules, and observations supplementing local mail protection. | Connector |
+| External mailbox migration | Account mapping, message transfer, recovery, volume checks, and per-mailbox reports. | Module |
 
-### Outils de bases de données et données avancées
+### Database tools and advanced data services
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| phpMyAdmin / Adminer | Accès éphémère limité aux bases autorisées, versions et restrictions de publication. | Pack d’adaptateurs |
-| pgAdmin | Raccordement et accès contrôlé aux bases PostgreSQL sans exposer la base du Core. | Adaptateur |
-| SQLite par compte | Fichiers de base, permissions, WAL selon capacités, quotas et sauvegardes. | Adaptateur |
-| Réplication de bases | Topologie, retard, état, initialisation et bascule seulement si l’adaptateur fournit une procédure sûre. | Module |
-| Analyse de performance SQL | Connexions, verrous, requêtes lentes et recommandations explicables sans modification automatique des schémas. | Module |
-| Catalogue d’extensions PostgreSQL | Métadonnées, versions et politiques d’autorisation des extensions ; leur activation reste contrôlée par le domaine base de données. | Module |
-| Bases de données externes | Raccordement à un moteur distant ou géré, accès, observations et sauvegardes selon les contrats réellement exposés. | Connecteur |
-| Anonymisation de données de staging | Règles de transformation, vérification et rapport avant mise à disposition d’une copie de base. | Module |
+| phpMyAdmin / Adminer | Temporary access limited to authorized databases, version management, and publication restrictions. | Adapter pack |
+| pgAdmin | Connection and controlled access to PostgreSQL databases without exposing the Core database. | Adapter |
+| Per-account SQLite | Database files, permissions, WAL where supported, quotas, and backups. | Adapter |
+| Database replication | Topology, lag, status, initialization, and failover only when the adapter provides a safe procedure. | Module |
+| SQL performance analysis | Connections, locks, slow queries, and explainable recommendations without automatic schema changes. | Module |
+| PostgreSQL extension catalog | Metadata, versions, and authorization policies for extensions; activation remains controlled by the database domain. | Module |
+| External databases | Connect a remote or managed engine, access, observations, and backups according to contracts actually exposed. | Connector |
+| Staging data anonymization | Transformation rules, verification, and reporting before making a database copy available. | Module |
 
-### Sauvegardes distantes, moteurs et assurance de reprise
+### Remote backups, engines, and recovery assurance
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Destination SFTP | Identité distante limitée, répertoire, disponibilité et transferts des artefacts de sauvegarde. | Connecteur |
-| Destination compatible S3 | Buckets, identifiants restreints, stockage, rétention et vérification des capacités effectives. | Connecteur |
-| Destination NFS | Répertoire autorisé, disponibilité, capacité et règles d’accès adaptées aux sauvegardes. | Connecteur |
-| Moteur Restic | Dépôts, politiques, progression, vérification, restauration et gestion des clés selon son contrat. | Adaptateur |
-| Moteur Borg | Dépôts et opérations propres au moteur, avec compatibilité, rétention et récupération documentées. | Adaptateur |
-| Transferts rclone / rsync | Profils de transfert, périmètre, simulation lorsque disponible et résultat par opération. | Pack d’adaptateurs |
-| Stockage immuable | Détection et utilisation des mécanismes de verrouillage réellement fournis par la destination. | Connecteur |
-| Tests de restauration isolés | Recréer un environnement de contrôle, vérifier données et services puis produire une preuve de récupérabilité. | Module |
-| Orchestration de reprise après incident | Ordre des ressources, objectifs RPO/RTO, exercices, dépendances et validation de retour en service. | Module |
+| SFTP destination | Restricted remote identity, directory, availability, and backup-artifact transfers. | Connector |
+| S3-compatible destination | Buckets, restricted credentials, storage, retention, and verification of effective capabilities. | Connector |
+| NFS destination | Authorized directory, availability, capacity, and backup-specific access rules. | Connector |
+| Restic engine | Repositories, policies, progress, verification, restore, and key management according to its contract. | Adapter |
+| Borg engine | Engine-specific repositories and operations with documented compatibility, retention, and recovery. | Adapter |
+| rclone / rsync transfers | Transfer profiles, scope, dry runs when available, and per-operation results. | Adapter pack |
+| Immutable storage | Detect and use locking mechanisms actually provided by the destination. | Connector |
+| Isolated restore tests | Recreate a test environment, verify data and services, and produce recovery evidence. | Module |
+| Disaster recovery orchestration | Resource ordering, RPO/RTO objectives, exercises, dependencies, and return-to-service validation. | Module |
 
-### Protection avancée, scanners et investigation
+### Advanced protection, scanners, and investigation
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| ClamAV | Scans ciblés ou planifiés, signatures, résultats et gestion contrôlée des éléments détectés. | Adaptateur |
-| Maldet | Pilotage des analyses, exclusions et résultats propres au moteur de détection. | Adaptateur |
-| Imunify360 | Intégration des fonctions réellement licenciées, événements et actions disponibles sans remplacer les permissions du Core. | Connecteur |
-| CrowdSec | Décisions, scénarios et intégrations de blocage selon les capacités ; complément au socle de protection. | Adaptateur |
-| WAF / ModSecurity | Profils, règles, exclusions et analyse des événements en complément de la sécurité applicative du panneau. | Adaptateur |
-| Intégrité des fichiers | Références, détection de changement, comparaison et alertes sans assimiler tout changement à une compromission. | Module |
-| Threat Intelligence | Flux de renseignements configurés, correspondances expliquées et décisions séparées des observations. | Connecteur |
-| Forensics Lab | Collecte ciblée de preuves, chronologie, environnement d’analyse isolé et export contrôlé. | Module |
-| Export SIEM | Transmission filtrée, format des événements, authentification, reprise et suivi de livraison. | Connecteur |
-| Avis de vulnérabilité externes | Sources, correspondances, exceptions et preuve de l’applicabilité aux composants observés. | Connecteur |
+| ClamAV | Targeted or scheduled scans, signatures, results, and controlled handling of detected items. | Adapter |
+| Maldet | Manage scans, exclusions, and results specific to the detection engine. | Adapter |
+| Imunify360 | Integrate actually licensed functions, events, and available actions without replacing Core permissions. | Connector |
+| CrowdSec | Decisions, scenarios, and blocking integrations according to capabilities; complements baseline protection. | Adapter |
+| WAF / ModSecurity | Profiles, rules, exclusions, and event analysis supplementing panel application security. | Adapter |
+| File integrity monitoring | Baselines, change detection, comparison, and alerts without treating every change as a compromise. | Module |
+| Threat Intelligence | Configured intelligence feeds, explained matches, and decisions kept separate from observations. | Connector |
+| Forensics Lab | Targeted evidence collection, timelines, isolated analysis environments, and controlled export. | Module |
+| SIEM export | Filtered transmission, event format, authentication, retries, and delivery tracking. | Connector |
+| External vulnerability advisories | Sources, matching, exceptions, and evidence of applicability to observed components. | Connector |
 
-### Identité d’entreprise et coffres de secrets
+### Enterprise identity and secret vaults
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| OIDC / OAuth | Connexion fédérée, correspondance des identités et rôles, cycle de session et révocation selon le fournisseur. | Connecteur |
-| SAML | Fédération, métadonnées, certificats, correspondance des attributs et procédure de récupération locale. | Connecteur |
-| LDAP / Active Directory | Recherche des utilisateurs/groupes, restrictions, synchronisation et traitement des indisponibilités. | Connecteur |
-| SCIM | Provisionnement et retrait des identités, correspondance des groupes et historique des synchronisations. | Connecteur |
-| Coffres de secrets / KMS | Références externes, droits de lecture limités, rotation et gestion des erreurs sans exporter le contenu du coffre. | Connecteur |
+| OIDC / OAuth | Federated sign-in, identity and role mapping, session lifecycle, and provider-supported revocation. | Connector |
+| SAML | Federation, metadata, certificates, attribute mapping, and local recovery procedures. | Connector |
+| LDAP / Active Directory | User/group lookup, restrictions, synchronization, and handling of provider outages. | Connector |
+| SCIM | Identity provisioning and removal, group mapping, and synchronization history. | Connector |
+| Secret vaults / KMS | External references, limited read permissions, rotation, and error handling without exporting vault contents. | Connector |
 
-### Observabilité et supervision externe
+### Observability and external monitoring
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Prometheus | Exposition ou transmission des métriques autorisées, labels, périmètre et contrôle d’accès. | Connecteur |
-| OpenTelemetry | Transmission des traces et métriques retenues, corrélation et filtrage des données sensibles. | Connecteur |
-| Loki et journaux centralisés | Envoi des journaux autorisés, labels, rétention et suivi des pertes ou retards. | Connecteur |
-| Syslog distant | Transport configuré, format, destination et surveillance des erreurs de livraison. | Connecteur |
-| Grafana | Raccordement de tableaux et sources de données avec droits cohérents avec les comptes du panneau. | Connecteur |
-| SNMP / supervision existante | Inventaire et remontée des métriques prises en charge vers une supervision externe. | Connecteur |
-| Tests synthétiques externes | Scénarios de disponibilité et comparaison entre observation extérieure et état local du service. | Module |
+| Prometheus | Expose or transmit authorized metrics, labels, scope, and access controls. | Connector |
+| OpenTelemetry | Transmit selected traces and metrics, correlation data, and sensitive-data filtering. | Connector |
+| Loki and centralized logs | Send authorized logs, labels, retention settings, and track losses or delays. | Connector |
+| Remote syslog | Configured transport, format, destination, and delivery-error monitoring. | Connector |
+| Grafana | Connect dashboards and data sources with permissions consistent with panel accounts. | Connector |
+| SNMP / existing monitoring | Inventory and forward supported metrics to an external monitoring system. | Connector |
+| External synthetic checks | Availability scenarios and comparison between outside observations and local service state. | Module |
 
-### Notifications, communication et astreinte
+### Notifications, communication, and on-call services
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| SMS | Fournisseurs, numéros vérifiés, modèles, limites d’envoi et suivi des échecs. | Connecteur |
-| Messageries d’équipe | Destinations, règles de routage et messages filtrés vers les plateformes configurées. | Pack de connecteurs |
-| Astreinte et incidents | Déclenchement, acquittement et synchronisation des incidents avec une plateforme spécialisée. | Connecteur |
-| Notifications push | Enrôlement de destinations, choix des événements et révocation par utilisateur. | Connecteur |
+| SMS | Providers, verified numbers, templates, sending limits, and failure tracking. | Connector |
+| Team messaging | Destinations, routing rules, and filtered messages to configured platforms. | Connector pack |
+| On-call and incidents | Trigger, acknowledge, and synchronize incidents with a specialized platform. | Connector |
+| Push notifications | Enroll destinations, select events, and support per-user revocation. | Connector |
 
-### Stockage partagé et moteurs spécialisés
+### Shared storage and specialized engines
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| ZFS | Inventaire datasets/pools, santé, snapshots et opérations explicitement prises en charge. | Adaptateur |
-| Ceph | Santé du cluster, pools, capacité et opérations propres au backend sans masquer son modèle distribué. | Adaptateur |
-| GlusterFS | Volumes, pairs, santé et synchronisation selon les capacités de l’adaptateur. | Adaptateur |
-| NFS | Montages, options validées, dépendances et diagnostic ; démontage interdit tant que des ressources en dépendent. | Adaptateur |
-| SMB / Samba | Partages autorisés, identités, accès et contraintes de publication selon le système. | Adaptateur |
-| Stockage objet applicatif | Espaces, accès et usages clients du stockage objet ; distinct des destinations de sauvegarde. | Connecteur |
-| Gestion RAID / LVM avancée | Inventaire et santé ; mutations uniquement par workflows dédiés avec contrôle des dépendances et récupération. | Module |
+| ZFS | Dataset/pool inventory, health, snapshots, and explicitly supported operations. | Adapter |
+| Ceph | Cluster health, pools, capacity, and backend-specific operations without hiding its distributed model. | Adapter |
+| GlusterFS | Volumes, peers, health, and synchronization according to adapter capabilities. | Adapter |
+| NFS | Mounts, validated options, dependencies, and diagnostics; prevent unmounting while resources depend on the mount. | Adapter |
+| SMB / Samba | Authorized shares, identities, access, and system-specific publication constraints. | Adapter |
+| Application object storage | Customer object-storage spaces, access, and uses; separate from backup destinations. | Connector |
+| Advanced RAID / LVM management | Inventory and health; changes only through dedicated workflows with dependency checks and recovery. | Module |
 
-### Virtualisation, conteneurs et clusters
+### Virtualization, containers, and clusters
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Proxmox | Connexion, inventaire des ressources, images, offres VM et actions permises par l’API. | Connecteur |
-| KVM / QEMU / libvirt | Création et gestion des VM, ressources, stockage et réseau selon le contrat du moteur. | Adaptateur |
-| Conteneurs LXC | Modèles, limites, cycle de vie et accès encadrés des conteneurs. | Adaptateur |
-| Docker / Podman | Images, conteneurs, volumes, limites et journaux sans exposer un contrôle privilégié général. | Pack d’adaptateurs |
-| Kubernetes / K3s | Namespaces, workloads, services, ingress et journaux avec identité de cluster à portée limitée. | Connecteur |
-| Catalogue d’images | Images approuvées, versions, provenance et compatibilité des modèles de machines ou conteneurs. | Module |
-| Gestion de groupes de nœuds | Inventaire, santé, capacité, adhésion et maintenance des nœuds gérés. | Module |
-| Placement et opérations progressives | Contraintes de placement, drainage et maintenance par étapes selon les mécanismes réellement disponibles. | Module |
+| Proxmox | Connection, resource inventory, images, VM plans, and API-permitted actions. | Connector |
+| KVM / QEMU / libvirt | VM creation and management, resources, storage, and networking according to the engine contract. | Adapter |
+| LXC containers | Templates, limits, lifecycle, and controlled container access. | Adapter |
+| Docker / Podman | Images, containers, volumes, limits, and logs without exposing unrestricted privileged control. | Adapter pack |
+| Kubernetes / K3s | Namespaces, workloads, services, ingress, and logs using a scoped cluster identity. | Connector |
+| Image catalog | Approved images, versions, provenance, and compatibility of machine or container templates. | Module |
+| Node group management | Inventory, health, capacity, membership, and maintenance of managed nodes. | Module |
+| Placement and rolling operations | Placement constraints, draining, and staged maintenance according to mechanisms actually available. | Module |
 
-### Réseau avancé, équilibrage et disponibilité
+### Advanced networking, load balancing, and availability
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| HAProxy | Frontends, backends, état des cibles, règles et rechargement validé. | Adaptateur |
-| Traefik | Routes, services, configuration dynamique et contrôle des points d’entrée autorisés. | Adaptateur |
-| VRRP / adresses flottantes | Propriétaires des VIP, état, bascule et contrôles préalables selon le moteur. | Adaptateur |
-| WireGuard / VPN | Pairs, plages, clés et accès de management limités ; séparation des réseaux hébergés. | Adaptateur |
-| VLAN, bonding et bridges | Relations entre interfaces, paramètres compatibles et dépendances avant modification. | Module |
-| SDN | Connexion à un contrôleur réseau et traduction limitée des segments, règles et affectations autorisées. | Connecteur |
-| Haute disponibilité de services | Surveillance, quorum/fencing si nécessaire, bascule, réintégration et exercices adaptés au service. | Module |
+| HAProxy | Frontends, backends, target health, rules, and validated reloads. | Adapter |
+| Traefik | Routes, services, dynamic configuration, and control over authorized entrypoints. | Adapter |
+| VRRP / floating IP addresses | VIP ownership, status, failover, and prerequisite checks according to the engine. | Adapter |
+| WireGuard / VPN | Peers, ranges, keys, and restricted management access; separate from hosted networks. | Adapter |
+| VLANs, bonding, and bridges | Interface relationships, compatible settings, and dependencies before changes. | Module |
+| SDN | Connect a network controller and perform bounded mapping of authorized segments, rules, and assignments. | Connector |
+| Service high availability | Monitoring, quorum/fencing where required, failover, reintegration, and service-specific exercises. | Module |
 
-### Datacenter et matériel
+### Datacenter and hardware
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| Redfish / IPMI | Inventaire matériel, capteurs, état électrique et commandes autorisées par un accès de management dédié. | Pack d’adaptateurs |
-| Provisionnement PXE | Profils, images, bootstrap réseau, tâches d’installation et inscription du nœud après vérification. | Module |
-| Inventaire datacenter | Emplacements, équipements et dépendances physiques rattachés aux ressources techniques. | Module |
-| Sondes environnementales | Mesures de température, énergie et autres capteurs disponibles avec origine et date. | Connecteur |
+| Redfish / IPMI | Hardware inventory, sensors, power state, and authorized commands through dedicated management access. | Adapter pack |
+| PXE provisioning | Profiles, images, network bootstrap, installation jobs, and verified node enrollment. | Module |
+| Datacenter inventory | Locations, equipment, and physical dependencies associated with technical resources. | Module |
+| Environmental sensors | Available temperature, energy, and other sensor measurements with source and timestamp. | Connector |
 
-### Facturation, commerce et licences tierces
+### Billing, commerce, and third-party licenses
 
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
+| Module, connector, or adapter | Planned functions | Type |
 | :--- | :--- | :--- |
-| WHMCS | Correspondance produits/offres, comptes de service, demandes de provisionnement, suspension et retours d’état. | Connecteur |
-| Blesta | Synchronisation des ressources techniques avec les opérations commerciales via API autorisées. | Connecteur |
-| FOSSBilling | Adaptation des offres, clients et changements de cycle commercial aux commandes du Core. | Connecteur |
-| HostBill | Raccordement du catalogue commercial et suivi des opérations de provisionnement. | Connecteur |
-| Export de consommation facturable | Transformation explicite des mesures en relevés commerciaux, unités, périodes et contrôles de rapprochement. | Module |
-| Paiement / comptabilité / CRM | Connexions possibles aux outils commerciaux retenus, sans déplacer leurs données sensibles dans le Core. | Pack de connecteurs |
-| Licences de produits tiers | Suivi des droits LiteSpeed, CloudLinux, Imunify360 ou autres produits ; comportement conforme aux capacités déclarées de chaque intégration. | Pack de connecteurs |
-
-### Support, portail client et diagnostics consentis
-
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
-| :--- | :--- | :--- |
-| Ticketing / helpdesk | Tickets, conversations, pièces jointes, affectation, notes internes et liens vers les ressources concernées. | Connecteur ou module |
-| Base de connaissances | Articles contextualisés, recherche et aide liée au module consulté. | Module |
-| Page de statut | Publication des incidents et maintenances avec informations adaptées au public visé. | Module |
-| Insights Connector | Collecte sélectionnée, consentement, masquage, revue et transmission de rapports de diagnostic sans administration distante générale. | Connecteur |
-| Rapports d’exploitation | Rapports périodiques de santé, capacité, sauvegardes et actions suivies dans le périmètre du destinataire. | Module |
-
-### Données personnelles, conservation et gouvernance
-
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
-| :--- | :--- | :--- |
-| Demandes sur les données | Inventaire, collecte, revue et export des données du périmètre demandé. | Module |
-| Effacement et anonymisation | Plan des ressources concernées, exceptions, validation et preuve des opérations effectuées. | Module |
-| Conservation et gels de suppression | Politiques, dépendances, échéances et blocage explicite des purges incompatibles. | Module |
-| Résidence et circulation des données | Affectations, restrictions de destination et contrôle des exportations selon la politique configurée. | Module |
-| Archivage d’audit renforcé | Export, vérification d’intégrité et stockages d’archive adaptés au besoin, au-delà de l’audit local obligatoire. | Module |
-
-### Automatisation, infrastructure déclarative et assistance IA
-
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
-| :--- | :--- | :--- |
-| Playbooks | Étapes versionnées, paramètres, préconditions, simulation fiable, résultats et reprise encadrée. | Module |
-| Règles événementielles | Déclencheurs, conditions, actions autorisées, limites et prévention des boucles. | Module |
-| Terraform / OpenTofu | Provider utilisant les API publiques, correspondance d’état, plans et gestion des changements concurrents. | Connecteur |
-| Collection Ansible | Modules et rôles utilisant les contrats autorisés, résultats structurés et gestion des identifiants machine. | Connecteur |
-| Assistance IA en lecture | Explication de journaux et diagnostics, données consultées identifiables et résultats séparés des faits mesurés. | Module |
-| Missions IA avec validation | Plan d’action, périmètre, autorisations, validation humaine des mutations et résultat audité ; aucun shell privilégié implicite. | Module |
-| ChatOps | Commandes bornées via un canal authentifié, confirmation des effets et corrélation avec les tâches du panneau. | Connecteur |
-| Optimisation énergétique | Déplacement des tâches flexibles selon contraintes de capacité et disponibilité, avec explication des décisions. | Module |
-
-### Personnalisation et productivité
-
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
-| :--- | :--- | :--- |
-| Marque blanche revendeur | Identité visuelle et messages dans le périmètre du revendeur, sans modifier les frontières de sécurité. | Module |
-| Packs de thèmes | Déclinaisons compatibles avec les tokens et composants, contrôle d’accessibilité et retour au thème standard. | Pack UI |
-| Traductions et terminologie | Packs de langues, validation des clés, formats locaux et adaptation RTL lorsque prévue. | Pack UI |
-| Tableaux de bord personnalisés | Widgets autorisés et vues adaptées aux rôles, sans second point d’écriture des ressources. | Module |
-| Terminal web optionnel | Session limitée à une identité et un périmètre explicitement autorisés, expiration et métadonnées d’audit filtrées. | Module |
-
-### Adaptateurs de moteurs alternatifs du Core
-
-Ces adaptateurs appartiennent à l’implémentation des services du Core. Le choix d’un moteur est remplaçable ; la fonction d’hébergement reste nécessaire.
-
-| Module, connecteur ou adaptateur | Fonctions à prévoir | Nature |
-| :--- | :--- | :--- |
-| Apache | Adapter le modèle de site, les hôtes virtuels et paramètres autorisés à un autre moteur web. | Adaptateur Core |
-| LiteSpeed / OpenLiteSpeed | Versions, configuration et fonctions compatibles ; la licence éventuelle appartient au produit tiers. | Adaptateur Core |
-| BIND / PowerDNS / Knot / NSD | Traduire le modèle DNS du Core vers le moteur sélectionné, avec validation des capacités propres à chacun. | Adaptateur Core |
-| Postfix / Exim / Dovecot | Pilotes des services SMTP/IMAP retenus, configuration, files, identité et état des opérations. | Adaptateur Core |
-| nftables / firewalld | Piloter le backend de pare-feu effectivement actif sans entretenir deux configurations concurrentes. | Adaptateur Core |
-| AppArmor / SELinux | Lecture des états et contrôles disponibles ; conserver les modèles de politiques propres à chaque système. | Adaptateur Core |
-| Isolation native / chroot / LVE / CageFS | Associer capacités, limites et contraintes réelles au moteur retenu, sans promettre une isolation identique. | Adaptateur Core |
-
-### Extensions PHP et PostgreSQL administrées
-
-Les plugins WCP360 sont distincts des extensions de langage ou de moteur de base. Le panneau doit aussi gérer ces dernières par des adaptateurs et politiques explicites. Les exemples suivants sont des éléments de catalogue à évaluer, pas les dépendances minimales du panneau ni des modules déjà disponibles sur tout serveur.
-
-| Famille technique | Exemples de capacités | Gestion attendue |
-| :--- | :--- | :--- |
-| PHP — accès aux bases | PDO et pilotes PostgreSQL / MySQL, mysqli selon les applications | Lister les modules par version PHP et vérifier les dépendances du site. |
-| PHP — réseau et échanges | cURL, OpenSSL, SOAP | Exposer la disponibilité et les contraintes du runtime, sans ouvrir de destinations interdites. |
-| PHP — texte et données | intl, mbstring, XML, bcmath | Gérer les besoins applicatifs et contrôler la compatibilité avec la version attribuée. |
-| PHP — images et médias | GD, Imagick | Vérifier bibliothèques, limites de traitement et consommation autorisée. |
-| PHP — fichiers et archives | fileinfo, ZIP | Relier les capacités aux opérations de fichiers autorisées et aux limites de taille. |
-| PHP — cache et performance | OPcache, APCu, client Redis | Distinguer cache d’opcodes, cache applicatif et accès à un service Redis. |
-| PostgreSQL — observation | pg_stat_statements et autres modules disponibles | Gérer disponibilité, permissions et impact sur le moteur avant activation. |
-| PostgreSQL — fonctions applicatives | pgcrypto, uuid-ossp ou extensions proposées par le moteur | Vérifier compatibilité, dépendances et besoin de privilèges par base. |
-| PostgreSQL — données spécialisées | PostGIS ou autres extensions métier | Prévoir un catalogue contrôlé ; installation soumise au backend et à la politique de la plateforme. |
-
-La liste disponible provient du moteur et des paquets détectés. Une activation peut nécessiter un rechargement, des privilèges ou une migration ; l’interface ne doit pas annoncer une désactivation dynamique lorsque le backend ne la permet pas.
-
-### Contrat attendu pour un plugin WCP360
-
-| Élément du contrat | Informations à déclarer |
-| :--- | :--- |
-| Identité et provenance | Identifiant stable, type, éditeur, version, source et description. |
-| Compatibilité | Versions de Core, API et runtimes acceptées ; dépendances et incompatibilités. |
-| Permissions | Actions et ressources demandées ; différence visible lors d’une mise à jour. |
-| Interface | Routes, éléments de navigation, traductions, composants et ressources UI déclarés. |
-| Commandes et jobs | Opérations permises, paramètres, limites, progression et stratégie de reprise. |
-| Événements | Événements consommés ou émis et garanties de livraison attendues. |
-| Données et migrations | Namespace propre, schémas possédés, sauvegarde et stratégie de migration. |
-| Identité et exécution | Processus dédié, quotas de ressources, durée et isolation. |
-| Réseau et secrets | Destinations nécessaires, références de secrets et identifiants à portée limitée. |
-| Santé et défaillance | Contrôles, délais, arrêt des appels en échec et comportement lorsque le module est indisponible. |
-| Chaîne de confiance | Signature, intégrité, provenance, inventaire des dépendances et révocation. |
-| Cycle de retrait | Drainage, conservation/export des données et conditions d’un retour de version sûr. |
-
-### Gestion et cycle de vie des extensions
-
-Le gestionnaire **Software & Extensions** doit présenter les extensions disponibles, installées, actives, arrêtées, indisponibles ou mises en quarantaine. Un catalogue peut distribuer des extensions intégrées ou tierces sans devenir nécessaire au fonctionnement des sites existants.
-
-| Étape | Contrôle attendu |
-| :--- | :--- |
-| Découverte | Éditeur, version, description, compatibilité, dépendances et capacités demandées. |
-| Installation | Signature, intégrité, provenance, permissions et migrations propres à l’extension. |
-| Activation | Vérification de santé, publication des routes et démarrage de traitements isolés. |
-| Exécution | Identité dédiée, ressources limitées, accès réseau maîtrisé et journalisation. |
-| Mise à jour | Compatibilité des contrats, changements de permissions, migration et possibilité de retour. |
-| Désactivation | Retrait des routes, refus des nouvelles tâches et drainage des traitements en cours. |
-| Quarantaine | Blocage des accès de l’extension et conservation des éléments de diagnostic. |
-| Désinstallation | Vérification des dépendances et choix explicite d’export, conservation ou suppression des données de l’extension. |
-
-Une extension ne remplace pas les contrôles d’autorisation, n’écrit pas directement dans les tables du Core et ne dispose pas d’un shell privilégié arbitraire. Son retrait doit préserver les sites, domaines, boîtes mail, bases et sauvegardes locales existants.
-
-
-## Prérequis techniques
-
-### Environnement cible du panneau complet
-
-Ces exigences décrivent l’environnement à assembler et qualifier pour le produit cible ; elles ne constituent pas une procédure de déploiement déjà disponible.
-
-| Besoin | Prérequis |
-| :--- | :--- |
-| Système | Serveur Linux/Debian pris en charge, gestion des services, du réseau, des utilisateurs et du stockage. |
-| Accès web | Nginx, configuration HTTPS, nom d’accès au panneau et résolution DNS adaptée. |
-| Backend | PHP compatible avec la version Symfony retenue, Composer et extensions PHP requises par les manifests du composant. |
-| Exécution PHP | PHP-FPM, avec séparation du panneau et des pools des applications clientes. |
-| Données du Core | PostgreSQL, identités de base dédiées, sauvegardes et procédure de migration. |
-| Traitements asynchrones | Workers supervisés et transport durable ; Redis seulement lorsqu’il est retenu pour ce transport. |
-| Agent système | Binaire Go construit avec la toolchain et les contrats validés pour la version distribuée. |
-| Diagnostics spécialisés | Python et dépendances isolées uniquement pour les traitements qui en ont besoin. |
-| Services d’hébergement | Moteurs DNS, mail et bases clientes compatibles avec les adaptateurs activés. |
-| Exploitation | Espace de stockage pour les données, journaux et sauvegardes ; politique de rétention et accès de récupération. |
-
-Les versions et dépendances doivent être verrouillées dans les manifests de chaque composant. **Aucun minimum de CPU, RAM ou disque pour le panneau complet en production n’est encore qualifié.**
-
-### Prérequis des composants consultables
-
-| Usage actuel | Nécessaire |
-| :--- | :--- |
-| Lire ou cloner le dépôt | Navigateur, accès au dépôt et Git pour les sources. |
-| Explorer le prototype HTML local | Navigateur avec JavaScript et stockage local ; serveur HTTP. Le workspace fournit un lanceur PowerShell Windows. |
-| Étudier le noyau candidat | PHP 8.4 et README de la branche concernée ; ce candidat ne constitue pas l’assemblage Symfony complet décrit plus haut. |
-| Exécuter le File Manager depuis GitHub | PHP `^8.2`, extensions `json` et `fileinfo`, Composer et dépendances Symfony `^7.4`. L’extension PHP `zip` est requise pour les fonctions ZIP. |
-| Construire le daemon inerte | Environnement canonique Debian 13.7 / linux/amd64, Go 1.27.3, image et toolchain épinglées, construction sous UID/GID 10001 selon son README. |
-
-Node.js sert aux outils d’audit du prototype ; il n’est pas nécessaire pour afficher ses pages HTML.
-
-## État actuel du projet
-
-La stack et le catalogue précédents expriment la cible. Ils ne doivent pas être confondus avec l’état de livraison de chaque composant.
-
-| Élément | État documenté |
-| :--- | :--- |
-| Spécifications, contrats et gouvernance | Présents dans `main`, avec suivi des décisions et preuves. |
-| Prototype du panneau | HTML/CSS/JavaScript dans le workspace de conception, avec interactions et données de démonstration locales. |
-| Noyau applicatif et interface | Sources candidates dans `source/full-platform-candidate`, dont un noyau PHP 8.4 indépendant d’un framework et une interface statique. |
-| Daemon `wcpd` | Fondation CLI Go inerte : aide, version et vérifications locales ; aucun listener ni effet privilégié. |
-| File Manager 0.3.0 alpha Pro | Application autonome PHP/Symfony dans une branche dédiée ; intégration WCP360 bloquée dans l’attente des contrats et de l’adaptateur. |
-| Insights Connector | Prototype facultatif du workspace de conception, désactivé par défaut ; sa présence locale ne constitue pas une publication dans `main`. |
-| Plateforme complète | Assemblage Symfony/PostgreSQL, transports, agents et services d’hébergement à intégrer et qualifier ; aucune livraison de production annoncée ici. |
-
-Le File Manager autonome actuel utilise un **stockage privé à propriétaire unique, modifié exclusivement par ce module**. Ce mode ne constitue pas un backend multi-tenant pour des répertoires modifiés simultanément par SSH, FTP ou les applications des clients.
-
-## Explorer et démarrer
-
-
-### Cloner le dépôt
-
-L’accès au dépôt est requis. Depuis un terminal disposant de Git :
-
-```sh
-git clone https://github.com/yyogas/wcp360.git
-cd wcp360
-git branch --all
-```
-
-Commencez par le [manifeste courant](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md), puis consultez la branche du composant à étudier. `main` n’est pas un installateur du panneau complet.
-
-### Installer les dépendances du File Manager autonome
-
-Depuis la racine du clone, dans PowerShell, lors de la première récupération de cette branche :
-
-```powershell
-git switch --track origin/extensions/file-manager-v0.3.0-import
-Set-Location WCP360_Extensions/WCP360-File-Manager
-composer install --no-dev --prefer-dist
-```
-
-Lisez ensuite le [README du File Manager](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md) pour configurer son stockage et utiliser le lanceur adapté. Les sources GitHub n’incluent pas `vendor/`. Pour développer et exécuter les tests du module, utilisez `composer install` avec les dépendances de développement.
-
-### Ouvrir le prototype du workspace de conception
-
-Cette procédure concerne le **workspace local contenant `WCP360_Design_System/`**, dont l’arborescence diffère du dépôt GitHub. Le clone de `main` seul ne fournit pas ce dossier.
-
-Depuis la racine de ce workspace, sous Windows :
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\WCP360_Design_System\serve-prototype.ps1"
-```
-
-Ouvrez <http://127.0.0.1:8790/>. Conservez le même hôte et le même port pour partager l’état de démonstration entre les pages. `Ctrl+C` arrête le serveur. Les actions de cette interface simulent le panneau ; elles ne configurent pas les services Linux du serveur.
-
-## Organisation du dépôt
-
-Arborescence observée à la racine de `main` :
-
-```text
-wcp360/
-├── .github/
-├── .gitignore
-├── README.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-├── archive/
-├── contracts/
-├── documentation/
-├── governance/
-├── manifests/
-├── specifications/
-└── src/
-```
-
-Les sources candidates sont distribuées dans leurs branches. Leur présence n’implique pas leur intégration dans `main` :
-
-| Emplacement | Branche de référence |
-| --- | --- |
-| `SOURCE/platform/`, `SOURCE/ui/`, `SOURCE/daemon/` | `source/full-platform-candidate` |
-| `SOURCE/daemon/` — fondation CLI inerte | `source/sc-m01-inert-daemon` |
-| `WCP360_Extensions/WCP360-File-Manager/` | `extensions/file-manager-v0.3.0-import` |
-
-## Branches GitHub
-
-
-Branches constatées le **31 octobre 2026**. `main` est la branche par défaut ; les préfixes regroupent les travaux par nature. Leur existence ne prouve ni une fusion, ni une validation indépendante, ni une publication de version.
-
-| Branche | Contenu ou rôle |
-| --- | --- |
-| [`main`](https://github.com/yyogas/wcp360/tree/main) | Référentiel par défaut : spécifications, contrats, gouvernance et documentation. |
-| [`audit/closure-matrix-refresh-2026-10-03`](https://github.com/yyogas/wcp360/tree/audit/closure-matrix-refresh-2026-10-03) | Suivi de la matrice de clôture des constats d’audit. |
-| [`design-system/import-v2.5.3.36.4-markdown`](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown) | Import des documents Markdown du Design System V2.5.3.36.4. |
-| [`extensions/file-manager-v0.3.0-import`](https://github.com/yyogas/wcp360/tree/extensions/file-manager-v0.3.0-import) | Sources du File Manager autonome 0.3.0 alpha, publiées pour revue. |
-| [`integration/sc-m01-owner-readiness-20261026`](https://github.com/yyogas/wcp360/tree/integration/sc-m01-owner-readiness-20261026) | Travaux d’intégration et de préparation interdomaines SC-M01. |
-| [`maintenance/sc-m01-repository-guardrails`](https://github.com/yyogas/wcp360/tree/maintenance/sc-m01-repository-guardrails) | Maintenance des contrôles du dépôt et de publication. |
-| [`research/sc-m01-control-protocol-options-20261026`](https://github.com/yyogas/wcp360/tree/research/sc-m01-control-protocol-options-20261026) | Recherche sur le protocole de contrôle backend–wcpd. |
-| [`research/sc-m01-ipcb-go-framing-20261027`](https://github.com/yyogas/wcp360/tree/research/sc-m01-ipcb-go-framing-20261027) | Recherche sur le framing et le parsing IPC-B en Go. |
-| [`source/full-platform-candidate`](https://github.com/yyogas/wcp360/tree/source/full-platform-candidate) | Noyau PHP 8.4, interface statique et daemon inerte : candidats hors production. |
-| [`source/sc-m01-domain-foundation`](https://github.com/yyogas/wcp360/tree/source/sc-m01-domain-foundation) | Travaux de fondation des domaines applicatifs SC-M01. |
-| [`source/sc-m01-inert-daemon`](https://github.com/yyogas/wcp360/tree/source/sc-m01-inert-daemon) | Fondation CLI Go de wcpd, sans listener, base de données ni action privilégiée. |
-| [`test/sc-m01-cli-process-contract`](https://github.com/yyogas/wcp360/tree/test/sc-m01-cli-process-contract) | Travaux de test du contrat CLI et du comportement des processus. |
-| [`tooling/sc-m01-contract-traceability-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-contract-traceability-20261026) | Outillage de traçabilité et de cohérence des contrats. |
-| [`tooling/sc-m01-preflight-checks-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-preflight-checks-20261026) | Contrôles préalables de présence et d’intégrité des artefacts. |
-
-Pour suivre un composant, consultez son README et les décisions de gouvernance applicables avant d’utiliser ses sources. Les travaux de recherche, d’intégration et d’outillage ne sont pas des versions installables du panneau.
-
-## Documentation et contribution
-
-
-| Besoin | Référence |
-| --- | --- |
-| Comprendre l’état autorisé du projet | [Manifeste de baseline](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) et [état du projet](https://github.com/yyogas/wcp360/blob/main/governance/PROJECT-STATUS.md). |
-| Lire les exigences et la documentation | [Spécifications](https://github.com/yyogas/wcp360/tree/main/specifications), [contrats](https://github.com/yyogas/wcp360/tree/main/contracts) et [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
-| Étudier le candidat applicatif | [Présentation du candidat complet](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) et [README du noyau PHP](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
-| Étudier le daemon | [README de la fondation inerte](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), notamment son environnement de construction canonique. |
-| Étudier le File Manager | [README du module](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md). |
-| Proposer une contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), à lire avec le manifeste courant pour le périmètre autorisé. |
-| Signaler un problème de sécurité | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
-
-Les contributions doivent préciser le composant concerné, son contrat et les vérifications effectuées. Une interface fonctionnelle, un test local réussi ou une branche de sources ne remplace pas la validation et la promotion prévues par la gouvernance du projet.
+| WHMCS | Product/plan mapping, service accounts, provisioning and suspension requests, and status feedback. | Connector |
+| Blesta | Synchronize technical resources with commercial operations through authorized APIs. | Connector |
+| FOSSBilling | Map plans, customers, and commercial lifecycle changes to Core commands. | Connector |
+| HostBill | Connect the commercial catalog and track provisioning operations. | Connector |
+| Billable usage export | Explicitly transform measurements into commercial records, units, periods, and reconciliation checks. | Module |
