@@ -6,7 +6,7 @@ use Wcp360\Core\Tests\Fixtures\WorkbenchFixture;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Module\Operations\Application\RunHostingPlan;
 use Wcp360\Core\Module\Hosting\Application\{SubmitHostingPlan,SubmitActivation,RunActivation};
-if(PHP_OS_FAMILY!=='Linux'||getenv('WCP_ISOLATED_TEST_CONTAINER')!=='1'||!is_file('/.dockerenv'))throw new RuntimeException('Isolated test container required.');
+Wcp360\Core\Module\Hosting\Infrastructure\DisposableExecution::requireEnvironment();
 $kernel=new Kernel('test',true);$kernel->boot();$container=$kernel->getContainer()->get('test.service_container');
 $store=$container->get(WorkbenchStore::class);
 switch($argv[1]??''){

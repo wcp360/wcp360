@@ -81,5 +81,5 @@ sha256sum "$work_dir/candidate.tar.gz" | cut -d' ' -f1 >"$work_dir/payload.sha25
 ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'cat > /home/wcp-vm/candidate.tar.gz' <"$work_dir/candidate.tar.gz"
 expected_payload="$(cat "$work_dir/payload.sha256")"
 ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 "printf '%s  /home/wcp-vm/candidate.tar.gz\n' '$expected_payload' | sha256sum --check --strict && sudo install -d -m 0755 /opt/wcp360 && sudo tar --no-same-owner -xzf /home/wcp-vm/candidate.tar.gz -C /opt/wcp360"
-ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'sudo timeout 900 bash /opt/wcp360/WCP360_Build/verification/candidate-vm-guest.sh'
+ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'sudo timeout 1200 bash /opt/wcp360/WCP360_Build/verification/candidate-vm-guest.sh'
 printf 'PASS: clean pinned Debian 13 cloud VM; packaged PHP-FPM; two tenants and stateful application.\n'

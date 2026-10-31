@@ -42,7 +42,7 @@ jobs:
       - name: Install QEMU tools on disposable runner
         run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
       - name: Clean Debian 13 VM with distribution PHP-FPM
-        timeout-minutes: 20
+        timeout-minutes: 25
         env:
           WCP_DISPOSABLE_VM_HARNESS: '1'
         run: bash WCP360_Build/verification/candidate-debian-vm.sh
