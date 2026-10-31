@@ -65,7 +65,36 @@ def build_summary(result):
     return {'status':'PASS' if ok else 'FAIL','exit_code':result['returncode'],'timed_out':result['timed_out'],'output_limited':result['output_limited'],'diagnostic_codes':codes}
 
 
-def browser_failure(data):
+def sandbox_summary(value):
+    value = value if isinstance(value, dict) else {}
+    schema = 'CHROMIUM_156_SANDBOX_INTERNALS'
+    report = {'schema': schema if value.get('schema') == schema else 'UNKNOWN',
+              'status': value.get('status') if value.get('status') in ('PASS', 'FAIL') else 'UNKNOWN'}
+    for key in ('namespace', 'pid_namespace', 'network_namespace', 'seccomp_bpf'):
+        report[key] = value.get(key) if type(value.get(key)) is bool else False
+    states = value.get('states', {})
+    states = states if isinstance(states, dict) else {}
+    report['states'] = {}
+    for key, allowed in {'layer1': ('Namespace', 'SUID', 'None'),
+                         'pid': ('Yes', 'No'), 'network': ('Yes', 'No'), 'seccomp': ('Yes', 'No')}.items():
+        state = states.get(key, 'MISSING')
+        report['states'][key] = state if state in allowed + ('MISSING', 'DUPLICATE', 'UNKNOWN') else 'UNKNOWN'
+    return report
+
+
+def browser_evidence(result, expected_version):
+    expected = {'schema': 'CHROMIUM_156_SANDBOX_INTERNALS', 'status': 'PASS',
+                'namespace': True, 'pid_namespace': True, 'network_namespace': True, 'seccomp_bpf': True,
+                'states': {'layer1': 'Namespace', 'pid': 'Yes', 'network': 'Yes', 'seccomp': 'Yes'}}
+    sandbox = sandbox_summary(result.get('sandbox'))
+    if (result.get('browser_version') != expected_version or type(result.get('browser_uid')) is not int
+            or result['browser_uid'] != 10001 or type(result.get('completed')) is not int
+            or result['completed'] != 28 or sandbox != expected):
+        raise ValueError('BROWSER_EVIDENCE_INVALID')
+    return {'browser_version': expected_version, 'browser_uid': 10001, 'completed': 28, 'sandbox': sandbox}
+
+
+def browser_failure(data, expected_browser_version=None):
     try:
         result=json.loads(data)
         stages={'initialization','php-readiness','browser-launch','browser-preflight','userns-probe','browser-version','browser-identity','sandbox-attestation','ui'}
@@ -102,6 +131,18 @@ def browser_failure(data):
         sites=fatal.get('check_sites',[])
         filtered['check_sites']=[{'component':s['component'],'line':s['line']} for s in sites[:12] if isinstance(s,dict) and s.get('component') in components and type(s.get('line')) is int and 0<s['line']<=20000] if isinstance(sites,list) else []
         report['fatal']=filtered
+        report['attestation']=sandbox_summary(result.get('attestation'))
+        identity=result.get('browser_identity',{})
+        filtered={}
+        if isinstance(identity,dict):
+            if type(identity.get('version_match')) is bool:
+                filtered['version_match']=(identity['version_match'] and expected_browser_version is not None
+                                           and identity.get('browser_version')==expected_browser_version)
+            if expected_browser_version is not None and identity.get('browser_version')==expected_browser_version:
+                filtered['browser_version']=expected_browser_version
+            if type(identity.get('browser_uid')) is int and 0<=identity['browser_uid']<=65535:
+                filtered['browser_uid']=identity['browser_uid']
+        report['browser_identity']=filtered
         return report
     except (ValueError,TypeError,AttributeError):
         return {'browser_code':'UNRECOGNIZED_REPORT'}

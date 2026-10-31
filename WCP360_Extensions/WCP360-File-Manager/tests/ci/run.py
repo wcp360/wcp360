@@ -8,7 +8,7 @@ import platform
 import xml.etree.ElementTree as ET
 from safe_process import execute
 from network_probe import direct_denied
-from reporting import composer_version, write_report, junit_summary, browser_failure
+from reporting import composer_version, write_report, junit_summary, browser_failure, browser_evidence
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path('/evidence')
@@ -29,7 +29,7 @@ def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
     item.update(exit_code=result_process['returncode'],timed_out=result_process['timed_out'],output_limited=result_process['output_limited'])
     data=result_process['data']
     if name=='browser-sandboxed' and result_process['returncode']!=0:
-        item.update(browser_failure(data))
+        item.update(browser_failure(data, json.loads((ROOT/'tests/ci/toolchain.json').read_text())['chromium']['version']))
     if result_process['returncode']!=0 or result_process['timed_out'] or result_process['output_limited']:
         raise RuntimeError('COMMAND_FAILED')
     if json_count is not None:
@@ -39,11 +39,7 @@ def suite(name, args, *, cwd=ROOT, json_count=None, seconds=180):
             raise RuntimeError('COUNT_MISMATCH')
         item['executed'] = len(checks)
         if name == 'browser-sandboxed':
-            item['browser_version'] = result['browser_version']
-            item['browser_uid'] = result['browser_uid']
-            assert result['completed']==len(checks)
-            item['completed']=result['completed']
-            item['sandbox'] = result['sandbox']
+            item.update(browser_evidence(result, json.loads((ROOT/'tests/ci/toolchain.json').read_text())['chromium']['version']))
     item['status'] = 'PASS'
 
 
@@ -124,6 +120,7 @@ def main():
     suite('runtime-http-no-dev', ['python3','tests/http_smoke.py'], cwd=Path('/runtime'),json_count=46)
     suite('runtime-setup-no-dev', ['python3','tests/setup_smoke.py'], cwd=Path('/runtime'),json_count=5)
     suite('browser-diagnostic-fixtures', ['node','--test','tests/ci/browser_diagnostics.test.cjs'])
+    suite('sandbox-attestation-fixtures', ['node','--test','tests/ci/sandbox_attestation.test.cjs'])
     suite('browser-sandboxed', ['node','tests/browser.cjs'], json_count=28, seconds=300)
     REPORT['status']='PASS'
 

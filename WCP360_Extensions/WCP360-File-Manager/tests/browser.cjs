@@ -2,7 +2,7 @@
 const http=require('http');
 const fs=require('fs'),path=require('path'),cp=require('child_process'),assert=require('assert');
 const {chromium}=require(process.env.FM_PLAYWRIGHT_MODULE||'playwright');
-let ciStage='initialization',ciCompleted=0,ciProbe={};
+let ciStage='initialization',ciCompleted=0,ciProbe={},ciIdentity={},ciAttestation={};
 (async()=>{
  const source=path.resolve(__dirname,'..'),tmp=fs.mkdtempSync('/tmp/fm-ui-');
  fs.cpSync(source,tmp,{recursive:true,filter:p=>!['vendor','var','.phpunit.cache'].includes(path.basename(p))});fs.symlinkSync(source+'/vendor',tmp+'/vendor');
@@ -33,11 +33,14 @@ let ciStage='initialization',ciCompleted=0,ciProbe={};
  try{ciProbe.apparmor_enforcing=fs.readFileSync('/proc/self/attr/current','utf8').includes('(enforce)');}catch{}
  ciStage='browser-launch';browser=await chromium.launch({headless:true,channel:'chromium',chromiumSandbox:true,timeout:30000});
  ciStage='browser-version';const ciLock=JSON.parse(fs.readFileSync(path.join(__dirname,'ci/toolchain.json'),'utf8'));
- assert.strictEqual(browser.version(),ciLock.chromium.version);assert.strictEqual(require((process.env.FM_PLAYWRIGHT_MODULE||'playwright')+'/package.json').version,ciLock.playwright);
- ciStage='browser-identity';const cdp=await browser.newBrowserCDPSession();const processes=await cdp.send('SystemInfo.getProcessInfo');const bp=processes.processInfo.find(p=>p.type==='browser');assert(bp&&Number.isSafeInteger(bp.id)&&bp.id>0);const uid=Number(fs.readFileSync('/proc/'+bp.id+'/status','utf8').match(/^Uid:\s+(\d+)/m)?.[1]);assert.strictEqual(uid,10001);await cdp.detach();
+ ciIdentity.version_match=browser.version()===ciLock.chromium.version;
+ if(ciIdentity.version_match)ciIdentity.browser_version=browser.version();
+ assert.strictEqual(ciIdentity.version_match,true);assert.strictEqual(require((process.env.FM_PLAYWRIGHT_MODULE||'playwright')+'/package.json').version,ciLock.playwright);
+ ciStage='browser-identity';const cdp=await browser.newBrowserCDPSession();const processes=await cdp.send('SystemInfo.getProcessInfo');const bp=processes.processInfo.find(p=>p.type==='browser');assert(bp&&Number.isSafeInteger(bp.id)&&bp.id>0);const uid=Number(fs.readFileSync('/proc/'+bp.id+'/status','utf8').match(/^Uid:\s+(\d+)/m)?.[1]);if(Number.isSafeInteger(uid))ciIdentity.browser_uid=uid;assert.strictEqual(uid,10001);await cdp.detach();
  ciStage='sandbox-attestation';const sandbox=await browser.newPage();await sandbox.goto('chrome://sandbox');
- const sandboxText=await sandbox.locator('body').innerText();
- assert.match(sandboxText,/Namespace sandbox\s+Yes/i);assert.match(sandboxText,/Seccomp-BPF sandbox\s+Yes/i);await sandbox.close();const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
+ const sandboxRows=await sandbox.locator('#sandbox-status tr').evaluateAll(rows=>rows.map(row=>Array.from(row.querySelectorAll('td')).map(cell=>(cell.textContent||'').trim())));
+ ciAttestation=require('./ci/sandbox_attestation.cjs')(sandboxRows);
+ assert.strictEqual(ciAttestation.status,'PASS');await sandbox.close();const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
  ciStage='ui';await page.goto('http://127.0.0.1:8879/login');await page.screenshot({path:tmp+'/fm030-login.png',fullPage:true});await page.locator('[name=_username]').fill('tester');await page.locator('[name=_password]').fill('browser-test-password');await page.getByRole('button',{name:'Se connecter'}).click();
  const rows=page.locator('#rows'),row=name=>rows.locator('tr').filter({has:page.getByRole('button',{name,exact:true})});
  const open=name=>rows.getByRole('button',{name,exact:true}).click();
@@ -82,7 +85,7 @@ let ciStage='initialization',ciCompleted=0,ciProbe={};
  await page.locator('#gridView').click();await page.locator('#grid').waitFor({state:'visible'});assert.strictEqual(await page.locator('#tableWrap').isVisible(),false);checks.push('grid view');
  await page.screenshot({path:tmp+'/fm030-desktop.png',fullPage:true});await page.setViewportSize({width:390,height:844});await page.screenshot({path:tmp+'/fm030-mobile.png',fullPage:true});assert.strictEqual(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks.push('mobile viewport no overflow');
  await page.locator('#optionsBtn').click();await page.locator('#optionsTabs').getByRole('button',{name:'Vue d’ensemble',exact:true}).click();await page.screenshot({path:tmp+'/fm030-options-mobile.png',fullPage:true});assert.strictEqual(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks.push('mobile Options viewport');await page.locator('#closeOptions').click();
- assert.deepStrictEqual(errors,[]);checks.push('no JavaScript runtime errors');console.log(JSON.stringify({status:'PASS',browser:'Chromium',browser_version:browser.version(),browser_uid:uid,sandbox:{namespace:true,seccomp_bpf:true},count:checks.length,completed:checks.length,checks},null,2));
+ assert.deepStrictEqual(errors,[]);checks.push('no JavaScript runtime errors');console.log(JSON.stringify({status:'PASS',browser:'Chromium',browser_version:browser.version(),browser_uid:uid,sandbox:ciAttestation,count:checks.length,completed:checks.length,checks},null,2));
  }catch(e){ciCompleted=checks.length;if(browser){const pages=browser.contexts()[0]?.pages();if(pages?.[0])await pages[0].screenshot({path:tmp+'/fm030-failure.png',fullPage:true});}throw e;}
  finally{try{if(browser)await browser.close();}finally{server.kill('SIGKILL');fs.rmSync(tmp,{recursive:true,force:true});}}
-})().catch(e=>{const code=require('./ci/browser_diagnostics.cjs')(e);console.log(JSON.stringify({status:'FAIL',stage:ciStage,completed:ciCompleted,code,probe:ciProbe,launch:require('./ci/browser_diagnostics.cjs').metadata(e),fatal:require('./ci/browser_diagnostics.cjs').fatal(e)}));process.exit(1)});
+})().catch(e=>{const code=require('./ci/browser_diagnostics.cjs')(e);console.log(JSON.stringify({status:'FAIL',stage:ciStage,completed:ciCompleted,code,probe:ciProbe,browser_identity:ciIdentity,attestation:ciAttestation,launch:require('./ci/browser_diagnostics.cjs').metadata(e),fatal:require('./ci/browser_diagnostics.cjs').fatal(e)}));process.exit(1)});

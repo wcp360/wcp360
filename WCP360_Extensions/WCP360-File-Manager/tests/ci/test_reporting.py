@@ -4,11 +4,43 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from reporting import audit_result, composer_version, write_report, build_summary, browser_failure
+from reporting import audit_result, composer_version, write_report, build_summary, browser_failure, sandbox_summary, browser_evidence
 from safe_process import execute
 
 
 class ReportingTest(unittest.TestCase):
+    def browser_result(self):
+        return {'browser_version':'156.0.8078.4','browser_uid':10001,'completed':28,
+                'sandbox':{'schema':'CHROMIUM_156_SANDBOX_INTERNALS','status':'PASS',
+                           'namespace':True,'pid_namespace':True,'network_namespace':True,'seccomp_bpf':True,
+                           'states':{'layer1':'Namespace','pid':'Yes','network':'Yes','seccomp':'Yes'}}}
+
+    def test_browser_success_requires_actual_identity_count_and_all_sandbox_properties(self):
+        original=self.browser_result()
+        self.assertEqual(browser_evidence(original,'156.0.8078.4')['completed'],28)
+        for key,value in [('browser_version','wrong'),('browser_uid',0),('completed',27)]:
+            report=self.browser_result();report[key]=value
+            with self.assertRaises(ValueError):browser_evidence(report,'156.0.8078.4')
+        for key in ['namespace','pid_namespace','network_namespace','seccomp_bpf']:
+            report=self.browser_result();report['sandbox'][key]=False
+            with self.assertRaises(ValueError):browser_evidence(report,'156.0.8078.4')
+
+    def test_sandbox_rows_cannot_be_replaced_by_a_pass_label(self):
+        for key,value in [('layer1','SUID'),('pid','No'),('network','MISSING'),('seccomp','DUPLICATE')]:
+            report=self.browser_result();report['sandbox']['states'][key]=value
+            with self.assertRaises(ValueError):browser_evidence(report,'156.0.8078.4')
+        self.assertEqual(sandbox_summary(None)['status'],'UNKNOWN')
+
+    def test_attestation_failure_exports_only_closed_status_and_verified_identity(self):
+        data={'stage':'sandbox-attestation','code':'BROWSER_SUITE_FAILED','completed':0,
+              'attestation':{'schema':'SYNTHETIC_SECRET','status':'SYNTHETIC_SECRET',
+                             'states':{'layer1':'SYNTHETIC_SECRET'},'secret':'SYNTHETIC_SECRET'},
+              'browser_identity':{'browser_uid':10001,'browser_version':'SYNTHETIC_SECRET','version_match':True,'secret':'SYNTHETIC_SECRET'}}
+        report=browser_failure(json.dumps(data).encode(),'156.0.8078.4')
+        self.assertEqual(report['attestation']['states']['layer1'],'UNKNOWN')
+        self.assertEqual(report['browser_identity'],{'browser_uid':10001,'version_match':False})
+        self.assertNotIn('SYNTHETIC_SECRET',json.dumps(report))
+
     def result(self, data, **extra):
         return dict(returncode=0, timed_out=False, output_limited=False, data=json.dumps(data).encode(), **extra)
 
