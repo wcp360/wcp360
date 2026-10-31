@@ -123,3 +123,7 @@ The candidate implements a Symfony bootstrap, selected application suites, inert
 ### Debian VM verification and embedded demo application
 
 The isolated provisioning candidate supports a separate [disposable Debian 13 VM profile](../documentation/development/DEBIAN-VM.md), using the distribution PHP-FPM package and explicit boot-bound root intent. The shared harness deploys a reviewed embedded PHP demo with sessions, CSRF and tenant-private persistent state. This does not enable arbitrary application uploads or production installation.
+
+### Candidate service recovery
+
+The disposable Debian VM uses [systemd supervision and strict recovery](../documentation/development/SYSTEMD-RECOVERY.md) for confirmed sites. An explicit machine-bound root opt-in permits boot re-arming only in the test VM. Changed/partial state refuses recovery; production installation and power-loss qualification remain separate.

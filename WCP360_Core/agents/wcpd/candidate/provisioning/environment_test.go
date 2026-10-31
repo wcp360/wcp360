@@ -31,3 +31,16 @@ func TestVMEvidenceBindsBootDistributionAndRootIntent(t *testing.T) {
 		})
 	}
 }
+
+func TestBootRecoveryRequiresMachineBoundExplicitPolicy(t *testing.T) {
+	id := "13e808127be44c7290be602091be2740\n"
+	policy := "wcp360.candidate.vm-recovery/1\n" + id
+	if e := validateBootPolicy(policy, id); e != nil {
+		t.Fatal(e)
+	}
+	for _, pair := range [][2]string{{"", id}, {policy, ""}, {policy, "23e808127be44c7290be602091be2740\n"}, {policy + "extra", id}, {policy, id + "\n"}} {
+		if validateBootPolicy(pair[0], pair[1]) == nil {
+			t.Fatal("invalid boot opt-in accepted")
+		}
+	}
+}

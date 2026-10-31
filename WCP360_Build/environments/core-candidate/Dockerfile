@@ -23,7 +23,7 @@ COPY WCP360_Core/ ./
 COPY WCP360_SDK/ /opt/wcp360/WCP360_SDK/
 COPY WCP360_Plugins/wcp360-reference-report/ /opt/wcp360/WCP360_Plugins/wcp360-reference-report/
 COPY WCP360_Build/verification/candidate-linux-smoke.sh /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
-COPY WCP360_Build/verification/candidate-provisioning-smoke.sh WCP360_Build/verification/candidate-provisioning-fixture.php WCP360_Build/verification/candidate-demo-application-smoke.php /opt/wcp360/WCP360_Build/verification/
+COPY WCP360_Build/verification/candidate-provisioning-smoke.sh WCP360_Build/verification/candidate-provisioning-fixture.php WCP360_Build/verification/candidate-demo-application-smoke.php WCP360_Build/verification/candidate-demo-client.php WCP360_Build/verification/candidate-recovery-state.php WCP360_Build/verification/candidate-systemd-smoke.sh /opt/wcp360/WCP360_Build/verification/
 COPY --from=node /out/wcp-candidate-node /usr/local/libexec/wcp360/wcp-candidate-node
 COPY --from=planner /out/wcp-plan /usr/local/libexec/wcp360/wcp-plan
 ENV APP_ENV=dev APP_DEBUG=0 WCP_CANDIDATE=1 WCP_CONTEXT=user WCP_PUBLIC_HOST=user.localhost WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan

@@ -24,12 +24,6 @@ import (
 //go:embed fixtures/demo.php
 var demoApplication string
 
-type record struct {
-	Request     Request `json:"request"`
-	Fingerprint string  `json:"fingerprint"`
-	State       string  `json:"state"`
-}
-
 func rootDir(path string, mode os.FileMode) error {
 	s, e := os.Lstat(path)
 	if os.IsNotExist(e) {
@@ -93,6 +87,7 @@ func (b *Broker) Prepare() error {
 	if os.Geteuid() != 0 {
 		return fmt.Errorf("broker requires root")
 	}
+	b.failures = make(chan error, 1)
 	for _, path := range []string{StateRoot, StateRoot + "/records", StateRoot + "/nginx-sites", StateRoot + "/fpm-pools"} {
 		if e := rootDir(path, 0755); e != nil {
 			return e
@@ -130,7 +125,7 @@ func (b *Broker) Prepare() error {
 		} else if e != nil {
 			return e
 		} else {
-			old, e := os.ReadFile(p)
+			old, e := trustedRead(p, 0644, 0)
 			if e != nil || string(old) != c {
 				return fmt.Errorf("managed supervisor configuration changed")
 			}
@@ -148,10 +143,10 @@ func (b *Broker) Handle(r Request) Response {
 		return Reply(r, "REJECTED", false)
 	}
 	path := StateRoot + "/records/" + r.SiteID + ".json"
-	raw, e := os.ReadFile(path)
+	raw, e := trustedRead(path, 0600, 0)
 	if e == nil {
-		var old record
-		if json.Unmarshal(raw, &old) != nil || old.Fingerprint != r.Fingerprint() {
+		old, decodeErr := decodeRecord(raw)
+		if decodeErr != nil || old.Fingerprint != r.Fingerprint() {
 			return Reply(r, "REJECTED", false)
 		}
 		if old.State == "ACTIVE" && b.healthy(r) {
@@ -170,9 +165,9 @@ func (b *Broker) Handle(r Request) Response {
 		return Reply(r, "REJECTED", false)
 	}
 	for _, entry := range records {
-		data, e := os.ReadFile(StateRoot + "/records/" + entry.Name())
-		var old record
-		if e != nil || json.Unmarshal(data, &old) != nil {
+		data, e := trustedRead(StateRoot+"/records/"+entry.Name(), 0600, 0)
+		old, decodeErr := decodeRecord(data)
+		if e != nil || decodeErr != nil {
 			return Reply(r, "REJECTED", false)
 		}
 		if old.Request.JobID == r.JobID || old.Request.Hostname == r.Hostname {
@@ -198,6 +193,12 @@ func (b *Broker) Handle(r Request) Response {
 	}
 	return Reply(r, "ACTIVE", false)
 }
+func siteSources(r Request) map[string]string {
+	probe := "<?php declare(strict_types=1); header('Content-Type: application/json'); preg_match('/^Uid:\\s+([0-9]+)\\s+([0-9]+)/m',(string)file_get_contents('/proc/self/status'),$uid); echo json_encode(['site_id'=>'" + r.SiteID + "','tenant_id'=>'" + r.TenantID + "','euid'=>(int)($uid[2]??0)],JSON_THROW_ON_ERROR);"
+	app := strings.NewReplacer("{{SITE_ID}}", r.SiteID, "{{TENANT_ID}}", r.TenantID).Replace(demoApplication)
+	return map[string]string{"index.php": app, "__wcp_probe.php": probe}
+}
+
 func (b *Broker) apply(r Request) error {
 	name := UnixUser(r.SiteID)
 	if _, e := user.Lookup(name); e == nil {
@@ -243,9 +244,7 @@ func (b *Broker) apply(r Request) error {
 			return e
 		}
 	}
-	source := "<?php declare(strict_types=1); header('Content-Type: application/json'); preg_match('/^Uid:\\s+([0-9]+)\\s+([0-9]+)/m',(string)file_get_contents('/proc/self/status'),$uid); echo json_encode(['site_id'=>'" + r.SiteID + "','tenant_id'=>'" + r.TenantID + "','euid'=>(int)($uid[2]??0)],JSON_THROW_ON_ERROR);"
-	app := strings.NewReplacer("{{SITE_ID}}", r.SiteID, "{{TENANT_ID}}", r.TenantID).Replace(demoApplication)
-	for file, content := range map[string]string{"index.php": app, "__wcp_probe.php": source} {
+	for file, content := range siteSources(r) {
 		if e = writeNew(base+"/public/"+file, []byte(content), 0640); e != nil {
 			return e
 		}
@@ -266,29 +265,33 @@ func (b *Broker) apply(r Request) error {
 	if e = writeNew(StateRoot+"/fpm-pools/"+r.SiteID+".conf", []byte(plan.PHPFPM), 0644); e != nil {
 		return e
 	}
-	if e = fixedCommand("/usr/sbin/nginx", "-t", "-c", StateRoot+"/nginx.conf"); e != nil {
+	return b.ensureServers()
+}
+
+func (b *Broker) ensureServers() error {
+	if e := fixedCommand("/usr/sbin/nginx", "-t", "-c", StateRoot+"/nginx.conf"); e != nil {
 		return e
 	}
-	if e = fixedCommand(fpmBinary(), "-t", "-y", StateRoot+"/fpm.conf"); e != nil {
+	if e := fixedCommand(fpmBinary(), "-t", "-y", StateRoot+"/fpm.conf"); e != nil {
 		return e
 	}
 	if !b.fpmStarted {
-		if e = b.start(fpmBinary(), "-F", "-y", StateRoot+"/fpm.conf"); e != nil {
+		if e := b.start(fpmBinary(), "-F", "-y", StateRoot+"/fpm.conf"); e != nil {
 			return e
 		}
 		b.fpmStarted = true
 	} else {
-		if e = b.children[0].Signal(syscall.SIGUSR2); e != nil {
+		if e := b.children[0].Signal(syscall.SIGUSR2); e != nil {
 			return e
 		}
 	}
 	if !b.nginxStarted {
-		if e = b.start("/usr/sbin/nginx", "-c", StateRoot+"/nginx.conf", "-g", "daemon off;"); e != nil {
+		if e := b.start("/usr/sbin/nginx", "-c", StateRoot+"/nginx.conf", "-g", "daemon off;"); e != nil {
 			return e
 		}
 		b.nginxStarted = true
 	} else {
-		if e = b.children[1].Signal(syscall.SIGHUP); e != nil {
+		if e := b.children[1].Signal(syscall.SIGHUP); e != nil {
 			return e
 		}
 	}
@@ -303,7 +306,15 @@ func (b *Broker) start(binary string, args ...string) error {
 		return e
 	}
 	b.children = append(b.children, cmd.Process)
-	go cmd.Wait()
+	go func() {
+		e := cmd.Wait()
+		if !b.stopping.Load() {
+			select {
+			case b.failures <- fmt.Errorf("managed child exited (%s): %v", filepath.Base(binary), e):
+			default:
+			}
+		}
+	}()
 	return nil
 }
 func (b *Broker) healthy(r Request) bool {

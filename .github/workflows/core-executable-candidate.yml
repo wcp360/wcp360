@@ -12,11 +12,13 @@ concurrency:
 jobs:
   debian-postgresql:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+      - name: Validate candidate shell harnesses
+        run: for script in WCP360_Build/verification/candidate-{debian-vm,vm-guest,provisioning-smoke,systemd-smoke}.sh; do bash -n "$script"; done
       - name: Build tested Debian 13 / PHP 8.4 / Go candidate
         run: docker build -f WCP360_Build/environments/core-candidate/Dockerfile -t wcp360-candidate .
       - name: Start isolated PostgreSQL 17
@@ -41,8 +43,8 @@ jobs:
           docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e PGHOST=wcp-candidate-db -e PGUSER=postgres -e PGPASSWORD=ci-only-ephemeral-password -e PGDATABASE=wcp360_test --entrypoint bash wcp360-candidate -ec 'cd /opt/wcp360/WCP360_Core; backup_file="$(bash installer/recovery/candidate-backup.sh)"; bash installer/upgrades/candidate-upgrade.sh "$backup_file"; PGDATABASE=wcp360_restore_test bash installer/recovery/candidate-restore-test.sh "$backup_file"'
       - name: Install QEMU tools on disposable runner
         run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
-      - name: Clean Debian 13 VM with distribution PHP-FPM
-        timeout-minutes: 25
+      - name: Clean Debian 13 VM with systemd recovery and actual reboot
+        timeout-minutes: 35
         env:
           WCP_DISPOSABLE_VM_HARNESS: '1'
         run: bash WCP360_Build/verification/candidate-debian-vm.sh

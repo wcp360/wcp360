@@ -39,7 +39,7 @@ Transport failures after dispatch become UNKNOWN_OUTCOME. There is no automatic 
 
 The activation worker's --reconcile option only inspects uncertain operations; stop other activation workers first. Inspection can confirm an already-created healthy site without creating it again. Application audit/outcome publication failures leave the operation uncertain for inspection. Physical outcomes are retained even if permissions change after dispatch; access to their UI remains tenant-authorized.
 
-The experiment does not automatically restart/reconstruct services after broker restart or complete a partially applied site. Such outcomes remain uncertain and require operator investigation; disposal of this test environment is the recovery boundary. Full crash/power-loss/service-supervision qualification remains open.
+The disposable Debian VM profile adds [systemd supervision and strict recovery](SYSTEMD-RECOVERY.md) of confirmed ACTIVE sites. Missing/changed managed files, ambiguous journals and PREPARING records refuse recovery and require trusted investigation. Recovery never completes a partially applied site or replays provisioning. Process-crash and ordered reboot checks are separate from sudden power-loss durability and production recovery qualification.
 
 ## Reproduce in an isolated container
 
@@ -60,4 +60,4 @@ The Debian VM profile uses the distribution's fixed /usr/sbin/php-fpm8.4 executa
 
 ## Required next boundaries
 
-Approved production contracts/identity/entitlement model, durable authorization/fencing across revocation, systemd supervision/recovery, customer-controlled application deployment, TLS, quota enforcement, signed installation/update/recovery and independent Engineering/Security review remain necessary. FrankenPHP live switching/draining and Ubuntu/AlmaLinux adapters remain separate work. This candidate does not alter authoritative specification artifacts or assert production readiness.
+Approved production contracts/identity/entitlement model, durable authorization/fencing across revocation, production supervision/power-loss/partial-operation recovery, customer-controlled application deployment, TLS, quota enforcement, signed installation/update/recovery and independent Engineering/Security review remain necessary. FrankenPHP live switching/draining and Ubuntu/AlmaLinux adapters remain separate work. This candidate does not alter authoritative specification artifacts or assert production readiness.

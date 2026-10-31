@@ -28,12 +28,19 @@ set -e
 [[ "$status" == 78 ]] || exit 1
 cd /opt/wcp360/WCP360_Core
 php -r 'require "vendor/autoload.php"; try { Wcp360\Core\Module\Hosting\Infrastructure\DisposableExecution::requireEnvironment(); exit(1); } catch (RuntimeException) { echo "PASS: unflagged VM rejected.\n"; }'
+# A boot marker alone does not authorize persistent boot recovery.
+set +e
+WCP_ISOLATED_TEST_VM=1 /usr/local/libexec/wcp360/wcp-candidate-node arm-vm
+status=$?
+set -e
+[[ "$status" == 78 ]] || exit 1
 # This boot's marker is only accepted with the explicit VM flag.
-export WCP_ISOLATED_TEST_VM=1
+export WCP_ISOLATED_TEST_VM=1 WCP_CANDIDATE_SYSTEMD=1
 unset WCP_ISOLATED_TEST_CONTAINER
 install -d -m 0755 var/cache/test
 bash /opt/wcp360/WCP360_Build/verification/candidate-provisioning-smoke.sh
+bash /opt/wcp360/WCP360_Build/verification/candidate-systemd-smoke.sh exercise
 php --version | head -n 1
 /usr/sbin/php-fpm8.4 --version | head -n 1
 dpkg-query -W -f='${Package} ${Version}\n' nginx php8.4-fpm
-printf 'PASS: Debian 13 VM qualification is limited to this isolated candidate path; no production installer, reboot recovery, TLS or quotas claimed.\n'
+printf 'PASS: Debian 13 VM qualification is limited to this isolated candidate path; no production installer, hard power-loss durability, TLS or quotas claimed.\n'

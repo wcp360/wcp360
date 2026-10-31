@@ -10,6 +10,7 @@ import (
 	"net"
 	"os"
 	"sync"
+	"sync/atomic"
 	"syscall"
 	"time"
 )
@@ -107,6 +108,9 @@ func Serve(ctx context.Context, path string, peerUID uint32, owner, group int, h
 	if e = os.Chown(path, owner, group); e != nil {
 		return e
 	}
+	if e = notifyReady(); e != nil {
+		return e
+	}
 	go func() { <-ctx.Done(); listener.Close() }()
 	// Serialize requests and cap work. No unbounded goroutine per attacker connection.
 	for {
@@ -162,6 +166,8 @@ func Forward(r Request) Response {
 }
 
 type Broker struct {
+	failures     chan error
+	stopping     atomic.Bool
 	mu           sync.Mutex
 	children     []*os.Process
 	nginxStarted bool
@@ -169,6 +175,7 @@ type Broker struct {
 }
 
 func (b *Broker) Close() {
+	b.stopping.Store(true)
 	for _, p := range b.children {
 		p.Signal(syscall.SIGQUIT)
 	}
@@ -197,3 +204,21 @@ func PrepareSocketDirs(agentUID, workerUID int) error {
 	}
 	return nil
 }
+
+// systemd readiness is emitted only after recovery and socket ownership succeed.
+func notifyReady() error {
+	path := os.Getenv("NOTIFY_SOCKET")
+	if path == "" {
+		return nil
+	}
+	conn, e := net.DialUnix("unixgram", nil, &net.UnixAddr{Name: path, Net: "unixgram"})
+	if e != nil {
+		return e
+	}
+	defer conn.Close()
+	conn.SetWriteDeadline(time.Now().Add(time.Second))
+	_, e = conn.Write([]byte("READY=1"))
+	return e
+}
+
+func (b *Broker) Failures() <-chan error { return b.failures }

@@ -19,3 +19,14 @@ func validateVMEvidence(marker, bootID, product, release string, uid uint32, mod
 	}
 	return nil
 }
+
+const RecoveryPolicy = "/etc/wcp360-candidate/allow-boot-recovery"
+
+var machineIDPattern = regexp.MustCompile(`^[0-9a-f]{32}\n$`)
+
+func validateBootPolicy(policy, machineID string) error {
+	if !machineIDPattern.MatchString(machineID) || policy != "wcp360.candidate.vm-recovery/1\n"+machineID {
+		return fmt.Errorf("VM recovery policy does not match this machine")
+	}
+	return nil
+}

@@ -56,7 +56,7 @@ qemu-system-x86_64 -machine q35 "${accel[@]}" -smp 2 -m 3072 \
     -drive "file=$work_dir/overlay.qcow2,if=virtio,format=qcow2" \
     -drive "file=$work_dir/seed.img,if=virtio,format=raw,readonly=on" \
     -netdev user,id=net0,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net-pci,netdev=net0 \
-    -display none -monitor none -serial "file:$work_dir/serial.log" -no-reboot >"$work_dir/qemu.log" 2>&1 &
+    -display none -monitor none -serial "file:$work_dir/serial.log" >"$work_dir/qemu.log" 2>&1 &
 qemu_pid=$!
 ssh_opts=(-p 22222 -i "$work_dir/client-key" -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$work_dir/known_hosts" -o HostKeyAlias=wcp360-candidate-vm -o LogLevel=ERROR)
 ready=0
@@ -81,5 +81,21 @@ sha256sum "$work_dir/candidate.tar.gz" | cut -d' ' -f1 >"$work_dir/payload.sha25
 ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'cat > /home/wcp-vm/candidate.tar.gz' <"$work_dir/candidate.tar.gz"
 expected_payload="$(cat "$work_dir/payload.sha256")"
 ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 "printf '%s  /home/wcp-vm/candidate.tar.gz\n' '$expected_payload' | sha256sum --check --strict && sudo install -d -m 0755 /opt/wcp360 && sudo tar --no-same-owner -xzf /home/wcp-vm/candidate.tar.gz -C /opt/wcp360"
-ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'sudo timeout 1200 bash /opt/wcp360/WCP360_Build/verification/candidate-vm-guest.sh'
-printf 'PASS: clean pinned Debian 13 cloud VM; packaged PHP-FPM; two tenants and stateful application.\n'
+ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'sudo timeout 1500 bash /opt/wcp360/WCP360_Build/verification/candidate-vm-guest.sh'
+# Reboot the same guest; no manual re-arming or service start is allowed here.
+old_boot="$(ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'cat /proc/sys/kernel/random/boot_id')"
+set +e
+ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'sudo systemctl reboot'
+reboot_status=$?
+set -e
+[[ "$reboot_status" == 0 || "$reboot_status" == 255 ]]
+rebooted=0
+for attempt in {1..200}; do
+    kill -0 "$qemu_pid"
+    new_boot="$(ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'cat /proc/sys/kernel/random/boot_id' 2>/dev/null || true)"
+    if [[ "$new_boot" =~ ^[0-9a-f-]{36}$ && "$new_boot" != "$old_boot" ]]; then rebooted=1; break; fi
+    sleep 2
+done
+[[ "$rebooted" == 1 ]] || { echo 'Actual guest reboot deadline exceeded.' >&2; exit 1; }
+ssh "${ssh_opts[@]}" wcp-vm@127.0.0.1 'sudo env WCP_ISOLATED_TEST_VM=1 timeout 180 bash /opt/wcp360/WCP360_Build/verification/candidate-systemd-smoke.sh after-reboot'
+printf 'PASS: clean Debian 13 VM, supervised PHP-FPM sites, injected child crash and actual guest reboot with persistent sessions/state.\n'

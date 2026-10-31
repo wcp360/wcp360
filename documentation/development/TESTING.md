@@ -45,3 +45,7 @@ References: [Symfony testing](https://symfony.com/doc/7.4/testing.html), [PHPSta
 ## Clean Debian VM and hosted application
 
 The [disposable VM rehearsal](DEBIAN-VM.md) runs the shared provisioning and packaged-application checks against Debian 13 distribution PHP-FPM. Its explicit environment gates have PHP and Go regression coverage for stale boot IDs, wrong distributions, ordinary VM identifiers and writable/tenant-owned markers. This is additional to the container, PostgreSQL, Panther and FrankenPHP jobs; consult the exact workflow run for execution evidence.
+
+## Supervised recovery
+
+The [systemd recovery rehearsal](SYSTEMD-RECOVERY.md) adds strict Go journal/managed-file regressions and tests actual candidate service restart, owned PHP-FPM child failure, inconsistent-state refusal and full guest reboot. Application sessions, counters and Unix identities must survive without replaying physical provisioning. The workflow result applies only to its exact source head.

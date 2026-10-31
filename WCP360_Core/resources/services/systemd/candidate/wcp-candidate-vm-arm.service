@@ -1,0 +1,25 @@
+# Disposable Debian 13 VM candidate only. Not a production service.
+[Unit]
+Description=WCP360 disposable VM boot authorization
+ConditionPathExists=/etc/wcp360-candidate/allow-boot-recovery
+Before=wcp-candidate-broker.service wcp-candidate-agent.service
+
+[Service]
+Type=oneshot
+Environment=WCP_ISOLATED_TEST_VM=1
+ExecStart=/usr/local/libexec/wcp360/wcp-candidate-node arm-vm
+RemainAfterExit=yes
+User=root
+UMask=0022
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/run
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+
+[Install]
+WantedBy=multi-user.target

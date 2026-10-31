@@ -12,7 +12,8 @@ This harness boots a clean official Debian 13 amd64 cloud image under QEMU and r
 6. Verify that unflagged Go and PHP entry points refuse this VM before physical effects.
 7. Run Symfony jobs through separate worker, agent and root broker identities, provision two PHP-FPM tenants, exercise the embedded application and inspect uncertain outcomes without replaying mutations.
 8. Check non-root PHP execution, private writable application state, immutable public code, CSRF rejection, cross-site file denial, hidden-path denial and unauthorized IPC peer/schema rejection.
-9. Stop the owned QEMU process and remove the temporary overlay, seed, payload and ephemeral keys, including on failure.
+9. Exercise [systemd supervision and recovery](SYSTEMD-RECOVERY.md), including a verified PHP-FPM child crash, explicit recovery refusal cases and actual guest reboot with preserved sessions/state.
+10. Stop the owned QEMU process and remove the temporary overlay, seed, payload and ephemeral keys, including on failure.
 
 No host directory, host block device, Docker socket or host process namespace is mounted in the guest. QEMU runs as the CI user with user-mode NAT. Only guest SSH is forwarded, on host loopback port 22222; guest web services have no host forwarding. Guest Internet access is needed for Debian's signed package repositories. This is not containment against a malicious hypervisor/root administrator.
 
@@ -25,7 +26,7 @@ docker build -f WCP360_Build/environments/core-candidate/Dockerfile -t wcp360-ca
 WCP_DISPOSABLE_VM_HARNESS=1 bash WCP360_Build/verification/candidate-debian-vm.sh
 ~~~
 
-The existing core workflow installs QEMU tools only on its disposable GitHub runner, then invokes this same script. KVM is used when accessible; otherwise QEMU uses TCG. Startup and guest execution have bounded deadlines. Accelerator selection and package versions are printed to the run log. The marker in /run expires with the boot; it is never automatically re-created by an installed service.
+The existing core workflow installs QEMU tools only on its disposable GitHub runner, then invokes this same script. KVM is used when accessible; otherwise QEMU uses TCG. Startup and guest execution have bounded deadlines. Accelerator selection and package versions are printed to the run log. The marker in /run expires with each boot. The new [candidate recovery profile](SYSTEMD-RECOVERY.md) reissues it only when the trusted fixture has installed a separate root-only, machine-bound boot opt-in. Ordinary servers/VMs remain refused.
 
 ## Pinned input and trust
 
@@ -45,4 +46,4 @@ Upstream references: [cloud-init NoCloud drive format](https://docs.cloud-init.i
 
 ## Limits
 
-Passing this rehearsal establishes only this initial provisioning and packaged-application path on the reported Debian image and packages. It does not qualify reboot/power-loss reconstruction, systemd service recovery, arbitrary application uploads, live runtime migration, production authorization/fencing, MFA, TLS, quotas, signed updates or release promotion. FrankenPHP worker verification remains its separate container test; this VM path uses PHP-FPM. Ubuntu and AlmaLinux remain unqualified. Production boot and stable publishing gates remain closed.
+Passing this rehearsal establishes only this initial provisioning and packaged-application path on the reported Debian image and packages. The supervised path additionally tests controlled process-crash and ordered reboot recovery. It does not qualify sudden power-loss/partial-operation recovery, arbitrary application uploads, live runtime migration, production authorization/fencing, MFA, TLS, quotas, signed updates or release promotion. FrankenPHP worker verification remains its separate container test; this VM path uses PHP-FPM. Ubuntu and AlmaLinux remain unqualified. Production boot and stable publishing gates remain closed.
