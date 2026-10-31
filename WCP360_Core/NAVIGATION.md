@@ -18,12 +18,12 @@ Start here to locate a change. This index documents the intended source location
 | MySQL, MariaDB or PostgreSQL service settings | [Data](src/Module/Data/README.md) | mysql/, mariadb/, postgresql/ resources; tenant and control-plane grants stay separate |
 | Redis, DNS, SSH, firewall or supervision | [Service index](resources/services/README.md) | Typed adapter and approved agent operations, not a PHP shell call |
 | Composer, Go, Python or frontend dependencies | [Dependency guide](DEPENDENCIES.md) | Component manifest/lock and its reviewed build procedure |
-| An administrator/user page or reusable component | [Templates](templates/README.md) and [assets](assets/README.md) | Owning module presenter, first-party Twig, Stimulus and styles |
+| An administrator/user page or reusable component | [Templates](templates/README.md) and [assets](assets/README.md) | Domain presenter; layouts/errors and shared form/table/feedback/navigation components; controllers/styles/images source |
 | Database schema | [Migrations](migrations/README.md) and the owning domain | Accepted DB contract, migrations and upgrade/recovery evidence |
-| Installation and upgrade | [Installer](installer/README.md) and [Setup](src/Module/Setup/README.md) | Bootstrap source, restricted wizard and durable progress |
+| Installation and upgrade | [Installer](installer/README.md) and [Setup](src/Module/Setup/README.md) | preflight/, recipes/, upgrades/, recovery/; restricted wizard and durable progress |
 | Go daemon/broker behavior | [Agents](agents/README.md) | Separate wcpd / wcp-privd components and accepted protocol/privilege contracts |
 | Python diagnostics | [Diagnostics](diagnostics/README.md) | Specialized, bounded, non-root tooling |
-| Regression/contract/target tests | [Tests](tests/README.md) | Unit, Integration, Contract, Security, Fixtures and other relevant suites as implemented |
+| Regression/contract/target tests | [Tests](tests/README.md) | Prepared Unit, Contract, Integration, Security, Lifecycle, Installer, Browser and Fixtures source directories; executable suites accompany implementation |
 | Artifact assembly or a release | [Build](../WCP360_Build/README.md) | [Qualified release records](../WCP360_Releases/README.md) |
 
 ## Source tree
@@ -59,14 +59,40 @@ WCP360_Core/
 │       ├── logrotate/
 │       └── backup/
 ├── templates/                      # Browser-facing first-party Twig views
-├── assets/                         # Stimulus, styles and approved asset pipeline
+│   ├── admin/
+│   ├── user/
+│   ├── setup/
+│   ├── layouts/
+│   ├── errors/
+│   └── components/
+│       ├── forms/
+│       ├── tables/
+│       ├── feedback/
+│       └── navigation/
+├── assets/                         # Frontend source; generated output stays out of source
+│   ├── controllers/
+│   ├── styles/
+│   └── images/
 ├── public/                         # Published entry points/assets only
 ├── migrations/                     # Reviewed control-plane schema migrations
 ├── translations/
 ├── agents/                         # wcpd and wcp-privd source components
 ├── diagnostics/                    # Non-root Python tools
 ├── installer/                      # Installation/bootstrap and recovery sources
-└── tests/                          # Test code and synthetic fixtures
+│   ├── preflight/
+│   ├── recipes/
+│   ├── upgrades/
+│   ├── recovery/
+│   └── scaffolds/                  # Historical non-operational templates
+└── tests/                          # Prepared suite/fixture source locations
+    ├── Unit/
+    ├── Contract/
+    ├── Integration/
+    ├── Security/
+    ├── Lifecycle/
+    ├── Installer/
+    ├── Browser/
+    └── Fixtures/
 ```
 
 When an approved bootstrap exists, Composer manifests/locks will be real root files, vendor/ will be generated and ignored, and var/ will hold disposable application-local state. These generated directories and empty manifests are not created as placeholders.

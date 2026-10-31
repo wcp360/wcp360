@@ -1,7 +1,22 @@
 # Installer source and orchestration
 
-Reviewed CLI/bootstrap/recipes and interrupted-install recovery belong here. Wizard UI lives in templates/setup and state/orchestration in the Setup domain. Existing scaffolds remain non-operational and preserve their guarded behavior.
+**Status: implementation areas documented; no operational installer is implemented by these directories.** Existing versioned shell scaffolds keep their guarded non-operational behavior.
 
-This is an implementation reservation. Follow the [Core status](../README.md) and [development/acceptance guide](../../documentation/development/CORE-ENGINE.md) before adding runtime code.
+| Source area | Responsibility |
+| :--- | :--- |
+| [preflight](preflight/README.md) | Read-only discovery and validation before selecting or applying an installation plan. |
+| [recipes](recipes/README.md) | Reviewed orchestration for an approved installation plan and selected compatible components. |
+| [upgrades](upgrades/README.md) | Version-specific compatibility checks and orchestration for upgrades from explicitly supported installed versions. |
+| [recovery](recovery/README.md) | State inspection, bounded resume/repair and recovery procedures for incomplete or failed installation/upgrade steps. |
+| [scaffolds](scaffolds/README.md) | Preserve the earlier unqualified guarded shell templates; they are not released installers. |
 
-Reviewed service templates/profiles have a single source under [resources/services](../resources/services/README.md). Bootstrap recipes select compatible resources and approved operations; they do not maintain a second copy of service defaults. Dependency/toolchain and package inputs are mapped in the [dependency guide](../DEPENDENCIES.md).
+The eventual autonomous CLI/bootstrap entry point must work before Symfony is installed, verify qualified artifact identity and select an accepted installation plan. Its source can live here while being packaged as an independently runnable installation artifact. Do not add a fake executable or dependency lock just to fill the layout.
+
+The restricted wizard UI lives in [templates/setup](../templates/setup/README.md); business state and orchestration live in the [Setup module](../src/Module/Setup/README.md). Reviewed host operations use accepted installation/agent boundaries. Repeated execution must distinguish fresh installation, resume, repair and supported upgrade.
+
+Service templates/profiles have a single source in [resources/services](../resources/services/README.md). Recipes select compatible resources and approved operations rather than maintaining another copy of service defaults. Machine settings, secrets and live /etc files stay outside versioned source.
+
+- [Dependency and toolchain locations](../DEPENDENCIES.md)
+- [Installation/recovery tests](../tests/Installer/README.md)
+- [Delivery and release acceptance](../../documentation/development/DELIVERY-AND-RELEASES.md)
+- [Core scope/status](../README.md)
