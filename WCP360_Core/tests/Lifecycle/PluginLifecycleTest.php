@@ -33,4 +33,14 @@ final class PluginLifecycleTest extends KernelTestCase
     {
         $process=new Process([PHP_BINARY,dirname(__DIR__,3).'/WCP360_Plugins/wcp360-reference-report/bin/report.php'],null,null,'{"schema":"wrong","counts":[]}',5);$process->run();self::assertSame(2,$process->getExitCode());self::assertSame('',$process->getOutput());
     }
+    public function testMissingPackageCannotPreventDisablingAndUninstalling():void
+    {
+        $this->transition('install');$this->transition('enable');
+        $unavailable=new PluginRegistry($this->store,dirname(__DIR__).'/Fixtures/nonexistent-package-root');
+        $unavailable->transition($this->fixture['users']['admin'],'wcp360-reference-report','disable');
+        self::assertSame('DISABLED',$this->plugins->installed()[0]['state']);
+        $unavailable->transition($this->fixture['users']['admin'],'wcp360-reference-report','uninstall');
+        self::assertSame([],$this->plugins->installed());
+        self::assertNotEmpty($this->submit()['job_id']);
+    }
 }

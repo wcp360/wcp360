@@ -20,12 +20,14 @@ Audit date: 2026-10-31. Status: implementation evidence, not independent review 
 - Go 1.27.3 Windows amd64 archive verified with the official SHA-256; planner unit tests, CLI schema tests, go vet and compilation pass.
 - Unchanged PHP candidate: 31/31 tests pass. Registry checks pass for 82 permissions, 86 API contracts/actions, 30 action domains, 23 errors, 47 IPC operations, 54 physical tables and eight session-policy rows.
 - Canonical input Git blob fingerprints match. The current database publication contains 54 physical table headings; an older 52-table description must not be treated as current physical coverage.
-- New Symfony candidate: 34 tests, 81 assertions pass on PHP 8.4.27 with SQLite fixtures. Coverage includes real form authentication, forged CSRF rejection, cross-context/cross-tenant denial, SQL composite-FK integrity, idempotency, audit failure rollback, audit immutability, permission revocation, job interruption and detached plugin lifecycle.
+- New Symfony candidate: the expanded local suite reports 37 tests / 86 assertions, with 36 passing and one Windows-only skip for the hidden-input console interaction. The complete wizard interaction is assigned to Linux CI. Coverage includes real form authentication, forged CSRF rejection, cross-context/cross-tenant denial, SQL composite-FK integrity, idempotency, audit failure rollback, audit immutability, permission revocation, job interruption and detached plugin lifecycle.
 - Kernel startup, container injection checks, Twig syntax, asset compilation and Composer validation/platform checks pass. Composer reports no known dependency advisories at the audit time; this is not a source security audit.
 
 ## Target-platform evidence
 
-The supplied GitHub workflow runs the new candidate against real PostgreSQL 17 on a Debian 13/PHP 8.4 image, followed by a real Nginx/PHP-FPM HTTP probe and backup/restore rehearsal. Read its actual run result before declaring these checks passed. Windows/SQLite results are not Debian/PostgreSQL evidence.
+The first complete [successful Linux workflow](https://github.com/yyogas/wcp360/actions/runs/41231366927) tested source f3ce52c15ece85b03f750d59ed1fe4ad717c47c0: 34 application tests / 81 assertions pass against PostgreSQL 17 on Debian 13/PHP 8.4. The real Nginx/PHP-FPM HTTP probe, other-user file-read denial, hidden-file rejection, missing-PHP rejection and backup/upgrade/empty-database restore rehearsal also pass.
+
+The suite was then expanded with the unavailable-package disable/uninstall regression and enrollment command checks. Consult the latest run linked from [PR #116](https://github.com/yyogas/wcp360/pull/116) for that exact head; the earlier 34-test result is not automatically reassigned to later changes. Windows/SQLite results are not Debian/PostgreSQL evidence.
 
 The workstation has no local Docker installation or WSL distribution. Its preinstalled PHP 8.3/XAMPP was left unchanged. Downloaded toolchains, candidate audit copies, Composer dependencies, compiled binaries, frontend assets and generated state remain ignored local build/runtime output.
 

@@ -15,11 +15,11 @@ The candidate uses deliberately separate wcp_candidate_* tables and /workbench r
 | Stage | Concrete implementation | Remaining acceptance |
 | :--- | :--- | :--- |
 | Source audit | Audited immutable PHP candidate 284daabc8d57a65d3ad11e326baee32898e64254; 31 tests and source-fingerprint/registry checks pass. The 86 handlers are ports, not 86 completed features. | Review individual policies and concrete adapters before promotion. |
-| Development environment | Composer/importmap locks, Debian 13 candidate Dockerfile, PostgreSQL 17 Compose, separate context processes/Unix IDs and secrets, PHP 8.4 and Go 1.27.3. | Run the supplied Linux workflow; this environment is not the addendum's pinned canonical offline qualification environment. |
+| Development environment | Composer/importmap locks, Debian 13 candidate Dockerfile, PostgreSQL 17 Compose, separate context processes/Unix IDs and secrets, PHP 8.4 and Go 1.27.3. | The first complete Linux workflow passes; this environment is not the addendum's pinned canonical offline qualification environment. |
 | Symfony Core | Kernel, CLI, routes, dependency injection, migration, login/dashboard/job templates, responsive CSS, Turbo/Stimulus and AssetMapper. | Production packaging, immutable dependency/asset attestations and component design review. |
 | Foundations | Sodium/Argon2id hashing, login throttling/CSRF, context-bound sessions with idle/absolute lifetime, tenant permissions, relational tenant FK, atomic enqueue/audit, idempotency, revocation recheck and interrupted-job handling. | Canonical IAM schema, MFA, entitlements, delegations, separate database grants/RLS, audit retention/export, fenced privileged execution and a full security review. |
 | Hosting path | PHP submits a durable plan job; a worker invokes the fixed Go executable. A disposable Linux probe starts real Nginx/PHP-FPM and checks an HTTP PHP response, hidden-file denial and missing-PHP rejection. | Reviewed IPC-B/wcpd/wcp-privd implementation, real enrollment/provisioning, verified activation/reload, reconciliation and failure injection on the supported target. |
-| SDK and plugin | Strict standalone summary decoder; detached report process; install/enable/disable/uninstall metadata; lifecycle and tenant-boundary tests; Core works without plugins. | Signed packages, installation storage, process supervision, scoped service credentials, revocation, compatibility and upgrade policy. |
+| SDK and plugin | Strict standalone summary decoder; detached report process; install/enable/disable/uninstall metadata; lifecycle and tenant-boundary tests, including disable/uninstall with an unavailable package; Core works without plugins. | Signed packages, installation storage, process supervision, scoped service credentials, revocation, compatibility and upgrade policy. |
 | Installation and release | Non-root development installer, interactive account wizard, preflight, backup, migration upgrade and empty-database restore rehearsal; CI has read-only repository permissions and no publishing step. | Fresh-system installer, production recovery, migration review, complete functional/security acceptance, independent E3 and a reviewed release publisher. No stable version or latest pointer is produced. |
 
 ## Run with Docker Compose
@@ -65,6 +65,8 @@ php -S 127.0.0.1:8080 -t public
 
 Use a separate terminal with WCP_CONTEXT=worker php bin/console wcp:candidate:work to process one job. For ADMIN use a separate process with WCP_CONTEXT=admin, WCP_PUBLIC_HOST=admin.localhost and a different APP_SECRET. On Windows, build wcp-plan.exe and adjust WCP_PLANNER in the private .env.
 
+For native frontend editing, rebuild assets after source changes; a compiled public/assets directory takes precedence over development mapping.
+
 The Debian helper installer/recipes/candidate-install.sh automates dependencies, plan compilation, assets and migrations in a complete checkout. It refuses root and does not modify /etc, install services, fetch an unqualified release or enroll a default privileged account.
 
 ## Verification and recovery
@@ -78,7 +80,7 @@ php bin/console asset-map:compile
 (cd agents/wcpd/candidate/planner && go test ./... && go vet ./...)
 ~~~
 
-The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM and backup/restore probes. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
+The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM and backup/restore probes. The first complete run passed; see [PR #116](https://github.com/yyogas/wcp360/pull/116) for results bound to the latest candidate head. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
 
 The backup helpers accept only wcp360_workbench or wcp360_test. The restore helper accepts only an empty wcp360_restore_test database and a verified backup under Core var/backups. Supply PGHOST/PGUSER/PGPASSWORD securely; never put credentials in a command line or commit them. Stop all candidate workers before using wcp:candidate:work --reconcile-interrupted. This marks interrupted jobs UNKNOWN_OUTCOME and does not resubmit them.
 

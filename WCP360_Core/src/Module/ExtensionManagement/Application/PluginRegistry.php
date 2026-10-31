@@ -14,22 +14,25 @@ final readonly class PluginRegistry
         if(!$this->store->db->fetchOne("SELECT 1 FROM wcp_candidate_users WHERE id=? AND context='admin' AND active=1",[$actor]))throw new AccessDeniedHttpException();
         if($id!=='wcp360-reference-report' || !in_array($action,['install','enable','disable','uninstall'],true))throw new \InvalidArgumentException('Unknown candidate package or operation.');
         // No hooks, plugin includes, network fetch, dependency installation or command execution in the Core.
+        $hash=null;
+        if(in_array($action,['install','enable'],true)){
         $path=$this->pluginRoot.'/'.$id.'/candidate-plugin.json';
         if(is_link(dirname($path))||is_link($path)||!is_file($path)||filesize($path)>8192)throw new \RuntimeException('Invalid package source.');
         $raw=(string)file_get_contents($path);$manifest=json_decode($raw,true,8,JSON_THROW_ON_ERROR);
         if(array_keys($manifest)!==['id','version','api','mode','capabilities'] || $manifest['id']!==$id || $manifest['version']!=='0.1.0-dev' || $manifest['api']!=='wcp360.candidate.summary/1' || $manifest['mode']!=='detached' || $manifest['capabilities']!==['candidate.summary.read'])throw new \RuntimeException('Candidate manifest rejected.');
         $hash=hash('sha256',$raw);
+        }
         $db=$this->store->db;
         $db->transactional(function()use($db,$actor,$id,$action,$hash):void{
             $lock=$db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform?' FOR UPDATE':'';
-            $db->fetchOne('SELECT id FROM wcp_candidate_users WHERE id=?'.$lock,[$actor]);
+            if(!$db->fetchOne("SELECT id FROM wcp_candidate_users WHERE id=? AND context='admin' AND active=1".$lock,[$actor]))throw new AccessDeniedHttpException();
             $old=$db->fetchAssociative('SELECT * FROM wcp_candidate_plugins WHERE id=?',[$id]);
             if($action==='install'){
                 if($old)throw new ConflictHttpException('Already installed.');
                 $db->insert('wcp_candidate_plugins',['id'=>$id,'version'=>'0.1.0-dev','state'=>'DISABLED','manifest_hash'=>$hash]);
             }else{
                 if(!$old)throw new ConflictHttpException('Install the package first.');
-                if(!hash_equals($old['manifest_hash'],$hash))throw new ConflictHttpException('Package changed; requalification required.');
+                if($action==='enable' && !hash_equals($old['manifest_hash'],$hash))throw new ConflictHttpException('Package changed; requalification required.');
                 if($action==='uninstall'){
                     if($old['state']!=='DISABLED')throw new ConflictHttpException('Disable the package before uninstalling.');
                     $db->delete('wcp_candidate_plugins',['id'=>$id]);
