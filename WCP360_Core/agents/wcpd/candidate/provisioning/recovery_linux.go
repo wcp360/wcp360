@@ -94,6 +94,11 @@ func (b *Broker) Recover() error {
 		return e
 	}
 	if len(entries) == 0 {
+		for _, sub := range []string{"nginx-sites", "fpm-pools"} {
+			if e = verifyConfigInventory(StateRoot+"/"+sub, nil); e != nil {
+				return e
+			}
+		}
 		return nil
 	}
 	if os.Getenv("WCP_ISOLATED_TEST_VM") != "1" || os.Getenv("WCP_ALLOW_CANDIDATE_RECOVERY") != "1" || len(entries) > 4 {
@@ -119,20 +124,14 @@ func (b *Broker) Recover() error {
 		}
 		records = append(records, r)
 	}
-	// Wildcard includes are safe only when every loaded configuration is accounted for.
+	// Wildcard includes require a complete recorded inventory, including an empty one.
+	expected := map[string]bool{}
+	for _, r := range records {
+		expected[r.Request.SiteID+".conf"] = true
+	}
 	for _, sub := range []string{"nginx-sites", "fpm-pools"} {
-		files, e := os.ReadDir(StateRoot + "/" + sub)
-		if e != nil || len(files) != len(records) {
-			return fmt.Errorf("unexpected service configuration inventory")
-		}
-		expected := map[string]bool{}
-		for _, r := range records {
-			expected[r.Request.SiteID+".conf"] = true
-		}
-		for _, f := range files {
-			if !expected[f.Name()] {
-				return fmt.Errorf("unrecorded service configuration")
-			}
+		if e = verifyConfigInventory(StateRoot+"/"+sub, expected); e != nil {
+			return e
 		}
 	}
 	if e = b.ensureServers(); e != nil {
@@ -202,6 +201,22 @@ func verifySite(r Request) error {
 	for path, content := range map[string]string{"nginx-sites/": plan.Nginx, "fpm-pools/": plan.PHPFPM} {
 		if e = expectFile(filepath.Join(StateRoot, path, r.SiteID+".conf"), content, 0644, 0); e != nil {
 			return e
+		}
+	}
+	return nil
+}
+
+func verifyConfigInventory(dir string, expected map[string]bool) error {
+	files, e := os.ReadDir(dir)
+	if e != nil {
+		return e
+	}
+	if len(files) != len(expected) {
+		return fmt.Errorf("unexpected service configuration inventory")
+	}
+	for _, f := range files {
+		if !expected[f.Name()] {
+			return fmt.Errorf("unrecorded service configuration")
 		}
 	}
 	return nil

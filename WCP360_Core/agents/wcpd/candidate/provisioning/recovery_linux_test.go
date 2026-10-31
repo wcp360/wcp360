@@ -48,3 +48,27 @@ func TestRecoveryRefusesSymlinksHardlinksAndWritableManagedCode(t *testing.T) {
 		t.Fatal("tenant-owned managed code accepted")
 	}
 }
+
+func TestOrphanConfigurationCannotBeLoadedWithoutJournal(t *testing.T) {
+	dir := t.TempDir()
+	if e := verifyConfigInventory(dir, nil); e != nil {
+		t.Fatal(e)
+	}
+	path := filepath.Join(dir, "orphan.conf")
+	if e := os.WriteFile(path, []byte("unrecorded"), 0644); e != nil {
+		t.Fatal(e)
+	}
+	if verifyConfigInventory(dir, nil) == nil {
+		t.Fatal("empty journal accepted an orphan configuration")
+	}
+	if verifyConfigInventory(dir, map[string]bool{"different.conf": true}) == nil {
+		t.Fatal("same-count mismatched configuration accepted")
+	}
+	if e := verifyConfigInventory(dir, map[string]bool{"orphan.conf": true}); e != nil {
+		t.Fatal(e)
+	}
+	os.Remove(path)
+	if verifyConfigInventory(dir, map[string]bool{"orphan.conf": true}) == nil {
+		t.Fatal("missing configuration accepted")
+	}
+}
