@@ -2,12 +2,14 @@
 
 Start here to locate a change. This index documents the intended source locations; the directories currently contain documentation scaffolds, not a complete Symfony application or deployable Linux configurations.
 
+The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21 functional domains to their Core owners and distinguishes proposed plugins from missing source folders.
+
 ## Find the right owner
 
 | I need to change… | Start here | Then follow |
 | :--- | :--- | :--- |
 | A business function or validation rule | [Module index](src/Module/README.md) | Owning module's Domain/ or Application/ |
-| A function reused across several domains | [Shared foundations](src/Shared/README.md) | A typed cohesive service; keep domain-specific policy in its module |
+| A function reused across several domains | [Shared foundations](src/Shared/README.md) | Shared Http/Security primitives where applicable; keep domain-specific policy in its module |
 | A panel CLI command | [Command guide](bin/README.md) | src/Module/<Domain>/UI/Console/ calling the same application use case as HTTP |
 | A worker/job handler | [Operations](src/Module/Operations/README.md) and the affected domain | Shared lifecycle in Operations; resource decisions in the owning module |
 | An API controller or form | [Module layout](src/Module/README.md) | UI/Http/ or UI/Form/; authorization and invariants stay server-side |
@@ -18,7 +20,8 @@ Start here to locate a change. This index documents the intended source location
 | MySQL, MariaDB or PostgreSQL service settings | [Data](src/Module/Data/README.md) | mysql/, mariadb/, postgresql/ resources; tenant and control-plane grants stay separate |
 | Redis, DNS, SSH, firewall or supervision | [Service index](resources/services/README.md) | Typed adapter and approved agent operations, not a PHP shell call |
 | Composer, Go, Python or frontend dependencies | [Dependency guide](DEPENDENCIES.md) | Component manifest/lock and its reviewed build procedure |
-| An administrator/user page or reusable component | [Templates](templates/README.md) and [assets](assets/README.md) | Domain presenter; layouts/errors and shared form/table/feedback/navigation components; controllers/styles/images source |
+| An administrator/user page or reusable component | [Templates](templates/README.md) and [assets](assets/README.md) | Domain presenter; layouts/errors and shared form/table/chart/feedback/navigation components; controllers/styles/images source |
+| Transfer hosting resources between instances | [Transfers](src/Module/Transfers/README.md) | Coordinate existing account/site/file/database/mail owners and durable jobs; separate from Core schema migrations |
 | Database schema | [Migrations](migrations/README.md) and the owning domain | Accepted DB contract, migrations and upgrade/recovery evidence |
 | Installation and upgrade | [Installer](installer/README.md) and [Setup](src/Module/Setup/README.md) | preflight/, recipes/, upgrades/, recovery/; restricted wizard and durable progress |
 | Go daemon/broker behavior | [Agents](agents/README.md) | Separate wcpd / wcp-privd components and accepted protocol/privilege contracts |
@@ -34,7 +37,9 @@ WCP360_Core/
 ├── DEPENDENCIES.md                 # Manifests, locks, generated dependencies
 ├── src/
 │   ├── Shared/                     # Stable shared primitives and policies
-│   └── Module/                     # Twelve named business-domain boundaries
+│   │   ├── Http/
+│   │   └── Security/
+│   └── Module/                     # Thirteen named business-domain boundaries
 ├── bin/                            # Application entry points and command guide
 ├── config/                         # Symfony configuration only
 │   ├── packages/                   # Framework/library configuration
@@ -68,6 +73,7 @@ WCP360_Core/
 │       ├── forms/
 │       ├── tables/
 │       ├── feedback/
+│       ├── charts/
 │       └── navigation/
 ├── assets/                         # Frontend source; generated output stays out of source
 │   ├── controllers/

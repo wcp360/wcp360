@@ -7,6 +7,7 @@
 | [forms](forms/README.md) | Reusable labeled fields, help text, error summaries, validation feedback and accessible field groups. |
 | [tables](tables/README.md) | Reusable table headers, rows, empty/loading states, pagination, filters, sorting and bounded-export controls. |
 | [feedback](feedback/README.md) | Notifications, operation status, confirmations, loading/error/empty states and accessible dialogs. |
+| [charts](charts/README.md) | Accessible usage/history/availability visualizations and metric states. |
 | [navigation](navigation/README.md) | First-party menus, breadcrumbs, tabs, pagination navigation and command-palette presentation. |
 
 Use one shared presentation component across module pages instead of duplicating form controls, table chrome or dialogs. Keep domain decisions and authorization in server application services. Browser interactions and style tokens have their own source under [assets](../../assets/README.md).

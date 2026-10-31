@@ -12,6 +12,7 @@ Each module has one owner and one [module README](../../NAVIGATION.md). These ar
 | [Files](Files/README.md) | File listing, upload policy, rename, trash and restore behavior. |
 | [Operations](Operations/README.md) | Shared job scheduling, progress, retry and recovery mechanics. |
 | [BackupRestore](BackupRestore/README.md) | Backup policy, restore plans and recovery behavior. |
+| [Transfers](Transfers/README.md) | Instance migration, resource mapping, cutover and post-transfer verification. |
 | [Observability](Observability/README.md) | Audit queries, health checks, alerts and diagnostic presentation. |
 | [Platform](Platform/README.md) | Node/service settings, approved agent integration and infrastructure policy. |
 | [ExtensionManagement](ExtensionManagement/README.md) | Plugin installation, activation, disablement, upgrade and removal. |
@@ -37,3 +38,5 @@ A PHP function belongs to a cohesive class/service in the owning module. Pure sh
 HTTP, CLI and message handlers invoke the same application use case with explicit tenant/surface/actor context. Native system commands belong behind approved agent operations; a Console command is not permission to execute a root shell.
 
 Symfony command registration and service discovery must be verified against the actual bootstrap when implemented. Domain-namespaced Console classes are a WCP360 convention; they require service discovery/wiring and command tests. See [Symfony Console](https://symfony.com/doc/current/console.html).
+
+The [README capability map](../../CAPABILITY-MAP.md) assigns all 233 listed capabilities to primary owners and collaborators across the thirteen modules. README capability domains and implementation modules are different groupings; a folder does not establish implementation or runtime authority.

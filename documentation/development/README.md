@@ -19,6 +19,8 @@ Build one autonomous hosting Core, develop detached plugins against a versioned 
 
 Use the [Core change-location index](../../WCP360_Core/NAVIGATION.md) for task-based navigation, the [module index](../../WCP360_Core/src/Module/README.md) for business ownership and the [Linux-service directory](../../WCP360_Core/resources/services/README.md) for configuration sources. Dependency graphs and generated libraries are detailed in [Core/DEPENDENCIES.md](../../WCP360_Core/DEPENDENCIES.md).
 
+The [README capability map](../../WCP360_Core/CAPABILITY-MAP.md) accounts for the 233 functional entries and distinguishes the 149 catalog candidates from missing source directories. It maps capability ownership; it does not certify implementation or authorize another runtime slice.
+
 ## Where code, functions, templates and dependencies belong
 
 | Concern | Source location | Rule |

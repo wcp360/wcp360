@@ -11,3 +11,5 @@ Use the common [module layout](../README.md) for Domain, Application, Infrastruc
 - [Core navigation index](../../../NAVIGATION.md)
 - [System-service resources](../../../resources/services/README.md)
 - [Core implementation and acceptance](../../../../documentation/development/CORE-ENGINE.md)
+
+The README groups several capability domains here: websites, authoritative DNS, certificates/ACME and hosted PHP/PHP-FPM. Runtime assignment, effective settings, pool health, permitted PHP extensions and a site's Composer/CLI task remain scoped to that hosted project and identity; they are distinct from the Core Composer dependency graph. The [capability map](../../../CAPABILITY-MAP.md) identifies collaborators without creating a second resource authority.

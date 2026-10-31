@@ -16,6 +16,7 @@ Use `src/Module/<Domain>/{Domain,Application,Infrastructure,UI}`. Start with the
 | Files | Canonical scoped file-operation authority, quota/storage boundaries and confinement requirements. |
 | Operations | Durable jobs, idempotency, outbox, leases/fencing, retries, approvals, cancellation and uncertain-outcome reconciliation. |
 | BackupRestore | Baseline local backup/restore, retention, recovery references and restore verification. |
+| Transfers | Source/destination inventory, compatibility, resource mapping, cutover, verification and recovery across instances; reuses existing resource owners and Operations. |
 | Observability | Local health, durable audit, logs, metrics and baseline administrator alerts. |
 | Platform | Configuration, node inventory, approved service/network adapters and agent interaction through typed ports. |
 | ExtensionManagement | Package registry, dependencies, compatibility, capabilities, lifecycle, health and isolated contribution registration. |
@@ -32,6 +33,8 @@ Symfony service wiring, packages and routes belong in config. Versioned service 
 Domain CLI classes belong in UI/Console and reuse the application use case. Fixed system operations remain in the accepted Go agent/broker boundary. Rendering templates does not grant PHP write access to /etc; a validated, revision-bound operation must use approved primitives and verify the observed service result.
 
 [Dependency ownership](../../WCP360_Core/DEPENDENCIES.md) distinguishes Core Composer dependencies, independently versioned SDK/plugin graphs, Go modules, specialized Python tools and OS packages. No global functions directory, universal dependency tree, duplicate service default or second privileged command registry is introduced.
+
+The [README capability map](../../WCP360_Core/CAPABILITY-MAP.md) traces 233 capabilities to thirteen Core owners. Instance transfers have their own coordinator; migrations/ remains Core schema history. Shared HTTP/security primitives and chart presentation have named source locations without creating another domain authority.
 
 ## Shared services built once
 

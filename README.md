@@ -553,6 +553,8 @@ Report suspected vulnerabilities using the repository’s [SECURITY.md](https://
 
 The following catalog details **233 functional capabilities across 21 domains**. It describes the intended scope, not delivery status. Advanced optional functions are detailed in the [extension catalog](#potential-and-planned-extensions-and-plugins).
 
+The [Core capability-to-folder map](WCP360_Core/CAPABILITY-MAP.md) assigns each capability a primary owner and collaborators. The 21 functional domains are grouped into 13 Core modules; this mapping identifies source locations without claiming implementation.
+
 For each domain, WCP-ADMIN manages server policies and resources; WCP-USER sees only assigned resources and actions. Variants depend on capabilities actually detected. Actions must be authorized by the backend, produce verified results, and appear in the task center when long-running.
 
 | Functional domain | Capabilities described |
@@ -1415,13 +1417,19 @@ wcp360/
 │   ├── governance/
 │   ├── manifests/
 │   ├── specifications/
-│   └── documentary reference, mirrors and snapshots
+│   └── documentary references and mirrors
 ├── WCP360_Core/
-│   ├── bin/ / config/ / src/ / templates/ / assets/ / public/
+│   ├── NAVIGATION.md / DEPENDENCIES.md / CAPABILITY-MAP.md
+│   ├── src/                                # Shared primitives and 13 Core modules
+│   ├── config/                             # packages, routes and contexts
+│   ├── resources/services/                  # Versioned Linux-service sources
+│   ├── templates/                           # Pages, layouts, errors and components
+│   ├── assets/                              # Controllers, styles and source images
+│   ├── bin/ / public/
 │   ├── translations/ / migrations/ / tests/
-│   ├── agents/wcpd/ / agents/wcp-privd/
+│   ├── agents/                              # Separate wcpd and wcp-privd sources
 │   ├── diagnostics/
-│   └── installer/scaffolds/
+│   └── installer/                           # preflight, recipes, upgrades, recovery, scaffolds
 ├── WCP360_Plugins/
 │   ├── _template/
 │   ├── wcp360-file-manager-xampp/

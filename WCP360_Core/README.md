@@ -10,44 +10,87 @@ Start with the [change-location index](NAVIGATION.md) to find a function, comman
 
 ```text
 WCP360_Core/
-├── bin/                         # Reviewed application CLI entry points
-├── config/                      # Services, routes, packages and distinct runtime contexts
+├── README.md / NAVIGATION.md / DEPENDENCIES.md / CAPABILITY-MAP.md
 ├── src/
-│   ├── Shared/                  # Reusable policies, typed plumbing and ports
+│   ├── Shared/
+│   │   ├── Http/
+│   │   └── Security/
 │   └── Module/
-│       └── ExtensionManagement/ # Built-in plugin lifecycle domain
+│       ├── IdentityAccess/
+│       ├── Tenancy/
+│       ├── Hosting/
+│       ├── Mail/
+│       ├── Data/
+│       ├── Files/
+│       ├── Operations/
+│       ├── BackupRestore/
+│       ├── Transfers/
+│       ├── Observability/
+│       ├── Platform/
+│       ├── ExtensionManagement/
+│       └── Setup/
+├── bin/                         # Reviewed CLI entry points when implemented
+├── config/
+│   ├── packages/
+│   ├── routes/
+│   └── contexts/
+├── resources/services/          # Sixteen documented Linux-service source locations
 ├── templates/
 │   ├── admin/
 │   ├── user/
-│   ├── components/
-│   └── setup/
-├── resources/                   # Versioned service configuration templates/profiles
-│   └── services/                # Nginx, Apache, PHP-FPM, mail, databases and system adapters
-├── assets/                      # Stimulus, styles and approved frontend pipeline
-├── public/                      # Published entry points only
+│   ├── setup/
+│   ├── layouts/
+│   ├── errors/
+│   └── components/
+│       ├── forms/
+│       ├── tables/
+│       ├── feedback/
+│       ├── charts/
+│       └── navigation/
+├── assets/
+│   ├── controllers/
+│   ├── styles/
+│   └── images/
+├── public/
 ├── translations/
-├── migrations/
+├── migrations/                  # Core schema migrations, not instance transfers
 ├── tests/
+│   ├── Unit/
+│   ├── Contract/
+│   ├── Integration/
+│   ├── Security/
+│   ├── Lifecycle/
+│   ├── Installer/
+│   ├── Browser/
+│   └── Fixtures/
 ├── agents/
-│   ├── wcpd/                    # Non-root Go agent
-│   └── wcp-privd/               # Separate minimal-root Go broker
-├── diagnostics/                 # Specialized non-root Python tools
+│   ├── wcpd/
+│   └── wcp-privd/
+├── diagnostics/
 └── installer/
-    └── scaffolds/               # Earlier guarded installer templates
+    ├── preflight/
+    ├── recipes/
+    ├── upgrades/
+    ├── recovery/
+    └── scaffolds/               # Historical guarded templates, not stable installers
 ```
 
 The Symfony bootstrap will add its real composer.json/lock, bootstrap/configuration and application commands after toolchain/slice acceptance. Composer generates vendor/; runtime var/ and build/cache output are not source. No placeholder dependency lock or synthetic application kernel is presented as an implemented platform.
 
+## README capability coverage
+
+The [capability-to-owner map](CAPABILITY-MAP.md) accounts for all 233 README capabilities across 21 functional domains. They are grouped into thirteen Core modules, with shared HTTP/security primitives and chart components explicitly indexed. It also distinguishes the 149 proposed catalog entries from implemented plugin packages. This is ownership/structure coverage, not functional acceptance.
+
 ## Configuration and commands
 
-Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all twelve built-in domains and sixteen service-resource locations to their owners.
+Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all thirteen built-in domains and sixteen service-resource locations to their owners.
 
 Business functions are cohesive services in the owning module. CLI adapters belong in that module's UI/Console layer and call the same authorized use cases as HTTP. bin contains entry points; agents contain the accepted controlled system operations. See the [command guide](bin/README.md).
 
 ## Frontend, installation and verification locations
 
 - [Frontend sources](assets/README.md): controllers, styles and first-party images.
-- [Twig sources](templates/README.md): context-specific pages, layouts, safe error pages and shared forms/tables/feedback/navigation.
+- [Twig sources](templates/README.md): context-specific pages, layouts, safe error pages and shared forms/tables/charts/feedback/navigation.
 - [Installer source map](installer/README.md): preflight, recipes, supported upgrades, interrupted-install recovery and historical scaffolds.
 - [Test source map](tests/README.md): unit, contract, integration, security, lifecycle, installation, browser and synthetic-fixture locations.
 

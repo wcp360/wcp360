@@ -8,7 +8,7 @@
 | [user](user/README.md) | Customer pages with enforced tenant/resource scope |
 | [setup](setup/README.md) | Restricted initial setup and enrollment presentation |
 | [layouts](layouts/README.md) | Reusable context-aware page frames |
-| [components](components/README.md) | Shared form, table, feedback and navigation presentation |
+| [components](components/README.md) | Shared form, table, chart, feedback and navigation presentation |
 | [errors](errors/README.md) | Safe context-aware error-page presentations |
 
 Templates consume the owning module's authorized view data. They do not own business rules, privileges, secret storage or system writes. Sharing a layout/component does not share origins, cookies, sessions or runtime credentials.
