@@ -33,4 +33,4 @@ The availability check and invocation without arguments return **78** because th
 
 A distributable version requires the approved Core package and daemon, a reviewed installer, artifact integrity/signature verification, pinned compatibility, installation evidence, and documented recovery/rollback limits. Production installation commands belong here once that package is qualified.
 
-See the [release directory guide](../README.md), [architecture](../../ARCHITECTURE.md), and [current baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md).
+See the [release directory guide](../README.md), [architecture](../../ARCHITECTURE.md), and [current baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).

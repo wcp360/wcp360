@@ -43,7 +43,7 @@ WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, 
 The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. Go agents perform controlled system operations on Debian 13; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications.
 
 > [!NOTE]
-> **In development — status documented on October 31, 2026.** This README describes the target architecture. The existing prototypes and candidate sources still require integration and qualification. See [Current project status](#current-project-status) and the [current manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) for the authorized development scope.
+> **In development — status documented on October 31, 2026.** This README describes the target architecture. The existing prototypes and candidate sources still require integration and qualification. See [Current project status](#current-project-status) and the [current manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) for the authorized development scope.
 
 ## Contents
 
@@ -1375,7 +1375,7 @@ cd wcp360
 git branch --all
 ```
 
-Start with the [current manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md), then consult the branch for the component you want to study. `main` is not an installer for the complete panel.
+Start with the [current manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md), then consult the branch for the component you want to study. `main` is not an installer for the complete panel.
 
 ### Install standalone File Manager dependencies
 
@@ -1402,7 +1402,7 @@ Open <http://127.0.0.1:8790/>. Keep the same hostname and port to share demo sta
 
 ## Repository layout
 
-Layout observed at the root of `main`:
+Documentation is grouped under [documentation/](documentation/README.md), while implementation components and delivery remain visible at the root. See the [directory guide and history access](documentation/REPOSITORY-STRUCTURE.md). Current main layout:
 
 ```text
 wcp360/
@@ -1413,23 +1413,27 @@ wcp360/
 ├── PLUGIN_CATALOG.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
+├── documentation/
+│   ├── README.md
+│   ├── REPOSITORY-STRUCTURE.md
+│   ├── PATH-MIGRATION.json
+│   ├── contracts/
+│   ├── governance/
+│   ├── manifests/
+│   ├── specifications/
+│   ├── design-system/
+│   ├── library-mirror/
+│   ├── snapshots/
+│   └── visuals/
 ├── WCP360_Core/
-│   └── README.md
 ├── WCP360_Design_System/
 ├── WCP360_Developper/
 ├── WCP360_Plugins/
-├── WCP360_Release/
-│   ├── README.md
-│   ├── v1.0.0/
-│   ├── v1.1.0/
-│   └── latest -> v1.0.0/
-├── archive/
-├── contracts/
-├── documentation/
-├── governance/
-├── manifests/
-├── specifications/
-└── src/
+└── WCP360_Release/
+    ├── README.md
+    ├── v1.0.0/
+    ├── v1.1.0/
+    └── latest -> v1.0.0/
 ```
 
 ### Imported workspace directories
@@ -1440,8 +1444,10 @@ The active main tree contains the four directories below. Internal Management an
 | :--- | :--- | :--- |
 | [WCP360_Core](WCP360_Core/README.md) | Reserved implementation directory with a README. | No production Core code or installer is supplied by this placeholder. |
 | [WCP360_Design_System](WCP360_Design_System/README.md) | 351 files: panel UI prototype, assets, and design notes. | Demo behavior and visual reference; not the target Symfony implementation. |
-| [WCP360_Developper](WCP360_Developper/README.md) | 1,803 files of developer/product documentation and historical snapshots. | Canonical implementation authority remains under `specifications/` and the current manifest. |
+| [WCP360_Developper](WCP360_Developper/README.md) | 1,803 files of developer/product documentation and historical snapshots. | Canonical implementation authority remains under `documentation/specifications/` and the current manifest. |
 | [WCP360_Plugins](WCP360_Plugins/) | 73 files, including File Manager sources, four archives, and Insights Connector. | Development packages; loose `vendor/` dependencies are excluded and installed from manifests where needed. |
+
+The root `src/` reservation was redundant with `WCP360_Core` and has been removed. The old `archive/` copies are available in [the immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive). [Path mapping](documentation/PATH-MIGRATION.json) preserves legacy documentation locators for existing branches.
 
 This import preserves workspace source files and package archives. It does not establish a production release, a CODE-BASELINE, independent review, or Core integration.
 
@@ -1455,7 +1461,7 @@ Other candidate sources remain on their branches. The following branch locations
 
 ## GitHub branches
 
-All **14 branches** were reconciled on **October 31, 2026**: two documentation branches consolidated, one historical integration bundle retained, and ten open PR candidates kept at their exact review SHAs. Read the [branch reconciliation and dependency diagram](governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) or its [complete path/blob evidence](governance/branches/BRANCH-RECONCILIATION-2026-10-31.json).
+All **14 branches** were reconciled on **October 31, 2026**: two documentation branches consolidated, one historical integration bundle retained, and ten open PR candidates kept at their exact review SHAs. Read the [branch reconciliation and dependency diagram](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) or its [complete path/blob evidence](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.json).
 
 | Branch | Current disposition |
 | :--- | :--- |
@@ -1480,8 +1486,9 @@ Research, source candidates and tooling branches require the applicable scope, t
 
 | Need | Reference |
 | :--- | :--- |
-| Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/governance/PROJECT-STATUS.md). |
-| Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
+| Navigate the organized repository | [Documentation index](documentation/README.md) and [repository structure](documentation/REPOSITORY-STRUCTURE.md). |
+| Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/documentation/governance/PROJECT-STATUS.md). |
+| Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/documentation/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
 | Understand the architecture | [ARCHITECTURE.md](ARCHITECTURE.md): components, flows, data authority, system agents, extensions, and deployment boundaries. |
 | Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |

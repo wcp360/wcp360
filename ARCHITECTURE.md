@@ -4,7 +4,7 @@
 
 This document explains the target structure of WCP360, how components collaborate, and which boundaries implementations must preserve. It is intended for contributors, operators, reviewers, and extension developers.
 
-> **Document status:** non-normative architecture overview. The [baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) and approved owner contracts remain authoritative. Architecture diagrams describe the target; they are not evidence of a deployed or production-qualified system.
+> **Document status:** non-normative architecture overview. The [baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and approved owner contracts remain authoritative. Architecture diagrams describe the target; they are not evidence of a deployed or production-qualified system.
 
 [System overview](#system-overview) · [Core structure](#core-structure) · [Operation flows](#operation-flows) · [Data and tenancy](#data-and-tenancy) · [Extensions](#extension-architecture) · [Deployment](#deployment-model) · [Implementation status](#implementation-status)
 
@@ -392,11 +392,11 @@ Evidence identifies the source revision or artifact, environment, procedure, res
 | Document | Role |
 | :--- | :--- |
 | [Project README](https://github.com/yyogas/wcp360/blob/main/README.md) | Product scope, selected stack, capability inventory, requirements, and branches. |
-| [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) | Current authority, baseline versions, and implementation gates. |
-| [API contract](https://github.com/yyogas/wcp360/blob/main/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Authentication/scope, type boundaries, API schemas, job binding, errors, and compatibility. |
-| [IPC contract](https://github.com/yyogas/wcp360/blob/main/specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md) | Physical privileged boundary, caller identity, framing, operations, validation, and uncertain outcomes. |
-| [Database model](https://github.com/yyogas/wcp360/blob/main/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md) | Logical/physical state authority, ownership, sessions, operations, and persistence constraints. |
+| [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) | Current authority, baseline versions, and implementation gates. |
+| [API contract](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Authentication/scope, type boundaries, API schemas, job binding, errors, and compatibility. |
+| [IPC contract](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md) | Physical privileged boundary, caller identity, framing, operations, validation, and uncertain outcomes. |
+| [Database model](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md) | Logical/physical state authority, ownership, sessions, operations, and persistence constraints. |
 | [Security policy](https://github.com/yyogas/wcp360/blob/main/SECURITY.md) | Private vulnerability reporting, review context, and required security boundaries. |
-| [Security Baseline](https://github.com/yyogas/wcp360/blob/main/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) and [Permission Registry](https://github.com/yyogas/wcp360/blob/main/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Canonical security rules, permission namespaces, and operation bindings. |
+| [Security Baseline](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) and [Permission Registry](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Canonical security rules, permission namespaces, and operation bindings. |
 | [Plugin catalog](https://github.com/yyogas/wcp360/blob/main/PLUGIN_CATALOG.md) | Optional workflows, providers, engine adapters, and local package evidence. |
-| [Contributing](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md) and [review policy](https://github.com/yyogas/wcp360/blob/main/governance/REVIEW-MERGE-POLICY.md) | Contribution process, evidence, ownership, and independent review requirements. |
+| [Contributing](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md) and [review policy](https://github.com/yyogas/wcp360/blob/main/documentation/governance/REVIEW-MERGE-POLICY.md) | Contribution process, evidence, ownership, and independent review requirements. |

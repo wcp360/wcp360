@@ -3,21 +3,23 @@
 
 * @yyogas
 
-/governance/ @yyogas
-/manifests/ @yyogas
+/documentation/ @yyogas
 
-/specifications/documentation/ @yyogas
-/specifications/design-system/ @yyogas
-/specifications/modules/ @yyogas
-/specifications/security/ @yyogas
-/specifications/database/ @yyogas
-/specifications/api/ @yyogas
-/specifications/ipc/ @yyogas
-/specifications/tests/ @yyogas
-/specifications/devops/ @yyogas
-/specifications/observability/ @yyogas
-/specifications/performance/ @yyogas
-/specifications/engineering/ @yyogas
+/documentation/governance/ @yyogas
+/documentation/manifests/ @yyogas
 
-/contracts/ @yyogas
-/src/ @yyogas
+/documentation/specifications/documentation/ @yyogas
+/documentation/specifications/design-system/ @yyogas
+/documentation/specifications/modules/ @yyogas
+/documentation/specifications/security/ @yyogas
+/documentation/specifications/database/ @yyogas
+/documentation/specifications/api/ @yyogas
+/documentation/specifications/ipc/ @yyogas
+/documentation/specifications/tests/ @yyogas
+/documentation/specifications/devops/ @yyogas
+/documentation/specifications/observability/ @yyogas
+/documentation/specifications/performance/ @yyogas
+/documentation/specifications/engineering/ @yyogas
+
+/documentation/contracts/ @yyogas
+/WCP360_Core/ @yyogas

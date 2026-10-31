@@ -33,7 +33,7 @@ If credentials are exposed, report their location without reproducing usable val
 
 ## Supported versions
 
-WCP360 is under active development. The [baseline manifest](manifests/WCP360-BM-0001.md) and [project status](governance/PROJECT-STATUS.md) define the current implementation and release authority.
+WCP360 is under active development. The [baseline manifest](documentation/manifests/WCP360-BM-0001.md) and [project status](documentation/governance/PROJECT-STATUS.md) define the current implementation and release authority.
 
 | Delivery class | Status |
 | :--- | :--- |
@@ -155,12 +155,12 @@ Security findings belong to:
 Canonical artifacts:
 
 ```text
-specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
-specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
+documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
+documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md
 ```
 
-- [Permission Registry](specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): approved permissions and namespace rules.
-- [Security Baseline](specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): required boundaries, protocol constraints, and negative test expectations.
-- [Review and merge evidence policy](governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
+- [Permission Registry](documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): approved permissions and namespace rules.
+- [Security Baseline](documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): required boundaries, protocol constraints, and negative test expectations.
+- [Review and merge evidence policy](documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
 
 This policy summarizes existing requirements and defines reporting guidance. It does not amend canonical contracts, authorize implementation or release, certify compliance, or close audit findings. Conflicting requirements must be resolved by the responsible owner.

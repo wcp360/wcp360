@@ -46,4 +46,4 @@ The repository link reserves the requested directory layout. A distributed stabl
 
 Release artifacts must be built from identified approved source revisions, checked for platform/contract compatibility, and accompanied by integrity/signature evidence, installation verification, and recovery instructions. Updating a directory name or link is not a release approval.
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md) and the [baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) for the current implementation scope.
+See [ARCHITECTURE.md](../ARCHITECTURE.md) and the [baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) for the current implementation scope.

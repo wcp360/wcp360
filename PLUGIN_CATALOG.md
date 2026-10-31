@@ -654,11 +654,11 @@ Use two distinct fields in the future registry: **documentation maturity** and *
 ## Architecture references
 
 - [Project architecture, frontend/backend choices, and security requirements](https://github.com/yyogas/wcp360/blob/main/README.md).
-- [Current baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md).
-- [Published specifications](https://github.com/yyogas/wcp360/blob/main/specifications/README.md) and [contracts](https://github.com/yyogas/wcp360/tree/main/contracts).
+- [Current baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).
+- [Published specifications](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/README.md) and [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts).
 - [Repository documentation](https://github.com/yyogas/wcp360/blob/main/documentation/README.md).
 - [Design System reference branch](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown/design-system).
-- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/main/governance/REVIEW-MERGE-POLICY.md).
+- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/main/documentation/governance/REVIEW-MERGE-POLICY.md).
 
 Imported design references (non-normative):
 

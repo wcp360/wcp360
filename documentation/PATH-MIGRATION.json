@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "repository": "yyogas/wcp360",
+  "effective_date": "2026-10-31",
+  "previous_main": "112c790111e192156c405c83cde0ddd2eeafd481",
+  "operation": "Documentation relocation and removal of redundant root placeholders/history copies",
+  "prefix_relocations": [
+    {
+      "from": "contracts/",
+      "to": "documentation/contracts/",
+      "files": 1,
+      "previous_tree": "58a905634ed2ac7c8d0ad396815680e8f26e88a6"
+    },
+    {
+      "from": "governance/",
+      "to": "documentation/governance/",
+      "files": 99,
+      "previous_tree": "717c612603fc09c08665817d1a5f1d45cccd637a"
+    },
+    {
+      "from": "manifests/",
+      "to": "documentation/manifests/",
+      "files": 1,
+      "previous_tree": "c6aa81457f7b5587932d1a126f7adda9055ad66e"
+    },
+    {
+      "from": "specifications/",
+      "to": "documentation/specifications/",
+      "files": 11,
+      "previous_tree": "087ac5f2ad691ed6315f0ee7e1c78e1496b40f2f"
+    }
+  ],
+  "retired_roots": [
+    {
+      "path": "src/",
+      "files": 1,
+      "reason": "Contained only an obsolete reservation README; WCP360_Core is the existing application reservation.",
+      "replacement": "WCP360_Core/README.md"
+    },
+    {
+      "path": "archive/",
+      "files": 2118,
+      "identical_blobs_retained_elsewhere": 1865,
+      "historical_versions_without_identical_live_copy": 253,
+      "reason": "Remove historical copies from the current tree; the complete previous tree remains in reachable Git history.",
+      "history_url": "https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive",
+      "inventory_url": "https://github.com/yyogas/wcp360/blob/112c790111e192156c405c83cde0ddd2eeafd481/archive/imports/2026-10-30/INVENTORY.json"
+    }
+  ],
+  "preservation": {
+    "specifications_tree_sha": "087ac5f2ad691ed6315f0ee7e1c78e1496b40f2f",
+    "manifests_tree_sha": "c6aa81457f7b5587932d1a126f7adda9055ad66e",
+    "canonical_content_changed": false,
+    "baseline_or_scope_authorization_changed": false,
+    "history_rewritten": false,
+    "branch_heads_rewritten": false
+  },
+  "canonical_file_locations": [
+    {
+      "old_path": "specifications/README.md",
+      "path": "documentation/specifications/README.md",
+      "git_blob": "05c6d919f3e743697bb7d22484f73652c75febef",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "path": "documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "git_blob": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/api/WCP360_API_IPC_CANONICAL_IMPLEMENTATION_EXPORT_MANIFEST.md",
+      "path": "documentation/specifications/api/WCP360_API_IPC_CANONICAL_IMPLEMENTATION_EXPORT_MANIFEST.md",
+      "git_blob": "1c91a511ee085ea14e155583068ee4637018e8cd",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md",
+      "path": "documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md",
+      "git_blob": "2660e057bad1d00592c57f354b1f3745ccccbe7d",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/devops/WCP360_SC-M01_DAEMON_FOUNDATION_TOOLCHAIN_ADDENDUM_v1.0.md",
+      "path": "documentation/specifications/devops/WCP360_SC-M01_DAEMON_FOUNDATION_TOOLCHAIN_ADDENDUM_v1.0.md",
+      "git_blob": "f8608d6258f87b8c1099b9b3a7e32ec95c72dc27",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/devops/WCP360_SC-M01_DEVOPS_BASELINE_v1.0.md",
+      "path": "documentation/specifications/devops/WCP360_SC-M01_DEVOPS_BASELINE_v1.0.md",
+      "git_blob": "61edf698c50cf58779b75ba02fba913bf8276c61",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/engineering/WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "path": "documentation/specifications/engineering/WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "git_blob": "a2d5035454d90f0a252da7041b3a6b239265c557",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "path": "documentation/specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "git_blob": "fec9c74e8413db822662e47c76c40486e282334f",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "path": "documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "git_blob": "81f3d425f36470167aba4bfb7ba069268626342f",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "path": "documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "git_blob": "6d74f2f363524511424f839ca7262143c2af95ab",
+      "mode": "100644"
+    },
+    {
+      "old_path": "specifications/tests/WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "path": "documentation/specifications/tests/WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "git_blob": "e0cdf924c5d7353624c069552f921f587cad8561",
+      "mode": "100644"
+    }
+  ],
+  "consumer_rules": [
+    "Resolve old root contracts/, governance/, manifests/ and specifications/ locators through prefix_relocations.",
+    "Keep immutable commit/SHA citations and historical evidence payloads unchanged.",
+    "Before merging older code/tooling branches, update active path constants and workflows to the new prefixes, rerun relevant checks and bind reviews to the resulting SHA.",
+    "Do not restore deleted root documentation directories or archive copies as part of merging older branches.",
+    "A directory relocation does not authorize new runtime code, privileged operations, a code baseline or a release."
+  ]
+}

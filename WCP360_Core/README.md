@@ -8,6 +8,6 @@ The selected target is PHP 8.4 / Symfony with Twig and Symfony UX, PostgreSQL 17
 
 - [Architecture](../ARCHITECTURE.md)
 - [Project overview](../README.md)
-- [Current baseline manifest](../manifests/WCP360-BM-0001.md)
+- [Current baseline manifest](../documentation/manifests/WCP360-BM-0001.md)
 
 Candidate sources on other branches remain separate from this reserved directory.

@@ -10,9 +10,13 @@ Cross-domain impact requires a **WCP360 HANDOFF**.
 
 Contradictions require a **WCP360 CONFLICT** routed to MASTER / Project Control and, when needed, AUDIT / ARCHITECTURE REVIEW.
 
+## Repository locations
+
+Use [documentation/README.md](documentation/README.md) for specifications, contracts, governance and manifests. WCP360_Core is the existing application reservation. The [path migration map](documentation/PATH-MIGRATION.json) translates earlier root locators; update active consumers and rerun relevant checks before merging an older branch. Keep immutable citations and historical evidence intact.
+
 ## Canonical artifact publication
 
-An owner artifact may be promoted to `specifications/` only when its owner publication is identifiable and final.
+An owner artifact may be promoted to `documentation/specifications/` only when its owner publication is identifiable and final.
 
 Do not reconstruct missing canonical artifacts from older audits, staging files or general knowledge.
 
@@ -33,20 +37,20 @@ Never commit:
 ## Current implementation gate
 
 ```text
-SOURCE CODE = PAUSED
-SC-M01 = PAUSED — TARGETED EVIDENCE
+CANONICAL SPECIFICATION INPUTS = 8/8 ACCEPTED
+SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-Repository, governance and documentation maintenance may continue. Broad application implementation must not start until MASTER closes the SC-M01 evidence gate.
+Repository, governance and documentation maintenance may continue. The [current manifest](documentation/manifests/WCP360-BM-0001.md) selects only the inert daemon foundation; additional runtime slices need explicit owner-backed authorization and the applicable reviews.
 
 
 ## Review and merge evidence
 
 Repository review evidence is defined in:
 
-governance/REVIEW-MERGE-POLICY.md
+documentation/governance/REVIEW-MERGE-POLICY.md
 
 Key rules:
 - automated checks are not independent review;
