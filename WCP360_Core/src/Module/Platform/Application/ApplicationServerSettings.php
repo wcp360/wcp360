@@ -12,6 +12,7 @@ final readonly class ApplicationServerSettings
 {
     public function __construct(private WorkbenchStore $store, private ApplicationServerPolicy $policy) {}
 
+    /** @return array{application_server: string, revision: int} */
     public function current(): array
     {
         $row = $this->store->db->fetchAssociative('SELECT application_server,revision FROM wcp_candidate_runtime_settings WHERE id=1');

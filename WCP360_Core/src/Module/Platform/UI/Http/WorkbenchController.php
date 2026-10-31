@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan;
+use Wcp360\Core\Module\Hosting\Application\SubmitActivation;
 use Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy;
 use Wcp360\Core\Module\Platform\Application\ApplicationServerSettings;
 use Wcp360\Core\Module\ExtensionManagement\Application\PluginRegistry;
@@ -72,11 +73,20 @@ final class WorkbenchController extends AbstractController
         return $this->json($submit->submit($user->id,$request->toArray()),202);
     }
     #[Route('/workbench/jobs/{id}',name:'wcp_job',methods:['GET'])]
-    public function job(string $id,WorkbenchStore $store,RuntimeContext $runtime):Response
+    public function job(string $id,WorkbenchStore $store,RuntimeContext $runtime,SubmitActivation $activations):Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
-        return $this->render('user/job.html.twig',['context'=>$runtime->context,'job'=>$store->job($user->id,$id)]);
+        return $this->render('user/job.html.twig',['context'=>$runtime->context,'job'=>$store->job($user->id,$id),'activation'=>$store->db->fetchAssociative('SELECT id,state FROM wcp_candidate_activations WHERE plan_job_id=?',[$id]),'provisioning_enabled'=>$activations->enabled]);
+    }
+    #[Route('/workbench/jobs/{id}/activate',name:'wcp_activate',methods:['POST'])]
+    public function activate(string $id,Request $request,SubmitActivation $activations):Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        if(array_keys($request->request->all())!==['_token']||!$this->isCsrfTokenValid('activate-'.$id,$request->request->getString('_token')))throw $this->createAccessDeniedException('Invalid activation request.');
+        $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
+        $activations->submit($user->id,$id);
+        return $this->redirectToRoute('wcp_job',['id'=>$id],303);
     }
     #[Route('/workbench/plugins/{action}',name:'wcp_plugin',requirements:['action'=>'install|enable|disable|uninstall'],methods:['POST'])]
     public function plugin(string $action,Request $request,PluginRegistry $plugins):Response

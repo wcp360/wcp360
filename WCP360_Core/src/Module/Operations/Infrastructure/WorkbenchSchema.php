@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 /** Experimental persistence, deliberately outside all eight canonical schemas. Never a DB Model v1 implementation. */
 final class WorkbenchSchema
 {
+    /** @return list<string> */
     public static function statements(Connection $db): array
     {
         $pg = $db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform;
@@ -22,6 +23,7 @@ final class WorkbenchSchema
             "CREATE TABLE wcp_candidate_plugins (id VARCHAR(64) PRIMARY KEY, version VARCHAR(32) NOT NULL, state VARCHAR(16) NOT NULL CHECK(state IN ('DISABLED','ENABLED')), manifest_hash VARCHAR(64) NOT NULL)",
         ];
     }
+    /** @return list<string> */
     public static function auditStatements(Connection $db):array
     {
         $pg = $db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform;

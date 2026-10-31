@@ -16,6 +16,7 @@ id "$unix_user" >/dev/null 2>&1 || useradd --system --user-group --no-create-hom
 mkdir -p "/srv/wcp360-candidate/vhosts/$site_id/public" "/srv/wcp360-candidate/vhosts/$site_id/tmp/sessions" /run/wcp360-candidate
 printf '%s' '<?php echo "wcp360-candidate-ok";' > "/srv/wcp360-candidate/vhosts/$site_id/public/index.php"
 printf '%s' 'must-not-be-served' > "/srv/wcp360-candidate/vhosts/$site_id/public/.secret"
+printf '%s' '<?php echo "hidden-must-not-execute";' > "/srv/wcp360-candidate/vhosts/$site_id/public/.hidden.php"
 chown -R "$unix_user:www-data" "/srv/wcp360-candidate/vhosts/$site_id"
 chmod 0710 "/srv/wcp360-candidate/vhosts/$site_id"
 chmod 0750 "/srv/wcp360-candidate/vhosts/$site_id/public"
@@ -57,4 +58,5 @@ done
 [[ "$(curl --silent --show-error --fail --max-time 3 -H 'Host: example.test' http://127.0.0.1:8080/index.php)" == wcp360-candidate-ok ]]
 [[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H 'Host: example.test' http://127.0.0.1:8080/.secret)" == 403 ]]
 [[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H 'Host: example.test' http://127.0.0.1:8080/missing.php)" == 404 ]]
+[[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H 'Host: example.test' http://127.0.0.1:8080/.hidden.php)" == 403 ]]
 printf '%s\n' 'PASS: real Nginx -> Unix socket -> isolated PHP-FPM -> PHP response; hidden files denied; missing PHP rejected.'

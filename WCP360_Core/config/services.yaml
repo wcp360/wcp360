@@ -3,6 +3,7 @@ parameters:
     env(WCP_CANDIDATE): '0'
     env(WCP_PUBLIC_HOST): user.localhost
     env(WCP_ALLOW_FRANKENPHP_PLANS): '0'
+    env(WCP_ALLOW_ISOLATED_PROVISIONING): '0'
 services:
     _defaults:
         autowire: true
@@ -16,9 +17,6 @@ services:
             $enabled: '%env(bool:WCP_CANDIDATE)%'
             $environment: '%kernel.environment%'
             $host: '%env(WCP_PUBLIC_HOST)%'
-    Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore:
-        arguments:
-            $projectDir: '%kernel.project_dir%'
     Wcp360\Core\Module\ExtensionManagement\Application\PluginRegistry:
         arguments:
             $pluginRoot: '%kernel.project_dir%/../WCP360_Plugins'
@@ -28,3 +26,7 @@ services:
     Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy:
         arguments:
             $workerPlansEnabled: '%env(bool:WCP_ALLOW_FRANKENPHP_PLANS)%'
+    Wcp360\Core\Module\Hosting\Application\SubmitActivation:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_ISOLATED_PROVISIONING)%'
+    Wcp360\Core\Module\Hosting\Domain\ProvisioningGateway: '@Wcp360\Core\Module\Hosting\Infrastructure\SocketProvisioningGateway'

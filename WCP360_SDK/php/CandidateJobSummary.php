@@ -6,6 +6,7 @@ namespace Wcp360\Sdk\Candidate;
 final readonly class CandidateJobSummary
 {
     private const STATES=['QUEUED','RUNNING','SUCCEEDED','FAILED','UNKNOWN_OUTCOME'];
+    /** @param list<array{state: string, total: int}> $counts */
     public function __construct(public array $counts) {}
     public static function decode(string $json):self
     {

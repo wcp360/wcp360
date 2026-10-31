@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+namespace Wcp360\Core\Tests\Browser;
+use Symfony\Component\Panther\PantherTestCase;
+use Wcp360\Core\Tests\Fixtures\WorkbenchFixture;
+use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
+final class HostingJourneyTest extends PantherTestCase
+{
+    public function testLoginRuntimeSelectorStimulusAndTurboNavigation():void
+    {
+        $url='sqlite:///'.str_replace('\\','/',dirname(__DIR__,2).'/var/panther.db');
+        $_ENV['DATABASE_URL']=$_SERVER['DATABASE_URL']=$url;putenv('DATABASE_URL='.$url);
+        foreach(['APP_ENV'=>'test','APP_DEBUG'=>'1','APP_SECRET'=>'browser-test-only-secret','WCP_CANDIDATE'=>'1','WCP_CONTEXT'=>'user','WCP_PUBLIC_HOST'=>'localhost','WCP_ALLOW_FRANKENPHP_PLANS'=>'0','WCP_ALLOW_ISOLATED_PROVISIONING'=>'0']as $k=>$v){$_ENV[$k]=$_SERVER[$k]=$v;putenv($k.'='.$v);}
+        $client=self::createPantherClient(['browser'=>self::CHROME,'hostname'=>'localhost','port'=>9080,'webServerDir'=>dirname(__DIR__,2).'/public']);
+        $store=self::getContainer()->get(WorkbenchStore::class);WorkbenchFixture::reset($store->db);
+        $client->request('GET','/login');
+        $client->submitForm('Se connecter',['_username'=>'alice@example.test','_password'=>WorkbenchFixture::PASSWORD]);
+        $client->waitFor('[data-form-guard-ready="true"]');
+        self::assertSelectorTextContains('h1','Tableau de bord');
+        self::assertSelectorExists('#site-application-server option[value="frankenphp_worker"][disabled]');
+        self::assertSelectorCount(1,'select[name="tenant_id"] option');
+        $client->executeScript("window.wcpBrowserJourney='turbo-preserves-window'; const f=document.querySelector('[data-controller=\"form-guard\"]');f.querySelector('[name=\"hostname\"]').value='browser.test';const b=f.querySelector('button[type=\"submit\"]');b.click();b.click();");
+        $client->waitFor('.status');
+        self::assertSelectorTextContains('h1','Suivi de tâche');
+        self::assertSelectorTextContains('.status','QUEUED');
+        self::assertSame(1,(int)$store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_jobs'));
+        self::assertSame('turbo-preserves-window',$client->executeScript('return window.wcpBrowserJourney'));
+        $client->clickLink('Retour au tableau de bord');
+        $client->waitFor('[data-form-guard-ready="true"]');
+        self::assertSelectorTextContains('h1','Tableau de bord');
+        self::assertSame('turbo-preserves-window',$client->executeScript('return window.wcpBrowserJourney'));
+    }
+}

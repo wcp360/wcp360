@@ -30,9 +30,15 @@ jobs:
           exit 1
       - name: Application tests against real PostgreSQL
         run: |
-          docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e WCP_TEST_DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' --entrypoint bash wcp360-candidate -c 'cd /opt/wcp360/WCP360_Core && php installer/preflight/candidate.php --target --dependencies && php bin/console doctrine:migrations:migrate --no-interaction && composer validate --strict && composer check-platform-reqs && composer audit --locked && php bin/console lint:container && php bin/console lint:yaml config && php bin/console lint:twig templates && php vendor/phpunit/phpunit/phpunit --colors=never --testdox'
+          docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e WCP_TEST_DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' --entrypoint bash wcp360-candidate -c 'cd /opt/wcp360/WCP360_Core && php installer/preflight/candidate.php --target --dependencies && php bin/console doctrine:migrations:migrate --no-interaction && composer validate --strict && composer check-platform-reqs && composer audit --locked && php bin/console lint:container && php bin/console lint:yaml config && php bin/console lint:twig templates && composer analyse && php vendor/phpunit/phpunit/phpunit --colors=never --testdox'
       - name: Real Nginx / PHP-FPM isolated hosting probe
         run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
+      - name: Symfony to isolated Go agents and two PHP-FPM sites
+        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-provisioning-smoke.sh
+      - name: Build real Chromium browser verification image
+        run: docker build -f WCP360_Build/environments/core-candidate/Browser.Dockerfile -t wcp360-browser-probe .
+      - name: Panther real-browser journey with JavaScript
+        run: docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=browser-test-only-secret --entrypoint bash wcp360-browser-probe -ec 'cd /opt/wcp360/WCP360_Core && composer test:browser'
       - name: Backup, upgrade and empty-database restore rehearsal
         run: |
           docker exec wcp-candidate-db createdb -U postgres wcp360_restore_test

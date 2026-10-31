@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 final readonly class PluginRegistry
 {
     public function __construct(private WorkbenchStore $store,private string $pluginRoot) {}
+    /** @return list<array<string, mixed>> */
     public function installed():array{return $this->store->db->fetchAllAssociative('SELECT id,version,state FROM wcp_candidate_plugins ORDER BY id');}
     public function transition(string $actor,string $id,string $action):void
     {
@@ -40,6 +41,7 @@ final readonly class PluginRegistry
             $this->store->audit($actor,null,'candidate.plugin.'.$action,null);
         });
     }
+    /** @return array{schema: string, counts: list<array{state: string, total: int}>} */
     public function summary(string $actor,string $tenant):array
     {
         $this->store->requirePermission($actor,$tenant);

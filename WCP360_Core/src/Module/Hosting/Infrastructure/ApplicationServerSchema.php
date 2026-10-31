@@ -6,6 +6,7 @@ namespace Wcp360\Core\Module\Hosting\Infrastructure;
 /** Frozen migration 20261031000300 input; experimental tables, not canonical production schemas. */
 final class ApplicationServerSchema
 {
+    /** @return list<string> */
     public static function statements(): array
     {
         return [

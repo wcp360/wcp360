@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
 final readonly class WorkbenchStore
 {
-    public function __construct(public Connection $db, private string $projectDir)
+    public function __construct(public Connection $db)
     {
         if ($db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\SQLitePlatform) $db->executeStatement('PRAGMA foreign_keys = ON');
     }
@@ -26,15 +26,18 @@ final readonly class WorkbenchStore
     {
         $this->db->insert('wcp_candidate_audit', ['id'=>self::id(),'actor_id'=>$actor,'tenant_id'=>$tenant,'kind'=>$kind,'resource_id'=>$resource,'created_at'=>self::now()]);
     }
+    /** @return list<array<string, mixed>> */
     public function tenants(string $actor): array
     {
         return $this->db->fetchAllAssociative('SELECT t.* FROM wcp_candidate_tenants t JOIN wcp_candidate_memberships m ON m.tenant_id=t.id WHERE m.user_id=? ORDER BY t.name,t.id',[$actor]);
     }
+    /** @return list<array<string, mixed>> */
     public function jobs(string $actor, string $tenant): array
     {
         $this->requirePermission($actor,$tenant);
         return $this->db->fetchAllAssociative('SELECT j.id,j.state,j.created_at,s.hostname,s.application_server FROM wcp_candidate_jobs j JOIN wcp_candidate_sites s ON s.id=j.site_id AND s.tenant_id=j.tenant_id WHERE j.tenant_id=? ORDER BY j.created_at DESC,j.id DESC LIMIT 100',[$tenant]);
     }
+    /** @return array<string, mixed> */
     public function job(string $actor,string $id): array
     {
         $row=$this->db->fetchAssociative('SELECT j.*,s.application_server FROM wcp_candidate_jobs j JOIN wcp_candidate_sites s ON s.id=j.site_id AND s.tenant_id=j.tenant_id WHERE j.id=?',[$id]);

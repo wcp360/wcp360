@@ -24,7 +24,7 @@
 [![Target system agent: Go](https://img.shields.io/badge/Agent-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target diagnostics: Python](https://img.shields.io/badge/Diagnostics-Python-3776AB?style=flat-square&logo=python&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
-[![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
+[![PHP runtimes: PHP-FPM and FrankenPHP Worker](https://img.shields.io/badge/Runtime-PHP--FPM%20%2F%20FrankenPHP-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
 [Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Releases/README.md) · [Get started](#explore-and-get-started)
 
@@ -157,6 +157,34 @@ The following defines the **project's target stack**.
 | **PHP-FPM** | Execute account PHP applications in isolated pools. The panel runtime has its own scope, separate from hosted applications. |
 
 Symfony renders the interface and applies business rules; Go performs authorized system operations; Python handles specialized processing. Twig templates and browser controllers never execute system operations directly.
+
+## Hosted PHP application servers
+
+**PHP-FPM is the initial default. FrankenPHP Worker is an explicit opt-in** for applications with a compatible persistent-worker bootstrap and reliable per-request cleanup.
+
+| Choice | Scope and behavior |
+| :--- | :--- |
+| Global default | ADMIN selects the profile for new plans; existing sites and queued jobs keep their recorded choice. |
+| Per-site setting | Inherit the default or select PHP-FPM / FrankenPHP Worker. A tenant may host applications using different profiles. |
+| PHP-FPM | Conventional request-scoped applications, including legacy software and WordPress, subject to version and extension requirements. |
+| FrankenPHP Worker | Dedicated process/Unix identity per site, private socket, resource limits, health checks and recycling. Application compatibility and performance require testing. |
+| Candidate | Both profiles are tested behind Nginx in disposable Linux containers. PHP-FPM activation through isolated candidate agents is separate from production provisioning. |
+| Core and platforms | The selector does not switch ADMIN/USER into worker mode. Debian 13 is the candidate test target; Ubuntu and AlmaLinux need adapters and qualification, including SELinux on AlmaLinux. |
+
+FrankenPHP/Caddy remains separate from the Go system agents. Worker planning is disabled by default through WCP_ALLOW_FRANKENPHP_PLANS and requires explicit compatibility acknowledgement. See [application-server profiles](documentation/development/APPLICATION-SERVERS.md).
+
+## Testing and static analysis
+
+| Tool | Project role | Command from WCP360_Core |
+| :--- | :--- | :--- |
+| PHPUnit + Symfony Test Pack | Unit, KernelTestCase integration and WebTestCase HTTP/authentication/tenant tests. | composer test |
+| PHPStan level 8 | Mandatory before application tests in CI; implemented Core source, migrations, candidate SDK and reference plugin. No baseline or ignored-error list. | composer analyse |
+| Symfony Panther | Real Chromium/WebDriver tests: login, runtime selector, Stimulus form protection and Turbo navigation. Requires browser and matching driver. | composer test:browser |
+| PestPHP | Optional syntax over PHPUnit, absent from default dependencies. Choose a major compatible with the locked PHPUnit version in a reviewed change. | Optional |
+
+Static analysis complements execution and security review; it does not prove the absence of vulnerabilities. Browser tests cover implemented journeys; file-manager menus and themes need tests when integrated. The 149 catalog entries are not 149 implemented packages.
+
+See [testing](documentation/development/TESTING.md) and [isolated provisioning](documentation/development/ISOLATED-PROVISIONING.md).
 
 ## Frontend architecture
 

@@ -17,6 +17,9 @@ final readonly class SubmitHostingPlan
         private ApplicationServerSettings $settings,
     ) {}
 
+    /** @param array<string, mixed> $input
+     * @return array{job_id: string, replayed: bool}
+     */
     public function submit(string $actor, array $input): array
     {
         $required = ['tenant_id', 'hostname', 'idempotency_key'];

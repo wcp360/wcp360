@@ -22,6 +22,12 @@ The candidate uses deliberately separate wcp_candidate_* tables and /workbench r
 | SDK and plugin | Strict standalone summary decoder; detached report process; install/enable/disable/uninstall metadata; lifecycle and tenant-boundary tests, including disable/uninstall with an unavailable package; Core works without plugins. | Signed packages, installation storage, process supervision, scoped service credentials, revocation, compatibility and upgrade policy. |
 | Installation and release | Non-root development installer, interactive account wizard, preflight, backup, migration upgrade and empty-database restore rehearsal; CI has read-only repository permissions and no publishing step. | Fresh-system installer, production recovery, migration review, complete functional/security acceptance, independent E3 and a reviewed release publisher. No stable version or latest pointer is produced. |
 
+## Isolated activation and quality checks
+
+The candidate now adds a separate opt-in [PHP-FPM activation experiment](ISOLATED-PROVISIONING.md): durable Symfony activation jobs, an unprivileged Go agent, a minimal-root candidate broker, strict Unix peer checks, fixed operations and observed outcomes. It runs only in a disposable Linux test container; the existing wcp-plan binary remains inert. This does not implement canonical IPC-B or qualify production/fresh-VM provisioning.
+
+[Testing](TESTING.md) documents PHPUnit/Test Pack, PHPStan level 8 before application tests, real-browser Panther checks and optional Pest syntax. Current outcomes are bound to the exact PR commit, not inherited from older runs.
+
 ## Hosted application-server profiles
 
 PHP-FPM remains the initial default. A global ADMIN setting and a per-site override now prepare either PHP-FPM or explicitly compatible FrankenPHP Worker plans. Worker planning is opt-in, acknowledgement is required, and changes to the global default preserve existing sites/jobs. See [Application servers](APPLICATION-SERVERS.md) for setup, process isolation, compatibility, platform boundaries and remaining activation work.

@@ -10,6 +10,8 @@ Start with the [change-location index](NAVIGATION.md) to find a function, comman
 
 See [application-server profiles](../documentation/development/APPLICATION-SERVERS.md) for PHP-FPM defaults, per-site FrankenPHP Worker plans, compatibility and runtime-isolation requirements.
 
+See [isolated provisioning](../documentation/development/ISOLATED-PROVISIONING.md) for the real-effects PHP-FPM experiment and [testing](../documentation/development/TESTING.md) for PHPUnit, PHPStan and Panther commands.
+
 ## Source layout
 
 ```text

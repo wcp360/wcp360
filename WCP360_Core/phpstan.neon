@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    phpVersion: 80400
+    paths:
+        - src
+        - migrations
+        - ../WCP360_SDK/php/CandidateJobSummary.php
+        - ../WCP360_Plugins/wcp360-reference-report/bin/report.php
+    tmpDir: var/phpstan

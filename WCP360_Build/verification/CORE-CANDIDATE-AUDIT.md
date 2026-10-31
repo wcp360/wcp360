@@ -29,6 +29,12 @@ The hosted-site selector adds PHP-FPM defaults, opt-in FrankenPHP Worker plans, 
 
 A separate immutable-image Linux job validates actual FrankenPHP configuration, persistent requests, application cleanup, worker recycling and filesystem/socket isolation. Its definition is not a successful-run claim: use the exact run attached to the current PR head. Production activation and Ubuntu/AlmaLinux qualification remain unimplemented.
 
+## Isolated provisioning and quality candidate
+
+The next candidate adds locked Symfony Test Pack/Panther/PHPStan dependencies, level-8 analysis without baseline/ignored errors, typed SDK/Core boundaries and validation of deserialized session identities. The local suite passes 59 tests / 148 assertions with the existing Windows console skip. Static analysis, container/YAML/Twig checks and Linux cross-compilation pass locally.
+
+Separate agent/broker processes implement bounded disposable-container PHP-FPM provisioning with durable activation/audit state, strict Unix peer authentication, initial-revision checks and outcome inspection instead of blind physical retries. Real Linux effects and Panther are assigned to the current workflow; consult the exact run in PR #116 before claiming success. This is not fresh-VM, production IPC-B or independent security-review evidence.
+
 ## Target-platform evidence
 
 The first complete [successful Linux workflow](https://github.com/yyogas/wcp360/actions/runs/41231366927) tested source f3ce52c15ece85b03f750d59ed1fe4ad717c47c0: 34 application tests / 81 assertions pass against PostgreSQL 17 on Debian 13/PHP 8.4. The real Nginx/PHP-FPM HTTP probe, other-user file-read denial, hidden-file rejection, missing-PHP rejection and backup/upgrade/empty-database restore rehearsal also pass.

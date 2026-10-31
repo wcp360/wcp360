@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
   static targets = ['button', 'status'];
-  connect() { this.reset(); }
+  connect() { this.reset(); this.element.dataset.formGuardReady = 'true'; }
   submit(event) {
     if (!this.element.checkValidity()) return;
     if (this.pending) { event.preventDefault(); return; }

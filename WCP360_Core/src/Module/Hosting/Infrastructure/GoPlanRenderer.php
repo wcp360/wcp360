@@ -7,6 +7,7 @@ use Wcp360\Core\Module\Hosting\Domain\ApplicationServer;
 final readonly class GoPlanRenderer
 {
     public function __construct(private string $binary) {}
+    /** @return array<string, string> */
     public function render(string $siteId,string $host,ApplicationServer $server=ApplicationServer::PhpFpm,bool $acknowledged=false): array
     {
         if(!is_file($this->binary)) throw new \RuntimeException('Build the candidate planner first.');
