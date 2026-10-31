@@ -6,6 +6,7 @@
 
 [![Project status: in development](https://img.shields.io/badge/Status-In%20development-E89B25?style=flat-square)](#current-project-status)
 [![Modular architecture](https://img.shields.io/badge/Architecture-Modular-4263EB?style=flat-square)](#modular-and-extensible-design)
+[![Plugin catalog: 149 entries](https://img.shields.io/badge/Plugins-149%20catalog%20entries-7C3AED?style=flat-square)](PLUGIN_CATALOG.md)
 [![Security design: least privilege](https://img.shields.io/badge/Security%20design-Least%20privilege-0F766E?style=flat-square)](#security-architecture)
 
 [![Target frontend: PHP 8.4 and Symfony](https://img.shields.io/badge/Frontend-PHP%208.4%20%2F%20Symfony-1F2937?style=flat-square&logo=symfony&logoColor=white)](#frontend-architecture)
@@ -25,7 +26,7 @@
 [![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
-[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](#architecture-and-operation-flow) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
+[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](#architecture-and-operation-flow) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
 
 </div>
 
@@ -58,6 +59,7 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Required panel capabilities](#required-panel-capabilities)
 - [Reusable components and services](#reusable-components-and-services)
 - [Potential and planned extensions and plugins](#potential-and-planned-extensions-and-plugins)
+- [Detailed plugin catalog](PLUGIN_CATALOG.md)
 - [Technical requirements](#technical-requirements)
 - [Current project status](#current-project-status)
 - [Explore and get started](#explore-and-get-started)
@@ -950,6 +952,8 @@ WCP360 Core, its interfaces, and extensions should use shared contracts and comp
 
 ## Potential and planned extensions and plugins
 
+The [dedicated Plugin Catalog](PLUGIN_CATALOG.md) gives every entry a unique documentation key, family dependencies, access boundaries, and disablement or migration requirements. It also documents the actual local File Manager and Insights Connector packages separately from proposed integrations.
+
 The catalog below contains **149 entries across 21 families**: 142 modules, connectors, recipes, or adapters for optional capabilities, and 7 entries for Core engine adapters. An entry may represent a pack of drivers or recipes; this is not a count of already published plugins.
 
 These items describe a design scope and potential integrations. Product names illustrate possible targets; versions, licenses, functions, and compatibility must be qualified for each integration. Components already present are identified in [Current project status](#current-project-status).
@@ -1400,6 +1404,7 @@ wcp360/
 ├── .github/
 ├── .gitignore
 ├── README.md
+├── PLUGIN_CATALOG.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
 ├── archive/
@@ -1450,6 +1455,7 @@ To follow a component, read its README and applicable governance decisions befor
 | Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
 | Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
+| Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md). |
 | Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
 | Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
