@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-# Prototype host. Replace with the verified production origin before launch.
-Sitemap: https://wcp360.example/sitemap.xml
