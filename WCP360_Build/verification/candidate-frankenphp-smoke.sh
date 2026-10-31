@@ -59,10 +59,12 @@ done
 runuser -u nobody -- test ! -w "$socket_dir/http.sock"
 curl -fsS -H 'Host: worker.test' -H 'X-Request-Marker: alice-request' http://127.0.0.1:8080/app/one >/tmp/worker-one.json
 curl -fsS -H 'Host: worker.test' -H 'X-Request-Marker: bob-request' http://127.0.0.1:8080/app/two >/tmp/worker-two.json
-php -r '$a=json_decode(file_get_contents("/tmp/worker-one.json"),true,16,JSON_THROW_ON_ERROR);$b=json_decode(file_get_contents("/tmp/worker-two.json"),true,16,JSON_THROW_ON_ERROR);if($a["pid"]!==$b["pid"] || $b["requests"]!==$a["requests"]+1 || $a["marker"]!=="alice-request" || $b["marker"]!=="bob-request" || $a["previous"]!==null || $b["previous"]!==null || $a["neighbor_readable"] || $b["neighbor_readable"])exit(1);'
+php -r '$a=json_decode(file_get_contents("/tmp/worker-one.json"),true,16,JSON_THROW_ON_ERROR);$b=json_decode(file_get_contents("/tmp/worker-two.json"),true,16,JSON_THROW_ON_ERROR);if($a["pid"]!==$b["pid"] || $b["requests"]!==$a["requests"]+1 || $a["marker"]!=="alice-request" || $b["marker"]!=="bob-request" || $a["previous"]!==null || $b["previous"]!==null || $a["neighbor_readable"] || $b["neighbor_readable"] || $a["euid"]===0 || $b["euid"]===0)exit(1);'
 [[ "$(curl -sS -o /dev/null -w '%{http_code}' -H 'Host: worker.test' http://127.0.0.1:8080/.secret)" == 403 ]]
 [[ "$(curl -sS -o /dev/null -w '%{http_code}' -H 'Host: worker.test' http://127.0.0.1:8080/other.php)" == 404 ]]
+
+php -r '$ctx=stream_context_create(["http"=>["header"=>"Host: worker.test\r\nX-Request-Marker: recycle\r\n","timeout"=>5]]);for($i=0;$i<502;++$i){$r=json_decode(file_get_contents("http://127.0.0.1:8080/recycle",false,$ctx),true,16,JSON_THROW_ON_ERROR);if($r["previous"]!==null || $r["marker"]!=="recycle")exit(1);}if($r["requests"]>10 || $r["euid"]===0)exit(1);'
 # No Caddy TCP listener: the application is reachable only through its Unix socket.
 if curl --connect-timeout 1 -sS http://127.0.0.1:8081/ >/dev/null 2>&1; then exit 1; fi
 if curl --connect-timeout 1 -sS http://127.0.0.1:2019/config/ >/dev/null 2>&1; then exit 1; fi
-printf 'FrankenPHP worker: private socket, unprivileged process, persistent worker and per-request cleanup verified.\n'
+printf 'FrankenPHP worker: private socket, unprivileged process, persistent worker, recycling and per-request cleanup verified.\n'

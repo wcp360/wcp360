@@ -33,10 +33,6 @@ jobs:
           docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e WCP_TEST_DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' --entrypoint bash wcp360-candidate -c 'cd /opt/wcp360/WCP360_Core && php installer/preflight/candidate.php --target --dependencies && php bin/console doctrine:migrations:migrate --no-interaction && composer validate --strict && composer check-platform-reqs && composer audit --locked && php bin/console lint:container && php bin/console lint:yaml config && php bin/console lint:twig templates && php vendor/phpunit/phpunit/phpunit --colors=never --testdox'
       - name: Real Nginx / PHP-FPM isolated hosting probe
         run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
-      - name: Build immutable FrankenPHP / PHP 8.4 ZTS verification image
-        run: docker build -f WCP360_Build/environments/core-candidate/FrankenPHP.Dockerfile -t wcp360-worker-probe .
-      - name: Real Nginx / FrankenPHP worker isolation probe
-        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 wcp360-worker-probe
       - name: Backup, upgrade and empty-database restore rehearsal
         run: |
           docker exec wcp-candidate-db createdb -U postgres wcp360_restore_test
@@ -46,3 +42,14 @@ jobs:
         run: |
           docker rm -f wcp-candidate-db || true
           docker network rm wcp-candidate || true
+  frankenphp-worker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build immutable FrankenPHP / PHP 8.4 ZTS verification image
+        run: docker build -f WCP360_Build/environments/core-candidate/FrankenPHP.Dockerfile -t wcp360-worker-probe .
+      - name: Real Nginx / FrankenPHP worker isolation probe
+        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 wcp360-worker-probe

@@ -8,10 +8,12 @@ $handler=static function()use(&$requests):void{
     $previous=$GLOBALS['request_marker']??null;
     try {
         $GLOBALS['request_marker']=$_SERVER['HTTP_X_REQUEST_MARKER']??'none';
+        preg_match('/^Uid:\s+([0-9]+)\s+([0-9]+)/m',(string)file_get_contents('/proc/self/status'),$uid);
         header('Content-Type: application/json');
         echo json_encode([
             'requests'=>$requests,
             'pid'=>getmypid(),
+            'euid'=>(int)($uid[2]??0),
             'marker'=>$GLOBALS['request_marker'],
             'previous'=>$previous,
             'neighbor_readable'=>is_readable('/srv/wcp360-candidate/neighbor/private.txt'),

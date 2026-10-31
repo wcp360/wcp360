@@ -48,7 +48,7 @@ The worker plan emits:
 - A Caddy configuration bound only to that Unix socket, with the Caddy admin API and automatic HTTPS disabled. Nginx owns edge TLS. Worker count, total threads, PHP memory and recycling budgets are bounded.
 - An inert systemd unit for one process and Unix identity per site, with no capabilities, no-new-privileges, private temporary storage, a read-only system view and process/memory limits.
 
-Different sites never share a FrankenPHP process or use worker threads as a tenant security boundary. The application stays in its own group; a reviewed provisioner may grant Nginx access to that specific socket group. Adding the application to Nginx's shared group would expose other sites and is forbidden by this profile. Runtime directories and socket modes must agree with this model. Site code and the root-managed Caddyfile are not application-writable.
+Different sites never share a FrankenPHP process or use worker threads as a tenant security boundary. The application stays in its own group; a reviewed provisioner may grant Nginx access to that specific socket group. Adding the application to Nginx's shared group would expose other sites and is forbidden by this profile. Runtime directories and socket modes must agree with this model. Site code and the root-managed Caddyfile are not application-writable. The provisioner must create a private site-owned var directory; the unit grants write access only there, in private temporary storage and in its own systemd state/runtime directories. Applications requiring other writable paths need a reviewed profile rather than broad filesystem access.
 
 The fixed worker script is public/index.php. These paths are candidate-owned examples, not a newly approved production file allowlist. PHP-FPM output keeps plan schema wcp360.candidate.plan/1; worker output uses wcp360.candidate.plan/2. The Go planner validates bounded typed input and renders text; it performs no system calls, filesystem changes, network listening or privileged execution.
 
@@ -68,7 +68,7 @@ Cache invalidation, worker restart after code/configuration/secret changes, prot
 
 The application suite checks defaults, migration of old sites, malformed choices, tenant/admin authority, revision conflicts, compatibility acknowledgement, idempotency across global changes, availability rechecks and inert worker plans.
 
-The separate Linux smoke image validates the generated Caddyfile, starts a non-root FrankenPHP worker behind real Nginx over a site-owned 0660 Unix socket, sends successive requests through the same persistent worker and verifies explicit application cleanup. It also checks neighbor-file read denial, hidden-file/direct-PHP rejection and absence of Caddy TCP/admin listeners. This small fixture proves the tested profile; it does not establish that an arbitrary customer application is worker-safe. The systemd unit is emitted but not activated in this probe.
+The separate Linux smoke image validates the generated Caddyfile, starts a non-root FrankenPHP worker behind real Nginx over a site-owned 0660 Unix socket, sends successive requests through the same persistent worker, verifies explicit application cleanup and exercises recycling after the 500-request budget. It also checks neighbor-file read denial, hidden-file/direct-PHP rejection and absence of Caddy TCP/admin listeners. This small fixture proves the tested profile; it does not establish that an arbitrary customer application is worker-safe. The systemd unit is emitted but not activated in this probe.
 
 ## Source locations
 

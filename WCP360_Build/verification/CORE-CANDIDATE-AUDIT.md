@@ -20,8 +20,14 @@ Audit date: 2026-10-31. Status: implementation evidence, not independent review 
 - Go 1.27.3 Windows amd64 archive verified with the official SHA-256; planner unit tests, CLI schema tests, go vet and compilation pass.
 - Unchanged PHP candidate: 31/31 tests pass. Registry checks pass for 82 permissions, 86 API contracts/actions, 30 action domains, 23 errors, 47 IPC operations, 54 physical tables and eight session-policy rows.
 - Canonical input Git blob fingerprints match. The current database publication contains 54 physical table headings; an older 52-table description must not be treated as current physical coverage.
-- New Symfony candidate: the expanded local suite reports 37 tests / 86 assertions, with 36 passing and one Windows-only skip for the hidden-input console interaction. The complete wizard interaction is assigned to Linux CI. Coverage includes real form authentication, forged CSRF rejection, cross-context/cross-tenant denial, SQL composite-FK integrity, idempotency, audit failure rollback, audit immutability, permission revocation, job interruption and detached plugin lifecycle.
+- New Symfony candidate: the application-server suite reports 51 tests / 125 assertions, with 50 passing and one Windows-only skip for the hidden-input console interaction. The complete wizard interaction is assigned to Linux CI. Coverage includes real form authentication, forged CSRF rejection, cross-context/cross-tenant denial, SQL composite-FK integrity, idempotency, audit failure rollback, audit immutability, permission revocation, job interruption and detached plugin lifecycle.
 - Kernel startup, container injection checks, Twig syntax, asset compilation and Composer validation/platform checks pass. Composer reports no known dependency advisories at the audit time; this is not a source security audit.
+
+## Application-server candidate
+
+The hosted-site selector adds PHP-FPM defaults, opt-in FrankenPHP Worker plans, explicit compatibility acknowledgement, revision-checked ADMIN settings and stable idempotency across default changes. The added migration preserves old sites on PHP-FPM. Go preserves the original FPM wire shape and emits a separate worker schema with dedicated Unix identities/sockets. See [application-server design and verification](../../documentation/development/APPLICATION-SERVERS.md).
+
+A separate immutable-image Linux job validates actual FrankenPHP configuration, persistent requests, application cleanup, worker recycling and filesystem/socket isolation. Its definition is not a successful-run claim: use the exact run attached to the current PR head. Production activation and Ubuntu/AlmaLinux qualification remain unimplemented.
 
 ## Target-platform evidence
 
