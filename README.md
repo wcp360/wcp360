@@ -26,7 +26,7 @@
 [![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
-[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](#architecture-and-operation-flow) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
+[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
 
 </div>
 
@@ -55,6 +55,7 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Backend architecture](#backend-architecture)
 - [Performance and reliability](#performance-and-reliability)
 - [Architecture and operation flow](#architecture-and-operation-flow)
+- [Detailed architecture guide](ARCHITECTURE.md)
 - [Security architecture](#security-architecture)
 - [Required panel capabilities](#required-panel-capabilities)
 - [Reusable components and services](#reusable-components-and-services)
@@ -323,6 +324,8 @@ OPcache caches bytecode; database calls, filesystem operations, authorization, a
 Benchmark reports must identify hardware, versions, dataset, enabled services, concurrency, and failure conditions. No production throughput or latency guarantee is established by the current prototypes.
 
 ## Architecture and operation flow
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for component boundaries, operation flows, tenancy and data ownership, agent contracts, extension isolation, deployment, and current implementation limits.
 
 The browser receives HTML rendered by Symfony/Twig. Turbo and Stimulus enhance navigation and selected interactions. The same domain services authorize page requests, partial updates, APIs, and jobs.
 
@@ -1404,6 +1407,7 @@ wcp360/
 ├── .github/
 ├── .gitignore
 ├── README.md
+├── ARCHITECTURE.md
 ├── PLUGIN_CATALOG.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
@@ -1453,6 +1457,7 @@ To follow a component, read its README and applicable governance decisions befor
 | :--- | :--- |
 | Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/governance/PROJECT-STATUS.md). |
 | Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
+| Understand the architecture | [ARCHITECTURE.md](ARCHITECTURE.md): components, flows, data authority, system agents, extensions, and deployment boundaries. |
 | Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
