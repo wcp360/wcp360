@@ -26,7 +26,7 @@
 [![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
-[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Get started](#explore-and-get-started)
+[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Release/README.md) · [Get started](#explore-and-get-started)
 
 </div>
 
@@ -64,6 +64,7 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Technical requirements](#technical-requirements)
 - [Current project status](#current-project-status)
 - [Explore and get started](#explore-and-get-started)
+- [Release directory scaffold](WCP360_Release/README.md)
 - [Repository layout](#repository-layout)
 - [GitHub branches](#github-branches)
 - [Documentation and contributing](#documentation-and-contributing)
@@ -1362,6 +1363,8 @@ The current standalone File Manager uses **private, single-owner storage modifie
 
 ## Explore and get started
 
+The [release directory](WCP360_Release/README.md) reserves `v1.0.0/`, `v1.1.0/`, and a relative `latest` link. These are unreleased scaffolds: installer templates stop before system changes, and Core archives and production daemon binaries are not yet included.
+
 ### Clone the repository
 
 Repository access is required. From a terminal with Git installed:
@@ -1411,6 +1414,11 @@ wcp360/
 ├── PLUGIN_CATALOG.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
+├── WCP360_Release/
+│   ├── README.md
+│   ├── v1.0.0/
+│   ├── v1.1.0/
+│   └── latest -> v1.0.0/
 ├── archive/
 ├── contracts/
 ├── documentation/
@@ -1461,6 +1469,7 @@ To follow a component, read its README and applicable governance decisions befor
 | Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
+| Inspect release preparation | [Version directories, guarded installer templates, installation guides, and the latest link](WCP360_Release/README.md). |
 | Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md). |
 | Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
 | Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
