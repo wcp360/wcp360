@@ -9,7 +9,8 @@ StartLimitBurst=5
 [Service]
 Type=notify
 NotifyAccess=main
-User=root
+# A system service defaults to root; the broker verifies euid == 0.
+# Avoid redundant User=root: systemd 257 can drop CAP_SETUID during seccomp setup.
 Environment=WCP_ISOLATED_TEST_VM=1 WCP_ALLOW_CANDIDATE_RECOVERY=1
 ExecStart=/usr/local/libexec/wcp360/wcp-candidate-node broker --agent-uid 31002 --worker-uid 31003 --ipc-gid 31004
 Restart=on-failure

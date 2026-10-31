@@ -16,6 +16,8 @@ Both long-running units announce systemd readiness only after their Unix socket 
 
 The agent has no capabilities, a read-only filesystem with only its socket directory writable, restricted address families and no privilege escalation. The broker needs root and writes to account databases and candidate directories; it has a broader privilege boundary. Its unit applies no-new-privileges, protected system/home/kernel paths, private temporary/devices views and task/memory limits. These controls do not constitute a production sandbox or an independent security review.
 
+The broker deliberately uses the system manager’s default root identity and also checks its effective UID in Go. On the tested Debian systemd 257 path, redundant User=root combined with seccomp-implying restrictions removes CAP_SETUID before exec; no-new-privileges prevents exec from restoring it. Nginx then cannot drop worker privileges. Omitting this redundant identity directive retains the same root identity and the existing sandbox settings, without granting ambient capabilities. The preflight reads identity and capability directives as well as the sandbox settings from the actual unit, then verifies the required non-root transition. See the [systemd 257 execution implementation](https://github.com/systemd/systemd/blob/v257/src/core/exec-invoke.c).
+
 ## Explicit boot opt-in
 
 Ordinary VM execution remains refused. Boot recovery additionally requires:

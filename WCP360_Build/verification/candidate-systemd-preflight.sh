@@ -5,7 +5,7 @@ unit=/opt/wcp360/WCP360_Core/resources/services/systemd/candidate/wcp-candidate-
 probe=/opt/wcp360/WCP360_Build/verification/candidate-identity-probe.py
 properties=()
 while IFS='=' read -r key value; do
-    case "$key" in NoNewPrivileges|ProtectSystem|ProtectHome|PrivateTmp|PrivateDevices|ProtectKernelTunables|ProtectKernelModules|ProtectControlGroups|TasksMax|MemoryMax) properties+=(--property="$key=$value");; esac
+    case "$key" in User|Group|CapabilityBoundingSet|AmbientCapabilities|NoNewPrivileges|ProtectSystem|ProtectHome|PrivateTmp|PrivateDevices|ProtectKernelTunables|ProtectKernelModules|ProtectControlGroups|TasksMax|MemoryMax) properties+=(--property="$key=$value");; esac
 done <"$unit"
 set +e
 systemd-run --quiet --wait --pipe --collect --unit=wcp-candidate-identity-full "${properties[@]}" /usr/bin/python3 "$probe"
