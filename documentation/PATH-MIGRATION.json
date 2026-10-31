@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "repository": "yyogas/wcp360",
   "effective_date": "2026-10-31",
   "previous_main": "112c790111e192156c405c83cde0ddd2eeafd481",
@@ -129,5 +129,37 @@
     "Before merging older code/tooling branches, update active path constants and workflows to the new prefixes, rerun relevant checks and bind reviews to the resulting SHA.",
     "Do not restore deleted root documentation directories or archive copies as part of merging older branches.",
     "A directory relocation does not authorize new runtime code, privileged operations, a code baseline or a release."
+  ],
+  "layout_updates": [
+    {
+      "date": "2026-10-31",
+      "source_main": "467bb65421dc1804b25398d663ced9bf3fbcf603",
+      "purpose": "Core, detached plugins, SDK, build and qualified releases development layout",
+      "relocations": [
+        {
+          "from": "WCP360_Release/README.md",
+          "to": "WCP360_Releases/README.md",
+          "content_change": "Updated publication policy: qualified records only"
+        },
+        {
+          "from": "WCP360_Release/v1.0.0/",
+          "to": "WCP360_Core/installer/scaffolds/v1.0.0/",
+          "content_change": "Shell source unchanged; guide links/qualification context updated"
+        },
+        {
+          "from": "WCP360_Release/v1.1.0/",
+          "to": "WCP360_Core/installer/scaffolds/v1.1.0/",
+          "content_change": "Shell source unchanged; guide links/qualification context updated"
+        }
+      ],
+      "retired": [
+        {
+          "path": "WCP360_Release/latest",
+          "reason": "No stable version exists; create a stable pointer only after qualification",
+          "previous_target": "v1.0.0"
+        }
+      ],
+      "candidate_source_paths": "Existing SOURCE/ and File Manager PR candidates remain on their frozen branches; future location adaptation requires tests/review."
+    }
   ]
 }

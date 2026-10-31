@@ -23,3 +23,7 @@
 
 /documentation/contracts/ @yyogas
 /WCP360_Core/ @yyogas
+/WCP360_Plugins/ @yyogas
+/WCP360_SDK/ @yyogas
+/WCP360_Build/ @yyogas
+/WCP360_Releases/ @yyogas

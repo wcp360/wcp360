@@ -11,33 +11,40 @@ wcp360/
 ├── SECURITY.md
 ├── PLUGIN_CATALOG.md
 ├── documentation/
-│   ├── README.md
-│   ├── REPOSITORY-STRUCTURE.md
-│   ├── PATH-MIGRATION.json
+│   ├── development/
 │   ├── contracts/
 │   ├── governance/
 │   ├── manifests/
 │   ├── specifications/
-│   ├── design-system/
-│   ├── library-mirror/
-│   ├── snapshots/
-│   └── visuals/
+│   └── reference snapshots and visuals
 ├── WCP360_Core/
-├── WCP360_Design_System/
-├── WCP360_Developper/
+│   ├── src/
+│   ├── templates/
+│   ├── agents/
+│   ├── installer/
+│   └── Symfony configuration/assets/tests
 ├── WCP360_Plugins/
-└── WCP360_Release/
+│   ├── _template/
+│   ├── wcp360-file-manager-xampp/
+│   └── wcp360-insights-connector/
+├── WCP360_SDK/
+├── WCP360_Build/
+├── WCP360_Releases/
+├── WCP360_Design_System/
+└── WCP360_Developper/
 ```
 
 ## Implementation and documentation boundaries
 
 | Location | Responsibility |
 | :--- | :--- |
-| WCP360_Core | Reserved application implementation location. The existing README is a reservation, not an implemented Symfony application. |
+| WCP360_Core | Symfony/modules/shared UI, separate Go agents, installer/setup and tests. Documentation scaffold; runtime implementation pending. |
 | WCP360_Design_System | Browser UI prototype, styles, assets and design notes. |
 | WCP360_Developper | Existing developer/product corpus and retained historical snapshots. |
-| WCP360_Plugins | Development extension packages and their documentation. |
-| WCP360_Release | Versioned delivery scaffold; it does not provide qualified release binaries. |
+| WCP360_Plugins | One independently developed/tested package per detached plugin and an authoring template. |
+| WCP360_SDK | Versioned public integration contracts/client and synthetic test support; implementation pending. |
+| WCP360_Build | Controlled environment/assembly/qualification/publication procedures; implementation pending. |
+| WCP360_Releases | Qualified version records and immutable artifact references; none currently qualified. |
 | documentation | Owner specifications, contracts, manifests, governance and documentary reference material. |
 | Root Markdown files | GitHub project entry points, architecture, security reporting, contribution guidance and plugin navigation. |
 
@@ -45,7 +52,7 @@ wcp360/
 
 `src/` contained one 425-byte README and no code. That README used an obsolete paused-state summary and duplicated the existing `WCP360_Core` reservation. Removing the root placeholder does not remove an application implementation.
 
-In a future Symfony application, `WCP360_Core/src/` can hold PHP classes according to the adopted application layout. Its creation belongs to the authorized implementation slice. Existing daemon and platform candidates on other branches keep their reviewed `SOURCE/` paths until separately reconciled; this cleanup does not move or approve them.
+`WCP360_Core/src/` now reserves the Symfony source layout with README guidance; no application classes are supplied by this scaffold. Implement actual code only within the accepted slice. Existing daemon and platform candidates on other branches keep their reviewed `SOURCE/` paths until separately reconciled; this cleanup does not move or approve them.
 
 ## Documentation moved under one root
 
@@ -69,6 +76,12 @@ The old `archive/` tree contained **2,118 files**. **1,865** have identical blob
 - [Earlier Design System import](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive/imports/2026-10-30/workspace/WCP360_Design_System).
 
 `archive/` is removed from the current tree; Git history is not rewritten. The 253 historical versions are not described as duplicates. Current Design System and developer sources are retained. Previously removed Internal Management and Official Website folders are not restored.
+
+## Core / plugins / release organization
+
+The [development strategy](development/README.md) defines the ordered Core foundation, public SDK seam, isolated plugin host, reference plugin, installer/wizard and qualification work. Follow [plugin lifecycle acceptance](development/PLUGIN-LIFECYCLE.md) rather than loading detached code into Core.
+
+WCP360_Release was renamed to WCP360_Releases as a publication boundary. Its earlier unqualified v1.0.0/v1.1.0 templates moved to [Core installer scaffolds](../WCP360_Core/installer/scaffolds/README.md); their shell bytes and modes remain unchanged. The former latest alias is removed until a stable target is actually qualified. No qualified release has been deleted.
 
 ## Existing branches and pinned consumers
 

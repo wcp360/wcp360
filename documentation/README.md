@@ -6,6 +6,7 @@ Technical documentation is grouped here so the repository root can focus on proj
 
 | Directory | Purpose | How to use it |
 | :--- | :--- | :--- |
+| [development/](development/README.md) | Core/SDK/plugin source organization, lifecycle, setup and qualification strategy. | Follow dependency order and applicable owner contracts; folders are scaffolds, not executed engines. |
 | [specifications/](specifications/README.md) | Published owner specifications: API, IPC, database, security, QA, Engineering and DevOps. | Selected versions and accepted scope come from the manifest. |
 | [contracts/](contracts/README.md) | Contract navigation and implementation consumption guidance. | Use the published specification bodies rather than creating duplicate contracts. |
 | [manifests/](manifests/WCP360-BM-0001.md) | Baseline membership, versions and implementation gates. | Read the latest explicit decisions; older entries are retained as history. |
@@ -33,7 +34,8 @@ The October 31 relocation preserves every file under specifications and manifest
 ## Repository navigation
 
 - [Project overview](../README.md), [architecture](../ARCHITECTURE.md) and [plugin catalogue](../PLUGIN_CATALOG.md).
-- [Core application reservation](../WCP360_Core/README.md), [UI prototype](../WCP360_Design_System/README.md), [developer corpus](../WCP360_Developper/README.md), [plugins](../WCP360_Plugins/) and [release preparation](../WCP360_Release/README.md).
+- [Core application reservation](../WCP360_Core/README.md), [UI prototype](../WCP360_Design_System/README.md), [developer corpus](../WCP360_Developper/README.md), [plugins](../WCP360_Plugins/) and [qualified release records](../WCP360_Releases/README.md).
+- [Core engine](development/CORE-ENGINE.md), [plugin lifecycle](development/PLUGIN-LIFECYCLE.md), [delivery](development/DELIVERY-AND-RELEASES.md), [SDK](../WCP360_SDK/README.md) and [build procedures](../WCP360_Build/README.md).
 - [Repository structure and history access](REPOSITORY-STRUCTURE.md), [branch reconciliation](governance/branches/BRANCH-RECONCILIATION-2026-10-31.md), [contribution guide](../CONTRIBUTING.md) and [security reporting](../SECURITY.md).
 
 ## Documentary provenance

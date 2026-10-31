@@ -104,6 +104,8 @@ These are target selections. Exact framework/package revisions, build inputs, ru
 
 ## Core structure
 
+Source responsibilities are now mapped in the [development strategy](documentation/development/README.md): the Symfony application and separate Go agents live under WCP360_Core, detached packages under WCP360_Plugins, public integration code under WCP360_SDK, build procedures under WCP360_Build and qualified version records under WCP360_Releases. These locations currently contain documentation scaffolds; existing candidate branches are not merged by this organization. See the [lifecycle guide](documentation/development/PLUGIN-LIFECYCLE.md) and [installation/release acceptance](documentation/development/DELIVERY-AND-RELEASES.md).
+
 ### Domain modules and shared foundations
 
 The Core is organized around hosting domains, with reusable cross-cutting services underneath them.

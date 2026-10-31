@@ -12,7 +12,7 @@ Contradictions require a **WCP360 CONFLICT** routed to MASTER / Project Control 
 
 ## Repository locations
 
-Use [documentation/README.md](documentation/README.md) for specifications, contracts, governance and manifests. WCP360_Core is the existing application reservation. The [path migration map](documentation/PATH-MIGRATION.json) translates earlier root locators; update active consumers and rerun relevant checks before merging an older branch. Keep immutable citations and historical evidence intact.
+Use [documentation/README.md](documentation/README.md) for specifications, contracts, governance and manifests. Follow the [development strategy](documentation/development/README.md): Core application/modules/agents in WCP360_Core, detached packages in WCP360_Plugins, the public client boundary in WCP360_SDK, construction/qualification in WCP360_Build and qualified records in WCP360_Releases. These directories currently provide architecture scaffolds; runtime implementation and review gates remain explicit. The [path migration map](documentation/PATH-MIGRATION.json) translates earlier root locators; update active consumers and rerun relevant checks before merging an older branch. Keep immutable citations and historical evidence intact.
 
 ## Canonical artifact publication
 

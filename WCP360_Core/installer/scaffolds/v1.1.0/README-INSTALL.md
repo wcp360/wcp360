@@ -1,15 +1,15 @@
-# WCP360 1.0.0 — Installation Guide
+# WCP360 1.1.0 — Installation Guide
 
 **Status: unreleased directory scaffold. Installation is unavailable.**
 
-This directory reserves the distribution layout for WCP360 1.0.0. It is not a stable release or an installable panel.
+This historical development scaffold preserves the proposed distribution layout for WCP360 1.1.0. It is not a stable release or an installable panel.
 
 ## Package contents
 
 | File | Current state |
 | :--- | :--- |
 | `wcp360-installer.sh` | Non-operational Bash template; stops before any system change. |
-| `wcp360-core-v1.0.0.tar.gz` | Expected build output; absent until the approved backend/frontend package exists. |
+| `wcp360-core-v1.1.0.tar.gz` | Expected build output; absent until the approved backend/frontend package exists. |
 | `wcpd-debian13-amd64` | Expected Linux/amd64 production build; absent. An inert CLI is not substituted for a production agent. |
 | `README-INSTALL.md` | This guide. |
 
@@ -31,6 +31,8 @@ The availability check and invocation without arguments return **78** because th
 
 ## Publication conditions
 
+Qualified version records belong in [WCP360_Releases](../../../../WCP360_Releases/README.md); this directory is a development template.
+
 A distributable version requires the approved Core package and daemon, a reviewed installer, artifact integrity/signature verification, pinned compatibility, installation evidence, and documented recovery/rollback limits. Production installation commands belong here once that package is qualified.
 
-See the [release directory guide](../README.md), [architecture](../../ARCHITECTURE.md), and [current baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).
+See the [installer scaffold guide](../README.md), [architecture](../../../../ARCHITECTURE.md), and [current baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).

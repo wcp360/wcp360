@@ -26,7 +26,7 @@
 [![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target PHP runtime: PHP-FPM](https://img.shields.io/badge/Runtime-PHP--FPM-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
 
-[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Release/README.md) · [Get started](#explore-and-get-started)
+[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Releases/README.md) · [Get started](#explore-and-get-started)
 
 </div>
 
@@ -64,7 +64,7 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Technical requirements](#technical-requirements)
 - [Current project status](#current-project-status)
 - [Explore and get started](#explore-and-get-started)
-- [Release directory scaffold](WCP360_Release/README.md)
+- [Release directory scaffold](WCP360_Releases/README.md)
 - [Repository layout](#repository-layout)
 - [GitHub branches](#github-branches)
 - [Documentation and contributing](#documentation-and-contributing)
@@ -1363,7 +1363,7 @@ The current standalone File Manager uses **private, single-owner storage modifie
 
 ## Explore and get started
 
-The [release directory](WCP360_Release/README.md) reserves `v1.0.0/`, `v1.1.0/`, and a relative `latest` link. These are unreleased scaffolds: installer templates stop before system changes, and Core archives and production daemon binaries are not yet included.
+The [release directory](WCP360_Releases/README.md) reserves `v1.0.0/`, `v1.1.0/`, and a relative `latest` link. These are unreleased scaffolds: installer templates stop before system changes, and Core archives and production daemon binaries are not yet included.
 
 ### Clone the repository
 
@@ -1402,62 +1402,65 @@ Open <http://127.0.0.1:8790/>. Keep the same hostname and port to share demo sta
 
 ## Repository layout
 
-Documentation is grouped under [documentation/](documentation/README.md), while implementation components and delivery remain visible at the root. See the [directory guide and history access](documentation/REPOSITORY-STRUCTURE.md). Current main layout:
+Development follows an autonomous Core, a versioned SDK and independently packaged plugins. Read the [development strategy](documentation/development/README.md), [Core guide](documentation/development/CORE-ENGINE.md), [plugin lifecycle](documentation/development/PLUGIN-LIFECYCLE.md) and [installation/release acceptance](documentation/development/DELIVERY-AND-RELEASES.md).
 
 ```text
 wcp360/
 ├── .github/
-├── .gitignore
-├── README.md
-├── ARCHITECTURE.md
+├── README.md / ARCHITECTURE.md / CONTRIBUTING.md / SECURITY.md
 ├── PLUGIN_CATALOG.md
-├── CONTRIBUTING.md
-├── SECURITY.md
 ├── documentation/
-│   ├── README.md
-│   ├── REPOSITORY-STRUCTURE.md
-│   ├── PATH-MIGRATION.json
+│   ├── development/
 │   ├── contracts/
 │   ├── governance/
 │   ├── manifests/
 │   ├── specifications/
-│   ├── design-system/
-│   ├── library-mirror/
-│   ├── snapshots/
-│   └── visuals/
+│   └── documentary reference, mirrors and snapshots
 ├── WCP360_Core/
-├── WCP360_Design_System/
-├── WCP360_Developper/
+│   ├── bin/ / config/ / src/ / templates/ / assets/ / public/
+│   ├── translations/ / migrations/ / tests/
+│   ├── agents/wcpd/ / agents/wcp-privd/
+│   ├── diagnostics/
+│   └── installer/scaffolds/
 ├── WCP360_Plugins/
-└── WCP360_Release/
-    ├── README.md
-    ├── v1.0.0/
-    ├── v1.1.0/
-    └── latest -> v1.0.0/
+│   ├── _template/
+│   ├── wcp360-file-manager-xampp/
+│   └── wcp360-insights-connector/
+├── WCP360_SDK/
+├── WCP360_Build/
+├── WCP360_Releases/
+├── WCP360_Design_System/
+└── WCP360_Developper/
 ```
 
-### Imported workspace directories
+### Implementation and delivery directories
 
-The active main tree contains the four directories below. Internal Management and Official Website were removed from main on October 31, 2026; their local workspace copies are outside this repository publication.
-
-| Directory | Imported contents | Delivery boundary |
+| Directory | Responsibility | Current status |
 | :--- | :--- | :--- |
-| [WCP360_Core](WCP360_Core/README.md) | Reserved implementation directory with a README. | No production Core code or installer is supplied by this placeholder. |
-| [WCP360_Design_System](WCP360_Design_System/README.md) | 351 files: panel UI prototype, assets, and design notes. | Demo behavior and visual reference; not the target Symfony implementation. |
-| [WCP360_Developper](WCP360_Developper/README.md) | 1,803 files of developer/product documentation and historical snapshots. | Canonical implementation authority remains under `documentation/specifications/` and the current manifest. |
-| [WCP360_Plugins](WCP360_Plugins/) | 73 files, including File Manager sources, four archives, and Insights Connector. | Development packages; loose `vendor/` dependencies are excluded and installed from manifests where needed. |
+| [WCP360_Core](WCP360_Core/README.md) | Symfony domain/services, reusable Twig UI, built-in extension manager, separate Go agents, setup/install source and tests. | Architecture scaffold; complete runtime implementation and qualification remain pending. |
+| [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing File Manager/Insights development packages plus a documentation-only authoring template. |
+| [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures. | Reserved interface/layout; no executable client or ratified production manifest schema yet. |
+| [WCP360_Build](WCP360_Build/README.md) | Controlled environments, assembly, verification and publication. | Procedure/layout reserved; no new builder or workflow is claimed. |
+| [WCP360_Releases](WCP360_Releases/README.md) | Qualified version records and immutable artifact references. | No qualified release and no latest pointer. |
+| [WCP360_Design_System](WCP360_Design_System/README.md) | Existing panel UI prototype, assets and design notes. | Visual/demo reference to port into the Symfony/Twig frontend. |
+| [WCP360_Developper](WCP360_Developper/README.md) | Existing developer/product documentation and historical snapshots. | Canonical authority remains in documentation/specifications and the manifest. |
 
-The root `src/` reservation was redundant with `WCP360_Core` and has been removed. The old `archive/` copies are available in [the immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive). [Path mapping](documentation/PATH-MIGRATION.json) preserves legacy documentation locators for existing branches.
+Core functions are namespaced services, not a global functions directory. Twig views live in Core/templates. Composer generates a separate vendor directory for each PHP application; Go dependencies use per-module manifests/cache. Generated dependencies and artifacts are not committed as source.
 
-This import preserves workspace source files and package archives. It does not establish a production release, a CODE-BASELINE, independent review, or Core integration.
+The Core must retain essential hosting, local administration, audit and recovery with zero optional plugins. Detached plugins run separately; a plugin operation must not modify the Core Composer graph or inject arbitrary bundles/templates into its runtime.
 
-Other candidate sources remain on their branches. The following branch locations are preserved for reference:
+The earlier versioned installer templates now live under [Core installer scaffolds](WCP360_Core/installer/scaffolds/README.md). They remain guarded and non-operational. Version folders and a stable pointer in WCP360_Releases are created only after actual qualification.
+
+The root src reservation and old archive copies were removed; historical content remains in [the immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive). Internal Management and Official Website remain outside current main. See [repository history/path mapping](documentation/REPOSITORY-STRUCTURE.md).
+
+Existing candidate source locations remain separate; this organizational change does not merge them:
 
 | Location | Reference branch |
 | :--- | :--- |
 | `SOURCE/platform/`, `SOURCE/ui/`, `SOURCE/daemon/` | `source/full-platform-candidate` |
 | `SOURCE/daemon/` — inert CLI foundation | `source/sc-m01-inert-daemon` |
 | `WCP360_Extensions/WCP360-File-Manager/` | `extensions/file-manager-v0.3.0-import` |
+
 
 ## GitHub branches
 
@@ -1493,7 +1496,7 @@ Research, source candidates and tooling branches require the applicable scope, t
 | Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
-| Inspect release preparation | [Version directories, guarded installer templates, installation guides, and the latest link](WCP360_Release/README.md). |
+| Follow release qualification | [Qualified version records](WCP360_Releases/README.md), [build procedures](WCP360_Build/README.md) and [installer scaffolds](WCP360_Core/installer/scaffolds/README.md). |
 | Explore the imported workspace | [Core](WCP360_Core/README.md), [Design System](WCP360_Design_System/README.md), [developer documentation](WCP360_Developper/README.md), and [plugins](WCP360_Plugins/). |
 | Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
 | Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
