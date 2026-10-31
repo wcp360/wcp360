@@ -41,9 +41,10 @@ error_log = $test_root/fpm-error.log
 daemonize = no
 include = $test_root/pool.conf
 EOF
+fpm_command="$(command -v php-fpm || command -v php-fpm8.4)"
 nginx -t -c "$test_root/nginx.conf"
-php-fpm8.4 -t -y "$test_root/fpm.conf"
-php-fpm8.4 -y "$test_root/fpm.conf" > "$test_root/fpm-output.log" 2>&1 &
+"$fpm_command" -t -y "$test_root/fpm.conf"
+"$fpm_command" -y "$test_root/fpm.conf" > "$test_root/fpm-output.log" 2>&1 &
 nginx -c "$test_root/nginx.conf"
 for attempt in {1..20}; do
     if [[ "$(curl --silent --show-error --fail --max-time 2 -H 'Host: example.test' http://127.0.0.1:8080/index.php 2>/dev/null || true)" == wcp360-candidate-ok ]]; then break; fi

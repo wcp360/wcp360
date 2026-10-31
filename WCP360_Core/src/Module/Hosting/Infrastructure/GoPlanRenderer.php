@@ -9,7 +9,9 @@ final readonly class GoPlanRenderer
     public function render(string $siteId,string $host): array
     {
         if(!is_file($this->binary)) throw new \RuntimeException('Build the candidate planner first.');
-        $process=new Process([$this->binary,'plan'],null,['GODEBUG'=>''],json_encode(['site_id'=>$siteId,'hostname'=>$host],JSON_THROW_ON_ERROR),5.0);
+        $cleanEnv=array_fill_keys(array_keys(array_merge(getenv()?:[],$_ENV,$_SERVER)),false);
+        foreach(['SystemRoot','SYSTEMROOT','WINDIR','ComSpec','TEMP','TMP']as $name){$value=getenv($name);if(is_string($value))$cleanEnv[$name]=$value;}
+        $process=new Process([$this->binary,'plan'],null,$cleanEnv,json_encode(['site_id'=>$siteId,'hostname'=>$host],JSON_THROW_ON_ERROR),5.0);
         $output='';$process->disableOutput();
         $process->run(static function(string $type,string $data)use(&$output):void{
             if($type!==Process::OUT)return;

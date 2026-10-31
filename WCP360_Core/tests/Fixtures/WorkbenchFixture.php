@@ -14,7 +14,7 @@ final class WorkbenchFixture
         if(!$sqlite && $db->fetchOne('SELECT current_database()')!=='wcp360_test')throw new \RuntimeException('Fixture cleanup requires the dedicated wcp360_test database.');
         if($sqlite)$db->executeStatement('PRAGMA foreign_keys = ON');
         foreach(['plugins','audit','jobs','sites','memberships','tenants','accounts','users'] as $table)$db->executeStatement('DROP TABLE IF EXISTS wcp_candidate_'.$table);
-        foreach(WorkbenchSchema::statements($db) as $sql)$db->executeStatement($sql);
+        foreach(array_merge(WorkbenchSchema::statements($db),WorkbenchSchema::auditStatements($db)) as $sql)$db->executeStatement($sql);
         $hash=password_hash(self::PASSWORD,PASSWORD_ARGON2ID,['memory_cost'=>8192,'time_cost'=>1]);
         $users=[];$tenants=[];
         foreach(['alice','bob','admin']as $name){

@@ -4,8 +4,8 @@ WORKDIR /src
 COPY WCP360_Core/agents/wcpd/candidate/planner/ ./
 RUN go test ./... && go vet ./... && CGO_ENABLED=0 go build -trimpath -o /out/wcp-plan ./cmd/wcp-plan
 
-FROM php:8.4.27-cli-trixie AS candidate
-RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev libicu-dev libzip-dev unzip curl nginx php8.4-fpm postgresql-client ca-certificates \
+FROM php:8.4.27-fpm-trixie AS candidate
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev libicu-dev libzip-dev unzip curl nginx postgresql-client ca-certificates \
     && docker-php-ext-install intl pdo_pgsql zip opcache \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=composer:2.11.1 /usr/bin/composer /usr/local/bin/composer

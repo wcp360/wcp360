@@ -11,7 +11,7 @@ use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 final readonly class SessionBoundary
 {
     public function __construct(private RuntimeContext $runtime,private TokenStorageInterface $tokens){}
-    #[AsEventListener(event:LoginSuccessEvent::class,method:'login',dispatcher:'security.event_dispatcher.main')]
+    #[AsEventListener(event:LoginSuccessEvent::class,dispatcher:'security.event_dispatcher.main')]
     public function login(LoginSuccessEvent $event):void
     {
         $session=$event->getRequest()->getSession();
@@ -19,7 +19,7 @@ final readonly class SessionBoundary
         $session->set('_wcp_created',time());
         $session->set('_wcp_last',time());
     }
-    #[AsEventListener(event:'kernel.request',method:'request',priority:0)]
+    #[AsEventListener(event:'kernel.request',priority:0)]
     public function request(RequestEvent $event):void
     {
         if(!$event->isMainRequest() || !$this->tokens->getToken()?->getUser() instanceof Principal)return;
