@@ -11,11 +11,12 @@ final readonly class SubmitActivation
     {
         if(!$this->enabled)throw new AccessDeniedHttpException('Isolated provisioning is disabled.');
         $plan=$this->store->job($actor,$planId);
+        $this->store->requireActivationGrant($actor,$plan['tenant_id']);
         return $this->store->db->transactional(function()use($actor,$planId,$plan):string{
             $db=$this->store->db;
             $lock=$db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform?' FOR UPDATE':'';
             $site=$db->fetchAssociative('SELECT * FROM wcp_candidate_sites WHERE id=? AND tenant_id=?'.$lock,[$plan['site_id'],$plan['tenant_id']]);
-            $this->store->requirePermission($actor,$plan['tenant_id']);
+            $this->store->requireActivationGrant($actor,$plan['tenant_id']);
             if(!$site||$site['application_server']!=='php_fpm'||$site['state']!=='PLAN_READY'||(int)$site['revision']!==2||$plan['state']!=='SUCCEEDED')throw new ConflictHttpException('A successful initial PHP-FPM plan is required.');
             $old=$db->fetchOne('SELECT id FROM wcp_candidate_activations WHERE plan_job_id=?',[$planId]);
             if(is_string($old))return $old;

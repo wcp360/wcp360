@@ -16,7 +16,7 @@ flowchart LR
     Observe --> Outcome[Record observed result + audit]
 ~~~
 
-A successful initial PHP-FPM plan at site revision 2 can be queued once for activation. Current tenant permission, runtime mode, readiness and revision are rechecked before dispatch. WCP_ALLOW_ISOLATED_PROVISIONING defaults to 0. The protected form appears only when enabled; wcp:candidate:activate processes one queued operation in worker context. The transport additionally requires Linux, WCP_ISOLATED_TEST_CONTAINER=1 and the container marker.
+A successful initial PHP-FPM plan at site revision 2 can be queued once for activation. An explicit per-user/per-tenant activation grant is required in addition to planning permission; there is no automatic grant migration. The disposable fixture grants this authority deliberately. Current tenant permission and activation-grant revocation, runtime mode, readiness and revision are rechecked before dispatch. WCP_ALLOW_ISOLATED_PROVISIONING defaults to 0. The protected form appears only when enabled; wcp:candidate:activate processes one queued operation in worker context. The transport additionally requires Linux, WCP_ISOLATED_TEST_CONTAINER=1 and the container marker.
 
 The Go component lives in WCP360_Core/agents/wcpd/candidate/provisioning, builds as wcp-candidate-node, and runs separate agent and broker processes. Its seven-field bounded JSON envelope accepts only provision_php_fpm and inspect_php_fpm. The socket authenticates Linux SO_PEERCRED against dedicated configured UIDs; even UID 0 is rejected as an ordinary caller. The worker cannot connect directly to the broker.
 

@@ -38,7 +38,7 @@ jobs:
       - name: Build real Chromium browser verification image
         run: docker build -f WCP360_Build/environments/core-candidate/Browser.Dockerfile -t wcp360-browser-probe .
       - name: Panther real-browser journey with JavaScript
-        run: docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=browser-test-only-secret --entrypoint bash wcp360-browser-probe -ec 'cd /opt/wcp360/WCP360_Core && composer test:browser'
+        run: docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=browser-test-only-secret --entrypoint bash wcp360-browser-probe /opt/wcp360/candidate-browser-smoke.sh
       - name: Backup, upgrade and empty-database restore rehearsal
         run: |
           docker exec wcp-candidate-db createdb -U postgres wcp360_restore_test

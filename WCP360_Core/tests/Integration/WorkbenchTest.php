@@ -103,6 +103,23 @@ final class WorkbenchTest extends WebTestCase
         try{$this->submit();self::fail('Submission without audit accepted');}catch(\Doctrine\DBAL\Exception){}
         self::assertSame(0,(int)$db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_jobs'));self::assertSame(0,(int)$db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_sites'));
     }
+    public function testActivationFormRequiresExplicitGrantAndCsrf():void
+    {
+        $job=$this->submit();self::getContainer()->get(RunHostingPlan::class)->runOne();
+        self::getContainer()->set(\Wcp360\Core\Module\Hosting\Application\SubmitActivation::class,new \Wcp360\Core\Module\Hosting\Application\SubmitActivation($this->store,true));
+        $this->login();
+        $this->browser->request('GET','http://user.localhost/workbench/jobs/'.$job['job_id']);
+        self::assertSelectorNotExists('form[action$="/activate"]');
+        $this->store->db->insert('wcp_candidate_activation_grants',['user_id'=>$this->fixture['users']['alice'],'tenant_id'=>$this->fixture['tenants']['alice']]);
+        $crawler=$this->browser->request('GET','http://user.localhost/workbench/jobs/'.$job['job_id']);
+        $form=$crawler->selectButton('Activer dans le conteneur d’essai')->form();
+        $this->browser->submit($form);self::assertResponseStatusCodeSame(303);
+        self::assertSame('QUEUED',$this->store->db->fetchOne('SELECT state FROM wcp_candidate_activations'));
+        $this->browser->submit($form);self::assertResponseStatusCodeSame(303);
+        self::assertSame(1,(int)$this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_activations'));
+        $this->browser->request('POST','http://user.localhost/workbench/jobs/'.$job['job_id'].'/activate',['_token'=>'forged']);
+        self::assertResponseStatusCodeSame(403);
+    }
     public function testRenderedImportmapNonceMatchesCsp():void
     {
         $crawler=$this->browser->request('GET','http://user.localhost/login');

@@ -77,7 +77,9 @@ final class WorkbenchController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
-        return $this->render('user/job.html.twig',['context'=>$runtime->context,'job'=>$store->job($user->id,$id),'activation'=>$store->db->fetchAssociative('SELECT id,state FROM wcp_candidate_activations WHERE plan_job_id=?',[$id]),'provisioning_enabled'=>$activations->enabled]);
+        $job=$store->job($user->id,$id);$allowed=false;
+        if($activations->enabled){try{$store->requireActivationGrant($user->id,$job['tenant_id']);$allowed=true;}catch(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException){}}
+        return $this->render('user/job.html.twig',['context'=>$runtime->context,'job'=>$job,'activation'=>$store->db->fetchAssociative('SELECT id,state FROM wcp_candidate_activations WHERE plan_job_id=?',[$id]),'provisioning_enabled'=>$allowed]);
     }
     #[Route('/workbench/jobs/{id}/activate',name:'wcp_activate',methods:['POST'])]
     public function activate(string $id,Request $request,SubmitActivation $activations):Response

@@ -17,6 +17,11 @@ final readonly class WorkbenchStore
         $allowed = $this->db->fetchOne("SELECT 1 FROM wcp_candidate_memberships m JOIN wcp_candidate_users u ON u.id=m.user_id WHERE m.user_id=? AND m.tenant_id=? AND m.permission='candidate.hosting.plan' AND u.context='user' AND u.active=1", [$actor,$tenant]);
         if (!$allowed) throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Tenant permission required.');
     }
+    public function requireActivationGrant(string $actor,string $tenant):void
+    {
+        $this->requirePermission($actor,$tenant);
+        if(!$this->db->fetchOne('SELECT 1 FROM wcp_candidate_activation_grants WHERE user_id=? AND tenant_id=?',[$actor,$tenant]))throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Explicit isolated-activation grant required.');
+    }
     public function requireAdmin(string $actor, bool $lock=false): void
     {
         $suffix=$lock && $this->db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform ? ' FOR UPDATE' : '';

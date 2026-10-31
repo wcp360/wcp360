@@ -19,6 +19,7 @@ final class ActivationTest extends KernelTestCase
     {
         self::bootKernel();$this->store=self::getContainer()->get(WorkbenchStore::class);
         $this->fixture=WorkbenchFixture::reset($this->store->db);
+        foreach(['alice','bob']as $name)$this->store->db->insert('wcp_candidate_activation_grants',['user_id'=>$this->fixture['users'][$name],'tenant_id'=>$this->fixture['tenants'][$name]]);
         $this->submit=new SubmitActivation($this->store,true);
         $this->gateway=new class implements ProvisioningGateway{
             public array $requests=[];public bool $fail=false;
@@ -33,6 +34,20 @@ final class ActivationTest extends KernelTestCase
     }
     private function activationWorker():RunActivation{return new RunActivation($this->store,$this->gateway,$this->submit);}
     private function state(string $id):string{return $this->store->db->fetchOne('SELECT state FROM wcp_candidate_activations WHERE id=?',[$id]);}
+    public function testPlanningPermissionDoesNotGrantPhysicalActivation():void
+    {
+        $plan=$this->plan();
+        $this->store->db->delete('wcp_candidate_activation_grants',['user_id'=>$this->fixture['users']['alice']]);
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->submit->submit($this->fixture['users']['alice'],$plan);
+    }
+    public function testActivationGrantRevocationPreventsDispatch():void
+    {
+        $id=$this->submit->submit($this->fixture['users']['alice'],$this->plan());
+        $this->store->db->delete('wcp_candidate_activation_grants',['user_id'=>$this->fixture['users']['alice']]);
+        $this->activationWorker()->runOne();
+        self::assertSame('FAILED',$this->state($id));self::assertSame([],$this->gateway->requests);
+    }
     public function testDisabledActivationCreatesNoOperation():void
     {
         $id=$this->plan();

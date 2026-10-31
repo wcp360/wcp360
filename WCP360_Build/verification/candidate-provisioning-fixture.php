@@ -14,6 +14,7 @@ case 'seed':
     $fixture=WorkbenchFixture::reset($store->db);$requests=[];
     foreach(['alice','bob']as $name){
         $actor=$fixture['users'][$name];$tenant=$fixture['tenants'][$name];
+        $store->db->insert('wcp_candidate_activation_grants',['user_id'=>$actor,'tenant_id'=>$tenant]);
         $plan=$container->get(SubmitHostingPlan::class)->submit($actor,['tenant_id'=>$tenant,'hostname'=>$name.'.test','idempotency_key'=>'provision-fixture-'.$name]);
         $container->get(RunHostingPlan::class)->runOne();
         $activation=$container->get(SubmitActivation::class)->submit($actor,$plan['job_id']);
