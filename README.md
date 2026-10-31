@@ -1336,7 +1336,7 @@ Versions and dependencies must be pinned in each component's manifests. **No min
 | Current use | Required |
 | :--- | :--- |
 | Read or clone the repository | Browser, repository access, and Git for source checkout. |
-| Explore the local HTML prototype | Browser with JavaScript and local storage; an HTTP server. The workspace provides a Windows PowerShell launcher. |
+| Explore the local HTML prototype | Browser with JavaScript and local storage; an HTTP server. The prototype provides loopback-only PowerShell and portable Node.js preview servers. |
 | Study the candidate kernel | PHP 8.4 and the relevant branch README; this candidate is not the complete Symfony platform described above. |
 | Run File Manager from GitHub sources | PHP `^8.2`, `json` and `fileinfo` extensions, Composer, and Symfony `^7.4` dependencies. The PHP `zip` extension is required for ZIP features. |
 | Build the inert daemon | Canonical Debian 13.7 / linux/amd64 environment, Go 1.27.3, pinned image and toolchain, and builds under UID/GID 10001 as documented in its README. |
@@ -1350,7 +1350,7 @@ The stack and catalogs above describe the target. They must be distinguished fro
 | Component | Documented status |
 | :--- | :--- |
 | Specifications, contracts, and governance | Present in `main`, with decision and evidence tracking. |
-| Panel prototype | HTML/CSS/JavaScript sources in `WCP360_Design_System/`, with local demo interactions and data; no server provisioning. |
+| Panel prototype | HTML/CSS/JavaScript sources in `WCP360_Prototype/`, with local demo interactions and data; no server provisioning. |
 | Selected frontend target | PHP/Symfony, Twig, Symfony UX, and shared Twig components; implementation and integration remain to be completed. |
 | Selected backend target | PHP 8.4 / Symfony, Doctrine ORM/DBAL, PostgreSQL 17, and Messenger with an approved transport; these target integrations are not established by the inert foundation alone. |
 | Application kernel and interface | Candidate sources in `source/full-platform-candidate`, including a framework-independent PHP 8.4 kernel and static interface. |
@@ -1388,14 +1388,14 @@ composer install --no-dev --prefer-dist
 
 Then read the [File Manager README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md) to configure storage and use the appropriate launcher. GitHub sources do not include `vendor/`. For development and module tests, use `composer install` with development dependencies.
 
-### Open the design workspace prototype
+### Open the interactive prototype
 
-The prototype sources are published in **`WCP360_Design_System/`** on `main`. This procedure serves static demo pages and browser-storage state; it does not install the target Symfony platform.
+The prototype sources are published in **`WCP360_Prototype/`** on `main`. This procedure serves static demo pages and browser-storage state; it does not install the target Symfony platform.
 
 From the clone or workspace root on Windows:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\WCP360_Design_System\serve-prototype.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\WCP360_Prototype\serve-prototype.ps1"
 ```
 
 Open <http://127.0.0.1:8790/>. Keep the same hostname and port to share demo state between pages. `Ctrl+C` stops the server. Interface actions simulate the panel; they do not configure the server's Linux services.
@@ -1429,7 +1429,7 @@ wcp360/
 ├── WCP360_SDK/
 ├── WCP360_Build/
 ├── WCP360_Releases/
-├── WCP360_Design_System/
+├── WCP360_Prototype/
 └── WCP360_Developper/
 ```
 
@@ -1442,7 +1442,7 @@ wcp360/
 | [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures. | Reserved interface/layout; no executable client or ratified production manifest schema yet. |
 | [WCP360_Build](WCP360_Build/README.md) | Controlled environments, assembly, verification and publication. | Procedure/layout reserved; no new builder or workflow is claimed. |
 | [WCP360_Releases](WCP360_Releases/README.md) | Qualified version records and immutable artifact references. | No qualified release and no latest pointer. |
-| [WCP360_Design_System](WCP360_Design_System/README.md) | Existing panel UI prototype, assets and design notes. | Visual/demo reference to port into the Symfony/Twig frontend. |
+| [WCP360_Prototype](WCP360_Prototype/README.md) | Existing panel UI prototype, assets and design notes. | Visual/demo reference to port into the Symfony/Twig frontend. |
 | [WCP360_Developper](WCP360_Developper/README.md) | Existing developer/product documentation and historical snapshots. | Canonical authority remains in documentation/specifications and the manifest. |
 
 Core functions are namespaced services, not a global functions directory. Twig views live in Core/templates. Composer generates a separate vendor directory for each PHP application; Go dependencies use per-module manifests/cache. Generated dependencies and artifacts are not committed as source.
@@ -1497,7 +1497,7 @@ Research, source candidates and tooling branches require the applicable scope, t
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Follow release qualification | [Qualified version records](WCP360_Releases/README.md), [build procedures](WCP360_Build/README.md) and [installer scaffolds](WCP360_Core/installer/scaffolds/README.md). |
-| Explore the imported workspace | [Core](WCP360_Core/README.md), [Design System](WCP360_Design_System/README.md), [developer documentation](WCP360_Developper/README.md), and [plugins](WCP360_Plugins/). |
+| Explore the imported workspace | [Core](WCP360_Core/README.md), [Prototype](WCP360_Prototype/README.md), [developer documentation](WCP360_Developper/README.md), and [plugins](WCP360_Plugins/). |
 | Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
 | Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
 | Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |

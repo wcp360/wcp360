@@ -662,7 +662,7 @@ Use two distinct fields in the future registry: **documentation maturity** and *
 
 Imported design references (non-normative):
 
-- [Core and extension boundaries](WCP360_Design_System/08-core-extension-architecture.md).
+- [Core and extension boundaries](WCP360_Prototype/08-core-extension-architecture.md).
 - [Plugin and Extension Manager](WCP360_Developper/280-plugin-extension-manager.md).
 - [Plugin trust and permissions](WCP360_Developper/600-plugin-trust-signing.md).
 - [Extension marketplace model](WCP360_Developper/601-extension-marketplace-model.md).

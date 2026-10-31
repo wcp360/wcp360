@@ -160,6 +160,20 @@
         }
       ],
       "candidate_source_paths": "Existing SOURCE/ and File Manager PR candidates remain on their frozen branches; future location adaptation requires tests/review."
+    },
+    {
+      "date": "2026-10-31",
+      "source_main": "888db7c67e39620e5904d417310f1879c3122294",
+      "purpose": "Rename and improve the local hosting-control-panel prototype",
+      "relocations": [
+        {
+          "from": "WCP360_Design_System/",
+          "to": "WCP360_Prototype/",
+          "content_change": "UI, setup validation, documentation and self-contained verification updated; historical canonical specifications unchanged"
+        }
+      ],
+      "historical_references": "Frozen packages, commit citations and branch names keep their original design-system identifiers.",
+      "runtime_authorization_changed": false
     }
   ]
 }

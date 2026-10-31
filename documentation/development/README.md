@@ -13,7 +13,7 @@ Build one autonomous hosting Core, develop detached plugins against a versioned 
 | [WCP360_SDK](../../WCP360_SDK/README.md) | Public PHP client/contracts and synthetic testing support for integrations; no Core internals or privileged broker client. |
 | [WCP360_Build](../../WCP360_Build/README.md) | Build environments, package assembly and qualification/publication procedures. Generated output goes under ignored `build/`. |
 | [WCP360_Releases](../../WCP360_Releases/README.md) | Records for qualified releases and their immutable artifact references. No qualified version currently exists. |
-| [WCP360_Design_System](../../WCP360_Design_System/README.md) | Existing UI prototype and visual reference. Port reviewed components to Twig; browser simulation is not production logic. |
+| [WCP360_Prototype](../../WCP360_Prototype/README.md) | Existing UI prototype and visual reference. Port reviewed components to Twig; browser simulation is not production logic. |
 | [WCP360_Developper](../../WCP360_Developper/README.md) | Existing developer/product corpus and historical evidence. |
 | [documentation](../README.md) | Current specifications, baseline membership, governance, development method and provenance. |
 

@@ -11,9 +11,9 @@ Technical documentation is grouped here so the repository root can focus on proj
 | [contracts/](contracts/README.md) | Contract navigation and implementation consumption guidance. | Use the published specification bodies rather than creating duplicate contracts. |
 | [manifests/](manifests/WCP360-BM-0001.md) | Baseline membership, versions and implementation gates. | Read the latest explicit decisions; older entries are retained as history. |
 | [governance/](governance/PROJECT-STATUS.md) | Project status, decisions, handoffs, reviews, audits and publication evidence. | Follow owner authority and the [review policy](governance/REVIEW-MERGE-POLICY.md). |
-| [design-system/](design-system/V2.5.3.36.4/README.md) | Published Design System Markdown reference. | Documentary reference; UI prototypes remain in WCP360_Design_System. |
+| [design-system/](design-system/V2.5.3.36.4/README.md) | Published Design System Markdown reference. | Documentary reference; UI prototypes remain in WCP360_Prototype. |
 | [library-mirror/](library-mirror/README.md) | The 147-file materialized Project/Library mirror and its integrity manifest. | Preserve source bytes and provenance; mirror publication does not promote authority. |
-| [snapshots/](snapshots/) | Earlier consolidated documentation snapshots. | Historical, non-normative evidence. |
+| [Consolidated developer snapshot](../WCP360_Developper/WCP360_CONSOLIDATED_MD_2026-09-27/) | Earlier consolidated documentation snapshots. | Historical, non-normative evidence. |
 | [visuals/](visuals/README.md) | Explanatory project visuals. | Read alongside current owner specifications. |
 
 ## Canonical implementation inputs
@@ -34,7 +34,7 @@ The October 31 relocation preserves every file under specifications and manifest
 ## Repository navigation
 
 - [Project overview](../README.md), [architecture](../ARCHITECTURE.md) and [plugin catalogue](../PLUGIN_CATALOG.md).
-- [Core application reservation](../WCP360_Core/README.md), [UI prototype](../WCP360_Design_System/README.md), [developer corpus](../WCP360_Developper/README.md), [plugins](../WCP360_Plugins/) and [qualified release records](../WCP360_Releases/README.md).
+- [Core application reservation](../WCP360_Core/README.md), [UI prototype](../WCP360_Prototype/README.md), [developer corpus](../WCP360_Developper/README.md), [plugins](../WCP360_Plugins/) and [qualified release records](../WCP360_Releases/README.md).
 - [Core engine](development/CORE-ENGINE.md), [plugin lifecycle](development/PLUGIN-LIFECYCLE.md), [delivery](development/DELIVERY-AND-RELEASES.md), [SDK](../WCP360_SDK/README.md) and [build procedures](../WCP360_Build/README.md).
 - [Repository structure and history access](REPOSITORY-STRUCTURE.md), [branch reconciliation](governance/branches/BRANCH-RECONCILIATION-2026-10-31.md), [contribution guide](../CONTRIBUTING.md) and [security reporting](../SECURITY.md).
 
@@ -42,4 +42,4 @@ The October 31 relocation preserves every file under specifications and manifest
 
 `DOC-BASELINE = v4.0.21.23` remains the selected documentary baseline. The physical canonical archive `WCP-Design-System-Spec-v4.0.21.23-global-canonical-registry-consolidation.zip` has not been reconstructed or substituted; publication remains tracked by issues #16 and #24.
 
-The available 42-Markdown consolidated snapshot under `snapshots/2026-09-27/` predates final H3-CM/H3-V2 closure and does not replace accepted owner artifacts. The [materialized inventory](MATERIALIZED-MARKDOWN-INVENTORY.md) and [147-file mirror manifest](library-mirror/MANIFEST.md) retain their original evidence. When the exact DOC archive becomes available, preserve its bytes and relative paths under `documentation/baselines/v4.0.21.23/` with reviewed integrity metadata.
+The available 42-Markdown consolidated snapshot under `WCP360_Developper/WCP360_CONSOLIDATED_MD_2026-09-27/` predates final H3-CM/H3-V2 closure and does not replace accepted owner artifacts. The [materialized inventory](MATERIALIZED-MARKDOWN-INVENTORY.md) and [147-file mirror manifest](library-mirror/MANIFEST.md) retain their original evidence. When the exact DOC archive becomes available, preserve its bytes and relative paths under `documentation/baselines/v4.0.21.23/` with reviewed integrity metadata.
