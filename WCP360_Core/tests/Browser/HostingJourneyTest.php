@@ -14,6 +14,8 @@ final class HostingJourneyTest extends PantherTestCase
         $client=self::createPantherClient(['browser'=>self::CHROME,'hostname'=>'localhost','port'=>9080,'webServerDir'=>dirname(__DIR__,2).'/public'],[],['chromedriver_arguments'=>['--log-level=WARNING','--log-path=/tmp/wcp-browser/chromedriver.log']]);
         $store=self::getContainer()->get(WorkbenchStore::class);WorkbenchFixture::reset($store->db);
         $client->request('GET','/login');
+        if($client->getCrawler()->filter('form[action="/login"]')->count()!==1){fwrite(STDERR,'Unexpected browser page: '.$client->getCurrentURL().' '.substr($client->executeScript('return document.body.innerText'),0,3000).PHP_EOL);}
+        self::assertSelectorExists('form[action="/login"]');
         $client->submitForm('Se connecter',['_username'=>'alice@example.test','_password'=>WorkbenchFixture::PASSWORD]);
         $client->waitFor('[data-form-guard-ready="true"]');
         self::assertSelectorTextContains('h1','Tableau de bord');

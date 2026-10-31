@@ -35,10 +35,6 @@ jobs:
         run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
       - name: Symfony to isolated Go agents and two PHP-FPM sites
         run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-provisioning-smoke.sh
-      - name: Build real Chromium browser verification image
-        run: docker build -f WCP360_Build/environments/core-candidate/Browser.Dockerfile -t wcp360-browser-probe .
-      - name: Panther real-browser journey with JavaScript
-        run: docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=browser-test-only-secret --entrypoint bash wcp360-browser-probe /opt/wcp360/candidate-browser-smoke.sh
       - name: Backup, upgrade and empty-database restore rehearsal
         run: |
           docker exec wcp-candidate-db createdb -U postgres wcp360_restore_test
@@ -59,3 +55,14 @@ jobs:
         run: docker build -f WCP360_Build/environments/core-candidate/FrankenPHP.Dockerfile -t wcp360-worker-probe .
       - name: Real Nginx / FrankenPHP worker isolation probe
         run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 wcp360-worker-probe
+  browser-panther:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build real Chromium browser verification image
+        run: docker build -f WCP360_Build/environments/core-candidate/Browser.Dockerfile -t wcp360-browser-probe .
+      - name: Panther real-browser journey with JavaScript
+        run: docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=browser-test-only-secret --entrypoint bash wcp360-browser-probe /opt/wcp360/candidate-browser-smoke.sh
