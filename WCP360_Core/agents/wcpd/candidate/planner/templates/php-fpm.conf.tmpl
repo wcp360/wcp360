@@ -17,3 +17,6 @@ php_admin_flag[expose_php] = off
 php_admin_value[session.cookie_httponly] = 1
 php_admin_value[session.cookie_samesite] = Strict
 php_admin_value[upload_tmp_dir] = /srv/wcp360-candidate/vhosts/{{.ID}}/tmp
+php_admin_value[sys_temp_dir] = /srv/wcp360-candidate/vhosts/{{.ID}}/tmp
+php_admin_value[session.save_path] = /srv/wcp360-candidate/vhosts/{{.ID}}/tmp/sessions
+php_admin_flag[opcache.validate_permission] = on

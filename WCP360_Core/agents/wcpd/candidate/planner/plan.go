@@ -3,10 +3,10 @@ package planner
 
 import (
 	"bytes"
+	"crypto/sha256"
 	_ "embed"
 	"fmt"
 	"regexp"
-	"strings"
 	"text/template"
 )
 
@@ -33,7 +33,8 @@ func Render(r Request) (Plan, error) {
 	if !siteID.MatchString(r.SiteID) || len(r.Hostname) > 253 || !hostname.MatchString(r.Hostname) {
 		return Plan{}, fmt.Errorf("invalid candidate identity or .test hostname")
 	}
-	values := struct{ ID, Host, User string }{r.SiteID, r.Hostname, "wcp_" + strings.ReplaceAll(r.SiteID[:13], "-", "")}
+	digest := sha256.Sum256([]byte(r.SiteID))
+	values := struct{ ID, Host, User string }{r.SiteID, r.Hostname, fmt.Sprintf("wcp_%x", digest[:12])}
 	render := func(source string) (string, error) {
 		t, e := template.New("plan").Option("missingkey=error").Parse(source)
 		if e != nil {
