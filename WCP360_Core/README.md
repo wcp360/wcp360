@@ -119,3 +119,7 @@ The candidate implements a Symfony bootstrap, selected application suites, inert
 - [Installer and release qualification](../documentation/development/DELIVERY-AND-RELEASES.md)
 - [Current baseline manifest](../documentation/manifests/WCP360-BM-0001.md)
 - [Architecture](../ARCHITECTURE.md)
+
+### Debian VM verification and embedded demo application
+
+The isolated provisioning candidate supports a separate [disposable Debian 13 VM profile](../documentation/development/DEBIAN-VM.md), using the distribution PHP-FPM package and explicit boot-bound root intent. The shared harness deploys a reviewed embedded PHP demo with sessions, CSRF and tenant-private persistent state. This does not enable arbitrary application uploads or production installation.

@@ -15,15 +15,54 @@ import (
 )
 
 func Guard() error {
-	if os.Getenv("WCP_ISOLATED_TEST_CONTAINER") != "1" {
-		return fmt.Errorf("isolated test container flag required")
-	}
-	info, e := os.Lstat("/.dockerenv")
-	if e != nil || !info.Mode().IsRegular() {
+	container, vm := os.Getenv("WCP_ISOLATED_TEST_CONTAINER"), os.Getenv("WCP_ISOLATED_TEST_VM")
+	if container == "1" && vm == "" {
+		info, e := os.Lstat("/.dockerenv")
+		if e == nil && info.Mode().IsRegular() {
+			return nil
+		}
 		return fmt.Errorf("container marker required")
 	}
-	return nil
+	if vm != "1" || container != "" {
+		return fmt.Errorf("exactly one disposable execution profile required")
+	}
+	if _, e := os.Lstat("/.dockerenv"); !os.IsNotExist(e) {
+		return fmt.Errorf("VM profile refuses containers")
+	}
+	info, e := os.Lstat(VMMarker)
+	if e != nil || !info.Mode().IsRegular() || info.Size() > 128 {
+		return fmt.Errorf("VM marker required")
+	}
+	stat, ok := info.Sys().(*syscall.Stat_t)
+	if !ok {
+		return fmt.Errorf("VM marker ownership unavailable")
+	}
+	marker, e := os.ReadFile(VMMarker)
+	if e != nil {
+		return e
+	}
+	bootID, e := os.ReadFile("/proc/sys/kernel/random/boot_id")
+	if e != nil {
+		return e
+	}
+	product, e := os.ReadFile("/sys/class/dmi/id/product_name")
+	if e != nil {
+		return e
+	}
+	release, e := os.ReadFile("/etc/os-release")
+	if e != nil {
+		return e
+	}
+	return validateVMEvidence(string(marker), string(bootID), string(product), string(release), stat.Uid, uint32(info.Mode().Perm()))
 }
+
+func fpmBinary() string {
+	if os.Getenv("WCP_ISOLATED_TEST_VM") == "1" {
+		return "/usr/sbin/php-fpm8.4"
+	}
+	return "/usr/local/sbin/php-fpm"
+}
+
 func peer(conn *net.UnixConn) (uint32, error) {
 	raw, e := conn.SyscallConn()
 	if e != nil {

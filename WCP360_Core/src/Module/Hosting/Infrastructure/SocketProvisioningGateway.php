@@ -6,7 +6,7 @@ final class SocketProvisioningGateway implements ProvisioningGateway
 {
     public function send(array $request):string
     {
-        if(PHP_OS_FAMILY!=='Linux'||getenv('WCP_ISOLATED_TEST_CONTAINER')!=='1'||!is_file('/.dockerenv'))throw new \RuntimeException('Provisioning requires the isolated Linux test container.');
+        DisposableExecution::requireEnvironment();
         $socket=@stream_socket_client('unix:///run/wcp360-provision-candidate/public/agent.sock',$errno,$error,3);
         if($socket===false)throw new \RuntimeException('Candidate agent unavailable.');
         try{

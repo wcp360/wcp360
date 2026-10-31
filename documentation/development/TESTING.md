@@ -41,3 +41,7 @@ Pest is an optional alternative syntax over PHPUnit and is not installed in the 
 Static analysis is a type/correctness control, not a replacement for a security audit, adversarial testing or independent review. Run outcomes are bound to the exact commit and environment in [PR #116](https://github.com/yyogas/wcp360/pull/116).
 
 References: [Symfony testing](https://symfony.com/doc/7.4/testing.html), [PHPStan levels](https://phpstan.org/user-guide/rule-levels), [Panther](https://symfony.com/doc/current/testing/end_to_end.html), [Pest installation](https://pestphp.com/docs/installation).
+
+## Clean Debian VM and hosted application
+
+The [disposable VM rehearsal](DEBIAN-VM.md) runs the shared provisioning and packaged-application checks against Debian 13 distribution PHP-FPM. Its explicit environment gates have PHP and Go regression coverage for stale boot IDs, wrong distributions, ordinary VM identifiers and writable/tenant-owned markers. This is additional to the container, PostgreSQL, Panther and FrankenPHP jobs; consult the exact workflow run for execution evidence.

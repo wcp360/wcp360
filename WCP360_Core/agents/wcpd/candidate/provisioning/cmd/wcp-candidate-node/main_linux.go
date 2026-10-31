@@ -24,7 +24,7 @@ func main() {
 	ipcGID := fs.Uint("ipc-gid", 0, "dedicated worker-agent IPC group")
 	fs.Parse(os.Args[2:])
 	if fs.NArg() != 0 || *agentUID < 1000 || *workerUID < 1000 || *ipcGID < 1000 || *ipcGID > 2147483647 || *agentUID == *workerUID || *agentUID > 2147483647 || *workerUID > 2147483647 || p.Guard() != nil {
-		fmt.Fprintln(os.Stderr, "isolated candidate identities/container required")
+		fmt.Fprintln(os.Stderr, "isolated candidate identities/execution profile required")
 		os.Exit(78)
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)

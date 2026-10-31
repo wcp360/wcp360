@@ -4,6 +4,7 @@ package provisioning
 
 import (
 	"context"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	planner "github.com/yyogas/wcp360/candidate/planner"
@@ -15,9 +16,13 @@ import (
 	"os/user"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 )
+
+//go:embed fixtures/demo.php
+var demoApplication string
 
 type record struct {
 	Request     Request `json:"request"`
@@ -239,11 +244,14 @@ func (b *Broker) apply(r Request) error {
 		}
 	}
 	source := "<?php declare(strict_types=1); header('Content-Type: application/json'); preg_match('/^Uid:\\s+([0-9]+)\\s+([0-9]+)/m',(string)file_get_contents('/proc/self/status'),$uid); echo json_encode(['site_id'=>'" + r.SiteID + "','tenant_id'=>'" + r.TenantID + "','euid'=>(int)($uid[2]??0)],JSON_THROW_ON_ERROR);"
-	if e = writeNew(base+"/public/index.php", []byte(source), 0640); e != nil {
-		return e
-	}
-	if e = os.Chown(base+"/public/index.php", 0, gid); e != nil {
-		return e
+	app := strings.NewReplacer("{{SITE_ID}}", r.SiteID, "{{TENANT_ID}}", r.TenantID).Replace(demoApplication)
+	for file, content := range map[string]string{"index.php": app, "__wcp_probe.php": source} {
+		if e = writeNew(base+"/public/"+file, []byte(content), 0640); e != nil {
+			return e
+		}
+		if e = os.Chown(base+"/public/"+file, 0, gid); e != nil {
+			return e
+		}
 	}
 	if e = fixedCommand("/usr/sbin/usermod", "-aG", name, "www-data"); e != nil {
 		return e
@@ -261,11 +269,11 @@ func (b *Broker) apply(r Request) error {
 	if e = fixedCommand("/usr/sbin/nginx", "-t", "-c", StateRoot+"/nginx.conf"); e != nil {
 		return e
 	}
-	if e = fixedCommand("/usr/local/sbin/php-fpm", "-t", "-y", StateRoot+"/fpm.conf"); e != nil {
+	if e = fixedCommand(fpmBinary(), "-t", "-y", StateRoot+"/fpm.conf"); e != nil {
 		return e
 	}
 	if !b.fpmStarted {
-		if e = b.start("/usr/local/sbin/php-fpm", "-F", "-y", StateRoot+"/fpm.conf"); e != nil {
+		if e = b.start(fpmBinary(), "-F", "-y", StateRoot+"/fpm.conf"); e != nil {
 			return e
 		}
 		b.fpmStarted = true
@@ -310,7 +318,7 @@ func (b *Broker) healthy(r Request) bool {
 	client := http.Client{Timeout: time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }, Transport: &http.Transport{Proxy: nil, DialContext: (&net.Dialer{Timeout: time.Second}).DialContext, DisableKeepAlives: true}}
 	defer client.CloseIdleConnections()
 	for i := 0; i < 30; i++ {
-		req, _ := http.NewRequest("GET", "http://127.0.0.1:8080/index.php", nil)
+		req, _ := http.NewRequest("GET", "http://127.0.0.1:8080/__wcp_probe.php", nil)
 		req.Host = r.Hostname
 		response, e := client.Do(req)
 		if e == nil {

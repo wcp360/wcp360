@@ -1539,3 +1539,7 @@ Research, source candidates and tooling branches require the applicable scope, t
 | Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
 
 Contributions should identify the component, its contract, and the checks performed. A working interface, a passing local test, or a source branch does not replace the review and promotion required by project governance.
+
+### Disposable Debian VM rehearsal
+
+The executable candidate includes a [clean Debian 13 QEMU rehearsal](documentation/development/DEBIAN-VM.md) for distribution PHP-FPM, two tenant identities and an embedded PHP application with sessions, CSRF and private persistent state. This complements PostgreSQL, PHPUnit, PHPStan, Panther and FrankenPHP container verification. Execution evidence belongs to the exact workflow run; production installation, customer application uploads and stable release promotion remain separate qualification steps.
