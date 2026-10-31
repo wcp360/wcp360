@@ -1,0 +1,26 @@
+parameters:
+    env(WCP_CONTEXT): user
+    env(WCP_CANDIDATE): '0'
+    env(WCP_PUBLIC_HOST): user.localhost
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    Wcp360\Core\:
+        resource: ../src/
+        exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/']
+    Wcp360\Core\Shared\Security\RuntimeContext:
+        arguments:
+            $context: '%env(WCP_CONTEXT)%'
+            $enabled: '%env(bool:WCP_CANDIDATE)%'
+            $environment: '%kernel.environment%'
+            $host: '%env(WCP_PUBLIC_HOST)%'
+    Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+    Wcp360\Core\Module\ExtensionManagement\Application\PluginRegistry:
+        arguments:
+            $pluginRoot: '%kernel.project_dir%/../WCP360_Plugins'
+    Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer:
+        arguments:
+            $binary: '%env(resolve:WCP_PLANNER)%'

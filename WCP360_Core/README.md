@@ -1,6 +1,8 @@
 # WCP360 Core
 
-**Status: implementation layout documented; no executable Symfony bootstrap or complete hosting engine is supplied by this scaffold.**
+**Status: an executable development candidate is available; the complete hosting engine and production release remain unqualified.**
+
+Start with the [candidate run guide](../documentation/development/EXECUTABLE-CANDIDATE.md) for Docker/native setup, account enrollment, job processing, plugin lifecycle and the exact remaining acceptance work. Symfony 7.4 LTS/PHP 8.4, Twig, Turbo/Stimulus, candidate persistence, a Go plan builder and automated checks are now implemented on the dedicated draft branch.
 
 The Core owns essential hosting, local administration/recovery and the extension manager. It must run with zero optional plugins. Detached packages use the public SDK/API and their own processes; installing a plugin does not modify the Core Composer graph or inject its code into Symfony.
 
@@ -75,7 +77,7 @@ WCP360_Core/
     └── scaffolds/               # Historical guarded templates, not stable installers
 ```
 
-The Symfony bootstrap will add its real composer.json/lock, bootstrap/configuration and application commands after toolchain/slice acceptance. Composer generates vendor/; runtime var/ and build/cache output are not source. No placeholder dependency lock or synthetic application kernel is presented as an implemented platform.
+The candidate supplies real composer.json/composer.lock, Kernel, HTTP/CLI entry points, configuration, migration and commands. It requires WCP_CANDIDATE=1 with APP_ENV=dev/test and refuses production boot. The experimental wcp_candidate_* tables and /workbench routes are separate from canonical production schemas/contracts. Composer generates vendor/; var/, public/assets/ and build/cache outputs are not source.
 
 ## README capability coverage
 

@@ -1,0 +1,15 @@
+**/.env
+**/.env.*
+!**/.env.example
+**/vendor
+**/node_modules
+**/var
+**/build
+**/public/assets
+.git
+archive
+governance
+tools
+WCP360_Internal_Management
+WCP360_Official_Website
+WCP360_Prototype

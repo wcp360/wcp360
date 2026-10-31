@@ -1,0 +1,30 @@
+security:
+    password_hashers:
+        Wcp360\Core\Module\IdentityAccess\Domain\Principal:
+            algorithm: sodium
+    providers:
+        workbench:
+            id: Wcp360\Core\Module\IdentityAccess\Infrastructure\PrincipalProvider
+    firewalls:
+        main:
+            lazy: true
+            provider: workbench
+            user_checker: Wcp360\Core\Shared\Security\ContextUserChecker
+            form_login:
+                login_path: wcp_login
+                check_path: wcp_login
+                enable_csrf: true
+                default_target_path: wcp_dashboard
+                use_referer: false
+                always_use_default_target_path: true
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
+            logout:
+                path: wcp_logout
+                target: wcp_login
+                enable_csrf: true
+    access_control:
+        - { path: '^/health$', roles: PUBLIC_ACCESS }
+        - { path: '^/login$', roles: PUBLIC_ACCESS }
+        - { path: '^/', roles: IS_AUTHENTICATED_FULLY }

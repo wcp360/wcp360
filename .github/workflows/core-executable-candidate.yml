@@ -1,0 +1,44 @@
+name: Core executable candidate
+on:
+  pull_request:
+    paths: ['WCP360_Core/**', 'WCP360_SDK/**', 'WCP360_Plugins/wcp360-reference-report/**', 'WCP360_Build/**', '.dockerignore', '.github/workflows/core-executable-candidate.yml']
+  push:
+    branches: ['implementation/core-executable-foundation-20261031']
+permissions:
+  contents: read
+concurrency:
+  group: core-candidate-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  debian-postgresql:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build tested Debian 13 / PHP 8.4 / Go candidate
+        run: docker build -f WCP360_Build/environments/core-candidate/Dockerfile -t wcp360-candidate .
+      - name: Start isolated PostgreSQL 17
+        run: |
+          docker network create wcp-candidate
+          docker run -d --name wcp-candidate-db --network wcp-candidate -e POSTGRES_PASSWORD=ci-only-ephemeral-password -e POSTGRES_DB=wcp360_test postgres:17-trixie
+          for attempt in {1..60}; do
+            if docker exec wcp-candidate-db pg_isready -U postgres -d wcp360_test; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Application tests against real PostgreSQL
+        run: |
+          docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e WCP_TEST_DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' --entrypoint bash wcp360-candidate -c 'cd /opt/wcp360/WCP360_Core && php installer/preflight/candidate.php --target --dependencies && php bin/console doctrine:migrations:migrate --no-interaction && composer validate --strict && composer check-platform-reqs && composer audit --locked && php bin/console lint:container && php bin/console lint:yaml config && php bin/console lint:twig templates && php vendor/phpunit/phpunit/phpunit --colors=never --testdox'
+      - name: Real Nginx / PHP-FPM isolated hosting probe
+        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
+      - name: Backup, upgrade and empty-database restore rehearsal
+        run: |
+          docker exec wcp-candidate-db createdb -U postgres wcp360_restore_test
+          docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e PGHOST=wcp-candidate-db -e PGUSER=postgres -e PGPASSWORD=ci-only-ephemeral-password -e PGDATABASE=wcp360_test --entrypoint bash wcp360-candidate -ec 'cd /opt/wcp360/WCP360_Core; backup_file="$(bash installer/recovery/candidate-backup.sh)"; bash installer/upgrades/candidate-upgrade.sh "$backup_file"; PGDATABASE=wcp360_restore_test bash installer/recovery/candidate-restore-test.sh "$backup_file"'
+      - name: Cleanup disposable containers
+        if: always()
+        run: |
+          docker rm -f wcp-candidate-db || true
+          docker network rm wcp-candidate || true

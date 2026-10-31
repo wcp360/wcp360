@@ -1,0 +1,9 @@
+{
+  "id": "wcp360-reference-report",
+  "version": "0.1.0-dev",
+  "api": "wcp360.candidate.summary/1",
+  "mode": "detached",
+  "capabilities": [
+    "candidate.summary.read"
+  ]
+}
