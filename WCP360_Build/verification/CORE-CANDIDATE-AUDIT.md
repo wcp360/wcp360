@@ -31,7 +31,7 @@ A separate immutable-image Linux job validates actual FrankenPHP configuration, 
 
 ## Isolated provisioning and quality candidate
 
-The next candidate adds locked Symfony Test Pack/Panther/PHPStan dependencies, level-8 analysis without baseline/ignored errors, typed SDK/Core boundaries and validation of deserialized session identities. The local suite passes 62 tests / 159 assertions with the existing Windows console skip. Static analysis, container/YAML/Twig checks and Linux cross-compilation pass locally.
+The next candidate adds locked Symfony Test Pack/Panther/PHPStan dependencies, level-8 analysis without baseline/ignored errors, typed SDK/Core boundaries and validation of deserialized session identities. The local suite passes 63 tests / 160 assertions with the existing Windows console skip. Static analysis, container/YAML/Twig checks and Linux cross-compilation pass locally.
 
 Separate agent/broker processes implement bounded disposable-container PHP-FPM provisioning with durable activation/audit state, strict Unix peer authentication, initial-revision checks and outcome inspection instead of blind physical retries. Real Linux effects and Panther are assigned to the current workflow; consult the exact run in PR #116 before claiming success. This is not fresh-VM, production IPC-B or independent security-review evidence.
 

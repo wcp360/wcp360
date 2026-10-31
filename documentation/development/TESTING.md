@@ -28,7 +28,7 @@ The standalone File Manager and proposed catalog packages are not claimed as int
 
 ## Browser setup and data
 
-The Linux browser image installs Chromium and its matching distribution ChromeDriver. It uses an application-specific SQLite fixture in Core var/panther.db and a localhost-only test origin. It exercises a real HTTP server and JavaScript; WebTestCase remains useful for faster request-level tests.
+The Linux browser image installs Chromium and its matching distribution ChromeDriver. It uses an application-specific SQLite fixture in Core var/panther.db and a localhost-only test origin. The fixture Kernel uses test; PANTHER_APP_ENV=dev starts the HTTP application with native session cookies, avoiding the mock-file storage used by KernelBrowser. Both processes share only the synthetic browser database. It exercises a real HTTP server and JavaScript; WebTestCase remains useful for faster request-level tests.
 
 PANTHER_NO_SANDBOX is scoped to Chromium inside the disposable non-root CI container. It does not disable tenant isolation or AlmaLinux SELinux. Production hosting services never consume this browser setting.
 

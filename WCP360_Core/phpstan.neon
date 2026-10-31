@@ -4,6 +4,9 @@ parameters:
     paths:
         - src
         - migrations
+        - config/bootstrap.php
+        - public/index.php
+        - bin/console
         - ../WCP360_SDK/php/CandidateJobSummary.php
         - ../WCP360_Plugins/wcp360-reference-report/bin/report.php
     tmpDir: var/phpstan
