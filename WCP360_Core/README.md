@@ -4,6 +4,8 @@
 
 The Core owns essential hosting, local administration/recovery and the extension manager. It must run with zero optional plugins. Detached packages use the public SDK/API and their own processes; installing a plugin does not modify the Core Composer graph or inject its code into Symfony.
 
+Start with the [change-location index](NAVIGATION.md) to find a function, command, dependency or Linux-service configuration. The [dependency guide](DEPENDENCIES.md) identifies manifests, locks and generated libraries.
+
 ## Source layout
 
 ```text
@@ -19,6 +21,8 @@ WCP360_Core/
 │   ├── user/
 │   ├── components/
 │   └── setup/
+├── resources/                   # Versioned service configuration templates/profiles
+│   └── services/                # Nginx, Apache, PHP-FPM, mail, databases and system adapters
 ├── assets/                      # Stimulus, styles and approved frontend pipeline
 ├── public/                      # Published entry points only
 ├── translations/
@@ -33,6 +37,12 @@ WCP360_Core/
 ```
 
 The Symfony bootstrap will add its real composer.json/lock, bootstrap/configuration and application commands after toolchain/slice acceptance. Composer generates vendor/; runtime var/ and build/cache output are not source. No placeholder dependency lock or synthetic application kernel is presented as an implemented platform.
+
+## Configuration and commands
+
+Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all twelve built-in domains and sixteen service-resource locations to their owners.
+
+Business functions are cohesive services in the owning module. CLI adapters belong in that module's UI/Console layer and call the same authorized use cases as HTTP. bin contains entry points; agents contain the accepted controlled system operations. See the [command guide](bin/README.md).
 
 ## Development boundaries
 

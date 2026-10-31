@@ -23,6 +23,16 @@ Use `src/Module/<Domain>/{Domain,Application,Infrastructure,UI}`. Start with the
 
 All API, database, permissions, IPC and event identifiers come from their accepted namespaces. Do not infer an action grant from a plugin ID, job ID, menu item or IPC operation ID.
 
+## Locate functions, commands and Linux configuration
+
+The [Core navigation index](../../WCP360_Core/NAVIGATION.md) maps a requested change to the relevant source. Named module directories document ownership; create Domain/Application/Infrastructure/UI code directories with their first accepted implementation.
+
+Symfony service wiring, packages and routes belong in config. Versioned service templates/profiles belong in [resources/services](../../WCP360_Core/resources/services/README.md): Nginx, Apache, PHP-FPM, Postfix, Dovecot, Rspamd, PostgreSQL, MySQL, MariaDB, Redis, DNS, systemd, SSH, firewall, log rotation and backup tooling. A resource folder does not enable or qualify that engine.
+
+Domain CLI classes belong in UI/Console and reuse the application use case. Fixed system operations remain in the accepted Go agent/broker boundary. Rendering templates does not grant PHP write access to /etc; a validated, revision-bound operation must use approved primitives and verify the observed service result.
+
+[Dependency ownership](../../WCP360_Core/DEPENDENCIES.md) distinguishes Core Composer dependencies, independently versioned SDK/plugin graphs, Go modules, specialized Python tools and OS packages. No global functions directory, universal dependency tree, duplicate service default or second privileged command registry is introduced.
+
 ## Shared services built once
 
 | Foundation | Expected behavior and proof |

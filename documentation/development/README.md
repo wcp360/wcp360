@@ -17,6 +17,8 @@ Build one autonomous hosting Core, develop detached plugins against a versioned 
 | [WCP360_Developper](../../WCP360_Developper/README.md) | Existing developer/product corpus and historical evidence. |
 | [documentation](../README.md) | Current specifications, baseline membership, governance, development method and provenance. |
 
+Use the [Core change-location index](../../WCP360_Core/NAVIGATION.md) for task-based navigation, the [module index](../../WCP360_Core/src/Module/README.md) for business ownership and the [Linux-service directory](../../WCP360_Core/resources/services/README.md) for configuration sources. Dependency graphs and generated libraries are detailed in [Core/DEPENDENCIES.md](../../WCP360_Core/DEPENDENCIES.md).
+
 ## Where code, functions, templates and dependencies belong
 
 | Concern | Source location | Rule |
@@ -25,6 +27,9 @@ Build one autonomous hosting Core, develop detached plugins against a versioned 
 | Use cases and functions | `.../Application/` | Symfony-injected services, command/query handlers and ports; avoid a global functions/Utils directory. |
 | Persistence and external adapters | `.../Infrastructure/` | Implement domain ports; use only the approved database and transport contracts. |
 | Controllers, forms and presenters | `.../UI/` | Thin transport/UI layer; authorization and business invariants remain server-side. |
+| Domain CLI commands | `WCP360_Core/src/Module/<Domain>/UI/Console/` | Thin registered Symfony adapters reuse the same authorized application use cases as HTTP. |
+| Symfony configuration | `WCP360_Core/config/` | Packages, routes, service wiring and explicit per-runtime contexts; no applied Linux-service files. |
+| Linux configuration sources | `WCP360_Core/resources/services/<service>/` | Reviewed templates/profiles, with one owning domain and bounded configuration lifecycle. Applied /etc files and secrets stay outside Git. |
 | Reusable foundations | `WCP360_Core/src/Shared/` | One implementation of shared policies and typed infrastructure; domain-specific rules stay in their module. |
 | Twig views | `WCP360_Core/templates/{admin,user,components,setup}/` | First-party templates only; ADMIN/USER runtime and session isolation remains mandatory. |
 | Stimulus and styles | `WCP360_Core/assets/` | Symfony UX, AssetMapper and the approved CSS pipeline; do not require Node for the panel runtime. |

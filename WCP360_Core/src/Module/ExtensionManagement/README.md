@@ -1,5 +1,13 @@
-# Extension-management domain
+# ExtensionManagement
 
-Core-owned registry, admission, compatibility/dependencies, scoped credentials, lifecycle, supervision and approved contributions. Use the approved API/database/permission models; this README does not implement a host, manifest parser or new schema.
+**Status: documented module boundary; application source is not implemented by this directory.**
 
-This is an implementation reservation. Follow the [Core status](../../../README.md) and [development/acceptance guide](../../../../documentation/development/CORE-ENGINE.md) before adding runtime code.
+Package inventory, compatibility, capabilities, lifecycle, health, supervision and approved contribution registration.
+
+Start here when changing: **Plugin installation, activation, disablement, upgrade and removal.**
+
+Use the common [module layout](../README.md) for Domain, Application, Infrastructure and UI code. Detached plugin code and dependencies are not loaded into the Core container, Twig paths or Composer graph.
+
+- [Core navigation index](../../../NAVIGATION.md)
+- [System-service resources](../../../resources/services/README.md)
+- [Core implementation and acceptance](../../../../documentation/development/CORE-ENGINE.md)

@@ -38,7 +38,7 @@ wcp360/
 
 | Location | Responsibility |
 | :--- | :--- |
-| WCP360_Core | Symfony/modules/shared UI, separate Go agents, installer/setup and tests. Documentation scaffold; runtime implementation pending. |
+| [WCP360_Core](../WCP360_Core/NAVIGATION.md) | Indexed business modules, commands, dependencies, Symfony configuration and Linux-service resources; separate agents, installer/setup and tests. Documentation scaffold; runtime implementation pending. |
 | WCP360_Prototype | Browser UI prototype, styles, assets and design notes. |
 | WCP360_Developper | Existing developer/product corpus and retained historical snapshots. |
 | WCP360_Plugins | One independently developed/tested package per detached plugin and an authoring template. |

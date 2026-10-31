@@ -1437,7 +1437,7 @@ wcp360/
 
 | Directory | Responsibility | Current status |
 | :--- | :--- | :--- |
-| [WCP360_Core](WCP360_Core/README.md) | Symfony domain/services, reusable Twig UI, built-in extension manager, separate Go agents, setup/install source and tests. | Architecture scaffold; complete runtime implementation and qualification remain pending. |
+| [WCP360_Core](WCP360_Core/README.md) | Symfony domain/services, reusable Twig UI, built-in extension manager, separate Go agents, setup/install source and tests. Find functions, commands, dependencies and Linux configuration in the [Core navigation index](WCP360_Core/NAVIGATION.md). | Architecture scaffold; complete runtime implementation and qualification remain pending. |
 | [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing File Manager/Insights development packages plus a documentation-only authoring template. |
 | [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures. | Reserved interface/layout; no executable client or ratified production manifest schema yet. |
 | [WCP360_Build](WCP360_Build/README.md) | Controlled environments, assembly, verification and publication. | Procedure/layout reserved; no new builder or workflow is claimed. |
