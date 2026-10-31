@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Install WCP360 — Installation Center</title>
+  <meta name="description" content="Plan, verify and install WCP360 with guided, signed archive and offline deployment paths.">
+  <meta name="theme-color" content="#0a2e43">
+  <link rel="icon" href="assets/wcp360-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/wcp360-site.css">
+  <link rel="stylesheet" href="assets/wcp360-install.css">
+  <noscript><style>.reveal{opacity:1;transform:none}.install-panel{display:block!important}</style></noscript>
+  <script defer src="assets/wcp360-site.js"></script>
+</head>
+<body class="install-page" data-page="install">
+<a class="skip-link" href="#main">Skip to content</a>
+<div data-site-header></div>
+<main id="main">
+  <section class="install-hero">
+    <div class="container install-hero-grid">
+      <div class="install-hero-copy reveal">
+        <p class="eyebrow"><span class="eyebrow-dot"></span>Installation center · Prototype</p>
+        <h1>Install with a plan.<br><span class="gradient-text">Operate with confidence.</span></h1>
+        <p class="hero-lead">Prepare the host, verify every artifact and review the exact system changes before WCP360 activates a service.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#methods">Choose an install method</a>
+          <a class="button button-secondary" href="#requirements">Check requirements</a>
+        </div>
+        <div class="install-assurance">
+          <span>Signed packages</span><span>Preflight plan</span><span>Recovery checkpoint</span>
+        </div>
+      </div>
+      <div class="install-console reveal delay-2" aria-label="Installation plan preview">
+        <div class="install-console-bar"><span>WCP360 Installer</span><span class="install-console-state">PLAN READY</span></div>
+        <div class="install-console-body">
+          <div class="install-console-title"><small>Target node</small><strong>host.example.com</strong></div>
+          <div class="install-checks">
+            <div><span>01</span><p><strong>Preflight</strong><small>OS, storage, DNS and ports</small></p><b>Passed</b></div>
+            <div><span>02</span><p><strong>Artifact trust</strong><small>Checksum, signature and SBOM</small></p><b>Verified</b></div>
+            <div><span>03</span><p><strong>Change plan</strong><small>Packages, services and firewall</small></p><b>Review</b></div>
+            <div class="is-pending"><span>04</span><p><strong>Activation</strong><small>Apply only after ROOT approval</small></p><b>Waiting</b></div>
+          </div>
+          <div class="install-console-foot"><span>Mode: Default / Quick</span><span>Rollback: staged</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="install-notice">
+    <div class="container">
+      <div class="prototype-notice"><span class="prototype-icon">!</span><div><strong>Prototype installer — do not run on a production server.</strong><p>The download domain and commands below define the intended experience. No production artifact is published at the example endpoint yet.</p></div><a href="roadmap.html">Follow release readiness →</a></div>
+    </div>
+  </section>
+
+  <nav class="install-local-nav" aria-label="Installation page sections">
+    <div class="container">
+      <a href="#requirements">Requirements</a>
+      <a href="#preflight">Preflight</a>
+      <a href="#methods">Install methods</a>
+      <a href="#wizard">Setup modes</a>
+      <a href="#options">Options</a>
+      <a href="#footprint">System changes</a>
+      <a href="#updates">Updates</a>
+    </div>
+  </nav>
+
+  <section class="section" id="requirements">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Before you begin</p><h2 class="section-title">Give the control plane a clean foundation.</h2></div><p class="section-copy">The installer should refuse ambiguous or unsafe hosts before any package, firewall or service state is changed.</p></div>
+      <div class="requirement-grid">
+        <article class="requirement-card reveal"><span class="requirement-icon">CPU</span><div><strong>4 cores minimum</strong><p>8 cores recommended for a multi-service evaluation node.</p></div></article>
+        <article class="requirement-card reveal delay-1"><span class="requirement-icon">RAM</span><div><strong>8 GB minimum</strong><p>16 GB recommended when mail, databases and applications share the host.</p></div></article>
+        <article class="requirement-card reveal delay-2"><span class="requirement-icon">SSD</span><div><strong>80 GB available</strong><p>Separate data and backup storage for production-oriented layouts.</p></div></article>
+        <article class="requirement-card reveal"><span class="requirement-icon">OS</span><div><strong>Fresh 64-bit Linux</strong><p>Supported systemd distribution, current security updates and no existing panel.</p></div></article>
+        <article class="requirement-card reveal delay-1"><span class="requirement-icon">DNS</span><div><strong>Stable FQDN</strong><p>Forward and reverse DNS prepared for the primary node identity.</p></div></article>
+        <article class="requirement-card reveal delay-2"><span class="requirement-icon">NET</span><div><strong>Policy-approved network</strong><p>Public or private addressing, required ports and deterministic time sync.</p></div></article>
+      </div>
+      <div class="requirements-foot reveal"><span>ROOT or passwordless sudo during installation</span><span>Recovery access outside WCP360</span><span>Backups before migration</span></div>
+      <div class="compatibility-layout reveal">
+        <div class="compatibility-panel">
+          <div class="compatibility-head"><div><span>Target support matrix</span><strong>Host compatibility</strong></div><small>Prototype contract</small></div>
+          <div class="compatibility-row"><span>Debian stable · 64-bit</span><b class="compatibility-state is-target">Primary target</b><small>Fresh minimal installation with systemd</small></div>
+          <div class="compatibility-row"><span>Ubuntu LTS · 64-bit</span><b class="compatibility-state is-target">Primary target</b><small>Current LTS, fully updated before setup</small></div>
+          <div class="compatibility-row"><span>RHEL-compatible Linux</span><b class="compatibility-state is-roadmap">Roadmap</b><small>Package and service adapters still to validate</small></div>
+          <div class="compatibility-row"><span>x86_64 / AMD64</span><b class="compatibility-state is-target">Primary target</b><small>Reference architecture for first releases</small></div>
+          <div class="compatibility-row"><span>ARM64 / AArch64</span><b class="compatibility-state is-roadmap">Roadmap</b><small>Requires a separately signed artifact set</small></div>
+          <div class="compatibility-row"><span>Bare metal or full VM</span><b class="compatibility-state is-target">Supported model</b><small>KVM, VMware or equivalent full virtualization</small></div>
+        </div>
+        <aside class="host-boundaries">
+          <span class="host-boundaries-label">Host boundaries</span>
+          <h3>One clean operating-system instance.</h3>
+          <p>WCP360 is designed to own the hosting stack it manages. Existing panels, unmanaged web stacks and nested container installs create ambiguous state and should block installation.</p>
+          <ul>
+            <li>No cPanel, Plesk, DirectAdmin or another control panel</li>
+            <li>No public database ports required by default</li>
+            <li>Docker-in-Docker and shared OpenVZ hosts are not target environments</li>
+            <li>SELinux or AppArmor policy is detected and included in the plan</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted install-preflight" id="preflight">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Preflight diagnostics</p><h2 class="section-title">Find conflicts before the installer changes anything.</h2></div><p class="section-copy">Report-only mode inventories the host and returns a portable readiness report. It must not install packages, open ports or start services.</p></div>
+      <div class="preflight-grid">
+        <div class="preflight-command reveal">
+          <div class="preflight-command-head"><span>Read-only host inspection</span><b>NO CHANGES</b></div>
+          <div class="terminal-bar"><span>Target CLI · preview</span><button class="copy-button" type="button" data-copy="#preflight-command" aria-label="Copy preflight command">Copy</button></div>
+          <pre class="install-code" id="preflight-command" data-command="sudo wcp360-installer doctor --report-only --format table">sudo wcp360-installer doctor \
+  --report-only \
+  --format table</pre>
+          <div class="preflight-result">
+            <div><span>Operating system</span><strong>READY</strong></div>
+            <div><span>Hostname & DNS</span><strong>READY</strong></div>
+            <div><span>Port conflicts</span><strong class="is-warning">REVIEW</strong></div>
+            <div><span>Disk & inodes</span><strong>READY</strong></div>
+            <div><span>Existing services</span><strong>READY</strong></div>
+          </div>
+        </div>
+        <div class="preflight-checklist reveal delay-1">
+          <article><span>01</span><div><strong>Identity and name resolution</strong><p>FQDN syntax, forward lookup, reverse DNS availability, local hosts file and clock synchronization.</p></div></article>
+          <article><span>02</span><div><strong>Capacity and filesystem</strong><p>CPU, memory, free space, inodes, mount options, quota support and storage latency baseline.</p></div></article>
+          <article><span>03</span><div><strong>Conflicts and ownership</strong><p>Existing web, mail, DNS, database, firewall and control-panel services that would overlap WCP360.</p></div></article>
+          <article><span>04</span><div><strong>Network reachability</strong><p>Required repositories, time service, package mirrors, outbound policy and listener conflicts.</p></div></article>
+          <article><span>05</span><div><strong>Recovery readiness</strong><p>Out-of-band access, restore point, existing data inventory and a writable backup destination.</p></div></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section install-methods" id="methods">
+    <div class="container">
+      <div class="section-head-centered reveal"><p class="section-kicker">Installation methods</p><h2 class="section-title">Choose the delivery path that matches your environment.</h2><p class="section-copy">Each method produces the same reviewable plan and first-run wizard. Only artifact delivery changes.</p></div>
+      <div class="install-tabs reveal">
+        <div class="install-tablist" role="tablist" aria-label="Installation methods">
+          <button type="button" role="tab" id="tab-guided" aria-controls="panel-guided" aria-selected="true" tabindex="0" data-install-method="guided"><span>01</span><strong>Guided installer</strong><small>Fast evaluation path</small></button>
+          <button type="button" role="tab" id="tab-archive" aria-controls="panel-archive" aria-selected="false" tabindex="-1" data-install-method="archive"><span>02</span><strong>Verified archive</strong><small>Pinned and auditable</small></button>
+          <button type="button" role="tab" id="tab-offline" aria-controls="panel-offline" aria-selected="false" tabindex="-1" data-install-method="offline"><span>03</span><strong>Offline bundle</strong><small>Restricted networks</small></button>
+        </div>
+
+        <div class="install-panel is-active" id="panel-guided" role="tabpanel" aria-labelledby="tab-guided" data-install-panel="guided">
+          <div class="install-panel-copy"><span class="status-pill status-core">Recommended for evaluation</span><h3>Guided, interactive and still reviewable.</h3><p>Download the bootstrap, verify its detached signature, then generate a plan. Nothing is applied until ROOT confirms the final change summary.</p><ol><li>Inspect host prerequisites and conflicts.</li><li>Select Default or Expert configuration mode.</li><li>Review packages, ports, identities and storage changes.</li><li>Create a recovery checkpoint and activate.</li></ol></div>
+          <div class="install-command-card">
+            <div class="terminal-bar"><span>Preview endpoint · not live</span><button class="copy-button" type="button" data-copy="#guided-command" aria-label="Copy command">Copy</button></div>
+            <code class="terminal-code install-code" id="guided-command" data-command="curl -fsSL https://downloads.wcp360.example/install.sh | sudo bash"><span class="prompt">$</span>curl -fsSL https://downloads.wcp360.example/install.sh | sudo bash</code>
+            <div class="command-note"><strong>Production rule</strong><span>The published installer will pin a release manifest and verify it before execution.</span></div>
+          </div>
+        </div>
+
+        <div class="install-panel" id="panel-archive" role="tabpanel" aria-labelledby="tab-archive" data-install-panel="archive" hidden>
+          <div class="install-panel-copy"><span class="status-pill status-extension">Controlled delivery</span><h3>Pin the exact release and keep the evidence.</h3><p>Use a versioned archive when change management requires explicit checksums, signatures, SBOM retention and internal mirroring.</p><ol><li>Download the archive, checksum, signature and SBOM.</li><li>Verify the signer against the published trust policy.</li><li>Extract to a staging directory and run preflight.</li><li>Archive the final plan with the change record.</li></ol></div>
+          <div class="install-command-card">
+            <div class="terminal-bar"><span>Verified archive · preview</span><button class="copy-button" type="button" data-copy="#archive-command" aria-label="Copy command">Copy</button></div>
+            <pre class="install-code" id="archive-command" data-command="wcp360-installer verify wcp360-0.1.0.tar.zst&#10;sudo wcp360-installer plan --mode expert&#10;sudo wcp360-installer apply">wcp360-installer verify wcp360-0.1.0.tar.zst
+sudo wcp360-installer plan --mode expert
+sudo wcp360-installer apply</pre>
+            <div class="command-note"><strong>Evidence retained</strong><span>Manifest, signer, checksum, SBOM, plan and apply result.</span></div>
+          </div>
+        </div>
+
+        <div class="install-panel" id="panel-offline" role="tabpanel" aria-labelledby="tab-offline" data-install-panel="offline" hidden>
+          <div class="install-panel-copy"><span class="status-pill status-roadmap">Roadmap workflow</span><h3>Move trust evidence, not hidden network access.</h3><p>The offline bundle is designed for isolated environments with an approved transfer station and an internal update mirror.</p><ol><li>Build the signed bundle for the target architecture.</li><li>Transfer through the organization’s media-control process.</li><li>Verify signatures and bundle completeness offline.</li><li>Install against a local repository and export the audit result.</li></ol></div>
+          <div class="install-command-card">
+            <div class="terminal-bar"><span>Offline workflow · specification</span><button class="copy-button" type="button" data-copy="#offline-command" aria-label="Copy command">Copy</button></div>
+            <pre class="install-code" id="offline-command" data-command="wcp360-bundle inspect ./wcp360-offline&#10;sudo wcp360-installer plan --source ./wcp360-offline&#10;sudo wcp360-installer apply --offline">wcp360-bundle inspect ./wcp360-offline
+sudo wcp360-installer plan --source ./wcp360-offline
+sudo wcp360-installer apply --offline</pre>
+            <div class="command-note"><strong>No silent egress</strong><span>Repository, telemetry and licensing destinations remain explicitly disabled or declared.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Transaction model</p><h2 class="section-title">Know what happens before activation.</h2></div><p class="section-copy">Installation is modeled as a staged operation with evidence and recovery at every critical boundary.</p></div>
+      <div class="install-timeline reveal">
+        <div><span>01</span><strong>Discover</strong><p>Host, network, conflicts and capacity.</p></div>
+        <div><span>02</span><strong>Verify</strong><p>Manifest, signature, checksum and SBOM.</p></div>
+        <div><span>03</span><strong>Plan</strong><p>Packages, identities, ports and storage.</p></div>
+        <div><span>04</span><strong>Checkpoint</strong><p>Configuration and recovery state.</p></div>
+        <div><span>05</span><strong>Apply</strong><p>Atomic service and policy changes.</p></div>
+        <div><span>06</span><strong>Prove</strong><p>Health gates, audit result and rollback.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted" id="wizard">
+    <div class="container wizard-grid">
+      <div class="reveal"><p class="section-kicker">First-run wizard</p><h2 class="section-title">Start quickly or control every decision.</h2><p class="section-copy">Both modes generate the same final plan. Expert mode exposes the decisions instead of changing the safety model.</p></div>
+      <div class="wizard-options">
+        <article class="wizard-card reveal delay-1"><span>DEFAULT / QUICK</span><h3>Secure production-minded defaults</h3><p>Conservative quotas, isolated users, local service baseline, automatic security updates and a mandatory backup target.</p><ul><li>Guided DNS and hostname validation</li><li>Recommended firewall and brute-force policy</li><li>Local database and storage profile</li><li>Review before commit</li></ul></article>
+        <article class="wizard-card wizard-card-expert reveal delay-2"><span>EXPERT / CUSTOM</span><h3>Every critical choice exposed</h3><p>Database, storage, DNS, mail, network, runtime, security, provider and resource settings with inline validation.</p><ul><li>External providers and cluster topology</li><li>Custom IP pools and service placement</li><li>Retention and residency policies</li><li>Exportable configuration plan</li></ul></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section installer-options" id="options">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Installer options</p><h2 class="section-title">Automate the setup without hiding the decisions.</h2></div><p class="section-copy">Interactive answers, CLI flags and a versioned configuration file resolve into the same plan. Unknown or conflicting values must stop the run.</p></div>
+      <div class="installer-options-grid">
+        <div class="configuration-card reveal">
+          <div class="configuration-card-head"><span>install.yaml</span><b>EXPERT EXAMPLE</b></div>
+          <pre><code>mode: expert
+node:
+  hostname: panel.example.com
+  role: standalone
+services:
+  dns: local
+  mail: disabled
+  databases: local
+storage:
+  data_root: /srv/wcp360
+  backup_target: local
+updates:
+  channel: stable
+  automatic_security: true</code></pre>
+          <div class="configuration-card-foot">Secrets are referenced from protected files or a secret provider — never embedded in the plan.</div>
+        </div>
+        <div class="option-table-wrap reveal delay-1">
+          <table class="option-table">
+            <caption>Target command-line interface · prototype</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Purpose</th><th scope="col">Default</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>--mode quick|expert</code></th><td>Select guided defaults or expose every critical choice.</td><td><code>quick</code></td></tr>
+              <tr><th scope="row"><code>--hostname FQDN</code></th><td>Declare the permanent panel hostname and certificate identity.</td><td>Required</td></tr>
+              <tr><th scope="row"><code>--role ROLE</code></th><td>Install a standalone, control-plane or worker-node profile.</td><td><code>standalone</code></td></tr>
+              <tr><th scope="row"><code>--channel CHANNEL</code></th><td>Pin stable, candidate or an approved internal mirror.</td><td><code>stable</code></td></tr>
+              <tr><th scope="row"><code>--data-root PATH</code></th><td>Place customer and service state on the selected filesystem.</td><td><code>/srv/wcp360</code></td></tr>
+              <tr><th scope="row"><code>--disable LIST</code></th><td>Exclude optional DNS, mail, apps or monitoring capabilities.</td><td>None</td></tr>
+              <tr><th scope="row"><code>--config FILE</code></th><td>Load a reviewable YAML configuration for repeatable builds.</td><td>Interactive</td></tr>
+              <tr><th scope="row"><code>--dry-run</code></th><td>Resolve dependencies and write the plan without applying it.</td><td>Off</td></tr>
+              <tr><th scope="row"><code>--plan-out FILE</code></th><td>Export the signed change plan for approval or evidence.</td><td>Generated</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="option-policy reveal"><strong>Configuration precedence</strong><span>Secure defaults</span><i>→</i><span>Configuration file</span><i>→</i><span>Explicit CLI flags</span><i>→</i><span>Final approval</span></div>
+    </div>
+  </section>
+
+  <section class="section section-muted system-footprint" id="footprint">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">System footprint</p><h2 class="section-title">See what WCP360 owns on the host.</h2></div><p class="section-copy">The final plan lists every package, unit, user, directory, firewall rule and listener. The names below define the intended layout and remain subject to release validation.</p></div>
+      <div class="footprint-grid">
+        <article class="footprint-card reveal"><span class="footprint-index">01 / PATHS</span><h3>Configuration and durable state</h3><dl><div><dt><code>/etc/wcp360</code></dt><dd>Validated configuration and policy references</dd></div><div><dt><code>/var/lib/wcp360</code></dt><dd>Control-plane state and job metadata</dd></div><div><dt><code>/srv/wcp360</code></dt><dd>Customer data root and service volumes</dd></div><div><dt><code>/var/log/wcp360</code></dt><dd>Structured local operational logs</dd></div><div><dt><code>/opt/wcp360/releases</code></dt><dd>Versioned binaries for atomic promotion</dd></div></dl></article>
+        <article class="footprint-card reveal delay-1"><span class="footprint-index">02 / SERVICES</span><h3>Managed system services</h3><dl><div><dt><code>wcp360-control</code></dt><dd>API, policy and desired-state coordination</dd></div><div><dt><code>wcp360-worker</code></dt><dd>Asynchronous jobs and reconciliations</dd></div><div><dt><code>wcp360-agent</code></dt><dd>Closed node operations and health reporting</dd></div><div><dt><code>wcp360-proxy</code></dt><dd>Panel ingress and certificate termination</dd></div><div><dt><code>wcp360-update</code></dt><dd>Staged update and recovery orchestration</dd></div></dl></article>
+        <article class="footprint-card reveal delay-2"><span class="footprint-index">03 / IDENTITIES</span><h3>Least-privilege ownership</h3><dl><div><dt>Service users</dt><dd>Dedicated non-login identities per subsystem</dd></div><div><dt>Customer users</dt><dd>Isolated UID/GID allocation with quota policy</dd></div><div><dt>Secrets</dt><dd>Root-readable references with explicit rotation</dd></div><div><dt>Privileges</dt><dd>Small allowlisted operations through the node agent</dd></div><div><dt>Audit</dt><dd>Install plan, approval, apply result and health proof</dd></div></dl></article>
+      </div>
+      <div class="network-plan reveal">
+        <div class="network-plan-copy"><span>Network exposure</span><h3>Only enabled roles open listeners.</h3><p>A standalone node may host several services; control and worker roles expose less. Databases remain private by default, and optional mail or DNS ports appear only when those services are selected.</p></div>
+        <div class="network-table-wrap">
+          <table class="network-table">
+            <thead><tr><th scope="col">Port</th><th scope="col">Role</th><th scope="col">Exposure</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>443/TCP</code></th><td>Panel, API and managed HTTPS</td><td><span class="exposure-badge is-required">Required</span></td></tr>
+              <tr><th scope="row"><code>80/TCP</code></th><td>HTTP redirect and ACME validation</td><td><span class="exposure-badge">Conditional</span></td></tr>
+              <tr><th scope="row"><code>53/TCP+UDP</code></th><td>Authoritative DNS service</td><td><span class="exposure-badge">DNS role only</span></td></tr>
+              <tr><th scope="row"><code>25/465/587/993</code></th><td>Mail transport and mailbox access</td><td><span class="exposure-badge">Mail role only</span></td></tr>
+              <tr><th scope="row"><code>3306 / 5432</code></th><td>MySQL/MariaDB or PostgreSQL</td><td><span class="exposure-badge is-private">Private by default</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section update-center" id="updates">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Updates and recovery</p><h2 class="section-title">Update through a staged transaction — not a blind package upgrade.</h2></div><p class="section-copy">Every update resolves compatibility, creates a checkpoint, stages artifacts, runs health gates and keeps the previous release available until promotion succeeds.</p></div>
+      <div class="update-layout">
+        <div class="update-channels reveal">
+          <article class="update-channel is-recommended"><span>STABLE</span><strong>Production baseline</strong><p>Signed releases that completed compatibility, migration and rollback gates.</p><b>Recommended</b></article>
+          <article class="update-channel"><span>CANDIDATE</span><strong>Pre-release validation</strong><p>Release candidates for staging nodes and controlled early testing.</p><b>Opt-in</b></article>
+          <article class="update-channel"><span>INTERNAL MIRROR</span><strong>Restricted networks</strong><p>Approved manifest and package mirror with the same signature verification.</p><b>Enterprise path</b></article>
+        </div>
+        <div class="update-command-card reveal delay-1">
+          <div class="terminal-bar"><span>Update workflow · preview</span><button class="copy-button" type="button" data-copy="#update-command" aria-label="Copy update commands">Copy</button></div>
+          <pre class="install-code" id="update-command" data-command="wcp360 update check --channel stable&#10;sudo wcp360 update plan --to latest&#10;sudo wcp360 update apply --canary&#10;sudo wcp360 update verify">wcp360 update check --channel stable
+sudo wcp360 update plan --to latest
+sudo wcp360 update apply --canary
+sudo wcp360 update verify</pre>
+          <div class="update-command-foot"><span>Rollback remains available until the promotion checkpoint is accepted.</span><code>sudo wcp360 update rollback --checkpoint previous</code></div>
+        </div>
+      </div>
+      <div class="update-flow reveal" aria-label="Update lifecycle">
+        <div><span>01</span><strong>Check</strong><small>Manifest and compatibility</small></div>
+        <div><span>02</span><strong>Plan</strong><small>Migrations and impact</small></div>
+        <div><span>03</span><strong>Checkpoint</strong><small>State and configuration</small></div>
+        <div><span>04</span><strong>Canary</strong><small>One node or service slice</small></div>
+        <div><span>05</span><strong>Promote</strong><small>Fleet rollout with gates</small></div>
+        <div><span>06</span><strong>Prove</strong><small>Health and audit evidence</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="post-install-grid reveal">
+        <article><span>01</span><strong>Protect ROOT access</strong><p>Create named administrators, enforce MFA and store recovery codes offline.</p></article>
+        <article><span>02</span><strong>Verify restore</strong><p>Run the first backup, restore it to an isolated target and retain the evidence.</p></article>
+        <article><span>03</span><strong>Review exposure</strong><p>Confirm listeners, firewall policy, DNS delegation and certificate issuance.</p></article>
+        <article><span>04</span><strong>Create the baseline</strong><p>Export configuration, resource defaults, service versions and the initial audit record.</p></article>
+      </div>
+      <div class="install-next reveal">
+        <div><p class="section-kicker">After installation</p><h2>Finish with evidence, not assumptions.</h2><p>Save the recovery code, export the initial configuration, verify backup restore, create named admin identities and remove temporary bootstrap access.</p></div>
+        <div class="install-next-actions"><a class="button button-primary" href="docs.html#wizard">Read first-run documentation</a><a class="button button-secondary" href="security.html">Review the security model</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div data-site-footer></div>
+</body>
+</html>

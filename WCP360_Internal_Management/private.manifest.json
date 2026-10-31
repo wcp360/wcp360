@@ -1,0 +1,25 @@
+{
+  "schema": "wcp360.private-product/v1",
+  "name": "WCP360 INTERNAL",
+  "distribution": "private-only",
+  "publicArchive": false,
+  "publicRepository": false,
+  "authentication": {
+    "authority": "https://id.internal.example.com",
+    "acceptedDomains": ["internal.example.com"],
+    "humanFactors": ["corporate-sso", "fido2"],
+    "workloadFactors": ["mtls"],
+    "sessionMinutes": 15,
+    "customerIdentitiesAccepted": false
+  },
+  "connector": {
+    "id": "com.wcp360.insights-connector",
+    "artifact": "../WCP360 Extensions/wcp360-insights-connector",
+    "bundledInPublicCore": false,
+    "releaseLane": "detached-extension",
+    "updateIndex": "signed-extension-index",
+    "revocationScope": "artifact-identity",
+    "remoteExecution": false,
+    "defaultConsent": "none"
+  }
+}

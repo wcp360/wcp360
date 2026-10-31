@@ -1,0 +1,34 @@
+/* Synthetic observability contracts. No collector, network probe or log-file access. */
+((global)=>{
+  'use strict';
+  const owner='example.com',nodes=['srv-par-01','srv-ams-01'],day=86400000,ranges={'1h':3600000,'24h':day,'7d':7*day,'14d':14*day,'30d':30*day};
+  const client=value=>/^\d{1,3}(?:\.\d{1,3}){2}\.0\/24$/.test(String(value))||['[IPv6 masked]','[client masked]'].includes(value)?value:/^\d{1,3}(?:\.\d{1,3}){3}$/.test(String(value))?String(value).split('.').slice(0,3).join('.')+'.0/24':String(value).includes(':')?'[IPv6 masked]':'[client masked]';
+  const path=value=>{const result=String(value||'/').split(/[?#]/)[0];return /^\/[a-zA-Z0-9/_.-]*$/.test(result)&&!result.startsWith('//')?result.slice(0,200):'[path omitted]';};
+  function redact(value){return String(value||'').replace(/Bearer\s+[a-zA-Z0-9._~+\/-]+/gi,'Bearer [redacted]').replace(/\b(password|token|secret|api[_-]?key|cookie|authorization)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s;,]+)/gi,'$1=[redacted]').replace(/https?:\/\/[^\s]+/gi,'[URL omitted]').replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,'[email masked]').replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b(?:\/24)?/g,client).replace(/[\r\n\0]/g,' ').slice(0,500);}
+  const number=(value,max=1e12)=>value===null||value===undefined||value===''||typeof value==='boolean'?null:Number.isFinite(Number(value))&&Number(value)>=0&&Number(value)<=max?Number(value):null;
+  function sanitize(row,{scope,sites=[],nodes=[]}={}){
+    if(!['user','root'].includes(scope)||!row||row.scope!==scope||!row.id||!Number.isFinite(Date.parse(row.when)))return null;
+    const site=sites.find(item=>item.id===row.siteId);
+    if(scope==='user'&&(row.owner!==owner||!site))return null;
+    if(scope==='user'&&row.site&&row.site!==site.domain)return null;
+    if(scope==='root'&&(row.owner!=='Platform'||!nodes.includes(row.node)))return null;
+    const status=number(row.status,599),request=row.eventType==='request'&&Number.isInteger(status)&&status>=100;
+    return {id:String(row.id),scope,owner:scope==='user'?owner:'Platform',siteId:scope==='user'?site.id:'',site:scope==='user'?site.domain:'',node:scope==='root'?String(row.node):'',service:redact(row.service),severity:['INFO','WARN','ERROR'].includes(row.severity)?row.severity:'INFO',when:new Date(row.when).toISOString(),eventType:request?'request':'event',message:redact(row.message),correlation:redact(row.correlation),method:request&&['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'].includes(row.method)?row.method:'',path:request?path(row.path):'',status:request?status:null,duration:request?number(row.duration,300000):null,bytes:request?number(row.bytes):null,client:scope==='user'&&request?client(row.client):'',sample:'Synthetic'};
+  }
+  function seed({scope,sites=[],nodes=['srv-par-01','srv-ams-01'],now=Date.now(),prefix='seed'}={}){
+    const rows=[];
+    if(scope==='root')for(let i=0;i<9;i++)rows.push({id:prefix+'-'+i,scope,owner:'Platform',node:nodes[i%nodes.length],service:['nginx','php-fpm','wcp360-agent'][i%3],severity:i%4===0?'ERROR':i%3===0?'WARN':'INFO',when:new Date(now-i*900000).toISOString(),eventType:'event',message:['Configuration validation complete','Worker threshold reached; account details omitted','Synthetic service heartbeat'][i%3],correlation:'DEMO-SYS-'+i});
+    else for(const [siteIndex,site] of sites.entries()){if(siteIndex===3)continue;for(let i=0;i<6;i++)rows.push({id:prefix+'-'+site.id+'-'+i,scope,owner,siteId:site.id,service:'access',severity:i===4?'ERROR':i===3?'WARN':'INFO',when:new Date(now-(i*20+siteIndex*4)*60000).toISOString(),eventType:'request',message:i===4?'Synthetic upstream response failure':'Synthetic request processed',correlation:'DEMO-REQ-'+siteIndex+'-'+i,method:i===2?'POST':'GET',path:['/','/assets/app.css','/login?token=demo-omit','/missing','/api/status','/health/ready'][i],status:i===4?502:i===3?404:200,duration:40+i*37,bytes:1024*(i+1),client:'203.0.113.'+(21+i)});}
+    return rows.map(row=>sanitize(row,{scope,sites,nodes})).filter(Boolean);
+  }
+  function select(rows,{scope,sites=[],nodes=[],site='all',node='all',range='24h',retention=14,now=Date.now()}={}){
+    const duration=Math.min(ranges[range]||ranges['24h'],Number(retention)*day),since=now-duration;
+    return rows.map(row=>sanitize(row,{scope,sites,nodes})).filter(row=>row&&Date.parse(row.when)>=since&&Date.parse(row.when)<=now&&(scope==='user'?(site==='all'||row.siteId===site):(node==='all'||row.node===node))).sort((a,b)=>Date.parse(b.when)-Date.parse(a.when));
+  }
+  function summary(rows){const requests=rows.filter(row=>row.eventType==='request'),latency=requests.map(row=>row.duration).filter(value=>value!==null).sort((a,b)=>a-b),bytes=requests.map(row=>row.bytes).filter(value=>value!==null);return {events:rows.length,requests:requests.length||null,errors:rows.length?rows.filter(row=>row.severity==='ERROR').length:null,http5xx:requests.length?requests.filter(row=>row.status>=500).length:null,errorRate:requests.length?Math.round(requests.filter(row=>row.status>=500).length/requests.length*10000)/100:null,bytes:requests.length&&bytes.length===requests.length?bytes.reduce((sum,value)=>sum+value,0):null,p95:latency.length?latency[Math.ceil(latency.length*.95)-1]:null};}
+  function preferenceFields({scope,current}={}){return [{name:'range',label:'Time window',type:'select',required:true,options:scope==='root'?Object.keys(ranges):Object.keys(ranges).filter(id=>id!=='30d'),default:current.range},{name:'retention',label:'Visible retention window (days)',type:'select',required:true,options:(scope==='root'?[1,7,14,30]:[1,7,14]).map(String),default:String(current.retention)}];}
+  function reportFields(reports=[]){return [{name:'label',label:'Report label',required:true,maxLength:60,validate:value=>!/^[-a-zA-Z0-9_.]{2,60}$/.test(value)?'Use 2–60 letters, digits, dashes, underscores or dots.':reports.some(row=>row.label?.toLowerCase()===value.toLowerCase())?'A retained or pending report already has this label.':''},{name:'includeEntries',label:'Include the filtered demo entries',type:'checkbox',default:true}];}
+  const diagnosticFields=()=>[{name:'profile',label:'Demo diagnostic profile',type:'select',required:true,options:['Log pipeline','Service readiness','Collector availability'],default:'Log pipeline'},{name:'outcome',label:'Simulated finding',type:'select',required:true,options:['Pass','Review'],default:'Pass'}];
+  function artifact({scope,label,selection,rows,includeEntries,now=Date.now()}={}){const safe=rows.map(row=>sanitize(row,{scope,sites:selection.sites||[],nodes})).filter(Boolean);return {schema:1,scope,label,sample:'Synthetic data only',selection:structuredClone(selection),capturedAt:new Date(now).toISOString(),summary:summary(safe),entries:includeEntries?structuredClone(safe):[]};}
+  global.WCPObservabilitySchemas={owner,nodes,day,ranges,client,path,redact,sanitize,seed,select,summary,preferenceFields,reportFields,diagnosticFields,artifact};
+})(globalThis);

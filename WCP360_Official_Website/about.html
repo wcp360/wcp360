@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About — WCP360</title>
+  <meta name="description" content="Why WCP360 exists, who it serves and the principles guiding its development.">
+  <meta name="theme-color" content="#05070b"><link rel="icon" href="assets/wcp360-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/wcp360-site.css"><link rel="stylesheet" href="assets/wcp360-about.css"><noscript><style>.reveal{opacity:1;transform:none}</style></noscript><script defer src="assets/wcp360-site.js"></script>
+</head>
+<body data-page="about">
+<a class="skip-link" href="#main">Skip to content</a><div data-site-header></div>
+<main id="main" class="about-page">
+  <section class="about-hero">
+    <div class="container about-hero-grid">
+      <div class="about-hero-copy reveal">
+        <p class="eyebrow"><span class="eyebrow-dot"></span>Why WCP360 exists</p>
+        <h1>Hosting operations changed.<br><span class="gradient-text">The control plane should too.</span></h1>
+        <p class="about-hero-lead">WCP360 is an open-source project for operators who need the depth of a serious hosting platform without inheriting blurred privileges, fragile add-ons or an opaque vendor dependency.</p>
+        <div class="hero-actions"><a class="button button-primary" href="features.html">Explore the platform</a><a class="button button-secondary" href="roadmap.html">See the delivery path</a></div>
+        <div class="about-hero-status"><span><i></i> Functional design prototype</span><span>No production release is claimed yet</span></div>
+      </div>
+      <aside class="about-brief reveal delay-2" aria-label="WCP360 project brief">
+        <div class="about-brief-head"><div><small>PROJECT BRIEF</small><strong>WCP360 product boundary</strong></div><span>Prototype</span></div>
+        <dl class="about-brief-rows">
+          <div><dt>Purpose</dt><dd>Make hosting power safer, observable and easier to operate.</dd></div>
+          <div><dt>Public product</dt><dd>WCP-ADMIN, WCP-USER, API, jobs, node agent and installer.</dd></div>
+          <div><dt>Extension model</dt><dd>Explicit permissions, owned data, health budgets and reversible removal.</dd></div>
+          <div><dt>Private services</dt><dd>Licensing, catalogue publishing, build systems and consented fleet insights.</dd></div>
+        </dl>
+        <div class="about-brief-rule"><span>Distribution rule</span><strong>Positive allowlist + signed packages</strong></div>
+        <p class="about-brief-note"><i></i> Customer servers remain autonomous when private services are unavailable.</p>
+      </aside>
+    </div>
+  </section>
+  <nav class="about-local-nav" aria-label="About WCP360 sections"><div class="container"><a href="#why">Why WCP360</a><a href="#principles">Principles</a><a href="#audience">For whom</a><a href="#architecture">Product boundary</a><a href="#status">Current status</a></div></nav>
+
+  <section class="about-section about-origin" id="why">
+    <div class="container about-story-layout">
+      <div class="about-story-intro reveal"><p class="section-kicker">The reason</p><h2>The problem is not missing buttons. It is missing structure.</h2><p>Traditional panels proved that one interface can operate a hosting server. WCP360 keeps that operational ambition, then rebuilds the model around explicit authority, durable jobs and recoverable change.</p></div>
+      <div class="about-tensions">
+        <article class="about-tension reveal"><span class="about-tension-number">01</span><div><small>LEGACY PATTERN</small><h3>Roles separated mostly by menus</h3><p>Hiding a screen is not an authorization boundary, and a convenience switch must never become privilege escalation.</p></div><div class="about-direction"><small>WCP360 DIRECTION</small><strong>Capability, tenant and ownership checks are enforced server-side.</strong></div></article>
+        <article class="about-tension reveal delay-1"><span class="about-tension-number">02</span><div><small>LEGACY PATTERN</small><h3>A click is treated as success</h3><p>Long-running infrastructure work can partially fail even when the interface has already shown a green notification.</p></div><div class="about-direction"><small>WCP360 DIRECTION</small><strong>Every mutation becomes a planned, durable and verifiable operation.</strong></div></article>
+        <article class="about-tension reveal delay-2"><span class="about-tension-number">03</span><div><small>LEGACY PATTERN</small><h3>Add-ons become hidden core dependencies</h3><p>Optional software can expand until the platform cannot update, recover or even start without it.</p></div><div class="about-direction"><small>WCP360 DIRECTION</small><strong>Extensions declare permissions, failure behavior and deterministic removal.</strong></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-principles-section" id="principles">
+    <div class="container">
+      <div class="about-dark-heading reveal"><div><p class="section-kicker">Non-negotiable principles</p><h2>Power is useful only when it stays understandable.</h2></div><p>Automation may be advanced. Its authority, impact, evidence and recovery path must remain clear to the operator.</p></div>
+      <div class="about-principles-grid">
+        <article class="about-principle reveal"><span class="about-principle-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="14" width="16" height="7" rx="2"/><path d="M8 7h.01M8 18h.01M15 10v4"/></svg></span><span class="about-principle-index">01</span><h3>Autonomy before convenience</h3><p>Authentication, hosting and recovery must continue locally when licensing, catalogue or vendor systems are unreachable.</p><strong>Offline-safe baseline</strong></article>
+        <article class="about-principle reveal delay-1"><span class="about-principle-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.5 2.8 8.2 7 10 4.2-1.8 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-5"/></svg></span><span class="about-principle-index">02</span><h3>Privilege must be explicit</h3><p>Actors, extensions and workloads receive narrow capabilities instead of ambient ROOT access.</p><strong>Least privilege by contract</strong></article>
+        <article class="about-principle reveal delay-2"><span class="about-principle-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M8 3v4H4v5h4v4h5v-4h4V7h-4V3H8Z"/><path d="M13 16v5h7v-7h-3"/></svg></span><span class="about-principle-index">03</span><h3>Extensions must fail safely</h3><p>A failed plugin withdraws its routes and jobs without taking the hosting baseline down with it.</p><strong>Contained failure domains</strong></article>
+        <article class="about-principle reveal delay-3"><span class="about-principle-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span class="about-principle-index">04</span><h3>Operations need evidence</h3><p>Intent, authorization, execution, verification and recovery information belong to one auditable chain.</p><strong>Proof, not optimistic status</strong></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-audience-section" id="audience">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Who it is for</p><h2 class="section-title">Different operators. Clear outcomes.</h2><p class="section-copy">WCP360 is designed around responsibility, not around one oversized interface shared by everyone.</p></div></div>
+      <div class="about-audience-grid">
+        <article class="about-audience-card reveal" data-tone="blue"><div class="about-audience-head"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="14" width="16" height="7" rx="2"/><path d="M8 7h.01M8 18h.01"/></svg></span><small>ROOT OPERATIONS</small></div><h3>Hosting providers</h3><p>Operate accounts, capacity, nodes, networks, services, security and recovery as one governed system.</p><dl><div><dt>Need</dt><dd>Depth without menu sprawl</dd></div><div><dt>Outcome</dt><dd>Explainable fleet control</dd></div></dl></article>
+        <article class="about-audience-card reveal delay-1" data-tone="cyan"><div class="about-audience-head"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 20V9l8-5 8 5v11M8 20v-6h8v6"/><path d="M9 10h6"/></svg></span><small>DELEGATED BUSINESS</small></div><h3>Resellers &amp; agencies</h3><p>Package approved capacity, manage customer accounts and brand the experience without receiving server authority.</p><dl><div><dt>Need</dt><dd>Delegation without ROOT exposure</dd></div><div><dt>Outcome</dt><dd>Bounded commercial control</dd></div></dl></article>
+        <article class="about-audience-card reveal delay-2" data-tone="lime"><div class="about-audience-head"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h5M8 16h7"/></svg></span><small>HOSTING WORKSPACE</small></div><h3>Site owners &amp; developers</h3><p>Manage websites, domains, mail, databases, files, backups and runtimes inside owned account boundaries.</p><dl><div><dt>Need</dt><dd>Useful control without infrastructure noise</dd></div><div><dt>Outcome</dt><dd>Focused WCP-USER workspace</dd></div></dl></article>
+        <article class="about-audience-card reveal delay-3" data-tone="violet"><div class="about-audience-head"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.5 2.8 8.2 7 10 4.2-1.8 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6M12 9v6"/></svg></span><small>ASSURANCE</small></div><h3>Platform &amp; security teams</h3><p>Automate through APIs and jobs while reviewing policy decisions, provenance, audit evidence and failure modes.</p><dl><div><dt>Need</dt><dd>Observable and reviewable automation</dd></div><div><dt>Outcome</dt><dd>Policy-backed operations</dd></div></dl></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-boundary-section" id="architecture">
+    <div class="container">
+      <div class="section-head reveal"><div><p class="section-kicker">Product boundary</p><h2 class="section-title">Public product. Optional ecosystem. Private vendor plane.</h2><p class="section-copy">The separation is physical and distributable, not a marketing label hidden inside one repository or one archive.</p></div><a class="text-link" href="security.html">Review the trust model <span>→</span></a></div>
+      <div class="about-boundary-board reveal delay-1">
+        <article class="about-boundary-card about-boundary-core"><div class="about-boundary-top"><span>01</span><b>ALWAYS DISTRIBUTED</b></div><h3>Public core</h3><p>Identity, accounts, websites, DNS, mail, databases, files, backups, API, jobs, audit, installer and updater.</p><ul><li>Operates without private vendor connectivity</li><li>Local recovery identities remain available</li><li>Public contracts and portable state</li></ul></article>
+        <div class="about-boundary-link"><span>Signed contracts</span><i>→</i></div>
+        <article class="about-boundary-card about-boundary-extensions"><div class="about-boundary-top"><span>02</span><b>OPTIONAL</b></div><h3>Extension ecosystem</h3><p>Application installers, providers, HA/DR, observability, identity adapters and advanced operational tooling.</p><ul><li>Explicit permissions and owned data</li><li>Health and compatibility budgets</li><li>Deterministic disable and uninstall</li></ul></article>
+        <div class="about-boundary-link"><span>Outbound clients only</span><i>→</i></div>
+        <article class="about-boundary-card about-boundary-private"><div class="about-boundary-top"><span>03</span><b>NEVER IN PUBLIC ZIP</b></div><h3>Private vendor plane</h3><p>License authority, catalogue publishing, release factory, commercial administration and consented fleet insights.</p><ul><li>Separate private repositories</li><li>No inbound universal ROOT access</li><li>Unavailable services fail safely</li></ul></article>
+        <div class="about-boundary-baseline"><span><i></i> Customer installation</span><strong>The hosting baseline remains usable when every optional extension and private service is offline.</strong></div>
+      </div>
+      <div class="about-release-rule reveal delay-2"><span class="about-release-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z"/><path d="m4 7 8 4 8-4M12 11v10"/></svg></span><div><small>PUBLIC RELEASE RULE</small><h3>Build from an allowlist, never from an exclusion list.</h3><p>Every public archive is assembled from explicitly approved components, scanned for secrets, checked against its SBOM and signed before publication.</p></div></div>
+    </div>
+  </section>
+
+  <section class="about-section about-status-section" id="status">
+    <div class="container about-status-layout">
+      <div class="about-status-copy reveal"><p class="section-kicker">Honest project status</p><h2>Ambition is not the same as availability.</h2><p>WCP360 currently demonstrates information architecture, functional coverage, lifecycle design and trust boundaries. Production readiness requires working agents, signed artifacts, installation tests, migrations and recovery evidence.</p><div class="about-status-callout"><strong>What the website shows today</strong><span>A comprehensive functional design prototype.</span><strong>What it does not claim</strong><span>A production-ready replacement available for live servers.</span></div><a class="button button-secondary" href="roadmap.html">Open the detailed roadmap</a></div>
+      <div class="about-stage-list reveal delay-2">
+        <article class="about-stage is-complete"><span>01</span><div><small>COMPLETE</small><h3>Domain and responsibility mapping</h3><p>Hosting baseline, ROOT, reseller, USER, extension and internal-service boundaries.</p></div></article>
+        <article class="about-stage is-current"><span>02</span><div><small>CURRENT</small><h3>Functional prototype</h3><p>End-to-end interfaces, state models, failure behavior and consolidated navigation.</p></div></article>
+        <article class="about-stage"><span>03</span><div><small>NEXT</small><h3>Hardened public core</h3><p>API, durable jobs, node agents, installer, updater and verified recovery workflows.</p></div></article>
+        <article class="about-stage"><span>04</span><div><small>PLANNED</small><h3>Stable extension ecosystem</h3><p>Signed SDK, compatibility program, public releases and community governance.</p></div></article>
+      </div>
+    </div>
+  </section>
+  <section class="about-final-section"><div class="container"><div class="about-final-panel reveal"><div><p class="section-kicker">Build it in the open</p><h2>Challenge the model before trusting the software.</h2><p>Review the architecture, question the boundaries and help turn a comprehensive prototype into a dependable hosting control plane.</p></div><div class="about-final-actions"><a class="button button-primary" href="forum.html">Join the discussion</a><a class="button button-secondary" href="docs.html">Read the documentation</a></div></div></div></section>
+</main>
+<div data-site-footer></div>
+</body>
+</html>

@@ -16,7 +16,7 @@
 
 This catalog describes **149 design entries in 21 families**: **142 optional modules, connectors, recipe packs, UI packs, and capability adapters**, plus **7 Core engine adapter entries**. An entry can represent a pack rather than a single installable artifact. These counts describe the documented scope, not published or production-ready plugins.
 
-Two local packages are documented separately: **File Manager** and **Insights Connector**. Insights also has a design entry in the support family; its profile is not counted as another entry. File Manager is a standalone implementation candidate for an essential Core capability and is outside the 149-entry design inventory.
+Two development packages are documented separately: **File Manager** and **Insights Connector**. Insights also has a design entry in the support family; its profile is not counted as another entry. File Manager is a standalone implementation candidate for an essential Core capability and is outside the 149-entry design inventory.
 
 > **NON-NORMATIVE DESIGN CATALOG.** Publication does not imply owner approval, amend canonical contracts, or authorize implementation. Contract decisions require the applicable owner ratification and project gates.
 
@@ -84,7 +84,7 @@ A panel role named ROOT does not grant Linux root execution. WCP-ADMIN governs s
 
 ## Local package profiles
 
-These profiles summarize files present in this workspace. Manifest declarations are recorded as declarations; they are not evidence that a signature, compatibility range, or production transport has been verified.
+These profiles summarize sources imported under `WCP360_Plugins/`. Manifest declarations are recorded as declarations; they are not evidence that a signature, compatibility range, or production transport has been verified.
 
 ### File Manager — standalone candidate
 
@@ -92,7 +92,7 @@ These profiles summarize files present in this workspace. Manifest declarations 
 | :--- | :--- |
 | Package identity | `wcp360/file-manager` in the local extension metadata and Composer package. |
 | Declared version | `0.3.0-alpha-pro`; development status. |
-| Source | [Package README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md), [extension metadata](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/extension.json), and [Composer requirements](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/composer.json). |
+| Source | [Package README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md), [extension metadata](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/extension.json), and [Composer requirements](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/composer.json). |
 | Runtime | PHP `^8.2`, Symfony `^7.4`, JSON and fileinfo; ZIP operations require the relevant runtime support. The WCP360 target remains PHP 8.4. |
 | Implemented mode | Standalone single-owner private storage. The storage must be exclusively modified by this module. |
 | Functional scope | File navigation, search, create/copy/move/rename, trash/restore, bounded uploads and downloads, text editing/history, and permissions within the process identity. See the package README for exact limits. |
@@ -109,7 +109,7 @@ These profiles summarize files present in this workspace. Manifest declarations 
 | :--- | :--- |
 | Manifest identity | `com.wcp360.insights-connector`. Design catalog key: `support.insights`. |
 | Declared version | `1.0.0` in the manifest; a version string does not establish a production release. |
-| Source | Local workspace only: `WCP360_Extensions/wcp360-insights-connector/` contains `README.md`, `manifest.json`, and `index.html`. These prototype files are not included in this publication to `main`. |
+| Source | [Package README](WCP360_Plugins/wcp360-insights-connector/README.md), [manifest](WCP360_Plugins/wcp360-insights-connector/manifest.json), and [prototype UI](WCP360_Plugins/wcp360-insights-connector/index.html), published as development sources on `main`. |
 | Current behavior | The README describes a browser-storage simulation of a signed, mutually authenticated exchange. |
 | Distribution intent | Separate optional package, disabled by default, removable, and not bundled into Core. |
 | Declared compatibility | WCP360 `>=2.5 <3.0` and API `insights/v1`. This is metadata to reconcile with the approved Core contract, not a tested compatibility matrix. |
@@ -660,12 +660,12 @@ Use two distinct fields in the future registry: **documentation maturity** and *
 - [Design System reference branch](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown/design-system).
 - [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/main/governance/REVIEW-MERGE-POLICY.md).
 
-Supporting documents in the local workspace, outside this publication:
+Imported design references (non-normative):
 
-- `WCP360_Design_System/08-core-extension-architecture.md` — Core and extension boundaries.
-- `WCP360_Developper_docs/280-plugin-extension-manager.md` — manager views and actions.
-- `WCP360_Developper_docs/600-plugin-trust-signing.md` — trust and permissions.
-- `WCP360_Developper_docs/601-extension-marketplace-model.md` — catalog model.
-- `WCP360_Developper_docs/82-extension-plugin-ui-contract.md` — UI contract.
+- [Core and extension boundaries](WCP360_Design_System/08-core-extension-architecture.md).
+- [Plugin and Extension Manager](WCP360_Developper/280-plugin-extension-manager.md).
+- [Plugin trust and permissions](WCP360_Developper/600-plugin-trust-signing.md).
+- [Extension marketplace model](WCP360_Developper/601-extension-marketplace-model.md).
+- [Extension UI contract](WCP360_Developper/82-extension-plugin-ui-contract.md).
 
 These design references include illustrative contracts. Version ranges, sample endpoints, and sample capability names must be reconciled with the approved implementation before becoming release requirements.

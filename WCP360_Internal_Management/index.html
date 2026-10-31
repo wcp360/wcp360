@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Private sign in - WCP360 INTERNAL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="assets/internal-auth.css">
+</head>
+<body class="internal-login-page" data-internal-login>
+  <main class="internal-login-shell">
+    <section class="internal-login-story" aria-labelledby="internalLoginTitle">
+      <div class="internal-login-brand"><span>360</span><strong>WCP360</strong><em>INTERNAL</em></div>
+      <div class="internal-login-copy">
+        <p class="internal-login-eyebrow">Private vendor control plane</p>
+        <h1 id="internalLoginTitle">A separate identity boundary for WCP360 operations.</h1>
+        <p>Builds, signing, licensing, customer commerce and consented fleet reports are protected by the vendor identity provider. Customer ROOT, RESELLER and USER accounts are never accepted here.</p>
+      </div>
+      <div class="internal-login-assurance">
+        <article><span class="material-symbols-rounded">passkey</span><div><strong>Phishing-resistant</strong><small>Corporate SSO plus FIDO2 or a managed passkey.</small></div></article>
+        <article><span class="material-symbols-rounded">timer</span><div><strong>Short-lived sessions</strong><small>Privilege is scoped, recorded and automatically expired.</small></div></article>
+        <article><span class="material-symbols-rounded">shield_lock</span><div><strong>No Linux root bridge</strong><small>INTERNAL access cannot become hidden server access.</small></div></article>
+      </div>
+    </section>
+    <section class="internal-login-card" aria-labelledby="signInHeading">
+      <div class="internal-login-lock"><span class="material-symbols-rounded">lock</span></div>
+      <p class="internal-login-kicker">Vendor workforce identity</p>
+      <h2 id="signInHeading">Sign in to INTERNAL</h2>
+      <p class="internal-login-help">Use an identity issued by <strong>internal.example.com</strong>. Password authentication is disabled.</p>
+      <div class="internal-session-notice" data-login-session hidden></div>
+      <form id="internalLoginForm" novalidate>
+        <label class="internal-auth-field" for="internalEmail">
+          <span>Corporate email</span>
+          <input id="internalEmail" name="email" type="email" value="operator@internal.example.com" autocomplete="username webauthn" spellcheck="false" required>
+          <small>Prototype identity domain: @internal.example.com</small>
+        </label>
+        <div class="internal-login-error" id="internalLoginError" role="alert" hidden></div>
+        <button class="internal-auth-button primary" type="submit" data-internal-passkey><span class="material-symbols-rounded">passkey</span>Continue with passkey</button>
+        <div class="internal-login-divider"><span>or</span></div>
+        <button class="internal-auth-button" type="button" data-internal-sso><span class="material-symbols-rounded">badge</span>Continue with corporate SSO</button>
+      </form>
+      <div class="internal-login-policy"><span class="material-symbols-rounded">policy</span><p>Access attempts are retained in the immutable workforce audit trail. Emergency recovery uses a separately approved break-glass process.</p></div>
+      <p class="internal-login-demo">Prototype only: this screen simulates the identity-provider handoff and never asks for a real password or secret.</p>
+    </section>
+  </main>
+  <script src="assets/internal-auth.js"></script>
+</body>
+</html>

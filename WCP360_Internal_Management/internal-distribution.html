@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Internal Distribution Control Plane - WCP360</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="assets/reference-ui.css">
+  <link rel="stylesheet" href="assets/internal-distribution.css">
+</head>
+<body data-access-scope="internal" data-product-scope="internal" data-internal-control-plane data-auth-pending>
+  <div class="wcp-dashboard-container internal-shell">
+    <aside class="wcp-dashboard-sidebar internal-sidebar" aria-label="Internal control plane navigation">
+      <div class="wcp-dashboard-brand">
+        <button class="wcp-menu-btn" type="button" data-internal-menu aria-label="Toggle navigation"><span class="material-symbols-rounded">menu</span></button>
+        <div class="wcp-brandmark">360</div><div class="wcp-brandtext">WCP<span>360</span></div>
+        <span class="wcp-scope-badge">INTERNAL</span>
+      </div>
+      <nav class="wcp-nav" id="internalNav"></nav>
+      <div class="wcp-sidebar-footer" id="internalSidebarFooter"></div>
+    </aside>
+    <button class="internal-overlay" type="button" data-internal-menu aria-label="Close navigation"></button>
+    <main class="wcp-dashboard-main">
+      <header class="wcp-dashboard-header internal-header" id="internalHeader"><h1 class="wcp-page-title">Internal Distribution Control Plane</h1></header>
+      <div class="wcp-dashboard-content"><div class="wcp-content-inner" id="internalControlPlane"></div></div>
+    </main>
+  </div>
+  <div id="internalDrawer"></div>
+  <div id="wcpToastStack" class="wcp-toast-stack" aria-live="polite"></div>
+  <script src="assets/internal-auth.js"></script>
+  <script src="assets/internal-distribution.js"></script>
+</body>
+</html>

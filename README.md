@@ -1350,13 +1350,13 @@ The stack and catalogs above describe the target. They must be distinguished fro
 | Component | Documented status |
 | :--- | :--- |
 | Specifications, contracts, and governance | Present in `main`, with decision and evidence tracking. |
-| Panel prototype | HTML/CSS/JavaScript in the design workspace, with local demo interactions and data. |
+| Panel prototype | HTML/CSS/JavaScript sources in `WCP360_Design_System/`, with local demo interactions and data; no server provisioning. |
 | Selected frontend target | PHP/Symfony, Twig, Symfony UX, and shared Twig components; implementation and integration remain to be completed. |
 | Selected backend target | PHP 8.4 / Symfony, Doctrine ORM/DBAL, PostgreSQL 17, and Messenger with an approved transport; these target integrations are not established by the inert foundation alone. |
 | Application kernel and interface | Candidate sources in `source/full-platform-candidate`, including a framework-independent PHP 8.4 kernel and static interface. |
 | `wcpd` daemon | Inert Go CLI foundation: help, version, and local checks; no listener or privileged effects. |
-| File Manager 0.3.0 alpha Pro | Standalone PHP/Symfony application on a dedicated branch; WCP360 integration blocked pending contracts and an adapter. |
-| Insights Connector | Optional design-workspace prototype, disabled by default; its local presence does not constitute publication in `main`. |
+| File Manager 0.3.0 alpha Pro | Development sources and archives in `WCP360_Plugins/`; WCP360 integration remains blocked pending contracts and an adapter. |
+| Insights Connector | Optional browser-storage prototype published in `WCP360_Plugins/wcp360-insights-connector/`, disabled by default; no production transport or remote administration is established. |
 | Complete platform | Symfony/Twig presentation, Doctrine/PostgreSQL 17 persistence, Messenger, agents, and hosting services still require integration and qualification; no production release is claimed here. |
 
 The current standalone File Manager uses **private, single-owner storage modified exclusively by that module**. This mode is not a multi-tenant backend for directories concurrently modified through SSH, FTP, or customer applications.
@@ -1379,21 +1379,20 @@ Start with the [current manifest](https://github.com/yyogas/wcp360/blob/main/man
 
 ### Install standalone File Manager dependencies
 
-From the clone root, in PowerShell, when checking out this branch for the first time:
+From the clone root on `main`, in PowerShell:
 
 ```powershell
-git switch --track origin/extensions/file-manager-v0.3.0-import
-Set-Location WCP360_Extensions/WCP360-File-Manager
+Set-Location WCP360_Plugins/wcp360-file-manager-xampp
 composer install --no-dev --prefer-dist
 ```
 
-Then read the [File Manager README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md) to configure storage and use the appropriate launcher. GitHub sources do not include `vendor/`. For development and module tests, use `composer install` with development dependencies.
+Then read the [File Manager README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md) to configure storage and use the appropriate launcher. GitHub sources do not include `vendor/`. For development and module tests, use `composer install` with development dependencies.
 
 ### Open the design workspace prototype
 
-This procedure applies to the **local workspace containing `WCP360_Design_System/`**, whose layout differs from the GitHub repository. Cloning `main` alone does not provide that directory.
+The prototype sources are published in **`WCP360_Design_System/`** on `main`. This procedure serves static demo pages and browser-storage state; it does not install the target Symfony platform.
 
-From the workspace root on Windows:
+From the clone or workspace root on Windows:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\WCP360_Design_System\serve-prototype.ps1"
@@ -1414,6 +1413,13 @@ wcp360/
 ├── PLUGIN_CATALOG.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
+├── WCP360_Core/
+│   └── README.md
+├── WCP360_Design_System/
+├── WCP360_Developper/
+├── WCP360_Internal_Management/
+├── WCP360_Official_Website/
+├── WCP360_Plugins/
 ├── WCP360_Release/
 │   ├── README.md
 │   ├── v1.0.0/
@@ -1428,7 +1434,20 @@ wcp360/
 └── src/
 ```
 
-Candidate sources are distributed across their branches. Their presence does not imply integration into `main`:
+### Imported workspace directories
+
+| Directory | Imported contents | Delivery boundary |
+| :--- | :--- | :--- |
+| [WCP360_Core](WCP360_Core/README.md) | Reserved implementation directory with a README. | No production Core code or installer is supplied by this placeholder. |
+| [WCP360_Design_System](WCP360_Design_System/README.md) | 351 files: panel UI prototype, assets, and design notes. | Demo behavior and visual reference; not the target Symfony implementation. |
+| [WCP360_Developper](WCP360_Developper/README.md) | 1,803 files of developer/product documentation and historical snapshots. | Canonical implementation authority remains under `specifications/` and the current manifest. |
+| [WCP360_Internal_Management](WCP360_Internal_Management/README.md) | 9 files for the private vendor-side UI prototype. | Keep separate from customer distribution artifacts; this is not a customer plugin or a production vendor service. |
+| [WCP360_Official_Website](WCP360_Official_Website/README-WCP360.md) | 443 files: website sources, assets, and PHP API prototypes. | Website source publication does not deploy the site or configure its services. |
+| [WCP360_Plugins](WCP360_Plugins/) | 73 files, including File Manager sources, four archives, and Insights Connector. | Development packages; loose `vendor/` dependencies are excluded and installed from manifests where needed. |
+
+This import preserves workspace source files and package archives. It does not establish a production release, a CODE-BASELINE, independent review, or Core integration.
+
+Other candidate sources remain on their branches. The following branch locations are preserved for reference:
 
 | Location | Reference branch |
 | :--- | :--- |
@@ -1470,7 +1489,8 @@ To follow a component, read its README and applicable governance decisions befor
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Inspect release preparation | [Version directories, guarded installer templates, installation guides, and the latest link](WCP360_Release/README.md). |
-| Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/extensions/file-manager-v0.3.0-import/WCP360_Extensions/WCP360-File-Manager/README.md). |
+| Explore the imported workspace | [Core](WCP360_Core/README.md), [Design System](WCP360_Design_System/README.md), [developer documentation](WCP360_Developper/README.md), [Internal prototype](WCP360_Internal_Management/README.md), [website](WCP360_Official_Website/README-WCP360.md), and [plugins](WCP360_Plugins/). |
+| Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
 | Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
 | Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
 

@@ -1,0 +1,51 @@
+{
+  "schema": "wcp360.extension/v1",
+  "id": "com.wcp360.insights-connector",
+  "name": "WCP360 Insights Connector",
+  "version": "1.0.0",
+  "publisher": "WCP360",
+  "distribution": {
+    "artifact": "separate-signed-package",
+    "bundledInCore": false,
+    "enabledByDefault": false,
+    "removable": true,
+    "releaseLane": "detached-extension",
+    "updateIndex": "signed-extension-index",
+    "evidence": ["sha256", "ed25519-signature", "cyclonedx-sbom", "build-provenance"],
+    "revocationScope": "artifact-identity"
+  },
+  "compatibility": {
+    "wcp360": ">=2.5 <3.0",
+    "api": "insights/v1"
+  },
+  "capabilities": [
+    "system.inventory.read",
+    "health.summary.read",
+    "extensions.health.read",
+    "audit.findings.generate",
+    "support.report.create",
+    "network.outbound:insights.internal.example.com"
+  ],
+  "forbidden": [
+    "shell.execute",
+    "root.impersonate",
+    "filesystem.content.read",
+    "database.rows.read",
+    "mail.content.read",
+    "secrets.export",
+    "remote.remediation"
+  ],
+  "data": {
+    "owner": "com.wcp360.insights-connector",
+    "defaultConsent": "none",
+    "localQueueEncrypted": true,
+    "customerContentCollected": false,
+    "retentionDaysDefault": 30
+  },
+  "failure": {
+    "coreDependency": false,
+    "onUnavailable": "queue-with-local-cap-and-backoff",
+    "onDisable": "stop-collection-and-transmission",
+    "onUninstall": "revoke-pairing-and-remove-routes"
+  }
+}

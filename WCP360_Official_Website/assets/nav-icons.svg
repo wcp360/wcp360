@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m3 11 9-7 9 7"/>
+    <path d="M5.5 10v10h13V10M9.5 20v-6h5v6"/>
+  </symbol>
+  <symbol id="business" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 7V5h6v2M4 7h16v12H4zM4 12h16M10 12v2h4v-2"/>
+  </symbol>
+  <symbol id="building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 21V4h11v17M16 9h3v12M8 8h2M12 8h2M8 12h2M12 12h2M8 16h2M12 16h2M3 21h18"/>
+  </symbol>
+  <symbol id="sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m12 3 1.4 3.6L17 8l-3.6 1.4L12 13l-1.4-3.6L7 8l3.6-1.4L12 3ZM6 14l.9 2.1L9 17l-2.1.9L6 20l-.9-2.1L3 17l2.1-.9L6 14ZM18 13l.8 1.7 1.7.8-1.7.8L18 18l-.8-1.7-1.7-.8 1.7-.8L18 13Z"/>
+  </symbol>
+</svg>

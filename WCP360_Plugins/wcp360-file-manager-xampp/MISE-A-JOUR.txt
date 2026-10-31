@@ -1,0 +1,30 @@
+CONSERVER VOTRE INSTALLATION 0.1.1 OU 0.2.0
+
+Le plus simple pour decouvrir la 0.3.0 : l'extraire dans un nouveau dossier
+et la lancer. L'ancien dossier reste intact. Ne lancez pas les deux versions
+simultanement sur le port 8088.
+
+Pour conserver vos fichiers et identifiants existants :
+1. Fermez l'ancien serveur (Ctrl+C dans sa fenetre).
+2. Faites une copie de sauvegarde de tout l'ancien dossier.
+3. Extrayez le nouveau ZIP dans un autre dossier.
+4. Dans le nouveau dossier, creez standalone\var si necessaire.
+5. Depuis l'ancien standalone\var, copiez UNIQUEMENT :
+   - config.php
+   - le dossier files
+   - le dossier state (contient la corbeille)
+   vers le nouveau standalone\var.
+6. Ne copiez PAS cache, log, logs, sessions ou vendor depuis l'ancien dossier.
+7. Lancez le NOUVEAU DEMARRER-WINDOWS.bat. Vos identifiants sont conserves.
+
+Cette procedure concerne la configuration relative standard generee par la
+version 0.1.1 ou 0.2.0. Si vous avez modifie FM_ROOT ou FM_STATE avec des chemins
+personnalises, faites verifier la configuration avant de copier les donnees.
+Le nouveau dossier ne doit pas pointer vers l'ancien stockage par accident.
+
+En cas de probleme : arretez le nouveau serveur et relancez votre ancienne
+copie sauvegardee. N'effacez l'ancienne installation qu'apres verification.
+Ce paquet reste une alpha locale, pas une mise a jour de production WCP360.
+
+La version 0.3.0 ajoute dans state : versions, audit, quota, verrous et partages.
+La sauvegarde de state doit inclure ces donnees privees. Ne publiez jamais var.

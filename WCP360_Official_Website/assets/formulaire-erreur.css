@@ -1,0 +1,517 @@
+.form-error-page {
+  --error-ink: var(--navy);
+  --error-red: #9b352f;
+  --error-red-soft: #fff1f0;
+  --error-red-line: #f1c2bd;
+  color: var(--ink);
+  background: #fff;
+}
+
+.form-error-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0 clamp(4rem, 7vw, 6.5rem);
+  background:
+    radial-gradient(circle at 7% 10%, rgba(172, 220, 4, .24), transparent 29rem),
+    radial-gradient(circle at 92% 14%, rgba(0, 136, 255, .24), transparent 34rem),
+    var(--grad-soft);
+}
+
+.form-error-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .5;
+  background-image: linear-gradient(rgba(10, 46, 67, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(10, 46, 67, .04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 88%);
+  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+}
+
+.form-error-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(21rem, .72fr);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: stretch;
+}
+
+.form-error-primary,
+.form-error-guide {
+  border-radius: clamp(1.5rem, 3vw, 2rem);
+  box-shadow: var(--shadow);
+}
+
+.form-error-primary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 4.4rem);
+  color: #fff;
+  background: linear-gradient(145deg, #082f45 0%, #07516e 100%);
+}
+
+.form-error-primary::before,
+.form-error-primary::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.form-error-primary::before {
+  width: 22rem;
+  height: 22rem;
+  top: -10rem;
+  right: -8rem;
+  border: 1px solid rgba(255, 255, 255, .16);
+  box-shadow: 0 0 0 3rem rgba(255, 255, 255, .025), 0 0 0 6rem rgba(255, 255, 255, .02);
+}
+
+.form-error-primary::after {
+  width: 13rem;
+  height: 13rem;
+  right: 12%;
+  bottom: -9rem;
+  background: rgba(172, 220, 4, .14);
+}
+
+.form-error-icon {
+  display: grid;
+  width: 4.75rem;
+  height: 4.75rem;
+  margin-bottom: 1.75rem;
+  place-items: center;
+  border: 1px solid var(--error-red-line);
+  border-radius: 1.45rem;
+  color: var(--error-red);
+  background: var(--error-red-soft);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, .2), 0 0 0 5px rgba(255, 255, 255, .08);
+}
+
+.form-error-icon svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.form-error-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  margin-bottom: 1rem;
+  color: var(--blue);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.form-error-eyebrow::before {
+  content: "";
+  width: 1.8rem;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--grad);
+}
+
+.form-error-primary .form-error-eyebrow {
+  color: #d8f75b;
+}
+
+.form-error-primary h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.45rem, 5vw, 4.8rem);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.form-error-lead {
+  max-width: 39rem;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, .82);
+  font-size: clamp(1.03rem, 1.5vw, 1.18rem);
+  line-height: 1.75;
+}
+
+.form-error-notice {
+  display: flex;
+  max-width: 38rem;
+  gap: .7rem;
+  align-items: flex-start;
+  margin: 1.45rem 0 0;
+  padding: .85rem 1rem;
+  border: 1px solid rgba(241, 194, 189, .34);
+  border-radius: .9rem;
+  color: #ffe4e1;
+  background: rgba(155, 53, 47, .2);
+  font-size: .86rem;
+  line-height: 1.55;
+}
+
+.form-error-notice svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: .08rem;
+  flex: 0 0 auto;
+}
+
+.form-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .85rem;
+  margin-top: clamp(2rem, 4vw, 2.6rem);
+}
+
+.form-error-actions .btn {
+  min-height: 3.8rem;
+  padding-inline: 1.4rem;
+}
+
+.form-error-actions .btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.form-error-secondary {
+  border-color: rgba(255, 255, 255, .3);
+  color: #fff;
+  background: rgba(255, 255, 255, .08);
+}
+
+.form-error-secondary:hover {
+  border-color: #fff;
+  color: var(--navy);
+  background: #fff;
+}
+
+.form-error-direct {
+  display: inline-flex;
+  gap: .65rem;
+  align-items: center;
+  margin-top: 1.25rem;
+  color: rgba(255, 255, 255, .72);
+  font-size: .84rem;
+  text-decoration: none;
+}
+
+.form-error-direct svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: #d5f45d;
+}
+
+.form-error-direct strong {
+  color: #fff;
+}
+
+.form-error-direct:hover {
+  color: #fff;
+}
+
+.form-error-guide {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 4vw, 3.2rem);
+  border: 1px solid #cbdfe8;
+  background: #fff;
+}
+
+.form-error-guide::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: var(--grad);
+}
+
+.form-error-guide h2 {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -.035em;
+}
+
+.form-error-checks {
+  display: grid;
+  gap: 1.15rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form-error-checks li {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid #e8f0f3;
+}
+
+.form-error-checks li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.form-error-check-icon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid #bfdce9;
+  border-radius: .9rem;
+  color: #0878c5;
+  background: #eff8fc;
+}
+
+.form-error-checks li:last-child .form-error-check-icon {
+  border-color: rgba(172, 220, 4, .42);
+  color: #6a9900;
+  background: #f6ffe9;
+}
+
+.form-error-check-icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.form-error-checks strong {
+  display: block;
+  margin-top: .1rem;
+  color: var(--navy);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.form-error-checks p {
+  margin: .35rem 0 0;
+  color: #526977;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.form-error-page .page-breadcrumbs {
+  border-top: 1px solid #e5eef0;
+  border-bottom: 1px solid #e5eef0;
+  background: #fff;
+}
+
+.form-error-support {
+  padding: clamp(4.5rem, 8vw, 7rem) 0;
+  background: linear-gradient(180deg, #f8fbfd 0%, #f2f8fb 100%);
+}
+
+.form-error-support-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, .65fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.form-error-support h2 {
+  max-width: 15ch;
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(2.15rem, 4vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+
+.form-error-support-head > p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.form-error-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.form-error-contact-card {
+  position: relative;
+  display: grid;
+  min-height: 15rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: start;
+  padding: clamp(1.5rem, 3vw, 2.2rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  color: var(--navy);
+  background: #fff;
+  box-shadow: var(--shadow-xs);
+  text-decoration: none;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+
+.form-error-contact-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--grad);
+}
+
+.form-error-contact-card:hover {
+  border-color: #b8dbe8;
+  color: var(--navy);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-5px);
+}
+
+.form-error-contact-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 1rem;
+  color: var(--blue);
+  background: #eaf7ff;
+}
+
+.form-error-contact-card:nth-child(2) .form-error-contact-icon {
+  color: #6a9900;
+  background: #f3fbe5;
+}
+
+.form-error-contact-icon svg {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.form-error-contact-card small {
+  display: block;
+  margin-bottom: .35rem;
+  color: #7a919c;
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.form-error-contact-card h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 1.35rem;
+}
+
+.form-error-contact-card p {
+  max-width: 31rem;
+  margin: .65rem 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.65;
+}
+
+.form-error-contact-arrow {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--blue);
+  transition: transform .25s var(--ease);
+}
+
+.form-error-contact-card:nth-child(2) .form-error-contact-arrow {
+  color: var(--navy);
+  background: var(--green);
+}
+
+.form-error-contact-arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.form-error-contact-card:hover .form-error-contact-arrow {
+  transform: translateX(3px);
+}
+
+.form-error-page a:focus-visible {
+  outline: 3px solid #d5f45d;
+  outline-offset: 4px;
+}
+
+@media (max-width: 940px) {
+  .form-error-shell,
+  .form-error-support-head {
+    grid-template-columns: 1fr;
+  }
+
+  .form-error-primary h1,
+  .form-error-guide h2,
+  .form-error-support h2 {
+    max-width: 18ch;
+  }
+}
+
+@media (max-width: 700px) {
+  .form-error-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .form-error-hero {
+    padding-top: 3.2rem;
+  }
+
+  .form-error-shell {
+    gap: 1rem;
+  }
+
+  .form-error-primary,
+  .form-error-guide {
+    border-radius: 1.35rem;
+  }
+
+  .form-error-primary,
+  .form-error-guide {
+    padding: 1.55rem;
+  }
+
+  .form-error-primary h1 {
+    font-size: clamp(2.25rem, 12vw, 3.1rem);
+  }
+
+  .form-error-actions,
+  .form-error-actions .btn {
+    width: 100%;
+  }
+
+  .form-error-contact-card {
+    min-height: 14rem;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .form-error-contact-arrow {
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-error-page *,
+  .form-error-page *::before,
+  .form-error-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}

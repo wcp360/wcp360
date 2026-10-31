@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Insights Connector - WCP360 Extension</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="assets/connector.css">
+</head>
+<body data-insights-connector>
+  <header class="ic-topbar">
+    <div class="ic-brand"><span class="ic-brandmark">360</span><div><strong>WCP360</strong><small>Insights Connector</small></div></div>
+    <div class="ic-top-actions"><span class="ic-package-badge"><span class="material-symbols-rounded">extension</span>Detached extension</span><a class="ic-button ghost" href="../../WCP360 Design System/software-manager.html#plugins"><span class="material-symbols-rounded">arrow_back</span>Software &amp; Extensions</a></div>
+  </header>
+  <main class="ic-layout">
+    <aside class="ic-side">
+      <p class="ic-side-kicker">Extension console</p>
+      <nav class="ic-nav" aria-label="Insights Connector sections">
+        <button type="button" data-ic-tab="overview"><span class="material-symbols-rounded">space_dashboard</span>Overview</button>
+        <button type="button" data-ic-tab="policy"><span class="material-symbols-rounded">privacy_tip</span>Collection policy</button>
+        <button type="button" data-ic-tab="findings"><span class="material-symbols-rounded">bug_report</span>Findings</button>
+        <button type="button" data-ic-tab="reports"><span class="material-symbols-rounded">assessment</span>Reports</button>
+        <button type="button" data-ic-tab="connection"><span class="material-symbols-rounded">hub</span>Connection</button>
+      </nav>
+      <div class="ic-boundary-card"><span class="material-symbols-rounded">shield_lock</span><strong>No remote control</strong><p>This plugin can transmit approved evidence. It cannot run commands, open a shell or access hosted content.</p></div>
+    </aside>
+    <section class="ic-main">
+      <div id="connectorApp"></div>
+    </section>
+  </main>
+  <div id="connectorDialog"></div>
+  <div class="ic-toast-stack" id="connectorToasts" aria-live="polite"></div>
+  <script src="assets/connector-core.js"></script>
+  <script src="assets/connector-views-overview.js"></script>
+  <script src="assets/connector-views-evidence.js"></script>
+  <script src="assets/connector-actions.js"></script>
+</body>
+</html>
