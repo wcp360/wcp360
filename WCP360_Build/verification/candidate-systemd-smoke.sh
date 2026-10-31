@@ -12,7 +12,7 @@ trap cleanup EXIT
 export APP_ENV=test APP_DEBUG=1 APP_SECRET=provision-test-only-secret WCP_CANDIDATE=1 WCP_CONTEXT=worker WCP_PUBLIC_HOST=localhost WCP_ALLOW_ISOLATED_PROVISIONING=1 WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan DATABASE_URL=sqlite:////var/lib/wcp360-candidate-test-worker/workbench.db
 wait_services(){
     for attempt in {1..90}; do
-        if systemctl is-active --quiet wcp-candidate-broker wcp-candidate-agent; then return; fi
+        if systemctl is-active --quiet wcp-candidate-broker && systemctl is-active --quiet wcp-candidate-agent; then return; fi
         sleep 1
     done
     echo 'Supervised service readiness deadline exceeded.' >&2; return 1
@@ -36,10 +36,12 @@ exercise)
     [[ "$status" == 78 ]]
     systemctl restart wcp-candidate-broker
     verify_state
+    printf 'PASS: clean broker service restart and outcome reconciliation.\n'
     # Kill only the PHP-FPM master that is a direct child of our owned broker.
     old_pid="$(systemctl show -p MainPID --value wcp-candidate-broker)"
     child="$(pgrep -P "$old_pid" -x php-fpm8.4)"
     [[ "$child" =~ ^[0-9]+$ && "$(readlink "/proc/$child/exe")" == /usr/sbin/php-fpm8.4 ]]
+    printf 'Injecting PHP-FPM master crash: broker=%s child=%s\n' "$old_pid" "$child"
     kill -KILL "$child"
     for attempt in {1..90}; do
         new_pid="$(systemctl show -p MainPID --value wcp-candidate-broker)"
@@ -48,6 +50,7 @@ exercise)
     done
     [[ "$new_pid" != 0 && "$new_pid" != "$old_pid" ]]
     verify_state
+    printf 'PASS: verified master crash triggers broker replacement and state reconciliation.\n'
     # Missing/changed configuration must refuse recovery, without automatic repair.
     site="$(php -r '$r=json_decode(file_get_contents("/var/lib/wcp360-candidate-recovery-test/requests.json"),true,16,JSON_THROW_ON_ERROR);echo $r[0]["site_id"];')"
     systemctl stop wcp-candidate-broker
@@ -76,7 +79,7 @@ after-reboot)
     [[ -d "$root" ]]
     cp "$root/requests.json" /tmp/wcp-provision-requests.json
     verify_state
-    systemctl is-enabled --quiet wcp-candidate-vm-arm wcp-candidate-broker wcp-candidate-agent
+    for service in wcp-candidate-vm-arm wcp-candidate-broker wcp-candidate-agent; do systemctl is-enabled --quiet "$service"; done
     printf 'PASS: automatic candidate boot authorization, systemd recovery and persistent sessions/state after actual guest reboot.\n'
     ;;
 *) exit 2;;

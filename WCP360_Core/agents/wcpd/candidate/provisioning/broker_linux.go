@@ -76,8 +76,7 @@ func fixedCommand(binary string, args ...string) error {
 	defer cancel()
 	cmd := exec.CommandContext(ctx, binary, args...)
 	cmd.Env = []string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin", "LANG=C"}
-	cmd.Stdout = io.Discard
-	cmd.Stderr = io.Discard
+	// Nil outputs use /dev/null directly: descendant-held pipes must not delay Wait.
 	return cmd.Run()
 }
 func (b *Broker) Prepare() error {
@@ -300,8 +299,7 @@ func (b *Broker) ensureServers() error {
 func (b *Broker) start(binary string, args ...string) error {
 	cmd := exec.Command(binary, args...)
 	cmd.Env = []string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin", "LANG=C"}
-	cmd.Stdout = io.Discard
-	cmd.Stderr = io.Discard
+	// Nil outputs use /dev/null directly: descendant-held pipes must not delay Wait.
 	if e := cmd.Start(); e != nil {
 		return e
 	}

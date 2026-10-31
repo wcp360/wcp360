@@ -18,6 +18,8 @@ The agent has no capabilities, a read-only filesystem with only its socket direc
 
 The broker deliberately uses the system manager’s default root identity and also checks its effective UID in Go. On the tested Debian systemd 257 path, redundant User=root combined with seccomp-implying restrictions removes CAP_SETUID before exec; no-new-privileges prevents exec from restoring it. Nginx then cannot drop worker privileges. Omitting this redundant identity directive retains the same root identity and the existing sandbox settings, without granting ambient capabilities. The preflight reads identity and capability directives as well as the sandbox settings from the actual unit, then verifies the required non-root transition. See the [systemd 257 execution implementation](https://github.com/systemd/systemd/blob/v257/src/core/exec-invoke.c).
 
+Managed commands use direct /dev/null output descriptors, rather than Go output-copy pipes. This lets Cmd.Wait observe a dead master even while its surviving workers still hold stdout/stderr open; the systemd control group can then clean up and restart. A Linux regression test covers a master that exits while a bounded descendant retains those descriptors. See [Go process and I/O waiting](https://pkg.go.dev/os/exec#Cmd.Wait).
+
 ## Explicit boot opt-in
 
 Ordinary VM execution remains refused. Boot recovery additionally requires:
