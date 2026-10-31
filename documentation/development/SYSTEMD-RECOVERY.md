@@ -42,7 +42,9 @@ The first candidate deliberately fails recovery for the whole small broker group
 
 ## Automated rehearsal
 
-Run the [clean Debian VM harness](DEBIAN-VM.md). It now exercises:
+Run the [clean Debian VM harness](DEBIAN-VM.md). A preflight executes the actual broker sandbox settings in a transient disposable-VM unit and verifies the required root-to-www-data identity transition before package installation. On failure it prints bounded process capability/security metadata and individual-setting diagnostics; these probes do not change installed service settings.
+
+The harness then exercises:
 
 - Initial Symfony → worker → agent → broker activation through the actual systemd units.
 - A clean broker service restart, with exact persistent identity/code/configuration/journal hashes preserved.

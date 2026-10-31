@@ -7,6 +7,7 @@ set -Eeuo pipefail
 source /etc/os-release
 [[ "$ID" == debian && "$VERSION_ID" == 13 ]] || exit 78
 [[ ! -e /var/lib/wcp360-provision-candidate && ! -e /srv/wcp360-candidate ]] || { echo 'Guest is not clean.' >&2; exit 78; }
+bash /opt/wcp360/WCP360_Build/verification/candidate-systemd-preflight.sh
 # Prevent package postinst from starting default web services. Only this guest is affected.
 [[ ! -e /usr/sbin/policy-rc.d ]] || exit 78
 printf '#!/bin/sh\nexit 101\n' >/usr/sbin/policy-rc.d

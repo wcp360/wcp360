@@ -26,7 +26,17 @@ cleanup(){
     [[ -z "$broker_pid" ]] || kill "$broker_pid" 2>/dev/null || true
     if (( status != 0 )); then
         cat /tmp/wcp-broker.log /tmp/wcp-agent.log /var/lib/wcp360-provision-candidate/*error.log 2>/dev/null || true
-        if [[ "${WCP_CANDIDATE_SYSTEMD:-}" == 1 ]]; then journalctl --no-pager -u wcp-candidate-broker -u wcp-candidate-agent -n 60; systemctl stop wcp-candidate-agent wcp-candidate-broker; fi
+        if [[ "${WCP_CANDIDATE_SYSTEMD:-}" == 1 ]]; then
+            systemctl show wcp-candidate-broker -p MainPID -p CapabilityBoundingSet -p AmbientCapabilities -p NoNewPrivileges -p SystemCallFilter -p RestrictSUIDSGID -p SecureBits
+            main_pid="$(systemctl show -p MainPID --value wcp-candidate-broker)"
+            if [[ "$main_pid" =~ ^[1-9][0-9]*$ ]]; then
+                for candidate_pid in "$main_pid" $(pgrep -P "$main_pid" || true); do
+                    printf 'DIAGNOSTIC: process %s\n' "$candidate_pid"
+                    awk '/^(Name|Uid|Gid|CapInh|CapPrm|CapEff|CapBnd|CapAmb|NoNewPrivs|Seccomp):/' "/proc/$candidate_pid/status" || true
+                    cat "/proc/$candidate_pid/attr/current" 2>/dev/null || true
+                done
+            fi
+            journalctl --no-pager -u wcp-candidate-broker -u wcp-candidate-agent -n 60; systemctl stop wcp-candidate-agent wcp-candidate-broker; fi
     fi
     exit "$status"
 }
