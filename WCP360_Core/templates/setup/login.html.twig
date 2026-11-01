@@ -12,5 +12,6 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
     <button class="button auth-submit" type="submit">Se connecter <span aria-hidden="true">→</span></button>
 </form>
+{% if recovery_available %}<p class="auth-help"><a href="{{ path('wcp_password_recovery') }}" data-turbo-frame="_top">Mot de passe oublié ? Utiliser un code de récupération</a></p>{% endif %}
 <p class="auth-help">Utilisez un compte créé sur cette instance.{% if context == 'admin' %} Votre authentificateur sera demandé uniquement si vous avez activé la MFA.{% endif %}</p>
 {% endblock %}

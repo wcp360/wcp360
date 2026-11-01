@@ -8,6 +8,9 @@ Start here when changing: **Wizard steps, setup validation and interrupted-insta
 
 | Source | Responsibility |
 | :--- | :--- |
+| [Application/IssuePasswordRecoveryCode.php](Application/IssuePasswordRecoveryCode.php) | Explicit setup-only issuance of a state-bound code after locked account inspection and mandatory audit. |
+| [Infrastructure/CandidateAccountMaintenance.php](Infrastructure/CandidateAccountMaintenance.php) | Shared setup/maintenance connection admission for direct recovery and code issuance; no credential fallback. |
+| [UI/Console/IssuePasswordRecoveryCodeCommand.php](UI/Console/IssuePasswordRecoveryCodeCommand.php) | Read-only plan or confirmed one-time private code display; never sends email or generates a host-derived URL. |
 | [Application/RecoverAccountPassword.php](Application/RecoverAccountPassword.php) | Setup-only candidate recovery with maintenance admission, verifier compare-and-swap, transactional session revocation/audit and preserved MFA. |
 | [UI/Console/RecoverAccountPasswordCommand.php](UI/Console/RecoverAccountPasswordCommand.php) | Read-only plan or explicitly enabled interactive recovery; hidden password confirmation and redacted results. |
 | [UI/Console/SetupCommand.php](UI/Console/SetupCommand.php) | Interactive candidate account enrollment using password hashing, transactional persistence and audit. |
@@ -36,6 +39,8 @@ The enrollment terminal asks for a **username**, a separate **contact email**, t
 Enroll the initial candidate administrator with `WCP_CONTEXT=setup php bin/console wcp:candidate:enroll`, selecting the administrator account context in the interactive terminal. The graphical wizard is not enabled by this command. Candidate execution still requires its explicit development/test runtime guards.
 
 For a forgotten candidate password, follow the [operator-assisted account recovery guide](../../../installer/recovery/ACCOUNT-PASSWORD.md). The setup-only `wcp:candidate:account:recover` command requires an explicit USER/ADMIN surface and defaults to a read-only plan. `--apply` additionally requires `WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY=1`, interactive confirmation and two hidden password entries. MFA remains unchanged. The maintenance boundary is distinct from browser administrator rights; self-service email/token recovery remains unfinished.
+
+To let the owner choose the replacement password, use the separate [recovery-code handoff](../../../installer/recovery/RECOVERY-CODES.md). Its independent enable flag and per-surface keys authorize explicit issuance; the owner redeems the code through the matching public form. Shared-profile only; no email transport is claimed.
 
 Use the common [module layout](../README.md) for new Domain, Application, Infrastructure and UI code. Standalone CLI entry points live in installer; this module does not provide a generic privileged shell.
 

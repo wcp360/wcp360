@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Wcp360\Core\Module\Setup\Application;
 
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions;
@@ -118,31 +117,6 @@ final readonly class RecoverAccountPassword
 
     private function maintenance(): \PDO
     {
-        $db = $this->store->db;
-        $platform = $db->getDatabasePlatform();
-        if (!$platform instanceof PostgreSQLPlatform && !$platform instanceof SQLitePlatform) throw new \RuntimeException(self::REFUSED);
-        $pdo = $db->getNativeConnection();
-        if (!$pdo instanceof \PDO) throw new \RuntimeException(self::REFUSED);
-        if ($platform instanceof PostgreSQLPlatform) {
-            $identity = $pdo->query(<<<'SQL'
-SELECT current_user = session_user AND pg_catalog.current_setting('role') = 'none'
-    AND pg_catalog.current_setting('server_version_num')::integer BETWEEN 170000 AND 179999
-    AND pg_catalog.current_database() IN ('wcp360_workbench', 'wcp360_test')
-    AND (r.rolsuper OR (
-        r.oid = (SELECT datdba FROM pg_catalog.pg_database WHERE datname = pg_catalog.current_database())
-        AND 4 = (SELECT count(*) FROM pg_catalog.pg_class c
-            JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-            WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relowner = r.oid
-              AND c.relname IN ('wcp_candidate_users', 'wcp_candidate_user_sessions',
-                  'wcp_candidate_admin_sessions', 'wcp_candidate_audit'))
-    )) AS allowed
-FROM pg_catalog.pg_roles r WHERE r.rolname = current_user
-SQL);
-            if ($identity === false || !in_array($identity->fetchColumn(), [true, 1, '1', 't'], true)) {
-                throw new \RuntimeException(self::REFUSED);
-            }
-            $pdo->exec('SET search_path TO pg_catalog, public, pg_temp');
-        }
-        return $pdo;
+        return (new \Wcp360\Core\Module\Setup\Infrastructure\CandidateAccountMaintenance($this->store, $this->runtime))->connection();
     }
 }

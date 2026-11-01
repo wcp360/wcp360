@@ -50,6 +50,8 @@ A cancelled confirmation has no effect. Driver/hasher causes are replaced with f
 
 If commit or rollback becomes uncertain, the connection is closed. Inspect the actual account state and the recovery audit with maintenance authority before another attempt. Do not infer success from a CLI failure or blindly repeat an uncertain transition.
 
+For an owner-chosen replacement instead of direct operator entry, the [short-lived code flow](RECOVERY-CODES.md) supplies a separate shared-profile candidate. It preserves MFA and still requires an explicitly verified private operator handoff; email delivery is not implemented.
+
 ## Verification status and remaining work
 
 [Service and CLI regressions](../../tests/Integration/RecoverAccountPasswordTest.php) define positive/refusal, MFA preservation, rollback, profiling, target reuse, concurrency, cancellation and hidden-input cases. [Real PostgreSQL role regressions](../../tests/Integration/CandidateDatabaseRolesTest.php) define refusal for runtime logins disguised as maintenance.

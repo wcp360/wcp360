@@ -182,6 +182,12 @@ The [setup recovery command](installer/recovery/ACCOUNT-PASSWORD.md) adds a read
 
 [Service and CLI regressions](tests/Integration/RecoverAccountPasswordTest.php) and [PostgreSQL refusals](tests/Integration/CandidateDatabaseRolesTest.php) are prepared for the existing GitHub CI. Exact-source results are pending CI; earlier passing results are not inherited. Self-service email/token recovery and production identity/operator integration remain open. **M1 remains open**, with the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** counts unchanged.
 
+### Short-lived recovery codes and owner redemption
+
+The [recovery-code candidate](installer/recovery/RECOVERY-CODES.md) adds explicitly confirmed setup issuance and a USER/ADMIN `/reset-password` page in the shared database profile. Independent per-surface keys bind codes to current account state for fifteen minutes. Password replacement, old-session revocation and audit commit together; the verifier change invalidates all codes from the previous credential state. The owner then uses normal login and any enabled MFA. The maintenance guard is shared with direct operator recovery.
+
+[Unit, service and HTTP sources](installer/recovery/RECOVERY-CODES.md#verification-and-remaining-work) define the current CI scope; no local executable verification is claimed. Email request/delivery and notifications, per-code inventory/revocation, isolated redemption and accepted production contracts remain unfinished. **M1 remains open**; the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** counts are unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

@@ -13,6 +13,12 @@ framework:
         gc_maxlifetime: 1800
     router:
         utf8: true
+    rate_limiter:
+        candidate_password_recovery:
+            policy: fixed_window
+            limit: 5
+            interval: '15 minutes'
+            cache_pool: cache.app
     assets: ~
     asset_mapper:
         importmap_polyfill: false

@@ -16,7 +16,7 @@ final class PasswordChangeErrors
     #[AsEventListener(event: 'kernel.exception', priority: -64)]
     public function redact(#[\SensitiveParameter] ExceptionEvent $event): void
     {
-        if (!$event->isMainRequest() || $event->getRequest()->getPathInfo() !== '/account/password') return;
+        if (!$event->isMainRequest() || !in_array($event->getRequest()->getPathInfo(), ['/account/password', '/reset-password'], true)) return;
         $error = $event->getThrowable();
         $status = $error instanceof HttpExceptionInterface ? $error->getStatusCode() : 500;
         $headers = $error instanceof HttpExceptionInterface ? $error->getHeaders() : [];

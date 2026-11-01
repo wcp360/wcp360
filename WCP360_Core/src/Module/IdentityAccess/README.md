@@ -23,6 +23,10 @@ Start here when changing: **Identity, roles, session and recovery behavior.**
 | [UI/Http/ReauthenticationController.php](UI/Http/ReauthenticationController.php) | Administrator confirmation form using the existing password and MFA authenticators; no proof renewal on GET. |
 | [Infrastructure/MfaSchema.php](Infrastructure/MfaSchema.php) | Explicitly candidate-only encrypted factor and hashed recovery-code persistence. |
 | [Domain/NewAccountPassword.php](Domain/NewAccountPassword.php) | Shared enrollment/change policy: at least 14 UTF-8 characters, at most 256 bytes; passphrases accepted without trimming or composition rules. |
+| [Domain/PasswordRecoveryCode.php](Domain/PasswordRecoveryCode.php) | Short-lived, state-bound HMAC code semantics; no raw-code persistence. |
+| [Infrastructure/RuntimeRecoveryKeys.php](Infrastructure/RuntimeRecoveryKeys.php) | Read only the permitted surface key with no secret fallback. |
+| [Application/CompletePasswordRecovery.php](Application/CompletePasswordRecovery.php) | Shared-profile code redemption, credential CAS and atomic session revocation/audit. |
+| [UI/Http/PasswordRecoveryController.php](UI/Http/PasswordRecoveryController.php) | Anonymous code form with exact Origin, CSRF, input bounds, attempt limits and safe errors. |
 | [Application/ChangeOwnPassword.php](Application/ChangeOwnPassword.php) | Own-account credential replacement, current-state checks, context session revocation and audit in one transaction; shared persistence or the configured surface-bound PostgreSQL operation. |
 | [UI/Http/PasswordController.php](UI/Http/PasswordController.php) | Username-account password form with exact Origin, CSRF and the shared current-password confirmation budget. |
 | [Infrastructure/PasswordChangeErrors.php](Infrastructure/PasswordChangeErrors.php) | Redacted password-route exception responses with preserved refusal statuses and headers, including before-controller errors. |
@@ -72,6 +76,12 @@ The [real PostgreSQL role regressions](../../../tests/Integration/CandidateDatab
 ## Operator-assisted password recovery
 
 A forgotten candidate password can be replaced through the [Setup recovery command](../../../installer/recovery/ACCOUNT-PASSWORD.md). It requires local maintenance authority, a fixed account identity, explicit opt-in and interactive hidden confirmation. The shared password policy applies; credential replacement, own-context session revocation and audit are atomic. An enabled factor and unused backup codes are preserved. The next login still follows the account's existing MFA mode. This does not provide a public reset endpoint, email delivery, single-use recovery tokens or production operator identity integration.
+
+## Short-lived candidate recovery codes
+
+The [code handoff guide](../../../installer/recovery/RECOVERY-CODES.md) describes setup issuance and anonymous `/reset-password` redemption in the shared database profile. Codes expire after fifteen minutes and are bound by HMAC to account identity, verifier and factor revision, using independent surface keys. A successful credential compare-and-swap consumes all codes from the old state while revoking own-context sessions and appending audit atomically. No automatic login or MFA reset occurs. Exact Origin, CSRF, bounded form inputs, empty error fields and a cache-backed attempt limit guard the form. The credential error listener also redacts this route.
+
+The key reader permits only its runtime surface, or an explicitly requested setup target, and never falls back to another key or APP_SECRET/MFA material. No additional code table or runtime grant is introduced. The session-isolated profile remains unavailable for this new bearer path. Email request/delivery, notifications, individual code revocation, restore-aware key lifecycle and production acceptance remain unfinished; restoring old verifier state requires key rotation. CI sources, not local execution, define this increment's verification scope.
 
 ## Candidate authorization and access blocks
 

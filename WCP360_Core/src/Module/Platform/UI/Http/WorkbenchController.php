@@ -25,13 +25,13 @@ final class WorkbenchController extends AbstractController
         catch(\Throwable){return $this->json(['status'=>'unavailable'],503);}
     }
     #[Route('/login',name:'wcp_login',methods:['GET','POST'])]
-    public function login(AuthenticationUtils $auth,RuntimeContext $runtime):Response
+    public function login(AuthenticationUtils $auth,RuntimeContext $runtime,\Wcp360\Core\Module\IdentityAccess\Application\CompletePasswordRecovery $recovery):Response
     {
         if($this->getUser()) {
             if($runtime->context==='admin' && $auth->getLastAuthenticationError(false)!==null)return $this->redirectToRoute('wcp_account_reauthenticate');
             return $this->redirectToRoute('wcp_dashboard');
         }
-        return $this->render('setup/login.html.twig',['context'=>$runtime->context,'error'=>$auth->getLastAuthenticationError()]);
+        return $this->render('setup/login.html.twig',['context'=>$runtime->context,'error'=>$auth->getLastAuthenticationError(),'recovery_available'=>$recovery->available()]);
     }
     #[Route('/logout',name:'wcp_logout',methods:['POST'])]
     public function logout():never{throw new \LogicException('Handled by Symfony Security.');}

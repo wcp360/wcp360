@@ -8,6 +8,7 @@ parameters:
     env(WCP_DATABASE_MODE): shared
     env(WCP_ALLOW_CANDIDATE_DATABASE_ROLES): '0'
     env(WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY): '0'
+    env(WCP_ALLOW_CANDIDATE_RECOVERY_CODES): '0'
 services:
     _defaults:
         autowire: true
@@ -15,6 +16,18 @@ services:
     Wcp360\Core\:
         resource: ../src/
         exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Module\IdentityAccess\Domain\RecoveryKeySource: '@Wcp360\Core\Module\IdentityAccess\Infrastructure\RuntimeRecoveryKeys'
+    Wcp360\Core\Module\IdentityAccess\Application\CompletePasswordRecovery:
+        arguments:
+            $databaseMode: '%env(WCP_DATABASE_MODE)%'
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_RECOVERY_CODES)%'
+    Wcp360\Core\Module\Setup\Application\IssuePasswordRecoveryCode:
+        arguments:
+            $databaseMode: '%env(WCP_DATABASE_MODE)%'
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_RECOVERY_CODES)%'
+    Wcp360\Core\Module\IdentityAccess\UI\Http\PasswordRecoveryController:
+        arguments:
+            $limiter: '@limiter.candidate_password_recovery'
     Wcp360\Core\Module\Setup\Application\RecoverAccountPassword:
         arguments:
             $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY)%'

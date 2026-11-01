@@ -602,11 +602,16 @@ final class CandidateDatabaseRolesTest extends WebTestCase
                 $store, new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store),
                 self::getContainer()->get(\Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class),
                 new RuntimeContext('setup', true, 'test', 'localhost'), true);
+            $setup = new RuntimeContext('setup', true, 'test', 'localhost');
+            $issuer = new \Wcp360\Core\Module\Setup\Application\IssuePasswordRecoveryCode($store,
+                new \Wcp360\Core\Module\Setup\Infrastructure\CandidateAccountMaintenance($store, $setup),
+                $setup, 'shared', new \Wcp360\Core\Tests\Fixtures\RecoveryKeysFixture(str_repeat('c',64)), true);
             foreach ([fn() => $recovery->plan('alice', 'user'),
-                fn() => $recovery->recover($this->fixture['users']['alice'], 'alice', 'user', 'synthetic-operator-recovery-password')] as $call) {
+                fn() => $recovery->recover($this->fixture['users']['alice'], 'alice', 'user', 'synthetic-operator-recovery-password'),
+                fn() => $issuer->issue($this->fixture['users']['alice'], 'alice', 'user')] as $call) {
                 try { $call(); self::fail('Runtime database login performed maintenance recovery.'); }
                 catch (\RuntimeException $error) {
-                    self::assertSame(\Wcp360\Core\Module\Setup\Application\RecoverAccountPassword::REFUSED, $error->getMessage());
+                    self::assertContains($error->getMessage(), [\Wcp360\Core\Module\Setup\Application\RecoverAccountPassword::REFUSED, 'Recovery code issuance refused.']);
                     self::assertNull($error->getPrevious());
                 }
             }
