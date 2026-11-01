@@ -87,11 +87,13 @@ final class ListHostingJobsTest extends KernelTestCase
         $this->store->db->insert('wcp_candidate_permission_denials', ['user_id' => $this->fixture['users']['alice'],
             'tenant_id' => $this->fixture['tenants']['alice'], 'permission' => CandidateAuthorization::HOSTING_PLAN,
             'created_by' => $this->fixture['users']['admin'], 'created_at' => WorkbenchStore::now()]);
-        try { $this->page(); self::fail('Revoked authority was retained.'); } catch (AccessDeniedHttpException) {}
+        try { $this->page(); self::fail('Revoked authority was retained.'); }
+        catch (AccessDeniedHttpException $error) { self::assertSame(403, $error->getStatusCode()); }
         $this->store->db->delete('wcp_candidate_permission_denials', ['user_id' => $this->fixture['users']['alice']]);
         $this->store->db->update('wcp_candidate_users', ['active' => 0], ['id' => $this->fixture['users']['alice']]);
         foreach (['alice', 'admin', 'bob'] as $name) {
-            try { $this->page(name: $name); self::fail('An unauthorized identity was accepted.'); } catch (AccessDeniedHttpException) {}
+            try { $this->page(name: $name); self::fail('An unauthorized identity was accepted.'); }
+            catch (AccessDeniedHttpException $error) { self::assertSame(403, $error->getStatusCode()); }
         }
     }
 
