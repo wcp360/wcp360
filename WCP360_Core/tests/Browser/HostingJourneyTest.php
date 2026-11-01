@@ -45,5 +45,9 @@ final class HostingJourneyTest extends PantherTestCase
         $client->waitFor('[data-form-guard-ready="true"]');
         self::assertSelectorTextContains('h1','Tableau de bord');
         self::assertSame('turbo-preserves-window',$client->executeScript('return window.wcpBrowserJourney'));
+        $client->clickLink('Mes sessions');
+        $client->waitFor('[data-session-strength]');
+        self::assertSelectorTextContains('[data-session-strength]', 'Mot de passe');
+        self::assertSelectorTextContains('[data-session-state]', 'Active');
     }
 }

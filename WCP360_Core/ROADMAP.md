@@ -118,6 +118,14 @@ Older checkouts must apply [Version20261101000300](migrations/Version20261101000
 
 Session management and Revocation and role changes remain **Partial**. Counts stay **5 demonstrated / 71 partial / 157 planned**, totaling 233; the overall estimate remains approximately 20%. Canonical roles/permissions and session contracts, password recovery, passkeys, service accounts, Unix identities, PostgreSQL grants and production qualification remain outstanding. **M1 remains open and `CODE-BASELINE` remains `NONE`.**
 
+### Session inventory authentication details and persistence boundary
+
+The own-account session page now shows the factors actually completed for each session: password or password plus MFA. Its active/pending display uses the current administrator account setting, resolved by the authenticated [HTTP controller](src/Module/IdentityAccess/UI/Http/SessionController.php). A query parameter cannot select a weaker display policy. Revoked/expired states retain precedence, and the admission boundary independently enforces the account's actual required strength.
+
+The generic [session registry](src/Module/IdentityAccess/Application/CandidateSessions.php) reads only account/session data; it no longer reads MFA secrets. This corrects the PostgreSQL permission failure exposed by [workflow 41329513630](https://github.com/yyogas/wcp360/actions/runs/41329513630) on source `5600b0b`. The [PostgreSQL regression](tests/Integration/CandidatePostgresGrantsTest.php) explicitly denies the session-only role MFA-table reads, while checking listing under both display policies; its grants are unchanged. [HTTP journeys](tests/Integration/SessionJourneyTest.php) cover password-only, completed-MFA and pending displays without disclosing raw session identifiers or verifiers. [Panther](tests/Browser/AdministratorIdentityJourneyTest.php) checks the rendered factors in the real browser.
+
+Exact-source test results must be recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Windows skips do not qualify PostgreSQL grants. This incremental session improvement leaves M1 open, `CODE-BASELINE` at `NONE`, the estimate at approximately 20% and the capability counts at **5 demonstrated / 71 partial / 157 planned**.
+
 ### Read-only runtime identity inspection
 
 [RuntimeIdentity](src/Shared/Platform/RuntimeIdentity.php) and its [standalone preflight](installer/preflight/README.md#runtime-identity-inspection) compare actual Linux calling-thread credentials with the fixed identity names from Security section 4. All real/effective/saved/filesystem UID/GID values, actual supplementary groups, canonical mapping separation and recognized no-login service accounts are checked. Conservative process checks require `NoNewPrivs=1` and empty active/potential capability sets for non-root profiles; the bounding set and root broker capability confinement are not qualified.

@@ -50,9 +50,26 @@ final class CandidateSessionsTest extends KernelTestCase
         self::assertFalse($this->sessions->current($admin, 'admin', $pending, $this->sid(2), 2));
         self::assertSame('active', $this->sessions->listing($alice, 'user', $user)['items'][0]['state']);
         self::assertSame('active', $this->sessions->listing($admin, 'admin', $pending)['items'][0]['state']);
+        self::assertSame(1, $this->sessions->listing($admin, 'admin', $pending)['items'][0]['auth_strength']);
+        self::assertSame('pending', $this->sessions->listing($admin, 'admin', $pending, 1, 2)['items'][0]['state']);
+        self::assertFalse($this->sessions->current($admin, 'admin', $pending, $this->sid(2), 2));
         self::assertSame(['candidate.session.opened', 'candidate.session.opened'], array_column($this->audits(), 'kind'));
         self::assertSame([$user, $pending], array_column($this->audits(), 'resource_id'));
         self::assertSame([null, null], array_column($this->audits(), 'tenant_id'));
+    }
+
+    public function testSessionDisplayRejectsUnsupportedAuthenticationPolicies(): void
+    {
+        $actor = $this->fixture['users']['admin'];
+        $selector = $this->sessions->issue($actor, 'admin', $this->sid(1));
+        foreach ([-1, 0, 3, PHP_INT_MAX] as $strength) {
+            try {
+                $this->sessions->listing($actor, 'admin', $selector, 1, $strength);
+                self::fail('Unsupported session display policy was accepted.');
+            } catch (\InvalidArgumentException $error) {
+                self::assertSame('Invalid candidate session display policy.', $error->getMessage());
+            }
+        }
     }
 
     public function testBindingsAreDomainSeparatedAndRejectMalformedCookieIdentifiers(): void
@@ -262,7 +279,8 @@ final class CandidateSessionsTest extends KernelTestCase
         self::assertSame($before['expires_at'], $this->row('admin', $id)['expires_at']);
         self::assertFalse($this->sessions->current($admin, 'admin', $id, $this->sid(1)));
         self::assertTrue($this->sessions->current($admin, 'admin', $id, $this->sid(2), 2));
-        self::assertSame('active', $this->sessions->listing($admin, 'admin', $id)['items'][0]['state']);
+        self::assertSame('active', $this->sessions->listing($admin, 'admin', $id, 1, 2)['items'][0]['state']);
+        self::assertSame(2, $this->sessions->listing($admin, 'admin', $id, 1, 2)['items'][0]['auth_strength']);
         self::assertSame(['candidate.session.opened', 'candidate.session.rotated'], array_column($this->audits(), 'kind'));
         $this->denied(fn () => $this->sessions->upgrade($admin, 'admin', $id, CandidateSessions::binding($admin, 'admin', $this->sid(2)), $this->sid(3)));
     }
@@ -331,7 +349,7 @@ final class CandidateSessionsTest extends KernelTestCase
         self::assertTrue($rebuilt->current($actor, 'user', $id, $sid));
         $list = $rebuilt->listing($actor, 'user', $id);
         self::assertTrue($list['items'][0]['current']);
-        self::assertSame(['id', 'created_at', 'last_seen_at', 'expires_at', 'revoked_at', 'state', 'current'], array_keys($list['items'][0]));
+        self::assertSame(['id', 'created_at', 'last_seen_at', 'expires_at', 'revoked_at', 'auth_strength', 'state', 'current'], array_keys($list['items'][0]));
         $stored = json_encode([$this->row('user', $id), $this->audits(), $list], JSON_THROW_ON_ERROR);
         self::assertStringNotContainsString($sid, $stored);
         self::assertStringNotContainsString(CandidateSessions::binding($actor, 'user', $sid), json_encode([$this->audits(), $list], JSON_THROW_ON_ERROR));

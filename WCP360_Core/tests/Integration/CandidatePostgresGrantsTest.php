@@ -73,7 +73,18 @@ final class CandidatePostgresGrantsTest extends KernelTestCase
             $sid = str_repeat('s', 32);
             $selector = $sessions->issue($actor, $context, $sid);
             self::assertTrue($sessions->current($actor, $context, $selector, $sid));
-            self::assertCount(1, $sessions->listing($actor, $context, $selector)['items']);
+            // Session-only credentials deliberately have no access to factor persistence.
+            try {
+                $db->fetchOne('SELECT sealed_secret FROM public.wcp_candidate_mfa LIMIT 1');
+                self::fail('Session-only credentials unexpectedly read MFA secrets.');
+            } catch (DriverException $error) {
+                self::assertSame('42501', $error->getSQLState());
+            }
+            $listing = $sessions->listing($actor, $context, $selector);
+            self::assertCount(1, $listing['items']);
+            self::assertSame(1, $listing['items'][0]['auth_strength']);
+            self::assertSame('active', $listing['items'][0]['state']);
+            self::assertSame('pending', $sessions->listing($actor, $context, $selector, 1, 2)['items'][0]['state']);
             self::assertTrue($sessions->revoke($actor, $context, $selector));
             self::assertFalse($sessions->current($actor, $context, $selector, $sid));
             self::assertSame(1, $db->delete('wcp_candidate_'.$context.'_sessions', ['id' => $selector]));

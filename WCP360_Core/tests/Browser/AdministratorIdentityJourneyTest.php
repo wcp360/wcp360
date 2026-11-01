@@ -85,6 +85,10 @@ final class AdministratorIdentityJourneyTest extends PantherTestCase
         self::assertSame(1, (int) $store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
         $client->clickLink('Mes sessions');
         $client->waitFor('form[action="/account/sessions/revoke-all"]');
+        $current = $store->db->fetchOne('SELECT id FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL');
+        self::assertIsString($current);
+        self::assertSelectorTextContains('tr[data-session-id="'.$current.'"] [data-session-strength]', 'Mot de passe + MFA');
+        self::assertSelectorTextContains('tr[data-session-id="'.$current.'"] [data-session-state]', 'Active');
         $client->submitForm('Tout déconnecter', ['current_password' => WorkbenchFixture::PASSWORD]);
         $client->waitFor('#password');
         self::assertSame(0, (int) $store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));

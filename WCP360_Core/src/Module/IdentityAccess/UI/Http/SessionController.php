@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Wcp360\Core\Module\IdentityAccess\Infrastructure\CurrentPasswordConfirmation;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 use Wcp360\Core\Shared\Security\RuntimeContext;
@@ -20,7 +21,8 @@ use Wcp360\Core\Shared\Security\RuntimeContext;
 final class SessionController extends AbstractController
 {
     public function __construct(private readonly CandidateSessions $sessions, private readonly RuntimeContext $runtime,
-        private readonly TokenStorageInterface $tokens, private readonly CurrentPasswordConfirmation $confirmation) {}
+        private readonly TokenStorageInterface $tokens, private readonly CurrentPasswordConfirmation $confirmation,
+        private readonly CandidateMfa $mfa) {}
 
     #[Route('/account/sessions', name: 'wcp_account_sessions', methods: ['GET'])]
     public function index(Request $request): Response
@@ -31,8 +33,10 @@ final class SessionController extends AbstractController
         $selector = $this->selector($request);
 
         try {
+            $requiredStrength = $user->context === 'admin' && $this->mfa->status($user->id)['enabled'] ? 2 : 1;
+
             return $this->render('identity/sessions.html.twig', ['context' => $user->context, 'page_title' => 'Mes sessions',
-                'report' => $this->sessions->listing($user->id, $user->context, $selector, (int) $page)]);
+                'report' => $this->sessions->listing($user->id, $user->context, $selector, (int) $page, $requiredStrength)]);
         } catch (HttpExceptionInterface $exception) {
             throw $exception;
         } catch (\Throwable) {

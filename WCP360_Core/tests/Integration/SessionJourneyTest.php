@@ -154,6 +154,8 @@ final class SessionJourneyTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'Mes sessions');
         self::assertSelectorTextContains('caption', 'Sessions de mon compte');
+        self::assertSelectorCount(2, '[data-session-strength]');
+        self::assertSelectorTextSame('[data-session-strength]', 'Mot de passe');
         self::assertSelectorExists('a[href="/account/sessions"]');
         self::assertSelectorCount(2, 'form[action$="/revoke"]');
         self::assertSelectorExists('form[action="/account/sessions/'.$first.'/revoke"]');
@@ -508,6 +510,17 @@ final class SessionJourneyTest extends WebTestCase
         $this->browser->request('GET', $this->url('/account/sessions'));
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('form[action="/account/sessions/'.$pending['selector'].'/revoke"]');
+        self::assertSelectorTextSame('tr[data-session-id="'.$pending['selector'].'"] [data-session-strength]', 'Mot de passe + MFA');
+        self::assertStringNotContainsString($pending['sid'], (string) $this->browser->getResponse()->getContent());
+        self::assertStringNotContainsString((string) $row['secret_verifier'], (string) $this->browser->getResponse()->getContent());
+
+        $incomplete = self::getContainer()->get(CandidateSessions::class)->issue($this->fixture['users']['admin'], 'admin', str_repeat('p', 32));
+        // Untrusted query fields cannot choose a weaker presentation policy.
+        $this->browser->request('GET', $this->url('/account/sessions?requiredStrength=1&auth_strength=2'));
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextSame('tr[data-session-id="'.$incomplete.'"] [data-session-strength]', 'Mot de passe');
+        self::assertSelectorTextSame('tr[data-session-id="'.$incomplete.'"] [data-session-state]', 'MFA en attente');
+        self::assertSelectorTextSame('tr[data-session-id="'.$pending['selector'].'"] [data-session-state]', 'Active');
     }
 
     public function testRevokedPendingAdministratorCannotConsumeEnrollmentCode(): void

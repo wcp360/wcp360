@@ -174,26 +174,29 @@ final readonly class CandidateSessions
         });
     }
 
-    /** @return array{items:list<array{id:string,created_at:int,last_seen_at:int,expires_at:int,revoked_at:?int,state:string,current:bool}>,page:int,has_next:bool} */
-    public function listing(string $actor, string $surface, string $currentSelector, int $page = 1): array
+    /** @return array{items:list<array{id:string,created_at:int,last_seen_at:int,expires_at:int,revoked_at:?int,auth_strength:int,state:string,current:bool}>,page:int,has_next:bool} */
+    public function listing(string $actor, string $surface, string $currentSelector, int $page = 1, int $requiredStrength = 1): array
     {
         $table = self::table($surface);
         if ($page < 1 || $page > 10000) {
             throw new \InvalidArgumentException('Invalid candidate session page.');
+        }
+        if (!in_array($requiredStrength, [1, 2], true)) {
+            throw new \InvalidArgumentException('Invalid candidate session display policy.');
         }
         $this->requireActor($actor, $surface);
         $rows = $this->store->db->fetchAllAssociative("SELECT id, created_at, last_seen_at, expires_at, revoked_at, auth_strength, surface_claim FROM $table WHERE user_id = ? ORDER BY created_at DESC, id DESC LIMIT 101 OFFSET ".(($page - 1) * 100), [$actor]);
         $hasNext = count($rows) > 100;
         $now = $this->now();
         $items = [];
-        $factor = $surface === 'admin' ? $this->store->db->fetchOne('SELECT sealed_secret FROM wcp_candidate_mfa WHERE user_id = ?', [$actor]) : false;
-        $mfaEnabled = is_string($factor);
+        // Display policy only: admission independently checks the current account policy.
         foreach (array_slice($rows, 0, 100) as $row) {
-            $state = $row['revoked_at'] !== null ? 'revoked' : (!$this->valid($row, $surface, $now) ? 'expired' : ($surface === 'admin' && $mfaEnabled && (int) $row['auth_strength'] === 1 ? 'pending' : 'active'));
+            $state = $row['revoked_at'] !== null ? 'revoked' : (!$this->valid($row, $surface, $now) ? 'expired' : ((int) $row['auth_strength'] < $requiredStrength ? 'pending' : 'active'));
             $items[] = [
                 'id' => (string) $row['id'], 'created_at' => (int) $row['created_at'],
                 'last_seen_at' => (int) $row['last_seen_at'], 'expires_at' => (int) $row['expires_at'],
                 'revoked_at' => $row['revoked_at'] === null ? null : (int) $row['revoked_at'],
+                'auth_strength' => (int) $row['auth_strength'],
                 'state' => $state, 'current' => $row['id'] === $currentSelector,
             ];
         }

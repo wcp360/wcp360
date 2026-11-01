@@ -499,7 +499,8 @@ final class MfaJourneyTest extends WebTestCase
         self::assertSame(2, (int) $this->store->db->fetchOne('SELECT revision FROM wcp_candidate_runtime_settings'));
         $this->browser->request('GET', 'http://admin.localhost/account/sessions');
         self::assertResponseIsSuccessful();
-        self::assertSelectorNotExists('.status-pending');
+        self::assertSelectorTextSame('[data-session-strength]', 'Mot de passe');
+        self::assertSelectorTextSame('[data-session-state]', 'Active');
         self::assertSame(1, (int) $this->store->db->fetchOne('SELECT auth_strength FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
     }
 
