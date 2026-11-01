@@ -27,7 +27,10 @@ final class WorkbenchController extends AbstractController
     #[Route('/login',name:'wcp_login',methods:['GET','POST'])]
     public function login(AuthenticationUtils $auth,RuntimeContext $runtime):Response
     {
-        if($this->getUser())return $this->redirectToRoute('wcp_dashboard');
+        if($this->getUser()) {
+            if($runtime->context==='admin' && $auth->getLastAuthenticationError(false)!==null)return $this->redirectToRoute('wcp_account_reauthenticate');
+            return $this->redirectToRoute('wcp_dashboard');
+        }
         return $this->render('setup/login.html.twig',['context'=>$runtime->context,'error'=>$auth->getLastAuthenticationError()]);
     }
     #[Route('/logout',name:'wcp_logout',methods:['POST'])]

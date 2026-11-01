@@ -84,7 +84,7 @@ final readonly class MfaSessionGuard
             return;
         }
         if (!$pending && !$request->isMethodSafe() && $at + 300 <= time()) {
-            throw new AccessDeniedHttpException('Sign in again for a fresh administrator MFA challenge.');
+            throw new AccessDeniedHttpException('Confirm your identity at /account/reauthenticate before retrying this action.');
         }
     }
 }

@@ -9,7 +9,7 @@
 <div class="table-scroll"><table><caption class="sr-only">Accès aux plans d’hébergement par utilisateur et tenant</caption><thead><tr><th scope="col">Utilisateur</th><th scope="col">Tenant</th><th scope="col">Accès aux plans</th><th scope="col">Action</th></tr></thead><tbody>
 {% for entry in report.items %}
 <tr data-user-id="{{ entry.user_id }}" data-tenant-id="{{ entry.tenant_id }}"><td>{{ entry.email }}</td><td>{{ entry.tenant_name }}</td><td>{% if not entry.active %}Compte inactif{% elseif entry.denied %}Bloqué{% else %}Autorisé{% endif %}</td><td>
-<form action="{{ path('wcp_access_denial', {actor: entry.user_id, tenant: entry.tenant_id}) }}" method="post" data-turbo="false">
+<form action="{{ path('wcp_access_denial', {actor: entry.user_id, tenant: entry.tenant_id}) }}" method="post" data-turbo-frame="_top">
 <input type="hidden" name="_token" value="{{ csrf_token('candidate_access_denial_' ~ entry.user_id ~ '_' ~ entry.tenant_id) }}">
 <input type="hidden" name="denied" value="{{ entry.denied ? '0' : '1' }}">
 <button class="button secondary" type="submit">{{ entry.denied ? 'Lever le blocage' : 'Bloquer' }}</button>

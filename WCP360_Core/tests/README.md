@@ -15,12 +15,16 @@
 
 Run `composer check` from Core for Symfony-aware PHPStan, analyzer regressions, PHPUnit and framework lints. Run `composer test:browser` in the documented Chromium/WebDriver environment. See the [testing guide](../../documentation/development/TESTING.md) for commands, scopes, fixture safeguards and Linux/VM evidence. The deliberate-error PHPStan fixtures live in `tools/phpstan/fixtures`, outside application test discovery.
 
+## Real-browser journeys
+
+[AdministratorIdentityJourneyTest](Browser/AdministratorIdentityJourneyTest.php) exercises actual password login, MFA enrollment, one-time recovery-code display, identity reconfirmation, replay refusal, global own-session revocation and logout through Turbo. [HostingJourneyTest](Browser/HostingJourneyTest.php) covers USER login, the runtime selector, themes/navigation and idempotent plan submission. Both use synthetic fixtures; browser and database execution results must be recorded for their exact source. Browser execution requires the documented Chrome/WebDriver environment.
+
 ## Candidate identity and authorization regressions
 
 | Executable source | Bounded verification scope |
 | :--- | :--- |
 | [CandidateMfaTest](Integration/CandidateMfaTest.php) | Encrypted factor storage, replay and attempt windows, single-use backup codes and factor revisions. |
-| [MfaJourneyTest](Integration/MfaJourneyTest.php) | Pending administrator role denial, exact Origin/CSRF boundaries, session rotation, recovery/reset and unavailable-key refusal. |
+| [MfaJourneyTest](Integration/MfaJourneyTest.php) | Pending administrator role denial, exact Origin/CSRF boundaries, session rotation, recovery/reset, unavailable-key refusal and administrator reconfirmation with password/MFA, generic failure feedback, replay and revoked-pending refusal. |
 | [CandidateAuthorizationTest](Integration/CandidateAuthorizationTest.php) | Exact single-permission/current-USER checks, shared visibility/execution, cross-tenant refusal, idempotent audited blocks, membership regrant, queued-worker rechecks, bounded listing and audit-failure rollback. |
 | [PermissionAdministrationTest](Integration/PermissionAdministrationTest.php) | Completed/fresh administrator MFA, Origin and target-bound CSRF for access changes; existing user-session/API denial; worker rejection after a block; unblocking without restoring deleted membership. |
 | [CandidateAccessCommandTest](Integration/CandidateAccessCommandTest.php) | Read-only worker/setup CLI decisions, unknown-permission refusal, JSON output and exit status; HTTP runtime contexts cannot use the command. |

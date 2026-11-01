@@ -322,12 +322,31 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertResponseIsSuccessful();
         $crawler=$browser->submit($crawler->selectButton('Configurer la MFA')->form());
         $secret=trim($crawler->filter('#mfa-secret')->text());
-        $browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>TOTP::createFromSecret($secret)->now()]));
+        $crawler=$browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>TOTP::createFromSecret($secret)->now()]));
         self::assertResponseIsSuccessful();
         self::assertSelectorCount(10, '#recovery-codes code');
+        $backup=trim($crawler->filter('#recovery-codes code')->first()->text());
         $browser->request('GET', 'http://admin.localhost/');
         self::assertResponseIsSuccessful();
         self::assertSame($this->roles['admin'], self::getContainer()->get(Connection::class)->fetchOne('SELECT current_user'));
+        $session=$browser->getRequest()->getSession();
+        $proof=$session->get('_wcp_mfa_proof');
+        self::assertIsArray($proof);
+        $proof['at']=time()-301;
+        $session->set('_wcp_mfa_proof', $proof);
+        $session->save();
+        $crawler=$browser->request('GET', 'http://admin.localhost/account/reauthenticate');
+        self::assertResponseIsSuccessful();
+        $browser->submit($crawler->selectButton('Confirmer mon mot de passe')->form(['_password'=>WorkbenchFixture::PASSWORD]));
+        for ($i=0; $i<3 && $browser->getResponse()->isRedirect(); ++$i) { $crawler=$browser->followRedirect(); }
+        self::assertSame('/mfa', $browser->getRequest()->getPathInfo());
+        self::assertResponseIsSuccessful();
+        $browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>$backup]));
+        self::assertResponseRedirects('/');
+        $browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSame($this->roles['admin'], self::getContainer()->get(Connection::class)->fetchOne('SELECT current_user'));
+        self::assertSame(1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
         $browser->request('GET', 'http://admin.localhost/account/sessions');
         self::assertResponseIsSuccessful();
         self::getContainer()->get(ApplicationServerSettings::class)->change($this->fixture['users']['admin'], 'php_fpm', 1);
@@ -340,7 +359,7 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertSame($second['job_id'], self::getContainer()->get(RunHostingPlan::class)->runOne());
         self::assertSame('FAILED', $this->maintenance->fetchOne('SELECT state FROM public.wcp_candidate_jobs WHERE id=?', [$second['job_id']]));
         self::assertSame(1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_user_sessions'));
-        self::assertSame(1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions'));
+        self::assertSame(2, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions'));
     }
 
     private function provider(Connection $db): CandidateDatabaseRoles

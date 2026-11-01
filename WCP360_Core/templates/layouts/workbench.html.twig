@@ -19,7 +19,7 @@
     ]) %}
 {% endif %}
 {% set account = [{label: 'Mes sessions', href: path('wcp_account_sessions'), icon: 'sessions', active: route == 'wcp_account_sessions'}] %}
-{% if admin %}{% set account = account|merge([{label: 'Sécurité du compte', href: path('wcp_account_security'), icon: 'shield', active: route == 'wcp_account_security'}]) %}{% endif %}
+{% if admin %}{% set account = account|merge([{label: 'Sécurité du compte', href: path('wcp_account_security'), icon: 'shield', active: route == 'wcp_account_security'}, {label: 'Confirmer mon identité', href: path('wcp_account_reauthenticate'), icon: 'shield', active: route == 'wcp_account_reauthenticate'}]) %}{% endif %}
 {% set groups = [{title: 'Espace de travail', links: workspace}, {title: 'Mon compte', links: account}] %}
 <!doctype html>
 <html lang="fr" data-theme="system">
@@ -55,7 +55,7 @@
             <div class="wcp-header-actions">
                 {% include 'components/navigation/theme.html.twig' %}
                 <a class="wcp-avatar" href="{{ path('wcp_account_sessions') }}" aria-label="Mes sessions : {{ app.user.userIdentifier }}" title="{{ app.user.userIdentifier }}">{{ app.user.userIdentifier|slice(0, 2)|upper }}</a>
-                <form action="{{ path('wcp_logout') }}" method="post" data-turbo="false" class="wcp-core-logout"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button class="wcp-icon-btn" type="submit" aria-label="Déconnexion" title="Déconnexion">{{ ui.icon('logout') }}</button></form>
+                <form action="{{ path('wcp_logout') }}" method="post" data-turbo-frame="_top" class="wcp-core-logout"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button class="wcp-icon-btn" type="submit" aria-label="Déconnexion" title="Déconnexion">{{ ui.icon('logout') }}</button></form>
             </div>
         </header>
         <main id="main" class="wcp-dashboard-content" tabindex="-1">

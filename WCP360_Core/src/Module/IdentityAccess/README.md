@@ -19,6 +19,7 @@ Start here when changing: **Identity, roles, session and recovery behavior.**
 | [Infrastructure/AdminTwoFactorProvider.php](Infrastructure/AdminTwoFactorProvider.php) | Mandatory administrator second factor through SchebTwoFactorBundle and OTPHP. |
 | [Infrastructure/MfaSessionGuard.php](Infrastructure/MfaSessionGuard.php) | Exact administrator Origin, pending-session expiry, factor revision checks, session rotation and fresh-MFA gates. |
 | [UI/Http/MfaController.php](UI/Http/MfaController.php) | CSRF-protected enrollment, account-security page and password-confirmed factor reset. |
+| [UI/Http/ReauthenticationController.php](UI/Http/ReauthenticationController.php) | Administrator confirmation form using the existing password and MFA authenticators; no proof renewal on GET. |
 | [Infrastructure/MfaSchema.php](Infrastructure/MfaSchema.php) | Explicitly candidate-only encrypted factor and hashed recovery-code persistence. |
 | [Application/CandidateSessions.php](Application/CandidateSessions.php) | Current-session admission, bounded own-account inventory, durable revocation, MFA strength upgrade and password-confirmation attempt limits. |
 | [Infrastructure/SessionSchema.php](Infrastructure/SessionSchema.php) | Separate candidate USER/ADMIN registries containing session metadata and SHA-256 bindings. |
@@ -64,12 +65,20 @@ Administrator password authentication starts a five-minute pending session with 
 | Backup codes | Ten random 128-bit codes are shown once after enrollment. Only actor-bound keyed hashes are stored; successful use atomically consumes a code and increments the factor revision. |
 | Browser boundary | Mutating administrator requests require exact Origin; forms also require CSRF tokens. MFA completion rotates the session identifier. Seed/code responses use the shared no-store policy. |
 | Current authority | Inactive accounts, changed factor revisions and unavailable or incorrect encryption keys invalidate administrator access. Recovery or reset invalidates other sessions' old MFA proofs. |
-| Freshness | Unsafe authenticated administrator requests require MFA less than five minutes old. The current candidate asks the administrator to sign in again; an inline sensitive-action reauthentication flow remains unfinished. |
+| Freshness | Unsafe authenticated administrator requests require MFA less than five minutes old. `/account/reauthenticate` starts a new password-then-MFA login without manual logout; opening the form or validating only the password never renews the proof. |
 | Factor replacement | `/account/security` accepts a fresh-MFA, CSRF-protected POST with the current password. Reset deletes the factor and backup codes, revokes old proofs, ends the current session and requires enrollment at the next login. |
 
 Backup codes replace the **second factor after password authentication**. They do not reset a forgotten password. Keep them outside the hosted server. If the encryption key is lost, restore the correct operator-managed key; no automatic administrative bypass or plaintext seed export is provided. Existing local `.env` files are preserved, so an operator must add `WCP_MFA_KEY` when upgrading an older checkout. A fresh [checkout installation](../../../installer/recipes/README.md) generates independent private application and MFA keys.
 
 [Service regressions](../../../tests/Integration/CandidateMfaTest.php) cover factor storage, replay, attempt windows and recovery. [HTTP journeys](../../../tests/Integration/MfaJourneyTest.php) cover pending-role denial, Origin/CSRF checks, session rotation, recovery/reset and missing-key refusal. Executed outcomes must be tied to the exact source in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); these sources alone are not a passing CI claim.
+
+## Administrator identity confirmation
+
+`GET /account/reauthenticate` is available only to a fully MFA-authenticated administrator on ADMIN. Account security and the administrator navigation link to the same form. It displays the current identity and submits to the existing CSRF-protected, rate-limited `/login` authenticator; there is no second password verifier or custom authentication bypass. Rejected credentials return a generic accessible error without changing the old proof or registration.
+
+A successful password check retires the previous registration and creates a new pending session. A new TOTP or unused backup code must then pass the existing MFA checks before sensitive actions become available. MFA completion rotates the identifier and upgrades that pending registration while preserving its original deadline. Opening the form, a failed password, a replayed code or a revoked pending registration cannot refresh the proof. All administrator POSTs still require exact Origin. The browser uses Turbo submissions with the existing `no-referrer` policy; it never accepts a missing or `null` Origin. Enrollment and the one-time backup-code response render inside the shared authentication frame, while full login, reconfirmation and logout target the whole page. The JavaScript bundle is required for these browser forms. Shared private pages disable Turbo snapshot caching as well as HTTP caching, including the enrollment seed and one-time backup-code views.
+
+The flow returns to the dashboard. The administrator must retry the original action explicitly; no submitted action or external return URL is saved or replayed. This is a full candidate sign-in replacement, not an extension of the old session. Forgotten-password recovery and action-bound production confirmation remain open. [MFA HTTP regressions](../../../tests/Integration/MfaJourneyTest.php) and the [isolated PostgreSQL role journey](../../../tests/Integration/CandidateDatabaseRolesTest.php) define its positive and refusal coverage.
 
 ## Candidate session inventory and revocation
 
@@ -96,7 +105,7 @@ Before using this slice on an older checkout, apply [Version20261101000300](../.
 
 ## Remaining production foundations
 
-The MFA, access-block and session tables and flows are `wcp_candidate_*` development mechanisms, not an accepted canonical production schema or the canonical `wcp_iam` storage/grant model. Complete password recovery, passkeys, inline sensitive-action reauthentication, service accounts, reseller delegation, general permission composition, production session administration and contract integration remain unfinished. Production Unix identities and PostgreSQL grants still require independent separation and qualification. **M1 is not complete.** Candidate code and passing tests do not establish production readiness.
+The MFA, access-block and session tables and flows are `wcp_candidate_*` development mechanisms, not an accepted canonical production schema or the canonical `wcp_iam` storage/grant model. Complete password recovery, passkeys, action-bound production reauthentication, service accounts, reseller delegation, general permission composition, production session administration and contract integration remain unfinished. Production Unix identities and PostgreSQL grants still require independent separation and qualification. **M1 is not complete.** Candidate code and passing tests do not establish production readiness.
 
 Use the common [module layout](../README.md) for Domain, Application, Infrastructure and UI code. Hosting resource policy stays with its owning domain; reuse the common authorization boundary.
 

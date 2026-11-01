@@ -6,7 +6,7 @@
 <p class="auth-lead">Votre hébergement. Un espace de travail, tout simplement.</p>
 <div class="auth-context"><span class="wcp-core-dot"></span> {{ context == 'admin' ? 'Administration du panneau' : 'Gestion de vos espaces et hébergements' }}</div>
 {% if error %}<p role="alert" class="auth-feedback error">Connexion refusée. Vérifiez vos identifiants et le contexte.</p>{% endif %}
-<form class="auth-form" method="post" action="{{ path('wcp_login') }}" data-turbo="false">
+<form class="auth-form" method="post" action="{{ path('wcp_login') }}" data-turbo-frame="_top">
     <div><label for="username">Adresse e-mail</label><input id="username" name="_username" type="email" required maxlength="254" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="vous@exemple.fr"></div>
     <div><label for="password">Mot de passe</label><input id="password" name="_password" type="password" required maxlength="256" autocomplete="current-password" placeholder="Votre mot de passe"></div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">

@@ -22,6 +22,7 @@ final class HostingJourneyTest extends PantherTestCase
         self::assertSelectorTextContains('h1','Tableau de bord');
         self::assertSelectorExists('#site-application-server option[value="frankenphp_worker"][disabled]');
         self::assertSelectorCount(1,'select[name="tenant_id"] option');
+        self::assertSelectorNotExists('a[href="/account/reauthenticate"]');
         $client->executeScript("document.querySelector('[data-mode=light]').click();");
         $lightBackground=$client->executeScript('return getComputedStyle(document.body).backgroundColor');
         $client->executeScript("document.querySelector('[data-mode=dark]').click();");

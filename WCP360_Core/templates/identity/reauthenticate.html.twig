@@ -1,0 +1,17 @@
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Confirmer mon identité' %}
+{% block content %}
+<p class="auth-eyebrow">OPÉRATIONS SENSIBLES</p>
+<h1>Confirmer votre identité</h1>
+<p class="auth-lead">Validez de nouveau votre mot de passe et votre second facteur pour continuer à administrer votre panneau.</p>
+<div class="auth-notice"><strong>Compte administrateur</strong><p>{{ identity }}</p></div>
+{% if error %}<p role="alert" class="auth-feedback error">Confirmation refusée. Vérifiez votre mot de passe et réessayez.</p>{% endif %}
+<form class="auth-form" method="post" action="{{ path('wcp_login') }}" data-turbo-frame="_top">
+    <input type="hidden" name="_username" value="{{ identity }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <div><label for="reauth-password">Mot de passe actuel</label><input id="reauth-password" name="_password" type="password" autocomplete="current-password" maxlength="256" required autofocus></div>
+    <button class="button auth-submit" type="submit">Confirmer mon mot de passe <span aria-hidden="true">→</span></button>
+</form>
+<p class="auth-help">Votre authentificateur sera demandé à l’étape suivante. Après la vérification, vous reviendrez au tableau de bord pour relancer votre action.</p>
+<p><a class="button secondary" href="{{ path('wcp_account_security') }}">Retour à la sécurité du compte</a></p>
+{% endblock %}
