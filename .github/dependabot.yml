@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: /WCP360_Core
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: gomod
+    directory: /WCP360_Core/agents/wcpd/candidate/planner
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: gomod
+    directory: /WCP360_Core/agents/wcpd/candidate/provisioning
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: docker
+    directory: /WCP360_Build/environments/core-candidate
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

@@ -100,6 +100,9 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - [Core engine and reusable services](CORE-ENGINE.md)
 - [Plugin lifecycle and failure containment](PLUGIN-LIFECYCLE.md)
 - [Installer, wizard, builds and release acceptance](DELIVERY-AND-RELEASES.md)
+- [Tests and static analysis](TESTING.md)
+- [Engineering quality and security toolchain](QUALITY-SECURITY-STACK.md)
+- [Security test and release evidence matrix](SECURITY-TEST-MATRIX.md)
 - [Repository directory guide](../REPOSITORY-STRUCTURE.md)
 - [Functional inventory](../../README.md) and [149-entry extension catalogue](../../PLUGIN_CATALOG.md)
 

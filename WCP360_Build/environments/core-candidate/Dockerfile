@@ -9,7 +9,10 @@ WORKDIR /candidate
 COPY WCP360_Core/agents/wcpd/candidate/planner/ ./planner/
 COPY WCP360_Core/agents/wcpd/candidate/provisioning/ ./provisioning/
 WORKDIR /candidate/provisioning
-RUN go test -race ./... && go vet ./... && CGO_ENABLED=0 go build -trimpath -o /out/wcp-candidate-node ./cmd/wcp-candidate-node
+RUN go test -race ./... && go vet ./... \
+    && go test -run='^$' -fuzz='^FuzzProvisionEnvelope$' -fuzztime=10s -parallel=2 . \
+    && go test -run='^$' -fuzz='^FuzzActivationJournal$' -fuzztime=10s -parallel=2 . \
+    && CGO_ENABLED=0 go build -trimpath -o /out/wcp-candidate-node ./cmd/wcp-candidate-node
 
 FROM php:8.4.27-fpm-trixie AS candidate
 RUN apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev libpq-dev libicu-dev libzip-dev unzip curl nginx postgresql-client ca-certificates \

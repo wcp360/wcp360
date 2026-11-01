@@ -117,6 +117,9 @@ The candidate implements a Symfony bootstrap, selected application suites, inert
 - [Core domain ownership and acceptance](../documentation/development/CORE-ENGINE.md)
 - [Plugin lifecycle](../documentation/development/PLUGIN-LIFECYCLE.md)
 - [Installer and release qualification](../documentation/development/DELIVERY-AND-RELEASES.md)
+- [Tests and static analysis](../documentation/development/TESTING.md)
+- [Engineering quality and security toolchain](../documentation/development/QUALITY-SECURITY-STACK.md)
+- [Security test and release evidence matrix](../documentation/development/SECURITY-TEST-MATRIX.md)
 - [Current baseline manifest](../documentation/manifests/WCP360-BM-0001.md)
 - [Architecture](../ARCHITECTURE.md)
 

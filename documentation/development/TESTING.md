@@ -1,5 +1,7 @@
 # Testing and static analysis
 
+The [engineering quality and security catalogue](QUALITY-SECURITY-STACK.md) covers PHP/Symfony, Go, Python, Shell, Linux hardening, HTTP/IPC/PostgreSQL, browsers and software delivery. The [security test matrix](SECURITY-TEST-MATRIX.md) defines required positive/negative cases and revision-bound evidence. Both distinguish existing controls from configured or conditional additions; they do not assert that every listed tool has run.
+
 The executable candidate uses locked development dependencies: PHPUnit 12, Symfony Test Pack, PHPStan 2 at level 8 and Symfony Panther 2.4. Exact patch versions are recorded in WCP360_Core/composer.lock. No Symfony Flex plugin is needed to run this project's explicit configuration.
 
 ## Commands
@@ -49,3 +51,22 @@ The [disposable VM rehearsal](DEBIAN-VM.md) runs the shared provisioning and pac
 ## Supervised recovery
 
 The [systemd recovery rehearsal](SYSTEMD-RECOVERY.md) adds strict Go journal/managed-file regressions and tests actual candidate service restart, owned PHP-FPM child failure, inconsistent-state refusal and full guest reboot. Application sessions, counters and Unix identities must survive without replaying physical provisioning. The workflow result applies only to its exact source head.
+
+## Native Go fuzzing
+
+From `WCP360_Core/agents/wcpd/candidate/provisioning`:
+
+~~~sh
+go test ./...
+go vet ./...
+go test -run='^$' -fuzz='^FuzzProvisionEnvelope$' -fuzztime=10s -parallel=2 .
+go test -run='^$' -fuzz='^FuzzActivationJournal$' -fuzztime=10s -parallel=2 .
+~~~
+
+These targets exercise bounded untrusted-message and journal parsing, canonical round trips and immutable identity/state bindings. They call pure parsers/renderers only; they never launch a broker, create users, mutate services or access customer files. Seed corpora also run with ordinary `go test`. Linux candidate image builds configure ten seconds per target with two fuzz workers; exact execution results belong to that build's source SHA.
+
+Use longer bounded campaigns in isolated test workers when qualifying a parser change. Retain any minimal failing corpus as a regression fixture after checking it for secrets. Go's fuzz cache is local build state; it is not a release artifact. Fuzzing does not replace the real peer-credential, UID/GID, filesystem, process-crash and VM reboot tests.
+
+## Dependency update configuration
+
+`.github/dependabot.yml` configures reviewed weekly updates for Core Composer dependencies, both candidate Go modules, GitHub Actions and candidate container definitions. It configures no automatic merge. Dependabot becomes active only when its configuration is available on the default branch and the repository service supports it; a file on the candidate branch is not evidence that update jobs ran.
