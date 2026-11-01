@@ -176,6 +176,12 @@ The [password-change service](src/Module/IdentityAccess/Application/ChangeOwnPas
 
 The isolated PostgreSQL candidate now uses two fixed, surface-bound password operations with atomic revocation/audit; direct credential writes remain denied. Fresh role creation and an explicit existing-role capability upgrade verify code, owner, configuration and ACLs before granting the matching operation. Roles and table grants remain unchanged by an upgrade. [Real PostgreSQL regressions](tests/Integration/CandidateDatabaseRolesTest.php) define isolation, refusal, rollback and upgrade evidence. Canonical acceptance of this credential boundary, forgotten-password recovery, token lifecycle and production integration remain unfinished. **M1 remains open**; the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** capability counts are unchanged.
 
+### Operator-assisted account recovery
+
+The [setup recovery command](installer/recovery/ACCOUNT-PASSWORD.md) adds a read-only account plan and explicitly enabled interactive password reset for an active USER or ADMIN account. The inspected ID/username/surface are bound across prompts, a conditional write refuses concurrent credential changes, and replacement, own-context session revocation and audit commit together. The command preserves MFA and backup codes; it does not reactivate accounts or supply an MFA bypass. Real runtime PostgreSQL identities cannot masquerade as maintenance by changing the application context.
+
+[Service and CLI regressions](tests/Integration/RecoverAccountPasswordTest.php) and [PostgreSQL refusals](tests/Integration/CandidateDatabaseRolesTest.php) are prepared for the existing GitHub CI. Exact-source results are pending CI; earlier passing results are not inherited. Self-service email/token recovery and production identity/operator integration remain open. **M1 remains open**, with the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** counts unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

@@ -69,6 +69,10 @@ These database roles are surface-scoped application identities, not one identity
 
 The [real PostgreSQL role regressions](../../../tests/Integration/CandidateDatabaseRolesTest.php) cover actual USER/ADMIN password forms, enabled-MFA preservation, direct-write refusal, opposite-role denial even after a mistaken EXECUTE grant, malformed/stale/revoked requests, temporary-object shadowing, profiling, atomic audit failure and the existing-role upgrade. Test definitions must be distinguished from exact-source execution evidence.
 
+## Operator-assisted password recovery
+
+A forgotten candidate password can be replaced through the [Setup recovery command](../../../installer/recovery/ACCOUNT-PASSWORD.md). It requires local maintenance authority, a fixed account identity, explicit opt-in and interactive hidden confirmation. The shared password policy applies; credential replacement, own-context session revocation and audit are atomic. An enabled factor and unused backup codes are preserved. The next login still follows the account's existing MFA mode. This does not provide a public reset endpoint, email delivery, single-use recovery tokens or production operator identity integration.
+
 ## Candidate authorization and access blocks
 
 The shared decision allows `candidate.hosting.plan` only when the actor is an active USER account, holds the exact permission membership for the requested tenant and has no matching explicit denial. Unknown permissions, malformed identifiers, inactive users and mismatched tenants fail closed. Administrator context does not supply tenant authority. Visibility and execution use the same database rule; queued hosting plans recheck current authority when processed.

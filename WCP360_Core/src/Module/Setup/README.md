@@ -1,6 +1,6 @@
 # Setup
 
-**Status: interactive candidate enrollment, restartable checkout preparation and a read-only native-installation handoff are implemented. Graphical first-run setup and production installation/upgrade orchestration remain future work.**
+**Status: interactive candidate enrollment, operator-assisted account recovery, restartable checkout preparation and a read-only native-installation handoff are implemented. Graphical first-run setup and production installation/upgrade orchestration remain future work.**
 
 Initial setup state, administrator enrollment, restricted wizard, install/upgrade progress and recovery handoff.
 
@@ -8,6 +8,8 @@ Start here when changing: **Wizard steps, setup validation and interrupted-insta
 
 | Source | Responsibility |
 | :--- | :--- |
+| [Application/RecoverAccountPassword.php](Application/RecoverAccountPassword.php) | Setup-only candidate recovery with maintenance admission, verifier compare-and-swap, transactional session revocation/audit and preserved MFA. |
+| [UI/Console/RecoverAccountPasswordCommand.php](UI/Console/RecoverAccountPasswordCommand.php) | Read-only plan or explicitly enabled interactive recovery; hidden password confirmation and redacted results. |
 | [UI/Console/SetupCommand.php](UI/Console/SetupCommand.php) | Interactive candidate account enrollment using password hashing, transactional persistence and audit. |
 | [Application/NativeInstallationPlan.php](Application/NativeInstallationPlan.php) | Evaluate bounded host observations and explicit requirements; describe blocked native-installation prerequisites without granting host effects. |
 | [Application/CandidateArtifactVerifier.php](Application/CandidateArtifactVerifier.php) | Verify a candidate manifest's detached signature, expected identity and local payload size/digest against an independently pinned operator key. |
@@ -32,6 +34,8 @@ The [candidate database role recipe](../../../installer/recipes/CANDIDATE-DATABA
 The enrollment terminal asks for a **username**, a separate **contact email**, the USER/ADMIN context and a hidden password. Usernames contain 3–32 lowercase ASCII letters, digits or underscores and begin with a letter. Login accepts the username only. Existing checkouts must apply the [username migration](../../../migrations/Version20261101000500.php) before using the updated Core; see [the migration and session rules](../IdentityAccess/README.md#username-authentication).
 
 Enroll the initial candidate administrator with `WCP_CONTEXT=setup php bin/console wcp:candidate:enroll`, selecting the administrator account context in the interactive terminal. The graphical wizard is not enabled by this command. Candidate execution still requires its explicit development/test runtime guards.
+
+For a forgotten candidate password, follow the [operator-assisted account recovery guide](../../../installer/recovery/ACCOUNT-PASSWORD.md). The setup-only `wcp:candidate:account:recover` command requires an explicit USER/ADMIN surface and defaults to a read-only plan. `--apply` additionally requires `WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY=1`, interactive confirmation and two hidden password entries. MFA remains unchanged. The maintenance boundary is distinct from browser administrator rights; self-service email/token recovery remains unfinished.
 
 Use the common [module layout](../README.md) for new Domain, Application, Infrastructure and UI code. Standalone CLI entry points live in installer; this module does not provide a generic privileged shell.
 

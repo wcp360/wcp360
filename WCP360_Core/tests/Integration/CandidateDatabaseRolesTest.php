@@ -593,6 +593,28 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertSame(3,$this->roleCount());
     }
 
+    public function testRuntimeDatabaseLoginsCannotMasqueradeAsRecoveryMaintenance(): void
+    {
+        $this->provider->provision($this->passwords);
+        foreach (['user','admin','worker'] as $context) {
+            $store = new WorkbenchStore($this->login($context));
+            $recovery = new \Wcp360\Core\Module\Setup\Application\RecoverAccountPassword(
+                $store, new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store),
+                self::getContainer()->get(\Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class),
+                new RuntimeContext('setup', true, 'test', 'localhost'), true);
+            foreach ([fn() => $recovery->plan('alice', 'user'),
+                fn() => $recovery->recover($this->fixture['users']['alice'], 'alice', 'user', 'synthetic-operator-recovery-password')] as $call) {
+                try { $call(); self::fail('Runtime database login performed maintenance recovery.'); }
+                catch (\RuntimeException $error) {
+                    self::assertSame(\Wcp360\Core\Module\Setup\Application\RecoverAccountPassword::REFUSED, $error->getMessage());
+                    self::assertNull($error->getPrevious());
+                }
+            }
+        }
+        self::assertTrue(password_verify(WorkbenchFixture::PASSWORD, $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$this->fixture['users']['alice']])));
+        self::assertSame(0, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.account.password_recovered'"));
+    }
+
     public function testActualPasswordFormsWorkWithSeparateDatabaseRoles(): void
     {
         $this->provider->provision($this->passwords);

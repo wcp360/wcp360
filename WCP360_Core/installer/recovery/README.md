@@ -16,6 +16,7 @@ These rules cover candidate dependencies, generated planner/assets and database 
 
 Setup business state and the restricted wizard remain in the [Setup module](../../src/Module/Setup/README.md). Service configuration text has one source in [resources/services](../../resources/services/README.md); installer code consumes the accepted boundaries rather than creating a second generic system executor.
 
+- [Operator-assisted account password recovery](ACCOUNT-PASSWORD.md): separate setup-only account maintenance, with preserved MFA and transactional session revocation/audit.
 - [Installer source map](../README.md)
 - [Installation and upgrade verification](../../tests/Installer/README.md)
 - [Release and recovery acceptance](../../../documentation/development/DELIVERY-AND-RELEASES.md)

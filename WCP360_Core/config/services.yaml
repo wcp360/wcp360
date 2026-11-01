@@ -7,6 +7,7 @@ parameters:
     env(WCP_MFA_KEY): ''
     env(WCP_DATABASE_MODE): shared
     env(WCP_ALLOW_CANDIDATE_DATABASE_ROLES): '0'
+    env(WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY): '0'
 services:
     _defaults:
         autowire: true
@@ -14,6 +15,9 @@ services:
     Wcp360\Core\:
         resource: ../src/
         exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Module\Setup\Application\RecoverAccountPassword:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY)%'
     Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabaseRoles:
         arguments:
             $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_DATABASE_ROLES)%'
