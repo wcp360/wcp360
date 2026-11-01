@@ -16,7 +16,7 @@ final readonly class RunHostingPlan
             $row=$db->fetchAssociative("SELECT * FROM wcp_candidate_jobs WHERE state='QUEUED' ORDER BY created_at,id LIMIT 1".$lock);
             if(!$row)return false;
             $db->executeStatement("UPDATE wcp_candidate_jobs SET state='RUNNING',started_at=? WHERE id=? AND state='QUEUED'",[WorkbenchStore::now(),$row['id']]);
-            $this->store->audit($row['actor_id'],$row['tenant_id'],'candidate.hosting.plan.started',$row['id']);
+            $this->store->audit($row['actor_id'],$row['tenant_id'],'candidate.hosting.plan.started',$row['id'],$row['request_id']);
             return $row;
         });
         if(!$job)return null;
@@ -34,7 +34,7 @@ final readonly class RunHostingPlan
             $changed=$db->executeStatement("UPDATE wcp_candidate_jobs SET state=?,result=?,completed_at=? WHERE id=? AND state='RUNNING'",[$state,$result,WorkbenchStore::now(),$job['id']]);
             if($changed!==1) throw new \RuntimeException('Job state changed; result publication refused.');
             $db->executeStatement('UPDATE wcp_candidate_sites SET state=?,revision=revision+1 WHERE id=? AND tenant_id=?',[$state==='SUCCEEDED'?'PLAN_READY':'PLAN_FAILED',$job['site_id'],$job['tenant_id']]);
-            $this->store->audit($job['actor_id'],$job['tenant_id'],'candidate.hosting.plan.'.strtolower($state),$job['id']);
+            $this->store->audit($job['actor_id'],$job['tenant_id'],'candidate.hosting.plan.'.strtolower($state),$job['id'],$job['request_id']);
         });
         return $job['id'];
     }
@@ -42,8 +42,8 @@ final readonly class RunHostingPlan
     {
         // No blind replay. A crashed RUNNING job remains explicit until operator reconciliation.
         return $this->store->db->transactional(function():int{
-            $rows=$this->store->db->fetchAllAssociative("SELECT id,actor_id,tenant_id FROM wcp_candidate_jobs WHERE state='RUNNING'");
-            foreach($rows as $row){$this->store->db->executeStatement("UPDATE wcp_candidate_jobs SET state='UNKNOWN_OUTCOME' WHERE id=? AND state='RUNNING'",[$row['id']]);$this->store->audit($row['actor_id'],$row['tenant_id'],'candidate.hosting.plan.interrupted',$row['id']);}
+            $rows=$this->store->db->fetchAllAssociative("SELECT id,actor_id,tenant_id,request_id FROM wcp_candidate_jobs WHERE state='RUNNING'");
+            foreach($rows as $row){$this->store->db->executeStatement("UPDATE wcp_candidate_jobs SET state='UNKNOWN_OUTCOME' WHERE id=? AND state='RUNNING'",[$row['id']]);$this->store->audit($row['actor_id'],$row['tenant_id'],'candidate.hosting.plan.interrupted',$row['id'],$row['request_id']);}
             return count($rows);
         });
     }

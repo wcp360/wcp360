@@ -50,6 +50,8 @@ The operating-system targets are **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS
 
 The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) uses the reviewed PHP 8.4 source profile from `config/platforms/runtime-providers.json`, compiled inside each target userspace, with a real PostgreSQL 17 verification service. It covers non-root checkout preparation, application checks, enrollment, real Nginx/FPM HTTP, jobs, reference-plugin lifecycle and logical database recovery. It remains development verification; native host installation and production runtime providers need separate qualification. Inspect exact per-profile job outcomes before treating any configured check as passing.
 
+[Hosting-plan request correlation](src/Module/Operations/README.md#durable-hosting-plan-request-correlation) now retains the first submission reference in the job and its queued/started/outcome audit occurrences. The authorized task detail shows this creation reference; retries preserve the original, and historical rows remain empty. Apply [Version20261102000100](migrations/Version20261102000100.php) before using this source. This is candidate diagnostics, not a permission or complete distributed tracing.
+
 ## Source layout
 
 ```text

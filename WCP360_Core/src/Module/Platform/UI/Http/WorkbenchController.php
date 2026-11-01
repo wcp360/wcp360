@@ -57,23 +57,23 @@ final class WorkbenchController extends AbstractController
         return $this->redirectToRoute('wcp_dashboard',[],303);
     }
     #[Route('/workbench/plans',name:'wcp_plan',methods:['POST'])]
-    public function submit(Request $request,SubmitHostingPlan $submit):Response
+    public function submit(Request $request,SubmitHostingPlan $submit,\Wcp360\Core\Shared\Http\RequestReference $references):Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         if(!$this->isCsrfTokenValid('hosting-plan',$request->request->getString('_token')))throw $this->createAccessDeniedException('Invalid CSRF token.');
         $fields=$request->request->all();unset($fields['_token']);
         $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
-        $result=$submit->submit($user->id,$fields);
+        $result=$submit->submit($user->id,$fields,$references->get($request));
         return $this->redirectToRoute('wcp_job',['id'=>$result['job_id']],303);
     }
     #[Route('/workbench/v1/plans',name:'wcp_api_plan',methods:['POST'])]
-    public function apiSubmit(Request $request,SubmitHostingPlan $submit):JsonResponse
+    public function apiSubmit(Request $request,SubmitHostingPlan $submit,\Wcp360\Core\Shared\Http\RequestReference $references):JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         if($request->headers->get('Origin')!==$request->getSchemeAndHttpHost() || !$this->isCsrfTokenValid('hosting-plan',$request->headers->get('X-CSRF-Token')))throw $this->createAccessDeniedException('Origin and CSRF required.');
         if($request->getContentTypeFormat()!=='json' || strlen($request->getContent())>4096)throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('A bounded JSON body is required.');
         $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
-        return $this->json($submit->submit($user->id,$request->toArray()),202);
+        return $this->json($submit->submit($user->id,$request->toArray(),$references->get($request)),202);
     }
     #[Route('/workbench/jobs/{id}',name:'wcp_job',methods:['GET'])]
     public function job(string $id,WorkbenchStore $store,RuntimeContext $runtime,SubmitActivation $activations):Response

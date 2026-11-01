@@ -16,6 +16,18 @@ Start here when changing: **Shared job scheduling, progress, retry and recovery 
 | [Infrastructure/WorkbenchSchema.php](Infrastructure/WorkbenchSchema.php) | Candidate account, tenant, site, job and audit schema. |
 | [UI/Console/WorkCommand.php](UI/Console/WorkCommand.php) | Worker-context command for the implemented candidate operations. |
 
+## Durable hosting-plan request correlation
+
+[PlanCorrelationSchema](Infrastructure/PlanCorrelationSchema.php) and [Version20261102000100](../../../migrations/Version20261102000100.php) add nullable `request_id` columns to the existing candidate jobs and audit tables, constrained to 32 lowercase hexadecimal characters when present, plus an audit lookup index. Apply the migration with the existing setup maintenance procedure before running this source. Existing rows remain NULL; historical audit is neither backfilled nor rewritten, and append-only protection remains applied. No database-role grant changes.
+
+[Shared RequestId](../../Shared/Correlation/RequestId.php) owns generation and validation. HTTP plan submission passes its already server-generated main-request reference as a separate internal argument; caller body fields cannot set it and caller tracing headers remain ignored. Direct non-HTTP use generates an independent reference when omitted. Correlation metadata is excluded from the intent fingerprint and success payload: an idempotent retry returns the same job, keeps its first origin and adds no duplicate queued occurrence. Its HTTP response header still describes the current request.
+
+The job and queued audit reference commit atomically. A fresh worker reads the stored origin for started, succeeded, failed and interrupted occurrences; audit failure rolls back the associated transaction. Legacy tasks retain NULL through subsequent transitions. Existing authorization and outcome rules remain authoritative. This does not resolve in-flight revocation races or add retries, cancellation, reconciliation or leases.
+
+The authorized task detail shows the creation reference separately from the current response header, with an explicit unavailable state for historical rows. List/API summary projections stay unchanged; references never serve as an access key. The application does not gain audit-table reads. Operators with existing setup authority can correlate candidate job/audit metadata using the fixed resource and reference fields; there is no new general audit-query UI or privileged SQL endpoint.
+
+[Unit definitions](../../../tests/Unit/RequestIdTest.php), [service definitions](../../../tests/Integration/PlanCorrelationTest.php), [HTTP journeys](../../../tests/Integration/PlanCorrelationJourneyTest.php), [SQLite/PostgreSQL upgrade definitions](../../../tests/Integration/PlanCorrelationSchemaTest.php) and [actual restricted-role handoff](../../../tests/Integration/CandidateDatabaseRolesTest.php) cover format/refusal, restart, replay, legacy data, audit rollback/immutability and tenant access. Executed outcomes remain bound to exact source/CI in draft PR #116. IPC propagation, global audit/trace conventions, all resource lifecycles and canonical production correlation remain unfinished.
+
 ## Filtered hosting-job inventory
 
 [JobListQuery](Domain/JobListQuery.php) validates the existing tenant scope, five supported job states, an ASCII hostname fragment and page sizes of 25, 50 or 100. Unknown fields, arrays, oversized input, SQL wildcard characters, invalid UUIDs and simultaneous before/after cursors fail before querying job data.

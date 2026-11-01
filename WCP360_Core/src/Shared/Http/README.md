@@ -17,7 +17,7 @@
 
 Every admitted main HTTP request receives a new server-generated `X-WCP360-Request-Id` response header containing 32 lowercase hexadecimal characters. Client values in that header, `X-Request-Id`, `traceparent`, query/body data and preexisting request attributes never establish the new reference. Request attributes hold the reference; no service property retains it between FrankenPHP worker requests. Subrequests do not replace the main reference.
 
-This reference is diagnostic metadata, never an identity, permission, tenant selector, idempotency key, job ID or audit-record ID. It does not link database audit occurrences, queues, IPC or a distributed trace. Errors optionally log only the reference, status and fixed code through an available PSR logger; no new log backend or durable audit storage is installed. Existing framework/domain logging and secret-redaction obligations remain separate.
+This reference is diagnostic metadata, never an identity, permission, tenant selector, idempotency key, job ID or audit-record ID. [Hosting-plan submission](../../Module/Operations/README.md#durable-hosting-plan-request-correlation) now persists the first request reference with the job and its lifecycle audit occurrences. Other resources, IPC and complete distributed tracing remain outside this slice. Errors optionally log only the reference, status and fixed code through an available PSR logger; no new log backend is installed. Existing framework/domain logging and secret-redaction obligations remain separate.
 
 ## Existing workbench API
 

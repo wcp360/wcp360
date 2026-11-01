@@ -20,8 +20,11 @@ final readonly class SubmitHostingPlan
     /** @param array<string, mixed> $input
      * @return array{job_id: string, replayed: bool}
      */
-    public function submit(string $actor, array $input): array
+    public function submit(string $actor, array $input, ?string $requestId = null): array
     {
+        // Transport-owned metadata is deliberately outside caller input and the intent fingerprint.
+        $requestId ??= \Wcp360\Core\Shared\Correlation\RequestId::generate();
+        \Wcp360\Core\Shared\Correlation\RequestId::assertValid($requestId);
         $required = ['tenant_id', 'hostname', 'idempotency_key'];
         $allowed = [...$required, 'application_server', 'worker_acknowledged'];
         if (array_diff(array_keys($input), $allowed) || array_diff($required, array_keys($input))) {
@@ -47,7 +50,7 @@ final readonly class SubmitHostingPlan
         $semantic = $requested === 'inherit' && !$acknowledged ? [$tenant, $host] : [$tenant, $host, $requested, $acknowledged];
         $fingerprint = hash('sha256', json_encode($semantic, JSON_THROW_ON_ERROR));
         $db = $this->store->db;
-        return $db->transactional(function () use ($db, $actor, $tenant, $host, $key, $fingerprint, $requested, $acknowledged): array {
+        return $db->transactional(function () use ($db, $actor, $tenant, $host, $key, $fingerprint, $requested, $acknowledged, $requestId): array {
             $lock = $db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform ? ' FOR UPDATE' : '';
             $db->fetchOne('SELECT id FROM wcp_candidate_tenants WHERE id=?'.$lock, [$tenant]);
             $this->store->requirePermission($actor, $tenant);
@@ -67,8 +70,9 @@ final readonly class SubmitHostingPlan
             $db->insert('wcp_candidate_jobs', [
                 'id' => $job, 'tenant_id' => $tenant, 'site_id' => $site, 'actor_id' => $actor,
                 'idempotency_key' => $key, 'fingerprint' => $fingerprint, 'state' => 'QUEUED', 'created_at' => WorkbenchStore::now(),
+                'request_id' => $requestId,
             ]);
-            $this->store->audit($actor, $tenant, 'candidate.hosting.plan.queued', $job);
+            $this->store->audit($actor, $tenant, 'candidate.hosting.plan.queued', $job, $requestId);
             return ['job_id' => $job, 'replayed' => false];
         });
     }

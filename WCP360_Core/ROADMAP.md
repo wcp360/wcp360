@@ -206,6 +206,12 @@ The [Operations job inventory](src/Module/Operations/README.md#filtered-hosting-
 
 Regression definitions cover tied timestamps, inserts between pages, history beyond 100 rows, filter/cursor rejection, tenant separation, revocation, escaping, minimal projections, unchanged business state and existing restricted PostgreSQL grants. Exact-source results belong to draft PR #116; no local executable tests run. **M1 remains open, approximately 20% overall; capability counts unchanged.**
 
+### Durable request correlation for hosting-plan execution
+
+[RequestId](src/Shared/Correlation/RequestId.php) shares bounded server-generated references between HTTP and the hosting-plan use case. The first accepted submission stores its reference with the job and queued audit occurrence in the same transaction. A reconstructed worker reads that durable origin for started, succeeded, failed and interrupted occurrences. Idempotent retries keep the first origin and do not append another queued occurrence; non-HTTP submissions generate a reference when omitted. References never grant resource authority.
+
+[Version20261102000100](migrations/Version20261102000100.php) adds nullable, format-constrained job/audit metadata and an audit lookup index without rewriting historical rows or widening database grants. The authorized task detail displays the creation reference separately from the current HTTP response header. [Service](tests/Integration/PlanCorrelationTest.php), [HTTP](tests/Integration/PlanCorrelationJourneyTest.php), [schema-upgrade](tests/Integration/PlanCorrelationSchemaTest.php) and [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) definitions cover this slice; exact-source execution belongs to draft PR #116. Local executable tests remain stopped. This does not provide cross-resource correlation, an audit-query product, IPC propagation or a distributed trace. M1 remains open; approximately 20% overall and capability counts remain unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

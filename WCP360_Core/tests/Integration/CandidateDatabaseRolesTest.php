@@ -480,6 +480,32 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $service->page($this->fixture['users']['alice'], $query);
     }
 
+    public function testPlanCorrelationSurvivesUserToWorkerHandoffWithoutAuditReadGrants(): void
+    {
+        $this->provider->provision($this->passwords);
+        $userDb = $this->login('user');
+        $userStore = new WorkbenchStore($userDb);
+        $policy = self::getContainer()->get(\Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy::class);
+        $submit = new \Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan($userStore, $policy,
+            new \Wcp360\Core\Module\Platform\Application\ApplicationServerSettings($userStore, $policy));
+        $reference = str_repeat('d', 32);
+        $job = $submit->submit($this->fixture['users']['alice'], [
+            'tenant_id' => $this->fixture['tenants']['alice'], 'hostname' => 'isolated-reference.test',
+            'idempotency_key' => 'isolated-reference-key-2026',
+        ], $reference)['job_id'];
+        self::assertSame($reference, $userDb->fetchOne('SELECT request_id FROM wcp_candidate_jobs WHERE id=?', [$job]));
+        $workerDb = $this->login('worker');
+        $worker = new \Wcp360\Core\Module\Operations\Application\RunHostingPlan(new WorkbenchStore($workerDb),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class), $policy);
+        self::assertSame($job, $worker->runOne());
+        self::assertSame([$reference, $reference, $reference], $this->maintenance->fetchFirstColumn(
+            'SELECT request_id FROM wcp_candidate_audit WHERE resource_id=? ORDER BY id', [$job]));
+        foreach ([$userDb, $workerDb] as $db) {
+            try { $db->fetchOne('SELECT request_id FROM wcp_candidate_audit LIMIT 1'); self::fail('Audit read grant was broadened.'); }
+            catch (\Doctrine\DBAL\Exception\DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

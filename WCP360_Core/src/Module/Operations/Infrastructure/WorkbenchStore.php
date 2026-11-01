@@ -28,9 +28,10 @@ final readonly class WorkbenchStore
     {
         $this->authorization->requireAdmin($actor, $lock);
     }
-    public function audit(?string $actor, ?string $tenant, string $kind, ?string $resource): void
+    public function audit(?string $actor, ?string $tenant, string $kind, ?string $resource, ?string $requestId = null): void
     {
-        $this->db->insert('wcp_candidate_audit', ['id'=>self::id(),'actor_id'=>$actor,'tenant_id'=>$tenant,'kind'=>$kind,'resource_id'=>$resource,'created_at'=>self::now()]);
+        \Wcp360\Core\Shared\Correlation\RequestId::assertValid($requestId);
+        $this->db->insert('wcp_candidate_audit', ['id'=>self::id(),'actor_id'=>$actor,'tenant_id'=>$tenant,'kind'=>$kind,'resource_id'=>$resource,'created_at'=>self::now(),'request_id'=>$requestId]);
     }
     /** @return list<array<string, mixed>> */
     public function tenants(string $actor): array

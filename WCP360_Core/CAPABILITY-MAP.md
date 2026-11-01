@@ -36,7 +36,7 @@ The [candidate session registry](src/Module/IdentityAccess/README.md#candidate-s
 
 The [runtime identity diagnostic](installer/preflight/README.md#runtime-identity-inspection) extends read-only prerequisite observation with fixed canonical profiles, actual current-namespace credentials and conservative process checks. It does not deploy identities or establish production Unix/filesystem/PostgreSQL separation; no capability status or count changes. Exact-source results remain in draft PR #116.
 
-The [shared HTTP candidate](src/Shared/Http/README.md) now implements request references, safe exception presentation and a bounded error envelope for existing workbench endpoints. It reuses canonical error-code names without claiming complete API contracts, durable audit correlation or production integration. Capability statuses and the **5 demonstrated / 71 partial / 157 planned** counts stay unchanged; current-source execution is recorded in draft PR #116.
+The [shared HTTP candidate](src/Shared/Http/README.md) now implements request references, safe exception presentation and a bounded error envelope for existing workbench endpoints. It reuses canonical error-code names without claiming complete API contracts or production integration. Hosting-plan submission now persists its originating request reference across the job and its lifecycle audit occurrences; cross-resource and IPC correlation remain unfinished. Capability statuses and the **5 demonstrated / 71 partial / 157 planned** counts stay unchanged; current-source execution is recorded in draft PR #116.
 
 ## Domain summary
 
@@ -414,7 +414,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Configuration validation | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Selected forms/profiles; general configuration model absent. | [M9](ROADMAP.md#m9) |
 | Diff and apply | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Fixed plans and guarded apply; general diff/apply workflow absent. | [M9](ROADMAP.md#m9) |
 | REST API | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Experimental workbench API; canonical production API absent. | [M9](ROADMAP.md#m9) |
-| Identifiers and correlation | [Operations](src/Module/Operations/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Candidate UUID identities; end-to-end correlation absent. | [M9](ROADMAP.md#m9) |
+| Identifiers and correlation | [Operations](src/Module/Operations/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Candidate UUID identities, HTTP references and durable hosting-plan request/audit correlation; cross-resource/IPC tracing unfinished. | [M9](ROADMAP.md#m9) |
 | Tokens and restrictions | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
 | Outbound webhooks | [Operations](src/Module/Operations/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
 | Inbound webhooks | [Operations](src/Module/Operations/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
