@@ -36,10 +36,17 @@ final readonly class CandidateInstaller
             }
             $stat = @lstat($path);
             $binary = $path.'/wcp-plan';
+            clearstatcache(true, $binary);
             $binaryStat = @lstat($binary);
             if ($stat === false || ($stat['mode'] & 0170000) !== 0040000 || is_link($path)
                 || ($binaryStat !== false && (($binaryStat['mode'] & 0170000) !== 0100000 || $binaryStat['nlink'] !== 1 || is_link($binary)))) {
                 throw new \RuntimeException('Planner output must remain inside a real checkout directory.');
+            }
+            foreach ([$stat, $binaryStat] as $metadata) {
+                if ($metadata !== false && PHP_OS_FAMILY !== 'Windows'
+                    && (!function_exists('posix_geteuid') || $metadata['uid'] !== posix_geteuid() || ($metadata['mode'] & 0022) !== 0)) {
+                    throw new \RuntimeException('Planner output must belong to the operator and refuse group/other writes.');
+                }
             }
         }
         $environment = getenv();

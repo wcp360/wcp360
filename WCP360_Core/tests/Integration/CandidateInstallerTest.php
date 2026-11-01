@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wcp360\Core\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Process\Process;
 use Wcp360\Core\Module\Setup\Infrastructure\CandidateInstaller;
 
@@ -46,6 +47,44 @@ final class CandidateInstallerTest extends TestCase
         $installer = new CandidateInstaller(dirname(__DIR__, 2), PHP_BINARY, '/unused/composer', '/unused/go');
         $this->expectException(\InvalidArgumentException::class);
         $installer->execute('database_migrations; touch /tmp/injected');
+    }
+
+    public static function writablePlannerTargets(): iterable
+    {
+        yield 'directory' => ['directory'];
+        yield 'binary' => ['binary'];
+    }
+
+    #[DataProvider('writablePlannerTargets')]
+    public function testWritablePlannerOutputIsRefusedBeforeSpawningGo(string $target): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            self::markTestSkipped('POSIX planner ownership/mode checks run on each Linux target.');
+        }
+        $directory = sys_get_temp_dir().'/wcp-installer-planner-'.bin2hex(random_bytes(8));
+        mkdir($directory.'/var/bin', 0700, true);
+        mkdir($directory.'/agents/wcpd/candidate/planner', 0700, true);
+        $go = $directory.'/fake-go';
+        file_put_contents($go, "#!/usr/bin/env php\n<?php touch(__DIR__.'/unexpected-spawn');");
+        chmod($go, 0700);
+        if ($target === 'directory') {
+            chmod($directory.'/var/bin', 0777);
+        } else {
+            file_put_contents($directory.'/var/bin/wcp-plan', 'existing binary');
+            chmod($directory.'/var/bin/wcp-plan', 0666);
+        }
+        try {
+            $installer = new CandidateInstaller($directory, PHP_BINARY, '/unused/composer', $go);
+            try {
+                $installer->execute('planner_build');
+                self::fail('Writable planner output was accepted.');
+            } catch (\RuntimeException $error) {
+                self::assertSame('Planner output must belong to the operator and refuse group/other writes.', $error->getMessage());
+                self::assertFileDoesNotExist($directory.'/unexpected-spawn');
+            }
+        } finally {
+            $this->remove($directory);
+        }
     }
 
     public function testFixedChildProcessHandlesMetacharactersAsLiteralPaths(): void
