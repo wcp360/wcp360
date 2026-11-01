@@ -10,7 +10,7 @@ services:
         autoconfigure: true
     Wcp360\Core\:
         resource: ../src/
-        exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/']
+        exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
     Wcp360\Core\Shared\Security\RuntimeContext:
         arguments:
             $context: '%env(WCP_CONTEXT)%'

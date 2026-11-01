@@ -26,7 +26,9 @@ The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21
 | An administrator/user page or reusable component | [Templates](templates/README.md) and [assets](assets/README.md) | Domain presenter; layouts/errors and shared form/table/chart/feedback/navigation components; controllers/styles/images source |
 | Transfer hosting resources between instances | [Transfers](src/Module/Transfers/README.md) | Coordinate existing account/site/file/database/mail owners and durable jobs; separate from Core schema migrations |
 | Database schema | [Migrations](migrations/README.md) and the owning domain | Accepted DB contract, migrations and upgrade/recovery evidence |
-| Installation and upgrade | [Installer](installer/README.md) and [Setup](src/Module/Setup/README.md) | preflight/, recipes/, upgrades/, recovery/; restricted wizard and durable progress |
+| Candidate checkout installation, status or resume | [Installer recipes](installer/recipes/README.md) and [Setup](src/Module/Setup/README.md) | candidate-install.sh / candidate-install.php; Infrastructure/CandidateInstaller.php, InstallationJournal.php and InstallationInputs.php; private var/installer/candidate-install.json |
+| Interrupted installation or migration uncertainty | [Recovery](installer/recovery/README.md) | Read-only --status, explicit --resume, input binding and migration reconciliation; no reset flag |
+| Production installation, upgrades or a graphical first-run wizard | [Installer](installer/README.md) and [Setup](src/Module/Setup/README.md) | Reserved production boundaries and acceptance requirements; not delivered by candidate checkout preparation |
 | Go daemon/broker behavior | [Agents](agents/README.md) | Separate wcpd / wcp-privd components and accepted protocol/privilege contracts |
 | Python diagnostics | [Diagnostics](diagnostics/README.md) | Specialized, bounded, non-root tooling |
 | Symfony-aware static analysis | [Testing guide](../documentation/development/TESTING.md#symfony-aware-analysis) | phpstan.neon and tools/phpstan/: synthetic Kernel/container preparation, Console loader and deliberately invalid rule fixtures |

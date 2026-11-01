@@ -4,6 +4,8 @@
 
 Start with the [candidate run guide](../documentation/development/EXECUTABLE-CANDIDATE.md) for Docker/native setup, account enrollment, job processing, plugin lifecycle and the exact remaining acceptance work. Symfony 7.4 LTS/PHP 8.4, Twig, Turbo/Stimulus, candidate persistence, a Go plan builder and automated checks are now implemented on the dedicated draft branch.
 
+The [checkout installer](installer/recipes/README.md) now records private durable checkpoints, prevents concurrent runs and provides read-only `--status` plus explicit `--resume`. It verifies source/configuration identity, rebuilds repeatable preparation outputs and blocks automatic replay after failed or interrupted database migrations. It prepares an existing trusted development checkout; native production provisioning and the graphical first-run wizard remain separate work.
+
 The Core owns essential hosting, local administration/recovery and the extension manager. It must run with zero optional plugins. Detached packages use the public SDK/API and their own processes; installing a plugin does not modify the Core Composer graph or inject its code into Symfony.
 
 Start with the [change-location index](NAVIGATION.md) to find a function, command, dependency or Linux-service configuration. The [dependency guide](DEPENDENCIES.md) identifies manifests, locks and generated libraries.
