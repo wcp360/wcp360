@@ -2,6 +2,8 @@
 
 **Status: an executable development candidate is available; the complete hosting engine and production release remain unqualified.**
 
+The [Core delivery roadmap](ROADMAP.md) records the current completion estimate, implemented candidate paths, remaining work, dependency order and acceptance criteria. The [capability register](CAPABILITY-MAP.md#delivery-snapshot) assigns a delivery status to each of the 233 capabilities; source-folder coverage is separate from product completion.
+
 Start with the [candidate run guide](../documentation/development/EXECUTABLE-CANDIDATE.md) for Docker/native setup, account enrollment, job processing, plugin lifecycle and the exact remaining acceptance work. Symfony 7.4 LTS/PHP 8.4, Twig, Turbo/Stimulus, candidate persistence, a Go plan builder and automated checks are now implemented on the dedicated draft branch.
 
 The [checkout installer](installer/recipes/README.md) now records private durable checkpoints, prevents concurrent runs and provides read-only `--status` plus explicit `--resume`. It verifies source/configuration identity, rebuilds repeatable preparation outputs and blocks automatic replay after failed or interrupted database migrations. It prepares an existing trusted development checkout; native production provisioning and the graphical first-run wizard remain separate work.

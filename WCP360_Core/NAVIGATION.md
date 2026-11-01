@@ -8,6 +8,7 @@ The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21
 
 | I need to change… | Start here | Then follow |
 | :--- | :--- | :--- |
+| Current completion estimate, delivered paths and remaining Core work | [Core roadmap](ROADMAP.md) | Weighted maturity, ordered milestones, acceptance criteria and the [233-capability delivery register](CAPABILITY-MAP.md#delivery-snapshot) |
 | A business function or validation rule | [Module index](src/Module/README.md) | Owning module's Domain/ or Application/ |
 | A function reused across several domains | [Shared foundations](src/Shared/README.md) | Shared Http/Security primitives where applicable; keep domain-specific policy in its module |
 | A panel CLI command | [Command guide](bin/README.md) | src/Module/<Domain>/UI/Console/ calling the same application use case as HTTP |

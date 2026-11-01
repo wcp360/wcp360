@@ -14,6 +14,20 @@ Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369
 | Shared context/secret-reference/redaction primitives had no named source anchor. | Add [Shared/Security](src/Shared/Security/README.md); preserve authoritative domain policy and accepted system boundaries. |
 | The Core/root README diagrams omitted directories that already exist. | Update the diagrams and link this owner map from the navigation indexes. |
 
+
+## Delivery snapshot
+
+**Assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
+
+| Candidate status | Rows | Meaning |
+| :--- | ---: | :--- |
+| Demonstrated | 5 | The stated bounded candidate path executes and has retained test evidence; the complete production capability is not thereby accepted. |
+| Partial | 67 | Implemented candidate code, helper or probe covers only part of this capability. |
+| Planned | 161 | No implemented Core product workflow was demonstrated for this capability; ownership/documentation or unrelated infrastructure alone is insufficient. |
+| **Total** | **233** | **One status per existing capability; all production acceptance remains open.** |
+
+These row counts are not the overall completion percentage. The weighted roadmap estimate is approximately 20% complete / 80% remaining (15–25% completion range). The five-OS userspace matrix and the Debian 13 privileged VM have different qualification boundaries.
+
 ## Domain summary
 
 The README domains describe capabilities; Core modules describe cohesive ownership. Several README domains can share a module, and a cross-resource capability has one primary coordinator with explicit collaborators.
@@ -76,341 +90,341 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 
 ### Authentication and access protection
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Sign-in and sign-out | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Passkeys / WebAuthn | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Access recovery | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Sensitive-action reauthentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Abuse protection | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Passwords | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Sign-in history | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Local recovery access | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Sign-in and sign-out | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Demonstrated — Candidate sign-in/out forms, CSRF and real HTTP sessions. | [M1](ROADMAP.md#m1) |
+| Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
+| Passkeys / WebAuthn | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
+| Access recovery | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
+| Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Context-bound, expiring candidate sessions; full session administration absent. | [M1](ROADMAP.md#m1) |
+| Sensitive-action reauthentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
+| Abuse protection | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Login throttling only; wider abuse policy absent. | [M1](ROADMAP.md#m1) |
+| Passwords | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Argon2id enrollment/login; complete reset/rotation lifecycle absent. | [M1](ROADMAP.md#m1) |
+| Sign-in history | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
+| Local recovery access | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
 
 ### Permissions, delegation, and account separation
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| ROOT / RESELLER / USER roles | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Action-level permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Ownership checks | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Reseller delegation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Policy inheritance | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Effective permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Data isolation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Support mode / impersonation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Service accounts | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| ROOT / RESELLER / USER roles | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — ADMIN/USER candidate contexts; ROOT/RESELLER policy absent. | [M1](ROADMAP.md#m1) |
+| Action-level permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — One fixed candidate.hosting.plan membership permission. | [M1](ROADMAP.md#m1) |
+| Ownership checks | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Candidate tenant-plan and job ownership checks. | [M1](ROADMAP.md#m1) |
+| Reseller delegation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Policy inheritance | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Effective permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Direct membership check; no general effective-policy evaluator. | [M4](ROADMAP.md#m4) |
+| Data isolation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Candidate tenant/context checks; production database grants absent. | [M1](ROADMAP.md#m1) |
+| Support mode / impersonation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
+| Service accounts | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
+| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Account/password/context checks; complete revocation/fencing absent. | [M1](ROADMAP.md#m1) |
 
 ### Customers, resellers, and account lifecycle
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Account creation | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Onboarding | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Customer profile | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Resource inventory | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Targeted suspension | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Reactivation | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Closure and deletion | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Ownership transfer | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Demo accounts | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
-| Trial accounts | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Account creation | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — CLI enrollment creates distinct account and tenant identities. | [M4](ROADMAP.md#m4) |
+| Onboarding | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Interactive enrollment only; full customer onboarding absent. | [M4](ROADMAP.md#m4) |
+| Customer profile | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Resource inventory | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Candidate tenant/site/job views; general resource inventory absent. | [M4](ROADMAP.md#m4) |
+| Targeted suspension | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Reactivation | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Closure and deletion | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Ownership transfer | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Demo accounts | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Trial accounts | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
 
 ### Hosting plans, quotas, and usage metering
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Plan catalog | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| Resource limits | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| Storage and inodes | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| Bandwidth | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| CPU, RAM, and processes | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| I/O and connections | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| Upgrades and exceptions | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| Limit violations | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
-| Usage history | [Observability](src/Module/Observability/README.md) | [Tenancy](src/Module/Tenancy/README.md) |
-| Usage export | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Plan catalog | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Resource limits | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Storage and inodes | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Bandwidth | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| CPU, RAM, and processes | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| I/O and connections | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Upgrades and exceptions | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Limit violations | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Usage history | [Observability](src/Module/Observability/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Usage export | [Tenancy](src/Module/Tenancy/README.md) | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M4](ROADMAP.md#m4) |
 
 ### Websites, virtual hosts, and HTTP routing
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Site provisioning | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Document roots | [Hosting](src/Module/Hosting/README.md) | [Files](src/Module/Files/README.md) |
-| Static and PHP sites | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Nginx configuration | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Web subdomains and aliases | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Redirects | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Reverse proxy | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Per-site rules | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Directory access | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Caching and compression | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| HTTP logs | [Observability](src/Module/Observability/README.md) | [Hosting](src/Module/Hosting/README.md) |
-| Configuration apply and recovery | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Site provisioning | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Synthetic .test plans and guarded disposable hosting activation. | [M5](ROADMAP.md#m5) |
+| Document roots | [Hosting](src/Module/Hosting/README.md) | [Files](src/Module/Files/README.md) | Partial — Fixed candidate tenant paths; general document-root lifecycle absent. | [M5](ROADMAP.md#m5) |
+| Static and PHP sites | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Embedded PHP demo and isolated HTTP probes; arbitrary apps absent. | [M5](ROADMAP.md#m5) |
+| Nginx configuration | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed Go templates and disposable Nginx/FPM execution. | [M5](ROADMAP.md#m5) |
+| Web subdomains and aliases | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Redirects | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Reverse proxy | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed FastCGI/Worker upstreams; general proxy administration absent. | [M5](ROADMAP.md#m5) |
+| Per-site rules | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Directory access | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Hidden-file and missing-script refusals; directory policy UI absent. | [M5](ROADMAP.md#m5) |
+| Caching and compression | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| HTTP logs | [Observability](src/Module/Observability/README.md) | [Hosting](src/Module/Hosting/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Configuration apply and recovery | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Candidate apply/recovery; privileged VM path is Debian 13-specific. | [M5](ROADMAP.md#m5) |
 
 ### Domains, authoritative DNS, and resolution
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Domain inventory | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Name validation | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Zones and records | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| SOA, TTL, and serial numbers | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Zone templates | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Zone import and export | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| DNSSEC | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Nameservers and glue | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Primary and secondary DNS | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Resolution diagnostics | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Reverse DNS | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| CAA, TLSA, and DANE | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| DNS configuration drift | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Domain inventory | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Name validation | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Strict ASCII .test validation; public/IDN domain workflow absent. | [M5](ROADMAP.md#m5) |
+| Zones and records | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| SOA, TTL, and serial numbers | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Zone templates | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Zone import and export | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| DNSSEC | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Nameservers and glue | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Primary and secondary DNS | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Resolution diagnostics | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Reverse DNS | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| CAA, TLSA, and DANE | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| DNS configuration drift | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
 
 ### Certificates, ACME, and TLS policies
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Certificate inventory | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| ACME accounts and authorities | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Orders and challenges | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Wildcard certificates | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Renewal | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Import and CSR | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Deployment across services | [Hosting](src/Module/Hosting/README.md) | [Mail](src/Module/Mail/README.md), [Platform](src/Module/Platform/README.md) |
-| TLS profiles | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Expiration and rotation | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
-| Post-application verification | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Certificate inventory | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| ACME accounts and authorities | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Orders and challenges | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Wildcard certificates | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Renewal | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Import and CSR | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Deployment across services | [Hosting](src/Module/Hosting/README.md) | [Mail](src/Module/Mail/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| TLS profiles | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Expiration and rotation | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Post-application verification | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
 
 ### PHP, PHP-FPM, and site dependencies
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| PHP versions | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| Per-site assignment | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| PHP-FPM pools | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| PHP settings | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| Effective configuration | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| PHP extensions | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| OPcache and diagnostics | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| Command-line PHP | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| Composer | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| Startup and health | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
-| Version changes | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| PHP versions | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Fixed candidate runtime profiles; hosted version inventory absent. | [M5](ROADMAP.md#m5) |
+| Per-site assignment | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Partial — FPM/Worker assignment; hosted PHP-version assignment absent. | [M5](ROADMAP.md#m5) |
+| PHP-FPM pools | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Fixed rendered pools and non-root runtime probes. | [M5](ROADMAP.md#m5) |
+| PHP settings | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Fixed generated directives; general per-site settings absent. | [M5](ROADMAP.md#m5) |
+| Effective configuration | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Partial — One revisioned default/inheritance policy; full effective settings absent. | [M5](ROADMAP.md#m5) |
+| PHP extensions | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| OPcache and diagnostics | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Command-line PHP | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Composer | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M5](ROADMAP.md#m5) |
+| Startup and health | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Candidate process/service probes; general pool health management absent. | [M5](ROADMAP.md#m5) |
+| Version changes | [Hosting](src/Module/Hosting/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M5](ROADMAP.md#m5) |
 
 ### Databases and engine access
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Engine inventory | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Database creation | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Users and credentials | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Privileges | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Remote access | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Data import | [Data](src/Module/Data/README.md) | [Files](src/Module/Files/README.md) |
-| Data export | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Backup and restore | [BackupRestore](src/Module/BackupRestore/README.md) | [Data](src/Module/Data/README.md) |
-| Connections and locks | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Slow queries | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| PostgreSQL extensions | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Deletion and dependencies | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
-| Panel data separation | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Engine inventory | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Database creation | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Users and credentials | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Privileges | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Remote access | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Data import | [Data](src/Module/Data/README.md) | [Files](src/Module/Files/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Data export | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Backup and restore | [BackupRestore](src/Module/BackupRestore/README.md) | [Data](src/Module/Data/README.md) | Partial — Candidate control-plane dump/restore; tenant backup service absent. | [M7](ROADMAP.md#m7) |
+| Connections and locks | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Slow queries | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| PostgreSQL extensions | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Deletion and dependencies | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Panel data separation | [Data](src/Module/Data/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
 
 ### Mail services and deliverability
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Mail domains | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Mailboxes | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Quotas and sending limits | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Aliases and recipient groups | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Forwarders and catch-all | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Vacation replies | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Sieve filters | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| SMTP, IMAP, and authentication | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Autoconfig and Autodiscover | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Webmail access | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Mail queue | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| SPF, DKIM, and DMARC | [Mail](src/Module/Mail/README.md) | [Hosting](src/Module/Hosting/README.md) |
-| DKIM key rotation | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Baseline mail protection | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Outbound abuse and reputation | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| MTA-STS and TLS-RPT | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Deliverability diagnostics | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
-| Mail logs | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Mail domains | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Mailboxes | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Quotas and sending limits | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Aliases and recipient groups | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Forwarders and catch-all | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Vacation replies | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Sieve filters | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| SMTP, IMAP, and authentication | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Autoconfig and Autodiscover | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Webmail access | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Mail queue | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| SPF, DKIM, and DMARC | [Mail](src/Module/Mail/README.md) | [Hosting](src/Module/Hosting/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| DKIM key rotation | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Baseline mail protection | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Outbound abuse and reputation | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| MTA-STS and TLS-RPT | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Deliverability diagnostics | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
+| Mail logs | [Mail](src/Module/Mail/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M8](ROADMAP.md#m8) |
 
 ### File management and web transfers
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| File explorer | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Creation and renaming | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Copy and move | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Uploads | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Downloads | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Text editor | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Edit conflicts | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Archives | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| File permissions | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Deletion and trash | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Search and size calculation | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Path protection | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
-| Operation history | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| File explorer | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Creation and renaming | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Copy and move | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Uploads | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Downloads | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Text editor | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Edit conflicts | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Archives | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| File permissions | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Deletion and trash | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Search and size calculation | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Path protection | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
+| Operation history | [Files](src/Module/Files/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M6](ROADMAP.md#m6) |
 
 ### SSH, SFTP, and technical access
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Server SSH configuration | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md) |
-| User keys | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md), [Platform](src/Module/Platform/README.md) |
-| SFTP accounts | [Tenancy](src/Module/Tenancy/README.md) | [Files](src/Module/Files/README.md), [Platform](src/Module/Platform/README.md) |
-| Delegated shell access | [Tenancy](src/Module/Tenancy/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) |
-| Access restrictions | [Tenancy](src/Module/Tenancy/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) |
-| Administrator lockout prevention | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md) |
-| SSH host keys | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md) |
-| Sessions and logs | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) |
-| Credential rotation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md), [Platform](src/Module/Platform/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Server SSH configuration | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| User keys | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| SFTP accounts | [Tenancy](src/Module/Tenancy/README.md) | [Files](src/Module/Files/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Delegated shell access | [Tenancy](src/Module/Tenancy/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Access restrictions | [Tenancy](src/Module/Tenancy/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Administrator lockout prevention | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| SSH host keys | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Sessions and logs | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Credential rotation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
 
 ### Local backups, restoration, and retention
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Backup policies | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Per-resource backups | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Recovery points | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Execution and progress | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Data consistency | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Encryption | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Verification | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Retention and pruning | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Targeted restoration | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Restore preparation | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Restore results | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
-| Independent recovery access | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Backup policies | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Per-resource backups | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Selected candidate PostgreSQL data only; files/mail/config coverage absent. | [M7](ROADMAP.md#m7) |
+| Recovery points | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Execution and progress | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — CLI helper execution; scheduled product backup jobs absent. | [M7](ROADMAP.md#m7) |
+| Data consistency | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Selected logical database snapshots; cross-resource consistency absent. | [M7](ROADMAP.md#m7) |
+| Encryption | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Verification | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Digest and logical-restore comparisons; full recovery verification absent. | [M7](ROADMAP.md#m7) |
+| Retention and pruning | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Targeted restoration | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Restore into guarded empty test database; tenant restore workflow absent. | [M7](ROADMAP.md#m7) |
+| Restore preparation | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Backup path/digest and empty test-database admission guards. | [M7](ROADMAP.md#m7) |
+| Restore results | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Selected database-state comparison; full application restore reporting absent. | [M7](ROADMAP.md#m7) |
+| Independent recovery access | [BackupRestore](src/Module/BackupRestore/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M7](ROADMAP.md#m7) |
 
 ### Migration and transfers between instances
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Source inventory | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Compatibility checks | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Resource mapping | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Destination capacity | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Tracked transfers | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Final synchronization | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Cutover preparation | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Post-transfer validation | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| Recovery and cleanup | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
-| External formats | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Source inventory | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Compatibility checks | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Resource mapping | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Destination capacity | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Tracked transfers | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Final synchronization | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Cutover preparation | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Post-transfer validation | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| Recovery and cleanup | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
+| External formats | [Transfers](src/Module/Transfers/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M11](ROADMAP.md#m11) |
 
 ### System, services, packages, and local storage
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Server identity | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| System users and groups | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Services | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Service dependencies | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Processes | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Packages and repositories | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Security updates | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| System scheduling | [Operations](src/Module/Operations/README.md) | [Platform](src/Module/Platform/README.md) |
-| Volumes and mounts | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Disk capacity and health | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| System logs | [Observability](src/Module/Observability/README.md) | [Platform](src/Module/Platform/README.md) |
-| Maintenance and reboot | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Server identity | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Strict target and boot-bound fixture identity; full node inventory absent. | [M9](ROADMAP.md#m9) |
+| System users and groups | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed disposable identities and UID checks; production lifecycle absent. | [M9](ROADMAP.md#m9) |
+| Services | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Candidate systemd units and fixed processes only. | [M9](ROADMAP.md#m9) |
+| Service dependencies | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed candidate startup ordering; general service dependency policy absent. | [M9](ROADMAP.md#m9) |
+| Processes | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Candidate child supervision; general process controls absent. | [M9](ROADMAP.md#m9) |
+| Packages and repositories | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Security updates | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| System scheduling | [Operations](src/Module/Operations/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Volumes and mounts | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Disk capacity and health | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| System logs | [Observability](src/Module/Observability/README.md) | [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Maintenance and reboot | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Explicit Debian 13 VM reboot/re-arm; operator maintenance workflow absent. | [M9](ROADMAP.md#m9) |
 
 ### Networking, IP addresses, and firewall
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Interface inventory | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| IPv4 and IPv6 | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| IP pools and reservations | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Routes and gateways | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Resolvers and local naming | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Ports and sockets | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Firewall rules | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Blocks and exceptions | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Network diagnostics | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
-| Sensitive network changes | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Interface inventory | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| IPv4 and IPv6 | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| IP pools and reservations | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Routes and gateways | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Resolvers and local naming | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Ports and sockets | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed candidate Unix sockets; host port/socket inventory absent. | [M9](ROADMAP.md#m9) |
+| Firewall rules | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Blocks and exceptions | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Network diagnostics | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Sensitive network changes | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
 
 ### Security, secrets, and baseline compliance
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Security center | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) |
-| Baseline hardening | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| Sign-in attack prevention | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) |
-| Installed protection integrations | [Platform](src/Module/Platform/README.md) | [Mail](src/Module/Mail/README.md), [Observability](src/Module/Observability/README.md) |
-| Application secrets | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) |
-| Sensitive-data redaction | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| Internal keys and certificates | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| Request validation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) |
-| Change auditing | [Observability](src/Module/Observability/README.md) | [Operations](src/Module/Operations/README.md) |
-| Evidence retention | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Security center | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Baseline hardening | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Partial — Candidate identity/allowlist/path guards; complete hardening policy absent. | [M2](ROADMAP.md#m2) |
+| Sign-in attack prevention | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Candidate login throttling; broader protection lifecycle absent. | [M1](ROADMAP.md#m1) |
+| Installed protection integrations | [Platform](src/Module/Platform/README.md) | [Mail](src/Module/Mail/README.md), [Observability](src/Module/Observability/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Application secrets | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Private generated local secret; managed secret rotation/store absent. | [M1](ROADMAP.md#m1) |
+| Sensitive-data redaction | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Partial — Selected readiness/installer redaction; system-wide coverage absent. | [M9](ROADMAP.md#m9) |
+| Internal keys and certificates | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Request validation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Selected CSRF, schema and bounded-input checks. | [M1](ROADMAP.md#m1) |
+| Change auditing | [Observability](src/Module/Observability/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Append-only candidate audit; general audit query/retention absent. | [M2](ROADMAP.md#m2) |
+| Evidence retention | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Partial — Source-bound CI and private journal; product evidence retention absent. | [M9](ROADMAP.md#m9) |
 
 ### Metrics, alerts, incidents, and diagnostics
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Server health | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| System metrics | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Per-account metrics | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| History and trends | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Service checks | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Alert rules | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Notification center | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Local alert fallback | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Incident management | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
-| Diagnostic bundles | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Server health | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Partial — Database SELECT 1 endpoint; full server health inventory absent. | [M9](ROADMAP.md#m9) |
+| System metrics | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Per-account metrics | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| History and trends | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Service checks | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Partial — Fixed candidate runtime probes; operator service-check catalog absent. | [M9](ROADMAP.md#m9) |
+| Alert rules | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Notification center | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Local alert fallback | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Incident management | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Diagnostic bundles | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
 
 ### Jobs, reconciliation, and long-running operations
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Task center | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Job persistence | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Idempotency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Locks and concurrency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Preconditions | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Steps and checkpoints | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Recovery and retries | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Cancellation and compensation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Timeouts and resource budgets | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
-| Reconciliation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Task center | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Candidate plan/job dashboard only. | [M2](ROADMAP.md#m2) |
+| Job persistence | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Demonstrated — Durable candidate job state and worker processing. | [M2](ROADMAP.md#m2) |
+| Idempotency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Demonstrated — Candidate request fingerprint, uniqueness and retry tests. | [M2](ROADMAP.md#m2) |
+| Locks and concurrency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — PostgreSQL claims and install lock; general leases/fencing absent. | [M2](ROADMAP.md#m2) |
+| Preconditions | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Candidate authorization/input/revision checks; general contract absent. | [M2](ROADMAP.md#m2) |
+| Steps and checkpoints | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Installer/broker checkpoints; generic operation steps absent. | [M2](ROADMAP.md#m2) |
+| Recovery and retries | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Conservative uncertain outcomes; general retry policy absent. | [M2](ROADMAP.md#m2) |
+| Cancellation and compensation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Planned | [M2](ROADMAP.md#m2) |
+| Timeouts and resource budgets | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Selected child/IPC bounds; global task budgets absent. | [M2](ROADMAP.md#m2) |
+| Reconciliation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Candidate UNKNOWN_OUTCOME and broker recovery; generic flow absent. | [M2](ROADMAP.md#m2) |
 
 ### Configuration, APIs, and application exchanges
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Hierarchical configuration | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) |
-| Configuration validation | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) |
-| Diff and apply | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) |
-| REST API | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) |
-| Identifiers and correlation | [Operations](src/Module/Operations/README.md) | [Platform](src/Module/Platform/README.md) |
-| Tokens and restrictions | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts |
-| Outbound webhooks | [Operations](src/Module/Operations/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) |
-| Inbound webhooks | [Operations](src/Module/Operations/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) |
-| Structured import and export | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) |
-| Capability detection | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Hierarchical configuration | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — One global default and site override; general hierarchy absent. | [M9](ROADMAP.md#m9) |
+| Configuration validation | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Selected forms/profiles; general configuration model absent. | [M9](ROADMAP.md#m9) |
+| Diff and apply | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Fixed plans and guarded apply; general diff/apply workflow absent. | [M9](ROADMAP.md#m9) |
+| REST API | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Experimental workbench API; canonical production API absent. | [M9](ROADMAP.md#m9) |
+| Identifiers and correlation | [Operations](src/Module/Operations/README.md) | [Platform](src/Module/Platform/README.md) | Partial — Candidate UUID identities; end-to-end correlation absent. | [M9](ROADMAP.md#m9) |
+| Tokens and restrictions | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M9](ROADMAP.md#m9) |
+| Outbound webhooks | [Operations](src/Module/Operations/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Inbound webhooks | [Operations](src/Module/Operations/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Structured import and export | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Planned | [M9](ROADMAP.md#m9) |
+| Capability detection | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Operations](src/Module/Operations/README.md) | Partial — Strict OS/runtime detection; full service capability discovery absent. | [M9](ROADMAP.md#m9) |
 
 ### Installation, updates, and panel autonomy
 
-| README capability | Primary owner | Collaborators |
-| :--- | :--- | :--- |
-| Prerequisite checks | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Installation status | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Initial configuration | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Update verification | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Panel migrations | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Controlled maintenance | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Version rollback | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| License entitlement status | [Tenancy](src/Module/Tenancy/README.md) | [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
-| Extension independence | [ExtensionManagement](src/Module/ExtensionManagement/README.md) | [Setup](src/Module/Setup/README.md), [Hosting](src/Module/Hosting/README.md), [Mail](src/Module/Mail/README.md), [Data](src/Module/Data/README.md), [Files](src/Module/Files/README.md), [BackupRestore](src/Module/BackupRestore/README.md) |
-| Private-service availability | [ExtensionManagement](src/Module/ExtensionManagement/README.md) | [Setup](src/Module/Setup/README.md) |
+| README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
+| :--- | :--- | :--- | :--- | :--- |
+| Prerequisite checks | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Read-only actual OS/PHP/PostgreSQL checks for the candidate scope. | [M3](ROADMAP.md#m3) |
+| Installation status | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Private journal with read-only status and explicit resume. | [M3](ROADMAP.md#m3) |
+| Initial configuration | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Partial — Private local config and CLI enrollment; graphical wizard absent. | [M3](ROADMAP.md#m3) |
+| Update verification | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Panel migrations | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Partial — Candidate migrations and uncertainty guards; supported release upgrade absent. | [M7](ROADMAP.md#m7) |
+| Controlled maintenance | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Version rollback | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| License entitlement status | [Tenancy](src/Module/Tenancy/README.md) | [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M4](ROADMAP.md#m4) |
+| Extension independence | [ExtensionManagement](src/Module/ExtensionManagement/README.md) | [Setup](src/Module/Setup/README.md), [Hosting](src/Module/Hosting/README.md), [Mail](src/Module/Mail/README.md), [Data](src/Module/Data/README.md), [Files](src/Module/Files/README.md), [BackupRestore](src/Module/BackupRestore/README.md) | Partial — Reference plugin removal preserves candidate Core operations. | [M10](ROADMAP.md#m10) |
+| Private-service availability | [ExtensionManagement](src/Module/ExtensionManagement/README.md) | [Setup](src/Module/Setup/README.md) | Partial — Local reference path has no vendor dependency; full offline-Core proof pending. | [M10](ROADMAP.md#m10) |
 
 ## Verification scope
 
