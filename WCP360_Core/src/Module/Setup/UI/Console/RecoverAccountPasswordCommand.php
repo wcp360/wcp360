@@ -39,7 +39,7 @@ final class RecoverAccountPasswordCommand extends Command
         }
         $username = $input->getArgument('username');
         $surface = $input->getOption('surface');
-        if (!is_string($username) || !is_string($surface)) {
+        if (!is_string($surface)) {
             $this->result($output, 'refused');
             return self::INVALID;
         }
