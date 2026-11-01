@@ -1,6 +1,6 @@
 # Core verification locations
 
-**Status: suite directories are prepared with navigation documents. No executable Core test suite or passing result is supplied by this scaffold.** Add actual tests and bootstrap with the reviewed implementation.
+**Status: the development candidate includes executable PHPUnit unit, integration/functional and plugin-lifecycle suites, plus a separate Panther browser suite. Contract, Security and Installer remain organizational locations; security and installer checks also live in implemented suites and the disposable Linux/VM harnesses. A directory is not evidence of a passing test.**
 
 | Test source | Purpose |
 | :--- | :--- |
@@ -12,6 +12,8 @@
 | [Installer](Installer/README.md) | Fresh install, rejected preconditions, interrupted/resumed setup, repair, qualified upgrades and recovery rehearsal. |
 | [Browser](Browser/README.md) | Twig/UX workflows, native form behavior, keyboard focus, responsive layout and visible error/loading/empty states. |
 | [Fixtures](Fixtures/README.md) | Shared deterministic settings, input/output examples, fake tenant/resource identities and expected rendered configuration. |
+
+Run `composer check` from Core for Symfony-aware PHPStan, analyzer regressions, PHPUnit and framework lints. Run `composer test:browser` in the documented Chromium/WebDriver environment. See the [testing guide](../../documentation/development/TESTING.md) for commands, scopes, fixture safeguards and Linux/VM evidence. The deliberate-error PHPStan fixtures live in `tools/phpstan/fixtures`, outside application test discovery.
 
 Organize implemented test files by the same domain/service names as the source. Framework configuration, deterministic inputs and the accepted contract/requirement must accompany the implementation. Keep the shared synthetic fixture source in Fixtures instead of copying test data across suite directories.
 

@@ -1,3 +1,7 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+
 parameters:
     level: 8
     phpVersion: 80400
@@ -7,6 +11,13 @@ parameters:
         - config/bootstrap.php
         - public/index.php
         - bin/console
+        - tools/phpstan/bootstrap.php
+        - tools/phpstan/prepare.php
+        - tools/phpstan/console-application.php
+        - tools/phpstan/verify.php
         - ../WCP360_SDK/php/CandidateJobSummary.php
         - ../WCP360_Plugins/wcp360-reference-report/bin/report.php
     tmpDir: var/phpstan
+    symfony:
+        containerXmlPath: var/cache/test/user/Wcp360_Core_KernelTestDebugContainer.xml
+        consoleApplicationLoader: tools/phpstan/console-application.php

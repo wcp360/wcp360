@@ -21,7 +21,7 @@ Use one maintained configuration for a check. Panther and ZAP appear in more tha
 | :--- | :--- | :--- |
 | PHPUnit | Unit, integration and HTTP functional tests using KernelTestCase/WebTestCase. | Existing; separate PostgreSQL and local SQLite execution. |
 | PHPStan | Type and correctness analysis of implemented PHP packages. | Existing; level 8, PHP 8.4, explicit paths and no blanket baseline. |
-| PHPStan Symfony | Understand the compiled container, services and Symfony APIs. | Complement; install the compatible extension and regenerate container XML before analysis. |
+| PHPStan Symfony | Understand the compiled container, services and Symfony APIs. | Existing; locked extension, freshly prepared test/user container XML, Console definitions and positive/negative rule regressions. |
 | Symfony Test Pack | Symfony testing dependencies and integration. | Existing; explicit project configuration, without enabling arbitrary Composer plugins. |
 | PHP-CS-Fixer | Reproducible PHP formatting and conventions. | Complement; use a reviewed ruleset, dry-run in CI and explicit local fixes. |
 | Symfony Panther | Real Chromium/WebDriver, Turbo and Stimulus journeys. | Existing; separate browser job. |
@@ -32,7 +32,7 @@ Use one maintained configuration for a check. Panther and ZAP appear in more tha
 | Composer Audit | Known vulnerability checks against the actual Composer lock. | Existing in Linux CI; retain advisory identity and affected dependency paths. |
 | Symfony Security Checker / Symfony CLI | Additional dependency checking under the maintained Symfony tooling. | Complement; prefer Composer audit or the current Symfony CLI `check:security` command over copying historical checker setup. |
 
-The selected PHP foundation is PHPUnit, PHPStan with Symfony-aware analysis, and consistent formatting. The current lock implements PHPUnit/PHPStan/Test Pack/Panther; it does not yet install PHPStan Symfony, PHP-CS-Fixer, Rector, Psalm, Infection or Pest. Each addition must resolve against PHP 8.4 and the existing lock, rather than promising universal compatibility.
+The selected PHP foundation is PHPUnit, PHPStan with Symfony-aware analysis, and consistent formatting. The current lock implements PHPUnit/PHPStan/PHPStan Symfony/Test Pack/Panther; it does not yet install PHP-CS-Fixer, Rector, Psalm, Infection or Pest. Each addition must resolve against PHP 8.4 and the existing lock, rather than promising universal compatibility.
 
 ## Go agents and privileged operations
 

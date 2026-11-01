@@ -1,6 +1,6 @@
 # Plugin and Core continuity tests
 
-**Status: test source location reserved; no executable test or passing result is supplied by this README.**
+**Status: PluginLifecycleTest exercises the detached reference-report candidate and Core continuity through the implemented lifecycle transitions. The full plugin catalogue and production lifecycle remain unqualified; additional acceptance scenarios below must accompany each implemented capability.**
 
 Install, enable, crash, quarantine, disable, update and remove detached optional plugins while retaining Core operations.
 

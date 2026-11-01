@@ -27,7 +27,8 @@ The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21
 | Installation and upgrade | [Installer](installer/README.md) and [Setup](src/Module/Setup/README.md) | preflight/, recipes/, upgrades/, recovery/; restricted wizard and durable progress |
 | Go daemon/broker behavior | [Agents](agents/README.md) | Separate wcpd / wcp-privd components and accepted protocol/privilege contracts |
 | Python diagnostics | [Diagnostics](diagnostics/README.md) | Specialized, bounded, non-root tooling |
-| Regression/contract/target tests | [Tests](tests/README.md) | Prepared Unit, Contract, Integration, Security, Lifecycle, Installer, Browser and Fixtures source directories; executable suites accompany implementation |
+| Symfony-aware static analysis | [Testing guide](../documentation/development/TESTING.md#symfony-aware-analysis) | phpstan.neon and tools/phpstan/: synthetic Kernel/container preparation, Console loader and deliberately invalid rule fixtures |
+| Regression/contract/target tests | [Tests](tests/README.md) | Executable Unit, Integration, Lifecycle and Browser suites; Contract, Security and Installer also retain organizational source locations |
 | Artifact assembly or a release | [Build](../WCP360_Build/README.md) | [Qualified release records](../WCP360_Releases/README.md) |
 
 ## Source tree
@@ -86,6 +87,7 @@ WCP360_Core/
 ├── translations/
 ├── agents/                         # wcpd and wcp-privd source components
 ├── diagnostics/                    # Non-root Python tools
+├── tools/phpstan/                  # Static-analysis bootstrap, Console loader and rule fixtures
 ├── installer/                      # Installation/bootstrap and recovery sources
 │   ├── preflight/
 │   ├── recipes/

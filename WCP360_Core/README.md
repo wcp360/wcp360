@@ -73,6 +73,7 @@ WCP360_Core/
 │   ├── wcpd/
 │   └── wcp-privd/
 ├── diagnostics/
+├── tools/phpstan/                  # Synthetic analysis container and rule-regression fixtures
 └── installer/
     ├── preflight/
     ├── recipes/

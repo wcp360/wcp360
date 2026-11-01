@@ -1,6 +1,6 @@
 # Integration and supported-target tests
 
-**Status: test source location reserved; no executable test or passing result is supplied by this README.**
+**Status: executable PHPUnit functional/integration suites cover the candidate workbench, enrollment, application-server policy/UI and isolated-activation state transitions. SQLite supports portable checks; Linux CI also exercises real PostgreSQL. Broker peer credentials, physical services and reboot recovery are checked by separate disposable Linux/VM harnesses.**
 
 Actual persistence, transport, agent and selected Linux-service integration on disposable supported environments.
 
