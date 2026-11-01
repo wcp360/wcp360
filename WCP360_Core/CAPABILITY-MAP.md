@@ -30,6 +30,8 @@ These row counts are not the overall completion percentage. The weighted roadmap
 
 The [administrator MFA candidate](src/Module/IdentityAccess/README.md#administrator-mfa-candidate) moves Multifactor authentication, Access recovery and Sensitive-action reauthentication from Planned to Partial. It supplies TOTP, second-factor backup codes and a fresh-MFA mutation gate; password recovery, inline reauthentication and canonical production integration remain absent. Current-source executed outcomes belong to draft PR #116, separately from the initial assessment.
 
+The [shared candidate authorization boundary](src/Module/IdentityAccess/README.md#candidate-authorization-and-access-blocks) now applies one current-database rule to visibility and execution, with audited administrator access blocks for the single existing permission. Action-level permissions, Effective permissions and Revocation and role changes remain Partial; the counts above do not change. Canonical policy composition, the 82 canonical permissions and production identity separation remain unfinished. Current-source CI for this slice must be recorded separately from the earlier checkpoints.
+
 ## Domain summary
 
 The README domains describe capabilities; Core modules describe cohesive ownership. Several README domains can share a module, and a cross-resource capability has one primary coordinator with explicit collaborators.
@@ -110,15 +112,15 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
 | :--- | :--- | :--- | :--- | :--- |
 | ROOT / RESELLER / USER roles | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — ADMIN/USER candidate contexts; ROOT/RESELLER policy absent. | [M1](ROADMAP.md#m1) |
-| Action-level permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — One fixed candidate.hosting.plan membership permission. | [M1](ROADMAP.md#m1) |
+| Action-level permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — One fixed candidate.hosting.plan permission; shared current active-USER/membership/block checks, no canonical registry. | [M1](ROADMAP.md#m1) |
 | Ownership checks | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Candidate tenant-plan and job ownership checks. | [M1](ROADMAP.md#m1) |
 | Reseller delegation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M4](ROADMAP.md#m4) |
 | Policy inheritance | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M4](ROADMAP.md#m4) |
-| Effective permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Direct membership check; no general effective-policy evaluator. | [M4](ROADMAP.md#m4) |
+| Effective permissions | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Shared database evaluation and read-only CLI for one candidate permission; canonical role/override/delegation composition absent. | [M4](ROADMAP.md#m4) |
 | Data isolation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Candidate tenant/context checks; production database grants absent. | [M1](ROADMAP.md#m1) |
 | Support mode / impersonation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
 | Service accounts | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
-| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Account/password/context checks and MFA-revision invalidation; complete revocation/fencing absent. | [M1](ROADMAP.md#m1) |
+| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Audited persistent tenant access blocks, current-authority worker checks and MFA-revision invalidation; general role changes/revocation fencing absent. | [M1](ROADMAP.md#m1) |
 
 ### Customers, resellers, and account lifecycle
 

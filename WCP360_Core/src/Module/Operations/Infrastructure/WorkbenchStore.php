@@ -4,18 +4,20 @@ declare(strict_types=1);
 namespace Wcp360\Core\Module\Operations\Infrastructure;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
+use Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization;
 final readonly class WorkbenchStore
 {
+    private CandidateAuthorization $authorization;
     public function __construct(public Connection $db)
     {
         if ($db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\SQLitePlatform) $db->executeStatement('PRAGMA foreign_keys = ON');
+        $this->authorization = new CandidateAuthorization($db);
     }
     public static function id(): string { return Uuid::v7()->toRfc4122(); }
     public static function now(): string { return gmdate('Y-m-d\TH:i:s\Z'); }
     public function requirePermission(string $actor, string $tenant): void
     {
-        $allowed = $this->db->fetchOne("SELECT 1 FROM wcp_candidate_memberships m JOIN wcp_candidate_users u ON u.id=m.user_id WHERE m.user_id=? AND m.tenant_id=? AND m.permission='candidate.hosting.plan' AND u.context='user' AND u.active=1", [$actor,$tenant]);
-        if (!$allowed) throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Tenant permission required.');
+        $this->authorization->requireTenantPermission($actor, $tenant);
     }
     public function requireActivationGrant(string $actor,string $tenant):void
     {
@@ -24,8 +26,7 @@ final readonly class WorkbenchStore
     }
     public function requireAdmin(string $actor, bool $lock=false): void
     {
-        $suffix=$lock && $this->db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform ? ' FOR UPDATE' : '';
-        if(!$this->db->fetchOne("SELECT id FROM wcp_candidate_users WHERE id=? AND context='admin' AND active=1".$suffix,[$actor]))throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Current admin authority required.');
+        $this->authorization->requireAdmin($actor, $lock);
     }
     public function audit(?string $actor, ?string $tenant, string $kind, ?string $resource): void
     {
@@ -34,7 +35,7 @@ final readonly class WorkbenchStore
     /** @return list<array<string, mixed>> */
     public function tenants(string $actor): array
     {
-        return $this->db->fetchAllAssociative('SELECT t.* FROM wcp_candidate_tenants t JOIN wcp_candidate_memberships m ON m.tenant_id=t.id WHERE m.user_id=? ORDER BY t.name,t.id',[$actor]);
+        return $this->authorization->tenantsForActor($actor);
     }
     /** @return list<array<string, mixed>> */
     public function jobs(string $actor, string $tenant): array

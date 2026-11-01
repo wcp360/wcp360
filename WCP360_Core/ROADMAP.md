@@ -41,7 +41,7 @@ Security, failure handling and integration are part of each workstream's unfinis
 | Workstream | Weight | Estimated maturity | Present evidence | Major unfinished work |
 | :--- | ---: | ---: | :--- | :--- |
 | Runtime architecture, bootstrap and toolchain | 8% | 70% | Kernel, locked dependencies, HTTP/CLI entry points, runtime contexts and static/build checks. | Accepted production integration, service ownership, packaging and deployment topology. |
-| IdentityAccess | 9% | 20% | Candidate login/logout, mandatory administrator TOTP, one-time backup codes, fresh-MFA gates, Argon2id, CSRF and context/session checks. | Production MFA/recovery integration, password recovery, passkeys, inline sensitive-action reauthentication, complete roles/delegation and token/session administration. |
+| IdentityAccess | 9% | 20% | Candidate login/logout, mandatory administrator TOTP, one-time backup codes, fresh-MFA gates, Argon2id, shared current-authority checks and audited tenant access blocks. | Production MFA/recovery integration, password recovery, passkeys, inline sensitive-action reauthentication, canonical policy composition, complete roles/delegation and token/session administration. |
 | Tenancy | 7% | 10% | Enrollment creates distinct account/tenant identities and one scoped membership. | Customer/reseller lifecycle, plans, entitlements, metering and enforceable quotas. |
 | Hosting: web, DNS, TLS and PHP | 15% | 20% | Typed `.test` plans, Go rendering, FPM/Worker selection and bounded real hosting experiments. | General site lifecycle, real domains, DNS, ACME/TLS, hosted PHP versions/extensions and safe runtime changes. |
 | Mail | 8% | 0% | Ownership and service-resource locations. | Mail domains/mailboxes, SMTP/IMAP, policy, quotas, signing, abuse protection, delivery and diagnostics. |
@@ -64,7 +64,7 @@ The candidate status columns in [CAPABILITY-MAP.md](CAPABILITY-MAP.md#capability
 | Delivered candidate path | Source and evidence | Remaining boundary |
 | :--- | :--- | :--- |
 | Symfony frontend/backend foundation | [Kernel](src/Kernel.php), [configuration](config/README.md), [Twig](templates/README.md), [assets](assets/README.md), locked Composer graph and browser tests. | The complete component library, accessibility/localization and production administration surfaces are unfinished. |
-| Local authentication and tenant authorization | [IdentityAccess](src/Module/IdentityAccess/README.md), [session boundaries](src/Shared/Security/SessionBoundary.php), [store](src/Module/Operations/Infrastructure/WorkbenchStore.php). | Only the candidate roles, membership checks and supported forms/routes are covered. |
+| Local authentication and tenant authorization | [IdentityAccess](src/Module/IdentityAccess/README.md), [session boundaries](src/Shared/Security/SessionBoundary.php), [authorization boundary](src/Module/IdentityAccess/Application/CandidateAuthorization.php) and delegated [store](src/Module/Operations/Infrastructure/WorkbenchStore.php). | Only candidate contexts, one tenant permission, explicit blocks and supported forms/routes are covered. |
 | Durable plan execution | [Operations](src/Module/Operations/README.md), [hosting use cases](src/Module/Hosting/README.md), fixed Go plan renderer. | Not a general production task engine or authorization model. |
 | Guarded hosted PHP | [Agent sources](agents/README.md), [application-server selection](src/Module/Hosting/Application/ApplicationServerPolicy.php), candidate templates and systemd units. | Synthetic applications and explicit disposable-container/VM admission; arbitrary customer deployment is absent. |
 | Reference plugin independence | [PluginRegistry](src/Module/ExtensionManagement/Application/PluginRegistry.php), [lifecycle tests](tests/Lifecycle/PluginLifecycleTest.php). | One fixed package, version and candidate capability; no general marketplace installer. |
@@ -96,6 +96,16 @@ This is a candidate metadata format and cryptographic primitive, not an approved
 
 This is second-factor recovery after password authentication, not forgotten-password recovery or an emergency key-loss bypass. Canonical production contracts, complete permissions, Unix identities, PostgreSQL grants, passkeys and the full sensitive-action reauthentication flow remain open. **M1 is not complete.**
 
+### Shared candidate authorization and administrator access blocks
+
+[CandidateAuthorization](src/Module/IdentityAccess/Application/CandidateAuthorization.php) centralizes current authority for the existing `candidate.hosting.plan` permission. Visibility, submission/API checks and worker execution require an active USER account, the exact tenant membership and no matching denial. Other permission names fail closed; an ADMIN context does not imply tenant access. [WorkbenchStore](src/Module/Operations/Infrastructure/WorkbenchStore.php) retains its existing facade and delegates these decisions, so callers do not maintain a second policy.
+
+[CandidatePermissionAdministration](src/Module/IdentityAccess/Application/CandidatePermissionAdministration.php) provides bounded membership listing and idempotent, transactional access blocks, with audit records for actual transitions. Blocks persist independently of membership deletion/regrant. Removing a block does not create a membership or restore an inactive account. The administrator [HTTP surface](src/Module/IdentityAccess/UI/Http/PermissionController.php) requires completed MFA, with fresh MFA, exact Origin and an actor/tenant-bound CSRF token for changes. The [CLI check](src/Module/IdentityAccess/UI/Console/CheckAccessCommand.php) is read-only and limited to worker/setup contexts.
+
+Older checkouts must apply [Version20261101000200](migrations/Version20261101000200.php) before the new checks: the migration creates candidate-only denial persistence. [Service regressions](tests/Integration/CandidateAuthorizationTest.php) and [HTTP journeys](tests/Integration/PermissionAdministrationTest.php) define current-state, cross-tenant, block/regrant, audit rollback and browser-boundary coverage. Full current-source CI remains to be executed and recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); neither these test definitions nor the historical checkpoint imply that result.
+
+Action-level permissions, Effective permissions and Revocation and role changes remain **Partial**. Counts stay **5 demonstrated / 71 partial / 157 planned**, totaling 233, and the overall estimate stays approximately 20%. This slice does not implement or grant any of the 82 canonical permissions, positive overrides, role/delegation composition or service-account authority. [AUDIT-WCP-0118](../documentation/governance/audits/AUDIT-WCP-0100/CLOSURE-MATRIX.md#audit-wcp-0118--permission-priority-vs-security-intersection) remains open; its owner decisions and accepted contracts remain authoritative. Canonical production integration and Unix/PostgreSQL identity separation are still required. **M1 remains open.**
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.
@@ -118,6 +128,7 @@ Owners: IdentityAccess, Tenancy, Platform, Operations and shared foundations.
 - Define the first supported engine/provider combination, resource ownership and ADMIN/USER/worker/agent/broker identities, origins, cookies, database grants and secret references.
 - Qualify the candidate administrator MFA/enrollment/backup-code recovery against the production contracts; complete password recovery, credential lifecycle, current-authority checks, session administration and sensitive-action reauthentication.
 - Define account/tenant identity, resource revision and policy evaluation used by all resource owners. Reserve reseller delegation for its explicitly tested implementation.
+- Retain the shared candidate current-authority boundary and access-block semantics while the canonical permission composition is resolved; qualify revocation races and production integration against the accepted contracts without treating candidate blocks as general grants.
 - Establish reusable server validation, error/audit/correlation conventions and UI contracts; do not duplicate business policy in controllers or plugins.
 
 **Acceptance:** positive and negative HTTP/CLI tests demonstrate current authorization, MFA/recovery, context separation and tenant isolation; approved production integration can be traced to exact contracts and source. Existing candidate approvals are not silently reassigned.
@@ -301,12 +312,12 @@ Cross-domain security, monitoring, UI and recovery tests are developed with each
 
 ## Next concrete Core work
 
-1. Resolve the M1 production integration boundaries against the existing accepted contracts; retain candidate behavior until replacement is explicitly accepted.
+1. Complete the M1 production integration boundaries against the existing accepted contracts: canonical permission composition, credential/session lifecycle and explicit Unix/PostgreSQL identities. Retain the bounded candidate authorization and access-block behavior until replacement is explicitly accepted; AUDIT-WCP-0118 remains open.
 2. Extend read-only host inspection and candidate artifact verification with reviewed native providers, accepted publisher/key/revocation/freshness policy, protected artifact staging, minimum sizing and service/identity ownership. Bind verified immutable bytes to typed journaled effects rather than adding a universal shell runner. The current candidate handoff is not that execution contract.
 3. Implement and qualify one reviewed native installation slice on a disposable reference target, including refusal/interruption/recovery cases, then extend the remaining targets independently.
 4. Build the restricted wizard on the shared enrollment/authorization use cases, with single-use bootstrap closure and MFA/recovery. Do not expose an unrestricted first-admin form.
 
-The installer/wizard workstream remains next; its privileged activation depends on the necessary M1/M2 interfaces and tests. This roadmap is not permission to bypass those prerequisites.
+The immediate work remains M1 foundations and their acceptance evidence. Installer/wizard preparation can continue where independent; privileged activation depends on the necessary M1/M2 interfaces and tests. This roadmap is not permission to bypass those prerequisites.
 
 ## Keeping progress honest
 

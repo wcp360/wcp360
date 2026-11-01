@@ -13,8 +13,8 @@ final class WorkbenchFixture
         $sqlite=$db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\SQLitePlatform;
         if(!$sqlite && $db->fetchOne('SELECT current_database()')!=='wcp360_test')throw new \RuntimeException('Fixture cleanup requires the dedicated wcp360_test database.');
         if($sqlite)$db->executeStatement('PRAGMA foreign_keys = ON');
-        foreach(['mfa_recovery','mfa','activation_grants','activations','runtime_settings','plugins','audit','jobs','sites','memberships','tenants','accounts','users'] as $table)$db->executeStatement('DROP TABLE IF EXISTS wcp_candidate_'.$table);
-        foreach(array_merge(WorkbenchSchema::statements($db),WorkbenchSchema::auditStatements($db),\Wcp360\Core\Module\IdentityAccess\Infrastructure\MfaSchema::statements($db),($applicationServers?array_merge(\Wcp360\Core\Module\Hosting\Infrastructure\ApplicationServerSchema::statements(),\Wcp360\Core\Module\Hosting\Infrastructure\ProvisioningSchema::statements($db),\Wcp360\Core\Module\Hosting\Infrastructure\ActivationGrantsSchema::statements($db)):[])) as $sql)$db->executeStatement($sql);
+        foreach(['permission_denials','mfa_recovery','mfa','activation_grants','activations','runtime_settings','plugins','audit','jobs','sites','memberships','tenants','accounts','users'] as $table)$db->executeStatement('DROP TABLE IF EXISTS wcp_candidate_'.$table);
+        foreach(array_merge(WorkbenchSchema::statements($db),WorkbenchSchema::auditStatements($db),\Wcp360\Core\Module\IdentityAccess\Infrastructure\MfaSchema::statements($db),\Wcp360\Core\Module\IdentityAccess\Infrastructure\PermissionDenialSchema::statements($db),($applicationServers?array_merge(\Wcp360\Core\Module\Hosting\Infrastructure\ApplicationServerSchema::statements(),\Wcp360\Core\Module\Hosting\Infrastructure\ProvisioningSchema::statements($db),\Wcp360\Core\Module\Hosting\Infrastructure\ActivationGrantsSchema::statements($db)):[])) as $sql)$db->executeStatement($sql);
         $hash=password_hash(self::PASSWORD,PASSWORD_ARGON2ID,['memory_cost'=>8192,'time_cost'=>1]);
         $users=[];$tenants=[];
         foreach(['alice','bob','admin']as $name){

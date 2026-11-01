@@ -1,0 +1,21 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% block content %}
+<h1>Accès des utilisateurs</h1>
+<p>Gérez les blocages des plans d’hébergement par utilisateur et tenant. Chaque décision est relue lors de la soumission et de l’exécution des tâches.</p>
+<p>Lever un blocage conserve les droits existants. Cette page ne crée aucune appartenance et n’attribue aucune permission supplémentaire.</p>
+<p>Un blocage n’annule pas une opération déjà transmise au système.</p>
+<section class="card" aria-label="Accès aux plans d’hébergement">
+{% if report.items is empty %}<p>Aucun accès à afficher pour cette page.</p>{% else %}
+<div class="table-scroll"><table><caption class="sr-only">Accès aux plans d’hébergement par utilisateur et tenant</caption><thead><tr><th scope="col">Utilisateur</th><th scope="col">Tenant</th><th scope="col">Accès aux plans</th><th scope="col">Action</th></tr></thead><tbody>
+{% for entry in report.items %}
+<tr data-user-id="{{ entry.user_id }}" data-tenant-id="{{ entry.tenant_id }}"><td>{{ entry.email }}</td><td>{{ entry.tenant_name }}</td><td>{% if not entry.active %}Compte inactif{% elseif entry.denied %}Bloqué{% else %}Autorisé{% endif %}</td><td>
+<form action="{{ path('wcp_access_denial', {actor: entry.user_id, tenant: entry.tenant_id}) }}" method="post" data-turbo="false">
+<input type="hidden" name="_token" value="{{ csrf_token('candidate_access_denial_' ~ entry.user_id ~ '_' ~ entry.tenant_id) }}">
+<input type="hidden" name="denied" value="{{ entry.denied ? '0' : '1' }}">
+<button class="button secondary" type="submit">{{ entry.denied ? 'Lever le blocage' : 'Bloquer' }}</button>
+</form></td></tr>
+{% endfor %}
+</tbody></table></div>{% endif %}
+</section>
+<nav aria-label="Pages des accès"><span>Page {{ report.page }}</span>{% if report.page > 1 %} <a href="{{ path('wcp_access_permissions', {page: report.page - 1}) }}">Précédente</a>{% endif %}{% if report.has_next and report.page < 10000 %} <a href="{{ path('wcp_access_permissions', {page: report.page + 1}) }}">Suivante</a>{% endif %}</nav>
+{% endblock %}

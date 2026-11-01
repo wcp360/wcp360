@@ -15,6 +15,18 @@
 
 Run `composer check` from Core for Symfony-aware PHPStan, analyzer regressions, PHPUnit and framework lints. Run `composer test:browser` in the documented Chromium/WebDriver environment. See the [testing guide](../../documentation/development/TESTING.md) for commands, scopes, fixture safeguards and Linux/VM evidence. The deliberate-error PHPStan fixtures live in `tools/phpstan/fixtures`, outside application test discovery.
 
+## Candidate identity and authorization regressions
+
+| Executable source | Bounded verification scope |
+| :--- | :--- |
+| [CandidateMfaTest](Integration/CandidateMfaTest.php) | Encrypted factor storage, replay and attempt windows, single-use backup codes and factor revisions. |
+| [MfaJourneyTest](Integration/MfaJourneyTest.php) | Pending administrator role denial, exact Origin/CSRF boundaries, session rotation, recovery/reset and unavailable-key refusal. |
+| [CandidateAuthorizationTest](Integration/CandidateAuthorizationTest.php) | Exact single-permission/current-USER checks, shared visibility/execution, cross-tenant refusal, idempotent audited blocks, membership regrant, queued-worker rechecks, bounded listing and audit-failure rollback. |
+| [PermissionAdministrationTest](Integration/PermissionAdministrationTest.php) | Completed/fresh administrator MFA, Origin and target-bound CSRF for access changes; existing user-session/API denial; worker rejection after a block; unblocking without restoring deleted membership. |
+| [CandidateAccessCommandTest](Integration/CandidateAccessCommandTest.php) | Read-only worker/setup CLI decisions, unknown-permission refusal, JSON output and exit status; HTTP runtime contexts cannot use the command. |
+
+The access checks depend on [Version20261101000200](../migrations/Version20261101000200.php) and candidate-only denial persistence. These suites verify the candidate rule and its implemented surfaces; they do not qualify the 82 canonical permissions, general revocation fencing, production database grants or Unix identities. Full current-source CI for the access-block slice remains to be executed and recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Earlier workflow totals remain evidence for their own source revisions.
+
 Organize implemented test files by the same domain/service names as the source. Framework configuration, deterministic inputs and the accepted contract/requirement must accompany the implementation. Keep the shared synthetic fixture source in Fixtures instead of copying test data across suite directories.
 
 Configuration-template checks identify the service, package/version, resource scope and expected rendering. Supported-target integration also executes actual service validation, failed-apply cases, concurrent-change/ownership checks and observed post-apply health on a disposable environment. A syntax check or source directory is not service acceptance.

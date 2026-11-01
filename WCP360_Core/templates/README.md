@@ -1,12 +1,13 @@
 # First-party Twig source map
 
-**Status: template locations documented; no executable Twig pages or component registration are supplied by this scaffold.**
+**Status: executable candidate pages and selected shared components are implemented; the complete interface library and production qualification remain unfinished.**
 
 | Source | Responsibility |
 | :--- | :--- |
 | [admin](admin/README.md) | Administrative pages in their authorized ADMIN context |
 | [user](user/README.md) | Customer pages with enforced tenant/resource scope |
 | [setup](setup/README.md) | Restricted initial setup and enrollment presentation |
+| [identity](../src/Module/IdentityAccess/README.md) | Candidate administrator MFA, one-time recovery codes, account security and tenant-access blocks |
 | [layouts](layouts/README.md) | Reusable context-aware page frames |
 | [components](components/README.md) | Shared form, table, chart, feedback and navigation presentation |
 | [errors](errors/README.md) | Safe context-aware error-page presentations |
