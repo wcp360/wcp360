@@ -53,7 +53,7 @@ Security, failure handling and integration are part of each workstream's unfinis
 | Observability | 4% | 10% | Candidate append-only audit and database health check. | Authorized audit/log queries, metrics/history, alerts, local fallback, incidents and diagnostic bundles. |
 | Platform and controlled system integration | 5% | 20% | Strict target/runtime discovery, one revisioned setting and guarded agent/broker experiments. | Production node/service/package/storage/network/SSH/firewall adapters and target-specific qualification. |
 | ExtensionManagement | 4% | 20% | Fixed reference-package lifecycle and detached authorized summary; Core survives removal. | General trusted package registry, signatures, dependencies, compatibility, upgrades, supervision and failure containment. |
-| Setup, installer and upgrades | 5% | 30% | Read-only checks, private configuration bootstrap, enrollment and restartable checkout preparation. | Native artifact installation, service setup, restricted graphical wizard, supported upgrades and recovery. |
+| Setup, installer and upgrades | 5% | 30% | Read-only host checks, offline candidate artifact verification, private configuration bootstrap, enrollment and restartable checkout preparation. | Native artifact installation, service setup, restricted graphical wizard, supported upgrades and recovery. |
 | Integrated product qualification | 5% | 20% | CI, browser/runtime probes and a bounded Debian VM recovery journey. | Full-scope acceptance, independent security review, load/endurance, all-target VM lifecycle and qualified artifact evidence. |
 | **Total scope weight** | **100%** | **Approximately 20% overall** | **Verified candidate foundation** | **Approximately 80% of complete-Core delivery remains** |
 
@@ -79,6 +79,14 @@ The next executable slice adds [LinuxHostInventory](src/Shared/Platform/LinuxHos
 The report remains a candidate handoff with `native_apply_allowed: false`. It provides no canonical execution plan, trusted native runtime provider, artifact-verification chain or registered installation effects. Cgroup budgets, other filesystems, host network topology, DNS/time and service ownership/health remain unchecked. Existing paths are never overwritten. The checkout installer exposes this read-only path through `--host-check`, before journaling or mutations.
 
 [Deterministic plan tests](tests/Unit/NativeInstallationPlanTest.php), [standalone checkout tests](tests/Integration/NativeInstallationPlanTest.php), [parser regressions](tests/Unit/LinuxHostInventoryTest.php) and [real Linux TCP/UDP tests](tests/Integration/LinuxHostInventoryTest.php) define this slice's evidence. Current-source CI outcomes belong to the existing draft PR; the historical numbers above remain the initial checkpoint. This bounded preparation leaves M3 open and does not change the approximately 20% overall estimate or the capability-status counts.
+
+### Offline candidate artifact verification
+
+[CandidateArtifactVerifier](src/Module/Setup/Application/CandidateArtifactVerifier.php), [ArtifactInput](src/Module/Setup/Infrastructure/ArtifactInput.php) and the [standalone artifact command](installer/preflight/artifact.php) add real detached Ed25519 verification over bounded exact manifest bytes. An independently supplied operator key pin and expected component/version/target are mandatory; payload size and SHA-256 are checked through guarded local file handles and streaming reads. The reader rejects unsafe file types, links and Linux ownership/permission conditions without extracting, copying, downloading or installing a package.
+
+This is a candidate metadata format and cryptographic primitive, not an approved release signing scheme or publisher trust chain. No trusted publisher key, revocation/freshness policy, provenance, compatibility decision, archive-content validation or immutable staging/application mechanism is supplied. Verification success does not approve native installation or guarantee later consumption of a path; the native artifact-trust blocker remains closed. Windows checks do not qualify Linux permissions or Windows ACLs.
+
+[Reader tests](tests/Unit/ArtifactInputTest.php), [signature/identity regressions](tests/Unit/CandidateArtifactVerifierTest.php) and [standalone CLI tests](tests/Integration/CandidateArtifactVerifierTest.php) cover this slice. Update verification becomes Partial: **5 demonstrated / 68 partial / 160 planned** capabilities still total 233. M3 and M7 remain open, and the approximately 20% overall estimate is unchanged. Current-source executed outcomes are recorded in the existing PR separately from the initial runtime checkpoint.
 
 ## Ordered delivery plan
 
@@ -286,7 +294,7 @@ Cross-domain security, monitoring, UI and recovery tests are developed with each
 ## Next concrete Core work
 
 1. Resolve the M1 production integration boundaries against the existing accepted contracts; retain candidate behavior until replacement is explicitly accepted.
-2. Extend the implemented read-only host inspection with reviewed native provider/artifact interfaces, accepted minimum sizing and service/identity ownership. Implement artifact verification and extend the journal through typed effects rather than adding a universal shell runner. The current candidate handoff is not that execution contract.
+2. Extend read-only host inspection and candidate artifact verification with reviewed native providers, accepted publisher/key/revocation/freshness policy, protected artifact staging, minimum sizing and service/identity ownership. Bind verified immutable bytes to typed journaled effects rather than adding a universal shell runner. The current candidate handoff is not that execution contract.
 3. Implement and qualify one reviewed native installation slice on a disposable reference target, including refusal/interruption/recovery cases, then extend the remaining targets independently.
 4. Build the restricted wizard on the shared enrollment/authorization use cases, with single-use bootstrap closure and MFA/recovery. Do not expose an unrestricted first-admin form.
 

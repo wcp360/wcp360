@@ -17,13 +17,13 @@ Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369
 
 ## Delivery snapshot
 
-**Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. The later live capacity/port/path inspection extends the existing prerequisite-check row without changing these status counts; its source and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
+**Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
 
 | Candidate status | Rows | Meaning |
 | :--- | ---: | :--- |
 | Demonstrated | 5 | The stated bounded candidate path executes and has retained test evidence; the complete production capability is not thereby accepted. |
-| Partial | 67 | Implemented candidate code, helper or probe covers only part of this capability. |
-| Planned | 161 | No implemented Core product workflow was demonstrated for this capability; ownership/documentation or unrelated infrastructure alone is insufficient. |
+| Partial | 68 | Implemented candidate code, helper or probe covers only part of this capability. |
+| Planned | 160 | No implemented Core product workflow was demonstrated for this capability; ownership/documentation or unrelated infrastructure alone is insufficient. |
 | **Total** | **233** | **One status per existing capability; all production acceptance remains open.** |
 
 These row counts are not the overall completion percentage. The weighted roadmap estimate is approximately 20% complete / 80% remaining (15–25% completion range). The five-OS userspace matrix and the Debian 13 privileged VM have different qualification boundaries.
@@ -418,7 +418,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Prerequisite checks | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Read-only OS/PHP/PostgreSQL checks and live capacity/port/path inspection; unknowns retained, native application blocked. | [M3](ROADMAP.md#m3) |
 | Installation status | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Private journal with read-only status and explicit resume. | [M3](ROADMAP.md#m3) |
 | Initial configuration | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Partial — Private local config and CLI enrollment; graphical wizard absent. | [M3](ROADMAP.md#m3) |
-| Update verification | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |
+| Update verification | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Partial — Offline operator-pinned candidate signature/identity/size/digest checks; trusted update admission, freshness and compatibility absent. | [M7](ROADMAP.md#m7) |
 | Panel migrations | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Partial — Candidate migrations and uncertainty guards; supported release upgrade absent. | [M7](ROADMAP.md#m7) |
 | Controlled maintenance | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |
 | Version rollback | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |

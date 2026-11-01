@@ -53,6 +53,45 @@ The report explicitly keeps native application blocked: `native_apply_allowed: f
 
 The command always exits **78** while native application is blocked, including when its implemented observations pass. Invalid arguments exit **64**; an unexpected collection/planning failure exits **1** with a redacted message. There is no `--apply` mode. A future installer must reobserve and authorize its concrete effects; this diagnostic is neither a privilege grant nor a substitute for live checks at mutation time.
 
+## Offline candidate artifact verification
+
+[artifact.php](artifact.php) verifies a local candidate payload through [CandidateArtifactVerifier](../../src/Module/Setup/Application/CandidateArtifactVerifier.php) and the bounded file reader [ArtifactInput](../../src/Module/Setup/Infrastructure/ArtifactInput.php). It requires PHP 8.1 or newer with sodium and works before Composer installation. It loads no `.env`, accesses no database, starts no subprocess and changes no host files. It neither downloads nor extracts or installs a package.
+
+All seven options are required exactly once. Supply absolute paths within private operator-controlled staging, an independently pinned public key and the expected artifact identity:
+
+~~~sh
+php WCP360_Core/installer/preflight/artifact.php \
+  --artifact=/absolute/staging/payload \
+  --manifest=/absolute/staging/manifest.json \
+  --signature=/absolute/staging/manifest.sig \
+  --public-key=REPLACE_WITH_64_LOWERCASE_HEXADECIMAL_CHARACTERS \
+  --component=core \
+  --version=1.0.0-rc.1 \
+  --target=debian-13
+~~~
+
+The public-key placeholder must be replaced with the operator's Ed25519 public key obtained through an independent trusted channel. No official publisher key or private signing material is supplied. A key delivered alongside an untrusted payload does not establish its publisher. `--component` accepts `core`, `wcpd` or `wcp-privd`; `--target` accepts the exact shared catalogue IDs `debian-12`, `debian-13`, `ubuntu-22.04`, `ubuntu-24.04` and `ubuntu-26.04`. The expected target binds artifact identity; the command does not establish compatibility with the executing host.
+
+The candidate manifest is compact UTF-8 JSON followed by one LF, limited to 16 KiB, with exactly these seven keys:
+
+| Key | Required value |
+| :--- | :--- |
+| `schema` | `wcp360.candidate-artifact/1` |
+| `component` | The expected `core`, `wcpd` or `wcp-privd` component. |
+| `version` | The exact expected candidate version, for example `1.0.0-rc.1`. This example does not name a published release. |
+| `target` | The exact expected shared target catalogue ID. |
+| `architecture` | `amd64` |
+| `size` | Positive integer payload length, at most 2,147,483,648 bytes. |
+| `sha256` | The expected payload SHA-256, encoded as 64 lowercase hexadecimal characters. |
+
+Its bytes must match PHP's `json_encode($metadata, JSON_UNESCAPED_SLASHES)."\n"` representation. Whitespace, a BOM, duplicate keys, escaped alternatives and additional line endings are refused even when signed. This is a bounded candidate encoding, not a claim of JSON Canonicalization Scheme compliance. Versions use three decimal components without leading zeros and an optional dot-separated prerelease suffix, up to 64 characters; build metadata with `+` is not accepted.
+
+No path, URL, key or command field is accepted. The separate signature file contains exactly 64 raw bytes: an ordinary Ed25519 detached signature over the exact manifest bytes, including its final LF. This is not Ed25519ph or an ASCII/base64 signature. Signature verification occurs before JSON decoding; payload length and SHA-256 are then checked by reading the local payload. The file reader refuses symbolic links, non-regular files and multiple hard links rather than reading arbitrary streams. On Linux it also checks file/ancestor ownership and write permissions, including protection of the immediate staging directory. Windows execution does not establish Linux permissions or Windows ACL protection.
+
+Exit **0** reports `candidate_verified: true` for the bytes observed during this invocation. A verification refusal, unavailable sodium or unreadable input exits **1** with a fixed redacted JSON result. Malformed arguments exit **64** with fixed usage. Reports retain `native_apply_allowed: false` and `qualified_release: false`. The checkout shell wrapper has no artifact-verification option; invoke this standalone command directly.
+
+This candidate format and operator-pinned verification primitive do not select the official release signing scheme, publisher/key distribution, revocation, freshness/rollback policy, provenance or package-content/permission checks. They do not make later reuse of a staging path safe: an eventual installer must consume the same verified immutable bytes through its accepted staging and execution boundary. The native plan's `artifact_identity_and_trust` blocker remains in place. [Release trust and qualification requirements](../../../documentation/development/DELIVERY-AND-RELEASES.md)
+
 The five-platform native Nginx/PHP-FPM matrix tests native package behavior; the separate source-runtime matrix exercises PHP 8.4 Core application behavior within those userspaces. The privileged systemd/reboot VM remains Debian 13-specific. Neither matrix qualifies a production host installer. An expected prerequisite refusal is not permission to run Symfony on an unsupported PHP version. [Platform and evidence boundaries](../../../documentation/development/SUPPORTED-PLATFORMS.md)
 
 Setup business state and the restricted wizard remain in the [Setup module](../../src/Module/Setup/README.md). Service configuration text has one source in [resources/services](../../resources/services/README.md); installer code consumes the accepted boundaries rather than creating a second generic system executor.

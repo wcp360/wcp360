@@ -10,6 +10,8 @@ The [checkout installer](installer/recipes/README.md) now records private durabl
 
 The standalone [native-installation inspection](installer/preflight/README.md#read-only-native-installation-handoff) observes the actual target, available memory, `/var` free space, TCP/UDP sockets and canonical product paths before Composer installation. Operator-selected checks expose conflicts and unknowns; no production defaults are assumed. The report keeps native application blocked until its provider, artifacts and controlled installation effects are implemented and qualified.
 
+The [offline candidate artifact verifier](installer/preflight/README.md#offline-candidate-artifact-verification) checks an Ed25519 signature using an explicit operator public-key pin, binds the expected component/version/target and streams payload size/SHA-256 verification. It reads protected local files without extracting or installing them. Successful verification authenticates observed bytes under that pin; official publisher trust, revocation, immutable staging and native installation remain separate requirements.
+
 The Core owns essential hosting, local administration/recovery and the extension manager. It must run with zero optional plugins. Detached packages use the public SDK/API and their own processes; installing a plugin does not modify the Core Composer graph or inject its code into Symfony.
 
 Start with the [change-location index](NAVIGATION.md) to find a function, command, dependency or Linux-service configuration. The [dependency guide](DEPENDENCIES.md) identifies manifests, locks and generated libraries.
