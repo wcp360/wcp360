@@ -28,14 +28,29 @@ final class EnrollmentTest extends KernelTestCase
         self::assertSame(1,$exit);
         self::assertSame(3,(int)$this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_users'));
     }
+    public function testDuplicateUsernameCannotPartiallyEnrollAnotherAccount(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') self::markTestSkipped('Hidden terminal input is exercised in Linux CI.');
+        $tester = $this->command();
+        $tester->setInputs(['alice', 'new-contact@example.test', '0', 'wizard-test-only-strong-password']);
+        try {
+            $tester->execute([], ['interactive' => true]);
+            self::fail('Duplicate username enrolled.');
+        } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException) {
+        }
+        self::assertSame(3, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_users'));
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_tenants'));
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_audit'));
+    }
+
     public function testInteractiveWizardHashesPasswordAndCreatesSeparateAccountTenant():void
     {
         if(PHP_OS_FAMILY==='Windows')$this->markTestSkipped('The Windows hidden-input executable reads the console directly; this interaction is exercised in Linux CI.');
         $tester=$this->command();$password='wizard-test-only-strong-password';
-        $tester->setInputs(['wizard@example.test','0',$password]);
+        $tester->setInputs(['wizard','wizard@example.test','0',$password]);
         self::assertSame(0,$tester->execute([],['interactive'=>true]));
         $row=$this->store->db->fetchAssociative("SELECT * FROM wcp_candidate_users WHERE email='wizard@example.test'");
-        self::assertSame('user',$row['context']);self::assertTrue(password_verify($password,$row['password_hash']));
+        self::assertSame('wizard',$row['username']);self::assertSame('user',$row['context']);self::assertTrue(password_verify($password,$row['password_hash']));
         self::assertStringNotContainsString($password,$tester->getDisplay());
         $tenant=$this->store->db->fetchAssociative('SELECT t.id,t.account_id FROM wcp_candidate_tenants t JOIN wcp_candidate_memberships m ON m.tenant_id=t.id WHERE m.user_id=?',[$row['id']]);
         self::assertNotSame($tenant['id'],$tenant['account_id']);self::assertNotSame($row['id'],$tenant['id']);

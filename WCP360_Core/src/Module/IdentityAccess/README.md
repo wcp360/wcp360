@@ -31,6 +31,16 @@ Start here when changing: **Identity, roles, session and recovery behavior.**
 
 The candidate checks current tenant authority for the single `candidate.hosting.plan` permission through `CandidateAuthorization`; [WorkbenchStore](../Operations/Infrastructure/WorkbenchStore.php) delegates its existing authorization and visibility facade to that service. It does not yet provide a general permission/delegation engine. Account and tenant lifecycle, plans and quotas belong to [Tenancy](../Tenancy/README.md).
 
+## Username authentication
+
+The USER surface is the **hosting workspace**. Both USER and ADMIN sign in with a canonical username: 3–32 lowercase ASCII letters, digits or underscores, beginning with a letter. The contact email remains a separate field and is never a login alias. Username lookup is parameterized and bound to the configured runtime context; a USER username cannot select the ADMIN identity. The database enforces format and uniqueness within each context. Existing login throttling, password hashing, CSRF, Origin checks and optional account MFA continue to apply.
+
+The interactive `wcp:candidate:enroll` command asks for username, contact email, account context and a hidden password. Enrollment and its audit remain transactional; a duplicate username creates no account or tenant.
+
+Before serving an updated checkout, apply [Version20261101000500](../../../migrations/Version20261101000500.php) with the existing setup/migration procedure and maintenance credentials. Back up the database first. The migration preserves account IDs, contact emails, password hashes, tenant relationships, stored MFA and session-registry data. A unique valid email local part becomes the username (for example, `alice@example.test` becomes `alice`). Invalid or colliding local parts receive a stable `u_` plus 30 hexadecimal characters; the setup operator must retrieve the assigned username from the account inventory. This is an application login identifier; it does not create or rename Linux users. All previous email-based browser sessions must sign in again. Renaming or reusing a username cannot transfer an existing session to another account ID.
+
+The migration is transactional and cannot be automatically reversed to email login. Its SQL planning is read-only, including Doctrine dry runs. PostgreSQL uses NOT NULL, a format constraint and a unique index; SQLite development fixtures use equivalent format triggers and the unique index without rebuilding referenced tables or disabling foreign keys. Production identity integration remains unfinished.
+
 ## Candidate authorization and access blocks
 
 The shared decision allows `candidate.hosting.plan` only when the actor is an active USER account, holds the exact permission membership for the requested tenant and has no matching explicit denial. Unknown permissions, malformed identifiers, inactive users and mismatched tenants fail closed. Administrator context does not supply tenant authority. Visibility and execution use the same database rule; queued hosting plans recheck current authority when processed.

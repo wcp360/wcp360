@@ -28,6 +28,8 @@ The [offline candidate artifact command](../../../installer/preflight/README.md#
 
 The [candidate database role recipe](../../../installer/recipes/CANDIDATE-DATABASE-ROLES.md) operates only on the reviewed disposable development databases and requires migrations first. It is separate from the default checkout installer and never runs automatically. Native PostgreSQL service/HBA setup, secret distribution and production identity qualification remain open.
 
+The enrollment terminal asks for a **username**, a separate **contact email**, the USER/ADMIN context and a hidden password. Usernames contain 3–32 lowercase ASCII letters, digits or underscores and begin with a letter. Login accepts the username only. Existing checkouts must apply the [username migration](../../../migrations/Version20261101000500.php) before using the updated Core; see [the migration and session rules](../IdentityAccess/README.md#username-authentication).
+
 Enroll the initial candidate administrator with `WCP_CONTEXT=setup php bin/console wcp:candidate:enroll`, selecting the administrator account context in the interactive terminal. The graphical wizard is not enabled by this command. Candidate execution still requires its explicit development/test runtime guards.
 
 Use the common [module layout](../README.md) for new Domain, Application, Infrastructure and UI code. Standalone CLI entry points live in installer; this module does not provide a generic privileged shell.

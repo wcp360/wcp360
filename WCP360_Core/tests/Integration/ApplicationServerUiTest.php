@@ -22,7 +22,7 @@ final class ApplicationServerUiTest extends WebTestCase
         $browser=self::createClient([],['HTTP_HOST'=>'admin.localhost','HTTP_ORIGIN'=>'http://admin.localhost']);$browser->disableReboot();
         $store=self::getContainer()->get(WorkbenchStore::class);WorkbenchFixture::reset($store->db);
         $crawler=$browser->request('GET','http://admin.localhost/login');
-        $browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>'admin@example.test','_password'=>WorkbenchFixture::PASSWORD]));
+        $browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>'admin','_password'=>WorkbenchFixture::PASSWORD]));
         for($i=0;$i<3 && $browser->getResponse()->isRedirect();$i++)$crawler=$browser->followRedirect();
         self::assertResponseIsSuccessful();
         self::assertSame('/',$browser->getRequest()->getPathInfo());

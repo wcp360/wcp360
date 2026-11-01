@@ -238,7 +238,7 @@ final class CandidateMfaTest extends KernelTestCase
         self::assertTrue($this->mfa->status($this->admin)['configured']);
         $this->unavailable(fn () => $wrongKey->check($this->admin, $this->code($pending['secret'])));
         $other = WorkbenchStore::id();
-        $this->store->db->insert('wcp_candidate_users', ['id' => $other, 'email' => 'other-admin@example.test', 'password_hash' => 'synthetic-unused', 'context' => 'admin', 'active' => 1]);
+        $this->store->db->insert('wcp_candidate_users', ['id' => $other, 'username' => 'other_admin', 'email' => 'other-admin@example.test', 'password_hash' => 'synthetic-unused', 'context' => 'admin', 'active' => 1]);
         $this->mfa->startEnrollment($other);
         $this->store->db->update('wcp_candidate_mfa', ['sealed_secret' => $this->factor()['sealed_secret'], 'pending_secret' => null, 'pending_expires_at' => null], ['user_id' => $other]);
         $this->unavailable(fn () => $this->mfa->check($other, $this->code($pending['secret'])));

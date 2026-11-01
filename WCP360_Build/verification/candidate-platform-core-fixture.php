@@ -27,6 +27,8 @@ final class PlatformFixtureFailure extends \RuntimeException {}
  */
 final class PlatformCoreFixture
 {
+    private const USER_NAME = 'platform_user';
+    private const ADMIN_NAME = 'platform_admin';
     private const USER_EMAIL = 'platform-user@example.test';
     private const ADMIN_EMAIL = 'platform-admin@example.test';
     private const PASSWORD = 'platform-only-account-password';
@@ -136,20 +138,20 @@ final class PlatformCoreFixture
         $hasher = $this->service(UserPasswordHasherInterface::class);
         $identities = [];
         $hashes = [];
-        foreach ([[self::USER_EMAIL, '0', 'user'], [self::ADMIN_EMAIL, '1', 'admin']] as [$email, $choice, $context]) {
+        foreach ([[self::USER_NAME, self::USER_EMAIL, '0', 'user'], [self::ADMIN_NAME, self::ADMIN_EMAIL, '1', 'admin']] as [$username, $email, $choice, $context]) {
             $tester = new CommandTester($this->service(SetupCommand::class));
-            $tester->setInputs([$email, $choice, self::PASSWORD]);
+            $tester->setInputs([$username, $email, $choice, self::PASSWORD]);
             if ($tester->execute([], ['interactive' => true]) !== 0 || str_contains($tester->getDisplay(), self::PASSWORD)) {
                 throw new PlatformFixtureFailure('Interactive account enrollment failed or exposed the fixture password.');
             }
-            $row = $this->store->db->fetchAssociative('SELECT id,email,context,active,password_hash FROM wcp_candidate_users WHERE email=? AND context=?', [$email, $context]);
+            $row = $this->store->db->fetchAssociative('SELECT id,username,email,context,active,password_hash FROM wcp_candidate_users WHERE email=? AND context=?', [$email, $context]);
             if ($row === false) {
                 throw new PlatformFixtureFailure('An enrolled account is missing.');
             }
             $id = $this->stringField($row, 'id');
             $hash = $this->stringField($row, 'password_hash');
-            $principal = new Principal($id, $email, $hash, $context);
-            if (!Uuid::isValid($id) || !str_starts_with($hash, '$argon2id$')
+            $principal = new Principal($id, $username, $email, $hash, $context);
+            if ($row['username'] !== $username || !Uuid::isValid($id) || !str_starts_with($hash, '$argon2id$')
                 || !$hasher->isPasswordValid($principal, self::PASSWORD)
                 || !in_array($row['active'], [1, '1'], true)) {
                 throw new PlatformFixtureFailure('Enrollment did not preserve the expected hashed identity.');
@@ -351,7 +353,7 @@ final class PlatformCoreFixture
             throw new PlatformFixtureFailure('The actual login form is unavailable '.$this->responseDescription($page).'.');
         }
         $fields = $this->form($page['body'], '/login', ['_username', '_password', '_csrf_token']);
-        $fields['_username'] = self::USER_EMAIL;
+        $fields['_username'] = self::USER_NAME;
         $fields['_password'] = self::PASSWORD;
         $response = $this->request('POST', '/login', $fields);
         if ($response['status'] !== 302 || $response['location'] !== '/') {

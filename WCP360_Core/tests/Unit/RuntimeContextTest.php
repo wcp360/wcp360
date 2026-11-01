@@ -14,6 +14,6 @@ final class RuntimeContextTest extends TestCase
     public function testRemoteHostIsRefused():void{$this->expectException(\InvalidArgumentException::class);new RuntimeContext('user',true,'dev','panel.example.com');}
     public function testAdminSessionCannotAuthenticateOnUserRuntime():void{
         $this->expectException(\Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException::class);
-        (new ContextUserChecker(new RuntimeContext('user',true,'test','user.localhost')))->checkPostAuth(new Principal('id','admin@example.test','hash','admin'));
+        (new ContextUserChecker(new RuntimeContext('user',true,'test','user.localhost')))->checkPostAuth(new Principal('id','admin','admin@example.test','hash','admin'));
     }
 }

@@ -53,7 +53,7 @@ final class PermissionAdministrationTest extends WebTestCase
     {
         $crawler = $this->browser->request('GET', 'http://admin.localhost/login');
         $this->browser->submit($crawler->selectButton('Se connecter')->form([
-            '_username' => 'admin@example.test',
+            '_username' => 'admin',
             '_password' => WorkbenchFixture::PASSWORD,
         ]));
         for ($i = 0; $i < 3 && $this->browser->getResponse()->isRedirect(); $i++) {
@@ -222,7 +222,7 @@ final class PermissionAdministrationTest extends WebTestCase
     private function loginUser(): Crawler
     {
         $crawler = $this->browser->request('GET', 'http://user.localhost/login');
-        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice@example.test', '_password' => WorkbenchFixture::PASSWORD]));
+        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice', '_password' => WorkbenchFixture::PASSWORD]));
         self::assertResponseRedirects('/');
 
         return $this->browser->followRedirect();

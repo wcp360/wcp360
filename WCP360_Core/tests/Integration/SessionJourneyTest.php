@@ -68,7 +68,7 @@ final class SessionJourneyTest extends WebTestCase
     {
         $crawler = $this->browser->request('GET', $this->url('/login'));
         $this->browser->submit($crawler->selectButton('Se connecter')->form([
-            '_username' => $name.'@example.test', '_password' => WorkbenchFixture::PASSWORD,
+            '_username' => $name, '_password' => WorkbenchFixture::PASSWORD,
         ]));
         for ($i = 0; $i < 3 && $this->browser->getResponse()->isRedirect(); $i++) {
             $crawler = $this->browser->followRedirect();

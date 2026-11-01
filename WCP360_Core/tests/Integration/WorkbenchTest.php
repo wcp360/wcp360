@@ -27,7 +27,7 @@ final class WorkbenchTest extends WebTestCase
     private function login(string $name='alice'):void
     {
         $crawler=$this->browser->request('GET','http://user.localhost/login');
-        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>$name.'@example.test','_password'=>WorkbenchFixture::PASSWORD]));
+        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>$name,'_password'=>WorkbenchFixture::PASSWORD]));
         self::assertResponseRedirects('/');
     }
     public function testHealthAndSecurityHeaders():void{$this->browser->request('GET','http://user.localhost/health');self::assertResponseIsSuccessful();self::assertResponseHeaderSame('X-Content-Type-Options','nosniff');self::assertResponseHeaderSame('X-WCP360-Status','development-candidate');self::assertStringContainsString("frame-ancestors 'none'",$this->browser->getResponse()->headers->get('Content-Security-Policy'));}
@@ -36,11 +36,11 @@ final class WorkbenchTest extends WebTestCase
     public function testActualLoginFormAndDashboard():void
     {
         $crawler=$this->browser->request('GET','http://user.localhost/login');self::assertResponseIsSuccessful();
-        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>'alice@example.test','_password'=>WorkbenchFixture::PASSWORD]));
+        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>'alice','_password'=>WorkbenchFixture::PASSWORD]));
         self::assertResponseRedirects('/');$this->browser->followRedirect();self::assertResponseIsSuccessful();self::assertSelectorTextContains('h1','Tableau de bord');self::assertSelectorCount(1,'select[name="tenant_id"] option');
         self::assertStringNotContainsString('bob@example.test',$this->browser->getResponse()->getContent());
     }
-    public function testLoginRejectsForgedCsrf():void{$this->browser->request('POST','http://user.localhost/login',['_username'=>'alice@example.test','_password'=>WorkbenchFixture::PASSWORD,'_csrf_token'=>'forged']);self::assertResponseRedirects('/login');$this->browser->request('GET','http://user.localhost/');self::assertResponseRedirects('/login');}
+    public function testLoginRejectsForgedCsrf():void{$this->browser->request('POST','http://user.localhost/login',['_username'=>'alice','_password'=>WorkbenchFixture::PASSWORD,'_csrf_token'=>'forged']);self::assertResponseRedirects('/login');$this->browser->request('GET','http://user.localhost/');self::assertResponseRedirects('/login');}
     public function testPlanSubmissionIsDurableAtomicAndIdempotent():void
     {
         $first=$this->submit();$second=$this->submit();self::assertSame($first['job_id'],$second['job_id']);self::assertTrue($second['replayed']);
@@ -138,6 +138,6 @@ final class WorkbenchTest extends WebTestCase
     {
         $provider=self::getContainer()->get(\Wcp360\Core\Module\IdentityAccess\Infrastructure\PrincipalProvider::class);
         $this->expectException(\Symfony\Component\Security\Core\Exception\UserNotFoundException::class);
-        $provider->refreshUser(new Principal($this->fixture['users']['alice'],'alice@example.test','unused','admin'));
+        $provider->refreshUser(new Principal($this->fixture['users']['alice'],'alice','alice@example.test','unused','admin'));
     }
 }

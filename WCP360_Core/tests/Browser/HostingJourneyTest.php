@@ -17,7 +17,7 @@ final class HostingJourneyTest extends PantherTestCase
         $client->request('GET','/login');
         if($client->getCrawler()->filter('form[action="/login"]')->count()!==1){fwrite(STDERR,'Unexpected browser page: '.$client->getCurrentURL().' '.substr($client->executeScript('return document.body.innerText'),0,3000).PHP_EOL);}
         self::assertSelectorExists('form[action="/login"]');
-        $client->submitForm('Se connecter',['_username'=>'alice@example.test','_password'=>WorkbenchFixture::PASSWORD]);
+        $client->submitForm('Se connecter',['_username'=>'alice','_password'=>WorkbenchFixture::PASSWORD]);
         $client->waitFor('[data-form-guard-ready="true"]');
         self::assertSelectorTextContains('h1','Tableau de bord');
         self::assertSelectorExists('#site-application-server option[value="frankenphp_worker"][disabled]');

@@ -291,7 +291,7 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $this->set('WCP_ALLOW_CANDIDATE_DATABASE_ROLES', '0');
         $browser = $this->browser('user');
         $crawler = $browser->request('GET', 'http://user.localhost/login');
-        $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice@example.test', '_password' => WorkbenchFixture::PASSWORD]));
+        $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice', '_password' => WorkbenchFixture::PASSWORD]));
         self::assertResponseRedirects('/');
         $crawler = $browser->followRedirect();
         self::assertResponseIsSuccessful();
@@ -317,7 +317,7 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         ]);
         $browser = $this->browser('admin');
         $crawler = $browser->request('GET', 'http://admin.localhost/login');
-        $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]));
+        $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin', '_password' => WorkbenchFixture::PASSWORD]));
         for ($i=0; $i<3 && $browser->getResponse()->isRedirect(); ++$i) { $crawler=$browser->followRedirect(); }
         self::assertResponseIsSuccessful();
         self::assertSame('/', $browser->getRequest()->getPathInfo());

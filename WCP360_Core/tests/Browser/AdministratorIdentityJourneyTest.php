@@ -39,7 +39,7 @@ final class AdministratorIdentityJourneyTest extends PantherTestCase
         WorkbenchFixture::reset($store->db);
         $client->request('GET', '/login');
         $client->waitFor('[data-appearance-ready="true"]');
-        $client->submitForm('Se connecter', ['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]);
+        $client->submitForm('Se connecter', ['_username' => 'admin', '_password' => WorkbenchFixture::PASSWORD]);
         $client->waitFor('.wcp-dashboard-sidebar');
         self::assertSelectorTextContains('h1', 'Tableau de bord');
         self::assertSelectorNotExists('#auth-code');
@@ -92,7 +92,7 @@ final class AdministratorIdentityJourneyTest extends PantherTestCase
         $client->submitForm('Tout déconnecter', ['current_password' => WorkbenchFixture::PASSWORD]);
         $client->waitFor('#password');
         self::assertSame(0, (int) $store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
-        $client->submitForm('Se connecter', ['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]);
+        $client->submitForm('Se connecter', ['_username' => 'admin', '_password' => WorkbenchFixture::PASSWORD]);
         $client->waitFor('#auth-code');
         $client->submitForm('Valider la MFA', ['_auth_code' => $backup[1]]);
         $client->waitFor('.wcp-dashboard-sidebar');
@@ -102,7 +102,7 @@ final class AdministratorIdentityJourneyTest extends PantherTestCase
         $client->waitFor('#password');
         self::assertNull($store->db->fetchOne('SELECT sealed_secret FROM wcp_candidate_mfa'));
         self::assertSame(0, (int) $store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
-        $client->submitForm('Se connecter', ['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]);
+        $client->submitForm('Se connecter', ['_username' => 'admin', '_password' => WorkbenchFixture::PASSWORD]);
         $client->waitFor('.wcp-dashboard-sidebar');
         self::assertSelectorNotExists('#auth-code');
         $client->executeScript('document.querySelector(".wcp-core-logout button").click();');

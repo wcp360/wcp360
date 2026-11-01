@@ -49,7 +49,7 @@ final class MfaJourneyTest extends WebTestCase
     {
         $crawler = $this->browser->request('GET', 'http://admin.localhost/login');
         $this->browser->submit($crawler->selectButton('Se connecter')->form([
-            '_username' => 'admin@example.test',
+            '_username' => 'admin',
             '_password' => WorkbenchFixture::PASSWORD,
         ]));
         for ($i = 0; $i < 3 && $this->browser->getResponse()->isRedirect(); $i++) {
@@ -297,7 +297,7 @@ final class MfaJourneyTest extends WebTestCase
         $store = self::getContainer()->get(WorkbenchStore::class);
         WorkbenchFixture::reset($store->db);
         $crawler = $this->browser->request('GET', 'http://admin.localhost/login');
-        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]));
+        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin', '_password' => WorkbenchFixture::PASSWORD]));
         for ($i = 0; $i < 3 && $this->browser->getResponse()->isRedirect(); $i++) $this->browser->followRedirect();
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'Tableau de bord');
@@ -309,7 +309,7 @@ final class MfaJourneyTest extends WebTestCase
         $store = self::getContainer()->get(WorkbenchStore::class);
         WorkbenchFixture::reset($store->db);
         $crawler = $this->browser->request('GET', 'http://user.localhost/login');
-        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice@example.test', '_password' => WorkbenchFixture::PASSWORD]));
+        $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice', '_password' => WorkbenchFixture::PASSWORD]));
         self::assertResponseRedirects('/');
         $this->browser->followRedirect();
         self::assertResponseIsSuccessful();
@@ -375,7 +375,7 @@ final class MfaJourneyTest extends WebTestCase
             $this->browser = self::createClient([], ['HTTP_HOST' => 'user.localhost', 'HTTP_ORIGIN' => 'http://user.localhost']);
             $this->browser->disableReboot();
             $crawler = $this->browser->request('GET', 'http://user.localhost/login');
-            $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice@example.test', '_password' => WorkbenchFixture::PASSWORD]));
+            $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice', '_password' => WorkbenchFixture::PASSWORD]));
             self::assertResponseRedirects('/');
             $this->browser->followRedirect();
             self::assertResponseIsSuccessful();
@@ -408,7 +408,7 @@ final class MfaJourneyTest extends WebTestCase
         WorkbenchFixture::reset($this->store->db);
         $crawler = $this->browser->request('GET', 'http://user.localhost/login');
         $this->browser->submit($crawler->selectButton('Se connecter')->form([
-            '_username' => 'alice@example.test', '_password' => WorkbenchFixture::PASSWORD,
+            '_username' => 'alice', '_password' => WorkbenchFixture::PASSWORD,
         ]));
         self::assertResponseRedirects('/');
         $this->browser->followRedirect();
@@ -634,7 +634,7 @@ final class MfaJourneyTest extends WebTestCase
         $crawler = $this->browser->request('GET', 'http://admin.localhost/account/reauthenticate?return_to=https://foreign.example');
         self::assertResponseIsSuccessful();
         self::assertSame('/login', $crawler->filter('form')->attr('action'));
-        self::assertSame('admin@example.test', $crawler->filter('input[name="_username"]')->attr('value'));
+        self::assertSame('admin', $crawler->filter('input[name="_username"]')->attr('value'));
         self::assertSelectorNotExists('input[name="return_to"]');
         self::assertSame('_top', $crawler->filter('form')->attr('data-turbo-frame'));
         self::assertSame('no-referrer', $this->browser->getResponse()->headers->get('Referrer-Policy'));

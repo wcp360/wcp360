@@ -30,7 +30,7 @@
     <aside id="wcp-sidebar" class="wcp-dashboard-sidebar" data-shell-target="sidebar">
         <div class="wcp-dashboard-brand">
             <a class="wcp-core-brand" href="{{ path('wcp_dashboard') }}" aria-label="WCP360, tableau de bord">{% include 'components/navigation/brand-logo.html.twig' %}</a>
-            <span class="wcp-core-scope">{{ admin ? 'ADMIN' : 'CLIENT' }}</span>
+            <span class="wcp-core-scope">{{ admin ? 'ADMIN' : 'USER' }}</span>
         </div>
         <nav class="wcp-nav" aria-label="Navigation principale" data-action="click->shell#navigate">
             {% for group in groups %}
@@ -50,7 +50,7 @@
     <button class="wcp-sidebar-overlay" data-shell-target="overlay" data-action="shell#close" type="button" aria-label="Fermer la navigation"></button>
     <div class="wcp-dashboard-main">
         <header class="wcp-dashboard-header">
-            <div class="wcp-header-left"><button class="wcp-menu-btn wcp-mobile-menu" type="button" data-shell-target="toggle" data-action="shell#toggle" aria-controls="wcp-sidebar" aria-expanded="false" aria-label="Ouvrir la navigation">{{ ui.icon('menu') }}</button><span class="wcp-page-title">{{ admin ? 'Administration' : 'Mon espace' }}</span></div>
+            <div class="wcp-header-left"><button class="wcp-menu-btn wcp-mobile-menu" type="button" data-shell-target="toggle" data-action="shell#toggle" aria-controls="wcp-sidebar" aria-expanded="false" aria-label="Ouvrir la navigation">{{ ui.icon('menu') }}</button><span class="wcp-page-title">{{ admin ? 'Administration' : 'Hébergement' }}</span></div>
             <button class="wcp-core-search" type="button" data-navigation-target="opener" data-action="navigation#open" aria-haspopup="dialog" aria-controls="wcp-navigation-search">{{ ui.icon('search') }}<span>Rechercher une page…</span><kbd>Ctrl K</kbd></button>
             <div class="wcp-header-actions">
                 {% include 'components/navigation/theme.html.twig' %}
@@ -60,7 +60,7 @@
         </header>
         <main id="main" class="wcp-dashboard-content" tabindex="-1">
             <div class="wcp-content-inner">
-                <div class="wcp-core-breadcrumb"><span>WCP360</span><span aria-hidden="true">/</span><span>{{ admin ? 'Administration' : 'Espace client' }}</span><span aria-hidden="true">/</span><strong>{{ page_title }}</strong></div>
+                <div class="wcp-core-breadcrumb"><span>WCP360</span><span aria-hidden="true">/</span><span>{{ admin ? 'Administration' : 'Espace d’hébergement' }}</span><span aria-hidden="true">/</span><strong>{{ page_title }}</strong></div>
                 <div class="notice">{{ ui.icon('shield') }}<span><strong>Version de développement</strong> · Les plans sont suivis en base. L’activation Linux reste réservée à l’environnement d’essai isolé.</span></div>
                 {% block content %}{% endblock %}
                 <footer class="wcp-core-footer"><span>WCP360 Standalone <span aria-hidden="true">·</span> Un Core indépendant des extensions.</span><span>PHP / Symfony <span aria-hidden="true">·</span> Go</span></footer>
