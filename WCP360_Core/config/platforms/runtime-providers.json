@@ -1,0 +1,16 @@
+{
+  "schema": "wcp360.candidate-runtime-providers/1",
+  "php": {
+    "version": "8.4.27",
+    "series": "8.4",
+    "source_url": "https://www.php.net/distributions/php-8.4.27.tar.xz",
+    "sha256": "dcf93923b0e38e0d5252b25b796520b5a47761a08b3488b6d0b5d1115764d3f0",
+    "prefix": "/opt/wcp360/runtime/php/8.4",
+    "status": "development-source-build"
+  },
+  "postgresql": {
+    "major": 17,
+    "image": "postgres:17-trixie",
+    "mode": "isolated-verification-service"
+  }
+}

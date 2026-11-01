@@ -1,6 +1,6 @@
 # WCP360 development strategy
 
-**Decision scope:** repository organization and target development method, October 31, 2026. The folders created with this strategy contain documentation scaffolds. The Symfony bootstrap, SDK, plugin host, wizard and production installer still need implementation and verification. The [baseline manifest](../manifests/WCP360-BM-0001.md) and owner specifications retain authority; no runtime gate or independent review is silently granted.
+**Decision scope:** repository organization and target development method, October 31, 2026. The layout combines documentation scaffolds with the selected executable development candidate: Symfony bootstrap, a restricted setup path, SDK/reference-plugin seam and checkout preparation helpers. Complete hosting, production installation and release qualification remain separate acceptance work. The [baseline manifest](../manifests/WCP360-BM-0001.md) and owner specifications retain authority; no runtime gate or independent review is silently granted.
 
 Build one autonomous hosting Core, develop detached plugins against a versioned SDK, and publish each product only from qualified source and evidence. A complete Core must operate with zero optional plugins.
 
@@ -102,9 +102,10 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - [Installer, wizard, builds and release acceptance](DELIVERY-AND-RELEASES.md)
 - [Tests and static analysis](TESTING.md)
 - [Target operating systems, native packages and qualification boundaries](SUPPORTED-PLATFORMS.md)
+- [Five-platform PHP 8.4 Core runtime and PostgreSQL 17 verification](CORE-RUNTIME-MATRIX.md)
 - [Engineering quality and security toolchain](QUALITY-SECURITY-STACK.md)
 - [Security test and release evidence matrix](SECURITY-TEST-MATRIX.md)
 - [Repository directory guide](../REPOSITORY-STRUCTURE.md)
 - [Functional inventory](../../README.md) and [149-entry extension catalogue](../../PLUGIN_CATALOG.md)
 
-The production goal is a complete Core and detachable ecosystem. This organizational publication provides the implementation map and acceptance work; it does not assert that those engines already run.
+The production goal is a complete Core and detachable ecosystem. This implementation map distinguishes the selected executable candidate paths from the remaining functional, host-installation and qualification work; a source directory or configured check does not establish completion.

@@ -6,6 +6,8 @@ The machine-readable source is [Core's target catalogue](../../WCP360_Core/confi
 
 From the repository root, `php WCP360_Core/installer/preflight/platform.php` performs only actual OS identification, without Composer/Symfony, and reports `runtime_validation: not_checked`. `php WCP360_Core/installer/preflight/candidate.php --target --dependencies` separately checks the candidate's PHP version, required extensions, dependency presence and target architecture. It does not connect to PostgreSQL or verify its server version/service health. Neither command changes the host or accepts a simulated OS override.
 
+The separate [Core runtime matrix](CORE-RUNTIME-MATRIX.md) adds a shared PHP 8.4 source-build profile, read-only runtime planning and real PostgreSQL 17 readiness. Its source image and application journey are configured for all five targets; executed outcomes still belong to the exact workflow run.
+
 ## Distribution packages and the Core runtime
 
 These are native distribution package families, not frozen patch revisions. Security updates must remain enabled and exact installed revisions belong in execution evidence.
@@ -20,6 +22,8 @@ These are native distribution package families, not frozen patch revisions. Secu
 
 Core currently requires PHP `~8.4.0`. Installing an unversioned `php-fpm` package on each target does not produce the same runtime. The platform matrix deliberately uses the native PHP-FPM family to exercise hosted-runtime configuration and reports the Core prerequisite refusal where PHP 8.4 is absent. It does not lower or widen the Core constraint to make a target appear compatible.
 
+For development application verification, [runtime-providers.json](../../WCP360_Core/config/platforms/runtime-providers.json) pins one upstream PHP 8.4 source archive and fixed runtime prefix. The separate Core image compiles it against each target's native libraries and connects to an isolated PostgreSQL 17 service. This is an executable development provider, not a qualified production package provider or host installation recipe.
+
 Control-plane data targets PostgreSQL 17. Outside Debian 13, use an explicitly qualified PostgreSQL 17 package provider, such as the upstream PostgreSQL APT repository for the correct distribution suite, or a separately managed PostgreSQL 17 service. The native `postgresql` metapackage is insufficient evidence of the required major version. Hosted customer databases may use other engines or versions through their own reviewed adapters.
 
 No candidate preflight or package probe automatically adds a PPA, changes repository trust, substitutes a different distribution's suite or upgrades an existing database. A runtime-provider decision must identify package/image provenance, signing trust, extensions, update ownership, service paths, isolation and tested rollback. An Ubuntu PPA and a Debian package repository are separate providers; neither is assumed to cover every target release.
@@ -32,11 +36,12 @@ Primary package references: [Debian 12 PHP](https://packages.debian.org/bookworm
 | :--- | :--- | :--- |
 | Declared target | Exact IDs/releases in the shared catalogue. | A compatibility target, without an installation or security claim. |
 | Native package matrix | Five disposable distribution profiles; exact OS recognition, read-only runtime preflight and real Nginx/PHP-FPM HTTP, execution-UID and file-boundary probes. | Configuration and probe results for the exact container image/source revision. Workflow configuration alone is pending execution. |
-| Complete Core candidate | PHP 8.4/Symfony, PostgreSQL 17, PHPUnit, PHPStan, Panther, jobs and the selected hosting integrations. | The existing Debian 13 candidate environment; no inference that Symfony ran on all five native PHP streams. |
+| Source-runtime Core matrix | Same reviewed PHP 8.4 source compiled within each of the five target userspaces; real PostgreSQL 17, non-root checkout preparation, application checks, enrollment, HTTP/job/plugin journey and logical database restore comparison. | The exact per-profile container/source revision and executed job outcome; no native PostgreSQL install, production provider or systemd/VM qualification. |
+| Additional candidate checks | PHP 8.4/Symfony, PostgreSQL 17, PHPUnit, PHPStan, Panther, jobs and the selected hosting integrations. | Existing dedicated candidate/browser/runtime environments retain their separate scopes; no inference that Symfony ran on all five native PHP streams. |
 | Privileged lifecycle and reboot | Go broker/agent, explicit disposable-VM admission, systemd restart, crash refusal/recovery and same-guest reboot. | The existing Debian 13 VM profile only. Its restrictive guards remain in place. |
 | Production qualification | Assembled artifacts, fresh install, upgrades, recovery, security acceptance and independent review on each supported combination. | No target currently has a qualified WCP360 production release. |
 
-The five-profile package matrix does not start the privileged candidate broker or add systemd/VM admission to Ubuntu or Debian 12. Extending those paths requires reviewed runtime providers, distribution adapters and real VM evidence. The FrankenPHP Worker probe also remains a separate PHP 8.4 ZTS image test; it does not qualify a native worker installation on all five systems.
+Neither five-profile matrix starts the privileged candidate broker or adds systemd/VM admission to Ubuntu or Debian 12. Extending those paths requires reviewed runtime providers, distribution adapters and real VM evidence. The FrankenPHP Worker probe also remains a separate PHP 8.4 ZTS image test; it does not qualify a native worker installation on all five systems.
 
 For execution outcomes, inspect the exact source SHA and jobs linked from [PR #116](https://github.com/yyogas/wcp360/pull/116). A successful Debian 13 run cannot qualify another operating system, and a pending or failed profile is never recorded as passing.
 

@@ -14,6 +14,8 @@ See [isolated provisioning](../documentation/development/ISOLATED-PROVISIONING.m
 
 The operating-system targets are **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS**. The [platform guide](../documentation/development/SUPPORTED-PLATFORMS.md) separates native-package probes from a complete PHP 8.4 Core installation and production qualification. The shared catalogue lives in `config/platforms/targets.json`; OS detection does not authorize privileged installation or relax the Debian 13 VM guards.
 
+The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) uses the reviewed PHP 8.4 source profile from `config/platforms/runtime-providers.json`, compiled inside each target userspace, with a real PostgreSQL 17 verification service. It covers non-root checkout preparation, application checks, enrollment, real Nginx/FPM HTTP, jobs, reference-plugin lifecycle and logical database recovery. It remains development verification; native host installation and production runtime providers need separate qualification. Inspect exact per-profile job outcomes before treating any configured check as passing.
+
 ## Source layout
 
 ```text
@@ -123,6 +125,7 @@ The candidate implements a Symfony bootstrap, selected application suites, inert
 - [Installer and release qualification](../documentation/development/DELIVERY-AND-RELEASES.md)
 - [Tests and static analysis](../documentation/development/TESTING.md)
 - [Target operating systems and qualification](../documentation/development/SUPPORTED-PLATFORMS.md)
+- [Five-platform PHP 8.4 Core runtime verification](../documentation/development/CORE-RUNTIME-MATRIX.md)
 - [Engineering quality and security toolchain](../documentation/development/QUALITY-SECURITY-STACK.md)
 - [Security test and release evidence matrix](../documentation/development/SECURITY-TEST-MATRIX.md)
 - [Current baseline manifest](../documentation/manifests/WCP360-BM-0001.md)

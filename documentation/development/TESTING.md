@@ -27,6 +27,7 @@ composer check prepares the Symfony analysis container, runs PHPStan and its rul
 | Linux effects | Separate unprivileged agent and root broker create two PHP-FPM sites, with socket-peer checks, fixed operations and outcome inspection. | Isolated provisioning smoke test; no host mounts. |
 | Runtime profiles | Real Nginx/PHP-FPM and immutable-image FrankenPHP Worker, including request cleanup and recycling. | Separate smoke probes. |
 | Distribution packages | Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS: exact OS detection, native Nginx/PHP-FPM HTTP/UID/file boundaries and Core PHP 8.4 prerequisite checks. | Separate five-profile jobs; inspect their exact run outcome. This is not the full Symfony/Core or systemd VM matrix. |
+| Source-runtime Core | The same PHP 8.4 source compiled within each of the five target userspaces; real PostgreSQL 17, installer checkout preparation, enrollment, actual Nginx/FPM HTTP, durable jobs, reference-plugin lifecycle and logical database recovery. | Separate five-profile Core jobs; exact outcomes/digests must be inspected. This is development application verification, not native host installation or privileged VM qualification. |
 
 The standalone File Manager and proposed catalog packages are not claimed as integrated, level-8-checked Core modules. Each additional package needs its own dependency graph, analysis configuration and execution tests before integration. Planned features such as file-manager context menus and themes receive browser tests when implemented; placeholder assertions would not prove their behavior.
 
@@ -81,6 +82,16 @@ The [systemd recovery rehearsal](SYSTEMD-RECOVERY.md) adds strict Go journal/man
 The independent `installer/preflight/platform.php` checks actual `os-release` identity without loading Composer or Symfony; its output explicitly leaves runtime validation unchecked. Full `installer/preflight/candidate.php --target --dependencies` must accept the native PHP 8.4 family only when all other requirements pass, and refuse native PHP 8.1/8.2/8.3/8.5. An expected runtime refusal is a negative test result, not evidence that Core ran on that PHP version.
 
 The jobs do not start the privileged broker, change third-party repositories or perform a target VM reboot. The existing full Core, PostgreSQL, browser, FrankenPHP and Debian 13 VM jobs retain their separate scopes. Check actual job results and package/image/source identities; adding this matrix does not make pending jobs pass or qualify a production installer.
+
+## Five-platform PHP 8.4 Core runtime matrix
+
+The [Core runtime guide](CORE-RUNTIME-MATRIX.md) describes the second five-profile matrix. Unlike the native package probe, it builds the reviewed PHP 8.4 source archive within each target userspace and runs Symfony with a real PostgreSQL 17 service. The shared [runtime-provider manifest](../../WCP360_Core/config/platforms/runtime-providers.json) owns the version/hash pin; the image verifies the archive before extraction and keeps the source runtime separate from system PHP.
+
+Read-only `runtime-plan.php` describes that development profile. `runtime-readiness.php` checks actual PHP/extensions and queries the database's `server_version_num` through a bounded read-only connection; a Doctrine `serverVersion` URL hint is never accepted as proof. Both also have installer entry points, `candidate-install.sh --plan` and `--check-runtime`. Readiness consumes only process `DATABASE_URL`, not an operator's `.env` or a PHPUnit override.
+
+The non-root harness runs the normal checkout preparation helper, dependency/framework checks and the application suite using a dedicated test database. Separate synthetic workbench accounts then exercise enrollment, login, CSRF refusal, idempotent plan submission, the real CLI worker and install/enable/report/disable/uninstall of the reference plugin through a real Nginx/FPM HTTP server. PostgreSQL 17 dump/restore tools and stable snapshots compare selected application state in a separate empty restore database.
+
+This matrix retains development build dependencies and uses a writable trusted checkout. It does not install a production PHP provider, PostgreSQL packages, systemd units or privileged agents onto target hosts, and it does not restore hosted files/secrets/services. The Debian 13 VM admission remains unchanged. Inspect the exact source revision and per-profile run results before recording any of these checks as passing.
 
 ## Native Go fuzzing
 
