@@ -200,6 +200,12 @@ The [shared HTTP boundary](src/Shared/Http/README.md) adds a fresh server-genera
 
 No dependency, schema, database grant or authorization expansion is introduced. Tests define transport selection, reference isolation, safe headers, disclosure, authentication/surface/tenant/CSRF refusals, idempotency, audit rollback and pending-factor behavior. Exact-source execution belongs to draft PR #116; local executable checks remain stopped by user instruction. Full canonical API/permission/audit correlation, durable log routing, production integration and independent acceptance remain open. **M1 remains open; approximately 20% overall and capability counts are unchanged.**
 
+### Filtered hosting-job history — 2026-11-02
+
+The [Operations job inventory](src/Module/Operations/README.md#filtered-hosting-job-inventory) adds USER browser/API history with tenant, state and hostname filters, bounded page sizes and bidirectional keyset navigation. It reuses the current authorization rule in every row/pivot query and the legacy dashboard/plugin projection. Candidate read/UI validation advances M1 and the bounded M2 task-center slice; it does not implement a general scheduler, cancellation or production permission contracts.
+
+Regression definitions cover tied timestamps, inserts between pages, history beyond 100 rows, filter/cursor rejection, tenant separation, revocation, escaping, minimal projections, unchanged business state and existing restricted PostgreSQL grants. Exact-source results belong to draft PR #116; no local executable tests run. **M1 remains open, approximately 20% overall; capability counts unchanged.**
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

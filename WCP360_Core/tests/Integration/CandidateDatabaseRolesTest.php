@@ -458,6 +458,28 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.mfa.recovery.regenerated'"));
     }
 
+    public function testJobInventoryUsesExistingRestrictedUserGrantsWithoutPrivateColumns(): void
+    {
+        \Wcp360\Core\Tests\Fixtures\HostingJobsFixture::seed($this->maintenance, $this->fixture, 30);
+        $this->provider->provision($this->passwords);
+        $db = $this->login('user');
+        $service = new \Wcp360\Core\Module\Operations\Application\ListHostingJobs($db,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db));
+        $query = \Wcp360\Core\Module\Operations\Domain\JobListQuery::fromArray(['tenant' => $this->fixture['tenants']['alice']]);
+        $page = $service->page($this->fixture['users']['alice'], $query);
+        self::assertCount(25, $page['items']);
+        self::assertSame($this->roles['user'], $db->fetchOne('SELECT current_user'));
+        self::assertNotNull($page['pagination']['next']);
+        self::assertStringNotContainsString('private_result_marker', json_encode($page, JSON_THROW_ON_ERROR));
+        $this->maintenance->insert('wcp_candidate_permission_denials', [
+            'user_id' => $this->fixture['users']['alice'], 'tenant_id' => $this->fixture['tenants']['alice'],
+            'permission' => 'candidate.hosting.plan', 'created_by' => $this->fixture['users']['admin'],
+            'created_at' => WorkbenchStore::now(),
+        ]);
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
+        $service->page($this->fixture['users']['alice'], $query);
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

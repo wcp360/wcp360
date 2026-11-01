@@ -1,0 +1,35 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Mes tâches' %}
+{% set states = {QUEUED:'En attente',RUNNING:'En cours',SUCCEEDED:'Terminée',FAILED:'Échec',UNKNOWN_OUTCOME:'Résultat à vérifier'} %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">OPÉRATIONS D’HÉBERGEMENT</p><h1>Mes tâches</h1><p class="wcp-page-sub">Retrouvez vos plans par domaine et par état.</p></div></div>
+<section class="wcp-panel">
+{% if tenants %}
+<div class="wcp-panel-body">
+<form action="{{ path('wcp_jobs') }}" method="get" aria-label="Filtrer les tâches">
+<div class="wcp-grid-2">
+<div><label for="jobs-tenant">Espace d’hébergement</label><select id="jobs-tenant" name="tenant">{% for tenant in tenants %}<option value="{{ tenant.id }}"{% if tenant.id == filters.tenant %} selected{% endif %}>{{ tenant.name }}</option>{% endfor %}</select></div>
+<div><label for="jobs-search">Domaine</label><input id="jobs-search" name="q" type="search" value="{{ filters.q }}" maxlength="253" placeholder="exemple.test"><p class="field-help">Tout ou partie du domaine, sans caractère générique.</p></div>
+<div><label for="jobs-state">État</label><select id="jobs-state" name="state"><option value="">Tous les états</option>{% for value,label in states %}<option value="{{ value }}"{% if value == filters.state %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+<div><label for="jobs-limit">Résultats affichés</label><select id="jobs-limit" name="limit">{% for size in [25,50,100] %}<option value="{{ size }}"{% if size == filters.limit %} selected{% endif %}>{{ size }}</option>{% endfor %}</select></div>
+</div>
+<div class="actions"><button class="button" type="submit">Filtrer</button><a class="button secondary" href="{{ path('wcp_jobs',{tenant:filters.tenant}) }}">Réinitialiser les filtres</a></div>
+</form>
+</div>
+<div class="table-scroll"><table><caption>Tâches de l’espace sélectionné, de la plus récente à la plus ancienne</caption><thead><tr><th scope="col">Domaine</th><th scope="col">Serveur</th><th scope="col">État</th><th scope="col">Création</th><th scope="col">Détail</th></tr></thead><tbody>
+{% for job in page.items %}
+<tr data-job-id="{{ job.id }}"><td><strong>{{ job.hostname }}</strong></td><td>{{ job.application_server == 'php_fpm' ? 'PHP-FPM' : 'FrankenPHP Worker' }}</td><td>{% include 'components/feedback/status.html.twig' with {state:job.state,label:states[job.state]|default(job.state)} only %}</td><td><time datetime="{{ job.created_at }}">{{ job.created_at }}</time></td><td><a href="{{ path('wcp_job',{id:job.id}) }}" aria-label="Consulter {{ job.hostname }}">Consulter</a></td></tr>
+{% else %}<tr><td colspan="5"><div class="wcp-core-empty"><h2>Aucune tâche pour ces filtres</h2><p>Modifiez votre recherche ou préparez un hébergement depuis le tableau de bord.</p></div></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="wcp-panel-body"><p role="status">{{ page.items|length }} tâche{{ page.items|length != 1 ? 's' : '' }} affichée{{ page.items|length != 1 ? 's' : '' }}</p>
+<nav class="actions" aria-label="Pagination des tâches">
+{% if page.pagination.previous %}<a class="button secondary" rel="prev" href="{{ path('wcp_jobs',filters|merge({before:page.pagination.previous})) }}">Plus récentes</a>{% endif %}
+<a class="button secondary" href="{{ path('wcp_jobs',filters) }}">Premiers résultats</a>
+{% if page.pagination.next %}<a class="button secondary" rel="next" href="{{ path('wcp_jobs',filters|merge({after:page.pagination.next})) }}">Plus anciennes</a>{% endif %}
+</nav></div>
+{% else %}
+<div class="wcp-panel-body"><h2>Aucun espace accessible</h2><p>Les tâches apparaîtront lorsqu’un espace d’hébergement vous sera accessible.</p></div>
+{% endif %}
+</section>
+<a class="button secondary" href="{{ path('wcp_dashboard') }}">Retour au tableau de bord</a>
+{% endblock %}

@@ -15,7 +15,7 @@
 {% else %}
     {% set workspace = workspace|merge([
         {label: 'Hébergements', href: path('wcp_dashboard') ~ '#hosting', icon: 'globe', active: false},
-        {label: 'Tâches', href: path('wcp_dashboard') ~ '#jobs', icon: 'clock', active: route == 'wcp_job'}
+        {label: 'Tâches', href: path('wcp_jobs'), icon: 'clock', active: route in ['wcp_job','wcp_jobs']}
     ]) %}
 {% endif %}
 {% set account = [{label: 'Mot de passe', href: path('wcp_account_password'), icon: 'shield', active: route in ['wcp_account_password', 'wcp_account_password_change']}, {label: 'Mes sessions', href: path('wcp_account_sessions'), icon: 'sessions', active: route == 'wcp_account_sessions'}] %}

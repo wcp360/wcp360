@@ -40,8 +40,11 @@ final readonly class WorkbenchStore
     /** @return list<array<string, mixed>> */
     public function jobs(string $actor, string $tenant): array
     {
-        $this->requirePermission($actor,$tenant);
-        return $this->db->fetchAllAssociative('SELECT j.id,j.state,j.created_at,s.hostname,s.application_server FROM wcp_candidate_jobs j JOIN wcp_candidate_sites s ON s.id=j.site_id AND s.tenant_id=j.tenant_id WHERE j.tenant_id=? ORDER BY j.created_at DESC,j.id DESC LIMIT 100',[$tenant]);
+        $page = (new \Wcp360\Core\Module\Operations\Application\ListHostingJobs($this->db, $this->authorization))
+            ->page($actor, \Wcp360\Core\Module\Operations\Domain\JobListQuery::fromArray(['tenant' => $tenant, 'limit' => '100']));
+        // Preserve the existing dashboard/plugin projection while sharing the query.
+        return array_map(static fn (array $row): array => array_intersect_key($row,
+            array_flip(['id', 'state', 'created_at', 'hostname', 'application_server'])), $page['items']);
     }
     /** @return array<string, mixed> */
     public function job(string $actor,string $id): array

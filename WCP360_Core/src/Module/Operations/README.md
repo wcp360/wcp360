@@ -8,10 +8,27 @@ Start here when changing: **Shared job scheduling, progress, retry and recovery 
 
 | Implemented candidate source | Responsibility |
 | :--- | :--- |
+| [Application/ListHostingJobs.php](Application/ListHostingJobs.php) | Current-tenant read scope, bounded projection and stable bidirectional job cursors. |
+| [Domain/JobListQuery.php](Domain/JobListQuery.php) | Strict query bounds, state/search filters and canonical UUID cursors. |
+| [UI/Http/JobListController.php](UI/Http/JobListController.php) | Filtered job history in the WCP360 layout and existing workbench API. |
 | [Application/RunHostingPlan.php](Application/RunHostingPlan.php) | Claim a queued plan, recheck authority, render its bounded result and persist the terminal state with audit. PostgreSQL claims use row locking. |
 | [Infrastructure/WorkbenchStore.php](Infrastructure/WorkbenchStore.php) | Candidate persistence, job reads and audit writes; its existing tenant/admin authorization and visibility facade delegates to IdentityAccess. |
 | [Infrastructure/WorkbenchSchema.php](Infrastructure/WorkbenchSchema.php) | Candidate account, tenant, site, job and audit schema. |
 | [UI/Console/WorkCommand.php](UI/Console/WorkCommand.php) | Worker-context command for the implemented candidate operations. |
+
+## Filtered hosting-job inventory
+
+[JobListQuery](Domain/JobListQuery.php) validates the existing tenant scope, five supported job states, an ASCII hostname fragment and page sizes of 25, 50 or 100. Unknown fields, arrays, oversized input, SQL wildcard characters, invalid UUIDs and simultaneous before/after cursors fail before querying job data.
+
+[ListHostingJobs](Application/ListHostingJobs.php) provides a bounded read projection and bidirectional cursor navigation ordered by creation time and UUID. Each pivot, page and boundary query joins the existing IdentityAccess tenant-scope rule: active USER identity, exact membership and no explicit block. The service rechecks current authority before returning. Cursors select an authorized result position; they never grant access. A missing, foreign or no-longer-matching pivot has the same safe refusal. Filter changes restart at the first page. Reads do not change jobs or append business audit records.
+
+[JobListController](UI/Http/JobListController.php) exposes `GET /workbench/jobs` and `GET /workbench/v1/jobs`. The browser defaults to the first accessible workspace, supports an empty-access view, and links from the existing sidebar/dashboard. The API requires an explicit `tenant`. Both require the existing USER session; ADMIN roles and pending authentication do not supply USER tenant access. Existing host/session and HTTP error boundaries remain applied.
+
+API query fields are `tenant`, optional `state`, `q`, `limit`, and either `after` or `before` (a job UUID). Responses contain `items` and `pagination: {limit,next,previous}`. Items expose only ID, state, creation/start/completion times, hostname and application-server choice. Raw plan results, fingerprints, idempotency keys and actor IDs are excluded. Existing dashboard/plugin calls reuse this query and retain their original five-field/100-row projection.
+
+This is live keyset navigation, not a frozen snapshot. Concurrent inserts do not shift an OFFSET or duplicate already traversed rows; state changes/deletion can invalidate a filtered pivot, requiring a fresh first page. No total count, arbitrary sort, global search, new schema/index/grant, general scheduler, cancellation or automatic retry is introduced. Large-dataset performance and canonical production API/permission acceptance remain open.
+
+[Query cases](../../../tests/Unit/JobListQueryTest.php), [service cases](../../../tests/Integration/ListHostingJobsTest.php), [HTTP journeys](../../../tests/Integration/JobListJourneyTest.php) and [restricted PostgreSQL-role coverage](../../../tests/Integration/CandidateDatabaseRolesTest.php) define validation, pagination, privacy, revocation, escaping and retained-grant checks. Exact-source outcomes are recorded in draft PR #116; local executable tests remain stopped by user instruction. M1/M2 and production qualification remain open.
 
 Hosting owns [plan submission](../Hosting/Application/SubmitHostingPlan.php), including its validated payload, transactional persistence and idempotency checks. Interrupted plan jobs become `UNKNOWN_OUTCOME` for explicit reconciliation; they are not blindly replayed. This slice does not implement generic retries, leases/fencing, cancellation, compensation, outbox delivery, webhooks or scheduling. Those mechanisms still require accepted contracts, implementation and failure-path qualification.
 

@@ -171,6 +171,8 @@ Before using this slice on an older checkout, apply [Version20261101000300](../.
 
 [Service regressions](../../../tests/Integration/CandidateSessionsTest.php) cover binding/owner separation, exact lifetime limits, MFA rotation, attempt budgets, concurrent timestamp updates, bounded inventory and audit rollback. [HTTP journeys](../../../tests/Integration/SessionJourneyTest.php) cover own-account listing/revocation, browser checks, logout, legacy-cookie refusal, pending/fresh-MFA boundaries and revocation across kernel restarts. Exact-source execution remains tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); test definitions do not establish a current passing result.
 
+The Operations [job inventory](../Operations/README.md#filtered-hosting-job-inventory) composes the same fixed tenant-selection rule through the internal `CandidateAuthorization::tenantScopeSql()` query. Every cursor/page/boundary read remains tenant-scoped and authority is rechecked before return. This does not introduce another permission, grant API or general policy engine.
+
 ## Remaining production foundations
 
 The MFA, access-block and session tables and flows are `wcp_candidate_*` development mechanisms, not an accepted canonical production schema or the canonical `wcp_iam` storage/grant model. Complete password recovery, passkeys, action-bound production reauthentication, service accounts, reseller delegation, general permission composition, production session administration and contract integration remain unfinished. Production Unix identities and PostgreSQL grants still require independent separation and qualification. **M1 is not complete.** Candidate code and passing tests do not establish production readiness.

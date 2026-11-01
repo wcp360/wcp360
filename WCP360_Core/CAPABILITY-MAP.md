@@ -395,7 +395,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 
 | README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
 | :--- | :--- | :--- | :--- | :--- |
-| Task center | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Candidate plan/job dashboard only. | [M2](ROADMAP.md#m2) |
+| Task center | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Tenant-scoped plan/job dashboard and filtered bidirectional job inventory; general scheduling, cancellation and production contracts remain open. | [M2](ROADMAP.md#m2) |
 | Job persistence | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Demonstrated — Durable candidate job state and worker processing. | [M2](ROADMAP.md#m2) |
 | Idempotency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Demonstrated — Candidate request fingerprint, uniqueness and retry tests. | [M2](ROADMAP.md#m2) |
 | Locks and concurrency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — PostgreSQL claims and install lock; general leases/fencing absent. | [M2](ROADMAP.md#m2) |

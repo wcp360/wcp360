@@ -59,6 +59,12 @@ final readonly class CandidateAuthorization
         return $this->db->fetchAllAssociative($this->eligibleGrants().' ORDER BY t.name, t.id', [$actor, self::HOSTING_PLAN]);
     }
 
+    /**
+     * Internal fixed selection query, bound by actor ID and HOSTING_PLAN parameters.
+     * Read repositories compose this scope; no caller-supplied SQL or permission names.
+     */
+    public function tenantScopeSql(): string { return $this->eligibleGrants(); }
+
     /** One current-state rule is shared by visibility and execution checks. */
     private function eligibleGrants(): string
     {
