@@ -32,6 +32,8 @@ The [administrator MFA candidate](src/Module/IdentityAccess/README.md#administra
 
 The [shared candidate authorization boundary](src/Module/IdentityAccess/README.md#candidate-authorization-and-access-blocks) now applies one current-database rule to visibility and execution, with audited administrator access blocks for the single existing permission. Action-level permissions, Effective permissions and Revocation and role changes remain Partial; the counts above do not change. Canonical policy composition, the 82 canonical permissions and production identity separation remain unfinished. Current-source CI for this slice must be recorded separately from the earlier checkpoints.
 
+The [candidate session registry](src/Module/IdentityAccess/README.md#candidate-session-inventory-and-revocation) adds bounded own-account inventory and password-confirmed single/all-session revocation in the current USER/ADMIN context, with durable cookie bindings, admission checks and audited logout. Session management and Revocation and role changes remain Partial; counts stay unchanged. Native Symfony session payloads remain in server-side files; canonical production session storage/grants, other channels and general in-flight effect fencing remain unfinished. Older checkouts require migration `Version20261101000300` and a new login. Exact-source CI for this slice belongs to draft PR #116, not the historical checkpoint.
+
 ## Domain summary
 
 The README domains describe capabilities; Core modules describe cohesive ownership. Several README domains can share a module, and a cross-resource capability has one primary coordinator with explicit collaborators.
@@ -100,9 +102,9 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Mandatory administrator TOTP enrollment/challenge, encrypted seeds and durable replay/attempt controls; production integration remains open. | [M1](ROADMAP.md#m1) |
 | Passkeys / WebAuthn | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
 | Access recovery | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Ten hashed single-use second-factor codes and password-confirmed factor reset; password recovery and independent emergency access absent. | [M1](ROADMAP.md#m1) |
-| Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Context-bound expiry, MFA rotation and factor-revision checks; full session administration absent. | [M1](ROADMAP.md#m1) |
+| Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Separate candidate USER/ADMIN registries, bound rotated cookies, bounded own-account inventory and password-confirmed revocation/logout; canonical session storage/grants and full production administration absent. | [M1](ROADMAP.md#m1) |
 | Sensitive-action reauthentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Administrator mutations require MFA less than five minutes old; sign-in-again flow, complete inline reauthentication absent. | [M1](ROADMAP.md#m1) |
-| Abuse protection | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Login throttling and durable MFA attempt/enrollment limits; wider abuse policy absent. | [M1](ROADMAP.md#m1) |
+| Abuse protection | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Login throttling, durable MFA limits and per-session password-confirmation budgets for revocation; wider abuse policy absent. | [M1](ROADMAP.md#m1) |
 | Passwords | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Argon2id enrollment/login; complete reset/rotation lifecycle absent. | [M1](ROADMAP.md#m1) |
 | Sign-in history | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
 | Local recovery access | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
@@ -120,7 +122,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Data isolation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Candidate tenant/context checks; production database grants absent. | [M1](ROADMAP.md#m1) |
 | Support mode / impersonation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
 | Service accounts | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
-| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Audited persistent tenant access blocks, current-authority worker checks and MFA-revision invalidation; general role changes/revocation fencing absent. | [M1](ROADMAP.md#m1) |
+| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Audited tenant access blocks, current-authority worker checks, MFA-revision invalidation and durable own-account browser-session revocation; general role changes and in-flight effect/channel fencing absent. | [M1](ROADMAP.md#m1) |
 
 ### Customers, resellers, and account lifecycle
 

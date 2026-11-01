@@ -20,6 +20,9 @@ Start here when changing: **Identity, roles, session and recovery behavior.**
 | [Infrastructure/MfaSessionGuard.php](Infrastructure/MfaSessionGuard.php) | Exact administrator Origin, pending-session expiry, factor revision checks, session rotation and fresh-MFA gates. |
 | [UI/Http/MfaController.php](UI/Http/MfaController.php) | CSRF-protected enrollment, account-security page and password-confirmed factor reset. |
 | [Infrastructure/MfaSchema.php](Infrastructure/MfaSchema.php) | Explicitly candidate-only encrypted factor and hashed recovery-code persistence. |
+| [Application/CandidateSessions.php](Application/CandidateSessions.php) | Current-session admission, bounded own-account inventory, durable revocation, MFA strength upgrade and password-confirmation attempt limits. |
+| [Infrastructure/SessionSchema.php](Infrastructure/SessionSchema.php) | Separate candidate USER/ADMIN registries containing session metadata and SHA-256 bindings. |
+| [UI/Http/SessionController.php](UI/Http/SessionController.php) | Own-account listing and password-confirmed, CSRF-protected single/all-session revocation in the current browser context. |
 | [Shared security](../../Shared/Security/README.md) | Runtime separation, session boundaries and bounded session lifetimes. |
 | [Security configuration](../../../config/packages/security.yaml) | Password hashing, CSRF-protected form login/logout and login throttling. |
 
@@ -68,9 +71,32 @@ Backup codes replace the **second factor after password authentication**. They d
 
 [Service regressions](../../../tests/Integration/CandidateMfaTest.php) cover factor storage, replay, attempt windows and recovery. [HTTP journeys](../../../tests/Integration/MfaJourneyTest.php) cover pending-role denial, Origin/CSRF checks, session rotation, recovery/reset and missing-key refusal. Executed outcomes must be tied to the exact source in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); these sources alone are not a passing CI claim.
 
+## Candidate session inventory and revocation
+
+`GET /account/sessions` lists only the authenticated account's sessions in its current USER or ADMIN context. The shared navigation exposes this page in both contexts; a password-only administrator cannot access it. The listing has a stable order, 100 rows per page and a page range of 1–10,000. It shows creation, last activity and maximum expiry times, current-session status and active/pending/expired/revoked states. It collects no IP address or user-agent inventory.
+
+| Mechanism | Implemented candidate behavior |
+| :--- | :--- |
+| Registry | `wcp_candidate_user_sessions` and `wcp_candidate_admin_sessions` hold server-generated UUID selectors, owner/context, authentication strength, timestamps, revocation state and password-confirmation counters. A selector alone never authenticates a browser. |
+| Browser binding | Only a domain-separated SHA-256 binding of the actor, context and actual Symfony session identifier is persisted. Raw session identifiers are excluded from database rows, audit records and rendered views. Symfony's native server-side session files still hold the session payload; this registry is not a database-backed session handler. |
+| Primary authentication | A current active account must match the browser context. The final rotated session identifier is registered after Symfony's login strategy. USER sessions start at strength 1; ADMIN sessions remain pending at strength 1 until real MFA completes. |
+| MFA completion | A compare-and-swap upgrade binds the final newly rotated identifier and changes the same pending ADMIN row to strength 2. Its original creation time and absolute deadline remain unchanged; a revoked or expired pending row cannot be restored by MFA. |
+| Lifetime | The existing shared policy remains authoritative: USER idle/absolute limits are 30 minutes/12 hours; ADMIN limits are 15 minutes/8 hours. Activity updates never extend absolute expiry or move timestamps backwards. |
+| Admission | The registry is checked before the firewall, before unsafe controller execution and again before an MFA attempt. Legacy, missing, revoked, expired or incorrectly bound registrations fail closed. Concurrent heartbeats preserve monotonic timestamps without invalidating another valid request solely because it touched the row. |
+| Single revocation | `POST /account/sessions/{id}/revoke` targets only a session owned by the current account in the current context. Exact Origin, a selector-bound CSRF token and the current password are mandatory. Administrators also need the existing MFA proof less than five minutes old. |
+| Global revocation | `POST /account/sessions/revoke-all` applies only to the current account and context, including its current session. It requires the same Origin/password checks and its own CSRF intent. It does not revoke another account or the other browser context. |
+| Password-confirmation limit | After Origin and CSRF validation, a durable budget permits five total confirmation attempts per session in 15 minutes, including successful attempts. Consumption commits before password hashing; the sixth attempt returns 429 without revocation. A new authenticated login receives a new budget; MFA rotation does not reset the existing counters. |
+| Logout and audit | POST logout retires the bound registration before Symfony clears the browser session. Opening, rotating, revoking and confirmation-attempt events use the UUID selector, and mutations commit atomically with their audit records. |
+
+Revoking the current session or all sessions invalidates the local session and redirects to `/login` with status 303. Revoking another owned session redirects to the inventory with status 303. Revocation is enforced on subsequent admitted requests and rechecked at the implemented mutation/MFA boundaries; it does not stop an already dispatched system operation or provide general fencing for in-flight work or other channels.
+
+Before using this slice on an older checkout, apply [Version20261101000300](../../../migrations/Version20261101000300.php) using the existing candidate migration procedure. **Existing users must sign in again after migration:** old cookies are not silently adopted into the new registries. Respect the [installer recovery rules](../../../installer/recovery/README.md) if migration execution is uncertain; dropping a registry would discard durable revocation state.
+
+[Service regressions](../../../tests/Integration/CandidateSessionsTest.php) cover binding/owner separation, exact lifetime limits, MFA rotation, attempt budgets, concurrent timestamp updates, bounded inventory and audit rollback. [HTTP journeys](../../../tests/Integration/SessionJourneyTest.php) cover own-account listing/revocation, browser checks, logout, legacy-cookie refusal, pending/fresh-MFA boundaries and revocation across kernel restarts. Exact-source execution remains tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); test definitions do not establish a current passing result.
+
 ## Remaining production foundations
 
-The MFA and access-block tables and flows are `wcp_candidate_*` development mechanisms, not an accepted canonical production schema. Complete password recovery, passkeys, inline sensitive-action reauthentication, service accounts, reseller delegation, general permission/session administration and production contract integration remain unfinished. Production Unix identities and PostgreSQL grants still require independent separation and qualification. **M1 is not complete.** Candidate code and passing tests do not establish production readiness.
+The MFA, access-block and session tables and flows are `wcp_candidate_*` development mechanisms, not an accepted canonical production schema or the canonical `wcp_iam` storage/grant model. Complete password recovery, passkeys, inline sensitive-action reauthentication, service accounts, reseller delegation, general permission composition, production session administration and contract integration remain unfinished. Production Unix identities and PostgreSQL grants still require independent separation and qualification. **M1 is not complete.** Candidate code and passing tests do not establish production readiness.
 
 Use the common [module layout](../README.md) for Domain, Application, Infrastructure and UI code. Hosting resource policy stays with its owning domain; reuse the common authorization boundary.
 

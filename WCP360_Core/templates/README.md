@@ -7,12 +7,14 @@
 | [admin](admin/README.md) | Administrative pages in their authorized ADMIN context |
 | [user](user/README.md) | Customer pages with enforced tenant/resource scope |
 | [setup](setup/README.md) | Restricted initial setup and enrollment presentation |
-| [identity](../src/Module/IdentityAccess/README.md) | Candidate administrator MFA, one-time recovery codes, account security and tenant-access blocks |
+| [identity](../src/Module/IdentityAccess/README.md) | Candidate administrator MFA, one-time recovery codes, account security, own-account session inventory/revocation and tenant-access blocks |
 | [layouts](layouts/README.md) | Reusable context-aware page frames |
 | [components](components/README.md) | Shared form, table, chart, feedback and navigation presentation |
 | [errors](errors/README.md) | Safe context-aware error-page presentations |
 
 Templates consume the owning module's authorized view data. They do not own business rules, privileges, secret storage or system writes. Sharing a layout/component does not share origins, cookies, sessions or runtime credentials.
+
+[identity/sessions.html.twig](identity/sessions.html.twig) displays bounded current-context session metadata and server-generated selectors; it receives no raw browser session identifiers, IP addresses or user agents. Its POST forms use target-bound CSRF and current-password confirmation. Owner/context checks, durable attempt limits, revocation and administrator MFA freshness remain server-side in IdentityAccess. The shared navigation links this own-account page for USER and ADMIN contexts.
 
 Browser behavior and styles belong in [assets](../assets/README.md). Linux-service configuration text belongs in [resources/services](../resources/services/README.md), even if the selected renderer eventually uses templates. Keep service rendering separate from the browser Twig loader.
 
