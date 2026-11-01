@@ -1,5 +1,7 @@
 # Installation recipes
 
+The server-installed panel is **WCP360 Standalone**, part of the **WCP360** project. These recipes belong to its Core engine; the current checkout installer remains a development preparation tool.
+
 **Status: a restartable non-root development checkout installer is implemented; no qualified production host installer is provided.**
 
 [candidate-install.sh](candidate-install.sh) prepares an existing complete, trusted repository checkout: generate a private local environment if missing, install locked Composer dependencies, build the Go planner, prepare assets and run migrations against the configured database. It requires the PHP 8.4 runtime and tools to exist already. Its no-option path refuses root and does not install OS packages, PostgreSQL services or systemd units. The default local database configuration is the candidate SQLite workbench; an explicit process `DATABASE_URL` can select the disposable PostgreSQL workbench used by CI.

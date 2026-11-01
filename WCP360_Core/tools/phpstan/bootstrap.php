@@ -12,6 +12,7 @@ $values = [
     'APP_DEBUG' => '1',
     'APP_SECRET' => 'static-analysis-only-synthetic-secret',
     'DATABASE_URL' => 'sqlite:///:memory:',
+    'WCP_DATABASE_MODE' => 'shared',
     'WCP_CANDIDATE' => '1',
     'WCP_CONTEXT' => 'user',
     'WCP_PUBLIC_HOST' => 'user.localhost',

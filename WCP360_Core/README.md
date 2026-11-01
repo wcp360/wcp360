@@ -1,5 +1,7 @@
 # WCP360 Core
 
+**WCP360** is the project name. **WCP360 Standalone** is the hosting control panel installed on a server. **WCP360 Core** is its built-in application engine, maintained in `WCP360_Core/`; it must operate without optional plugins. The local checkout directory name does not rename the product.
+
 **Status: an executable development candidate is available; the complete hosting engine and production release remain unqualified.**
 
 The [Core delivery roadmap](ROADMAP.md) records the current completion estimate, implemented candidate paths, remaining work, dependency order and acceptance criteria. The [capability register](CAPABILITY-MAP.md#delivery-snapshot) assigns a delivery status to each of the 233 capabilities; source-folder coverage is separate from product completion.
@@ -15,6 +17,8 @@ The [candidate authorization boundary](src/Module/IdentityAccess/README.md#candi
 The [candidate session registry](src/Module/IdentityAccess/README.md#candidate-session-inventory-and-revocation) adds `/account/sessions` for USER and MFA-authenticated ADMIN accounts. Each account can inspect and revoke its own sessions in the current browser context, with exact Origin, target-bound CSRF and current-password confirmation; administrator changes also require fresh MFA. Durable, separate candidate tables store session metadata and a SHA-256 binding, while Symfony's session payload remains in server-side files. Older checkouts must apply [Version20261101000300](migrations/Version20261101000300.php) and sign in again: existing cookies are never automatically registered. Revocation blocks subsequent admitted requests; complete production session contracts, database grants and in-flight effect fencing remain open.
 
 The standalone [runtime identity inspection](installer/preflight/README.md#runtime-identity-inspection) compares live Linux credentials with the accepted USER, ADMIN, worker, wcpd or wcp-privd identity profile. It checks all four UID/GID credentials, actual supplementary groups, canonical account/group separation, no-login service accounts and a conservative process-hardening baseline. It loads no application configuration and grants no authority. This diagnostic does not create identities, enforce runtime admission, qualify the root broker or establish filesystem/PostgreSQL isolation.
+
+The optional [candidate database profiles](config/contexts/DATABASE-PROFILES.md) select a private PostgreSQL credential for USER, ADMIN, worker or setup. Before admitting a new isolated application connection, a DBAL gate checks role restrictions and effective candidate session-table privileges: USER/ADMIN require their own CRUD and no access to the opposite registry; workers require no access to either. Shared development access remains the default. Native grant provisioning, broader database policy and production qualification remain open.
 
 The standalone [native-installation inspection](installer/preflight/README.md#read-only-native-installation-handoff) observes the actual target, available memory, `/var` free space, TCP/UDP sockets and canonical product paths before Composer installation. Operator-selected checks expose conflicts and unknowns; no production defaults are assumed. The report keeps native application blocked until its provider, artifacts and controlled installation effects are implemented and qualified.
 

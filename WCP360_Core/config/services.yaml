@@ -5,6 +5,7 @@ parameters:
     env(WCP_ALLOW_FRANKENPHP_PLANS): '0'
     env(WCP_ALLOW_ISOLATED_PROVISIONING): '0'
     env(WCP_MFA_KEY): ''
+    env(WCP_DATABASE_MODE): shared
 services:
     _defaults:
         autowire: true
@@ -12,6 +13,10 @@ services:
     Wcp360\Core\:
         resource: ../src/
         exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Shared\Security\CandidateDatabaseMiddleware:
+        arguments:
+            $mode: '%env(WCP_DATABASE_MODE)%'
+            $context: '%env(WCP_CONTEXT)%'
     Wcp360\Core\Shared\Security\RuntimeContext:
         arguments:
             $context: '%env(WCP_CONTEXT)%'

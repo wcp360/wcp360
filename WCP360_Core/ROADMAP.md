@@ -126,6 +126,16 @@ The diagnostic is read-only and independent of Symfony configuration. Missing ma
 
 [Unit](tests/Unit/RuntimeIdentityTest.php) and [standalone/live Linux](tests/Integration/RuntimeIdentityTest.php) tests define the scope; current-source results belong to [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Next, implement and qualify explicit runtime packaging and separate PostgreSQL credentials with negative cross-surface privilege tests. Accepted permission-composition decisions remain prerequisites for the general evaluator; AUDIT-WCP-0118 stays open. **M1 remains open**, `CODE-BASELINE` remains `NONE`, and the approximately 20% estimate and **5 demonstrated / 71 partial / 157 planned** capability counts remain unchanged.
 
+### Candidate database profiles and session-grant admission
+
+The project name remains **WCP360**; **WCP360 Standalone** identifies the hosting panel installed on the server, and **WCP360 Core** identifies its engine. This terminology does not change namespaces or directory ownership.
+
+The opt-in [database profiles](config/contexts/DATABASE-PROFILES.md) select one context-specific PostgreSQL URL without reading other runtime credentials or falling back to `DATABASE_URL`. A [DBAL middleware](src/Shared/Security/CandidateDatabaseMiddleware.php) checks new USER/ADMIN/worker connections before application queries. Effective privilege checks require own-session CRUD for web contexts, prohibit all direct table/column access to the opposite session registry, and prohibit both registries for workers. Elevated roles, role memberships, public-schema creation, non-PostgreSQL-17 connections and missing session tables are rejected. Setup uses a separate maintenance URL and deliberately bypasses the application-role gate.
+
+[Configuration and middleware regressions](tests/Unit/CandidateDatabaseMiddlewareTest.php), [actual Symfony wiring](tests/Integration/CandidateDatabaseConfigurationTest.php) and [real PostgreSQL role tests](tests/Integration/CandidatePostgresGrantsTest.php) define this slice. Exact-source results must be recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); definitions alone do not establish passing outcomes.
+
+The default shared development profile is unchanged. No native role/grant provisioning, canonical `wcp_iam` integration, full non-session grant policy, security-definer/view audit, live-connection privilege-drift fence or Unix/filesystem admission is implemented by this slice. Those remain production prerequisites. **M1 remains open**, `CODE-BASELINE` remains `NONE`, and the approximately 20% estimate and **5 demonstrated / 71 partial / 157 planned** capability counts remain unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.
