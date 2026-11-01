@@ -13,7 +13,7 @@ Non-root wcpd and the minimal-root wcp-privd broker are separately supervised co
 
 ## Candidate database access
 
-The opt-in [database profile](DATABASE-PROFILES.md) now selects a context-specific PostgreSQL credential and checks effective session-table privileges on new application connections. The default shared development profile retains its existing behavior. Database role provisioning, full runtime packaging and production admission remain unfinished.
+The opt-in [database profile](DATABASE-PROFILES.md) now selects a context-specific PostgreSQL credential and checks effective session-table privileges on new application connections. The default shared development profile retains its existing behavior. An explicit [candidate-only maintenance recipe](../../installer/recipes/CANDIDATE-DATABASE-ROLES.md) creates fresh development roles and exact direct grants. Native production provisioning, full runtime packaging and production admission remain unfinished.
 
 ## Inspect the calling identity
 

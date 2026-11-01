@@ -6,6 +6,7 @@ parameters:
     env(WCP_ALLOW_ISOLATED_PROVISIONING): '0'
     env(WCP_MFA_KEY): ''
     env(WCP_DATABASE_MODE): shared
+    env(WCP_ALLOW_CANDIDATE_DATABASE_ROLES): '0'
 services:
     _defaults:
         autowire: true
@@ -13,6 +14,12 @@ services:
     Wcp360\Core\:
         resource: ../src/
         exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabaseRoles:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_DATABASE_ROLES)%'
+    Wcp360\Core\Module\Setup\UI\Console\DatabaseRolesCommand:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_DATABASE_ROLES)%'
     Wcp360\Core\Shared\Security\CandidateDatabaseMiddleware:
         arguments:
             $mode: '%env(WCP_DATABASE_MODE)%'

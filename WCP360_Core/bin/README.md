@@ -1,6 +1,6 @@
 # Application entry points and command locations
 
-This folder is reserved for reviewed application entry points. The actual Symfony bootstrap will supply bin/console; no executable application command is supplied by this README.
+[bin/console](console) is the implemented Symfony entry point for the WCP360 Standalone development candidate. Commands live in their owning modules. Production boot remains disabled.
 
 | Kind of command | Source owner | Execution boundary |
 | :--- | :--- | :--- |
@@ -9,6 +9,8 @@ This folder is reserved for reviewed application entry points. The actual Symfon
 | First installation/repair/upgrade | installer/ and Setup | Autonomous reviewed bootstrap followed by restricted application setup |
 | Linux service/file action | Approved agent component and registered primitive | Non-root wcpd to minimal-root wcp-privd through accepted bounded IPC |
 | Specialized diagnostic | diagnostics/<tool>/ | Bounded non-root collection and redacted results |
+
+The setup-only `wcp:candidate:database:roles` command is read-only by default. Explicit `--apply` additionally needs its enable flag and private setup passwords; it creates only fresh reviewed development roles. See the [recipe](../installer/recipes/CANDIDATE-DATABASE-ROLES.md) for migration, grant and recovery requirements.
 
 A command's name, controller or executable path is not an authorization rule. Use explicit actor/tenant/surface context, typed inputs, bounded work and durable results. HTTP and Console adapters reuse one application operation rather than duplicating business functions.
 
