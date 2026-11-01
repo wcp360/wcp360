@@ -26,6 +26,7 @@ composer check prepares the Symfony analysis container, runs PHPStan and its rul
 | Browser | Login, global-default/site selector presentation, Stimulus duplicate-submit protection and Turbo navigation with compiled assets. | Panther and real Chromium/WebDriver in a non-root disposable test container. |
 | Linux effects | Separate unprivileged agent and root broker create two PHP-FPM sites, with socket-peer checks, fixed operations and outcome inspection. | Isolated provisioning smoke test; no host mounts. |
 | Runtime profiles | Real Nginx/PHP-FPM and immutable-image FrankenPHP Worker, including request cleanup and recycling. | Separate smoke probes. |
+| Distribution packages | Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS: exact OS detection, native Nginx/PHP-FPM HTTP/UID/file boundaries and Core PHP 8.4 prerequisite checks. | Separate five-profile jobs; inspect their exact run outcome. This is not the full Symfony/Core or systemd VM matrix. |
 
 The standalone File Manager and proposed catalog packages are not claimed as integrated, level-8-checked Core modules. Each additional package needs its own dependency graph, analysis configuration and execution tests before integration. Planned features such as file-manager context menus and themes receive browser tests when implemented; placeholder assertions would not prove their behavior.
 
@@ -65,11 +66,21 @@ References: [Symfony testing](https://symfony.com/doc/7.4/testing.html), [PHPSta
 
 ## Clean Debian VM and hosted application
 
+The shared [target catalogue and evidence guide](SUPPORTED-PLATFORMS.md) covers Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS. The complete privileged VM rehearsal below remains Debian 13-only; the declared targets do not broaden its admission guards.
+
 The [disposable VM rehearsal](DEBIAN-VM.md) runs the shared provisioning and packaged-application checks against Debian 13 distribution PHP-FPM. Its explicit environment gates have PHP and Go regression coverage for stale boot IDs, wrong distributions, ordinary VM identifiers and writable/tenant-owned markers. This is additional to the container, PostgreSQL, Panther and FrankenPHP jobs; consult the exact workflow run for execution evidence.
 
 ## Supervised recovery
 
 The [systemd recovery rehearsal](SYSTEMD-RECOVERY.md) adds strict Go journal/managed-file regressions and tests actual candidate service restart, owned PHP-FPM child failure, inconsistent-state refusal and full guest reboot. Application sessions, counters and Unix identities must survive without replaying physical provisioning. The workflow result applies only to its exact source head.
+
+## Five-platform native package matrix
+
+`.github/workflows/core-executable-candidate.yml` derives profile IDs from `WCP360_Core/config/platforms/targets.json` and configures disposable package jobs for `debian-12`, `debian-13`, `ubuntu-22.04`, `ubuntu-24.04` and `ubuntu-26.04`. The dedicated `WCP360_Build/environments/platform-smoke/Dockerfile` installs each image's native Nginx and PHP-FPM. `WCP360_Build/verification/candidate-platform-smoke.sh` exercises the generated configuration with real HTTP requests, a separate execution UID and file-boundary negatives.
+
+The independent `installer/preflight/platform.php` checks actual `os-release` identity without loading Composer or Symfony; its output explicitly leaves runtime validation unchecked. Full `installer/preflight/candidate.php --target --dependencies` must accept the native PHP 8.4 family only when all other requirements pass, and refuse native PHP 8.1/8.2/8.3/8.5. An expected runtime refusal is a negative test result, not evidence that Core ran on that PHP version.
+
+The jobs do not start the privileged broker, change third-party repositories or perform a target VM reboot. The existing full Core, PostgreSQL, browser, FrankenPHP and Debian 13 VM jobs retain their separate scopes. Check actual job results and package/image/source identities; adding this matrix does not make pending jobs pass or qualify a production installer.
 
 ## Native Go fuzzing
 

@@ -99,7 +99,8 @@ The outbox/delivery path represents durable publication to configured workers; i
 | Nginx | HTTPS termination and routing for configured panel origins and hosted applications. |
 | PHP-FPM | Initial default: separate panel runtime pools and account-isolated hosted PHP application pools. |
 | FrankenPHP / Caddy Worker | Optional explicitly compatible hosted applications, one dedicated non-root process/identity per site behind Nginx over a Unix socket; separate from the system daemons. |
-| Debian 13 / amd64 | Initial target operating-system and architecture boundary defined by the baseline. |
+| Debian 13 / amd64 baseline | The existing canonical build/qualification boundary remains version-bound to its approved baseline. |
+| Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS | Declared amd64 development targets, identified by the shared platform catalogue with per-distribution native package probes. Target recognition, native package probes and full installation qualification are separate results. |
 
 These are target selections. Exact framework/package revisions, build inputs, runtime extensions, and compatibility matrices belong to each qualified component release. The current inert daemon has its own narrowly approved toolchain.
 
@@ -109,7 +110,7 @@ PHP-FPM remains the initial default for hosted PHP applications. The candidate a
 
 The hosted-site selector does not convert the Core's current request-scoped bootstrap to worker mode. ADMIN/USER persistent runtimes require a separate reviewed integration and cross-request identity/session qualification. Caddy/FrankenPHP does not replace wcpd or wcp-privd, and worker threads are not tenant isolation boundaries.
 
-See [application-server profiles](documentation/development/APPLICATION-SERVERS.md) for source locations, candidate checks, safe-switch requirements and platform status. Debian 13 is the candidate test target; Ubuntu and AlmaLinux require separate adapters and qualification, including SELinux policy on AlmaLinux.
+See [application-server profiles](documentation/development/APPLICATION-SERVERS.md) and the [OS target matrix](documentation/development/SUPPORTED-PLATFORMS.md) for source locations, package/runtime differences and test scope. The requested targets are Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS. The complete privileged VM/reboot candidate remains Debian 13-specific until matching runtime providers and VM adapters are tested; AlmaLinux is outside this five-target matrix.
 
 ## Core structure
 
@@ -323,7 +324,9 @@ Vendor data collection does not create general remote administration. The Insigh
 
 ### Initial target
 
-The initial platform boundary is Debian 13 on amd64. A single managed node contains isolated panel runtimes, control-plane persistence, workers, agents, and enabled hosting services. External providers and vendor services remain separate dependencies with explicit failure behavior.
+The product targets Debian 12 and 13, plus Ubuntu 22.04, 24.04 and 26.04 LTS on amd64. The existing canonical baseline and full privileged recovery/reboot candidate remain scoped to Debian 13. A single managed node contains isolated panel runtimes, control-plane persistence, workers, agents, and enabled hosting services. External providers and vendor services remain separate dependencies with explicit failure behavior.
+
+The Core requires PHP 8.4 and PostgreSQL 17 regardless of the host distribution defaults. Native package probes do not substitute another PHP version into the Core. Distribution-specific runtime sourcing, package ownership, service paths, systemd behavior and complete installation/recovery evidence belong to the [platform adapter qualification](documentation/development/SUPPORTED-PLATFORMS.md).
 
 This is a target deployment model, not an available installer or a qualified minimum hardware configuration. Multi-node control, clustering, HA, virtualization, and advanced storage require their own validated adapters and operating procedures.
 

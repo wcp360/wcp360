@@ -1,6 +1,6 @@
 # Installer source and orchestration
 
-**Status: implementation areas documented; no operational installer is implemented by these directories.** Existing versioned shell scaffolds keep their guarded non-operational behavior.
+**Status: read-only candidate preflight and development helpers exist; no qualified production installer is provided.** Existing versioned shell scaffolds keep their guarded non-operational behavior.
 
 | Source area | Responsibility |
 | :--- | :--- |
@@ -11,6 +11,8 @@
 | [scaffolds](scaffolds/README.md) | Preserve the earlier unqualified guarded shell templates; they are not released installers. |
 
 The eventual autonomous CLI/bootstrap entry point must work before Symfony is installed, verify qualified artifact identity and select an accepted installation plan. Its source can live here while being packaged as an independently runnable installation artifact. Do not add a fake executable or dependency lock just to fill the layout.
+
+The declared targets are Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS, identified through the shared `config/platforms/targets.json` catalogue. Read-only OS detection, complete PHP 8.4 Core prerequisites and native-package smoke results are separate checks. The existing complete Core and privileged systemd/VM rehearsal remain Debian 13-specific. Other targets require qualified PHP 8.4/PostgreSQL 17 providers and reviewed service/recovery adapters; no preflight adds a PPA or changes host configuration. See the [platform guide](../../documentation/development/SUPPORTED-PLATFORMS.md).
 
 The restricted wizard UI lives in [templates/setup](../templates/setup/README.md); business state and orchestration live in the [Setup module](../src/Module/Setup/README.md). Reviewed host operations use accepted installation/agent boundaries. Repeated execution must distinguish fresh installation, resume, repair and supported upgrade.
 

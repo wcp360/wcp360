@@ -10,6 +10,61 @@ concurrency:
   group: core-candidate-${{ github.event.pull_request.head.ref || github.ref_name }}
   cancel-in-progress: true
 jobs:
+  platform-matrix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      targets: ${{ steps.targets.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Read the shared target platform catalogue
+        id: targets
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          data = json.loads(Path('WCP360_Core/config/platforms/targets.json').read_text())
+          assert data['schema'] == 'wcp360.target-platforms/1'
+          targets = data['targets']
+          assert len(targets) == 5 and len({p['id'] for p in targets}) == 5
+          matrix = []
+          for profile in targets:
+              assert re.fullmatch(r'debian-(12|13)|ubuntu-(22|24|26)\.04', profile['id'])
+              assert re.fullmatch(r'debian:(12|13)-slim|ubuntu:(22|24|26)\.04', profile['image'])
+              assert profile['architecture'] == 'amd64'
+              matrix.append({'id': profile['id'], 'image': profile['image']})
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('matrix=' + json.dumps({'include': matrix}, separators=(',', ':')), file=output)
+          PY
+  platform-packages:
+    needs: platform-matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.platform-matrix.outputs.targets) }}
+    env:
+      WCP_TARGET_PROFILE: ${{ matrix.id }}
+      WCP_BASE_IMAGE: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build native distribution package probe
+        run: |
+          bash -n WCP360_Build/verification/candidate-platform-smoke.sh
+          bash -n WCP360_Build/verification/candidate-linux-smoke.sh
+          docker pull "$WCP_BASE_IMAGE"
+          base_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' "$WCP_BASE_IMAGE")"
+          printf 'Target %s; resolved base image %s\n' "$WCP_TARGET_PROFILE" "$base_ref"
+          docker build --build-arg "BASE_IMAGE=$base_ref" -f WCP360_Build/environments/platform-smoke/Dockerfile -t wcp360-platform-probe .
+      - name: Verify identity, runtime refusal and isolated native Nginx/PHP-FPM
+        run: docker run --rm --network none --user 0:0 --pids-limit 128 --memory 512m --security-opt no-new-privileges -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_TARGET_PROFILE wcp360-platform-probe
   debian-postgresql:
     runs-on: ubuntu-24.04
     timeout-minutes: 55
@@ -18,7 +73,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Validate candidate shell harnesses
-        run: for script in WCP360_Build/verification/candidate-{debian-vm,vm-guest,provisioning-smoke,systemd-smoke,systemd-preflight}.sh; do bash -n "$script"; done
+        run: for script in WCP360_Build/verification/candidate-{debian-vm,vm-guest,provisioning-smoke,systemd-smoke,systemd-preflight,platform-smoke,linux-smoke}.sh; do bash -n "$script"; done
       - name: Build tested Debian 13 / PHP 8.4 / Go candidate
         run: docker build -f WCP360_Build/environments/core-candidate/Dockerfile -t wcp360-candidate .
       - name: Start isolated PostgreSQL 17

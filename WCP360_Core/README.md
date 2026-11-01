@@ -12,6 +12,8 @@ See [application-server profiles](../documentation/development/APPLICATION-SERVE
 
 See [isolated provisioning](../documentation/development/ISOLATED-PROVISIONING.md) for the real-effects PHP-FPM experiment and [testing](../documentation/development/TESTING.md) for PHPUnit, PHPStan and Panther commands.
 
+The operating-system targets are **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS**. The [platform guide](../documentation/development/SUPPORTED-PLATFORMS.md) separates native-package probes from a complete PHP 8.4 Core installation and production qualification. The shared catalogue lives in `config/platforms/targets.json`; OS detection does not authorize privileged installation or relax the Debian 13 VM guards.
+
 ## Source layout
 
 ```text
@@ -38,6 +40,7 @@ WCP360_Core/
 ├── bin/                         # Reviewed CLI entry points when implemented
 ├── config/
 │   ├── packages/
+│   ├── platforms/               # Exact target catalogue; native package families and profile IDs
 │   ├── routes/
 │   └── contexts/
 ├── resources/services/          # Seventeen documented Linux-service source locations
@@ -119,6 +122,7 @@ The candidate implements a Symfony bootstrap, selected application suites, inert
 - [Plugin lifecycle](../documentation/development/PLUGIN-LIFECYCLE.md)
 - [Installer and release qualification](../documentation/development/DELIVERY-AND-RELEASES.md)
 - [Tests and static analysis](../documentation/development/TESTING.md)
+- [Target operating systems and qualification](../documentation/development/SUPPORTED-PLATFORMS.md)
 - [Engineering quality and security toolchain](../documentation/development/QUALITY-SECURITY-STACK.md)
 - [Security test and release evidence matrix](../documentation/development/SECURITY-TEST-MATRIX.md)
 - [Current baseline manifest](../documentation/manifests/WCP360-BM-0001.md)

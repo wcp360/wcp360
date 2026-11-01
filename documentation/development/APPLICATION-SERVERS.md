@@ -62,9 +62,13 @@ Cache invalidation, worker restart after code/configuration/secret changes, prot
 
 | Platform | Current evidence boundary |
 | :--- | :--- |
-| Debian 13 / amd64 | Candidate container tests for PHP-FPM and a separate immutable official FrankenPHP/PHP 8.4 ZTS image. Consult the exact CI run for pass/fail; this is not a complete fresh-host or production qualification. |
-| Ubuntu | Planned adapter and test matrix: explicitly select supported releases, package sources, PHP/ZTS extensions, service units, permissions and recovery behavior. Not qualified. |
-| AlmaLinux | Planned RPM/DNF and systemd adapter with supported-version selection, SELinux labels/policy, package provenance and recovery tests. SELinux must remain enabled; no disabling workaround. Not qualified. |
+| Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS | Exact declared targets. A five-profile matrix configures real native Nginx/PHP-FPM package probes, OS recognition and Core-runtime prerequisite checks. Inspect the exact CI run for pass/fail; configuration alone is pending execution. Native PHP versions differ and the probe does not boot Symfony on incompatible versions. |
+| Complete Core candidate | Debian 13 / amd64 supplies PHP 8.4/PostgreSQL 17 and retains the full application integration path. Other targets need qualified PHP 8.4/PostgreSQL 17 providers and complete installation evidence. |
+| FrankenPHP Worker | Separate immutable official FrankenPHP/PHP 8.4 ZTS image; this fixture does not qualify native worker packages, extensions or service lifecycle on all five target systems. |
+| Privileged services and VM recovery | Existing Debian 13-only candidate guards and systemd/reboot rehearsal remain unchanged. A package probe cannot grant privileged admission on another OS. |
+| Other distributions | Outside this matrix. AlmaLinux would require explicit release selection, RPM/DNF adaptation, SELinux policy and independent evidence; SELinux must remain enabled. |
+
+The [platform and package matrix](SUPPORTED-PLATFORMS.md) records native PHP families and runtime-provider requirements. Choosing PHP-FPM or FrankenPHP does not choose the Core runtime, change its PHP `~8.4.0` constraint or add a package repository automatically.
 
 The application suite checks defaults, migration of old sites, malformed choices, tenant/admin authority, revision conflicts, compatibility acknowledgement, idempotency across global changes, availability rechecks and inert worker plans.
 

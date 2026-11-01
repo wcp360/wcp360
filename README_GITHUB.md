@@ -19,7 +19,8 @@
 [![Target database: PostgreSQL 17](https://img.shields.io/badge/Database-PostgreSQL%2017-4169E1?style=flat-square&logo=postgresql&logoColor=white)](#backend-architecture)
 [![Target persistence: Doctrine ORM](https://img.shields.io/badge/Persistence-Doctrine%20ORM-FC6A31?style=flat-square)](#backend-architecture)
 [![Target jobs: Symfony Messenger](https://img.shields.io/badge/Jobs-Symfony%20Messenger-475569?style=flat-square)](#backend-architecture)
-[![Target operating system: Debian 13](https://img.shields.io/badge/OS-Debian%2013-A81D33?style=flat-square&logo=debian&logoColor=white)](#technical-requirements)
+[![Target operating systems: Debian 12 and 13](https://img.shields.io/badge/OS-Debian%2012%20%2F%2013-A81D33?style=flat-square&logo=debian&logoColor=white)](documentation/development/SUPPORTED-PLATFORMS.md)
+[![Target operating systems: Ubuntu 22.04, 24.04 and 26.04 LTS](https://img.shields.io/badge/OS-Ubuntu%2022.04%20%2F%2024.04%20%2F%2026.04%20LTS-E95420?style=flat-square&logo=ubuntu&logoColor=white)](documentation/development/SUPPORTED-PLATFORMS.md)
 [![Optional job transport: Redis](https://img.shields.io/badge/Queue-Redis%20%28optional%29-DC382D?style=flat-square&logo=redis&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target system agent: Go](https://img.shields.io/badge/Agent-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target diagnostics: Python](https://img.shields.io/badge/Diagnostics-Python-3776AB?style=flat-square&logo=python&logoColor=white)](#technology-stack-and-responsibilities)
@@ -40,7 +41,7 @@ WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, 
 | :--- | :--- | :--- |
 | **233 documented capabilities** across 21 domains | **WCP-ADMIN** for server operations and **WCP-USER** for customers and resellers | **149 catalog entries** covering optional modules, connectors, recipes, and engine adapters |
 
-The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. Go agents perform controlled system operations on Debian 13; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications.
+The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. The operating-system targets are **Debian 12 and 13, and Ubuntu 22.04, 24.04 and 26.04 LTS**. Go agents perform controlled system operations; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications. Target declarations, native-package tests and complete installation qualification have distinct [platform evidence boundaries](documentation/development/SUPPORTED-PLATFORMS.md).
 
 > [!NOTE]
 > **In development — status documented on October 31, 2026.** This README describes the target architecture. The existing prototypes and candidate sources still require integration and qualification. See [Current project status](#current-project-status) and the [current manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) for the authorized development scope.
@@ -169,7 +170,7 @@ Symfony renders the interface and applies business rules; Go performs authorized
 | PHP-FPM | Conventional request-scoped applications, including legacy software and WordPress, subject to version and extension requirements. |
 | FrankenPHP Worker | Dedicated process/Unix identity per site, private socket, resource limits, health checks and recycling. Application compatibility and performance require testing. |
 | Candidate | Both profiles are tested behind Nginx in disposable Linux containers. PHP-FPM activation through isolated candidate agents is separate from production provisioning. |
-| Core and platforms | The selector does not switch ADMIN/USER into worker mode. Debian 13 is the candidate test target; Ubuntu and AlmaLinux need adapters and qualification, including SELinux on AlmaLinux. |
+| Core and platforms | The selector does not switch ADMIN/USER into worker mode. Targets are Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS; the complete Core and privileged VM candidate remain scoped to Debian 13. Native package probes and the separate FrankenPHP image do not qualify worker installation across those targets. |
 
 FrankenPHP/Caddy remains separate from the Go system agents. Worker planning is disabled by default through WCP_ALLOW_FRANKENPHP_PLANS and requires explicit compatibility acknowledgement. See [application-server profiles](documentation/development/APPLICATION-SERVERS.md).
 
@@ -246,9 +247,9 @@ The current HTML/CSS/vanilla-JavaScript prototype remains the visual and behavio
 
 ## Backend architecture
 
-The backend target combines **PHP 8.4 / Symfony**, **Doctrine ORM and DBAL over PostgreSQL 17**, **Symfony Messenger**, and the Go agents **`wcpd` / `wcp-privd`** on **Debian 13**. PHP handles application decisions and persistence; Go implements bounded system operations through a separate privilege boundary.
+The backend target combines **PHP 8.4 / Symfony**, **Doctrine ORM and DBAL over PostgreSQL 17**, **Symfony Messenger**, and the Go agents **`wcpd` / `wcp-privd`** on **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS**. PHP handles application decisions and persistence; Go implements bounded system operations through a separate privilege boundary. Each distribution needs its own runtime-provider and service qualification.
 
-Debian 13 includes PHP 8.4 and PostgreSQL 17, making these versions a coherent distribution-aligned target. Exact package revisions, Symfony compatibility, and updates must be pinned and tested for each release. [Debian 13 release information](https://www.debian.org/News/2025/20250809).
+Debian 13 natively supplies the selected PHP 8.4 and PostgreSQL 17 families. The other targets ship different defaults, including PHP 8.5 on Ubuntu 26.04; they require separately qualified PHP 8.4 and PostgreSQL 17 providers or services. Core's current `~8.4.0` constraint is unchanged. Exact revisions, extensions, updates and recovery must be verified per release. [Platform and package matrix](documentation/development/SUPPORTED-PLATFORMS.md).
 
 ### Backend responsibilities and runtime identities
 
@@ -1347,7 +1348,7 @@ These requirements describe the environment to assemble and qualify for the inte
 
 | Requirement | Prerequisite |
 | :--- | :--- |
-| Operating system | Debian 13 with tested service, network, user, package, and storage management. |
+| Operating system | Debian 12 or 13; Ubuntu 22.04, 24.04 or 26.04 LTS. Service, network, user, package and storage management must be qualified per target. |
 | Web access | Nginx, HTTPS configuration, a panel hostname, and appropriate DNS resolution. |
 | Frontend | PHP/Symfony, Twig, Symfony UX, AssetMapper, and a pinned standalone Tailwind compiler prepared in the build environment. |
 | Backend | PHP 8.4, a compatible pinned Symfony release, Composer, OPcache, and the extensions required by component manifests. |
@@ -1360,6 +1361,8 @@ These requirements describe the environment to assemble and qualify for the inte
 | Operations | Storage for data, logs, and backups; retention policy and recovery access. |
 
 Versions and dependencies must be pinned in each component's manifests. **No minimum CPU, RAM, or disk configuration has yet been qualified for the complete panel in production.**
+
+The [supported-platform guide](documentation/development/SUPPORTED-PLATFORMS.md) records exact target IDs and native package families. The five-profile CI matrix checks OS recognition, read-only preflight and real native Nginx/PHP-FPM behavior. Its configuration is not a passing result, and its native PHP probe does not run Symfony Core on PHP 8.1, 8.2, 8.3 or 8.5. The complete PHP 8.4 candidate and privileged systemd/reboot rehearsal remain Debian 13-specific until the other targets receive their own adapters and evidence.
 
 ### Requirements for currently available components
 

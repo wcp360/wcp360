@@ -80,7 +80,7 @@ Work in dependency order with a usable, tested result at each step. These work p
 | 3. Extension seam | Versioned API/SDK, package identity, compatibility, capabilities, data ownership and lifecycle registry. | Contract tests; denied cross-tenant/unknown operations; no private Core imports. |
 | 4. Plugin host | Admission, supervision, lifecycle, drain/recovery, menu registry and isolated UI contributions. | Install/enable/crash/disable/update/uninstall scenarios preserve Core and hosted workloads. |
 | 5. Reference plugin | One small optional integration developed in isolation, then tested against Core. | Standalone tests plus compatibility and lifecycle integration evidence. |
-| 6. Install and setup | CLI installation, restricted wizard, upgrade and recovery using assembled artifacts. | Fresh Debian installation, interrupted setup/resume, wrong-origin/session negatives and restore rehearsal. |
+| 6. Install and setup | CLI installation, restricted wizard, upgrade and recovery using assembled artifacts. | Fresh installations on the selected Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS targets, interrupted setup/resume, wrong-origin/session negatives and restore rehearsal. |
 | 7. Product qualification | Complete the selected functional release scope and dependency/security/recovery checks. | Trace the applicable requirements from the existing 233-capability inventory to executed evidence. |
 | 8. Release | Publish the exact qualified revision and immutable artifacts. | Release checklist, supported-target results, provenance, recovery instructions and required signoffs. |
 
@@ -101,6 +101,7 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - [Plugin lifecycle and failure containment](PLUGIN-LIFECYCLE.md)
 - [Installer, wizard, builds and release acceptance](DELIVERY-AND-RELEASES.md)
 - [Tests and static analysis](TESTING.md)
+- [Target operating systems, native packages and qualification boundaries](SUPPORTED-PLATFORMS.md)
 - [Engineering quality and security toolchain](QUALITY-SECURITY-STACK.md)
 - [Security test and release evidence matrix](SECURITY-TEST-MATRIX.md)
 - [Repository directory guide](../REPOSITORY-STRUCTURE.md)

@@ -10,6 +10,8 @@ The application requires APP_ENV=dev/test and WCP_CANDIDATE=1. Production boot i
 
 The candidate uses deliberately separate wcp_candidate_* tables and /workbench routes. It does not claim to implement the canonical DB Model v1.0, the 86 accepted API operations or IPC-B. Its narrow permission candidate.hosting.plan is experimental and is not added to the 82-entry canonical permission registry.
 
+WCP360 targets **Debian 12 and 13, and Ubuntu 22.04, 24.04 and 26.04 LTS**. The complete Core development image remains Debian 13 with PHP 8.4 and PostgreSQL 17. A separate five-profile native-package matrix checks detection, prerequisite refusal and Nginx/PHP-FPM behavior; it does not run this Symfony application on incompatible native PHP streams. See [target platforms](SUPPORTED-PLATFORMS.md) for exact profiles, package families and qualification boundaries.
+
 ## Seven-stage delivery status
 
 | Stage | Concrete implementation | Remaining acceptance |
@@ -24,7 +26,7 @@ The candidate uses deliberately separate wcp_candidate_* tables and /workbench r
 
 ## Isolated activation and quality checks
 
-The candidate now adds a separate opt-in [PHP-FPM activation experiment](ISOLATED-PROVISIONING.md): durable Symfony activation jobs, an unprivileged Go agent, a minimal-root candidate broker, strict Unix peer checks, fixed operations and observed outcomes. It runs only in a disposable Linux test container; the existing wcp-plan binary remains inert. This does not implement canonical IPC-B or qualify production/fresh-VM provisioning.
+The candidate now adds a separate opt-in [PHP-FPM activation experiment](ISOLATED-PROVISIONING.md): durable Symfony activation jobs, an unprivileged Go agent, a minimal-root candidate broker, strict Unix peer checks, fixed operations and observed outcomes. Its guarded execution profiles are disposable Linux test containers and the explicit [Debian 13 VM rehearsal](DEBIAN-VM.md); the existing wcp-plan binary remains inert. This does not implement canonical IPC-B or qualify production provisioning on any target. Debian 12/Ubuntu package probes do not extend broker or VM admission.
 
 [Testing](TESTING.md) documents PHPUnit/Test Pack, PHPStan level 8 before application tests, real-browser Panther checks and optional Pest syntax. Current outcomes are bound to the exact PR commit, not inherited from older runs.
 
@@ -59,6 +61,8 @@ The database volume persists candidate state. Runtime caches and browser session
 
 Require PHP 8.4 with the extensions checked by installer/preflight/candidate.php, Composer and Go 1.27.3. SQLite is allowed only for portable development/tests; PostgreSQL 17 is the control-plane target.
 
+Run the independent OS check from the repository root with `php WCP360_Core/installer/preflight/platform.php`. It reads the actual host identity and reports `runtime_validation: not_checked`; it does not certify PHP, database availability or installation readiness. Full Core prerequisites use `php WCP360_Core/installer/preflight/candidate.php --target --dependencies`. On the other four targets, provide a qualified PHP 8.4 runtime first; native PHP 8.1/8.2/8.3/8.5 must fail that runtime check. No command adds a repository or replaces system packages.
+
 From WCP360_Core:
 
 ~~~sh
@@ -77,7 +81,7 @@ Use a separate terminal with WCP_CONTEXT=worker php bin/console wcp:candidate:wo
 
 For native frontend editing, rebuild assets after source changes; a compiled public/assets directory takes precedence over development mapping.
 
-The Debian helper installer/recipes/candidate-install.sh automates dependencies, plan compilation, assets and migrations in a complete checkout. It refuses root and does not modify /etc, install services, fetch an unqualified release or enroll a default privileged account.
+The development helper installer/recipes/candidate-install.sh automates dependencies, plan compilation, assets and migrations in a complete checkout with the required runtime already available. It refuses root and does not modify /etc, install services, fetch an unqualified release or enroll a default privileged account. It is not the five-platform production installer.
 
 ## Verification and recovery
 
@@ -91,6 +95,8 @@ php bin/console asset-map:compile
 ~~~
 
 The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM, FrankenPHP Worker and backup/restore probes. The first complete run passed; see [PR #116](https://github.com/yyogas/wcp360/pull/116) for results bound to the latest candidate head. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
+
+Its additional platform jobs derive the five profile IDs from the shared catalogue and configure native Nginx/PHP-FPM smoke checks per distribution. The native package results are separate from the full Core job and from the Debian 13 systemd/reboot VM. They establish only their recorded assertions on the exact tested source/image; no production or cross-distribution qualification is inherited.
 
 The backup helpers accept only wcp360_workbench or wcp360_test. The restore helper accepts only an empty wcp360_restore_test database and a verified backup under Core var/backups. Supply PGHOST/PGUSER/PGPASSWORD securely; never put credentials in a command line or commit them. Stop all candidate workers before using wcp:candidate:work --reconcile-interrupted. This marks interrupted jobs UNKNOWN_OUTCOME and does not resubmit them.
 

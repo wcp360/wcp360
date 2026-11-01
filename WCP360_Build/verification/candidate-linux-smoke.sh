@@ -15,12 +15,13 @@ php -r '$p=json_decode(file_get_contents($argv[1]),true,16,JSON_THROW_ON_ERROR);
 id "$unix_user" >/dev/null 2>&1 || useradd --system --user-group --no-create-home --shell /usr/sbin/nologin "$unix_user"
 mkdir -p "/srv/wcp360-candidate/vhosts/$site_id/public" "/srv/wcp360-candidate/vhosts/$site_id/tmp/sessions" /run/wcp360-candidate
 printf '%s' '<?php echo "wcp360-candidate-ok";' > "/srv/wcp360-candidate/vhosts/$site_id/public/index.php"
+printf '%s' '<?php echo json_encode(["uid"=>posix_geteuid(),"owner"=>fileowner(__FILE__)],JSON_THROW_ON_ERROR);' > "/srv/wcp360-candidate/vhosts/$site_id/public/identity.php"
 printf '%s' 'must-not-be-served' > "/srv/wcp360-candidate/vhosts/$site_id/public/.secret"
 printf '%s' '<?php echo "hidden-must-not-execute";' > "/srv/wcp360-candidate/vhosts/$site_id/public/.hidden.php"
 chown -R "$unix_user:www-data" "/srv/wcp360-candidate/vhosts/$site_id"
 chmod 0710 "/srv/wcp360-candidate/vhosts/$site_id"
 chmod 0750 "/srv/wcp360-candidate/vhosts/$site_id/public"
-chmod 0640 "/srv/wcp360-candidate/vhosts/$site_id/public/index.php" "/srv/wcp360-candidate/vhosts/$site_id/public/.secret"
+chmod 0640 "/srv/wcp360-candidate/vhosts/$site_id/public/index.php" "/srv/wcp360-candidate/vhosts/$site_id/public/identity.php" "/srv/wcp360-candidate/vhosts/$site_id/public/.secret"
 chmod 0700 "/srv/wcp360-candidate/vhosts/$site_id/tmp" "/srv/wcp360-candidate/vhosts/$site_id/tmp/sessions"
 runuser -u nobody -- test ! -r "/srv/wcp360-candidate/vhosts/$site_id/public/index.php"
 chown www-data:www-data /run/wcp360-candidate
@@ -56,7 +57,9 @@ for attempt in {1..20}; do
     sleep 0.2
 done
 [[ "$(curl --silent --show-error --fail --max-time 3 -H 'Host: example.test' http://127.0.0.1:8080/index.php)" == wcp360-candidate-ok ]]
+curl --silent --show-error --fail --max-time 3 -H 'Host: example.test' http://127.0.0.1:8080/identity.php > "$test_root/identity.json"
+php -r '$r=json_decode(file_get_contents($argv[1]),true,8,JSON_THROW_ON_ERROR);$expected=(int)$argv[2];if($expected===0||$r!==["uid"=>$expected,"owner"=>$expected])exit(1);' "$test_root/identity.json" "$(id -u "$unix_user")"
 [[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H 'Host: example.test' http://127.0.0.1:8080/.secret)" == 403 ]]
 [[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H 'Host: example.test' http://127.0.0.1:8080/missing.php)" == 404 ]]
 [[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H 'Host: example.test' http://127.0.0.1:8080/.hidden.php)" == 403 ]]
-printf '%s\n' 'PASS: real Nginx -> Unix socket -> isolated PHP-FPM -> PHP response; hidden files denied; missing PHP rejected.'
+printf '%s\n' 'PASS: real Nginx -> Unix socket -> isolated PHP-FPM -> PHP response with expected non-root UID; hidden files denied; missing PHP rejected.'

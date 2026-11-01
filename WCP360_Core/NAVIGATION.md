@@ -14,6 +14,7 @@ The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21
 | A worker/job handler | [Operations](src/Module/Operations/README.md) and the affected domain | Shared lifecycle in Operations; resource decisions in the owning module |
 | An API controller or form | [Module layout](src/Module/README.md) | UI/Http/ or UI/Form/; authorization and invariants stay server-side |
 | Symfony packages, service wiring or routes | [Application configuration](config/README.md) | config/packages/, config/routes/ and reviewed service imports |
+| Debian/Ubuntu target recognition and package differences | [Platform guide](../documentation/development/SUPPORTED-PLATFORMS.md) | config/platforms/targets.json, Shared/Platform/TargetPlatform.php and installer/preflight; native package probes remain separate from privileged VM admission |
 | ADMIN, USER or worker identity/settings | [Runtime contexts](config/contexts/README.md) | Explicit per-context access, sessions, secrets and connections |
 | Nginx/Apache virtual hosts or PHP pools | [Linux services](resources/services/README.md) | nginx/, apache/, php-fpm/ and the Hosting module |
 | PHP-FPM / FrankenPHP Worker selection | [Application-server guide](../documentation/development/APPLICATION-SERVERS.md) | Hosting policy, Platform default settings, shared Twig field and Go candidate templates |

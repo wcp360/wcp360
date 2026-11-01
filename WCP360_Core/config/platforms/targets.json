@@ -1,0 +1,12 @@
+{
+  "schema": "wcp360.target-platforms/1",
+  "core_php_series": "8.4",
+  "core_postgresql_major": 17,
+  "targets": [
+    {"id": "debian-12", "os_id": "debian", "version": "12", "codename": "bookworm", "image": "debian:12-slim", "native_php_series": "8.2", "architecture": "amd64", "package_manager": "apt"},
+    {"id": "debian-13", "os_id": "debian", "version": "13", "codename": "trixie", "image": "debian:13-slim", "native_php_series": "8.4", "architecture": "amd64", "package_manager": "apt"},
+    {"id": "ubuntu-22.04", "os_id": "ubuntu", "version": "22.04", "codename": "jammy", "image": "ubuntu:22.04", "native_php_series": "8.1", "architecture": "amd64", "package_manager": "apt"},
+    {"id": "ubuntu-24.04", "os_id": "ubuntu", "version": "24.04", "codename": "noble", "image": "ubuntu:24.04", "native_php_series": "8.3", "architecture": "amd64", "package_manager": "apt"},
+    {"id": "ubuntu-26.04", "os_id": "ubuntu", "version": "26.04", "codename": "resolute", "image": "ubuntu:26.04", "native_php_series": "8.5", "architecture": "amd64", "package_manager": "apt"}
+  ]
+}

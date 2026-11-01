@@ -11,6 +11,8 @@ parameters:
         - config/bootstrap.php
         - public/index.php
         - bin/console
+        - installer/preflight/candidate.php
+        - installer/preflight/platform.php
         - tools/phpstan/bootstrap.php
         - tools/phpstan/prepare.php
         - tools/phpstan/console-application.php
