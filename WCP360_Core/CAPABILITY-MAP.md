@@ -17,7 +17,7 @@ Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369
 
 ## Delivery snapshot
 
-**Assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
+**Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. The later live capacity/port/path inspection extends the existing prerequisite-check row without changing these status counts; its source and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
 
 | Candidate status | Rows | Meaning |
 | :--- | ---: | :--- |
@@ -415,7 +415,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 
 | README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
 | :--- | :--- | :--- | :--- | :--- |
-| Prerequisite checks | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Read-only actual OS/PHP/PostgreSQL checks for the candidate scope. | [M3](ROADMAP.md#m3) |
+| Prerequisite checks | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Read-only OS/PHP/PostgreSQL checks and live capacity/port/path inspection; unknowns retained, native application blocked. | [M3](ROADMAP.md#m3) |
 | Installation status | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Demonstrated — Private journal with read-only status and explicit resume. | [M3](ROADMAP.md#m3) |
 | Initial configuration | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Partial — Private local config and CLI enrollment; graphical wizard absent. | [M3](ROADMAP.md#m3) |
 | Update verification | [Setup](src/Module/Setup/README.md) | [Platform](src/Module/Platform/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) | Planned | [M7](ROADMAP.md#m7) |

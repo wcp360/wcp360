@@ -8,7 +8,7 @@ The estimate is engineering judgment based on inspected source, executable evide
 
 ## Evidence and interpretation
 
-The runtime assessment is bound to [source 61adf46](https://github.com/yyogas/wcp360/commit/61adf46e3e29a666c3c0fc462591b7fbd639a85a), on the existing `implementation/core-executable-foundation-20261031` branch, and [workflow 41289487783](https://github.com/yyogas/wcp360/actions/runs/41289487783).
+The initial runtime assessment below is bound to [source 61adf46](https://github.com/yyogas/wcp360/commit/61adf46e3e29a666c3c0fc462591b7fbd639a85a), on the existing `implementation/core-executable-foundation-20261031` branch, and [workflow 41289487783](https://github.com/yyogas/wcp360/actions/runs/41289487783). Later implementation slices are listed separately; their executed outcomes must be tied to their own source/workflow.
 
 | Evidence | Verified scope | Limit |
 | :--- | :--- | :--- |
@@ -71,6 +71,14 @@ The candidate status columns in [CAPABILITY-MAP.md](CAPABILITY-MAP.md#capability
 | Restartable checkout installation | [Recipes](installer/recipes/README.md), [Setup](src/Module/Setup/README.md), [recovery rules](installer/recovery/README.md). | Existing trusted checkout and existing runtimes; no native package/service provisioning. |
 | Database recovery rehearsal | [Backup helper](installer/recovery/candidate-backup.sh), [restore helper](installer/recovery/candidate-restore-test.sh), five-target logical restore checks. | Selected candidate database state, not a complete tenant/server backup product. |
 | Cross-platform application verification | [Target catalogue](config/platforms/targets.json), [runtime profile](config/platforms/runtime-providers.json), linked workflow. | Five userspaces do not imply five qualified privileged host installers. |
+
+### Native installation preparation after the initial checkpoint
+
+The next executable slice adds [LinuxHostInventory](src/Shared/Platform/LinuxHostInventory.php), [NativeInstallationPlan](src/Module/Setup/Application/NativeInstallationPlan.php) and a [standalone CLI](installer/preflight/native-plan.php). It observes the live OS/architecture, process identity, available memory, free space on `/var`, current-namespace IPv4/IPv6 TCP/UDP bindings and canonical product paths. Optional operator requirements are diagnostic inputs, not production defaults. Known conflicts fail; incomplete observations stay unknown; omitted requirements stay unchecked.
+
+The report remains a candidate handoff with `native_apply_allowed: false`. It provides no canonical execution plan, trusted native runtime provider, artifact-verification chain or registered installation effects. Cgroup budgets, other filesystems, host network topology, DNS/time and service ownership/health remain unchecked. Existing paths are never overwritten. The checkout installer exposes this read-only path through `--host-check`, before journaling or mutations.
+
+[Deterministic plan tests](tests/Unit/NativeInstallationPlanTest.php), [standalone checkout tests](tests/Integration/NativeInstallationPlanTest.php), [parser regressions](tests/Unit/LinuxHostInventoryTest.php) and [real Linux TCP/UDP tests](tests/Integration/LinuxHostInventoryTest.php) define this slice's evidence. Current-source CI outcomes belong to the existing draft PR; the historical numbers above remain the initial checkpoint. This bounded preparation leaves M3 open and does not change the approximately 20% overall estimate or the capability-status counts.
 
 ## Ordered delivery plan
 
@@ -278,7 +286,7 @@ Cross-domain security, monitoring, UI and recovery tests are developed with each
 ## Next concrete Core work
 
 1. Resolve the M1 production integration boundaries against the existing accepted contracts; retain candidate behavior until replacement is explicitly accepted.
-2. Specify the native installation plan/provider interfaces in Core, including artifact verification, observed host state and service/identity ownership. Extend the journal through these typed boundaries rather than adding a universal shell runner.
+2. Extend the implemented read-only host inspection with reviewed native provider/artifact interfaces, accepted minimum sizing and service/identity ownership. Implement artifact verification and extend the journal through typed effects rather than adding a universal shell runner. The current candidate handoff is not that execution contract.
 3. Implement and qualify one reviewed native installation slice on a disposable reference target, including refusal/interruption/recovery cases, then extend the remaining targets independently.
 4. Build the restricted wizard on the shared enrollment/authorization use cases, with single-use bootstrap closure and MFA/recovery. Do not expose an unrestricted first-admin form.
 

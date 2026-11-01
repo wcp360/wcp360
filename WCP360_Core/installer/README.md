@@ -20,11 +20,14 @@ The [candidate installer](recipes/candidate-install.sh) prepares an existing com
 | :--- | :--- |
 | `installer/recipes/candidate-install.sh --plan` | Read-only development runtime plan. |
 | `installer/recipes/candidate-install.sh --check-runtime` | Read-only PHP/extensions and actual PostgreSQL server check using process `DATABASE_URL`; does not load `.env`. |
+| `installer/recipes/candidate-install.sh --host-check` | Read-only host observations and native-installation handoff, without assumed requirements. Native application remains blocked; exits 78. |
 | `installer/recipes/candidate-install.sh --status` | Read-only inspection of an existing journal; requires no Composer dependencies and creates no state or lock. |
 | `installer/recipes/candidate-install.sh` | Start preparation of a fresh checkout. Existing journal state requires explicit resume. |
 | `installer/recipes/candidate-install.sh --resume` | Revalidate the recorded source, configuration and environment binding before resuming permitted steps. |
 
 Progress lives in private `var/installer/candidate-install.json`. A lock covers the whole mutating run, and durable checkpoints distinguish completion, failure and interruption. Preparation steps can be replayed after successful admission; migration uncertainty requires manual reconciliation or a verified backup, never automatic retry. Successful migrations are checked read-only during resume. There is no reset flag. See the [recipe](recipes/README.md), [recovery procedure](recovery/README.md) and [preflight limits](preflight/README.md).
+
+The separate [native-plan preflight](preflight/README.md#read-only-native-installation-handoff) observes the actual target, visible memory, `/var` free space, current-namespace TCP/UDP sockets and the four canonical managed paths. Explicit optional port/capacity requirements can be supplied to `installer/preflight/native-plan.php`; memory thresholds use available memory and disk thresholds use free space on `/var`. `--tcp=none` and `--udp=none` explicitly request no ports for their protocol; omitted requirements remain unchecked. No accepted production defaults are invented. Missing requirements and unknown observations stay blocked. This command works before Composer installation, creates no journal, runs no package/service commands and grants no host mutation. It reports the current development runtime profile without promoting it to a native production provider.
 
 Interactive account enrollment remains `WCP_CONTEXT=setup php bin/console wcp:candidate:enroll`. The graphical first-run wizard remains future work: its reserved views live in [templates/setup](../templates/setup/README.md), and business orchestration belongs to the [Setup module](../src/Module/Setup/README.md). Reviewed host operations must use accepted installation/agent boundaries. Checkout resume is not a production repair or upgrade mechanism.
 

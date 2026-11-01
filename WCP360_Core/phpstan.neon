@@ -15,6 +15,7 @@ parameters:
         - installer/preflight/platform.php
         - installer/preflight/runtime-plan.php
         - installer/preflight/runtime-readiness.php
+        - installer/preflight/native-plan.php
         - installer/recipes/candidate-install.php
         - tools/phpstan/bootstrap.php
         - tools/phpstan/prepare.php

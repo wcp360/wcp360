@@ -11,6 +11,7 @@ php WCP360_Core/installer/preflight/platform.php
 php WCP360_Core/installer/preflight/candidate.php --target --dependencies
 php WCP360_Core/installer/preflight/runtime-plan.php
 php WCP360_Core/installer/preflight/runtime-readiness.php
+php WCP360_Core/installer/preflight/native-plan.php
 ~~~
 
 `platform.php` reads actual OS identity without Composer or Symfony and admits the exact Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS targets from [the shared catalogue](../../config/platforms/targets.json). It reports `runtime_validation: not_checked`; recognizing an OS is not a complete readiness result. Unknown releases and derivatives are rejected rather than inferred from `ID_LIKE`.
@@ -21,9 +22,36 @@ php WCP360_Core/installer/preflight/runtime-readiness.php
 
 `runtime-readiness.php` checks the executing PHP 8.4 process and required extensions, then connects to the explicit process `DATABASE_URL` using PDO with bounded timeouts and read-only session settings. It executes only `SHOW server_version_num`; the observed server must be PostgreSQL 17. The URL's `serverVersion` hint cannot establish that result. It deliberately loads no `.env`, PHPUnit bootstrap or test URL override. Missing/invalid connection settings, connection failure, the wrong major version or a failed PHP prerequisite produce a failing JSON report without credentials, DSNs or raw database errors. A successful report still sets `qualified_release: false`.
 
-The installer exposes these two read-only commands as `bash WCP360_Core/installer/recipes/candidate-install.sh --plan` and `--check-runtime`. These options return before the helper's checkout preparation/migration path. See the [runtime matrix guide](../../../documentation/development/CORE-RUNTIME-MATRIX.md) for the corresponding five-target development image, application journey and evidence requirements.
+The installer exposes runtime planning as `bash WCP360_Core/installer/recipes/candidate-install.sh --plan`, runtime readiness as `--check-runtime` and the native-installation handoff below as `--host-check`. These options return before checkout preparation, journaling or migrations. See the [runtime matrix guide](../../../documentation/development/CORE-RUNTIME-MATRIX.md) for the corresponding five-target development image, application journey and evidence requirements.
 
-Supported OS/architecture, installed package/engine versions, capacity, ownership, existing listeners, hostname/DNS/time and incompatible service topology. Report failed or unknown checks explicitly; do not silently repair the host or treat UI fixtures as real observations.
+## Read-only native-installation handoff
+
+[native-plan.php](native-plan.php) combines live observations from [LinuxHostInventory](../../src/Shared/Platform/LinuxHostInventory.php) with the [Setup native-installation plan](../../src/Module/Setup/Application/NativeInstallationPlan.php). It works with PHP 8.1 or newer without Composer, Symfony, `.env`, database access, subprocesses or package/service commands.
+
+Optional requirements are explicit inputs to this diagnostic. For example:
+
+~~~sh
+php WCP360_Core/installer/preflight/native-plan.php --tcp=80,443 --udp=53 --memory-mib=2048 --disk-mib=10240
+~~~
+
+These numbers are an example request, not accepted production ports or minimum sizing. `--memory-mib` compares the requested threshold with **available memory**, not total installed RAM; `--disk-mib` compares it with free space on the current `/var` filesystem. One MiB is 1,048,576 bytes. No requirements are assumed: omitted port or capacity requirements remain `not_checked` and block installation admission. The wrapper's `--host-check` passes no requirements; use the standalone command to supply them.
+
+Use `--tcp=none` or `--udp=none` to explicitly request no ports for that protocol. This differs from omitting the option: its requested-port check passes with an empty requirement, while the independently reported socket-table observation can still be unknown. Options accept no duplicate flag, duplicate port, port range or arbitrary command.
+
+| Observation | Scope and limit |
+| :--- | :--- |
+| OS and architecture | Exact shared five-target catalogue and actual architecture; no derivative/version inference. |
+| Memory and disk | Visible total/available Linux memory and total/free space on the `/var` filesystem at observation time. Capacity checks use available memory and free disk space. Cgroup limits and capacity on other filesystems are not checked; these values neither establish an effective container budget nor reserve capacity. |
+| TCP/UDP ports | Bounded IPv4/IPv6 socket-table reads in the current network namespace. This does not identify a service, inspect another namespace or prove a future bind will succeed. Unreadable or incomplete observations remain unknown. |
+| Managed paths | Observe `/usr/lib/wcp360`, `/var/lib/wcp360`, `/run/wcp360` and `/var/cache/wcp360`. Existing objects require fresh-install review; the report grants no overwrite, ownership or repair permission. |
+| Identity and systemd | Observe the process effective UID and `/run/systemd/system` marker. Neither establishes privileged authorization, a running service manager or service health. |
+| Runtime provider | Includes the existing development runtime plan as reference. Source-built PHP and isolated PostgreSQL verification are not a qualified native provider or installed service. |
+
+The report explicitly keeps native application blocked: `native_apply_allowed: false`, `host_changes: false` and `qualified_release: false`. Artifact trust, native provider qualification, registered host effects and the remaining host checks need their own implementation and evidence. No listener result establishes service ownership or readiness, and no preflight qualifies hostname/DNS/time or the full host topology by implication.
+
+`checks` distinguishes a satisfied observation (`pass`), a known refusal such as an occupied requested port or insufficient capacity (`fail`), unavailable evidence (`unknown`), an omitted/unimplemented check (`not_checked`) and unavailable production boundaries (`blocked`). `blockers` includes every check that is not `pass`. Passing the implemented checks never removes the native-provider, artifact-trust or registered-effect blockers.
+
+The command always exits **78** while native application is blocked, including when its implemented observations pass. Invalid arguments exit **64**; an unexpected collection/planning failure exits **1** with a redacted message. There is no `--apply` mode. A future installer must reobserve and authorize its concrete effects; this diagnostic is neither a privilege grant nor a substitute for live checks at mutation time.
 
 The five-platform native Nginx/PHP-FPM matrix tests native package behavior; the separate source-runtime matrix exercises PHP 8.4 Core application behavior within those userspaces. The privileged systemd/reboot VM remains Debian 13-specific. Neither matrix qualifies a production host installer. An expected prerequisite refusal is not permission to run Symfony on an unsupported PHP version. [Platform and evidence boundaries](../../../documentation/development/SUPPORTED-PLATFORMS.md)
 

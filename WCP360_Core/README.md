@@ -8,6 +8,8 @@ Start with the [candidate run guide](../documentation/development/EXECUTABLE-CAN
 
 The [checkout installer](installer/recipes/README.md) now records private durable checkpoints, prevents concurrent runs and provides read-only `--status` plus explicit `--resume`. It verifies source/configuration identity, rebuilds repeatable preparation outputs and blocks automatic replay after failed or interrupted database migrations. It prepares an existing trusted development checkout; native production provisioning and the graphical first-run wizard remain separate work.
 
+The standalone [native-installation inspection](installer/preflight/README.md#read-only-native-installation-handoff) observes the actual target, available memory, `/var` free space, TCP/UDP sockets and canonical product paths before Composer installation. Operator-selected checks expose conflicts and unknowns; no production defaults are assumed. The report keeps native application blocked until its provider, artifacts and controlled installation effects are implemented and qualified.
+
 The Core owns essential hosting, local administration/recovery and the extension manager. It must run with zero optional plugins. Detached packages use the public SDK/API and their own processes; installing a plugin does not modify the Core Composer graph or inject its code into Symfony.
 
 Start with the [change-location index](NAVIGATION.md) to find a function, command, dependency or Linux-service configuration. The [dependency guide](DEPENDENCIES.md) identifies manifests, locks and generated libraries.
