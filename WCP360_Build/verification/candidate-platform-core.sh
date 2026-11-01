@@ -38,6 +38,10 @@ php "$fixture" enroll
 # The Core itself runs behind Nginx and PHP-FPM as UID 10001. All process files
 # live in a private directory; no host service or privileged daemon is admitted.
 mkdir -p "$work_dir"/{client,proxy,fastcgi,uwsgi,scgi}
+# Debian's current FastCGI defaults normalize HTTP_HOST through $host, which
+# drops a non-default port. Keep the other distribution hardening directives,
+# then provide this fixture's fixed authority after validating both host forms.
+awk '!($1 == "fastcgi_param" && $2 == "HTTP_HOST")' /etc/nginx/fastcgi_params > "$work_dir/fastcgi_params"
 cat > "$work_dir/fpm.conf" <<EOF
 [global]
 pid = $work_dir/fpm.pid
@@ -81,9 +85,12 @@ http {
         listen 127.0.0.1:8080;
         server_name user.localhost;
         root $core_root/public;
+        if (\$host != "user.localhost") { return 400; }
+        if (\$http_host != "user.localhost:8080") { return 400; }
         location / { try_files \$uri /index.php\$is_args\$args; }
         location = /index.php {
-            include /etc/nginx/fastcgi_params;
+            include $work_dir/fastcgi_params;
+            fastcgi_param HTTP_HOST user.localhost:8080;
             fastcgi_param SCRIPT_FILENAME \$document_root/index.php;
             fastcgi_pass unix:$work_dir/core.sock;
         }
@@ -105,6 +112,11 @@ for attempt in {1..30}; do
     sleep 1
 done
 [[ $ready == 1 ]] || { echo 'The isolated Core HTTP runtime did not become ready.' >&2; exit 1; }
+for rejected_host in user.localhost other.localhost:8080 user.localhost:8081; do
+    [[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' -H "Host: $rejected_host" http://127.0.0.1:8080/health)" == 400 ]] || { echo 'The fixed HTTP authority boundary was not enforced.' >&2; exit 1; }
+done
+[[ "$(curl --silent --max-time 3 -o /dev/null -w '%{http_code}' --request-target 'http://other.localhost:8080/health' -H 'Host: user.localhost:8080' http://127.0.0.1:8080/health)" == 400 ]] || { echo 'A conflicting absolute request target was admitted.' >&2; exit 1; }
+printf '%s\n' 'PASS: fixed HTTP authority; missing/wrong port, foreign host and conflicting absolute target refused.'
 php "$fixture" submit
 WCP_CONTEXT=worker WCP_PUBLIC_HOST=localhost php bin/console wcp:candidate:work
 php "$fixture" verify

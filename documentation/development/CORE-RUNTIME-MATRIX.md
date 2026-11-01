@@ -51,12 +51,14 @@ The [candidate workflow](../../.github/workflows/core-executable-candidate.yml) 
 | Checkout preparation | Normal non-root installer path, generated local environment, locked Composer installation, Go planner build, frontend assets and migrations. This prepares a checkout, not an operating system. |
 | Application checks | Dependency/platform checks, PHPStan and framework-aware analysis regressions, PHPUnit and Symfony configuration/template checks against the dedicated test database. |
 | Enrollment | Interactive setup command creates separate synthetic user/admin identities and tenant membership, using password hashing. Fixture state excludes plaintext credentials. |
-| Real HTTP | Non-root Nginx and PHP-FPM serve the Core; login and dashboard use their actual forms and session cookies. A forged CSRF submission is refused; replaying a valid idempotency key preserves the same job. |
+| Real HTTP | Non-root Nginx and PHP-FPM serve the Core; login and dashboard use their actual forms and session cookies. The fixed host/port boundary rejects foreign hosts, missing/wrong ports and conflicting absolute request targets. A forged CSRF submission is refused; replaying a valid idempotency key preserves the same job. |
 | Job processing | The real CLI worker consumes the accepted plan job; the job succeeds and the site reaches `PLAN_READY`. Rendering a plan does not activate a hosted workload. |
 | Optional plugin | The reference package installs, enables, reports only its authorized tenant summary, disables and uninstalls; Core remains usable without it. |
 | Database recovery | PostgreSQL 17 tools dump the synthetic workbench, restore into a separate empty database and compare stable logical snapshots. |
 
 The application journey uses `wcp360_workbench`; the ordinary suite uses the separate `wcp360_test` database. The recovery comparison uses `wcp360_restore_test`. These fixed synthetic databases prevent the harness from being repurposed as a general data-reset tool. Test snapshots contain stable identifiers/counts/state, without passwords, password hashes or connection secrets. A matching snapshot proves that selected candidate application data survived logical restore; it does not prove restoration of hosted files, service configurations, encryption keys, external systems or an entire server.
+
+The loopback HTTP fixture admits exactly `user.localhost:8080`. It validates both Nginx's normalized request host and the original Host authority before passing that fixed literal authority to FastCGI. An owned copy of the distribution's parameter file replaces only `HTTP_HOST`, preserving its other defaults and hardening. This keeps the non-default port consistent across Debian's normalized FastCGI Host defaults and the Ubuntu packages. Redirect checks still accept only that exact origin and allowlisted paths; the HTTP client never follows redirects automatically.
 
 Never give these images production data, host-service mounts or the Docker socket. The harness starts only its own disposable application processes. It does not launch the privileged broker or change host identities and services.
 
