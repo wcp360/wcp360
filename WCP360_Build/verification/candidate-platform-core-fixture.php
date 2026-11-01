@@ -191,7 +191,7 @@ final class PlatformCoreFixture
         $this->login();
         $dashboard = $this->request('GET', '/');
         if ($dashboard['status'] !== 200) {
-            throw new PlatformFixtureFailure('The authenticated dashboard is unavailable.');
+            throw new PlatformFixtureFailure('The authenticated dashboard is unavailable '.$this->responseDescription($dashboard).'.');
         }
         $fields = $this->form($dashboard['body'], '/workbench/plans', ['_token', 'idempotency_key', 'tenant_id', 'hostname', 'application_server']);
         if ($fields['tenant_id'] !== $state['tenant_id'] || $fields['application_server'] !== 'inherit'
@@ -294,7 +294,7 @@ final class PlatformCoreFixture
         $logout = $this->form($dashboard['body'], '/logout', ['_csrf_token']);
         $loggedOut = $this->request('POST', '/logout', $logout);
         if ($loggedOut['status'] !== 302 || $loggedOut['location'] !== '/login') {
-            throw new PlatformFixtureFailure('The Core logout flow failed after plugin removal.');
+            throw new PlatformFixtureFailure('The Core logout flow failed after plugin removal '.$this->responseDescription($loggedOut).'.');
         }
         $this->login();
         if ($this->request('GET', $location)['status'] !== 200) {
@@ -348,14 +348,14 @@ final class PlatformCoreFixture
     {
         $page = $this->request('GET', '/login');
         if ($page['status'] !== 200) {
-            throw new PlatformFixtureFailure('The actual login form is unavailable.');
+            throw new PlatformFixtureFailure('The actual login form is unavailable '.$this->responseDescription($page).'.');
         }
         $fields = $this->form($page['body'], '/login', ['_username', '_password', '_csrf_token']);
         $fields['_username'] = self::USER_EMAIL;
         $fields['_password'] = self::PASSWORD;
         $response = $this->request('POST', '/login', $fields);
         if ($response['status'] !== 302 || $response['location'] !== '/') {
-            throw new PlatformFixtureFailure('Real HTTP authentication failed.');
+            throw new PlatformFixtureFailure('Real HTTP authentication failed '.$this->responseDescription($response).'.');
         }
     }
 
@@ -414,7 +414,35 @@ final class PlatformCoreFixture
         if ($count === false || $count > 1) {
             throw new PlatformFixtureFailure('The HTTP response has ambiguous redirect headers.');
         }
-        return ['status' => $status, 'body' => $body, 'location' => $count === 1 ? trim($locations[1][0]) : null];
+        $location = $count === 1 ? $this->redirectPath(trim($locations[1][0]), $status) : null;
+        return ['status' => $status, 'body' => $body, 'location' => $location];
+    }
+
+    private function redirectPath(string $location, int $status): string
+    {
+        // Symfony Security generates absolute success/logout URLs; controller
+        // redirects use relative paths. Neither form is followed automatically.
+        $parts = parse_url($location);
+        if (!is_array($parts) || array_diff(array_keys($parts), ['scheme', 'host', 'port', 'path']) !== []) {
+            throw new PlatformFixtureFailure('The HTTP redirect is outside the fixed fixture origin (status '.$status.').');
+        }
+        if (isset($parts['scheme']) || isset($parts['host']) || isset($parts['port'])) {
+            if (($parts['scheme'] ?? null) !== 'http' || ($parts['host'] ?? null) !== 'user.localhost' || ($parts['port'] ?? null) !== 8080) {
+                throw new PlatformFixtureFailure('The HTTP redirect is outside the fixed fixture origin (status '.$status.').');
+            }
+        }
+        $path = $parts['path'] ?? '/';
+        if (preg_match('~\A(?:/|/login|/logout|/workbench/plans|/workbench/jobs/'.self::UUID_PATTERN.'|/workbench/v1/summary/'.self::UUID_PATTERN.')\z~D', $path) !== 1) {
+            throw new PlatformFixtureFailure('The HTTP redirect has an unexpected fixture path (status '.$status.').');
+        }
+        return $path;
+    }
+
+    /** @param array{status: int, body: string, location: ?string} $response */
+    private function responseDescription(array $response): string
+    {
+        // Only a numeric HTTP status and an already allowlisted path are emitted.
+        return '(status '.$response['status'].', redirect '.($response['location'] ?? 'none').')';
     }
 
     /**
