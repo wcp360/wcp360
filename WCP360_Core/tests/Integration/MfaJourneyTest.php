@@ -171,9 +171,20 @@ final class MfaJourneyTest extends WebTestCase
         $this->login();
         $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security');
         self::assertSelectorNotExists('form[action="/account/security/mfa/recovery-codes"]');
-        $csrf = self::getContainer()->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class);
+        // Generate a valid intent token in the real browser session, then persist it.
+        // KernelBrowser has already popped the completed request from RequestStack.
+        $requests = self::getContainer()->get(\Symfony\Component\HttpFoundation\RequestStack::class);
+        $request = $this->browser->getRequest();
+        $requests->push($request);
+        try {
+            $csrf = self::getContainer()->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class);
+            $token = $csrf->getToken('mfa_recovery_regenerate')->getValue();
+            $request->getSession()->save();
+        } finally {
+            $requests->pop();
+        }
         $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', [
-            '_token' => $csrf->getToken('mfa_recovery_regenerate')->getValue(),
+            '_token' => $token,
             'current_password' => WorkbenchFixture::PASSWORD,
         ]);
         self::assertResponseStatusCodeSame(403);
