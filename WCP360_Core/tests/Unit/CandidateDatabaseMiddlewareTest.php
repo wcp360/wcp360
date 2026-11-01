@@ -66,7 +66,7 @@ final class CandidateDatabaseMiddlewareTest extends TestCase
         $result = $this->createStub(Result::class);
         $result->method('fetchAssociative')->willReturn($row);
         $connection = $this->createMock(Connection::class);
-        $connection->expects(self::once())->method('exec')->with('SET search_path TO pg_catalog, public')->willReturn(0);
+        $connection->expects(self::once())->method('exec')->with('SET search_path TO pg_catalog, public, pg_temp')->willReturn(0);
         $connection->expects(self::once())->method('query')->willReturn($result);
         if (!$allowed) {
             $this->expectExceptionMessage(CandidateDatabaseUrl::REJECTED);

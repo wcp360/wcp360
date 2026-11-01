@@ -14,8 +14,8 @@ final class CandidateSessionGrants
         if (!in_array($context, ['user', 'admin', 'worker'], true)) {
             throw new \RuntimeException(CandidateDatabaseUrl::REJECTED);
         }
-        // Remove "$user" and caller-controlled schemas before candidate application SQL.
-        $connection->exec('SET search_path TO pg_catalog, public');
+        // Explicit pg_temp last prevents implicit temporary-table shadowing of public tables.
+        $connection->exec('SET search_path TO pg_catalog, public, pg_temp');
         $row = $connection->query(<<<'SQL'
 SELECT
     current_user = session_user
@@ -36,9 +36,9 @@ SELECT
         FROM (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE')) privileges(p)) AS user_crud,
     (SELECT bool_and(pg_catalog.has_table_privilege(current_user, 'public.wcp_candidate_admin_sessions', p))
         FROM (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE')) privileges(p)) AS admin_crud,
-    pg_catalog.has_table_privilege(current_user, 'public.wcp_candidate_user_sessions', 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER')
+    pg_catalog.has_table_privilege(current_user, 'public.wcp_candidate_user_sessions', 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
         OR pg_catalog.has_any_column_privilege(current_user, 'public.wcp_candidate_user_sessions', 'SELECT,INSERT,UPDATE,REFERENCES') AS user_access,
-    pg_catalog.has_table_privilege(current_user, 'public.wcp_candidate_admin_sessions', 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER')
+    pg_catalog.has_table_privilege(current_user, 'public.wcp_candidate_admin_sessions', 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
         OR pg_catalog.has_any_column_privilege(current_user, 'public.wcp_candidate_admin_sessions', 'SELECT,INSERT,UPDATE,REFERENCES') AS admin_access
 SQL)->fetchAssociative();
         if (!$row || !self::truth($row['identity_ok'] ?? null)

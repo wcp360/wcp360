@@ -33,13 +33,15 @@ The profile selector is [wired into Doctrine](../packages/doctrine.yaml), and it
 
 On every newly established isolated USER, ADMIN or worker connection, the [grant gate](../../src/Shared/Security/CandidateSessionGrants.php):
 
-1. Fixes the search path to `pg_catalog, public`, then observes the connected PostgreSQL identity and version.
+1. Fixes the search path to `pg_catalog, public, pg_temp`, then observes the connected PostgreSQL identity and version.
 2. Requires PostgreSQL 17, unchanged login/effective identity and an ordinary login without superuser, database/role creation, replication or row-security bypass.
 3. Rejects any role membership, including non-inherited memberships that could permit `SET ROLE`. This is a conservative candidate restriction, not the final production role model.
 4. Rejects database/public-schema ownership or public-schema creation and requires both physical candidate session tables.
-5. Requires all four own-table CRUD privileges for USER/ADMIN. Opposite-table access includes column grants and extra table rights such as TRUNCATE, REFERENCES and TRIGGER; workers must have neither registry.
+5. Requires all four own-table CRUD privileges for USER/ADMIN. Opposite-table access includes column grants and extra table rights such as TRUNCATE, REFERENCES, TRIGGER and PostgreSQL 17 MAINTAIN; workers must have neither registry.
 
 PostgreSQL privilege inquiry functions include effective table/column grants. Multiple listed privilege names mean *any* matching privilege; own-table CRUD therefore checks each privilege separately. See the [PostgreSQL 17 access-privilege documentation](https://www.postgresql.org/docs/17/functions-info.html) and [role membership catalog](https://www.postgresql.org/docs/17/catalog-pg-auth-members.html).
+
+The explicit last `pg_temp` entry prevents implicit temporary-schema precedence from masking public identity/session tables. See [PostgreSQL 17 search-path semantics](https://www.postgresql.org/docs/17/runtime-config-client.html#GUC-SEARCH-PATH). Tests create real temporary impostor tables and verify public identity lookup plus opposite-session CRUD refusal.
 
 Rejection uses a fixed error and omits the driver exception chain, preventing the gate from forwarding private connection details. Do not enable public debug output or log environment/connection parameter dumps.
 

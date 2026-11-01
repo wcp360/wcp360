@@ -79,8 +79,19 @@ final class CandidatePostgresGrantsTest extends KernelTestCase
             self::assertSame(1, $db->delete('wcp_candidate_'.$context.'_sessions', ['id' => $selector]));
             $blocked = $context === 'user' ? 'admin' : 'user';
             $this->assertCrudDenied($db, $blocked);
-            self::assertSame('pg_catalog, public', $db->fetchOne('SHOW search_path'));
+            self::assertSame('pg_catalog, public, pg_temp', $db->fetchOne('SHOW search_path'));
         }
+    }
+
+    public function testTemporaryObjectsCannotShadowPublicIdentityOrSessionTables(): void
+    {
+        $db = $this->connection('user');
+        $db->executeStatement('CREATE TEMP TABLE wcp_candidate_users (id UUID)');
+        $db->executeStatement('CREATE TEMP TABLE wcp_candidate_admin_sessions (id UUID)');
+        self::assertSame(0, (int) $db->fetchOne('SELECT count(*) FROM pg_temp.wcp_candidate_users'));
+        self::assertSame(3, (int) $db->fetchOne('SELECT count(*) FROM wcp_candidate_users'));
+        self::assertSame($this->fixture['users']['alice'], $db->fetchOne("SELECT id FROM wcp_candidate_users WHERE email = 'alice@example.test'"));
+        $this->assertCrudDenied($db, 'admin', false);
     }
 
     public function testWorkerHasNoSessionAuthorityAndMaintenanceIsNotAWebCredential(): void
@@ -107,7 +118,7 @@ final class CandidatePostgresGrantsTest extends KernelTestCase
     public function testCrossSurfaceTableOrColumnGrantRejectsNewConnections(): void
     {
         $role = $this->db->quoteIdentifier($this->roles['user']['name']);
-        foreach (['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'SELECT (id)', 'UPDATE (id)', 'INSERT (id)', 'REFERENCES (id)'] as $privilege) {
+        foreach (['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN', 'SELECT (id)', 'UPDATE (id)', 'INSERT (id)', 'REFERENCES (id)'] as $privilege) {
             $this->db->executeStatement('GRANT '.$privilege.' ON public.wcp_candidate_admin_sessions TO '.$role);
             $this->assertRejected($this->connection('user'));
             $this->db->executeStatement('REVOKE '.$privilege.' ON public.wcp_candidate_admin_sessions FROM '.$role);
@@ -211,9 +222,9 @@ final class CandidatePostgresGrantsTest extends KernelTestCase
         }
     }
 
-    private function assertCrudDenied(Connection $db, string $surface): void
+    private function assertCrudDenied(Connection $db, string $surface, bool $qualified = true): void
     {
-        $table = 'public.wcp_candidate_'.$surface.'_sessions';
+        $table = ($qualified ? 'public.' : '').'wcp_candidate_'.$surface.'_sessions';
         foreach ([
             'SELECT id FROM '.$table,
             'INSERT INTO '.$table.' DEFAULT VALUES',
