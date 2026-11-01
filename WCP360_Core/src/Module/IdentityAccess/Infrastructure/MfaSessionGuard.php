@@ -66,14 +66,14 @@ final readonly class MfaSessionGuard
             return;
         }
         $pending = $token instanceof TwoFactorTokenInterface;
-        $stamp = $request->getSession()->get($pending ? '_wcp_mfa_pending' : '_wcp_mfa_proof');
         try {
             $status = $this->mfa->status($user->id);
+            $stamp = $request->getSession()->get($pending ? '_wcp_mfa_pending' : ($status['enabled'] ? '_wcp_mfa_proof' : '_wcp_password_proof'));
             $valid = is_array($stamp) && ($stamp['actor'] ?? null) === $user->id
                 && ($stamp['revision'] ?? null) === $status['revision'];
             $at = is_array($stamp) ? ($stamp[$pending ? 'started' : 'at'] ?? null) : null;
             $valid = $valid && is_int($at) && $at <= time()
-                && ($pending ? $at + 300 > time() : ($status['enabled'] && $status['configured']));
+                && ($pending ? ($at + 300 > time() && $status['configured'] && ($status['enabled'] || ($stamp['enrollment'] ?? false) === true)) : (!$status['enabled'] || $status['configured']));
         } catch (\Throwable) {
             $valid = false;
         }

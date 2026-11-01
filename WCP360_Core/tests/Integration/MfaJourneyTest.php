@@ -56,7 +56,9 @@ final class MfaJourneyTest extends WebTestCase
             $crawler = $this->browser->followRedirect();
         }
         self::assertResponseIsSuccessful();
-        self::assertSame('/mfa', $this->browser->getRequest()->getPathInfo());
+        $enabled = self::getContainer()->get(CandidateMfa::class)->status($this->admin)['enabled'];
+        self::assertSame($enabled ? '/mfa' : '/', $this->browser->getRequest()->getPathInfo());
+        if (!$enabled) $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security/mfa/enable');
 
         return $crawler;
     }
@@ -65,7 +67,7 @@ final class MfaJourneyTest extends WebTestCase
     private function enroll(): array
     {
         $crawler = $this->login();
-        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form());
+        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
         self::assertResponseIsSuccessful();
         $secret = trim($crawler->filter('#mfa-secret')->text());
         self::assertMatchesRegularExpression('/^[A-Z2-7]{32,128}$/D', $secret);
@@ -97,8 +99,10 @@ final class MfaJourneyTest extends WebTestCase
         self::assertContains($location, ['/mfa', 'http://admin.localhost/mfa']);
     }
 
-    public function testPasswordAloneCannotReadDashboardOrMutateAdminFeatures(): void
+    public function testEnabledMfaStillWithholdsAdminUntilTheSecondFactorCompletes(): void
     {
+        $this->enroll();
+        $this->logout();
         $this->login();
         $this->browser->request('GET', 'http://admin.localhost/');
         $this->assertPendingMfaRedirect();
@@ -108,13 +112,13 @@ final class MfaJourneyTest extends WebTestCase
         }
         self::assertSame(1, (int) $this->store->db->fetchOne('SELECT revision FROM wcp_candidate_runtime_settings'));
         self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_plugins'));
-        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa'));
+        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa'));
     }
 
     public function testEnrollmentAndChallengeRejectOriginAndCsrfBeforeConsumingCode(): void
     {
         $crawler = $this->login();
-        $enroll = $crawler->selectButton('Configurer la MFA')->form();
+        $enroll = $crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]);
         $fields = $enroll->getValues();
         $this->browser->request('POST', 'http://admin.localhost/mfa/enroll', array_replace($fields, ['_token' => 'forged']));
         self::assertResponseStatusCodeSame(403);
@@ -143,7 +147,7 @@ final class MfaJourneyTest extends WebTestCase
     {
         $crawler = $this->login();
         $initialSession = $this->browser->getRequest()->getSession()->getId();
-        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form());
+        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
         $secret = trim($crawler->filter('#mfa-secret')->text());
         $crawler = $this->browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code' => TOTP::createFromSecret($secret)->now()]));
         self::assertResponseIsSuccessful();
@@ -215,7 +219,7 @@ final class MfaJourneyTest extends WebTestCase
     public function testExpiredPendingAuthenticationCannotConfirmACurrentCode(): void
     {
         $crawler = $this->login();
-        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form());
+        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
         $secret = trim($crawler->filter('#mfa-secret')->text());
         $form = $crawler->selectButton('Valider la MFA')->form(['_auth_code' => TOTP::createFromSecret($secret)->now()]);
         $session = $this->browser->getRequest()->getSession();
@@ -248,7 +252,7 @@ final class MfaJourneyTest extends WebTestCase
         self::assertSame(1, (int) $this->store->db->fetchOne('SELECT revision FROM wcp_candidate_runtime_settings'));
     }
 
-    public function testRecoveryThenPasswordConfirmedResetRequiresFreshEnrollment(): void
+    public function testRecoveryThenPasswordConfirmedDisableAllowsPasswordOnlyLogin(): void
     {
         $factor = $this->enroll();
         $this->logout();
@@ -257,7 +261,7 @@ final class MfaJourneyTest extends WebTestCase
         self::assertResponseRedirects('/');
         $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security');
         self::assertResponseIsSuccessful();
-        $form = $crawler->selectButton('Réinitialiser mon facteur')->form(['current_password' => WorkbenchFixture::PASSWORD]);
+        $form = $crawler->selectButton('Désactiver la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]);
         $fields = $form->getValues();
         $before = self::getContainer()->get(CandidateMfa::class)->status($this->admin)['revision'];
         foreach ([['HTTP_ORIGIN' => 'https://foreign.example'], ['HTTP_ORIGIN' => '']] as $server) {
@@ -280,10 +284,11 @@ final class MfaJourneyTest extends WebTestCase
         self::assertSame(1, $crawler->selectButton('Configurer la MFA')->count());
         self::assertSelectorNotExists('#mfa-secret');
         $this->browser->request('GET', 'http://admin.localhost/');
-        $this->assertPendingMfaRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSelectorNotExists('#auth-code');
     }
 
-    public function testMissingEncryptionKeyBlocksAdminWithoutBreakingUserAuthentication(): void
+    public function testMissingEncryptionKeyDoesNotBlockAccountsWithoutMfa(): void
     {
         self::ensureKernelShutdown();
         $_ENV['WCP_MFA_KEY'] = $_SERVER['WCP_MFA_KEY'] = '';
@@ -294,7 +299,8 @@ final class MfaJourneyTest extends WebTestCase
         $crawler = $this->browser->request('GET', 'http://admin.localhost/login');
         $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]));
         for ($i = 0; $i < 3 && $this->browser->getResponse()->isRedirect(); $i++) $this->browser->followRedirect();
-        self::assertResponseStatusCodeSame(503);
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h1', 'Tableau de bord');
         self::assertStringNotContainsString(WorkbenchFixture::PASSWORD, (string) $this->browser->getResponse()->getContent());
         self::ensureKernelShutdown();
         $this->context('user');
@@ -385,6 +391,8 @@ final class MfaJourneyTest extends WebTestCase
     {
         $this->browser->request('GET', 'http://admin.localhost/account/reauthenticate');
         self::assertResponseRedirects('http://admin.localhost/login');
+        $this->enroll();
+        $this->logout();
         $this->login();
         $this->browser->request('GET', 'http://admin.localhost/account/reauthenticate');
         $this->assertPendingMfaRedirect();
@@ -409,6 +417,11 @@ final class MfaJourneyTest extends WebTestCase
         $this->browser->request('GET', 'http://user.localhost/account/reauthenticate');
         self::assertResponseStatusCodeSame(403);
         self::assertSelectorNotExists('input[name="_password"]');
+        $this->browser->request('GET', 'http://user.localhost/account/security/mfa/enable');
+        self::assertResponseStatusCodeSame(403);
+        $this->browser->request('POST', 'http://user.localhost/mfa/enroll', ['_token' => 'forged', 'current_password' => WorkbenchFixture::PASSWORD]);
+        self::assertResponseStatusCodeSame(403);
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa'));
     }
 
     public function testRejectedPrimaryConfirmationPreservesOldProofAndRegistration(): void
@@ -440,7 +453,7 @@ final class MfaJourneyTest extends WebTestCase
         self::assertSame($beforeId, $session->getId());
         self::assertSame($beforeRegistry, $session->get('_wcp_registry'));
         self::assertSame(1, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
-        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions'));
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions'));
         self::assertSame(10, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
         $this->browser->request('GET', 'http://admin.localhost/account/reauthenticate');
         self::assertSelectorNotExists('[role="alert"]');
@@ -466,6 +479,136 @@ final class MfaJourneyTest extends WebTestCase
         self::assertSame($beforeRevision, self::getContainer()->get(CandidateMfa::class)->status($this->admin)['revision']);
         self::assertSame(10, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
         self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+    }
+
+    public function testMfaIsOffByDefaultAndPasswordOnlyAdminCanUseProtectedForms(): void
+    {
+        $this->login();
+        $session = $this->browser->getRequest()->getSession();
+        $before = $session->get('_wcp_password_proof');
+        self::assertIsArray($before);
+        self::assertNull($session->get('_wcp_mfa_proof'));
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa'));
+        $this->browser->request('GET', 'http://admin.localhost/account/security/mfa/enable');
+        self::assertSame($before, $this->browser->getRequest()->getSession()->get('_wcp_password_proof'));
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorNotExists('#auth-code');
+        $this->browser->submit($crawler->filter('form[action="/workbench/settings/application-server"]')->form());
+        self::assertResponseRedirects('/');
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT revision FROM wcp_candidate_runtime_settings'));
+        $this->browser->request('GET', 'http://admin.localhost/account/sessions');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorNotExists('.status-pending');
+        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT auth_strength FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+    }
+
+    public function testExpiredPasswordProofRequiresReconfirmationWithoutForcingMfa(): void
+    {
+        $this->login();
+        $session = $this->browser->getRequest()->getSession();
+        $proof = $session->get('_wcp_password_proof');
+        self::assertIsArray($proof);
+        $proof['at'] = time() - 301;
+        $session->set('_wcp_password_proof', $proof);
+        $session->save();
+        $old = $session->get('_wcp_registry')['selector'];
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/');
+        $this->browser->submit($crawler->filter('form[action="/workbench/settings/application-server"]')->form());
+        self::assertResponseStatusCodeSame(403);
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/account/reauthenticate');
+        self::assertResponseIsSuccessful();
+        self::assertStringNotContainsString('Votre authentificateur sera demandé', (string) $this->browser->getResponse()->getContent());
+        self::assertSame($proof, $this->browser->getRequest()->getSession()->get('_wcp_password_proof'));
+        $this->browser->submit($crawler->selectButton('Confirmer mon mot de passe')->form(['_password' => WorkbenchFixture::PASSWORD]));
+        self::assertContains($this->browser->getResponse()->headers->get('Location'), ['/', 'http://admin.localhost/']);
+        $crawler = $this->browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSame('/', $this->browser->getRequest()->getPathInfo());
+        self::assertNull($this->browser->getRequest()->getSession()->get('_wcp_mfa_proof'));
+        self::assertGreaterThanOrEqual(time() - 5, $this->browser->getRequest()->getSession()->get('_wcp_password_proof')['at']);
+        self::assertNotNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_admin_sessions WHERE id=?', [$old]));
+        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT auth_strength FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+        $this->browser->submit($crawler->filter('form[action="/workbench/settings/application-server"]')->form());
+        self::assertResponseRedirects('/');
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT revision FROM wcp_candidate_runtime_settings'));
+    }
+
+    public function testActivationAndSessionRevocationShareTheDurablePasswordBudget(): void
+    {
+        $crawler = $this->login();
+        $fields = $crawler->selectButton('Configurer la MFA')->form(['current_password' => 'incorrect-current-password'])->getValues();
+        for ($attempt = 0; $attempt < 5; ++$attempt) {
+            $this->browser->request('POST', 'http://admin.localhost/mfa/enroll', $fields);
+            self::assertResponseStatusCodeSame(403);
+        }
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa'));
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/account/sessions');
+        self::assertResponseIsSuccessful();
+        $this->browser->submit($crawler->selectButton('Tout déconnecter')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseStatusCodeSame(429);
+        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+        self::assertSame(5, (int) $this->store->db->fetchOne('SELECT reauth_attempts FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+    }
+
+    public function testCancellingUnconfirmedActivationLeavesPasswordOnlyAccessAvailable(): void
+    {
+        $crawler = $this->login();
+        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('#mfa-secret');
+        self::assertFalse(self::getContainer()->get(CandidateMfa::class)->status($this->admin)['enabled']);
+        $this->browser->submit($crawler->selectButton('Annuler l’activation')->form());
+        self::assertResponseRedirects('/login');
+        $this->login();
+        $this->browser->request('GET', 'http://admin.localhost/');
+        self::assertResponseIsSuccessful();
+        self::assertFalse(self::getContainer()->get(CandidateMfa::class)->status($this->admin)['enabled']);
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
+    }
+
+    public function testActivatingMfaInvalidatesAnotherPasswordOnlyBrowser(): void
+    {
+        $this->login();
+        $oldCookies = $this->browser->getCookieJar()->all();
+        $session = $this->browser->getRequest()->getSession();
+        if ($session->isStarted()) $session->save();
+        $this->browser->getCookieJar()->clear();
+        $this->enroll();
+        $this->browser->getCookieJar()->clear();
+        foreach ($oldCookies as $cookie) $this->browser->getCookieJar()->set($cookie);
+        $this->browser->request('GET', 'http://admin.localhost/');
+        self::assertResponseRedirects('/login');
+        self::assertTrue(self::getContainer()->get(CandidateMfa::class)->status($this->admin)['enabled']);
+    }
+
+    public function testMfaDisablementRollsBackWhenSessionRevocationAuditFails(): void
+    {
+        $this->enroll();
+        $before = self::getContainer()->get(CandidateMfa::class)->status($this->admin);
+        $audits = (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_audit');
+        $db = $this->store->db;
+        $sqlite = $db->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\SQLitePlatform;
+        if ($sqlite) {
+            $db->executeStatement("CREATE TRIGGER reject_disable_audit BEFORE INSERT ON wcp_candidate_audit WHEN NEW.kind = 'candidate.session.revoked' BEGIN SELECT RAISE(ABORT,'test audit unavailable'); END");
+        } else {
+            $db->executeStatement("CREATE OR REPLACE FUNCTION wcp_test_disable_audit() RETURNS trigger LANGUAGE plpgsql AS 'BEGIN IF NEW.kind = ''candidate.session.revoked'' THEN RAISE EXCEPTION ''test audit unavailable''; END IF; RETURN NEW; END;'");
+            $db->executeStatement('CREATE TRIGGER reject_disable_audit BEFORE INSERT ON wcp_candidate_audit FOR EACH ROW EXECUTE FUNCTION wcp_test_disable_audit()');
+        }
+        $refused = false;
+        try {
+            self::getContainer()->get(\Wcp360\Core\Module\IdentityAccess\Application\DisableAdministratorMfa::class)->disable($this->admin);
+        } catch (\Doctrine\DBAL\Exception) {
+            $refused = true;
+        } finally {
+            $db->executeStatement('DROP TRIGGER reject_disable_audit'.($sqlite ? '' : ' ON wcp_candidate_audit'));
+            if (!$sqlite) $db->executeStatement('DROP FUNCTION wcp_test_disable_audit()');
+        }
+        self::assertTrue($refused);
+        self::assertSame($before, self::getContainer()->get(CandidateMfa::class)->status($this->admin));
+        self::assertSame(10, (int) $db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
+        self::assertSame(1, (int) $db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+        self::assertSame($audits, (int) $db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_audit'));
     }
 
     private function expireFreshProof(): void

@@ -74,7 +74,8 @@ final class SessionJourneyTest extends WebTestCase
             $crawler = $this->browser->followRedirect();
         }
         self::assertResponseIsSuccessful();
-        self::assertSame($this->surface === 'admin' ? '/mfa' : '/', $this->browser->getRequest()->getPathInfo());
+        $enabled = $this->surface === 'admin' && is_string($this->store->db->fetchOne('SELECT sealed_secret FROM wcp_candidate_mfa WHERE user_id = ?', [$this->fixture['users']['admin']]));
+        self::assertSame($enabled ? '/mfa' : '/', $this->browser->getRequest()->getPathInfo());
 
         return $crawler;
     }
@@ -478,12 +479,13 @@ final class SessionJourneyTest extends WebTestCase
     private function pendingAdministrator(): array
     {
         $this->bootBrowser('admin', true);
-        $crawler = $this->login('admin');
+        $this->login('admin');
+        $crawler = $this->browser->request('GET', $this->url('/account/security/mfa/enable'));
+        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseIsSuccessful();
         $selector = $this->selector();
         $sid = $this->browser->getRequest()->getSession()->getId();
         self::assertSame(1, (int) $this->store->db->fetchOne('SELECT auth_strength FROM wcp_candidate_admin_sessions WHERE id = ?', [$selector]));
-        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form());
-        self::assertResponseIsSuccessful();
 
         return ['crawler' => $crawler, 'secret' => trim($crawler->filter('#mfa-secret')->text()), 'selector' => $selector, 'sid' => $sid];
     }
@@ -502,7 +504,7 @@ final class SessionJourneyTest extends WebTestCase
         self::assertSame(2, (int) $row['auth_strength']);
         self::assertNotSame($oldVerifier, $row['secret_verifier']);
         self::assertNull($row['revoked_at']);
-        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions'));
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions'));
         $this->browser->request('GET', $this->url('/account/sessions'));
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('form[action="/account/sessions/'.$pending['selector'].'/revoke"]');
@@ -517,11 +519,10 @@ final class SessionJourneyTest extends WebTestCase
         $this->assertPendingCodeNotConsumed($pending['selector']);
     }
 
-    public function testPasswordOnlyAdministratorCannotReadOrRevokeSessions(): void
+    public function testPendingEnrollmentAdministratorCannotReadOrRevokeSessions(): void
     {
-        $this->bootBrowser('admin', true);
-        $this->login('admin');
-        $selector = $this->selector();
+        $pending = $this->pendingAdministrator();
+        $selector = $pending['selector'];
         foreach (['GET', 'POST'] as $method) {
             $this->browser->request($method, $this->url($method === 'GET' ? '/account/sessions' : '/account/sessions/'.$selector.'/revoke'), [
                 '_token' => 'forged', 'current_password' => WorkbenchFixture::PASSWORD,
@@ -581,7 +582,7 @@ final class SessionJourneyTest extends WebTestCase
         self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
         self::assertSame(1, (int) $this->store->db->fetchOne('SELECT auth_strength FROM wcp_candidate_admin_sessions WHERE id = ?', [$selector]));
         self::assertNotNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_admin_sessions WHERE id = ?', [$selector]));
-        self::assertSame(1, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions'));
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions'));
     }
 
     public function testDurableRevocationSurvivesKernelRestart(): void

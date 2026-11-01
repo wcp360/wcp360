@@ -1,0 +1,15 @@
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Configurer la MFA' %}
+{% block content %}
+<p class="auth-eyebrow">PROTECTION FACULTATIVE</p>
+<h1>Configurer la MFA</h1>
+<p class="auth-lead">Ajoutez un authentificateur si vous le souhaitez. Votre mot de passe reste suffisant tant que vous n’avez pas validé l’activation.</p>
+{% if configured %}
+<form class="auth-form" action="{{ path('wcp_mfa_enroll') }}" method="post" data-turbo-frame="wcp-auth-step">
+<input type="hidden" name="_token" value="{{ csrf_token('mfa_enroll') }}">
+<div><label for="enable-password">Mot de passe actuel</label><input id="enable-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required></div>
+<button class="button auth-submit" type="submit">Configurer la MFA</button>
+</form>
+{% else %}<p role="alert">L’activation est indisponible tant que la clé de chiffrement du panneau n’est pas configurée.</p>{% endif %}
+<p><a class="button secondary" href="{{ path('wcp_account_security') }}">Retour à la sécurité du compte</a></p>
+{% endblock %}

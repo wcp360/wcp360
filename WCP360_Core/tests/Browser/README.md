@@ -4,7 +4,7 @@
 
 | Source | Scope |
 | :--- | :--- |
-| [AdministratorIdentityJourneyTest](AdministratorIdentityJourneyTest.php) | Real administrator password login, MFA enrollment, one-time backup-code display, password/MFA reconfirmation, replay refusal, global own-session revocation and logout. |
+| [AdministratorIdentityJourneyTest](AdministratorIdentityJourneyTest.php) | Default password-only administrator login, voluntary MFA activation, one-time backup-code display, password/MFA reconfirmation, replay refusal, global own-session revocation, MFA disablement and password-only login/logout again. |
 | [HostingJourneyTest](HostingJourneyTest.php) | USER login, no administrator confirmation link, runtime selector, theme/page navigation, Turbo continuity and idempotent submission. |
 
 Authentication forms use Turbo to preserve exact Origin with the required no-referrer policy. The authentication frame renders enrollment and one-time recovery-code responses without storing their secrets in a redirect URL or session. Login, reconfirmation, account mutations and logout target the complete page. Missing JavaScript or an invalid Origin never relaxes the server checks. Shared private pages disable Turbo snapshot caching, including enrollment and one-time backup-code views, alongside the server no-store policy.

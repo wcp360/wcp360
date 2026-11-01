@@ -11,13 +11,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
+use Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 
 /** Presents a new full sign-in through the existing password/MFA authenticators. */
 final class ReauthenticationController extends AbstractController
 {
     #[Route('/account/reauthenticate', name: 'wcp_account_reauthenticate', methods: ['GET'])]
-    public function confirm(RuntimeContext $runtime, TokenStorageInterface $tokens, AuthenticationUtils $auth): Response
+    public function confirm(RuntimeContext $runtime, TokenStorageInterface $tokens, AuthenticationUtils $auth, CandidateMfa $mfa): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = $this->getUser();
@@ -29,6 +30,7 @@ final class ReauthenticationController extends AbstractController
         return $this->render('identity/reauthenticate.html.twig', [
             'identity' => $user->getUserIdentifier(),
             'error' => $auth->getLastAuthenticationError(),
+            'mfa_enabled' => $mfa->status($user->id)['enabled'],
         ]);
     }
 }

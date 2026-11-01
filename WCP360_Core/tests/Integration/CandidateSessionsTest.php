@@ -49,7 +49,7 @@ final class CandidateSessionsTest extends KernelTestCase
         self::assertTrue($this->sessions->current($admin, 'admin', $pending, $this->sid(2)));
         self::assertFalse($this->sessions->current($admin, 'admin', $pending, $this->sid(2), 2));
         self::assertSame('active', $this->sessions->listing($alice, 'user', $user)['items'][0]['state']);
-        self::assertSame('pending', $this->sessions->listing($admin, 'admin', $pending)['items'][0]['state']);
+        self::assertSame('active', $this->sessions->listing($admin, 'admin', $pending)['items'][0]['state']);
         self::assertSame(['candidate.session.opened', 'candidate.session.opened'], array_column($this->audits(), 'kind'));
         self::assertSame([$user, $pending], array_column($this->audits(), 'resource_id'));
         self::assertSame([null, null], array_column($this->audits(), 'tenant_id'));

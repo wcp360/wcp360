@@ -320,7 +320,9 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin@example.test', '_password' => WorkbenchFixture::PASSWORD]));
         for ($i=0; $i<3 && $browser->getResponse()->isRedirect(); ++$i) { $crawler=$browser->followRedirect(); }
         self::assertResponseIsSuccessful();
-        $crawler=$browser->submit($crawler->selectButton('Configurer la MFA')->form());
+        self::assertSame('/', $browser->getRequest()->getPathInfo());
+        $crawler=$browser->request('GET', 'http://admin.localhost/account/security/mfa/enable');
+        $crawler=$browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password'=>WorkbenchFixture::PASSWORD]));
         $secret=trim($crawler->filter('#mfa-secret')->text());
         $crawler=$browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>TOTP::createFromSecret($secret)->now()]));
         self::assertResponseIsSuccessful();
@@ -359,7 +361,7 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertSame($second['job_id'], self::getContainer()->get(RunHostingPlan::class)->runOne());
         self::assertSame('FAILED', $this->maintenance->fetchOne('SELECT state FROM public.wcp_candidate_jobs WHERE id=?', [$second['job_id']]));
         self::assertSame(1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_user_sessions'));
-        self::assertSame(2, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions'));
+        self::assertSame(3, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions'));
     }
 
     private function provider(Connection $db): CandidateDatabaseRoles

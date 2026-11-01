@@ -19,12 +19,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions;
+use Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 
 /** Candidate session admission; no automatic registration of existing cookies. */
 final readonly class SessionBoundary
 {
-    public function __construct(private RuntimeContext $runtime, private TokenStorageInterface $tokens, private CandidateSessions $sessions) {}
+    public function __construct(private RuntimeContext $runtime, private TokenStorageInterface $tokens, private CandidateSessions $sessions, private CandidateMfa $mfa) {}
 
     #[AsEventListener(event: 'kernel.request', priority: 12)]
     public function beforeFirewall(RequestEvent $event): void
@@ -69,7 +70,16 @@ final readonly class SessionBoundary
                 $this->sessions->upgrade($user->id, 'admin', $previous['selector'], $previous['binding'], $session->getId());
                 $selector = $previous['selector'];
             } else {
-                if ($user->context === 'admin' && !$event->getAuthenticatedToken() instanceof TwoFactorTokenInterface) throw new \RuntimeException('Administrator second factor required.');
+                $status = $user->context === 'admin' ? $this->mfa->status($user->id) : null;
+                $pending = $event->getAuthenticatedToken() instanceof TwoFactorTokenInterface;
+                if ($status !== null && ($status['enabled'] || $request->attributes->get('_wcp_mfa_enrollment_actor') === $user->id) !== $pending) {
+                    throw new \RuntimeException('Current administrator authentication required.');
+                }
+                if ($status !== null && !$pending) {
+                    $session->remove('_wcp_mfa_proof');
+                    $session->remove('_wcp_mfa_pending');
+                    $session->set('_wcp_password_proof', ['actor' => $user->id, 'revision' => $status['revision'], 'at' => time()]);
+                }
                 if (is_array($previous) && is_string($previous['actor'] ?? null) && is_string($previous['context'] ?? null)
                     && is_string($previous['selector'] ?? null) && is_string($previous['binding'] ?? null)) {
                     $this->sessions->retire($previous['actor'], $previous['context'], $previous['selector'], $previous['binding']);
@@ -143,7 +153,7 @@ final readonly class SessionBoundary
         try {
             if ($stamp === null || !$user instanceof Principal || $stamp['actor'] !== $user->id || $stamp['context'] !== $user->context
                 || !$this->sessions->current($user->id, $user->context, $stamp['selector'], $request->getSession()->getId(),
-                    $user->context === 'admin' && !$token instanceof TwoFactorTokenInterface ? 2 : 1, false)) throw new \RuntimeException('Current session required.');
+                    $user->context === 'admin' && !$token instanceof TwoFactorTokenInterface && $this->mfa->status($user->id)['enabled'] ? 2 : 1, false)) throw new \RuntimeException('Current session required.');
         } catch (\Throwable) {
             $this->invalidate($request);
             throw new AccessDeniedHttpException('Current session required.');

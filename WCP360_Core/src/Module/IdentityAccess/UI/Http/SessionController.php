@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Wcp360\Core\Module\IdentityAccess\Infrastructure\CurrentPasswordConfirmation;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions;
@@ -20,7 +20,7 @@ use Wcp360\Core\Shared\Security\RuntimeContext;
 final class SessionController extends AbstractController
 {
     public function __construct(private readonly CandidateSessions $sessions, private readonly RuntimeContext $runtime,
-        private readonly TokenStorageInterface $tokens, private readonly UserPasswordHasherInterface $passwords) {}
+        private readonly TokenStorageInterface $tokens, private readonly CurrentPasswordConfirmation $confirmation) {}
 
     #[Route('/account/sessions', name: 'wcp_account_sessions', methods: ['GET'])]
     public function index(Request $request): Response
@@ -60,14 +60,8 @@ final class SessionController extends AbstractController
         if (array_diff(array_keys($input), ['_token', 'current_password']) || !is_string($input['_token'] ?? null)
             || !is_string($input['current_password'] ?? null) || strlen($input['current_password']) > 256) throw new BadRequestHttpException('Invalid session revocation.');
         $intent = $target === null ? 'session_revoke_all' : 'session_revoke_'.$target;
-        if ($request->headers->get('Origin') !== $request->getSchemeAndHttpHost() || !$this->isCsrfTokenValid($intent, $input['_token'])) {
-            return new Response('Session revocation denied.', 403);
-        }
         try {
-            if (!$this->sessions->allowReauthentication($user->id, $user->context, $selector, $request->getSession()->getId())) {
-                return new Response('Too many password confirmations. Try again later.', 429);
-            }
-            if (!$this->passwords->isPasswordValid($user, $input['current_password'])) return new Response('Session revocation denied.', 403);
+            $this->confirmation->confirm($request, $user, $intent);
             unset($input);
             if ($target === null) {
                 $this->sessions->revokeAll($user->id, $user->context);

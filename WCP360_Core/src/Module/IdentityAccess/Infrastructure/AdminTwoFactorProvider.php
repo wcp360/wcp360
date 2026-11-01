@@ -23,11 +23,15 @@ final readonly class AdminTwoFactorProvider implements TwoFactorProviderInterfac
         if (!$user instanceof Principal || $user->context !== 'admin') {
             return false;
         }
+        $status = $this->mfa->status($user->id);
+        $enrollment = $context->getRequest()->attributes->get('_wcp_mfa_enrollment_actor') === $user->id;
+        if (!$status['enabled'] && !$enrollment) return false;
         $session = $context->getSession();
         $session->remove('_wcp_mfa_proof');
-        $session->set('_wcp_mfa_pending', ['actor' => $user->id, 'revision' => $this->mfa->status($user->id)['revision'], 'started' => time()]);
+        $session->remove('_wcp_password_proof');
+        $session->set('_wcp_mfa_pending', ['actor' => $user->id, 'revision' => $status['revision'], 'started' => time(), 'enrollment' => $enrollment]);
 
-        return true; // Includes administrators who must enroll their first factor.
+        return true;
     }
 
     public function needsPreparation(): bool { return false; }

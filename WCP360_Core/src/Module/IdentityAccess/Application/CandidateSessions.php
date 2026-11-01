@@ -186,8 +186,10 @@ final readonly class CandidateSessions
         $hasNext = count($rows) > 100;
         $now = $this->now();
         $items = [];
+        $factor = $surface === 'admin' ? $this->store->db->fetchOne('SELECT sealed_secret FROM wcp_candidate_mfa WHERE user_id = ?', [$actor]) : false;
+        $mfaEnabled = is_string($factor);
         foreach (array_slice($rows, 0, 100) as $row) {
-            $state = $row['revoked_at'] !== null ? 'revoked' : (!$this->valid($row, $surface, $now) ? 'expired' : ($surface === 'admin' && (int) $row['auth_strength'] === 1 ? 'pending' : 'active'));
+            $state = $row['revoked_at'] !== null ? 'revoked' : (!$this->valid($row, $surface, $now) ? 'expired' : ($surface === 'admin' && $mfaEnabled && (int) $row['auth_strength'] === 1 ? 'pending' : 'active'));
             $items[] = [
                 'id' => (string) $row['id'], 'created_at' => (int) $row['created_at'],
                 'last_seen_at' => (int) $row['last_seen_at'], 'expires_at' => (int) $row['expires_at'],

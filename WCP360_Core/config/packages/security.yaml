@@ -38,5 +38,6 @@ security:
         - { path: '^/health$', roles: PUBLIC_ACCESS }
         - { path: '^/login$', roles: PUBLIC_ACCESS }
         - { path: '^/logout$', roles: PUBLIC_ACCESS }
-        - { path: '^/mfa(?:/check|/enroll)?$', roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: '^/mfa/enroll$', roles: ROLE_ADMIN }
+        - { path: '^/mfa(?:/check)?$', roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY }

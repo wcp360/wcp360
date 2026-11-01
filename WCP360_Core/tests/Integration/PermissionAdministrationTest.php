@@ -60,15 +60,15 @@ final class PermissionAdministrationTest extends WebTestCase
             $crawler = $this->browser->followRedirect();
         }
         self::assertResponseIsSuccessful();
-        self::assertSame('/mfa', $this->browser->getRequest()->getPathInfo());
+        self::assertSame('/', $this->browser->getRequest()->getPathInfo());
 
-        return $crawler;
+        return $this->browser->request('GET', 'http://admin.localhost/account/security/mfa/enable');
     }
 
     private function completeAdminLogin(): void
     {
         $crawler = $this->primaryAdminLogin();
-        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form());
+        $crawler = $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
         self::assertResponseIsSuccessful();
         $secret = trim($crawler->filter('#mfa-secret')->text());
         $this->browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code' => TOTP::createFromSecret($secret)->now()]));
@@ -99,9 +99,10 @@ final class PermissionAdministrationTest extends WebTestCase
         self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_permission_denials'));
     }
 
-    public function testPasswordOnlyAdministratorCannotReadOrChangeAccess(): void
+    public function testPendingEnrollmentAdministratorCannotReadOrChangeAccess(): void
     {
-        $this->primaryAdminLogin();
+        $crawler = $this->primaryAdminLogin();
+        $this->browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password' => WorkbenchFixture::PASSWORD]));
         foreach (['GET', 'POST'] as $method) {
             $path = $method === 'GET' ? '/workbench/access' : $this->denialPath();
             $this->browser->request($method, 'http://admin.localhost'.$path, ['_token' => 'forged', 'denied' => '1']);

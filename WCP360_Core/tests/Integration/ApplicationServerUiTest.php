@@ -25,12 +25,8 @@ final class ApplicationServerUiTest extends WebTestCase
         $browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>'admin@example.test','_password'=>WorkbenchFixture::PASSWORD]));
         for($i=0;$i<3 && $browser->getResponse()->isRedirect();$i++)$crawler=$browser->followRedirect();
         self::assertResponseIsSuccessful();
-        self::assertSame('/mfa',$browser->getRequest()->getPathInfo());
-        $crawler=$browser->submit($crawler->selectButton('Configurer la MFA')->form());
-        self::assertResponseIsSuccessful();
-        $secret=trim($crawler->filter('#mfa-secret')->text());
-        $browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>TOTP::createFromSecret($secret)->now()]));
-        self::assertResponseIsSuccessful();self::assertSelectorCount(10,'#recovery-codes code');
+        self::assertSame('/',$browser->getRequest()->getPathInfo());
+        self::assertSelectorNotExists('#auth-code');
         $crawler=$browser->request('GET','http://admin.localhost/');self::assertResponseIsSuccessful();
         self::assertSelectorExists('#default-application-server option[value="php_fpm"][selected]');
         self::assertSelectorExists('#default-application-server option[value="frankenphp_worker"][disabled]');
