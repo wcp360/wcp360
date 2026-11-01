@@ -34,6 +34,8 @@ The [shared candidate authorization boundary](src/Module/IdentityAccess/README.m
 
 The [candidate session registry](src/Module/IdentityAccess/README.md#candidate-session-inventory-and-revocation) adds bounded own-account inventory and password-confirmed single/all-session revocation in the current USER/ADMIN context, with durable cookie bindings, admission checks and audited logout. Session management and Revocation and role changes remain Partial; counts stay unchanged. Native Symfony session payloads remain in server-side files; canonical production session storage/grants, other channels and general in-flight effect fencing remain unfinished. Older checkouts require migration `Version20261101000300` and a new login. Exact-source CI for this slice belongs to draft PR #116, not the historical checkpoint.
 
+The [runtime identity diagnostic](installer/preflight/README.md#runtime-identity-inspection) extends read-only prerequisite observation with fixed canonical profiles, actual current-namespace credentials and conservative process checks. It does not deploy identities or establish production Unix/filesystem/PostgreSQL separation; no capability status or count changes. Exact-source results remain in draft PR #116.
+
 ## Domain summary
 
 The README domains describe capabilities; Core modules describe cohesive ownership. Several README domains can share a module, and a cross-resource capability has one primary coordinator with explicit collaborators.

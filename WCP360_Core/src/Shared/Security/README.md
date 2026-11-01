@@ -22,6 +22,10 @@ Sharing a primitive does not create a second identity, permission, secret or res
 
 The owning module documents [session inventory, password-confirmed revocation, migration and limitations](../../Module/IdentityAccess/README.md#candidate-session-inventory-and-revocation). Existing checkouts require the new migration and a new login. Revocation gates subsequent admitted requests and the implemented mutation/MFA boundaries; general in-flight effect fencing remains unfinished.
 
+## Runtime identity observation
+
+The standalone [runtime identity inspector](../../../installer/preflight/README.md#runtime-identity-inspection) compares live Linux credentials with the accepted identity model. It is not called implicitly by [RuntimeContext](RuntimeContext.php): declaring a development context still does not establish an effective Unix identity. Profile matches do not authorize effects or qualify service, filesystem, PostgreSQL or minimal-root separation. Complete production runtime admission and identity/grant isolation remain M1 work.
+
 - [Shared foundations](../README.md)
 - [Identity and access owner](../../Module/IdentityAccess/README.md)
 - [Accepted security specifications](../../../../documentation/specifications/security/)

@@ -11,6 +11,7 @@ php WCP360_Core/installer/preflight/platform.php
 php WCP360_Core/installer/preflight/candidate.php --target --dependencies
 php WCP360_Core/installer/preflight/runtime-plan.php
 php WCP360_Core/installer/preflight/runtime-readiness.php
+php WCP360_Core/installer/preflight/runtime-identity.php worker
 php WCP360_Core/installer/preflight/native-plan.php
 ~~~
 
@@ -23,6 +24,22 @@ php WCP360_Core/installer/preflight/native-plan.php
 `runtime-readiness.php` checks the executing PHP 8.4 process and required extensions, then connects to the explicit process `DATABASE_URL` using PDO with bounded timeouts and read-only session settings. It executes only `SHOW server_version_num`; the observed server must be PostgreSQL 17. The URL's `serverVersion` hint cannot establish that result. It deliberately loads no `.env`, PHPUnit bootstrap or test URL override. Missing/invalid connection settings, connection failure, the wrong major version or a failed PHP prerequisite produce a failing JSON report without credentials, DSNs or raw database errors. A successful report still sets `qualified_release: false`.
 
 The installer exposes runtime planning as `bash WCP360_Core/installer/recipes/candidate-install.sh --plan`, runtime readiness as `--check-runtime` and the native-installation handoff below as `--host-check`. These options return before checkout preparation, journaling or migrations. See the [runtime matrix guide](../../../documentation/development/CORE-RUNTIME-MATRIX.md) for the corresponding five-target development image, application journey and evidence requirements.
+
+## Runtime identity inspection
+
+[runtime-identity.php](runtime-identity.php) uses the standalone [RuntimeIdentity](../../src/Shared/Platform/RuntimeIdentity.php) collector without Composer, Symfony, `.env`, database access, subprocesses or host writes. PHP 8.1 or newer can run it. Supply exactly one profile: `user`, `admin`, `worker`, `wcpd` or `wcp-privd`. Names and required groups follow the accepted [runtime identity table](../../config/contexts/README.md#inspect-the-calling-identity); arbitrary UID/group overrides and an apply mode are rejected.
+
+It reads at most 64 KiB from `/proc/thread-self/status`, validates unique complete credential/capability fields and resolves only the canonical account/group names through the POSIX/NSS functions. The report contains numeric credentials, capability masks, recognized no-login status and bounded checks, never password fields, home directories, command lines, unrelated accounts or application secrets. NSS may consult the host's configured providers; those lookups do not have an application-enforced timeout. No shadow database is read.
+
+The comparison refuses missing account/group mappings, aliases between canonical identities, wrong real/effective/saved/filesystem IDs, missing or unexpected supplementary groups, interactive non-root service accounts, missing `NoNewPrivs`, and non-root inheritable/permitted/effective/ambient capabilities. A nonzero capability bounding set is observable metadata, not an active capability grant or a sandbox qualification. Root broker capabilities are not qualified by this identity-only profile.
+
+Exit **0** means the calling process matches this diagnostic profile at observation time; **1** means a mismatch, incomplete observation or collection failure; **64** means invalid arguments. Non-Linux environments report unavailable observations and do not match. The CLI cannot inspect another PID or prove an existing service's identity. Running it as another user outside that service does not verify the service's confinement.
+
+Every report keeps `runtime_enforced`, `service_context_verified`, `filesystem_access_verified`, `database_isolation_verified`, `minimal_root_qualified`, `privileged_effects_allowed`, `qualified_release` and `host_changes` false, even after a match. No match changes the existing native-installation blockers or production boot refusal. Reobserve credentials and authorize concrete effects at their owning boundary; runtime packaging, actual filesystem/DB separation and production admission remain M1 work.
+
+[Pure regressions](../../tests/Unit/RuntimeIdentityTest.php) exercise synthetic canonical matches and refusal cases; [standalone/live Linux tests](../../tests/Integration/RuntimeIdentityTest.php) check bootstrap independence, bounded output, CLI refusals and actual current-namespace observations. Positive synthetic profiles do not establish deployment of the canonical accounts. Exact-source execution is recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116).
+
+Primary interface references: [Linux procfs credentials](https://www.kernel.org/doc/html/latest/filesystems/proc.html), [PHP account lookup](https://www.php.net/manual/en/function.posix-getpwnam.php) and [PHP group lookup](https://www.php.net/manual/en/function.posix-getgrnam.php).
 
 ## Read-only native-installation handoff
 

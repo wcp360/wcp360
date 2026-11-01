@@ -118,6 +118,14 @@ Older checkouts must apply [Version20261101000300](migrations/Version20261101000
 
 Session management and Revocation and role changes remain **Partial**. Counts stay **5 demonstrated / 71 partial / 157 planned**, totaling 233; the overall estimate remains approximately 20%. Canonical roles/permissions and session contracts, password recovery, passkeys, service accounts, Unix identities, PostgreSQL grants and production qualification remain outstanding. **M1 remains open and `CODE-BASELINE` remains `NONE`.**
 
+### Read-only runtime identity inspection
+
+[RuntimeIdentity](src/Shared/Platform/RuntimeIdentity.php) and its [standalone preflight](installer/preflight/README.md#runtime-identity-inspection) compare actual Linux calling-thread credentials with the fixed identity names from Security section 4. All real/effective/saved/filesystem UID/GID values, actual supplementary groups, canonical mapping separation and recognized no-login service accounts are checked. Conservative process checks require `NoNewPrivs=1` and empty active/potential capability sets for non-root profiles; the bounding set and root broker capability confinement are not qualified.
+
+The diagnostic is read-only and independent of Symfony configuration. Missing mappings, wrong identities and incomplete kernel data cannot pass. Matching a profile grants no authority: runtime admission, service-context validation, filesystem access, PostgreSQL grants and minimal-root qualification remain explicitly unverified. It creates no Unix account, starts no service, changes no grant and does not bypass production boot refusal. Positive policy fixtures do not prove that canonical identities are installed on the five CI targets.
+
+[Unit](tests/Unit/RuntimeIdentityTest.php) and [standalone/live Linux](tests/Integration/RuntimeIdentityTest.php) tests define the scope; current-source results belong to [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Next, implement and qualify explicit runtime packaging and separate PostgreSQL credentials with negative cross-surface privilege tests. Accepted permission-composition decisions remain prerequisites for the general evaluator; AUDIT-WCP-0118 stays open. **M1 remains open**, `CODE-BASELINE` remains `NONE`, and the approximately 20% estimate and **5 demonstrated / 71 partial / 157 planned** capability counts remain unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.
