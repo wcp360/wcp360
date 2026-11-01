@@ -34,7 +34,7 @@ final class PasswordRecoveryJourneyTest extends WebTestCase
         $_ENV['WCP_CONTEXT']=$_SERVER['WCP_CONTEXT']='user';
         $_ENV['WCP_PUBLIC_HOST']=$_SERVER['WCP_PUBLIC_HOST']='user.localhost';
     }
-    private function bootSurface(string $surface): void
+    private function bootSurface(string $surface, string $mode = 'shared'): void
     {
         self::ensureKernelShutdown();
         $this->surface=$surface;
@@ -45,7 +45,7 @@ final class PasswordRecoveryJourneyTest extends WebTestCase
         $this->browser->disableReboot();
         $this->store=self::getContainer()->get(WorkbenchStore::class);
         $this->fixture=WorkbenchFixture::reset($this->store->db);
-        $this->installRecovery();
+        $this->installRecovery($mode);
     }
     private function installRecovery(string $mode='shared',bool $enabled=true): void
     {
@@ -139,16 +139,20 @@ final class PasswordRecoveryJourneyTest extends WebTestCase
         self::assertResponseRedirects('/login',303);
         $crawler=$this->browser->followRedirect();
         $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>'admin','_password'=>self::NEXT]));
-        self::assertResponseRedirects('/mfa');
-        $this->browser->request('GET',$this->url('/'));
-        self::assertResponseRedirects('/mfa');
+        self::assertResponseRedirects('/');
+        $this->browser->followRedirect();
+        self::assertContains($this->browser->getResponse()->getStatusCode(), [302, 303]);
+        self::assertContains($this->browser->getResponse()->headers->get('Location'), ['/mfa', $this->url('/mfa')]);
+        $this->browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('input[name="_auth_code"]');
         self::assertTrue($mfa->status($id)['enabled']);
         self::assertSame($before,$this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery WHERE user_id=? ORDER BY code_hash',[$id]));
     }
 
     public function testUnavailableProfilesHaveNoFormOrPrivilegedFallback(): void
     {
-        $this->installRecovery('session-isolated');
+        $this->bootSurface('user', 'session-isolated');
         $this->browser->request('GET',$this->url('/reset-password'));
         self::assertResponseStatusCodeSame(503);
         self::assertSelectorNotExists('form.auth-form');
@@ -164,8 +168,11 @@ final class PasswordRecoveryJourneyTest extends WebTestCase
         $this->browser->request('GET',$this->url('/reset-password').'?recovery_code='.rawurlencode($code));
         self::assertResponseStatusCodeSame(400);
         self::assertStringNotContainsString($code,$this->browser->getResponse()->getContent());
-        $this->browser->request('POST',$this->url('/reset-password'),$fields,[],['HTTP_HOST'=>'outside.example']);
+        $this->browser->request('POST','http://outside.example/reset-password',$fields);
+        self::assertSame('outside.example', $this->browser->getRequest()->getHost());
         self::assertContains($this->browser->getResponse()->getStatusCode(),[400,403]);
         foreach([$code,self::NEXT] as $secret)self::assertStringNotContainsString($secret,$this->browser->getResponse()->getContent());
+        self::assertTrue(password_verify(WorkbenchFixture::PASSWORD, $this->store->db->fetchOne(
+            'SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$this->fixture['users']['alice']])));
     }
 }
