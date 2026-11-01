@@ -197,6 +197,24 @@ final class MfaJourneyTest extends WebTestCase
         return $this->store->db->fetchOne("SELECT id FROM wcp_candidate_users WHERE username='alice' AND context='user'");
     }
 
+    public function testPendingMfaApiUsesAJsonChallengeRefusalWithoutGrantingRoles(): void
+    {
+        $this->enroll();
+        $this->logout();
+        $this->login();
+        $tenant = $this->store->db->fetchOne('SELECT id FROM wcp_candidate_tenants ORDER BY id LIMIT 1');
+        $this->browser->request('GET', 'http://admin.localhost/workbench/v1/summary/'.$tenant);
+        self::assertResponseStatusCodeSame(403);
+        self::assertResponseHeaderSame('Content-Type', 'application/json');
+        $body = json_decode($this->browser->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame('MFA_REQUIRED', $body['error']['code']);
+        self::assertSame($body['request_id'], $this->browser->getResponse()->headers->get('X-WCP360-Request-Id'));
+        self::assertFalse($this->browser->getResponse()->headers->has('Location'));
+        self::assertStringNotContainsString($tenant, $this->browser->getResponse()->getContent());
+        $this->browser->request('GET', 'http://admin.localhost/');
+        $this->assertPendingMfaRedirect();
+    }
+
     private function assertPendingMfaRedirect(): void
     {
         self::assertContains($this->browser->getResponse()->getStatusCode(), [302, 303]);

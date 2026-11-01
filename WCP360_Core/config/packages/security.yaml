@@ -10,6 +10,7 @@ security:
             lazy: true
             provider: workbench
             user_checker: Wcp360\Core\Shared\Security\ContextUserChecker
+            entry_point: Wcp360\Core\Shared\Http\CandidateAuthenticationEntryPoint
             form_login:
                 login_path: wcp_login
                 check_path: wcp_login

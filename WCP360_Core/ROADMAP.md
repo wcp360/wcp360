@@ -194,6 +194,12 @@ The [backup-code renewal candidate](src/Module/IdentityAccess/README.md#renewing
 
 Service, HTTP and real PostgreSQL definitions cover expiry, stale credentials/revision, caller transactions, rollback, Origin/CSRF, confirmation throttling and disclosure boundaries. Executed outcomes belong to their exact source/workflow in draft PR #116; no local executable tests are run. **M1 remains open**, overall completion stays approximately **20%**, and capability counts remain **5 demonstrated / 71 partial / 157 planned**.
 
+### Shared request references and safe HTTP errors — 2026-11-02
+
+The [shared HTTP boundary](src/Shared/Http/README.md) adds a fresh server-generated request reference, fixed error-code/message mapping, a consistent error envelope for existing workbench APIs and branded browser error pages. Browser login/challenge redirects stay browser flows; anonymous, revoked and pending-factor API requests receive JSON refusals after the existing security boundary. Typed idempotency conflicts preserve their meaning without parsing arbitrary exception messages. The credential-specific listener delegates to the same responder, and template/logging failures have bounded fallbacks.
+
+No dependency, schema, database grant or authorization expansion is introduced. Tests define transport selection, reference isolation, safe headers, disclosure, authentication/surface/tenant/CSRF refusals, idempotency, audit rollback and pending-factor behavior. Exact-source execution belongs to draft PR #116; local executable checks remain stopped by user instruction. Full canonical API/permission/audit correlation, durable log routing, production integration and independent acceptance remain open. **M1 remains open; approximately 20% overall and capability counts are unchanged.**
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

@@ -36,6 +36,8 @@ The [candidate session registry](src/Module/IdentityAccess/README.md#candidate-s
 
 The [runtime identity diagnostic](installer/preflight/README.md#runtime-identity-inspection) extends read-only prerequisite observation with fixed canonical profiles, actual current-namespace credentials and conservative process checks. It does not deploy identities or establish production Unix/filesystem/PostgreSQL separation; no capability status or count changes. Exact-source results remain in draft PR #116.
 
+The [shared HTTP candidate](src/Shared/Http/README.md) now implements request references, safe exception presentation and a bounded error envelope for existing workbench endpoints. It reuses canonical error-code names without claiming complete API contracts, durable audit correlation or production integration. Capability statuses and the **5 demonstrated / 71 partial / 157 planned** counts stay unchanged; current-source execution is recorded in draft PR #116.
+
 ## Domain summary
 
 The README domains describe capabilities; Core modules describe cohesive ownership. Several README domains can share a module, and a cross-resource capability has one primary coordinator with explicit collaborators.

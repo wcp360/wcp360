@@ -4,6 +4,8 @@ Start here to locate a change. This index documents the intended source location
 
 The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21 functional domains to their Core owners and distinguishes proposed plugins from missing source folders.
 
+For request references, safe API error envelopes and branded error pages, start with [Shared HTTP](src/Shared/Http/README.md). Domain validation and authorization remain with the owning use case.
+
 ## Find the right owner
 
 | I need to change… | Start here | Then follow |

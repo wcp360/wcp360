@@ -53,7 +53,7 @@ final readonly class SubmitHostingPlan
             $this->store->requirePermission($actor, $tenant);
             $old = $db->fetchAssociative('SELECT id,fingerprint FROM wcp_candidate_jobs WHERE actor_id=? AND tenant_id=? AND idempotency_key=?', [$actor, $tenant, $key]);
             if ($old) {
-                if (!hash_equals($old['fingerprint'], $fingerprint)) throw new ConflictHttpException('IDEMPOTENCY_CONFLICT');
+                if (!hash_equals($old['fingerprint'], $fingerprint)) throw new \Wcp360\Core\Shared\Http\IdempotencyConflict();
                 return ['job_id' => $old['id'], 'replayed' => true];
             }
             $server = $this->policy->select($requested, $this->settings->current()['application_server'], $acknowledged);
