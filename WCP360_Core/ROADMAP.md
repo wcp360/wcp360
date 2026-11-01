@@ -188,6 +188,12 @@ The [recovery-code candidate](installer/recovery/RECOVERY-CODES.md) adds explici
 
 [Unit, service and HTTP sources](installer/recovery/RECOVERY-CODES.md#verification-and-remaining-work) define the current CI scope; no local executable verification is claimed. Email request/delivery and notifications, per-code inventory/revocation, isolated redemption and accepted production contracts remain unfinished. **M1 remains open**; the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** counts are unchanged.
 
+### MFA backup-code renewal
+
+The [backup-code renewal candidate](src/Module/IdentityAccess/README.md#renewing-mfa-backup-codes) adds a password-confirmed action for an enabled administrator factor. Fresh MFA and a bound strength-two session are rechecked under the current account lock. Ten replacement code HMACs, an incremented factor revision, all own ADMIN session revocations and mandatory audit commit together; the authenticator and replay/attempt budgets are preserved. The one-time response is returned only after commit and signs the browser out. Existing session-isolated ADMIN grants suffice.
+
+Service, HTTP and real PostgreSQL definitions cover expiry, stale credentials/revision, caller transactions, rollback, Origin/CSRF, confirmation throttling and disclosure boundaries. Executed outcomes belong to their exact source/workflow in draft PR #116; no local executable tests are run. **M1 remains open**, overall completion stays approximately **20%**, and capability counts remain **5 demonstrated / 71 partial / 157 planned**.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

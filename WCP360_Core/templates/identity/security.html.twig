@@ -15,6 +15,14 @@
 {% if mfa.enabled %}
 <p class="status" role="status">MFA activée</p>
 <p>Un second facteur est demandé à chaque connexion de ce compte. Sa désactivation exige une vérification récente et votre mot de passe actuel.</p>
+<h3>Codes de secours</h3>
+<p>Si vous avez perdu vos codes, renouvelez-les après une confirmation récente avec votre authentificateur. Les anciens codes seront supprimés et toutes les sessions de ce compte seront fermées. Votre authentificateur restera actif.</p>
+<form action="{{ path('wcp_mfa_recovery_regenerate') }}" method="post" data-turbo="false">
+<input type="hidden" name="_token" value="{{ csrf_token('mfa_recovery_regenerate') }}">
+<label for="recovery-current-password">Mot de passe actuel</label><input id="recovery-current-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required>
+<button class="button secondary" type="submit">Renouveler mes codes de secours</button>
+</form>
+<h3>Désactiver la MFA</h3>
 <form action="{{ path('wcp_mfa_reset') }}" method="post" data-turbo-frame="_top">
 <input type="hidden" name="_token" value="{{ csrf_token('mfa_reset') }}">
 <label for="current-password">Mot de passe actuel</label><input id="current-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required>

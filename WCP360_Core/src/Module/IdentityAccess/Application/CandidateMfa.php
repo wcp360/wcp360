@@ -138,12 +138,7 @@ final readonly class CandidateMfa
             if (!$enabled) {
                 $revision++;
                 $changes += ['sealed_secret' => $sealed, 'pending_secret' => null, 'pending_expires_at' => null, 'revision' => $revision];
-                $codes = [];
-                for ($i = 0; $i < 10; $i++) {
-                    $recovery = bin2hex(random_bytes(16));
-                    $this->store->db->insert('wcp_candidate_mfa_recovery', ['user_id' => $actor, 'code_hash' => $this->recoveryHash($actor, $recovery)]);
-                    $codes[] = $recovery;
-                }
+                $codes = $this->newRecoveryCodes($actor);
                 $result = ['revision' => $revision, 'method' => 'enrollment', 'recovery_codes' => $codes];
             }
             $this->store->db->update('wcp_candidate_mfa', $changes, ['user_id' => $actor]);
@@ -151,6 +146,50 @@ final readonly class CandidateMfa
 
             return $result;
         });
+    }
+
+    /**
+     * Internal factor mutation. The owning use case checks the bound session and
+     * current credentials, revokes sessions, and discloses codes only after commit.
+     *
+     * @return list<string>
+     */
+    public function regenerateRecoveryCodes(string $actor, int $expectedRevision): array
+    {
+        $this->requireKey();
+
+        return $this->store->db->transactional(function () use ($actor, $expectedRevision): array {
+            $row = $this->lockedFactor($actor);
+            if (!is_string($row['sealed_secret']) || (int) $row['revision'] !== $expectedRevision) {
+                throw new \RuntimeException('Current enabled factor required.');
+            }
+            // A syntactically valid replacement key cannot silently strand the authenticator.
+            $this->unseal($actor, $row['sealed_secret']);
+            $this->store->db->delete('wcp_candidate_mfa_recovery', ['user_id' => $actor]);
+            $codes = $this->newRecoveryCodes($actor);
+            $this->store->db->update('wcp_candidate_mfa', [
+                'revision' => $expectedRevision + 1,
+            ], ['user_id' => $actor]);
+            // Preserve the seed, replay counter and failed-challenge budget.
+            $this->store->audit($actor, null, 'candidate.mfa.recovery.regenerated', $actor);
+
+            return $codes;
+        });
+    }
+
+    /** @return list<string> Raw codes exist only until the immediate response is rendered. */
+    private function newRecoveryCodes(string $actor): array
+    {
+        $codes = [];
+        for ($i = 0; $i < 10; $i++) {
+            $code = bin2hex(random_bytes(16));
+            $this->store->db->insert('wcp_candidate_mfa_recovery', [
+                'user_id' => $actor, 'code_hash' => $this->recoveryHash($actor, $code),
+            ]);
+            $codes[] = $code;
+        }
+
+        return $codes;
     }
 
     /** Caller must require password reauthentication and fresh MFA, then terminate the browser session. */

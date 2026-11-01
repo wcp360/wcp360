@@ -169,7 +169,8 @@ final class PasswordRecoveryJourneyTest extends WebTestCase
         self::assertResponseStatusCodeSame(400);
         self::assertStringNotContainsString($code,$this->browser->getResponse()->getContent());
         $this->browser->request('POST','http://outside.example/reset-password',$fields);
-        self::assertSame('outside.example', $this->browser->getRequest()->getHost());
+        self::assertSame('outside.example', $this->browser->getRequest()->headers->get('Host'));
+        // Symfony may already have rejected an untrusted host; getHost() then returns an empty string.
         self::assertContains($this->browser->getResponse()->getStatusCode(),[400,403]);
         foreach([$code,self::NEXT] as $secret)self::assertStringNotContainsString($secret,$this->browser->getResponse()->getContent());
         self::assertTrue(password_verify(WorkbenchFixture::PASSWORD, $this->store->db->fetchOne(

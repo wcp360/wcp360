@@ -424,6 +424,40 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testBackupCodeRenewalWorksWithUnchangedAdministratorGrantsAndRedactedProfiles(): void
+    {
+        $this->provider->provision($this->passwords);
+        $logger = new class extends AbstractLogger {
+            public array $records = [];
+            public function log($level, string|\Stringable $message, array $context = []): void { $this->records[] = [(string) $message, $context]; }
+        };
+        $db = $this->login('admin', null, $logger);
+        $store = new WorkbenchStore($db);
+        $id = $this->fixture['users']['admin'];
+        $mfa = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa($store, str_repeat('a', 64));
+        $setup = $mfa->startEnrollment($id);
+        $result = $mfa->check($id, TOTP::createFromSecret($setup['secret'])->now(), 1);
+        self::assertNotNull($result);
+        $snapshot = \Wcp360\Core\Module\IdentityAccess\Infrastructure\RecoveryAccountSnapshot::find($db, $id, 'admin');
+        self::assertNotNull($snapshot);
+        $sessions = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store);
+        $old = str_repeat('o', 32);
+        $sid = str_repeat('n', 32);
+        $selector = $sessions->issue($id, 'admin', $old);
+        $sessions->upgrade($id, 'admin', $selector, $sessions::binding($id, 'admin', $old), $sid);
+        $renewal = new \Wcp360\Core\Module\IdentityAccess\Application\RegenerateMfaRecoveryCodes(
+            $store, $mfa, $sessions, new RuntimeContext('admin', true, 'test', 'admin.localhost'));
+        $logger->records = [];
+        $codes = $renewal->regenerate($snapshot['actor'], $selector, $sid, ['actor' => $id, 'revision' => $result['revision'], 'at' => time()]);
+        self::assertCount(10, $codes);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertFalse($sessions->current($id, 'admin', $selector, $sid, 2, false));
+        self::assertTrue($mfa->status($id)['enabled']);
+        $profile = serialize($logger->records);
+        foreach ([...$codes, $snapshot['actor']->getPassword(), $sid, $setup['secret']] as $secret) self::assertStringNotContainsString($secret, $profile);
+        self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.mfa.recovery.regenerated'"));
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

@@ -92,6 +92,100 @@ final class MfaJourneyTest extends WebTestCase
         self::assertResponseRedirects('/login');
     }
 
+    public function testRenewedBackupCodesAreShownOnceAndRequireANewLoginWithMfa(): void
+    {
+        $factor = $this->enroll();
+        $before = $this->store->db->fetchAssociative('SELECT * FROM wcp_candidate_mfa WHERE user_id=?', [$this->admin]);
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('form[action="/account/security/mfa/recovery-codes"][data-turbo="false"]');
+        $crawler = $this->browser->submit($crawler->selectButton('Renouveler mes codes de secours')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseIsSuccessful();
+        $codes = $crawler->filter('#recovery-codes code')->each(static fn (Crawler $node): string => trim($node->text()));
+        self::assertCount(10, array_unique($codes));
+        self::assertSame([], array_intersect($factor['codes'], $codes));
+        self::assertSelectorExists('a[href="/login"]');
+        self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
+        self::assertSelectorExists('meta[name="turbo-cache-control"][content="no-cache"]');
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+        $after = $this->store->db->fetchAssociative('SELECT * FROM wcp_candidate_mfa WHERE user_id=?', [$this->admin]);
+        self::assertSame($before['sealed_secret'], $after['sealed_secret']);
+        self::assertSame($before['last_counter'], $after['last_counter']);
+        self::assertSame((int) $before['revision'] + 1, (int) $after['revision']);
+        foreach ($codes as $code) self::assertStringNotContainsString($code, serialize($this->browser->getRequest()->getSession()->all()));
+        foreach ([$factor['secret'], WorkbenchFixture::PASSWORD] as $secret) self::assertStringNotContainsString($secret, (string) $this->browser->getResponse()->getContent());
+        $this->browser->request('GET', 'http://admin.localhost/account/security');
+        self::assertResponseRedirects('/login');
+        foreach ($codes as $code) self::assertStringNotContainsString($code, (string) $this->browser->getResponse()->getContent());
+        $this->login();
+        $this->browser->request('GET', 'http://admin.localhost/');
+        $this->assertPendingMfaRedirect();
+    }
+
+    public function testBackupRenewalRequiresOriginCsrfKnownFieldsAndCurrentPassword(): void
+    {
+        $this->enroll();
+        $before = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery ORDER BY code_hash');
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security');
+        $fields = $crawler->selectButton('Renouveler mes codes de secours')->form(['current_password' => WorkbenchFixture::PASSWORD])->getValues();
+        foreach (['', 'http://outside.example'] as $origin) {
+            $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', $fields, [], ['HTTP_ORIGIN' => $origin]);
+            self::assertResponseStatusCodeSame(403);
+        }
+        $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', array_replace($fields, ['_token' => 'forged']));
+        self::assertResponseStatusCodeSame(403);
+        $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', $fields + ['actor' => $this->fixtureUserId()]);
+        self::assertResponseStatusCodeSame(400);
+        $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', array_replace($fields, ['current_password' => ['invalid']]));
+        self::assertResponseStatusCodeSame(400);
+        $this->browser->request('POST', 'http://user.localhost/account/security/mfa/recovery-codes', $fields);
+        self::assertResponseStatusCodeSame(403);
+        self::assertStringNotContainsString(WorkbenchFixture::PASSWORD, (string) $this->browser->getResponse()->getContent());
+        for ($attempt = 0; $attempt < 5; ++$attempt) {
+            $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', array_replace($fields, ['current_password' => 'incorrect-current-password']));
+            self::assertResponseStatusCodeSame(403);
+        }
+        $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', $fields);
+        self::assertResponseStatusCodeSame(429);
+        self::assertSame($before, $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery ORDER BY code_hash'));
+    }
+
+    public function testStaleMfaProofCannotRenewBackupCodes(): void
+    {
+        $this->enroll();
+        $before = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery ORDER BY code_hash');
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security');
+        $fields = $crawler->selectButton('Renouveler mes codes de secours')->form(['current_password' => WorkbenchFixture::PASSWORD])->getValues();
+        $session = $this->browser->getRequest()->getSession();
+        $proof = $session->get('_wcp_mfa_proof');
+        $proof['at'] = time() - 301;
+        $session->set('_wcp_mfa_proof', $proof);
+        $session->save();
+        $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', $fields);
+        self::assertResponseStatusCodeSame(403);
+        self::assertSame($before, $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery ORDER BY code_hash'));
+    }
+
+    public function testBackupRenewalCannotEnableAnOptionalDisabledFactor(): void
+    {
+        $this->login();
+        $crawler = $this->browser->request('GET', 'http://admin.localhost/account/security');
+        self::assertSelectorNotExists('form[action="/account/security/mfa/recovery-codes"]');
+        $csrf = self::getContainer()->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class);
+        $this->browser->request('POST', 'http://admin.localhost/account/security/mfa/recovery-codes', [
+            '_token' => $csrf->getToken('mfa_recovery_regenerate')->getValue(),
+            'current_password' => WorkbenchFixture::PASSWORD,
+        ]);
+        self::assertResponseStatusCodeSame(403);
+        self::assertFalse(self::getContainer()->get(CandidateMfa::class)->status($this->admin)['enabled']);
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa_recovery'));
+    }
+
+    private function fixtureUserId(): string
+    {
+        return $this->store->db->fetchOne("SELECT id FROM wcp_candidate_users WHERE username='alice' AND context='user'");
+    }
+
     private function assertPendingMfaRedirect(): void
     {
         self::assertContains($this->browser->getResponse()->getStatusCode(), [302, 303]);
@@ -421,6 +515,9 @@ final class MfaJourneyTest extends WebTestCase
         self::assertResponseStatusCodeSame(403);
         $this->browser->request('POST', 'http://user.localhost/mfa/enroll', ['_token' => 'forged', 'current_password' => WorkbenchFixture::PASSWORD]);
         self::assertResponseStatusCodeSame(403);
+        $this->browser->request('POST', 'http://user.localhost/account/security/mfa/recovery-codes', ['_token' => 'forged', 'current_password' => WorkbenchFixture::PASSWORD]);
+        self::assertResponseStatusCodeSame(403);
+        self::assertStringNotContainsString(WorkbenchFixture::PASSWORD, (string) $this->browser->getResponse()->getContent());
         self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa'));
     }
 

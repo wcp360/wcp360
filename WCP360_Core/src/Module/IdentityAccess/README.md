@@ -30,6 +30,8 @@ Start here when changing: **Identity, roles, session and recovery behavior.**
 | [Application/ChangeOwnPassword.php](Application/ChangeOwnPassword.php) | Own-account credential replacement, current-state checks, context session revocation and audit in one transaction; shared persistence or the configured surface-bound PostgreSQL operation. |
 | [UI/Http/PasswordController.php](UI/Http/PasswordController.php) | Username-account password form with exact Origin, CSRF and the shared current-password confirmation budget. |
 | [Infrastructure/PasswordChangeErrors.php](Infrastructure/PasswordChangeErrors.php) | Redacted password-route exception responses with preserved refusal statuses and headers, including before-controller errors. |
+| [Application/RegenerateMfaRecoveryCodes.php](Application/RegenerateMfaRecoveryCodes.php) | Own enabled ADMIN factor renewal, current credential/session/proof rechecks and atomic revocation before one-time disclosure. |
+| [UI/Http/MfaRecoveryController.php](UI/Http/MfaRecoveryController.php) | Password-confirmed, CSRF/Origin-protected code renewal; no code retrieval endpoint. |
 | [Application/DisableAdministratorMfa.php](Application/DisableAdministratorMfa.php) | Atomic factor/backup-code removal and revocation of all ADMIN sessions for the account. |
 | [Application/CandidateSessions.php](Application/CandidateSessions.php) | Current-session admission, bounded own-account inventory, durable revocation, MFA strength upgrade and password-confirmation attempt limits. |
 | [Infrastructure/SessionSchema.php](Infrastructure/SessionSchema.php) | Separate candidate USER/ADMIN registries containing session metadata and SHA-256 bindings. |
@@ -127,6 +129,16 @@ This follows the current product decision and supersedes earlier Core notes requ
 Backup codes replace the **second factor after password authentication**. They do not reset a forgotten password. Keep them outside the hosted server. If the encryption key is lost, restore the correct operator-managed key; no automatic administrative bypass or plaintext seed export is provided. Existing local `.env` files are preserved, so an operator must add `WCP_MFA_KEY` when upgrading an older checkout. A fresh [checkout installation](../../../installer/recipes/README.md) generates independent private application and MFA keys.
 
 [Service regressions](../../../tests/Integration/CandidateMfaTest.php) cover factor storage, replay, attempt windows and recovery. [HTTP journeys](../../../tests/Integration/MfaJourneyTest.php) cover pending-role denial, Origin/CSRF checks, session rotation, recovery/reset and missing-key refusal. Executed outcomes must be tied to the exact source in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); these sources alone are not a passing CI claim.
+
+## Renewing MFA backup codes
+
+An enabled administrator can renew the ten backup codes from account security without replacing the authenticator. `POST /account/security/mfa/recovery-codes` accepts only an intent-specific CSRF token and current password, requires the exact Origin, the shared five-attempt confirmation budget and MFA completed less than five minutes ago. Disabled MFA stays optional: this path cannot activate a factor or accept a password-only/pending session.
+
+[RegenerateMfaRecoveryCodes](Application/RegenerateMfaRecoveryCodes.php) owns the transaction and refuses a caller-owned transaction. Under the account lock it rechecks the native credential snapshot, active ADMIN identity, bound durable session with strength two, proof time and factor revision. The existing factor service replaces stored code HMACs, increments the revision and preserves the encrypted seed, replay counter and challenge budgets. Code replacement, all own ADMIN session revocations and mandatory `candidate.mfa.recovery.regenerated` audit commit together. Existing ADMIN table grants suffice in both shared and session-isolated PostgreSQL profiles; no schema or grant changes are introduced.
+
+Ten random 128-bit codes are returned only after commit, in the existing no-store auth layout with Turbo caching disabled. They are never placed in a session, query string, redirect, audit or SQL profile. The browser is signed out and must sign in normally with its enabled factor. Older codes and earlier factor proofs no longer work. A render/connection failure never triggers automatic regeneration: sign in using the authenticator and explicitly retry. There is no redisplay endpoint or email delivery; saving the response and avoiding POST resubmission are the owner's responsibility.
+
+[Service cases](../../../tests/Integration/MfaRecoveryRenewalTest.php), [HTTP journeys](../../../tests/Integration/MfaJourneyTest.php) and [real PostgreSQL grant cases](../../../tests/Integration/CandidateDatabaseRolesTest.php) define the positive path, refusal boundaries, rollback and sensitive-profile checks. Their execution status is reported against the exact commit in draft PR #116; local executable tests remain stopped by user instruction. Production integration and independent acceptance are still open.
 
 ## Administrator identity confirmation
 
