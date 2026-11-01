@@ -4,6 +4,7 @@ parameters:
     env(WCP_PUBLIC_HOST): user.localhost
     env(WCP_ALLOW_FRANKENPHP_PLANS): '0'
     env(WCP_ALLOW_ISOLATED_PROVISIONING): '0'
+    env(WCP_MFA_KEY): ''
 services:
     _defaults:
         autowire: true
@@ -30,3 +31,9 @@ services:
         arguments:
             $enabled: '%env(bool:WCP_ALLOW_ISOLATED_PROVISIONING)%'
     Wcp360\Core\Module\Hosting\Domain\ProvisioningGateway: '@Wcp360\Core\Module\Hosting\Infrastructure\SocketProvisioningGateway'
+    Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa:
+        arguments:
+            $key: '%env(WCP_MFA_KEY)%'
+    Wcp360\Core\Module\IdentityAccess\Infrastructure\AdminTwoFactorProvider:
+        tags:
+            - { name: scheb_two_factor.provider, alias: wcp_candidate_totp }

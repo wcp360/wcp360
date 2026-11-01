@@ -41,7 +41,7 @@ Security, failure handling and integration are part of each workstream's unfinis
 | Workstream | Weight | Estimated maturity | Present evidence | Major unfinished work |
 | :--- | ---: | ---: | :--- | :--- |
 | Runtime architecture, bootstrap and toolchain | 8% | 70% | Kernel, locked dependencies, HTTP/CLI entry points, runtime contexts and static/build checks. | Accepted production integration, service ownership, packaging and deployment topology. |
-| IdentityAccess | 9% | 20% | Candidate login/logout, Argon2id, CSRF, throttling, context/session checks and account deactivation checks. | MFA, recovery, passkeys, sensitive-action reauthentication, complete roles/delegation and token/session administration. |
+| IdentityAccess | 9% | 20% | Candidate login/logout, mandatory administrator TOTP, one-time backup codes, fresh-MFA gates, Argon2id, CSRF and context/session checks. | Production MFA/recovery integration, password recovery, passkeys, inline sensitive-action reauthentication, complete roles/delegation and token/session administration. |
 | Tenancy | 7% | 10% | Enrollment creates distinct account/tenant identities and one scoped membership. | Customer/reseller lifecycle, plans, entitlements, metering and enforceable quotas. |
 | Hosting: web, DNS, TLS and PHP | 15% | 20% | Typed `.test` plans, Go rendering, FPM/Worker selection and bounded real hosting experiments. | General site lifecycle, real domains, DNS, ACME/TLS, hosted PHP versions/extensions and safe runtime changes. |
 | Mail | 8% | 0% | Ownership and service-resource locations. | Mail domains/mailboxes, SMTP/IMAP, policy, quotas, signing, abuse protection, delivery and diagnostics. |
@@ -88,6 +88,14 @@ This is a candidate metadata format and cryptographic primitive, not an approved
 
 [Reader tests](tests/Unit/ArtifactInputTest.php), [signature/identity regressions](tests/Unit/CandidateArtifactVerifierTest.php) and [standalone CLI tests](tests/Integration/CandidateArtifactVerifierTest.php) cover this slice. Update verification becomes Partial: **5 demonstrated / 68 partial / 160 planned** capabilities still total 233. M3 and M7 remain open, and the approximately 20% overall estimate is unchanged. Current-source executed outcomes are recorded in the existing PR separately from the initial runtime checkpoint.
 
+### Administrator MFA and second-factor recovery candidate
+
+[IdentityAccess](src/Module/IdentityAccess/README.md#administrator-mfa-candidate) adds mandatory administrator TOTP at every login, first-time enrollment, encrypted seeds, durable replay/attempt controls, ten single-use backup codes and password-confirmed factor reset. Rights remain withheld until confirmation; completion rotates the session, and recovery/reset revisions invalidate other sessions' older proofs. Administrator mutations require exact Origin, CSRF-protected forms and an MFA proof less than five minutes old. The current freshness flow requires signing in again. A fresh checkout generates an independent private MFA encryption key; existing operator configuration is preserved and requires the key to be added explicitly.
+
+[Service tests](tests/Integration/CandidateMfaTest.php) and [HTTP journeys](tests/Integration/MfaJourneyTest.php) define this slice's positive/refusal coverage. Current-source CI is tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); this entry makes no unexecuted passing-results claim and leaves the initial checkpoint figures intact. Multifactor authentication, Access recovery and Sensitive-action reauthentication now have Partial status: **5 demonstrated / 71 partial / 157 planned**, still 233 capabilities. The approximately 20% overall estimate is unchanged.
+
+This is second-factor recovery after password authentication, not forgotten-password recovery or an emergency key-loss bypass. Canonical production contracts, complete permissions, Unix identities, PostgreSQL grants, passkeys and the full sensitive-action reauthentication flow remain open. **M1 is not complete.**
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.
@@ -108,7 +116,7 @@ Owners: IdentityAccess, Tenancy, Platform, Operations and shared foundations.
 
 - Reconcile the candidate with the accepted API, database, permission, agent and event contracts; identify exact migration/handoff boundaries. The roadmap introduces no public identifiers or new privilege grants.
 - Define the first supported engine/provider combination, resource ownership and ADMIN/USER/worker/agent/broker identities, origins, cookies, database grants and secret references.
-- Implement the required identity foundations: administrator MFA enrollment/challenge/recovery, strong credential handling, current-authority checks, session revocation and sensitive-action reauthentication.
+- Qualify the candidate administrator MFA/enrollment/backup-code recovery against the production contracts; complete password recovery, credential lifecycle, current-authority checks, session administration and sensitive-action reauthentication.
 - Define account/tenant identity, resource revision and policy evaluation used by all resource owners. Reserve reseller delegation for its explicitly tested implementation.
 - Establish reusable server validation, error/audit/correlation conventions and UI contracts; do not duplicate business policy in controllers or plugins.
 

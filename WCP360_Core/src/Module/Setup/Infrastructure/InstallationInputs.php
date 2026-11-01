@@ -37,6 +37,16 @@ final class InstallationInputs
         if (substr_count($template, 'replace-with-a-random-local-secret') !== 1) {
             throw new \RuntimeException('The local configuration template has no unique secret placeholder.');
         }
+        $mfaKeys = preg_match_all('/^([ \t]*(?:export[ \t]+)?WCP_MFA_KEY[ \t]*=)([^\r\n]*)/m', $template, $mfaMatches, PREG_OFFSET_CAPTURE);
+        if ($mfaKeys === false || $mfaKeys > 1 || ($mfaKeys === 1 && trim($mfaMatches[2][0][0]) !== '')) {
+            throw new \RuntimeException('The local configuration template must contain at most one empty MFA key assignment.');
+        }
+        if ($mfaKeys === 1) {
+            // Older checkout templates may omit MFA. Never copy a shared key from
+            // a template or derive this encryption key from the application secret.
+            [$value, $offset] = $mfaMatches[2][0];
+            $template = substr_replace($template, bin2hex(random_bytes(32)), $offset, strlen($value));
+        }
         $content = str_replace('replace-with-a-random-local-secret', bin2hex(random_bytes(32)), $template);
         $temporary = $this->root.'/.env.bootstrap-'.bin2hex(random_bytes(16));
         $previous = umask(0077);

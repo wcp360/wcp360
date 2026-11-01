@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Wcp360\Core\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Wcp360\Core\Module\Setup\Infrastructure\InstallationInputs;
 
@@ -54,6 +55,63 @@ final class InstallationInputsTest extends TestCase
             self::assertStringContainsString('resume cannot recreate', $error->getMessage());
             self::assertFileDoesNotExist($this->root.'/.env');
         }
+    }
+
+    public function testBootstrapGeneratesAnIndependentPrivateMfaEncryptionKey(): void
+    {
+        file_put_contents($this->root.'/.env.example', "APP_SECRET=replace-with-a-random-local-secret\r\nWCP_MFA_KEY=\r\n");
+        $inputs = new InstallationInputs($this->root);
+        $inputs->ensureEnvironment(true);
+        $content = file_get_contents($this->root.'/.env');
+        self::assertIsString($content);
+        self::assertSame(1, preg_match('/^APP_SECRET=([a-f0-9]{64})\r?$/m', $content, $application));
+        self::assertSame(1, preg_match('/^WCP_MFA_KEY=([a-f0-9]{64})\r?$/m', $content, $mfa));
+        // Compare without including either private value in assertion output.
+        self::assertFalse(hash_equals($application[1], $mfa[1]));
+        $before = hash('sha256', $content);
+        $inputs->ensureEnvironment(true);
+        self::assertSame($before, hash_file('sha256', $this->root.'/.env'));
+        self::assertCount(0, glob($this->root.'/.env.bootstrap-*'));
+        if (PHP_OS_FAMILY !== 'Windows') {
+            self::assertSame(0600, fileperms($this->root.'/.env') & 0777);
+        }
+    }
+
+    public function testExistingOperatorEnvironmentWithoutMfaIsNeverRewritten(): void
+    {
+        $configuration = "APP_SECRET=operator-managed\nDATABASE_URL=operator-managed\n";
+        file_put_contents($this->root.'/.env', $configuration);
+        chmod($this->root.'/.env', 0600);
+        // Existing operator inputs take precedence, even over a broken template.
+        file_put_contents($this->root.'/.env.example', "WCP_MFA_KEY=must-not-be-copied\n");
+        $inputs = new InstallationInputs($this->root);
+        $inputs->ensureEnvironment(true);
+        $inputs->ensureEnvironment(false);
+        self::assertSame(hash('sha256', $configuration), hash_file('sha256', $this->root.'/.env'));
+        self::assertCount(0, glob($this->root.'/.env.bootstrap-*'));
+    }
+
+    #[DataProvider('invalidMfaTemplates')]
+    public function testBootstrapRefusesSharedOrAmbiguousMfaKeysBeforeWriting(string $assignments): void
+    {
+        file_put_contents($this->root.'/.env.example', "APP_SECRET=replace-with-a-random-local-secret\n".$assignments);
+        try {
+            (new InstallationInputs($this->root))->ensureEnvironment(true);
+            self::fail('An unsafe MFA key template was accepted.');
+        } catch (\RuntimeException $error) {
+            self::assertSame('The local configuration template must contain at most one empty MFA key assignment.', $error->getMessage());
+            self::assertFileDoesNotExist($this->root.'/.env');
+            self::assertCount(0, glob($this->root.'/.env.bootstrap-*'));
+        }
+    }
+
+    /** @return iterable<string, array{string}> */
+    public static function invalidMfaTemplates(): iterable
+    {
+        yield 'duplicate empty keys' => ["WCP_MFA_KEY=\nWCP_MFA_KEY=\n"];
+        yield 'tracked nonempty key' => ["WCP_MFA_KEY=shared-key\n"];
+        yield 'quoted key value' => ["WCP_MFA_KEY=\"\"\n"];
+        yield 'exported duplicate key' => ["WCP_MFA_KEY=\n export WCP_MFA_KEY =\n"];
     }
 
     public function testBindingChangesForSourceMigrationConfigurationRuntimeAndArbitraryEnvironmentInputs(): void

@@ -22,11 +22,13 @@ Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369
 | Candidate status | Rows | Meaning |
 | :--- | ---: | :--- |
 | Demonstrated | 5 | The stated bounded candidate path executes and has retained test evidence; the complete production capability is not thereby accepted. |
-| Partial | 68 | Implemented candidate code, helper or probe covers only part of this capability. |
-| Planned | 160 | No implemented Core product workflow was demonstrated for this capability; ownership/documentation or unrelated infrastructure alone is insufficient. |
+| Partial | 71 | Implemented candidate code, helper or probe covers only part of this capability. |
+| Planned | 157 | No implemented Core product workflow was demonstrated for this capability; ownership/documentation or unrelated infrastructure alone is insufficient. |
 | **Total** | **233** | **One status per existing capability; all production acceptance remains open.** |
 
 These row counts are not the overall completion percentage. The weighted roadmap estimate is approximately 20% complete / 80% remaining (15–25% completion range). The five-OS userspace matrix and the Debian 13 privileged VM have different qualification boundaries.
+
+The [administrator MFA candidate](src/Module/IdentityAccess/README.md#administrator-mfa-candidate) moves Multifactor authentication, Access recovery and Sensitive-action reauthentication from Planned to Partial. It supplies TOTP, second-factor backup codes and a fresh-MFA mutation gate; password recovery, inline reauthentication and canonical production integration remain absent. Current-source executed outcomes belong to draft PR #116, separately from the initial assessment.
 
 ## Domain summary
 
@@ -93,12 +95,12 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
 | :--- | :--- | :--- | :--- | :--- |
 | Sign-in and sign-out | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Demonstrated — Candidate sign-in/out forms, CSRF and real HTTP sessions. | [M1](ROADMAP.md#m1) |
-| Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
+| Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Mandatory administrator TOTP enrollment/challenge, encrypted seeds and durable replay/attempt controls; production integration remains open. | [M1](ROADMAP.md#m1) |
 | Passkeys / WebAuthn | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
-| Access recovery | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
-| Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Context-bound, expiring candidate sessions; full session administration absent. | [M1](ROADMAP.md#m1) |
-| Sensitive-action reauthentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
-| Abuse protection | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Login throttling only; wider abuse policy absent. | [M1](ROADMAP.md#m1) |
+| Access recovery | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Ten hashed single-use second-factor codes and password-confirmed factor reset; password recovery and independent emergency access absent. | [M1](ROADMAP.md#m1) |
+| Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Context-bound expiry, MFA rotation and factor-revision checks; full session administration absent. | [M1](ROADMAP.md#m1) |
+| Sensitive-action reauthentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Administrator mutations require MFA less than five minutes old; sign-in-again flow, complete inline reauthentication absent. | [M1](ROADMAP.md#m1) |
+| Abuse protection | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Login throttling and durable MFA attempt/enrollment limits; wider abuse policy absent. | [M1](ROADMAP.md#m1) |
 | Passwords | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Argon2id enrollment/login; complete reset/rotation lifecycle absent. | [M1](ROADMAP.md#m1) |
 | Sign-in history | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
 | Local recovery access | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
@@ -116,7 +118,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Data isolation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Candidate tenant/context checks; production database grants absent. | [M1](ROADMAP.md#m1) |
 | Support mode / impersonation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
 | Service accounts | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Planned | [M1](ROADMAP.md#m1) |
-| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Account/password/context checks; complete revocation/fencing absent. | [M1](ROADMAP.md#m1) |
+| Revocation and role changes | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Tenancy](src/Module/Tenancy/README.md) | Partial — Account/password/context checks and MFA-revision invalidation; complete revocation/fencing absent. | [M1](ROADMAP.md#m1) |
 
 ### Customers, resellers, and account lifecycle
 
@@ -357,9 +359,9 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | :--- | :--- | :--- | :--- | :--- |
 | Security center | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md), [Platform](src/Module/Platform/README.md) | Planned | [M9](ROADMAP.md#m9) |
 | Baseline hardening | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Partial — Candidate identity/allowlist/path guards; complete hardening policy absent. | [M2](ROADMAP.md#m2) |
-| Sign-in attack prevention | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Candidate login throttling; broader protection lifecycle absent. | [M1](ROADMAP.md#m1) |
+| Sign-in attack prevention | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Login throttling, mandatory administrator MFA and durable challenge limits; broader protection lifecycle absent. | [M1](ROADMAP.md#m1) |
 | Installed protection integrations | [Platform](src/Module/Platform/README.md) | [Mail](src/Module/Mail/README.md), [Observability](src/Module/Observability/README.md) | Planned | [M9](ROADMAP.md#m9) |
-| Application secrets | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Private generated local secret; managed secret rotation/store absent. | [M1](ROADMAP.md#m1) |
+| Application secrets | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Independent private application/MFA keys and encrypted factor seeds; managed secret rotation/store absent. | [M1](ROADMAP.md#m1) |
 | Sensitive-data redaction | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Partial — Selected readiness/installer redaction; system-wide coverage absent. | [M9](ROADMAP.md#m9) |
 | Internal keys and certificates | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Planned | [M9](ROADMAP.md#m9) |
 | Request validation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Selected CSRF, schema and bounded-input checks. | [M1](ROADMAP.md#m1) |

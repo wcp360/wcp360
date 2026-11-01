@@ -1,0 +1,5 @@
+scheb_two_factor:
+    ip_whitelist: []
+    # Atomic replay prevention belongs to the candidate DB transaction, not a
+    # per-process cache. No trusted-device or remember-me bypass is installed.
+    code_reuse_cache: null

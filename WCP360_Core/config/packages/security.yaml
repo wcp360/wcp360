@@ -20,6 +20,16 @@ security:
             login_throttling:
                 max_attempts: 5
                 interval: '15 minutes'
+            two_factor:
+                auth_form_path: /mfa
+                check_path: /mfa/check
+                post_only: true
+                enable_csrf: true
+                csrf_token_id: two_factor
+                always_use_default_target_path: true
+                default_target_path: /
+                success_handler: Wcp360\Core\Module\IdentityAccess\UI\Http\MfaSuccessHandler
+                failure_handler: Wcp360\Core\Module\IdentityAccess\UI\Http\MfaFailureHandler
             logout:
                 path: wcp_logout
                 target: wcp_login
@@ -27,4 +37,6 @@ security:
     access_control:
         - { path: '^/health$', roles: PUBLIC_ACCESS }
         - { path: '^/login$', roles: PUBLIC_ACCESS }
+        - { path: '^/logout$', roles: PUBLIC_ACCESS }
+        - { path: '^/mfa(?:/check|/enroll)?$', roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY }
