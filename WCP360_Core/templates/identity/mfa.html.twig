@@ -1,11 +1,16 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Vérification administrateur · WCP360</title><link rel="stylesheet" href="{{ asset('styles/app.css') }}"></head><body><main id="main" class="workspace">
-<h1>Vérification administrateur</h1><p>Les fonctions d’administration restent verrouillées jusqu’à la validation de votre second facteur.</p>
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Vérification administrateur' %}
+{% block content %}
+<p class="auth-eyebrow">SÉCURITÉ DU COMPTE</p>
+<h1>Vérification administrateur</h1>
+<p class="auth-lead">Les fonctions d’administration restent verrouillées jusqu’à la validation de votre second facteur.</p>
 {% if not configured %}<p role="alert">La MFA est indisponible. L’opérateur doit configurer sa clé de chiffrement privée.</p>
 {% else %}
-{% if error %}<p role="alert">Vérification refusée. Vérifiez votre code ou utilisez un code de secours inutilisé.</p>{% endif %}
-{% if secret %}<h2>Configurer votre application d’authentification</h2><p>Ajoutez un compte WCP360 avec cette clé. TOTP : 6 chiffres, période de 30 secondes.</p><code id="mfa-secret">{{ secret }}</code><p>Cette clé n’est affichée que dans cette réponse. Le réglage expire dans cinq minutes.</p>
-{% elseif not enabled %}<p>Votre compte doit enregistrer un authentificateur avant son premier accès.</p><form action="/mfa/enroll" method="post" data-turbo="false"><input type="hidden" name="_token" value="{{ csrf_token('mfa_enroll') }}"><button type="submit">Configurer la MFA</button></form>
+{% if error %}<p role="alert" class="auth-feedback">Vérification refusée. Vérifiez votre code ou utilisez un code de secours inutilisé.</p>{% endif %}
+{% if secret %}<h2>Configurer votre application d’authentification</h2><p>Ajoutez un compte WCP360 avec cette clé. TOTP : 6 chiffres, période de 30 secondes.</p><code id="mfa-secret">{{ secret }}</code><p class="field-help">Cette clé n’est affichée que dans cette réponse. Le réglage expire dans cinq minutes.</p>
+{% elseif not enabled %}<div class="auth-notice"><strong>Une protection supplémentaire.</strong><p>Votre compte doit enregistrer un authentificateur avant son premier accès.</p></div><form action="/mfa/enroll" method="post" data-turbo="false"><input type="hidden" name="_token" value="{{ csrf_token('mfa_enroll') }}"><button class="button auth-submit" type="submit">Configurer la MFA <span aria-hidden="true">→</span></button></form>
 {% endif %}
-{% if enabled or secret %}<form action="/mfa/check" method="post" data-turbo="false"><input type="hidden" name="_csrf_token" value="{{ csrf_token('two_factor') }}"><label for="auth-code">Code de l’authentificateur{% if enabled %} ou code de secours{% endif %}</label><input id="auth-code" name="_auth_code" type="text" autocomplete="one-time-code" maxlength="64" required><button type="submit">Valider la MFA</button></form>{% endif %}
+{% if enabled or secret %}<form class="auth-form" action="/mfa/check" method="post" data-turbo="false"><input type="hidden" name="_csrf_token" value="{{ csrf_token('two_factor') }}"><div><label for="auth-code">Code de l’authentificateur{% if enabled %} ou code de secours{% endif %}</label><input id="auth-code" name="_auth_code" type="text" autocomplete="one-time-code" maxlength="64" required></div><button class="button auth-submit" type="submit">Valider la MFA <span aria-hidden="true">→</span></button></form>{% endif %}
 {% endif %}
-<form action="/logout" method="post" data-turbo="false"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button type="submit">Déconnexion</button></form></main></body></html>
+<form class="wcp-auth-logout" action="/logout" method="post" data-turbo="false"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button class="button secondary" type="submit">Déconnexion</button></form>
+{% endblock %}

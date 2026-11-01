@@ -14,7 +14,7 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
     public function response(ResponseEvent $event): void
     {
         $headers = $event->getResponse()->headers;
-        $headers->set('Content-Security-Policy', "default-src 'none'; script-src 'self' 'nonce-".$event->getRequest()->attributes->get('_csp_nonce')."'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+        $headers->set('Content-Security-Policy', "default-src 'none'; script-src 'self' 'nonce-".$event->getRequest()->attributes->get('_csp_nonce')."'; style-src 'self' 'nonce-".$event->getRequest()->attributes->get('_csp_nonce')."'; img-src 'self' data:; connect-src 'self'; font-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
         $headers->set('X-Content-Type-Options', 'nosniff');
         $headers->set('Referrer-Policy', 'no-referrer');
         $headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');

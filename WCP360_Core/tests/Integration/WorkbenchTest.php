@@ -125,7 +125,14 @@ final class WorkbenchTest extends WebTestCase
         $crawler=$this->browser->request('GET','http://user.localhost/login');
         $nonce=$crawler->filter('script[type="importmap"]')->attr('nonce');
         self::assertMatchesRegularExpression('/^[A-Za-z0-9+\/=]{24}$/',$nonce);
-        self::assertStringContainsString("'nonce-".$nonce."'",$this->browser->getResponse()->headers->get('Content-Security-Policy'));
+        $policy=$this->browser->getResponse()->headers->get('Content-Security-Policy');
+        self::assertStringContainsString("'nonce-".$nonce."'",$policy);
+        self::assertSame($nonce,$crawler->filter('meta[name="csp-nonce"]')->attr('content'));
+        self::assertStringContainsString("script-src 'self' 'nonce-".$nonce."'",$policy);
+        self::assertStringContainsString("style-src 'self' 'nonce-".$nonce."'",$policy);
+        self::assertStringNotContainsString("'unsafe-inline'",$policy);
+        $next=$this->browser->request('GET','http://user.localhost/login');
+        self::assertNotSame($nonce,$next->filter('meta[name="csp-nonce"]')->attr('content'));
     }
     public function testSessionCannotRefreshIntoAnotherContext():void
     {

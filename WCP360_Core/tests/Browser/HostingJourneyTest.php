@@ -22,6 +22,18 @@ final class HostingJourneyTest extends PantherTestCase
         self::assertSelectorTextContains('h1','Tableau de bord');
         self::assertSelectorExists('#site-application-server option[value="frankenphp_worker"][disabled]');
         self::assertSelectorCount(1,'select[name="tenant_id"] option');
+        $client->executeScript("document.querySelector('[data-mode=light]').click();");
+        $lightBackground=$client->executeScript('return getComputedStyle(document.body).backgroundColor');
+        $client->executeScript("document.querySelector('[data-mode=dark]').click();");
+        self::assertSelectorExists('html[data-theme="dark"]');
+        self::assertNotSame($lightBackground,$client->executeScript('return getComputedStyle(document.body).backgroundColor'));
+        $client->executeScript("document.querySelector('[data-navigation-target=opener]').click();");
+        $client->waitFor('dialog[open]');
+        self::assertSame('wcp-page-search',$client->executeScript('return document.activeElement.id'));
+        $client->executeScript("const search=document.querySelector('#wcp-page-search');search.value='sessions';search.dispatchEvent(new Event('input',{bubbles:true}));");
+        self::assertSelectorCount(1,'[data-navigation-target="item"]:not([hidden])');
+        $client->executeScript("document.querySelector('dialog').close();");
+
         $client->executeScript("window.wcpBrowserJourney='turbo-preserves-window'; const f=document.querySelector('[data-controller=\"form-guard\"]');f.querySelector('[name=\"hostname\"]').value='browser.test';const b=f.querySelector('button[type=\"submit\"]');b.click();b.click();");
         $client->waitFor('.status');
         self::assertSelectorTextContains('h1','Suivi de tâche');

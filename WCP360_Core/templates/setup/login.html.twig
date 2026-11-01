@@ -1,1 +1,16 @@
-{% extends 'layouts/workbench.html.twig' %}{% set page_title = 'Connexion' %}{% block content %}<section class="login-card card"><p class="eyebrow">ESPACE {{ context|upper }}</p><h1>Bienvenue sur WCP360</h1><p class="muted">Connectez-vous avec un compte créé par le wizard local.</p>{% if error %}<p role="alert" class="error">Connexion refusée. Vérifiez vos identifiants et le contexte.</p>{% endif %}<form method="post" action="{{ path('wcp_login') }}" data-turbo="false"><label for="username">Adresse e-mail</label><input id="username" name="_username" type="email" required maxlength="254" autocomplete="username"><label for="password">Mot de passe</label><input id="password" name="_password" type="password" required maxlength="256" autocomplete="current-password"><input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"><button class="button" type="submit">Se connecter</button></form></section>{% endblock %}
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Connexion' %}
+{% block content %}
+<p class="auth-eyebrow">ESPACE {{ context == 'admin' ? 'ADMINISTRATEUR' : 'CLIENT' }}</p>
+<h1>Bienvenue sur WCP360</h1>
+<p class="auth-lead">Votre hébergement. Un espace de travail, tout simplement.</p>
+<div class="auth-context"><span class="wcp-core-dot"></span> {{ context == 'admin' ? 'Administration du panneau' : 'Gestion de vos espaces et hébergements' }}</div>
+{% if error %}<p role="alert" class="auth-feedback error">Connexion refusée. Vérifiez vos identifiants et le contexte.</p>{% endif %}
+<form class="auth-form" method="post" action="{{ path('wcp_login') }}" data-turbo="false">
+    <div><label for="username">Adresse e-mail</label><input id="username" name="_username" type="email" required maxlength="254" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="vous@exemple.fr"></div>
+    <div><label for="password">Mot de passe</label><input id="password" name="_password" type="password" required maxlength="256" autocomplete="current-password" placeholder="Votre mot de passe"></div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <button class="button auth-submit" type="submit">Se connecter <span aria-hidden="true">→</span></button>
+</form>
+<p class="auth-help">Utilisez un compte créé sur cette instance.{% if context == 'admin' %} Votre authentificateur sera demandé à l’étape suivante.{% endif %}</p>
+{% endblock %}

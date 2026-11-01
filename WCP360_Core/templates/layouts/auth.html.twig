@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="fr" data-theme="system">
+<head>{% include 'layouts/head.html.twig' %}</head>
+<body class="auth-page" data-controller="appearance">
+<a class="skip" href="#main">Aller au contenu</a>
+<div class="wcp-auth-appearance">{% include 'components/navigation/theme.html.twig' %}</div>
+<main id="main" class="auth-card" tabindex="-1">
+    <a class="auth-brand" href="{{ path('wcp_dashboard') }}" aria-label="WCP360, accueil"><span class="wcp-brandmark" aria-hidden="true">360</span><span>WCP<strong>360</strong></span></a>
+    {% block content %}{% endblock %}
+    <footer class="auth-footer"><span>WCP360 Standalone</span><span>Développement local</span></footer>
+</main>
+</body>
+</html>

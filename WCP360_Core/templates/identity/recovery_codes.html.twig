@@ -1,1 +1,10 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Codes de secours · WCP360</title><link rel="stylesheet" href="{{ asset('styles/app.css') }}"></head><body><main id="main" class="workspace"><h1>Conservez vos codes de secours</h1><p>Votre authentificateur est activé. Ces codes sont affichés une seule fois ; conservez-les hors du serveur. Chaque code remplace un second facteur pour une seule connexion, avec votre mot de passe.</p><ul id="recovery-codes">{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul><p>Après perte de l’authentificateur, connectez-vous avec un code inutilisé, puis ouvrez « Sécurité du compte » pour réinitialiser le facteur et en enregistrer un nouveau.</p><a href="/">Ouvrir le panneau</a></main></body></html>
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Codes de secours' %}
+{% block content %}
+<p class="auth-eyebrow">VOTRE ACCÈS DE SECOURS</p>
+<h1>Conservez vos codes de secours</h1>
+<p class="auth-lead">Votre authentificateur est activé. Ces codes sont affichés une seule fois ; conservez-les hors du serveur. Chaque code remplace un second facteur pour une seule connexion, avec votre mot de passe.</p>
+<ul id="recovery-codes">{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul>
+<p class="field-help">Après perte de l’authentificateur, connectez-vous avec un code inutilisé, puis ouvrez « Sécurité du compte » pour réinitialiser le facteur et en enregistrer un nouveau.</p>
+<a class="button auth-submit" href="/">Ouvrir le panneau <span aria-hidden="true">→</span></a>
+{% endblock %}

@@ -1,2 +1,9 @@
 {% extends 'layouts/workbench.html.twig' %}
-{% block content %}<h1>Sécurité du compte</h1><p>La MFA est requise à chaque connexion administrateur. La réinitialisation exige une MFA de moins de cinq minutes et votre mot de passe actuel.</p><form action="/mfa/reset" method="post" data-turbo="false"><input type="hidden" name="_token" value="{{ csrf_token('mfa_reset') }}"><label for="current-password">Mot de passe actuel</label><input id="current-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required><p>Cette action révoque votre facteur, tous les codes de secours et les preuves MFA des autres sessions. Vous serez déconnecté pour configurer un nouvel authentificateur.</p><button type="submit">Réinitialiser mon facteur</button></form>{% endblock %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">PROTECTION DE VOTRE COMPTE</p><h1>Sécurité du compte</h1><p class="wcp-page-sub">Gérez votre authentificateur et votre accès de secours.</p></div></div>
+<section class="card">
+<h2>Authentification multifacteur</h2>
+<p>La MFA est requise à chaque connexion administrateur. La réinitialisation exige une MFA de moins de cinq minutes et votre mot de passe actuel.</p>
+<form action="/mfa/reset" method="post" data-turbo="false"><input type="hidden" name="_token" value="{{ csrf_token('mfa_reset') }}"><label for="current-password">Mot de passe actuel</label><input id="current-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required><p>Cette action révoque votre facteur, tous les codes de secours et les preuves MFA des autres sessions. Vous serez déconnecté pour configurer un nouvel authentificateur.</p><button class="button" type="submit">Réinitialiser mon facteur</button></form>
+</section>
+{% endblock %}

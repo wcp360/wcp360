@@ -1,0 +1,6 @@
+{% import 'components/navigation/icons.html.twig' as ui %}
+<div class="wcp-core-theme" role="group" aria-label="Apparence">
+    {% for mode, item in {system: {label: 'Système', icon: 'sessions'}, light: {label: 'Clair', icon: 'sun'}, dark: {label: 'Sombre', icon: 'moon'}} %}
+    <button type="button" class="wcp-core-theme-option" data-appearance-target="option" data-mode="{{ mode }}" data-action="appearance#choose" aria-pressed="{{ mode == 'system' ? 'true' : 'false' }}" aria-label="Thème {{ item.label|lower }}" title="{{ item.label }}">{{ ui.icon(item.icon) }}<span>{{ item.label }}</span></button>
+    {% endfor %}
+</div>

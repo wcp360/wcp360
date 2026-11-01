@@ -1,0 +1,22 @@
+/* Shared legibility floor for dense control-panel screens. Loaded after feature styles. */
+:root{--wcp-type-caption:11.5px;--wcp-type-support:12px;--wcp-type-body:13px;--wcp-type-control:13px}
+.wcp-dashboard-main,.main{font-size:var(--wcp-type-body)}
+.wcp-nav-item,.nav{font-size:13px}.wcp-nav-heading,.group-title{font-size:11.5px!important;letter-spacing:.08em}.wcp-sidebar-meta,.wcp-sidebar-status-row,.statusbox{font-size:12px!important}
+.wcp-page-eyebrow,.crumb{font-size:11.5px!important}.wcp-page-sub,.sub{font-size:13px!important;line-height:1.55!important}.wcp-panel-sub{font-size:12px!important}
+.wcp-dashboard-content small,.main small{font-size:var(--wcp-type-support)!important;line-height:1.5!important}.wcp-dashboard-content code,.main code{font-size:11.5px!important;line-height:1.5!important}
+.wcp-dashboard-content :is(dt,.web-label,.db-label),.main :is(dt,.tiny,.muted){font-size:var(--wcp-type-caption)!important;line-height:1.5!important}
+.wcp-dashboard-content :is(.wcp-status,.badge),.main :is(.wcp-status,.badge){font-size:11.5px!important;line-height:1.2!important}
+.wcp-dashboard-content :is(input,select,textarea,button),.main :is(input,select,textarea,button){font-size:var(--wcp-type-control)!important}
+.wcp-dashboard-content :is(.wcp-action-btn,.btn),.main :is(.wcp-action-btn,.btn){font-size:12px!important}
+.wcp-dashboard-content :is(th,.wcp-table th),.main :is(th,.table th){font-size:11.5px!important}.wcp-dashboard-content :is(td,.wcp-table td),.main :is(td,.table td){font-size:12.5px!important;line-height:1.5}
+.wcp-dashboard-content [class*="-list"] :is(strong,b),.wcp-dashboard-content [class$="-row"] strong,.wcp-dashboard-content [class*="-details"] dd{font-size:12px!important;line-height:1.5!important}
+.wcp-dashboard-content [class*="-head"]>span,.wcp-dashboard-content [class*="-head"]>div>span{font-size:11.5px!important}
+.wcp-dashboard-content [class*="-actions"] button,.wcp-dashboard-content [class*="-actions"] a{font-size:12px!important}
+.wcp-dashboard-content :is(.cap-resource-pills,.cap-plan-resources,.cap-cluster-resources) strong{font-size:11.5px!important}.wcp-dashboard-content :is(.cap-resource-pills,.cap-plan-resources,.cap-cluster-resources) small{font-size:11.5px!important}.wcp-dashboard-content :is(.cap-metrics,.dpt-metrics)>article>span{font-size:11.5px!important}
+.wcp-dashboard-content :is(.web-metrics)>article>span{font-size:11.5px!important}
+.wcp-dashboard-content :is(.cap-inheritance-note,.cap-policy-grid,.cap-placement-grid,.cap-topology,.cap-addon-grid,.cap-server-grid,.cap-server-foot,.cap-cluster-summary,.cap-plan-limits) :is(strong,b,a,button,span):not(.material-symbols-rounded):not(.wcp-status){font-size:11.5px!important;line-height:1.5!important}
+.wcp-dashboard-content :is(.web-plan-note,.web-runtime-specs,.web-resource-strip,.web-card-head,.web-observability,.web-safeguards,.web-routing,.web-switch,.web-setting,.web-deploy-tools,.web-manage-summary,.web-manage-actions,.web-danger,.web-dependency-list) :is(strong,b,a,button,span):not(.material-symbols-rounded):not(.wcp-status){font-size:11.5px!important;line-height:1.5!important}
+.wcp-popover-title{font-size:12px!important}.wcp-popover-sub,.wcp-popover-item-sub,.wcp-portal-switch p{font-size:11.5px!important;line-height:1.5!important}.wcp-popover-item-title{font-size:12px!important}.wcp-portal-switch-head strong{font-size:12px!important}.wcp-portal-switch-head small,.wcp-portal-switch-options small{font-size:11.5px!important}.wcp-portal-switch-options strong{font-size:12px!important}
+.wcp-command-result-title,.wcp-job-name{font-size:13px}.wcp-command-result-sub,.wcp-drawer-sub,.wcp-job-meta,.wcp-job-step{font-size:12px;line-height:1.5}.wcp-command-group,.wcp-command-footer,.wcp-command-result-hint{font-size:11.5px}
+
+@media(pointer:coarse){.wcp-dashboard-content :is(input,select,textarea),.main :is(input,select,textarea){font-size:16px!important}}
