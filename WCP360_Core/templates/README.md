@@ -16,6 +16,8 @@ Templates consume the owning module's authorized view data. They do not own busi
 
 [identity/sessions.html.twig](identity/sessions.html.twig) displays bounded current-context session metadata and server-generated selectors; it receives no raw browser session identifiers, IP addresses or user agents. Its POST forms use target-bound CSRF and current-password confirmation. Owner/context checks, durable attempt limits, revocation and administrator MFA freshness remain server-side in IdentityAccess. The shared navigation links this own-account page for USER and ADMIN contexts.
 
+[identity/password.html.twig](identity/password.html.twig) presents own-account password changes in USER and ADMIN, with empty current/new/confirmation password fields and server-rendered validation. Context-bound authorization, secret handling, shared attempt limits, atomic revocation/audit and isolated-mode admission belong to IdentityAccess. Successful changes end the browser session; no password or verifier is rendered.
+
 Browser behavior and styles belong in [assets](../assets/README.md). Linux-service configuration text belongs in [resources/services](../resources/services/README.md), even if the selected renderer eventually uses templates. Keep service rendering separate from the browser Twig loader.
 
 Detached plugin Twig files are never added to the Core loader. Loader paths, names, escaping and component registration must be verified with the actual accepted frontend bootstrap.

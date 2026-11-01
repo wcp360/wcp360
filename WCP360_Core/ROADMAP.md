@@ -170,6 +170,12 @@ The current product decision makes MFA optional per administrator account and di
 
 The external canonical baseline still describes mandatory ADMIN MFA. Reconciliation with this explicit product decision remains M1 work; canonical documents and production acceptance are not silently changed. **M1 remains open**, the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** capability counts remain unchanged.
 
+### Authenticated own-account password changes
+
+The [password-change service](src/Module/IdentityAccess/Application/ChangeOwnPassword.php) and [USER/ADMIN form](templates/identity/password.html.twig) add authenticated credential replacement in the shared-database candidate. They reuse current-password confirmation and its durable budget, check exact Origin/CSRF, compare the previously confirmed verifier against current state and recheck session/factor authority under the account lock. Password replacement, all own-context session revocations and audit commit together. Enabled MFA remains enabled. [Service](tests/Integration/ChangeOwnPasswordTest.php) and [HTTP](tests/Integration/PasswordJourneyTest.php) regressions cover stale state, rollback, cross-account isolation and refusal paths; exact-source outcomes remain in the draft PR.
+
+Isolated database mode keeps its existing restriction on credential writes: the new page is unavailable there, without privilege fallback or broadened grants. A dedicated accepted credential-write boundary, forgotten-password recovery, token lifecycle and production integration remain unfinished. **M1 remains open**; the approximately **20%** estimate and **5 Demonstrated / 71 Partial / 157 Planned** capability counts are unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

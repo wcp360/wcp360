@@ -1,6 +1,6 @@
 {% import 'components/navigation/icons.html.twig' as ui %}
 {% set route = app.request.attributes.get('_route') %}
-{% set titles = {wcp_account_sessions: 'Mes sessions', wcp_account_security: 'Sécurité du compte', wcp_access_permissions: 'Accès des utilisateurs'} %}
+{% set titles = {wcp_account_password: 'Mot de passe', wcp_account_password_change: 'Mot de passe', wcp_account_sessions: 'Mes sessions', wcp_account_security: 'Sécurité du compte', wcp_access_permissions: 'Accès des utilisateurs'} %}
 {% set page_title = page_title|default(titles[route]|default('Tableau de bord')) %}
 {% set admin = context == 'admin' %}
 {% set workspace = [
@@ -18,7 +18,7 @@
         {label: 'Tâches', href: path('wcp_dashboard') ~ '#jobs', icon: 'clock', active: route == 'wcp_job'}
     ]) %}
 {% endif %}
-{% set account = [{label: 'Mes sessions', href: path('wcp_account_sessions'), icon: 'sessions', active: route == 'wcp_account_sessions'}] %}
+{% set account = [{label: 'Mot de passe', href: path('wcp_account_password'), icon: 'shield', active: route in ['wcp_account_password', 'wcp_account_password_change']}, {label: 'Mes sessions', href: path('wcp_account_sessions'), icon: 'sessions', active: route == 'wcp_account_sessions'}] %}
 {% if admin %}{% set account = account|merge([{label: 'Sécurité du compte', href: path('wcp_account_security'), icon: 'shield', active: route == 'wcp_account_security'}, {label: 'Confirmer mon identité', href: path('wcp_account_reauthenticate'), icon: 'shield', active: route == 'wcp_account_reauthenticate'}]) %}{% endif %}
 {% set groups = [{title: 'Espace de travail', links: workspace}, {title: 'Mon compte', links: account}] %}
 <!doctype html>

@@ -19,7 +19,7 @@ final readonly class CurrentPasswordConfirmation
 {
     public function __construct(private CandidateSessions $sessions, private CsrfTokenManagerInterface $csrf, private UserPasswordHasherInterface $passwords) {}
 
-    public function confirm(Request $request, Principal $user, string $intent): void
+    public function confirm(#[\SensitiveParameter] Request $request, #[\SensitiveParameter] Principal $user, string $intent): void
     {
         $fields = $request->request->all();
         if (!is_string($fields['_token'] ?? null) || !is_string($fields['current_password'] ?? null)

@@ -43,6 +43,9 @@ services:
         arguments:
             $enabled: '%env(bool:WCP_ALLOW_ISOLATED_PROVISIONING)%'
     Wcp360\Core\Module\Hosting\Domain\ProvisioningGateway: '@Wcp360\Core\Module\Hosting\Infrastructure\SocketProvisioningGateway'
+    Wcp360\Core\Module\IdentityAccess\Application\ChangeOwnPassword:
+        arguments:
+            $databaseMode: '%env(WCP_DATABASE_MODE)%'
     Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa:
         arguments:
             $key: '%env(WCP_MFA_KEY)%'

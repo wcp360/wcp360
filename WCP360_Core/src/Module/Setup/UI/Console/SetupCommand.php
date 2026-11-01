@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
+use Wcp360\Core\Module\IdentityAccess\Domain\NewAccountPassword;
 use Wcp360\Core\Module\IdentityAccess\Domain\CandidateUsername;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 use Wcp360\Core\Shared\Security\RuntimeContext;
@@ -40,8 +41,8 @@ final class SetupCommand extends Command
         });
         $context = $io->choice('Account context', ['user', 'admin'], 'user');
         $password = $io->askHidden('Password (at least 14 characters)', static function ($value): string {
-            if (!is_string($value) || strlen($value) < 14 || strlen($value) > 256) throw new \RuntimeException('Use 14–256 characters.');
-            return $value;
+            if (!is_string($value)) throw new \RuntimeException('Password required.');
+            return NewAccountPassword::require($value);
         });
         $id = WorkbenchStore::id();
         $principal = new Principal($id, $username, $email, '', $context);
