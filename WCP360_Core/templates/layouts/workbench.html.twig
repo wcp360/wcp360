@@ -29,7 +29,7 @@
 <div class="wcp-dashboard-container">
     <aside id="wcp-sidebar" class="wcp-dashboard-sidebar" data-shell-target="sidebar">
         <div class="wcp-dashboard-brand">
-            <a class="wcp-core-brand" href="{{ path('wcp_dashboard') }}" aria-label="WCP360, tableau de bord"><span class="wcp-brandmark" aria-hidden="true">360</span><span class="wcp-brandtext">WCP<span>360</span></span></a>
+            <a class="wcp-core-brand" href="{{ path('wcp_dashboard') }}" aria-label="WCP360, tableau de bord">{% include 'components/navigation/brand-logo.html.twig' %}</a>
             <span class="wcp-core-scope">{{ admin ? 'ADMIN' : 'CLIENT' }}</span>
         </div>
         <nav class="wcp-nav" aria-label="Navigation principale" data-action="click->shell#navigate">

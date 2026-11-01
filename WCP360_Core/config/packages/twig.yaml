@@ -1,4 +1,9 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     strict_variables: true
+    globals:
+        wcp_surface: '%env(WCP_CONTEXT)%'
+        wcp_brand_logos:
+            user: images/branding/wcp360-user.png
+            admin: images/branding/wcp360-admin-root.png
     form_themes: ['form_div_layout.html.twig']
