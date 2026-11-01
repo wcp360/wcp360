@@ -283,7 +283,7 @@ final class PasswordJourneyTest extends WebTestCase
         $this->login();
         $service = new ChangeOwnPassword($this->store, self::getContainer()->get(CandidateSessions::class),
             self::getContainer()->get(CandidateMfa::class), self::getContainer()->get(UserPasswordHasherInterface::class),
-            new RuntimeContext('user', true, 'test', 'user.localhost'), 'isolated');
+            new RuntimeContext('user', true, 'test', 'user.localhost'), 'session-isolated');
         self::getContainer()->set(ChangeOwnPassword::class, $service);
         $this->browser->request('GET', $this->url('/account/password'));
         self::assertResponseIsSuccessful();

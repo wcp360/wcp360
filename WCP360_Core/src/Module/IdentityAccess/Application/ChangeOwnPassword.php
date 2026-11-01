@@ -9,19 +9,26 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Wcp360\Core\Module\IdentityAccess\Domain\NewAccountPassword;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
+use Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeRoutine;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 
 /** Called after bounded current-password confirmation; no arbitrary target account. */
 final readonly class ChangeOwnPassword
 {
+    private PasswordChangeRoutine $routine;
+
     public function __construct(private WorkbenchStore $store, private CandidateSessions $sessions,
         private CandidateMfa $mfa, private UserPasswordHasherInterface $passwords,
-        private RuntimeContext $runtime, private string $databaseMode) {}
+        private RuntimeContext $runtime, private string $databaseMode, ?PasswordChangeRoutine $routine = null)
+    {
+        $this->routine = $routine ?? new PasswordChangeRoutine($store->db);
+    }
 
     public function available(): bool
     {
-        return $this->databaseMode === 'shared' && in_array($this->runtime->context, ['user', 'admin'], true);
+        return in_array($this->runtime->context, ['user', 'admin'], true)
+            && ($this->databaseMode === 'shared' || ($this->databaseMode === 'session-isolated' && $this->routine->available($this->runtime->context)));
     }
 
     /** @param array<array-key,mixed>|null $proof Server-side administrator proof, never form input. */
@@ -36,6 +43,16 @@ final readonly class ChangeOwnPassword
         }
         $hash = $this->passwords->hashPassword($actor, $newPassword);
         unset($newPassword);
+        if ($this->databaseMode === 'session-isolated') {
+            if ($actor->context === 'admin') {
+                $status = $this->mfa->status($actor->id);
+                if ($status['enabled'] && !$status['configured']) throw new AccessDeniedHttpException('Current administrator factor required.');
+            }
+            $this->store->db->transactional(function () use ($actor, $selector, $sessionId, $hash, $proof): void {
+                $this->routine->change($actor, $selector, $sessionId, $hash, $proof);
+            });
+            return;
+        }
         $this->store->db->transactional(function () use ($actor, $selector, $sessionId, $hash, $proof): void {
             // The conditional write locks the account before checking sessions/factor state.
             // Native PDO keeps credential verifiers out of Doctrine SQL parameter profiling.

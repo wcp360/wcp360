@@ -178,11 +178,11 @@ final class ChangeOwnPasswordTest extends KernelTestCase
 
     public function testIsolatedDatabaseModeRetainsExistingCredentialWriteRestrictions(): void
     {
-        self::assertFalse($this->service(mode: 'isolated')->available());
+        self::assertFalse($this->service(mode: 'session-isolated')->available());
         $actor = $this->principal();
         $before = $this->hash();
         try {
-            $this->service(mode: 'isolated')->change($actor, 'unused', str_repeat('a', 32), self::NEXT);
+            $this->service(mode: 'session-isolated')->change($actor, 'unused', str_repeat('a', 32), self::NEXT);
             self::fail('Isolated database credentials were broadened.');
         } catch (ServiceUnavailableHttpException) {
         }

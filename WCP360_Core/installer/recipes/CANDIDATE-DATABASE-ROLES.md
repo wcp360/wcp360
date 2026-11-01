@@ -7,8 +7,8 @@
 - Use a disposable development PostgreSQL 17 cluster, candidate execution in `APP_ENV=dev/test`, and `WCP_CONTEXT=setup`.
 - The connected database must be exactly `wcp360_workbench` or the explicitly disposable `wcp360_test` fixture database. These names are guards, not proof that an arbitrary host is disposable.
 - The maintenance login needs role-creation authority and ownership of the database, public schema and all candidate tables, or development superuser authority. It is never a web/worker credential.
-- Apply all candidate migrations, including [Version20261101000400](../../migrations/Version20261101000400.php). Required tables and the validated constant-zero lock constraints must exist.
-- All three target role names must be absent. Existing roles are never adopted, changed, rotated, repaired or deleted. Unexpected public relations and reserved `wcp_*` schemas are refused.
+- Apply all candidate migrations, including [Version20261101000400](../../migrations/Version20261101000400.php), [usernames](../../migrations/Version20261101000500.php) and [private password operations](../../migrations/Version20261101000600.php). Required tables and the validated constant-zero lock constraints must exist.
+- Fresh-role creation requires all three target names to be absent and never adopts or repairs existing roles. The separately selected capability-upgrade mode below grants only the two reviewed operations to an existing verified set; it never changes role passwords, identities or table grants. Unexpected public relations and reserved `wcp_*` schemas are refused.
 
 | Database | USER role | ADMIN role | Worker role |
 | :--- | :--- | :--- | :--- |
@@ -42,9 +42,29 @@ Do not pass passwords in command arguments, commit them or place all three in an
 WCP_CONTEXT=setup WCP_ALLOW_CANDIDATE_DATABASE_ROLES=1 php bin/console wcp:candidate:database:roles --apply
 ```
 
-The enable flag defaults to zero. USER, ADMIN and worker contexts cannot inspect or create roles, even with the flag set. The JSON result contains metadata and `planned`, `created`, `refused` or `uncertain` status, never passwords, verifiers or connection URLs.
+The enable flag defaults to zero. USER, ADMIN and worker contexts cannot inspect or create roles, even with the flag set. The JSON result contains metadata and `planned`, `created`, `enabled`, `refused` or `uncertain` status, never passwords, verifiers or connection URLs.
 
 After creation, distribute **only the corresponding private URL** to each runtime: `WCP_DATABASE_USER_URL`, `WCP_DATABASE_ADMIN_URL` or `WCP_DATABASE_WORKER_URL`, with `WCP_DATABASE_MODE=session-isolated` and the matching context. Remove setup-only password variables and maintenance credentials from those runtime environments. Secret distribution and launcher/Unix isolation are not performed by this command.
+
+## Enable password operations on existing roles
+
+Use the existing setup-only maintenance login and the supported disposable candidate database. Back up first and apply all migrations. Migration 00600 creates private functions but does not grant them to existing runtime roles. Inspect the exact code/ownership/settings/ACLs, existing role attributes and effective table/column grants through:
+
+```bash
+WCP_CONTEXT=setup php bin/console wcp:candidate:database:roles --password-changes
+```
+
+The plan reports the fixed signatures and current USER/ADMIN/worker enablement. It has no effects and needs no new runtime passwords. Explicit application is:
+
+```bash
+WCP_CONTEXT=setup WCP_ALLOW_CANDIDATE_DATABASE_ROLES=1 php bin/console wcp:candidate:database:roles --password-changes --apply
+```
+
+This adds EXECUTE only on the USER function to the USER role and on the ADMIN function to the ADMIN role. Worker execution and direct credential writes remain denied. The actual function also checks the connection login's surface and fixed database name. Verification rejects unexpected function source, owner, language, security/search-path/timeout configuration, overloads and ACLs, including PUBLIC/opposite privileges and delegation options. Existing roles must match the reviewed candidate identity and table-grant policy; this is not adoption or general drift repair.
+
+A changed upgrade and its credential-free audit event commit together under the provisioning advisory lock. Failure rolls back every grant; uncertain commit/rollback closes the connection and requires inspection. Repeating an already enabled upgrade is idempotent and creates no duplicate audit. Existing role OIDs, login passwords, memberships and table grants are preserved. Fresh role creation grants these same reviewed operations automatically after the migrations and strict definition checks.
+
+The application continues to verify current passwords, CSRF/Origin and administrator proof provenance. These are surface-scoped application database identities, not per-person/tenant identities. Read the [credential-boundary limits](../../src/Module/IdentityAccess/README.md#isolated-postgresql-password-operations) before assessing this candidate as production authorization.
 
 ## Direct candidate grants
 

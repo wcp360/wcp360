@@ -7,9 +7,10 @@ namespace Wcp360\Core\Module\Setup\Infrastructure;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
+use Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 
-/** Explicit maintenance-only creation; no adoption, rotation, repair, deletion or production apply. */
+/** Fresh candidate role creation and explicit fixed-capability upgrades; no credential rotation or generic repair. */
 final readonly class CandidateDatabaseRoles
 {
     public const REJECTED = 'Candidate database role provisioning refused. Check the private setup configuration, schema, role conflicts and grants.';
@@ -68,7 +69,11 @@ final readonly class CandidateDatabaseRoles
                 foreach (CandidateDatabasePolicy::grants($context) as $table => $privileges) {
                     $pdo->exec('GRANT '.implode(', ', $privileges).' ON TABLE public.wcp_candidate_'.$table.' TO '.$quoted);
                 }
+                if (in_array($context, ['user', 'admin'], true)) {
+                    $pdo->exec('GRANT EXECUTE ON FUNCTION '.PasswordChangeSchema::signature($context).' TO '.$quoted);
+                }
                 $this->verifyGrants($pdo, $context, $role);
+                CandidatePasswordRoutinePolicy::verifyAccess($pdo, $context, $role, true);
                 $pdo->exec('ALTER ROLE '.$quoted.' LOGIN');
             }
             $audit = $pdo->prepare('INSERT INTO public.wcp_candidate_audit (id,actor_id,tenant_id,kind,resource_id,created_at) VALUES (?,NULL,NULL,?,NULL,?)');
@@ -90,6 +95,62 @@ final readonly class CandidateDatabaseRoles
             } catch (\Throwable) {
                 $uncertain = true;
             }
+            $this->db->close();
+            throw new \RuntimeException($uncertain ? self::UNCERTAIN : self::REJECTED);
+        }
+    }
+
+    /** @return array<string,mixed> */
+    public function passwordChangePlan(): array
+    {
+        $this->requireSetup();
+        $pdo = $this->pdo();
+        $plan = $this->inspect($pdo, true);
+        return $plan + ['password_changes' => [
+            'user' => CandidatePasswordRoutinePolicy::enabled($pdo, 'user', $plan['roles']['user']),
+            'admin' => CandidatePasswordRoutinePolicy::enabled($pdo, 'admin', $plan['roles']['admin']),
+            'worker' => false,
+        ], 'applied' => false, 'apply_enabled' => $this->enabled];
+    }
+
+    /** Enable only the new fixed operations on existing verified candidate roles.
+     * @return array<string,mixed>
+     */
+    public function enablePasswordChanges(): array
+    {
+        $this->requireSetup();
+        if (!$this->enabled) throw new \RuntimeException(self::REJECTED);
+        $pdo = $this->pdo();
+        if ($this->db->isTransactionActive() || $pdo->inTransaction()) throw new \RuntimeException(self::REJECTED);
+        $committing = false;
+        try {
+            if (!$pdo->beginTransaction()) throw new \RuntimeException(self::REJECTED);
+            $pdo->exec("SET LOCAL lock_timeout = '2000ms'");
+            $pdo->exec("SET LOCAL statement_timeout = '5000ms'");
+            if (!self::boolean($this->query($pdo, "SELECT pg_catalog.pg_try_advisory_xact_lock(pg_catalog.hashtext(current_database()), 3601701)")->fetchColumn())) throw new \RuntimeException(self::REJECTED);
+            $plan = $this->inspect($pdo, true);
+            $changed = false;
+            foreach ($plan['roles'] as $context => $role) {
+                if (!in_array($context, ['user', 'admin'], true)) continue;
+                $access = $pdo->prepare("SELECT pg_catalog.has_function_privilege(?, pg_catalog.to_regprocedure(?), 'EXECUTE')");
+                $access->execute([$role, PasswordChangeSchema::signature($context)]);
+                if (!self::boolean($access->fetchColumn())) {
+                    $pdo->exec('GRANT EXECUTE ON FUNCTION '.PasswordChangeSchema::signature($context).' TO "'.$role.'"');
+                    $changed = true;
+                }
+                CandidatePasswordRoutinePolicy::verifyAccess($pdo, $context, $role, true);
+            }
+            if ($changed) {
+                $audit = $pdo->prepare('INSERT INTO public.wcp_candidate_audit (id,actor_id,tenant_id,kind,resource_id,created_at) VALUES (?,NULL,NULL,?,NULL,?)');
+                $audit->execute([WorkbenchStore::id(), 'candidate.database.password_changes.enabled', WorkbenchStore::now()]);
+            }
+            $committing = true;
+            if (!$pdo->commit()) throw new \RuntimeException(self::UNCERTAIN);
+            return $plan + ['password_changes' => ['user' => true, 'admin' => true, 'worker' => false], 'applied' => true, 'changed' => $changed, 'apply_enabled' => true];
+        } catch (\Throwable) {
+            $uncertain = $committing;
+            try { if ($pdo->inTransaction() && !$pdo->rollBack()) $uncertain = true; }
+            catch (\Throwable) { $uncertain = true; }
             $this->db->close();
             throw new \RuntimeException($uncertain ? self::UNCERTAIN : self::REJECTED);
         }
@@ -119,8 +180,8 @@ final readonly class CandidateDatabaseRoles
         }
     }
 
-    /** @return array{schema:string,database:string,roles:array{user:string,admin:string,worker:string},grants:array<string,array<string,list<string>>>,production_qualified:bool} */
-    private function inspect(\PDO $pdo): array
+    /** @return array{schema:string,database:string,roles:array{user:string,admin:string,worker:string},grants:array<string,array<string,list<string>>>,password_change_operations:array{user:string,admin:string},production_qualified:bool} */
+    private function inspect(\PDO $pdo, bool $existingRoles = false): array
     {
         try {
             $identity = $this->query($pdo, "SELECT current_database() AS database, current_setting('server_version_num')::integer AS version, current_user = session_user AS unchanged, rolsuper, rolcreaterole, rolsuper OR EXISTS (SELECT 1 FROM pg_catalog.pg_database d WHERE d.datname=current_database() AND d.datdba=r.oid) AS database_owned, pg_catalog.has_schema_privilege(current_user, 'public', 'USAGE WITH GRANT OPTION') AS schema_grant FROM pg_catalog.pg_roles r WHERE rolname = current_user")->fetch(\PDO::FETCH_ASSOC);
@@ -154,15 +215,25 @@ final readonly class CandidateDatabaseRoles
             }
             $exists = $pdo->prepare('SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN (?,?,?)');
             $exists->execute(array_values($roles));
-            if ((int) $exists->fetchColumn() !== 0) {
+            if ((int) $exists->fetchColumn() !== ($existingRoles ? 3 : 0)) {
                 throw new \RuntimeException(self::REJECTED);
+            }
+            CandidatePasswordRoutinePolicy::verify($pdo, $existingRoles);
+            if ($existingRoles) {
+                foreach ($roles as $context => $role) {
+                    $identityCheck = $pdo->prepare("SELECT rolcanlogin AND NOT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls) AND rolconfig IS NULL AND rolvaliduntil IS NULL AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_auth_members m WHERE m.member = r.oid) AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_database d WHERE d.datdba=r.oid) AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace n WHERE n.nspowner=r.oid) AS safe FROM pg_catalog.pg_roles r WHERE rolname=?");
+                    $identityCheck->execute([$role]);
+                    if (!self::boolean($identityCheck->fetchColumn())) throw new \RuntimeException(self::REJECTED);
+                    $this->verifyGrants($pdo, $context, $role);
+                    CandidatePasswordRoutinePolicy::verifyAccess($pdo, $context, $role, null);
+                }
             }
             $grants = [];
             foreach (CandidateDatabasePolicy::CONTEXTS as $context) {
                 $grants[$context] = CandidateDatabasePolicy::grants($context);
             }
 
-            return ['schema' => 'wcp360.candidate.database-roles/1', 'database' => $identity['database'], 'roles' => $roles, 'grants' => $grants, 'production_qualified' => false];
+            return ['schema' => 'wcp360.candidate.database-roles/1', 'database' => $identity['database'], 'roles' => $roles, 'grants' => $grants, 'password_change_operations' => ['user' => PasswordChangeSchema::signature('user'), 'admin' => PasswordChangeSchema::signature('admin')], 'production_qualified' => false];
         } catch (\Throwable) {
             throw new \RuntimeException(self::REJECTED);
         }
@@ -171,6 +242,12 @@ final readonly class CandidateDatabaseRoles
     private function verifyGrants(\PDO $pdo, string $context, string $role): void
     {
         $grants = CandidateDatabasePolicy::grants($context);
+        $options = $pdo->prepare("SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace CROSS JOIN LATERAL pg_catalog.aclexplode(COALESCE(c.relacl,pg_catalog.acldefault('r',c.relowner))) a JOIN pg_catalog.pg_roles r ON r.oid=a.grantee WHERE n.nspname='public' AND c.relname LIKE 'wcp_candidate_%' AND r.rolname=? AND a.is_grantable");
+        $options->execute([$role]);
+        if ((int) $options->fetchColumn() !== 0) throw new \RuntimeException(self::REJECTED);
+        $columnOptions = $pdo->prepare("SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_attribute col ON col.attrelid=c.oid CROSS JOIN LATERAL pg_catalog.aclexplode(col.attacl) a JOIN pg_catalog.pg_roles r ON r.oid=a.grantee WHERE n.nspname='public' AND c.relname LIKE 'wcp_candidate_%' AND r.rolname=? AND a.is_grantable");
+        $columnOptions->execute([$role]);
+        if ((int) $columnOptions->fetchColumn() !== 0) throw new \RuntimeException(self::REJECTED);
         $schema = $pdo->prepare("SELECT pg_catalog.has_schema_privilege(?, 'public', 'CREATE')");
         $schema->execute([$role]);
         if (self::boolean($schema->fetchColumn())) {

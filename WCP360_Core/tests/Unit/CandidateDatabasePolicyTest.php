@@ -101,6 +101,24 @@ final class CandidateDatabasePolicyTest extends TestCase
         }
     }
 
+    public function testPasswordCapabilityMaintenanceRejectsOrdinaryContextsAndDisabledApply(): void
+    {
+        $db = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
+        foreach (['user','admin','worker'] as $context) {
+            $provider = new CandidateDatabaseRoles($db, new RuntimeContext($context,true,'test','localhost'),true);
+            foreach ([fn()=>$provider->passwordChangePlan(),fn()=>$provider->enablePasswordChanges()] as $call) {
+                try { $call(); self::fail('Ordinary runtime enabled a credential capability.'); }
+                catch (\RuntimeException $error) { self::assertSame(CandidateDatabaseRoles::REJECTED,$error->getMessage()); }
+                self::assertFalse($db->isConnected());
+            }
+        }
+        $provider = new CandidateDatabaseRoles($db,new RuntimeContext('setup',true,'test','localhost'));
+        try { $provider->enablePasswordChanges(); self::fail('Disabled capability apply accepted.'); }
+        catch (\RuntimeException $error) { self::assertSame(CandidateDatabaseRoles::REJECTED,$error->getMessage()); }
+        self::assertFalse($db->isConnected());
+        self::assertSame([],\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::statements($db));
+    }
+
     public function testSqliteCannotBecomeAProvisioningTarget(): void
     {
         $db = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);

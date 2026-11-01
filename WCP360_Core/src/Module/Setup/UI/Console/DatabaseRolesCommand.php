@@ -13,7 +13,7 @@ use Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabasePolicy;
 use Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabaseRoles;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 
-#[AsCommand(name: 'wcp:candidate:database:roles', description: 'Inspect or explicitly create fresh development PostgreSQL roles; never production provisioning.')]
+#[AsCommand(name: 'wcp:candidate:database:roles', description: 'Inspect candidate PostgreSQL roles, create fresh roles or explicitly enable fixed password operations; never production provisioning.')]
 final class DatabaseRolesCommand extends Command
 {
     public function __construct(private readonly CandidateDatabaseRoles $roles, private readonly RuntimeContext $runtime, private readonly bool $enabled = false)
@@ -23,7 +23,8 @@ final class DatabaseRolesCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption('apply', null, InputOption::VALUE_NONE, 'Create fresh candidate roles and grants in one transaction. Existing roles are refused.');
+        $this->addOption('password-changes', null, InputOption::VALUE_NONE, 'Inspect or explicitly enable the fixed password operations on existing verified candidate roles.');
+        $this->addOption('apply', null, InputOption::VALUE_NONE, 'Apply the selected candidate role creation or fixed password-operation upgrade in one transaction.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -33,8 +34,11 @@ final class DatabaseRolesCommand extends Command
             return self::INVALID;
         }
         try {
-            $result = $input->getOption('apply') ? $this->roles->provision($this->passwords()) : $this->roles->plan();
-            $this->result($output, ['status' => $result['applied'] ? 'created' : 'planned', 'plan' => $result]);
+            $upgrade = $input->getOption('password-changes');
+            $result = $upgrade
+                ? ($input->getOption('apply') ? $this->roles->enablePasswordChanges() : $this->roles->passwordChangePlan())
+                : ($input->getOption('apply') ? $this->roles->provision($this->passwords()) : $this->roles->plan());
+            $this->result($output, ['status' => $result['applied'] ? ($upgrade ? 'enabled' : 'created') : 'planned', 'plan' => $result]);
             return self::SUCCESS;
         } catch (\Throwable $error) {
             $this->result($output, ['status' => $error->getMessage() === CandidateDatabaseRoles::UNCERTAIN ? 'uncertain' : 'refused']);
