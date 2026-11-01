@@ -115,8 +115,9 @@ jobs:
           docker network create wcp-platform-core
           docker run -d --name wcp-platform-db --network wcp-platform-core -e POSTGRES_PASSWORD=ci-only-platform-password -e POSTGRES_DB=wcp360_test "$pg_ref"
           ready=0
+          # The entrypoint's temporary initialization server is Unix-socket-only.
           for attempt in {1..60}; do
-            if docker exec wcp-platform-db pg_isready -U postgres -d wcp360_test; then ready=1; break; fi
+            if docker exec wcp-platform-db pg_isready -h 127.0.0.1 -U postgres -d wcp360_test; then ready=1; break; fi
             sleep 1
           done
           test "$ready" = 1
@@ -161,8 +162,9 @@ jobs:
         run: |
           docker network create wcp-candidate
           docker run -d --name wcp-candidate-db --network wcp-candidate -e POSTGRES_PASSWORD=ci-only-ephemeral-password -e POSTGRES_DB=wcp360_test postgres:17-trixie
+          # Wait for the final TCP server, rather than the temporary bootstrap socket.
           for attempt in {1..60}; do
-            if docker exec wcp-candidate-db pg_isready -U postgres -d wcp360_test; then exit 0; fi
+            if docker exec wcp-candidate-db pg_isready -h 127.0.0.1 -U postgres -d wcp360_test; then exit 0; fi
             sleep 1
           done
           exit 1
