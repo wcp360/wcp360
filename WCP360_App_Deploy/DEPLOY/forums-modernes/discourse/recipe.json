@@ -1,0 +1,191 @@
+{
+  "$schema": "../../../schemas/app-recipe.schema.json",
+  "schema": "wcp360.app-deploy.recipe-draft/0",
+  "recipe_id": "dev.app-deploy.discourse",
+  "recipe_version": "0.1.0-draft.1",
+  "status": "draft",
+  "installable": false,
+  "source_entry": {
+    "name": "Discourse",
+    "category": "Forums modernes",
+    "nature": "Application",
+    "proposed_profile": "DEPLOY"
+  },
+  "application_version": null,
+  "artifact": {
+    "resolution": "unresolved",
+    "pinning_required": true,
+    "locator": null,
+    "sha256": null,
+    "oci_digest": null,
+    "source_revision": null,
+    "build_context_sha256": null
+  },
+  "releases": [],
+  "runtime": {
+    "family": "docker",
+    "provider_ref": null,
+    "version": null,
+    "provider_digest": null,
+    "qualified_extensions": [],
+    "frankenphp_worker_enabled": false,
+    "frankenphp_worker_adapter_ref": null
+  },
+  "dependencies": [
+    {
+      "role": "database",
+      "candidates": [
+        "postgresql"
+      ],
+      "placement": "upstream_bundle",
+      "selected_version": null,
+      "provider_digest": null,
+      "required": true
+    },
+    {
+      "role": "cache",
+      "candidates": [
+        "redis"
+      ],
+      "placement": "upstream_bundle",
+      "selected_version": null,
+      "provider_digest": null,
+      "required": true
+    },
+    {
+      "role": "internal_web_server",
+      "candidates": [
+        "nginx"
+      ],
+      "placement": "upstream_bundle",
+      "selected_version": null,
+      "provider_digest": null,
+      "required": true
+    },
+    {
+      "role": "language_runtime",
+      "candidates": [
+        "ruby"
+      ],
+      "placement": "upstream_bundle",
+      "selected_version": null,
+      "provider_digest": null,
+      "required": true
+    },
+    {
+      "role": "background_worker",
+      "candidates": [
+        "sidekiq"
+      ],
+      "placement": "upstream_bundle",
+      "selected_version": null,
+      "provider_digest": null,
+      "required": true
+    }
+  ],
+  "hosting": {
+    "topology_ref": null,
+    "native_htaccess": "not_applicable",
+    "private_ingress_required": true,
+    "preserve_upstream_web_server": true,
+    "tls_ownership": "future_core_managed_edge",
+    "frankenphp_worker_support": "not_applicable"
+  },
+  "configuration_schema": "configuration.schema.json",
+  "secret_purposes": [
+    "smtp_credentials",
+    "database_credentials",
+    "redis_credentials"
+  ],
+  "data": {
+    "persistent_roles": [
+      "database",
+      "uploads",
+      "application_configuration",
+      "plugin_metadata"
+    ],
+    "retain_on_uninstall": true,
+    "purge_policy": "separate_explicit_authorization",
+    "owned_resources_only": true,
+    "backup_consistency": "application_specific_required"
+  },
+  "lifecycle": {
+    "install": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/install.md"
+    },
+    "configure": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/configure.md"
+    },
+    "update": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/update.md"
+    },
+    "uninstall": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/uninstall.md"
+    },
+    "backup": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/backup.md"
+    },
+    "restore": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/restore.md"
+    },
+    "inspect": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/inspect.md"
+    },
+    "reconcile": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/reconcile.md"
+    }
+  },
+  "qualification": {
+    "state": "candidate",
+    "publisher_trust_verified": false,
+    "artifact_integrity_verified": false,
+    "native_installation_implemented": false,
+    "live_activation_implemented": false,
+    "performance_measured": false,
+    "qualified_targets": [],
+    "evidence_scope": "upstream_documentation_only"
+  },
+  "upstream_sources": [
+    {
+      "url": "https://github.com/discourse/discourse/blob/main/docs/INSTALL.md",
+      "purpose": "requirements",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://github.com/discourse/discourse/blob/main/docs/INSTALL-cloud.md",
+      "purpose": "installation",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://github.com/discourse/discourse_docker/blob/main/samples/standalone.yml",
+      "purpose": "container_deployment",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://meta.discourse.org/t/run-other-websites-on-the-same-machine-as-discourse/17247",
+      "purpose": "routing",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://meta.discourse.org/t/create-download-and-restore-a-backup-of-your-discourse-database/122710",
+      "purpose": "backup_restore",
+      "checked_at": "2026-11-02"
+    }
+  ]
+}

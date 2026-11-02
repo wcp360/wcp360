@@ -1,6 +1,6 @@
 # Core structure, extensibility and growth
 
-**Assessment: 2026-11-02. Repository preparation; no new executable feature is introduced.**
+**Assessment: 2026-11-02. Repository preparation plus a bounded read-only application-catalogue candidate; production application deployment remains open.**
 
 WCP360 Standalone is the panel installed on a server. Its Core must remain usable without optional plugins or a live vendor connection for essential hosting, local administration, security and recovery.
 
@@ -11,9 +11,9 @@ The existing **13 module owners** can accommodate the requested growth. The miss
 | Area | Actual starting point | Preparation added |
 | :--- | :--- | :--- |
 | Business modules | 13 owners; several are README boundaries, others contain candidate code. | Named design locations and a cross-module responsibility map. |
-| CLI | One Symfony entry and seven domain candidate commands; native preflight tools are separate. | [Command/context inventory](bin/COMMANDS.md) and a shared Console presentation reservation. |
+| CLI | One Symfony entry and eight domain candidate commands; native preflight tools are separate. | [Command/context inventory](bin/COMMANDS.md) and a shared Console presentation reservation. |
 | Linux resources | 17 documented service families, mostly reservations; candidate Go templates and three disposable VM units exist. | Seven additional family READMEs and updated [service index](resources/services/README.md). |
-| Applications and Docker | Six inert PHP recipes; no general tenant container manager. | Application/provider contracts with explicit data, ingress and recovery ownership. |
+| Applications and Docker | Six inert PHP topology recipes and a read-only editorial catalogue; no general tenant container manager. | [AppDeploy workspace](../WCP360_App_Deploy/README.md), [Core catalogue bridge](src/Module/Hosting/APPLICATION-CATALOGUE.md) and application/provider contracts with explicit data, ingress and recovery ownership. |
 | Premium and licenses | Fixed reference-plugin lifecycle; general package manager and license client unfinished. | Separate package admission, local entitlement and current-permission boundaries. |
 | AI, models and MCP | No implemented Core assistant, model provider or MCP runtime. | Optional-integration resource/design anchors; no tool or privilege is enabled. |
 | Scalability | Local candidate database queue and current authorization checks. | Ordered single-node hardening, bounded execution and future node-routing design. |

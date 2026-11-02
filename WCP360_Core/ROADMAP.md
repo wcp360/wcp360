@@ -539,6 +539,10 @@ Cross-domain security, monitoring, UI and recovery tests are developed with each
 
 The immediate work remains M1 foundations and their acceptance evidence. Installer/wizard preparation can continue where independent; privileged activation depends on the necessary M1/M2 interfaces and tests. This roadmap is not permission to bypass those prerequisites.
 
+## Application catalogue integration candidate
+
+[WCP360_App_Deploy](../WCP360_App_Deploy/README.md) owns the supplied 410-reference editorial catalogue and draft recipes. The [Core read-only bridge](src/Module/Hosting/APPLICATION-CATALOGUE.md) adds a bounded fixed CSV reader, typed query and worker/setup inspection command. Candidate classifications, source labels and proposed access remain metadata; deployment/installability stay false. Recipe authoring and lifecycle guides are separate from the six topology previews. General installation/update/removal, trusted recipe release admission, application instances, provider execution and recovery remain open; capability statuses and the completion estimate are unchanged.
+
 ## Modular structure and growth preparation
 
 The [Core structure index](STRUCTURE.md) records the inspection of src/Module, CLI and resource coverage. Existing owners now have design anchors for local commercial rights, package admission, native/container applications, node capacity, durable execution, Toolbox and optional AI/MCP. The [resource index](resources/README.md) and [service index](resources/services/README.md) distinguish documented reservations from actual source/providers.

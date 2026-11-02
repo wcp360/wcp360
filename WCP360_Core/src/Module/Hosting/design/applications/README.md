@@ -1,6 +1,8 @@
 # Hosted application lifecycle preparation
 
-**Status: design reservation. Existing PHP previews are not a general application installer or container manager.**
+**Status: lifecycle design reservation with a separate read-only catalogue candidate. Existing PHP previews and catalogue inspection do not implement a general application installer or container manager.**
+
+[The catalogue bridge](../../APPLICATION-CATALOGUE.md) reads the sibling [AppDeploy workspace](../../../../../../WCP360_App_Deploy/README.md), which owns editorial data and recipe authoring. Core-owned resources, jobs, providers and recovery retain the boundaries below.
 
 Hosting owns each application instance and its ingress/routing intent. Platform owns runtime/container providers, Operations durable changes, Tenancy resource rights, Files storage, Data hosted engines, and BackupRestore recovery. Use the [web-server roadmap](../../WEB-SERVER-ROADMAP.md), [application resource index](../../../../../resources/applications/README.md) and [Core structure](../../../../../STRUCTURE.md).
 

@@ -1,6 +1,6 @@
 # Application entry points and command locations
 
-[bin/console](console) is the implemented Symfony entry point for the WCP360 development candidate. The [command inventory and CLI direction](COMMANDS.md) lists the seven WCP360 command classes, their current context checks and output limits. Production boot remains disabled.
+[bin/console](console) is the implemented Symfony entry point for the WCP360 development candidate. The [command inventory and CLI direction](COMMANDS.md) lists the eight WCP360 command classes, their current context checks and output limits. Production boot remains disabled.
 
 | Kind of command | Source owner | Execution boundary |
 | :--- | :--- | :--- |

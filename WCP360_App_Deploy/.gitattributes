@@ -1,0 +1,4 @@
+# Preserve the supplied catalogue snapshots byte for byte.
+WCP360_App_Catalogue_Candidat.csv -text
+WCP360_App_Catalogue_Candidat.md -text
+WCP360_App_Catalogue_Candidat.xlsx binary

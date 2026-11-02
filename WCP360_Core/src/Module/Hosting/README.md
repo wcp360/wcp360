@@ -8,6 +8,10 @@ Start here when changing: **Website creation, virtual hosts, certificates and PH
 
 The [application lifecycle design](design/applications/README.md) prepares PHP, native HTTP and container applications under one owner, with provider, data, ingress and recovery boundaries. [Application resources](../../../resources/applications/README.md) and the [Core structure](../../../STRUCTURE.md) show the planned locations; they do not install applications.
 
+## Application catalogue workspace
+
+[WCP360_App_Deploy](../../../../WCP360_App_Deploy/README.md) supplies the preserved editorial catalogue and draft recipe authoring. The [read-only Core bridge](APPLICATION-CATALOGUE.md) inspects the fixed CSV through a typed port/query and the worker/setup-only `wcp:candidate:apps:catalogue` command. It retains all source fields and classifications without granting installation or deployment authority. Missing sources do not block Core boot. This is separate from web/PHP topology rendering and the future provider-backed application lifecycle.
+
 ## Implemented candidate paths
 
 | Concern | Actual source and scope |

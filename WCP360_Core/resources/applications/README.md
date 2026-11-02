@@ -1,6 +1,8 @@
 # Application resource register
 
-**Status: documentation reservation. No additional runtime or production capability is implemented here.**
+**Status: runtime-resource documentation reservation. A separate read-only catalogue bridge is implemented; application deployment remains unavailable.**
+
+The editorial source and recipe authoring live in [WCP360_App_Deploy](../../../WCP360_App_Deploy/README.md). Hosting's [catalogue bridge](../../src/Module/Hosting/APPLICATION-CATALOGUE.md) consumes its fixed CSV without copying a second inventory here. This directory identifies Core resource ownership and future provider inputs; it is not another application catalogue.
 
 Owner: [Hosting](../../src/Module/Hosting/README.md), with Platform, Operations, Data, BackupRestore and Tenancy for their existing responsibilities.
 

@@ -25,6 +25,8 @@ The [hosting stack catalogue](src/Module/Hosting/README.md#web-stack-profiles-an
 
 [Reusable application profiles](src/Module/Hosting/APPLICATION-PROFILES.md) now generate six server/runtime combinations across three routing profiles, with WordPress as a reference. These are protected configuration previews with optional bounded syntax probes and exact artifact hashes; native availability and unexecuted stages remain explicit. Live application installation, native recipe qualification, cache policy and measured performance remain outstanding. No capability status/count or completion estimate is promoted.
 
+The [candidate application catalogue bridge](src/Module/Hosting/APPLICATION-CATALOGUE.md) reads the preserved App Deploy CSV as bounded editorial metadata. Draft recipe schemas and WordPress/Discourse authoring examples prepare future lifecycle work; they do not install applications, admit providers or enable deployment. Existing capability statuses, counts and the completion estimate remain unchanged.
+
 ## Delivery snapshot
 
 **Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.

@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "scope": "editorial_profile_mapping",
+  "source": "../WCP360_App_Catalogue_Candidat.csv",
+  "execution_authority": false,
+  "profiles": [
+    {
+      "profile": "PHP",
+      "method": "php_recipe_candidate",
+      "isolation": "site_runtime",
+      "hardware": "standard_profile_review",
+      "access": [
+        "USER",
+        "MASQUE"
+      ],
+      "eligibility": "qualification_required"
+    },
+    {
+      "profile": "DEPLOY",
+      "method": "isolated_application_candidate",
+      "isolation": "application",
+      "hardware": "standard_profile_review",
+      "access": [
+        "USER-CONDITIONNEL",
+        "MASQUE",
+        "USER"
+      ],
+      "eligibility": "qualification_required"
+    },
+    {
+      "profile": "QUALIFIER",
+      "method": "identity_and_method_unresolved",
+      "isolation": "unresolved",
+      "hardware": "unresolved",
+      "access": [
+        "MASQUE"
+      ],
+      "eligibility": "identity_required"
+    },
+    {
+      "profile": "ISOLE",
+      "method": "provider_selection_required",
+      "isolation": "enhanced_review",
+      "hardware": "standard_profile_review",
+      "access": [
+        "USER-CONDITIONNEL",
+        "USER-BORNE",
+        "ADMIN-DELEGABLE"
+      ],
+      "eligibility": "qualification_required"
+    },
+    {
+      "profile": "LAB",
+      "method": "isolated_lab_candidate",
+      "isolation": "private_lab",
+      "hardware": "standard_profile_review",
+      "access": [
+        "LAB-PRIVE"
+      ],
+      "eligibility": "private_lab_only"
+    },
+    {
+      "profile": "CPU-GPU",
+      "method": "inference_provider_candidate",
+      "isolation": "application",
+      "hardware": "model_backend_cpu_gpu_review",
+      "access": [
+        "ADMIN-DELEGABLE"
+      ],
+      "eligibility": "provider_qualification_required"
+    },
+    {
+      "profile": "SERVICE",
+      "method": "managed_service_candidate",
+      "isolation": "service",
+      "hardware": "standard_profile_review",
+      "access": [
+        "ADMIN-DELEGABLE"
+      ],
+      "eligibility": "provider_qualification_required"
+    },
+    {
+      "profile": "EXTENSION",
+      "method": "parent_component_candidate",
+      "isolation": "parent_resource",
+      "hardware": "not_applicable",
+      "access": [
+        "ADMIN-DELEGABLE",
+        "USER"
+      ],
+      "eligibility": "parent_and_qualification_required"
+    },
+    {
+      "profile": "CLUSTER",
+      "method": "multi_node_candidate",
+      "isolation": "dedicated_nodes",
+      "hardware": "multi_node_review",
+      "access": [
+        "ADMIN"
+      ],
+      "eligibility": "provider_qualification_required"
+    },
+    {
+      "profile": "INFRA",
+      "method": "infrastructure_provider_candidate",
+      "isolation": "host_administrator",
+      "hardware": "standard_profile_review",
+      "access": [
+        "ADMIN"
+      ],
+      "eligibility": "provider_qualification_required"
+    },
+    {
+      "profile": "VM",
+      "method": "virtual_machine_candidate",
+      "isolation": "private_vm",
+      "hardware": "virtualization_review",
+      "access": [
+        "ADMIN"
+      ],
+      "eligibility": "provider_qualification_required"
+    },
+    {
+      "profile": "RUNTIME",
+      "method": "project_runtime_candidate",
+      "isolation": "project_runtime",
+      "hardware": "standard_profile_review",
+      "access": [
+        "ADMIN-DELEGABLE"
+      ],
+      "eligibility": "provider_qualification_required"
+    },
+    {
+      "profile": "TEMPLATE",
+      "method": "project_build_candidate",
+      "isolation": "project_build",
+      "hardware": "standard_profile_review",
+      "access": [
+        "USER-DEVELOPPEUR",
+        "MASQUE"
+      ],
+      "eligibility": "project_workflow_required"
+    },
+    {
+      "profile": "DEPENDANCE",
+      "method": "project_dependency_candidate",
+      "isolation": "project_build",
+      "hardware": "not_applicable",
+      "access": [
+        "USER-DEVELOPPEUR"
+      ],
+      "eligibility": "project_dependency_only"
+    },
+    {
+      "profile": "BUILD-STATIQUE",
+      "method": "isolated_build_and_static_publish_candidate",
+      "isolation": "project_build",
+      "hardware": "standard_profile_review",
+      "access": [
+        "USER-DEVELOPPEUR"
+      ],
+      "eligibility": "build_workflow_only"
+    },
+    {
+      "profile": "BUILD",
+      "method": "isolated_build_tool_candidate",
+      "isolation": "project_build",
+      "hardware": "standard_profile_review",
+      "access": [
+        "USER-DEVELOPPEUR"
+      ],
+      "eligibility": "build_workflow_only"
+    }
+  ]
+}

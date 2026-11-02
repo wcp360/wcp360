@@ -16,6 +16,10 @@ services:
     Wcp360\Core\:
         resource: ../src/
         exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Module\Hosting\Application\ApplicationCatalogueSource: '@Wcp360\Core\Module\Hosting\Infrastructure\CsvApplicationCatalogueSource'
+    Wcp360\Core\Module\Hosting\Infrastructure\CsvApplicationCatalogueSource:
+        arguments:
+            $path: '%kernel.project_dir%/../WCP360_App_Deploy/WCP360_App_Catalogue_Candidat.csv'
     Wcp360\Core\Module\Hosting\Application\ModernPlanRenderer: '@Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer'
     Wcp360\Core\Module\Hosting\Application\ApplicationPlanRenderer: '@Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer'
     Wcp360\Core\Module\Hosting\Application\ApplicationPlanSyntax: '@Wcp360\Core\Module\Hosting\Infrastructure\NativeApplicationPlanSyntax'

@@ -4,11 +4,11 @@ This document describes the inspected development candidate and a proposed CLI d
 
 ## Implemented entry point and discovery
 
-[console](console) boots the Symfony Console application through the existing [Kernel](../src/Kernel.php). The Kernel accepts enabled candidate boot in dev/test only and refuses production boot. Symfony framework and dependency commands may also be registered; the table below inventories the seven WCP360-owned command classes currently declared with AsCommand.
+[console](console) boots the Symfony Console application through the existing [Kernel](../src/Kernel.php). The Kernel accepts enabled candidate boot in dev/test only and refuses production boot. Symfony framework and dependency commands may also be registered; the table below inventories the eight WCP360-owned command classes currently declared with AsCommand.
 
 [services.yaml](../config/services.yaml) discovers Core source with autowiring/autoconfiguration and explicit exclusions. Command discovery and a successful container build do not establish permission to invoke a command or perform an effect. Current command execution checks RuntimeContext; the four contexts are not yet independently composed production containers. [Context packaging and identities](../config/contexts/README.md) remain separate acceptance work.
 
-## Seven implemented candidate commands
+## Eight implemented candidate commands
 
 | Command | Source owner | Required candidate context | Existing behavior and additional boundary |
 | :--- | :--- | :--- | :--- |
@@ -17,6 +17,7 @@ This document describes the inspected development candidate and a proposed CLI d
 | `wcp:candidate:account:recover` | [RecoverAccountPasswordCommand](../src/Module/Setup/UI/Console/RecoverAccountPasswordCommand.php) | setup | Requires username and `--surface` (`user` or `admin`). Inspection is read-only. `--apply` additionally requires the enable flag, an interactive confirmation and hidden password input; recovery revokes account sessions and preserves MFA. |
 | `wcp:candidate:account:recovery-code` | [IssuePasswordRecoveryCodeCommand](../src/Module/Setup/UI/Console/IssuePasswordRecoveryCodeCommand.php) | setup | Requires username and `--surface` (`user` or `admin`). Inspection is read-only. `--issue` requires enabled issuance for the surface and interactive confirmation; the private short-lived code is displayed once and no email is sent. |
 | `wcp:candidate:access:check` | [CheckAccessCommand](../src/Module/IdentityAccess/UI/Console/CheckAccessCommand.php) | worker or setup | Read-only check for supplied actor and tenant UUIDs; the implemented permission is `candidate.hosting.plan`. Supplying an actor UUID does not authenticate as that actor or grant access. |
+| `wcp:candidate:apps:catalogue` | [ApplicationCatalogueCommand](../src/Module/Hosting/UI/Console/ApplicationCatalogueCommand.php) | worker or setup | Read-only local catalogue inspection with exact category/profile filters, 25/50/100-row pages and bounded offsets. Missing/invalid sources are explicit; all installation/deployment flags remain false. No path, URL, job or provider execution input. |
 | `wcp:candidate:work` | [WorkCommand](../src/Module/Operations/UI/Console/WorkCommand.php) | worker | Processes at most one queued hosting-plan job. `--reconcile-interrupted` marks at most 100 still-running plans UNKNOWN_OUTCOME per invocation; stop rendering workers first. No automatic replay or privileged effect. |
 | `wcp:candidate:activate` | [ActivationCommand](../src/Module/Hosting/UI/Console/ActivationCommand.php) | worker | Processes one admitted isolated PHP-FPM activation experiment. `--reconcile` observes uncertain outcomes without applying again; stop other activation workers first. The explicit disposable-environment admission remains mandatory. |
 

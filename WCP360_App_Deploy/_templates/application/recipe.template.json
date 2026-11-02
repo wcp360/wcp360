@@ -1,0 +1,100 @@
+{
+  "$schema": "../../schemas/app-recipe.schema.json",
+  "schema": "wcp360.app-deploy.recipe-draft/0",
+  "recipe_id": "dev.app-deploy.template",
+  "recipe_version": "0.1.0-draft.1",
+  "status": "draft",
+  "installable": false,
+  "source_entry": null,
+  "application_version": null,
+  "artifact": {
+    "resolution": "unresolved",
+    "pinning_required": true,
+    "locator": null,
+    "sha256": null,
+    "oci_digest": null,
+    "source_revision": null,
+    "build_context_sha256": null
+  },
+  "releases": [],
+  "runtime": {
+    "family": "native_http",
+    "provider_ref": null,
+    "version": null,
+    "provider_digest": null,
+    "qualified_extensions": [],
+    "frankenphp_worker_enabled": false,
+    "frankenphp_worker_adapter_ref": null
+  },
+  "dependencies": [],
+  "hosting": {
+    "topology_ref": null,
+    "native_htaccess": "not_applicable",
+    "private_ingress_required": true,
+    "preserve_upstream_web_server": false,
+    "tls_ownership": "future_core_managed_edge",
+    "frankenphp_worker_support": "not_applicable"
+  },
+  "configuration_schema": "configuration.schema.json",
+  "secret_purposes": [],
+  "data": {
+    "persistent_roles": [],
+    "retain_on_uninstall": true,
+    "purge_policy": "separate_explicit_authorization",
+    "owned_resources_only": true,
+    "backup_consistency": "application_specific_required"
+  },
+  "lifecycle": {
+    "install": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "configure": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "update": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "uninstall": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "backup": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "restore": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "inspect": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    },
+    "reconcile": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": null
+    }
+  },
+  "qualification": {
+    "state": "candidate",
+    "publisher_trust_verified": false,
+    "artifact_integrity_verified": false,
+    "native_installation_implemented": false,
+    "live_activation_implemented": false,
+    "performance_measured": false,
+    "qualified_targets": [],
+    "evidence_scope": "upstream_documentation_only"
+  },
+  "upstream_sources": []
+}
