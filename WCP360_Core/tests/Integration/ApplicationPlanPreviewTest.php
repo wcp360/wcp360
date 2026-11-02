@@ -66,6 +66,7 @@ final class ApplicationPlanPreviewTest extends KernelTestCase
 
     public function testUnsupportedNativeHtaccessAndUnknownInputsNeverRenderOrFallBack(): void
     {
+        $before = $this->state();
         $renderer = new class implements ApplicationPlanRenderer {
             public function renderApplication(string $siteId, string $host, string $recipe, string $application): array { self::unreachable(); }
             private static function unreachable(): never { throw new \LogicException('Renderer must not be reached.'); }
@@ -75,12 +76,13 @@ final class ApplicationPlanPreviewTest extends KernelTestCase
             ['app.test','nginx_php_fpm','worker',false], ['app.test','apache_frankenphp','wordpress',true],
             ['app.test','caddy_frankenphp','wordpress',true]] as [$host,$recipe,$application,$htaccess]) {
             try { $service->preview($this->fixture['users']['admin'], $host, $recipe, $application, $htaccess); self::fail('Invalid intent admitted.'); }
-            catch (BadRequestHttpException) {}
+            catch (BadRequestHttpException $error) { self::assertSame(400, $error->getStatusCode()); }
         }
         foreach ([$this->fixture['users']['alice'], WorkbenchStore::id()] as $actor) {
             try { $service->preview($actor, 'app.test', 'nginx_php_fpm'); self::fail('Invalid actor admitted.'); }
-            catch (AccessDeniedHttpException) {}
+            catch (AccessDeniedHttpException $error) { self::assertSame(403, $error->getStatusCode()); }
         }
+        self::assertSame($before, $this->state());
     }
 
     public function testMalformedOrMissingRendererOutputIsRedactedWithoutWrites(): void
