@@ -13,7 +13,7 @@ use Wcp360\Core\Shared\Security\RuntimeContext;
 final class WorkCommand extends Command
 {
     public function __construct(private readonly RunHostingPlan $worker,private readonly RuntimeContext $runtime){parent::__construct();}
-    protected function configure():void{$this->addOption('reconcile-interrupted',null,InputOption::VALUE_NONE,'Mark interrupted jobs UNKNOWN_OUTCOME. Stop other workers first.');}
+    protected function configure():void{$this->addOption('reconcile-interrupted',null,InputOption::VALUE_NONE,'Mark up to 100 interrupted plans UNKNOWN_OUTCOME. Stop all rendering workers first; repeat as needed. A zero count can mean locked rows remain.');}
     protected function execute(InputInterface $input,OutputInterface $output):int
     {
         if($this->runtime->context!=='worker'){ $output->writeln('Worker context required.');return self::FAILURE;}

@@ -12,6 +12,8 @@
 
 The setup-only `wcp:candidate:database:roles` command is read-only by default. Explicit `--apply` additionally needs its enable flag and private setup passwords; it creates only fresh reviewed development roles. See the [recipe](../installer/recipes/CANDIDATE-DATABASE-ROLES.md) for migration, grant and recovery requirements.
 
+The worker-only `wcp:candidate:work --reconcile-interrupted` option marks up to 100 still-running hosting plans UNKNOWN_OUTCOME per call. Stop all rendering workers first. The count covers actual transitions; locked PostgreSQL rows may be skipped, so zero is not proof that all interrupted work is resolved. Repeat as needed and inspect remaining state/locks; no plan is automatically replayed. See [queue behavior and limits](../src/Module/Operations/README.md#atomic-plan-transitions-and-bounded-recovery).
+
 A command's name, controller or executable path is not an authorization rule. Use explicit actor/tenant/surface context, typed inputs, bounded work and durable results. HTTP and Console adapters reuse one application operation rather than duplicating business functions.
 
 Domain-namespaced commands require verified service discovery/autoconfiguration or explicit registration in the implemented bootstrap. CLI registration does not grant privileged system execution. Keep any fixed native executable/arguments in the accepted agent contract; never append arbitrary browser/plugin strings to a shell command.

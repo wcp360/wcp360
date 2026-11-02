@@ -212,6 +212,14 @@ Regression definitions cover tied timestamps, inserts between pages, history bey
 
 [Version20261102000100](migrations/Version20261102000100.php) adds nullable, format-constrained job/audit metadata and an audit lookup index without rewriting historical rows or widening database grants. The authorized task detail displays the creation reference separately from the current HTTP response header. [Service](tests/Integration/PlanCorrelationTest.php), [HTTP](tests/Integration/PlanCorrelationJourneyTest.php), [schema-upgrade](tests/Integration/PlanCorrelationSchemaTest.php) and [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) definitions cover this slice; exact-source execution belongs to draft PR #116. Local executable tests remain stopped. This does not provide cross-resource correlation, an audit-query product, IPC propagation or a distributed trace. M1 remains open; approximately 20% overall and capability counts remain unchanged.
 
+### Atomic hosting-plan transitions and bounded interruption recovery
+
+[HostingPlanQueue](src/Module/Operations/Infrastructure/HostingPlanQueue.php) now owns the fixed candidate claim, publication and interruption transactions. [RunHostingPlan](src/Module/Operations/Application/RunHostingPlan.php) orchestrates authorization and Go rendering after the durable claim commits. Transactions supplied by a caller are refused rather than treating an uncommitted claim as durable intent.
+
+Claims/recovery use PostgreSQL row locks with SKIP LOCKED; transitions and audit depend on an actual compare-and-set update. Recovery processes at most 100 running plans per call and returns the number changed. A stale publication cannot overwrite a terminal/uncertain state. Access revocation observed before publication discards the rendered result and commits a failed outcome; infrastructure/audit errors still roll back. This does not close the general in-flight revocation race or introduce leases, retries or privileged effects.
+
+[Transition definitions](tests/Integration/HostingPlanQueueTest.php), [real overlapping PostgreSQL transactions](tests/Integration/HostingPlanQueueConcurrencyTest.php) and [restricted-role checks](tests/Integration/CandidateDatabaseRolesTest.php) cover the slice. Exact-source outcomes belong to draft PR #116; local executable tests remain stopped. Operators must stop all rendering workers before interruption maintenance; a zero count can still leave locked rows. M1/M2 remain open, approximately 20% overall, with unchanged capability counts.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

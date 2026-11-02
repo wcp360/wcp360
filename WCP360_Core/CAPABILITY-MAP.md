@@ -398,13 +398,13 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Task center | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Tenant-scoped plan/job dashboard and filtered bidirectional job inventory; general scheduling, cancellation and production contracts remain open. | [M2](ROADMAP.md#m2) |
 | Job persistence | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Demonstrated — Durable candidate job state and worker processing. | [M2](ROADMAP.md#m2) |
 | Idempotency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Demonstrated — Candidate request fingerprint, uniqueness and retry tests. | [M2](ROADMAP.md#m2) |
-| Locks and concurrency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — PostgreSQL claims and install lock; general leases/fencing absent. | [M2](ROADMAP.md#m2) |
+| Locks and concurrency | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Locked/CAS plan transitions, overlapping PostgreSQL transaction checks and install lock; general leases/fencing absent. | [M2](ROADMAP.md#m2) |
 | Preconditions | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Candidate authorization/input/revision checks; general contract absent. | [M2](ROADMAP.md#m2) |
 | Steps and checkpoints | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Installer/broker checkpoints; generic operation steps absent. | [M2](ROADMAP.md#m2) |
 | Recovery and retries | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Conservative uncertain outcomes; general retry policy absent. | [M2](ROADMAP.md#m2) |
 | Cancellation and compensation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Planned | [M2](ROADMAP.md#m2) |
 | Timeouts and resource budgets | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Selected child/IPC bounds; global task budgets absent. | [M2](ROADMAP.md#m2) |
-| Reconciliation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Candidate UNKNOWN_OUTCOME and broker recovery; generic flow absent. | [M2](ROADMAP.md#m2) |
+| Reconciliation | [Operations](src/Module/Operations/README.md) | Owning domain and shared contracts | Partial — Bounded audited UNKNOWN_OUTCOME batches and stale publication refusal; broker recovery; generic flow absent. | [M2](ROADMAP.md#m2) |
 
 ### Configuration, APIs, and application exchanges
 

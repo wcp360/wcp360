@@ -11,10 +11,25 @@ Start here when changing: **Shared job scheduling, progress, retry and recovery 
 | [Application/ListHostingJobs.php](Application/ListHostingJobs.php) | Current-tenant read scope, bounded projection and stable bidirectional job cursors. |
 | [Domain/JobListQuery.php](Domain/JobListQuery.php) | Strict query bounds, state/search filters and canonical UUID cursors. |
 | [UI/Http/JobListController.php](UI/Http/JobListController.php) | Filtered job history in the WCP360 layout and existing workbench API. |
-| [Application/RunHostingPlan.php](Application/RunHostingPlan.php) | Claim a queued plan, recheck authority, render its bounded result and persist the terminal state with audit. PostgreSQL claims use row locking. |
+| [Application/RunHostingPlan.php](Application/RunHostingPlan.php) | Orchestrate current authorization and bounded Go rendering between committed queue transitions. |
+| [Infrastructure/HostingPlanQueue.php](Infrastructure/HostingPlanQueue.php) | Fixed claim/publication transactions, compare-and-set outcomes and bounded interruption maintenance with mandatory audit. |
 | [Infrastructure/WorkbenchStore.php](Infrastructure/WorkbenchStore.php) | Candidate persistence, job reads and audit writes; its existing tenant/admin authorization and visibility facade delegates to IdentityAccess. |
 | [Infrastructure/WorkbenchSchema.php](Infrastructure/WorkbenchSchema.php) | Candidate account, tenant, site, job and audit schema. |
 | [UI/Console/WorkCommand.php](UI/Console/WorkCommand.php) | Worker-context command for the implemented candidate operations. |
+
+## Atomic plan transitions and bounded recovery
+
+[HostingPlanQueue](Infrastructure/HostingPlanQueue.php) owns the existing candidate lifecycle, with fixed SQL and no public endpoint or new permission. It returns only the minimal claim metadata. [RunHostingPlan](Application/RunHostingPlan.php) retains its existing constructor/entry points and orchestrates current authorization plus Go rendering outside database transactions. Every queue operation owns its transaction: an already-active caller transaction is refused before any transition, so rendering cannot start on a claim that is merely nested/uncommitted.
+
+A claim updates QUEUED to RUNNING and appends its correlated started occurrence atomically. PostgreSQL uses ordered `FOR UPDATE SKIP LOCKED`; SQLite retains writer serialization and can report contention instead of silently claiming twice. Publication rereads/locks the running job, uses its persisted actor/tenant/site/origin and performs a compare-and-set update. Job result, site state/revision and terminal audit commit together. Missing, unclaimed, terminal or uncertain jobs cannot be published or audited again.
+
+Rendering failure publishes FAILED. If current authority is denied at publication, the rendered result is discarded and a known FAILED outcome is committed instead of leaving a known refusal RUNNING. Database/verification/audit infrastructure errors are not converted into success; transaction failure preserves the previously committed state for explicit recovery. The worker still does not dispatch privileged effects. General policy/effect fencing and revocation races after the current-authority check remain open.
+
+The existing `wcp:candidate:work --reconcile-interrupted` option processes at most **100** RUNNING plans per call, ordered by creation time/UUID. It locks/skips occupied PostgreSQL rows, updates only still-running jobs to UNKNOWN_OUTCOME, audits only actual transitions and returns their actual count. Any required audit failure rolls back that batch. It leaves site state, uncertain results and original references intact, never requeues work and refuses stale result publication afterward.
+
+**Stop all rendering workers first.** Row locks do not detect a renderer outside its database transaction, a live process or a lost host. Repeat maintenance as needed and inspect remaining running rows/locks: a zero count is not proof that all interrupted work is reconciled. There is no automatic retry, lease expiry, liveness detector, general cancellation or compensation in this slice.
+
+[Transition tests](../../../tests/Integration/HostingPlanQueueTest.php) define successful/refused paths, audit rollback, caller-transaction refusal, more-than-one-batch recovery and a private SQLite journey. [PostgreSQL concurrency tests](../../../tests/Integration/HostingPlanQueueConcurrencyTest.php) use separate live connections and held row locks, without sleep-based timing, to exercise overlapping claims/recovery and terminal-state preservation. [Restricted-role checks](../../../tests/Integration/CandidateDatabaseRolesTest.php) retain worker capabilities and deny USER claims. Definitions are not execution evidence; source-bound CI is tracked in draft PR #116. No schema/dependency/grant change is added; the preceding request-correlation migration remains required.
 
 ## Durable hosting-plan request correlation
 

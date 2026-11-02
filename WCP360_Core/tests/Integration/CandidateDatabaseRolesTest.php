@@ -506,6 +506,26 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testQueueTransitionsUseWorkerGrantsWhileUserCannotClaimAJob(): void
+    {
+        $ids = \Wcp360\Core\Tests\Fixtures\HostingJobsFixture::seed($this->maintenance, $this->fixture, 2);
+        $this->maintenance->executeStatement("UPDATE wcp_candidate_jobs SET state='QUEUED',result=NULL");
+        $this->provider->provision($this->passwords);
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $userQueue = new \Wcp360\Core\Module\Operations\Infrastructure\HostingPlanQueue(new WorkbenchStore($this->login('user')));
+        try { $userQueue->claim(); self::fail('USER acquired a worker transition.'); }
+        catch (\Doctrine\DBAL\Exception\DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        $queue = new \Wcp360\Core\Module\Operations\Infrastructure\HostingPlanQueue(new WorkbenchStore($this->login('worker')));
+        self::assertSame($ids[0], $queue->claim()['id']);
+        self::assertTrue($queue->finish($ids[0], null));
+        self::assertSame($ids[1], $queue->claim()['id']);
+        self::assertSame(1, $queue->markInterrupted());
+        self::assertFalse($queue->finish($ids[1], '{"synthetic":"late"}'));
+        self::assertSame(['FAILED', 'UNKNOWN_OUTCOME'], $this->maintenance->fetchFirstColumn('SELECT state FROM wcp_candidate_jobs ORDER BY id'));
+        self::assertSame($before + 4, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

@@ -52,6 +52,8 @@ The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) u
 
 [Hosting-plan request correlation](src/Module/Operations/README.md#durable-hosting-plan-request-correlation) now retains the first submission reference in the job and its queued/started/outcome audit occurrences. The authorized task detail shows this creation reference; retries preserve the original, and historical rows remain empty. Apply [Version20261102000100](migrations/Version20261102000100.php) before using this source. This is candidate diagnostics, not a permission or complete distributed tracing.
 
+[Atomic plan transitions](src/Module/Operations/README.md#atomic-plan-transitions-and-bounded-recovery) now separate queue persistence from Go rendering, reject uncommitted caller transactions and prevent stale completion from overwriting an uncertain outcome. Interruption maintenance handles at most 100 plans per call, counting only actual changes; stop rendering workers first. A revocation observed at publication discards the result and records failure. General leases, retries and production fencing remain unfinished.
+
 ## Source layout
 
 ```text
