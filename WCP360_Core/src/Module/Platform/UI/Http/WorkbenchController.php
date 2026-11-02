@@ -45,17 +45,6 @@ final class WorkbenchController extends AbstractController
         return $this->render('user/dashboard.html.twig',['idempotency_key'=>WorkbenchStore::id(),'context'=>$runtime->context,'tenants'=>$tenants,'tenant'=>$tenant,'jobs'=>$jobs,'runtime_settings'=>$settings->current(),'worker_plans_enabled'=>$policy->workerPlansEnabled,'plugins'=>$runtime->context==='admin'?$plugins->installed():[]]);
     }
 
-    #[Route('/workbench/settings/application-server',name:'wcp_application_server',methods:['POST'])]
-    public function applicationServer(Request $request,ApplicationServerSettings $settings):Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        if(!$this->isCsrfTokenValid('application-server',$request->request->getString('_token')))throw $this->createAccessDeniedException('Invalid CSRF token.');
-        $fields=$request->request->all();
-        if(array_diff(array_keys($fields),['_token','application_server','revision']) || !isset($fields['application_server'],$fields['revision']) || !is_string($fields['application_server']) || !is_string($fields['revision']) || !preg_match('/^[1-9][0-9]{0,8}$/D',$fields['revision']))throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('Invalid runtime settings.');
-        $user=$this->getUser();if(!$user instanceof Principal)throw $this->createAccessDeniedException();
-        $settings->change($user->id,$fields['application_server'],(int)$fields['revision']);
-        return $this->redirectToRoute('wcp_dashboard',[],303);
-    }
     #[Route('/workbench/plans',name:'wcp_plan',methods:['POST'])]
     public function submit(Request $request,SubmitHostingPlan $submit,\Wcp360\Core\Shared\Http\RequestReference $references):Response
     {

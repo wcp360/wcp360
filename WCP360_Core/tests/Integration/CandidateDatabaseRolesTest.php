@@ -424,6 +424,32 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testRuntimeSettingsReadAndChangeUseExistingRootGrantsAndCorrelatedAppendOnlyAudit(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $store = new WorkbenchStore($db);
+        $settings = new ApplicationServerSettings($store, new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true));
+        $actor = $this->fixture['users']['admin'];
+        self::assertSame(1, $settings->inspect($actor)['settings']['revision']);
+        $reference = str_repeat('e', 32);
+        $settings->change($actor, 'frankenphp_worker', 1, $reference);
+        self::assertSame('frankenphp_worker', $settings->inspect($actor)['settings']['application_server']);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($reference, $this->maintenance->fetchOne("SELECT request_id FROM wcp_candidate_audit WHERE kind='candidate.runtime.default.changed'"));
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_audit LIMIT 1'); self::fail('Default audit reads were broadened.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        $userDb = $this->login('user');
+        try {
+            $userDb->executeStatement("UPDATE wcp_candidate_runtime_settings SET application_server='php_fpm' WHERE id=1");
+            self::fail('USER changed global settings.');
+        } catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        $userSettings = new ApplicationServerSettings(new WorkbenchStore($userDb), new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy());
+        try { $userSettings->inspect($this->fixture['users']['alice']); self::fail('USER inspected ROOT settings.'); }
+        catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {}
+        self::assertSame(2, $settings->current()['revision']);
+    }
+
     public function testOtherSessionRevocationUsesExistingUserAndRootGrantsWithoutAuditReads(): void
     {
         $this->provider->provision($this->passwords);

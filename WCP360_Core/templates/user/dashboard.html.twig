@@ -9,6 +9,7 @@
 {% if context == 'admin' %}
 <div class="wcp-core-admin-grid">
     <section id="runtime" class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Serveur d’application par défaut</h2><p class="wcp-panel-sub">Configuration des nouveaux plans d’hébergement</p></div><span class="wcp-stat-icon">{{ ui.icon('server') }}</span></div><div class="wcp-panel-body">
+        <p><a href="{{ path('wcp_runtime_settings') }}">Ouvrir les paramètres globaux</a></p>
         <p class="muted">Ce réglage concerne les nouveaux plans des sites hébergés. Les sites existants et le runtime du panneau conservent leur configuration.</p>
         <form method="post" action="{{ path('wcp_application_server') }}"><input type="hidden" name="_token" value="{{ csrf_token('application-server') }}"><input type="hidden" name="revision" value="{{ runtime_settings.revision }}">{% include 'components/forms/application-server.html.twig' with {field_id: 'default-application-server', allow_inherit: false, selected: runtime_settings.application_server} %}<button class="button" type="submit">Enregistrer le défaut</button></form>
     </div></section>

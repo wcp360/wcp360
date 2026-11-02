@@ -20,11 +20,23 @@ final readonly class ApplicationServerSettings
         return ['application_server' => $row['application_server'], 'revision' => (int) $row['revision']];
     }
 
-    public function change(string $actor, string $value, int $expectedRevision): void
+    /** @return array{schema:string,settings:array{application_server:string,revision:int},capabilities:array{frankenphp_worker_plans:bool}} */
+    public function inspect(string $actor): array
     {
+        $this->store->requireAdmin($actor);
+        $settings = $this->current();
+        $this->store->requireAdmin($actor);
+
+        return ['schema' => 'wcp360.candidate.runtime-settings/1', 'settings' => $settings,
+            'capabilities' => ['frankenphp_worker_plans' => $this->policy->workerPlansEnabled]];
+    }
+
+    public function change(string $actor, string $value, int $expectedRevision, ?string $requestId = null): void
+    {
+        \Wcp360\Core\Shared\Correlation\RequestId::assertValid($requestId);
         $server = $this->policy->parse($value);
         if ($expectedRevision < 1) throw new BadRequestHttpException('Invalid settings revision.');
-        $this->store->db->transactional(function () use ($actor, $server, $expectedRevision): void {
+        $this->store->db->transactional(function () use ($actor, $server, $expectedRevision, $requestId): void {
             $this->store->requireAdmin($actor, true);
             $this->policy->assertAvailable($server);
             $changed = $this->store->db->executeStatement(
@@ -32,7 +44,7 @@ final readonly class ApplicationServerSettings
                 [$server->value, $expectedRevision],
             );
             if ($changed !== 1) throw new ConflictHttpException('Runtime settings changed; refresh before retrying.');
-            $this->store->audit($actor, null, 'candidate.runtime.default.changed', null);
+            $this->store->audit($actor, null, 'candidate.runtime.default.changed', null, $requestId);
         });
     }
 }
