@@ -404,7 +404,9 @@ Owner: Hosting with Files, Platform, Operations, Tenancy and Observability. Depe
 - Authoritative zones/records, SOA/TTL/serials, templates/import/export, delegation, primary/secondary DNS, DNSSEC, reverse DNS and diagnostics/drift detection.
 - Certificate inventory, ACME accounts/orders/challenges, wildcard/import/CSR, renewal/rotation, cross-service deployment, TLS policy and post-apply verification.
 - Hosted PHP versions/extensions, per-site assignment, FPM pools/directives, effective settings, OPcache/CLI/Composer tasks and safe version changes under the tenant identity.
-- Keep PHP-FPM as default; qualify opt-in FrankenPHP Worker compatibility, isolation, recycling and state cleanup. Runtime changes preserve the previous observed state on failure or expose a reconciliation requirement.
+- Implement the [adopted web-server strategy](src/Module/Hosting/WEB-SERVER-STRATEGY.md) through the [ordered web-server roadmap](src/Module/Hosting/WEB-SERVER-ROADMAP.md): Nginx → Apache event → PHP-FPM is the target default for new qualified general-purpose installations. Keep the current Nginx/FPM candidate and all persisted profile/plan meanings intact until an explicit new versioned topology and installation path exist.
+- Retain Nginx/FPM as an alternative; qualify isolated FrankenPHP classic before application-specific opt-in Worker, including identity separation, recycling and state cleanup. Runtime changes preserve the previous observed state on failure or expose a reconciliation requirement.
+- Build registered native/container HTTP backends with Platform, Data and BackupRestore. Docker/Discourse need their own workload authority, networking, dependencies, upgrade and recovery evidence; a web proxy or development Docker environment is not an application manager.
 
 **Acceptance:** create, modify, suspend, restore and delete a real-domain site with DNS and TLS; serve the expected application under the expected UID; renew a certificate and recover failed configuration changes without disrupting unrelated tenants. Exercise each claimed engine/profile explicitly.
 

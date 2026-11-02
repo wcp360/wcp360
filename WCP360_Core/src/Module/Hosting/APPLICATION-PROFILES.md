@@ -4,6 +4,8 @@ The Core separates the application's routing needs from its web server and PHP r
 
 ## Current implementation
 
+The [adopted strategy](WEB-SERVER-STRATEGY.md) adds a **target** general-purpose default, Nginx → Apache event → PHP-FPM. That seventh PHP topology is not part of the six recipes below. The [ordered roadmap](WEB-SERVER-ROADMAP.md) requires a distinct versioned contract and an inert preview first; current recipe names, stored assignments and generated plan formats retain their meaning. Native/container HTTP applications, including Docker/Discourse, are a separate execution family rather than extra PHP recipes.
+
 The [catalogue](../../Shared/Platform/ApplicationRecipeCatalogue.php), [Go renderer](../../../agents/wcpd/candidate/planner/application.go) and strict [document](Domain/ApplicationPlanDocument.php) implement inert configuration previews. They do not install an application, database, package or service, reserve listeners, create a durable site/job, enable native activation or establish production compatibility.
 
 | Recipe | Web layer | PHP runtime | Native .htaccess in this recipe |

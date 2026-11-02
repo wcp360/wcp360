@@ -48,11 +48,13 @@ Start with the [change-location index](NAVIGATION.md) to find a function, comman
 
 ## Hosting web stacks
 
-The Core uses one [stack catalogue](src/Shared/Platform/WebStackCatalogue.php) across installer inspection, ROOT settings and the hosting-plan form. Stack topology and PHP execution mode are separate concepts.
+The [adopted web-server strategy](src/Module/Hosting/WEB-SERVER-STRATEGY.md) sets **Nginx → Apache event → PHP-FPM** as the target default for new general-purpose installations, with controlled native .htaccess handling for every request, including static files. The [web-server roadmap](src/Module/Hosting/WEB-SERVER-ROADMAP.md) covers its implementation, alternative PHP stacks, managed native/container applications, Docker/Discourse and measured performance acceptance.
+
+The table below describes the **current candidate**, whose default remains Nginx → PHP-FPM. The new three-layer topology is not implemented or selectable yet; adopting the strategy changes no service or stored assignment. The Core currently uses one [stack catalogue](src/Shared/Platform/WebStackCatalogue.php) across installer inspection, ROOT settings and the hosting-plan form. Stack topology and PHP execution mode are separate concepts.
 
 | Profile | Intended topology | Current implementation |
 | :--- | :--- | :--- |
-| **Classic — default** | Nginx + PHP-FPM; managed multi-version PHP is the target. | Candidate plans and separately guarded isolated FPM activation. One reviewed PHP series today; complete multi-PHP management remains open. |
+| **Classic — current candidate default** | Nginx + PHP-FPM; managed multi-version PHP is the target. | Candidate plans and separately guarded isolated FPM activation. One reviewed PHP series today; complete multi-PHP management remains open. |
 | **Modern** | Standalone Caddy/FrankenPHP Worker, replacing the web server and PHP-FPM. | Separate inert Go driver and ROOT preview implemented for one loopback-only synthetic site. Durable selection, listeners/TLS ownership and activation remain unavailable. |
 | **Legacy / compatibility** | Apache + PHP-FPM for Apache-specific application behavior. | Planned/unavailable. Any future mod_php variant requires its own explicit isolation and qualification decision. |
 | **Advanced mix — optional** | An edge proxy with a separately managed backend. | Existing opt-in Nginx → Caddy/FrankenPHP Worker plans; activation unavailable. Other compositions remain planned. |
