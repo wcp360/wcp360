@@ -30,16 +30,18 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced hosting orchestration across admitted servers: enrollment workflows, trust review, tenant/resource placement, scoped node routing, capacity groups, maintenance/drain waves and fleet care. It coordinates existing per-resource operations and observed outcomes rather than introducing a second authoritative node or customer registry.",
+    "summary":  "Advanced hosting orchestration across admitted servers and separately qualified Web, database, mail, authoritative DNS or mixed node roles: enrollment/trust, placement, scoped routing, capacity groups, maintenance/drain waves and fleet care. Resource owners and role-specific data/recovery semantics stay authoritative; this proposal is not a universal cluster implementation.",
     "core_boundary":  "Single-node hosting, identity/tenant boundaries, service control, local recovery and any future admitted node/provider/transport foundations remain open-source Core responsibilities. This premium module adds multi-server workflow intent and coordination only; it has no raw shell, privileged socket, direct Core database access or implicit authority over remote servers.",
     "acceptance":  [
-                       "Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and version/capability evidence; reject unknown, replaced or replayed identities.",
-                       "Resolve each tenant/resource to authoritative node placement and current route/revision before dispatch; never select a destination solely from a client-supplied node ID.",
-                       "Qualify scheduling and capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from reserved or enforced resources.",
+                       "Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and OS/version/capability evidence; reject unknown, replaced or replayed identities.",
+                       "Declare Web, database, mail, DNS or mixed roles with actual admitted service capabilities, dependencies, capacity and tenancy constraints; no role name proves readiness, high availability or interchangeability.",
+                       "Resolve each tenant/resource to authoritative placement, role-specific owner and current route/revision before dispatch; never choose a destination solely from a client-supplied node ID or copy the resource registry.",
+                       "Qualify scheduling/capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from actual reservations or enforcement.",
                        "Exercise leases/fencing, stale workers, concurrent placement, partitions, delayed acknowledgements and unavailable control paths without cross-tenant effects or competing active owners.",
-                       "Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node results and service-specific recovery.",
-                       "Document which existing workloads continue during controller/provider outage; keep uncertain operations reconcilable instead of blindly replaying them on another node.",
-                       "Qualify resource migration and return-to-service checks with the owning Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, retained recovery points and explicit cutover authority.",
-                       "Disable the premium coordinator without interrupting established node workloads or independent Core control, ownership inventory and recovery on each admitted server."
+                       "Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node receipts and explicit pending/failed/unknown states; convergence is measured, not instantaneous.",
+                       "Qualify Web routing/TLS, database consistency/quorum, mail queue/mailbox/authentication and DNS zone/delegation/serial behavior through each owner before a role migration or cutover.",
+                       "Document which workloads continue during controller/provider outages; reconcile uncertain operations rather than blindly replaying them on another node.",
+                       "Qualify resource migration and return-to-service with Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, independent recovery references and explicit cutover authority.",
+                       "Disable premium coordination without interrupting established workloads or free Core node/provider foundations, ownership inventory, ordinary service control and recovery."
                    ]
 }

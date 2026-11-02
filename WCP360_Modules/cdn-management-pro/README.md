@@ -12,7 +12,7 @@
 
 ## Proposed optional scope
 
-Advanced multi-site CDN/edge orchestration with provider-qualified delivery profiles, origin/DNS binding, cache rules, purge workflows, TLS review and source-attributed cache/availability observations. Specific CDN providers remain connectors and retain their actual capability limits.
+Advanced multi-site CDN/edge orchestration with separately qualified Cloudflare or other provider delivery profiles, origin/DNS binding, cache rules, purge campaigns and TLS review. Provider plans, API permissions, origin-authentication features, cache limits, propagation and cost constraints remain explicit; an account connection never proves every capability.
 
 ## Retained Core boundary
 

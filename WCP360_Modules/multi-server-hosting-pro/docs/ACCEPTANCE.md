@@ -4,14 +4,16 @@
 
 ## Package-specific checks
 
-1. Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and version/capability evidence; reject unknown, replaced or replayed identities.
-2. Resolve each tenant/resource to authoritative node placement and current route/revision before dispatch; never select a destination solely from a client-supplied node ID.
-3. Qualify scheduling and capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from reserved or enforced resources.
-4. Exercise leases/fencing, stale workers, concurrent placement, partitions, delayed acknowledgements and unavailable control paths without cross-tenant effects or competing active owners.
-5. Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node results and service-specific recovery.
-6. Document which existing workloads continue during controller/provider outage; keep uncertain operations reconcilable instead of blindly replaying them on another node.
-7. Qualify resource migration and return-to-service checks with the owning Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, retained recovery points and explicit cutover authority.
-8. Disable the premium coordinator without interrupting established node workloads or independent Core control, ownership inventory and recovery on each admitted server.
+1. Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and OS/version/capability evidence; reject unknown, replaced or replayed identities.
+2. Declare Web, database, mail, DNS or mixed roles with actual admitted service capabilities, dependencies, capacity and tenancy constraints; no role name proves readiness, high availability or interchangeability.
+3. Resolve each tenant/resource to authoritative placement, role-specific owner and current route/revision before dispatch; never choose a destination solely from a client-supplied node ID or copy the resource registry.
+4. Qualify scheduling/capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from actual reservations or enforcement.
+5. Exercise leases/fencing, stale workers, concurrent placement, partitions, delayed acknowledgements and unavailable control paths without cross-tenant effects or competing active owners.
+6. Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node receipts and explicit pending/failed/unknown states; convergence is measured, not instantaneous.
+7. Qualify Web routing/TLS, database consistency/quorum, mail queue/mailbox/authentication and DNS zone/delegation/serial behavior through each owner before a role migration or cutover.
+8. Document which workloads continue during controller/provider outages; reconcile uncertain operations rather than blindly replaying them on another node.
+9. Qualify resource migration and return-to-service with Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, independent recovery references and explicit cutover authority.
+10. Disable premium coordination without interrupting established workloads or free Core node/provider foundations, ownership inventory, ordinary service control and recovery.
 
 ## Shared release and exit checks
 

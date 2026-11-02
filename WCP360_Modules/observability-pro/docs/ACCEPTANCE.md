@@ -4,11 +4,14 @@
 
 ## Package-specific checks
 
-1. Distinguish local measurements, external probes, inferred objectives and stale or absent samples in every view.
-2. Enforce tenant scope on series, traces, labels and dashboard queries before rendering or export.
-3. Bound sample cardinality, retention, aggregation cost, outbound buffers and probe targets.
-4. Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability.
-5. Prove local Core observations and alert fallback remain usable during sink or module outages.
+1. Distinguish local measurements, external probes, inferred objectives and stale/absent samples; record time, source, freshness and vantage point without calling missing telemetry healthy.
+2. Qualify HTTP/HTTPS methods/redirects/TLS/body bounds, TCP connect behavior, DNS query/resolver limits and ICMP capability/privilege handling independently; unsupported protocols remain unavailable.
+3. Bind every probe to an authorized asset or explicitly admitted target. Bound DNS resolution, redirects, destination ranges, rate, concurrency, packet/body size, duration and retries; block metadata/control-plane or unintended internal targets without creating a network scanner.
+4. Enforce tenant scope on series, traces, labels, probes and dashboard queries before rendering/export; redact credentials, tokens, cookies and response secrets.
+5. Bound sample cardinality, retention, aggregation cost, outbound buffers and campaign resource use; protect other tenants and Core local observations from probe exhaustion.
+6. Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability or immediate event propagation.
+7. Emit scoped events through Core-owned notification policy for separately admitted Telegram, SMS, email or other transports; basic alerts remain free, and queued/sent/delivered/acknowledged states require distinct evidence.
+8. Prove local Core monitoring, ordinary alert routing and diagnostic fallback remain usable during sink, channel, module or provider outages.
 
 ## Shared release and exit checks
 

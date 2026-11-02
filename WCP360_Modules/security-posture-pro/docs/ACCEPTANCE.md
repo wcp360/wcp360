@@ -6,12 +6,14 @@
 
 1. Record subject, engine/package version, evidence source/time, freshness and applicability for every posture statement, including unknown and uncollected areas.
 2. Assess identity/secret exposure, configuration drift, TLS and reachable-service policy through qualified bounded observations; do not equate an inventory with a vulnerability scan.
-3. Scope optional advisory/WAF/file-integrity findings to the actual tenant/resource and compatible provider; coordinate with malware, response and DDoS modules without duplicating their case or execution authority.
-4. Qualify check inputs, rate/resource budgets, redaction and permitted network/filesystem visibility against synthetic fixtures; refuse unrestricted scans or root inspection.
-5. Bind remediation proposals to the owning Core use case, current permission, exact resource revision, meaningful diff and supported recovery procedure.
-6. Exercise false positives, revoked actors, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.
-7. Preserve all mandatory baseline controls during disablement, expiry and provider loss; optional scores must never unlock a weaker security policy.
-8. Make reviewed findings and permitted evidence exportable while Core audit, authorized baseline remediation and local incident/recovery access remain independent of this package.
+3. Scope advisory/WAF/file-integrity findings to the actual tenant/resource and provider; coordinate with malware, response and DDoS workflows without duplicating their case or execution authority.
+4. Declare the exact target policy revision, node membership, approved capability matrix, canary/batch budgets and per-node receipts for a cluster policy campaign; distribution is not instantaneous enforcement or cluster-wide success.
+5. Exercise node outages, partitions, stale revisions, revocation and interrupted policy changes. Show applied, pending, rejected, unknown and divergent states separately; reconcile under current authority with supported per-owner recovery.
+6. Preserve the Core-owned baseline firewall/hardening/security policy and management-access recovery on every node; optional profiles cannot weaken mandatory controls or become the only policy path.
+7. Qualify check inputs, rate/resource budgets, redaction and permitted network/filesystem visibility against synthetic fixtures; refuse unrestricted scans or root inspection.
+8. Bind remediation proposals to the owning Core use case, current permission, exact resource revision, meaningful diff and supported recovery procedure.
+9. Exercise false positives, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.
+10. Keep reviewed findings exportable and Core audit, authorized baseline remediation and local incident/recovery access independent of premium entitlement.
 
 ## Shared release and exit checks
 

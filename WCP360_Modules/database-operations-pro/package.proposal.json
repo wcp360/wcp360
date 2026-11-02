@@ -2,7 +2,7 @@
     "schema":  "wcp360.premium-package-proposal/1",
     "id":  "module.database-operations-pro",
     "kind":  "module",
-    "label":  "Database Operations Pro",
+    "label":  "Database Operations \u0026 DBaaS Pro",
     "category":  "data",
     "tier":  "pro",
     "status":  "design",
@@ -17,18 +17,24 @@
     "catalogue_keys":  [
                            "data.replication",
                            "data.postgres-extensions",
-                           "data.external-databases"
+                           "data.external-databases",
+                           "runtime.redis",
+                           "backup.restore-tests"
                        ],
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced database topology workflows covering replication planning, replica initialization, lag review, controlled promotion and qualified extension campaigns. Engine-specific capabilities and external-service limits remain explicit.",
-    "core_boundary":  "Database creation, users/grants, credential rotation, import/export, baseline diagnostics and ordinary backups stay in the free Core. Database Operations adds optional advanced orchestration and never receives the control-plane PostgreSQL credentials.",
+    "summary":  "Advanced database-service portfolio and topology workflows for separately qualified MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera capabilities. Proposed scope includes reviewed DBaaS service profiles, replication/cluster planning, replica initialization, measured lag/quorum, controlled promotion, engine-specific backup/restore and maintenance campaigns; no engine or topology is admitted by this proposal.",
+    "core_boundary":  "Database creation, users/grants, credential rotation, import/export, baseline diagnostics, ordinary engine administration and local backup/restore stay in the free Core. This module adds advanced service/topology orchestration, not a paywall around basic hosted databases. Customer databases/cache clusters never receive control-plane PostgreSQL data or panel Redis queue credentials; a database client is not an engine provider.",
     "acceptance":  [
-                       "Qualify replication and promotion procedures per engine/version/provider; unsupported failover actions must remain unavailable.",
-                       "Verify current topology, fencing, replica lag and recovery-point requirements before a promotion; refuse split-brain conditions.",
-                       "Use narrowly scoped hosted-database identities and separately authorize extension changes through the Data owner.",
-                       "Exercise interrupted initialization, credential revocation, stale topology and failed promotion without silently selecting a new primary.",
-                       "Disabling the module must preserve databases, grants, replication safety and documented engine-specific recovery."
+                       "Define an explicit engine/version/provider/topology and upstream-license matrix for MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera; list unsupported functions rather than treating the names as interchangeable or already supported.",
+                       "Define optional DBaaS service profiles using authoritative tenant accounts, quotas, endpoint/TLS policy, effective capacity and measured service objectives; Core-owned basic database provisioning and administration remain available without this package.",
+                       "Distinguish asynchronous replicas, PostgreSQL promotion mechanisms, Redis Sentinel/Cluster, MongoDB replica sets/shards and Galera multi-primary/quorum semantics; qualify each selected topology and recovery action independently.",
+                       "Verify membership, current topology/revisions, quorum, witness roles, fencing, lag and recovery-point requirements before promotion or membership changes; refuse split-brain and do not promise automatic availability during partitions.",
+                       "Qualify consistent engine-native backups, binary/WAL/oplog or persistence requirements, encryption/key references, retention and isolated restore/PITR checks where actually supported; a replica or snapshot is not an independently verified backup.",
+                       "Use narrowly scoped hosted-database identities and separately authorize engine extension changes through the Data owner; never reuse Core database or queue credentials for customer services.",
+                       "Exercise interrupted initialization, quorum loss, stale topology, credential revocation, engine upgrades and failed promotion with bounded jobs and explicit reconciliation, not silent primary reselection.",
+                       "Publish provider-specific endpoint/client behavior, compatibility and recovery evidence before offering a service profile; absence of evidence is planned/unavailable, not DBaaS readiness.",
+                       "Disabling or expiring orchestration must preserve databases, grants, safe replication state, ordinary Core control and documented engine-specific recovery."
                    ]
 }

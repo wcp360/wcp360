@@ -1,6 +1,6 @@
 {
     "schema":  "wcp360.premium-package-catalogue/1",
-    "count":  43,
+    "count":  44,
     "packages":  [
                      {
                          "schema":  "wcp360.premium-package-proposal/1",
@@ -29,13 +29,15 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "A curated application installation product with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. The 410 editorial references are discovery input; each deliverable recipe requires independent qualification and upstream license review.",
-                         "core_boundary":  "Core retains all 233 essential capabilities, application/resource ownership, ordinary hosting, local backup/recovery and the seven engine adapters. AppInstall Pro adds qualified optional application recipes and orchestration through detached extension contracts; it creates no privileged executor, legal compatibility decision or automatic installability for catalogue entries.",
+                         "summary":  "A curated application store with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. Native and Compose-derived products require separate qualification; the 410 editorial references are discovery input, never 410 installable or license-cleared recipes.",
+                         "core_boundary":  "Core retains all 233 essential capabilities, application/resource ownership, ordinary hosting, local backup/recovery and the seven engine adapters. AppInstall Pro adds qualified optional application recipes and orchestration through detached contracts; a storefront or Compose file cannot supply a privileged executor, legal compatibility decision or automatic installability.",
                          "acceptance":  [
                                             "Qualify each offered recipe on an explicit application/version/OS/architecture/runtime/database/provider matrix; unsupported combinations must remain unavailable.",
-                                            "Pin and verify upstream sources and recipe artifacts, record the applicable upstream licenses and redistribution/source obligations, and refuse unreviewed artifacts or incompatible combinations.",
+                                            "Pin and verify upstream sources, image digests and recipe artifacts; record upstream licenses and redistribution/source obligations, including Nextcloud or other application products, and refuse unreviewed or incompatible combinations.",
                                             "Exercise fresh install, interrupted install, update, supported rollback, backup/restore and removal with owned writable paths, secret references, data retention and per-instance results.",
-                                            "Run dependency installers as the application identity through admitted operations; deny arbitrary executable hooks, shell text, tenant escapes and access to Core credentials.",
+                                            "Admit only explicitly qualified Compose versions and features into a canonical typed workload/resource plan. Reject arbitrary raw YAML passthrough, host sockets, sensitive mounts, privileged/host namespaces, unbounded resource requests and hidden competing managers.",
+                                            "Treat application and build payloads as guest/workload code executed under admitted scoped identities with isolation and budgets; no package or recipe hook becomes a host shell or obtains Core credentials.",
+                                            "Distinguish native application recipes, Docker/Compose workload definitions and externally managed Portainer/Coolify/Dokku resources; select one effect owner instead of two reconcilers silently changing the same deployment.",
                                             "Demonstrate that removing or disabling AppInstall Pro preserves installed applications, canonical resource inventory, local recovery and access through the free Core."
                                         ]
                      },
@@ -169,14 +171,16 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Repository-driven delivery workflows with versioned branch/tag policy, isolated builds, immutable artifact references, environment binding and deployment history. Provider-specific authentication and webhooks remain separately selected connectors.",
-                         "core_boundary":  "Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository content cannot register privileged commands or modify the Core dependency graph.",
+                         "summary":  "Repository-driven CI/CD with versioned branch/tag policy, isolated builds, immutable artifacts, environment binding and deployment history. Qualified native or Compose-derived plans remain scoped deployment intent; Git/webhook and Portainer/Coolify/Dokku integrations are separately admitted connectors, never implicit host executors.",
+                         "core_boundary":  "Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository files, Compose syntax and external managers cannot register privileged commands, gain host sockets, modify Core dependencies or create a competing resource owner.",
                          "acceptance":  [
-                                            "Bind repository identity, permitted revisions and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.",
-                                            "Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded resources and no panel/agent secrets.",
-                                            "Verify artifact identity and provenance before passing an immutable reference to an admitted deployment operation.",
-                                            "Test trigger replay, concurrent pushes, stale resource revisions and missing acknowledgements without duplicate deployment effects.",
-                                            "Keep the last deployed release serving after connector or module failure; retain history and supported recovery references."
+                                            "Bind repository identity, permitted revisions, verified webhook provenance and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.",
+                                            "Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded CPU/RAM/PID/disk/time/network and no panel/agent secrets.",
+                                            "Verify artifact identity, provenance and upstream license obligations before passing an immutable reference to an admitted deployment operation.",
+                                            "Parse only qualified Compose versions/features into the same typed workload plan used by admitted deployment owners; validate services, mounts, networks, ports, dependencies, health checks and effective quotas rather than forwarding raw YAML or shell text.",
+                                            "Choose the authoritative deployment manager for each resource when integrating Portainer, Coolify or Dokku; use declared API capabilities and prohibit concurrent independent reconciliation by this module and that manager.",
+                                            "Test trigger replay, concurrent pushes, revoked actors, stale resource revisions, provider interruption and missing acknowledgements without duplicate deployment effects.",
+                                            "Keep the last deployed release serving after connector or module failure; retain history and supported recovery references without claiming every schema migration is reversible."
                                         ]
                      },
                      {
@@ -218,7 +222,7 @@
                          "schema":  "wcp360.premium-package-proposal/1",
                          "id":  "module.database-operations-pro",
                          "kind":  "module",
-                         "label":  "Database Operations Pro",
+                         "label":  "Database Operations \u0026 DBaaS Pro",
                          "category":  "data",
                          "tier":  "pro",
                          "status":  "design",
@@ -233,19 +237,25 @@
                          "catalogue_keys":  [
                                                 "data.replication",
                                                 "data.postgres-extensions",
-                                                "data.external-databases"
+                                                "data.external-databases",
+                                                "runtime.redis",
+                                                "backup.restore-tests"
                                             ],
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced database topology workflows covering replication planning, replica initialization, lag review, controlled promotion and qualified extension campaigns. Engine-specific capabilities and external-service limits remain explicit.",
-                         "core_boundary":  "Database creation, users/grants, credential rotation, import/export, baseline diagnostics and ordinary backups stay in the free Core. Database Operations adds optional advanced orchestration and never receives the control-plane PostgreSQL credentials.",
+                         "summary":  "Advanced database-service portfolio and topology workflows for separately qualified MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera capabilities. Proposed scope includes reviewed DBaaS service profiles, replication/cluster planning, replica initialization, measured lag/quorum, controlled promotion, engine-specific backup/restore and maintenance campaigns; no engine or topology is admitted by this proposal.",
+                         "core_boundary":  "Database creation, users/grants, credential rotation, import/export, baseline diagnostics, ordinary engine administration and local backup/restore stay in the free Core. This module adds advanced service/topology orchestration, not a paywall around basic hosted databases. Customer databases/cache clusters never receive control-plane PostgreSQL data or panel Redis queue credentials; a database client is not an engine provider.",
                          "acceptance":  [
-                                            "Qualify replication and promotion procedures per engine/version/provider; unsupported failover actions must remain unavailable.",
-                                            "Verify current topology, fencing, replica lag and recovery-point requirements before a promotion; refuse split-brain conditions.",
-                                            "Use narrowly scoped hosted-database identities and separately authorize extension changes through the Data owner.",
-                                            "Exercise interrupted initialization, credential revocation, stale topology and failed promotion without silently selecting a new primary.",
-                                            "Disabling the module must preserve databases, grants, replication safety and documented engine-specific recovery."
+                                            "Define an explicit engine/version/provider/topology and upstream-license matrix for MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera; list unsupported functions rather than treating the names as interchangeable or already supported.",
+                                            "Define optional DBaaS service profiles using authoritative tenant accounts, quotas, endpoint/TLS policy, effective capacity and measured service objectives; Core-owned basic database provisioning and administration remain available without this package.",
+                                            "Distinguish asynchronous replicas, PostgreSQL promotion mechanisms, Redis Sentinel/Cluster, MongoDB replica sets/shards and Galera multi-primary/quorum semantics; qualify each selected topology and recovery action independently.",
+                                            "Verify membership, current topology/revisions, quorum, witness roles, fencing, lag and recovery-point requirements before promotion or membership changes; refuse split-brain and do not promise automatic availability during partitions.",
+                                            "Qualify consistent engine-native backups, binary/WAL/oplog or persistence requirements, encryption/key references, retention and isolated restore/PITR checks where actually supported; a replica or snapshot is not an independently verified backup.",
+                                            "Use narrowly scoped hosted-database identities and separately authorize engine extension changes through the Data owner; never reuse Core database or queue credentials for customer services.",
+                                            "Exercise interrupted initialization, quorum loss, stale topology, credential revocation, engine upgrades and failed promotion with bounded jobs and explicit reconciliation, not silent primary reselection.",
+                                            "Publish provider-specific endpoint/client behavior, compatibility and recovery evidence before offering a service profile; absence of evidence is planned/unavailable, not DBaaS readiness.",
+                                            "Disabling or expiring orchestration must preserve databases, grants, safe replication state, ordinary Core control and documented engine-specific recovery."
                                         ]
                      },
                      {
@@ -449,17 +459,19 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, software advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence, tracks reviewed exceptions and produces scoped remediation proposals; scanner investigations, active incident response and DDoS orchestration remain separate workflows.",
+                         "summary":  "Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence and reviewed exceptions, and plans staged multi-node policy campaigns with explicit per-node convergence; investigations, active response and DDoS workflows retain their own owners.",
                          "core_boundary":  "All essential security, tenant isolation, credential/MFA/session protections, host hardening, firewall policy, baseline protection, audit and local recovery remain in the free Core. Cybersecurity Posture adds comparative assessments and exception/evidence workflows, without a second policy authority, raw shell or entitlement-based relaxation of mandatory controls.",
                          "acceptance":  [
                                             "Record subject, engine/package version, evidence source/time, freshness and applicability for every posture statement, including unknown and uncollected areas.",
                                             "Assess identity/secret exposure, configuration drift, TLS and reachable-service policy through qualified bounded observations; do not equate an inventory with a vulnerability scan.",
-                                            "Scope optional advisory/WAF/file-integrity findings to the actual tenant/resource and compatible provider; coordinate with malware, response and DDoS modules without duplicating their case or execution authority.",
+                                            "Scope advisory/WAF/file-integrity findings to the actual tenant/resource and provider; coordinate with malware, response and DDoS workflows without duplicating their case or execution authority.",
+                                            "Declare the exact target policy revision, node membership, approved capability matrix, canary/batch budgets and per-node receipts for a cluster policy campaign; distribution is not instantaneous enforcement or cluster-wide success.",
+                                            "Exercise node outages, partitions, stale revisions, revocation and interrupted policy changes. Show applied, pending, rejected, unknown and divergent states separately; reconcile under current authority with supported per-owner recovery.",
+                                            "Preserve the Core-owned baseline firewall/hardening/security policy and management-access recovery on every node; optional profiles cannot weaken mandatory controls or become the only policy path.",
                                             "Qualify check inputs, rate/resource budgets, redaction and permitted network/filesystem visibility against synthetic fixtures; refuse unrestricted scans or root inspection.",
                                             "Bind remediation proposals to the owning Core use case, current permission, exact resource revision, meaningful diff and supported recovery procedure.",
-                                            "Exercise false positives, revoked actors, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.",
-                                            "Preserve all mandatory baseline controls during disablement, expiry and provider loss; optional scores must never unlock a weaker security policy.",
-                                            "Make reviewed findings and permitted evidence exportable while Core audit, authorized baseline remediation and local incident/recovery access remain independent of this package."
+                                            "Exercise false positives, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.",
+                                            "Keep reviewed findings exportable and Core audit, authorized baseline remediation and local incident/recovery access independent of premium entitlement."
                                         ]
                      },
                      {
@@ -554,19 +566,24 @@
                                                 "observe.prometheus",
                                                 "observe.opentelemetry",
                                                 "observe.grafana",
-                                                "observe.synthetics"
+                                                "observe.synthetics",
+                                                "notify.sms",
+                                                "notify.team-messaging"
                                             ],
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry sources. Optional external collection and synthetic scenarios are explicitly scoped, budgeted and source-attributed.",
-                         "core_boundary":  "Core retains required metrics/history, service checks, local alerts, incidents, audit and diagnostics. This module adds comparative objectives and richer visualization; it does not become the only health display or replace Core telemetry authority.",
+                         "summary":  "Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry and bounded HTTP/HTTPS, TCP, DNS and ICMP observations where admitted. Source/time, freshness, probe vantage point and provider limits remain visible; basic local monitoring and notification channels are free Core responsibilities.",
+                         "core_boundary":  "Core retains required metrics/history, ordinary HTTP/TCP/DNS/ICMP checks where admitted, local alerts/incidents, diagnostics and essential notification routing. This module adds comparative objectives, richer visualization and advanced multi-vantage campaigns; Telegram/SMS/email transport connectors do not replace Core notification ownership or make premium necessary for basic alerts.",
                          "acceptance":  [
-                                            "Distinguish local measurements, external probes, inferred objectives and stale or absent samples in every view.",
-                                            "Enforce tenant scope on series, traces, labels and dashboard queries before rendering or export.",
-                                            "Bound sample cardinality, retention, aggregation cost, outbound buffers and probe targets.",
-                                            "Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability.",
-                                            "Prove local Core observations and alert fallback remain usable during sink or module outages."
+                                            "Distinguish local measurements, external probes, inferred objectives and stale/absent samples; record time, source, freshness and vantage point without calling missing telemetry healthy.",
+                                            "Qualify HTTP/HTTPS methods/redirects/TLS/body bounds, TCP connect behavior, DNS query/resolver limits and ICMP capability/privilege handling independently; unsupported protocols remain unavailable.",
+                                            "Bind every probe to an authorized asset or explicitly admitted target. Bound DNS resolution, redirects, destination ranges, rate, concurrency, packet/body size, duration and retries; block metadata/control-plane or unintended internal targets without creating a network scanner.",
+                                            "Enforce tenant scope on series, traces, labels, probes and dashboard queries before rendering/export; redact credentials, tokens, cookies and response secrets.",
+                                            "Bound sample cardinality, retention, aggregation cost, outbound buffers and campaign resource use; protect other tenants and Core local observations from probe exhaustion.",
+                                            "Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability or immediate event propagation.",
+                                            "Emit scoped events through Core-owned notification policy for separately admitted Telegram, SMS, email or other transports; basic alerts remain free, and queued/sent/delivered/acknowledged states require distinct evidence.",
+                                            "Prove local Core monitoring, ordinary alert routing and diagnostic fallback remain usable during sink, channel, module or provider outages."
                                         ]
                      },
                      {
@@ -628,13 +645,14 @@
 
                                           ],
                          "summary":  "Advanced incident cases, response coordination, on-call workflow integration and reviewed public-status drafting. It correlates existing authorized evidence and connector receipts without replacing local alerts.",
-                         "core_boundary":  "Core retains essential incidents, local notifications and verified ROOT fallback. This module adds team coordination and publication workflows; connector delivery does not prove acknowledgement, and no message is sent without the authorized operation.",
+                         "core_boundary":  "Core retains essential incidents, local notifications, ordinary email/SMS/Telegram or other admitted channel routing and verified ROOT fallback. This module adds advanced team/on-call coordination and reviewed publication workflows; connector delivery does not prove acknowledgement, and optional entitlement never gates basic operational alerts.",
                          "acceptance":  [
                                             "Keep incident membership, evidence visibility and public/private status content explicitly scoped.",
-                                            "Distinguish queued, sent, acknowledged and failed notifications using connector evidence and bounded retries.",
+                                            "Resolve channel ownership, recipient identity and current notification permission through Core policy for Telegram, SMS, email and other admitted transports; external contacts and connector credentials remain scoped.",
+                                            "Distinguish queued, provider-accepted, sent, delivered where evidenced, acknowledged and failed notifications with receipts, deduplication and bounded retries; do not claim instantaneous delivery.",
                                             "Require authorized review for external publication and prevent sensitive host/customer data from entering public drafts.",
-                                            "Exercise connector outages, duplicate events, shift changes and concurrent incident updates with current-authority checks.",
-                                            "Disabling the module must preserve local incident history, Core alerts and independent response access."
+                                            "Exercise connector outages, duplicate events, shift changes, channel revocation and concurrent incident updates with current-authority checks and Core local fallback.",
+                                            "Disabling the module must preserve local incident history, ordinary free Core alerts and independent response access."
                                         ]
                      },
                      {
@@ -730,14 +748,15 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced agency portfolio workspaces with scoped branding, client-facing views, resource links and coordinated handoffs. Optional support-system connectors can enrich workflows without becoming the source of technical ownership.",
-                         "core_boundary":  "Core keeps customer/reseller lifecycle, ordinary delegation, plans, quotas and essential UI. This module adds portfolio productivity and branding within existing scope; no paid workspace can hide operator identity, weaken security messages or become necessary for client hosting access.",
+                         "summary":  "Advanced agency and reseller portfolio workspaces with scoped branding, cross-account productivity views, reviewed client handoffs and optional support-system integration. It reuses free Core reseller packages, templates, quotas, assignments and delegation rather than selling an alternative account or hosting-plan authority.",
+                         "core_boundary":  "Core Tenancy retains customer/reseller lifecycle, resource ceilings, plan/package and template builders, quota rules, versioning, assignments, scoped overrides, ordinary delegation and essential UI. This module adds advanced portfolio productivity and branding only; no paid workspace can gate those features, change tenant authority, hide operator identity or become necessary for hosting access.",
                          "acceptance":  [
-                                            "Resolve workspace/client/resource relationships through Core ownership and reseller ceilings rather than copying an authority ledger.",
-                                            "Apply branding only through reviewed declarative assets while retaining security, consent and operator context.",
-                                            "Test client isolation, staff revocation and cross-workspace links across all embedded views.",
-                                            "Preserve language/accessibility fallback and usable Core navigation when the workspace is disabled.",
-                                            "Keep support records and customer data exportable under explicit retention and handoff policy."
+                                            "Resolve agency/reseller/client/resource relationships through Core ownership, delegation and reseller ceilings rather than copying an authority or quota ledger.",
+                                            "Keep hosting package/template creation, versioning, account assignment, quota enforcement and scoped overrides usable through free Core Tenancy; premium views only reference and orchestrate admitted existing operations.",
+                                            "Scope cross-account portfolio views and handoffs to currently delegated resources; test nested resellers, staff revocation, wrong-tenant links and effective ceilings.",
+                                            "Apply branding only through reviewed declarative assets while retaining security, consent and operator context; white labeling never changes identity or permission.",
+                                            "Preserve language/accessibility fallback and usable Core account/hosting-plan navigation when the workspace is disabled.",
+                                            "Keep support records, portfolio preferences and permitted customer data exportable under explicit retention and handoff policy without blocking independent Core access."
                                         ]
                      },
                      {
@@ -905,22 +924,26 @@
                                                 "storage.ceph",
                                                 "storage.glusterfs",
                                                 "storage.object-storage",
-                                                "storage.raid-lvm"
+                                                "storage.raid-lvm",
+                                                "storage.nfs",
+                                                "storage.smb"
                                             ],
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced storage lifecycle orchestration covering performance/resilience tiers, pools, volumes, measured capacity, encryption-key references, snapshots, replication and controlled migration across qualified local or distributed providers. Each engine\u0027s durability, consistency, effective quota and restore semantics remain explicit.",
+                         "summary":  "Advanced storage lifecycle orchestration across separately qualified local, GlusterFS and Ceph block/file/object providers: tiers, pools, volumes, capacity, key references, snapshots, replication and controlled migration. S3-compatible endpoints are object-service capabilities, while Nextcloud is a separately qualified application consuming storage, not an S3 server or filesystem engine.",
                          "core_boundary":  "Core retains essential local storage/device policy, filesystem quotas, ownership, encryption boundaries, ordinary snapshots where admitted and local backup/restore. This module adds advanced cross-pool/provider policy and orchestration; native storage/provider foundations remain open source, and no package receives arbitrary device paths, raw mount commands or the only recovery key.",
                          "acceptance":  [
-                                            "Qualify each engine/version/topology and storage tier using observed latency, resilience and durability characteristics; a tier name never proves performance or redundancy.",
-                                            "Resolve authoritative pool/volume identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.",
+                                            "Qualify each engine/version/topology and storage tier using measured latency, durability, consistency and resilience; distinguish Ceph RBD block, CephFS file, RGW object and GlusterFS file capabilities rather than claiming equivalence.",
+                                            "Resolve authoritative pool/volume/bucket/share identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.",
+                                            "Admit NFS/SMB/object gateways only under qualified identity, protocol, mount and network models; S3 API compatibility does not establish POSIX semantics, every S3 feature or durability guarantees.",
+                                            "Treat Nextcloud as an application with its own database, data directory/object-store compatibility, locking/background jobs, upstream license and backup/restore evidence; do not advertise it as an S3 server or bypass its application data lifecycle.",
                                             "Review encryption-at-rest support, key references, rotation, escrow/recovery and failure behavior without exporting plaintext keys into package data or logs.",
                                             "Coordinate snapshots with application/database consistency and retention; a local snapshot is not evidence of an independent backup or a tested restore.",
-                                            "Qualify replication direction, lag, snapshot compatibility, fencing and recovery-point selection before an orchestrated promotion or migration.",
-                                            "Exercise full pools, read-only filesystems, interrupted copies, failed mounts, concurrent changes and lost connectivity with explicit uncertain outcomes and reconciliation.",
-                                            "Refuse destructive pool/volume/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.",
-                                            "Removing or expiring orchestration must preserve mounted workloads, Core storage control, retained snapshots/backups, key recovery and a supported service-specific exit route."
+                                            "Qualify replication direction, lag, consistency, fencing and recovery-point selection before promotion or migration; distinguish a resilient storage pool from application-level service availability.",
+                                            "Exercise full pools, failed disks, read-only filesystems, interrupted copies, failed mounts, concurrent changes and partitions with explicit uncertainty and reconciliation.",
+                                            "Refuse destructive pool/volume/bucket/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.",
+                                            "Removing orchestration must preserve mounted workloads, ordinary Core storage control, retained recovery material, key access and a supported service-specific exit route."
                                         ]
                      },
                      {
@@ -986,14 +1009,16 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced load-balancer, global-routing and overlay-network orchestration with reviewed listener/upstream policies, measured checks and staged changes across qualified providers. CDN cache/content delivery is owned by CDN Management Pro, DDoS-response policy by DDoS Defense Pro and workload placement by Multi-server Hosting Pro.",
+                         "summary":  "Advanced load-balancer, global-routing, ingress and overlay-network orchestration with reviewed listeners/upstreams, measured checks and staged changes across qualified HAProxy, Traefik, Nginx Proxy Manager or other providers. Provider connectors supply admitted capabilities; CDN cache/content delivery, DDoS response and workload placement retain distinct workflow owners.",
                          "core_boundary":  "Core retains baseline IP/network/firewall administration, native gateway/provider foundations, management-access recovery and the seven essential engine adapters. This module coordinates advanced traffic policy through accepted owned operations, not arbitrary scans, tunnels, raw firewall commands or a competing routing authority.",
                          "acceptance":  [
-                                            "Map public/private listeners, routing authority, certificates and allowed upstreams before accepting a traffic plan.",
-                                            "Qualify protocol, source-address, timeout and health semantics for each selected provider combination.",
-                                            "Test management lockout prevention, failed configuration checks, lost connectivity and supported rollback.",
-                                            "Constrain probe and tunnel destinations, rate limits and credentials; reject metadata/control-plane reachability.",
-                                            "Disable new automation without removing current routing or the Core\u0027s independent network recovery route."
+                                            "Map public/private listeners, domain/tenant routing authority, certificate ownership and allowed upstreams before accepting a traffic plan.",
+                                            "Qualify each HAProxy, Traefik or Nginx Proxy Manager API/version/profile, protocols, source-address handling, TLS termination, timeout and health semantics; their capabilities are not interchangeable or already admitted.",
+                                            "Choose one authoritative ingress/reverse-proxy controller for each resource; reconcile external-manager changes through declared contracts rather than running competing reconcilers or exposing raw config/root sockets.",
+                                            "Keep current Nginx -\u003e Apache -\u003e FPM all-request Apache authorization and protected-file semantics; an ingress provider does not authorize edge direct-file or response-cache bypass.",
+                                            "Test management lockout prevention, failed configuration checks, stale routes, lost connectivity and supported rollback with current authority and resource revisions.",
+                                            "Constrain probe, tunnel and upstream destinations, budgets, credentials and egress; reject unauthorized metadata/control-plane reachability and arbitrary network scans.",
+                                            "Disable new orchestration without removing established routing or the free Core\u0027s independent DNS/TLS/network administration and recovery route."
                                         ]
                      },
                      {
@@ -1061,11 +1086,12 @@
                          "summary":  "Advanced guided diagnostic cases combining named bounded checks, evidence comparison and reviewed repair proposals across service owners. It packages reusable investigation runbooks rather than exposing a terminal.",
                          "core_boundary":  "Core retains baseline diagnostics, local checks, safe error reporting and ordinary repair operations. The Toolbox adds optional guided workflows; developer tools, arbitrary shell/SQL execution and root process control are outside its product interface.",
                          "acceptance":  [
-                                            "Catalogue each check with fixed inputs, permissions, resource/tenant scope, budgets and explicit unavailable states.",
+                                            "Catalogue each named check with fixed typed inputs, permissions, resource/tenant scope, budgets and explicit unavailable states.",
+                                            "For HTTP/HTTPS, TCP, DNS or ICMP check bundles, require admitted protocols/targets, bounded resolution/redirects, time/rate/size/concurrency and correct capability/privilege handling; no unrestricted scanner or raw shell is exposed.",
                                             "Treat paths, logs and returned diagnostics as untrusted data; redact secrets and prevent output from becoming executable markup or instructions.",
-                                            "Keep observation and repair separate; a repair invokes the owning module\u0027s qualified operation with current authority and recovery evidence.",
-                                            "Test malicious arguments, resource exhaustion, failed checks and source outages without fabricating healthy states.",
-                                            "Preserve Core diagnostic access and independent repair/recovery when the Toolbox is removed."
+                                            "Keep observation and repair separate; a repair invokes the owning module\u0027s qualified operation with current authority, resource revision and recovery evidence.",
+                                            "Test malicious arguments, wrong-tenant/internal-control targets, exhaustion, failed checks and source outages without fabricating healthy states.",
+                                            "Preserve free Core diagnostics, ordinary local/remote checks where admitted, essential alerts and independent repair/recovery when Toolbox is removed."
                                         ]
                      },
                      {
@@ -1315,17 +1341,19 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced hosting orchestration across admitted servers: enrollment workflows, trust review, tenant/resource placement, scoped node routing, capacity groups, maintenance/drain waves and fleet care. It coordinates existing per-resource operations and observed outcomes rather than introducing a second authoritative node or customer registry.",
+                         "summary":  "Advanced hosting orchestration across admitted servers and separately qualified Web, database, mail, authoritative DNS or mixed node roles: enrollment/trust, placement, scoped routing, capacity groups, maintenance/drain waves and fleet care. Resource owners and role-specific data/recovery semantics stay authoritative; this proposal is not a universal cluster implementation.",
                          "core_boundary":  "Single-node hosting, identity/tenant boundaries, service control, local recovery and any future admitted node/provider/transport foundations remain open-source Core responsibilities. This premium module adds multi-server workflow intent and coordination only; it has no raw shell, privileged socket, direct Core database access or implicit authority over remote servers.",
                          "acceptance":  [
-                                            "Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and version/capability evidence; reject unknown, replaced or replayed identities.",
-                                            "Resolve each tenant/resource to authoritative node placement and current route/revision before dispatch; never select a destination solely from a client-supplied node ID.",
-                                            "Qualify scheduling and capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from reserved or enforced resources.",
+                                            "Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and OS/version/capability evidence; reject unknown, replaced or replayed identities.",
+                                            "Declare Web, database, mail, DNS or mixed roles with actual admitted service capabilities, dependencies, capacity and tenancy constraints; no role name proves readiness, high availability or interchangeability.",
+                                            "Resolve each tenant/resource to authoritative placement, role-specific owner and current route/revision before dispatch; never choose a destination solely from a client-supplied node ID or copy the resource registry.",
+                                            "Qualify scheduling/capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from actual reservations or enforcement.",
                                             "Exercise leases/fencing, stale workers, concurrent placement, partitions, delayed acknowledgements and unavailable control paths without cross-tenant effects or competing active owners.",
-                                            "Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node results and service-specific recovery.",
-                                            "Document which existing workloads continue during controller/provider outage; keep uncertain operations reconcilable instead of blindly replaying them on another node.",
-                                            "Qualify resource migration and return-to-service checks with the owning Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, retained recovery points and explicit cutover authority.",
-                                            "Disable the premium coordinator without interrupting established node workloads or independent Core control, ownership inventory and recovery on each admitted server."
+                                            "Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node receipts and explicit pending/failed/unknown states; convergence is measured, not instantaneous.",
+                                            "Qualify Web routing/TLS, database consistency/quorum, mail queue/mailbox/authentication and DNS zone/delegation/serial behavior through each owner before a role migration or cutover.",
+                                            "Document which workloads continue during controller/provider outages; reconcile uncertain operations rather than blindly replaying them on another node.",
+                                            "Qualify resource migration and return-to-service with Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, independent recovery references and explicit cutover authority.",
+                                            "Disable premium coordination without interrupting established workloads or free Core node/provider foundations, ownership inventory, ordinary service control and recovery."
                                         ]
                      },
                      {
@@ -1357,17 +1385,19 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced Docker/OCI workload lifecycle management: reviewed images/build provenance, scoped containers and application groups, private networks, ports, volumes, secret references, effective quotas, logs/health, coordinated updates and verified backups. Every exposed operation depends on an explicitly admitted provider and owned resource.",
+                         "summary":  "Advanced Docker/OCI and admitted Compose workload orchestration: reviewed images/build provenance, application groups, networks, ports, volumes, secrets, effective budgets, health/logs, coordinated updates and restore. Qualified Portainer, Coolify or Dokku connectors can supply declared managed-resource capabilities; they are distinct external products, not interchangeable Docker engines.",
                          "core_boundary":  "Essential native hosting, storage, isolation, permissions and any future qualified Docker/provider foundations remain open source. This module adds advanced workload orchestration through Core contracts; it never hands a tenant or package the host Docker socket, unrestricted daemon API, privileged containers, raw root commands or Core credentials.",
                          "acceptance":  [
                                             "Qualify Docker/OCI versions and rootful/rootless assumptions, peer identity, cgroup delegation and actual CPU/RAM/PID/storage/log enforcement before declaring support.",
-                                            "Pin images to reviewed immutable digests with upstream source/license and provenance checks; isolate builds and refuse unreviewed image/build privileges.",
-                                            "Map tenant workload identity, UID/GID policy, allowed mounts, ports and network/egress ownership; refuse host sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.",
-                                            "Manage volume data, consistency boundaries, database dependencies, encryption/secret references and retention explicitly rather than treating container recreation as data recovery.",
-                                            "Bound logs, exec-like diagnostic capabilities, health checks and resource observations; module APIs cannot become arbitrary container or host command dispatch.",
-                                            "Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, health evidence and per-workload outcomes.",
-                                            "Rehearse backup/restore of application data plus required configuration/secrets references on isolated targets; test failed pulls, full storage, daemon loss and interrupted updates.",
-                                            "On expiry/removal, stop new premium orchestration safely while containers, data, ordinary Core provider control and independent recovery remain available."
+                                            "Pin images to reviewed immutable digests with upstream license/provenance checks; isolate builds and refuse unreviewed image/build privileges.",
+                                            "Admit Compose versions/features through a canonical typed plan; validate service identities, dependencies, mounts, networks, ports, health and effective budgets rather than sending arbitrary raw YAML or shell text to a daemon.",
+                                            "Map tenant UID/GID, allowed mounts, ports and network/egress ownership; refuse host Docker sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.",
+                                            "Select one authoritative effect/reconciliation owner per deployment when using Portainer, Coolify or Dokku. Connector capabilities, manager-owned metadata and Core resource mappings must be version-qualified; no two managers silently mutate the same workload.",
+                                            "Manage volumes, database consistency, encryption/secret references and retention explicitly; container recreation is not data recovery.",
+                                            "Bound logs, named diagnostic capabilities, health checks and observations; this product cannot become arbitrary container/host exec or an unrestricted daemon API.",
+                                            "Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, measured health and per-workload outcomes.",
+                                            "Rehearse isolated backup/restore of application data and required configuration/secret references; test failed pulls, full storage, daemon/manager loss and interrupted updates.",
+                                            "On expiry/removal preserve workloads, data, ordinary free Core provider control and independent recovery while stopping new premium orchestration safely."
                                         ]
                      },
                      {
@@ -1530,20 +1560,20 @@
                          "dependencies":  [
 
                                           ],
-                         "summary":  "Advanced multi-site CDN/edge orchestration with provider-qualified delivery profiles, origin/DNS binding, cache rules, purge workflows, TLS review and source-attributed cache/availability observations. Specific CDN providers remain connectors and retain their actual capability limits.",
+                         "summary":  "Advanced multi-site CDN/edge orchestration with separately qualified Cloudflare or other provider delivery profiles, origin/DNS binding, cache rules, purge campaigns and TLS review. Provider plans, API permissions, origin-authentication features, cache limits, propagation and cost constraints remain explicit; an account connection never proves every capability.",
                          "core_boundary":  "Core domain/DNS/TLS authority, ordinary caching/compression, origin security and essential hosting remain free. The current Nginx -\u003e Apache -\u003e FPM target routes all content, including static files, through Apache with edge direct-file/response-cache off by default. This module adds advanced CDN policy coordination only; no protected/private response may move to an edge cache without explicitly admitted, versioned semantics, and no proprietary edge service becomes necessary for Core hosting or recovery.",
                          "acceptance":  [
-                                            "Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before requesting an edge change.",
-                                            "Qualify origin TLS, certificate/hostname validation, SNI, origin authentication, direct-origin exposure policy and management-recovery access without disabling mandatory checks.",
-                                            "Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for logged-in users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods to prevent poisoning or cross-account disclosure.",
-                                            "Preserve all-request Apache authorization in the current Nginx -\u003e Apache -\u003e FPM target: default edge-cache/direct-file remains disabled, including for CSS/assets protected by nested .htaccess or directory access rules.",
-                                            "Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content tests before any CDN cache policy or authority handoff; compression and CDN connectivity do not authorize public caching.",
-                                            "Qualify compression negotiation, variant isolation, double-compression prevention, effective resource budgets and supported rollback. Secret-bearing dynamic compression requires its own risk/correctness decision and must remain bypassed when unqualified.",
-                                            "Implement bounded scoped purge/invalidation with provider receipts, replay handling and explicit propagation uncertainty; acceptance is not global purge completion.",
-                                            "Constrain rewrites, redirects, upstream destinations, compression and edge-worker features to admitted capabilities and separately reviewed code where applicable.",
-                                            "Measure cache correctness, origin/offload behavior, stale responses, error rates and request costs for each provider/profile; avoid treating CDN activation as proof of faster or safer delivery.",
-                                            "Exercise provider outage, credential rotation/revocation, DNS/certificate changes and failed deployments with a documented service-specific exit/recovery path.",
-                                            "Disabling premium orchestration must preserve current delivery policy and independent Core origin/DNS/TLS control; provider removal requires dependency review rather than silently breaking sites."
+                                            "Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before an edge change.",
+                                            "Qualify exact provider/API/version/plan limits and separately admitted features, including Cloudflare proxy/cache rules, certificate modes, origin authentication, purge scope/rate and request/body limits; do not promise all plans or features.",
+                                            "Require validated origin TLS, hostname/SNI/certificate checks and any admitted origin authentication; visitor-edge encryption alone or an encryption-only origin mode is not verified origin identity. Review direct-origin exposure and management recovery separately.",
+                                            "Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for authenticated users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods.",
+                                            "Preserve all-request Apache authorization in the current Nginx -\u003e Apache -\u003e FPM target: edge-cache/direct-file stays off by default, including CSS/assets protected by nested .htaccess or directory rules.",
+                                            "Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content checks before any CDN cache policy or authority handoff; connectivity or compression is not permission for public caching.",
+                                            "Qualify compression negotiation, variant separation, double-compression prevention, budgets and rollback. Secret-bearing dynamic compression needs its own risk/correctness decision and stays bypassed when unqualified.",
+                                            "Bound scoped purge/invalidation using provider receipts, replay control and measured propagation uncertainty; provider acceptance is not immediate global completion.",
+                                            "Constrain rewrites, redirects, upstream destinations and edge-worker features to admitted capabilities and reviewed code; ingress Traefik/Nginx Proxy Manager workflows remain under Network Traffic rather than creating a competing CDN owner.",
+                                            "Measure correctness, origin/offload behavior, stale responses, error rates and costs per profile; activation alone proves neither speed nor protection.",
+                                            "Exercise provider outage, credentials revocation/rotation and DNS/certificate changes with an explicit exit route; disabling orchestration preserves delivery and independent free Core DNS/TLS/origin control."
                                         ]
                      },
                      {
@@ -1585,6 +1615,51 @@
                                             "Test provider outage, signal loss, replay, stale rules, normal traffic spikes, exemptions and failed recovery using bounded synthetic fixtures or explicitly authorized isolated labs only.",
                                             "Record observed service availability, filtering consequences, errors and recovery under stated conditions; do not claim guaranteed DDoS protection or generate public/third-party attack traffic.",
                                             "Disable new premium response automation safely while baseline Core protections, existing provider policy, local incidents and independent recovery remain available."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.dns-tls-orchestration-pro",
+                         "kind":  "module",
+                         "label":  "DNS \u0026 TLS Orchestration Pro",
+                         "category":  "networking",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "IdentityAccess",
+                                             "Tenancy",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "domains.cloudflare",
+                                                "domains.route53",
+                                                "domains.dns-providers",
+                                                "domains.dns01",
+                                                "domains.acme-authorities",
+                                                "domains.domain-monitoring",
+                                                "domains.global-routing"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced DNS/TLS portfolio campaigns across qualified providers and admitted nodes: reviewed imports/reconciliation, coordinated changes, staged DNS propagation and certificate rollout, expiry/drift evidence and service-specific recovery. Domain/zone/certificate owners and provider connectors remain distinct; this proposal does not implement an authoritative DNS server or certificate authority.",
+                         "core_boundary":  "Ordinary local/global DNS records and zones, PowerDNS or other admitted Core engine support, DNSSEC, ACME issuance/renewal/deployment, wildcard certificates with DNS-01, permissions and basic automation remain free Core responsibilities. Premium adds optional advanced cross-provider/cross-node portfolio campaigns and evidence, never the only renewal path, a second zone/certificate authority or payment-gated DNS/TLS safety.",
+                         "acceptance":  [
+                                            "Resolve portfolio domains, zones, delegations, certificates, nodes and provider identities to authoritative Core owners and current revisions; review imported differences without taking over unrelated records or copying the DNS registry.",
+                                            "Qualify each provider/API/version and authoritative engine capability separately, including PowerDNS through Core-owned adapters. Keep provider transports in connectors and preserve free DNS records/zones, DNSSEC, ACME, DNS-01 wildcard issuance and ordinary renewal/deployment.",
+                                            "Review imports, merges, conflicts and scoped reconciliation using typed records, DNS semantics, serial/delegation policy and current permissions; no raw zone/config injection or unrestricted provider credentials.",
+                                            "Use versioned campaigns with explicit node/provider scope, canary/batch budgets, idempotency, leases/fencing and per-target receipts; exercise partitions, stale workers, revoked credentials and partial outcomes without instantaneous-convergence claims.",
+                                            "Measure DNS observations from bounded authorized vantage points with TTL, negative caching, resolver/delegation and freshness recorded; an accepted API update or observed resolver answer is not proof of universal propagation.",
+                                            "Stage certificate issuance/renewal and deployment through existing owned operations, scoped DNS-01 permissions and secret references; qualify CA rate/issuance constraints, challenge cleanup, wildcard/apex/SAN identity and key retention without exposing private keys.",
+                                            "Verify hostname/SNI/chain/expiry and each consuming Web/mail/ingress endpoint after deployment; a certificate file or issued serial alone is not evidence that every service presents the intended identity.",
+                                            "Qualify DNSSEC rollover, delegation/provider moves and certificate changes with owner-admitted sequencing and service-specific recovery; destructive rollback cannot assume prior DNS/cache state is instantly restored.",
+                                            "Keep unknown, pending, divergent and failed targets visible with correlation and bounded retries; separate delivery receipts, deployed revisions and measured DNS/TLS observations.",
+                                            "On expiry, disablement or removal preserve DNS serving, certificates/private keys under their Core owner, free renewal/automation, independent control and documented migration/recovery; provider exit must account for active dependencies."
                                         ]
                      }
                  ]

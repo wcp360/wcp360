@@ -7,6 +7,8 @@ Proposal: `plugin.crowdsec-defense-pro`. State: **design / not installable**. Th
 - [ ] Qualify selected CrowdSec interfaces, admitted signal sources and tenant-safe decision scopes with redacted telemetry and explicit data-sharing consent.
 - [ ] Stage defensive decisions with reviewed expiry, trusted client-IP provenance, false-positive rollback and current Core authorization before any native enforcement.
 - [ ] Exercise provider outage, stale decisions, forged signals and operator lockout recovery; local L7 or firewall controls cannot guarantee protection against upstream L3/L4 saturation.
+- [ ] Track observation, admission and effective enforcement per node with explicit applied, failed or unknown outcomes; provider decisions, local caches and polling do not guarantee immediate global blocking.
+- [ ] Qualify delayed propagation, network partitions, expiry, trusted proxy client-IP attribution and rollback under a single admitted enforcement owner without exposing bouncer/agent credentials.
 - [ ] Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.
 - [ ] Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.
 - [ ] Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested.

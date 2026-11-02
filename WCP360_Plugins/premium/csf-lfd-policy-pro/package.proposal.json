@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.csf-lfd-policy-pro",
+    "kind":  "plugin",
+    "label":  "CSF and lfd policy evidence connector",
+    "category":  "security-defense",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "security.threat-intel",
+                           "security.siem",
+                           "automation.event-rules"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare CSF/lfd evidence import and reviewed clustering-policy interoperability without replacing free Core firewall control.",
+    "core_boundary":  "This is optional evidence/coordination, not a paid native firewall driver. No upstream fork is selected, no separate official ClusterCSF product is assumed and no CSF/root command reaches the plugin. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Record source/fork provenance, maintenance policy, artifact integrity and exact supported platform before any qualification; the cPanel-maintained fork is evidence of a distinct source, not automatic WCP360 compatibility.",
+                       "Start with bounded redacted observations/exports; qualify any lfd peer/clustering profile, credentials, fan-out scope and conflicting-writer refusal separately through Core.",
+                       "Exercise stale peer decisions, replay, partitions, expiry, false positives and operator lockout recovery; never propagate every detection as an immediate global block or change update sources automatically.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

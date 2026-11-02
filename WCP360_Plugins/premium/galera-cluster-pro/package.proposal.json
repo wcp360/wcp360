@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.galera-cluster-pro",
+    "kind":  "plugin",
+    "label":  "Galera cluster observation connector",
+    "category":  "database-services",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Data",
+                        "BackupRestore",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "data.replication",
+                           "data.external-databases"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare a selected Galera-capable database cluster profile for bounded health, quorum and recovery observations.",
+    "core_boundary":  "A clustered database does not guarantee uninterrupted service or safe automatic failover. Core retains cluster ownership and recovery authority; no plugin bootstrap, arbitrary SQL or host command is admitted. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the exact engine/Galera/provider topology, credentials, observed members and quorum/replication states without assuming interchangeable MySQL/MariaDB distributions.",
+                       "Keep initial health and flow-control observations read-only; treat partition, stale state and lost quorum as recovery decisions rather than automatically forcing a primary component.",
+                       "Rehearse isolated consistency, state-transfer, backup and whole-cluster recovery scenarios; never bootstrap both sides of a partition or retry an uncertain destructive recovery.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

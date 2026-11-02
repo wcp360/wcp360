@@ -23,13 +23,15 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Repository-driven delivery workflows with versioned branch/tag policy, isolated builds, immutable artifact references, environment binding and deployment history. Provider-specific authentication and webhooks remain separately selected connectors.",
-    "core_boundary":  "Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository content cannot register privileged commands or modify the Core dependency graph.",
+    "summary":  "Repository-driven CI/CD with versioned branch/tag policy, isolated builds, immutable artifacts, environment binding and deployment history. Qualified native or Compose-derived plans remain scoped deployment intent; Git/webhook and Portainer/Coolify/Dokku integrations are separately admitted connectors, never implicit host executors.",
+    "core_boundary":  "Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository files, Compose syntax and external managers cannot register privileged commands, gain host sockets, modify Core dependencies or create a competing resource owner.",
     "acceptance":  [
-                       "Bind repository identity, permitted revisions and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.",
-                       "Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded resources and no panel/agent secrets.",
-                       "Verify artifact identity and provenance before passing an immutable reference to an admitted deployment operation.",
-                       "Test trigger replay, concurrent pushes, stale resource revisions and missing acknowledgements without duplicate deployment effects.",
-                       "Keep the last deployed release serving after connector or module failure; retain history and supported recovery references."
+                       "Bind repository identity, permitted revisions, verified webhook provenance and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.",
+                       "Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded CPU/RAM/PID/disk/time/network and no panel/agent secrets.",
+                       "Verify artifact identity, provenance and upstream license obligations before passing an immutable reference to an admitted deployment operation.",
+                       "Parse only qualified Compose versions/features into the same typed workload plan used by admitted deployment owners; validate services, mounts, networks, ports, dependencies, health checks and effective quotas rather than forwarding raw YAML or shell text.",
+                       "Choose the authoritative deployment manager for each resource when integrating Portainer, Coolify or Dokku; use declared API capabilities and prohibit concurrent independent reconciliation by this module and that manager.",
+                       "Test trigger replay, concurrent pushes, revoked actors, stale resource revisions, provider interruption and missing acknowledgements without duplicate deployment effects.",
+                       "Keep the last deployed release serving after connector or module failure; retain history and supported recovery references without claiming every schema migration is reversible."
                    ]
 }

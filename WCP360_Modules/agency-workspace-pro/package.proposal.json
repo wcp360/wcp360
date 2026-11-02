@@ -22,13 +22,14 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced agency portfolio workspaces with scoped branding, client-facing views, resource links and coordinated handoffs. Optional support-system connectors can enrich workflows without becoming the source of technical ownership.",
-    "core_boundary":  "Core keeps customer/reseller lifecycle, ordinary delegation, plans, quotas and essential UI. This module adds portfolio productivity and branding within existing scope; no paid workspace can hide operator identity, weaken security messages or become necessary for client hosting access.",
+    "summary":  "Advanced agency and reseller portfolio workspaces with scoped branding, cross-account productivity views, reviewed client handoffs and optional support-system integration. It reuses free Core reseller packages, templates, quotas, assignments and delegation rather than selling an alternative account or hosting-plan authority.",
+    "core_boundary":  "Core Tenancy retains customer/reseller lifecycle, resource ceilings, plan/package and template builders, quota rules, versioning, assignments, scoped overrides, ordinary delegation and essential UI. This module adds advanced portfolio productivity and branding only; no paid workspace can gate those features, change tenant authority, hide operator identity or become necessary for hosting access.",
     "acceptance":  [
-                       "Resolve workspace/client/resource relationships through Core ownership and reseller ceilings rather than copying an authority ledger.",
-                       "Apply branding only through reviewed declarative assets while retaining security, consent and operator context.",
-                       "Test client isolation, staff revocation and cross-workspace links across all embedded views.",
-                       "Preserve language/accessibility fallback and usable Core navigation when the workspace is disabled.",
-                       "Keep support records and customer data exportable under explicit retention and handoff policy."
+                       "Resolve agency/reseller/client/resource relationships through Core ownership, delegation and reseller ceilings rather than copying an authority or quota ledger.",
+                       "Keep hosting package/template creation, versioning, account assignment, quota enforcement and scoped overrides usable through free Core Tenancy; premium views only reference and orchestrate admitted existing operations.",
+                       "Scope cross-account portfolio views and handoffs to currently delegated resources; test nested resellers, staff revocation, wrong-tenant links and effective ceilings.",
+                       "Apply branding only through reviewed declarative assets while retaining security, consent and operator context; white labeling never changes identity or permission.",
+                       "Preserve language/accessibility fallback and usable Core account/hosting-plan navigation when the workspace is disabled.",
+                       "Keep support records, portfolio preferences and permitted customer data exportable under explicit retention and handoff policy without blocking independent Core access."
                    ]
 }

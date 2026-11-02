@@ -7,12 +7,12 @@
 | Planning ID | `module.storage-orchestration-pro` |
 | Category | `infrastructure` |
 | Core owners | Platform, Files, Tenancy, BackupRestore, Operations |
-| Source catalogue keys | `storage.zfs`, `storage.ceph`, `storage.glusterfs`, `storage.object-storage`, `storage.raid-lvm` |
+| Source catalogue keys | `storage.zfs`, `storage.ceph`, `storage.glusterfs`, `storage.object-storage`, `storage.raid-lvm`, `storage.nfs`, `storage.smb` |
 | Selected package dependencies | None; Core contracts and qualified providers remain prerequisites. |
 
 ## Proposed optional scope
 
-Advanced storage lifecycle orchestration covering performance/resilience tiers, pools, volumes, measured capacity, encryption-key references, snapshots, replication and controlled migration across qualified local or distributed providers. Each engine's durability, consistency, effective quota and restore semantics remain explicit.
+Advanced storage lifecycle orchestration across separately qualified local, GlusterFS and Ceph block/file/object providers: tiers, pools, volumes, capacity, key references, snapshots, replication and controlled migration. S3-compatible endpoints are object-service capabilities, while Nextcloud is a separately qualified application consuming storage, not an S3 server or filesystem engine.
 
 ## Retained Core boundary
 

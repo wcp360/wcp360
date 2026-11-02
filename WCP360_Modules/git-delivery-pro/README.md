@@ -12,11 +12,11 @@
 
 ## Proposed optional scope
 
-Repository-driven delivery workflows with versioned branch/tag policy, isolated builds, immutable artifact references, environment binding and deployment history. Provider-specific authentication and webhooks remain separately selected connectors.
+Repository-driven CI/CD with versioned branch/tag policy, isolated builds, immutable artifacts, environment binding and deployment history. Qualified native or Compose-derived plans remain scoped deployment intent; Git/webhook and Portainer/Coolify/Dokku integrations are separately admitted connectors, never implicit host executors.
 
 ## Retained Core boundary
 
-Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository content cannot register privileged commands or modify the Core dependency graph.
+Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository files, Compose syntax and external managers cannot register privileged commands, gain host sockets, modify Core dependencies or create a competing resource owner.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

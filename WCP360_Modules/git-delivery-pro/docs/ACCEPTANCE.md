@@ -4,11 +4,13 @@
 
 ## Package-specific checks
 
-1. Bind repository identity, permitted revisions and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.
-2. Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded resources and no panel/agent secrets.
-3. Verify artifact identity and provenance before passing an immutable reference to an admitted deployment operation.
-4. Test trigger replay, concurrent pushes, stale resource revisions and missing acknowledgements without duplicate deployment effects.
-5. Keep the last deployed release serving after connector or module failure; retain history and supported recovery references.
+1. Bind repository identity, permitted revisions, verified webhook provenance and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.
+2. Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded CPU/RAM/PID/disk/time/network and no panel/agent secrets.
+3. Verify artifact identity, provenance and upstream license obligations before passing an immutable reference to an admitted deployment operation.
+4. Parse only qualified Compose versions/features into the same typed workload plan used by admitted deployment owners; validate services, mounts, networks, ports, dependencies, health checks and effective quotas rather than forwarding raw YAML or shell text.
+5. Choose the authoritative deployment manager for each resource when integrating Portainer, Coolify or Dokku; use declared API capabilities and prohibit concurrent independent reconciliation by this module and that manager.
+6. Test trigger replay, concurrent pushes, revoked actors, stale resource revisions, provider interruption and missing acknowledgements without duplicate deployment effects.
+7. Keep the last deployed release serving after connector or module failure; retain history and supported recovery references without claiming every schema migration is reversible.
 
 ## Shared release and exit checks
 

@@ -8,6 +8,8 @@ The [Community/PRO strategy](EDITIONS-AND-PREMIUM.md) owns edition boundaries, p
 
 The [infrastructure coverage register](INFRASTRUCTURE-PREMIUM-COVERAGE.md) maps multi-server hosting, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS to Core owners, optional packages and qualification gates.
 
+Use the [eleven-area platform register](PLATFORM-INTEGRATIONS-COVERAGE.md) for named tool/provider mappings and the [Core reseller guide](../../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md) for templates, plan versions, quotas, assignment and safe exceptions. Both are design preparation, with no runtime or completion credit.
+
 ## Repository responsibilities
 
 | Location | Responsibility |

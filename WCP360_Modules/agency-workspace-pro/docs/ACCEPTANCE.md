@@ -4,11 +4,12 @@
 
 ## Package-specific checks
 
-1. Resolve workspace/client/resource relationships through Core ownership and reseller ceilings rather than copying an authority ledger.
-2. Apply branding only through reviewed declarative assets while retaining security, consent and operator context.
-3. Test client isolation, staff revocation and cross-workspace links across all embedded views.
-4. Preserve language/accessibility fallback and usable Core navigation when the workspace is disabled.
-5. Keep support records and customer data exportable under explicit retention and handoff policy.
+1. Resolve agency/reseller/client/resource relationships through Core ownership, delegation and reseller ceilings rather than copying an authority or quota ledger.
+2. Keep hosting package/template creation, versioning, account assignment, quota enforcement and scoped overrides usable through free Core Tenancy; premium views only reference and orchestrate admitted existing operations.
+3. Scope cross-account portfolio views and handoffs to currently delegated resources; test nested resellers, staff revocation, wrong-tenant links and effective ceilings.
+4. Apply branding only through reviewed declarative assets while retaining security, consent and operator context; white labeling never changes identity or permission.
+5. Preserve language/accessibility fallback and usable Core account/hosting-plan navigation when the workspace is disabled.
+6. Keep support records, portfolio preferences and permitted customer data exportable under explicit retention and handoff policy without blocking independent Core access.
 
 ## Shared release and exit checks
 

@@ -141,12 +141,12 @@ Its design addresses five needs:
 | :--- | :--- | :--- |
 | Hosting foundation | The 13 built-in owners and 233 documented essential capabilities remain in the open-source delivery scope. Current implementation limits still apply. | Reuses the same foundation; subscription does not grant ROOT, tenant access or execution authority. |
 | Engine adapters | The seven engine-adapter designs remain Core-owned. | Provider-specific connectors may be optional premium packages; essential engines are not paywalled. |
-| Business packages | Independent community packages can use the future public integration boundary. | [43 business-module proposals](WCP360_Modules/CATALOG.md): App Install, WordPress tools, delivery, backup, security, observability, agency operations, AI and other advanced workflows. |
-| Provider connectors | Existing independent development packages retain their source and status. | [76 connector proposals](WCP360_Plugins/premium/CATALOG.md), grouped by provider family; each has its own planned compatibility and acceptance work. |
+| Business packages | Independent community packages can use the future public integration boundary. | [44 business-module proposals](WCP360_Modules/CATALOG.md): App Install, WordPress tools, delivery, backup, security, observability, agency operations, AI and other advanced workflows. |
+| Provider connectors | Existing independent development packages retain their source and status. | [97 connector proposals](WCP360_Plugins/premium/CATALOG.md), grouped by provider family; each has its own planned compatibility and acceptance work. |
 | App Install | Core retains instances, authority, providers, jobs, data and essential recovery. | Full access to the qualified App Install catalogue and advanced orchestration. Qualification and each application's own license remain required. |
 | Subscription outage or expiry | Core access, running workloads and essential recovery continue. | New premium automation follows the defined safe degraded policy; no automatic workload shutdown or data deletion. |
 
-The **119 premium proposals** are a separate commercial planning inventory. They do not replace or renumber the existing **149 design entries** or App Deploy's **410 editorial references**. All new proposals are `design`, `installable: false`, with package source models undecided. No generic premium installer, entitlement protocol or live App Install execution is implemented by these documents.
+The **141 premium proposals** are a separate commercial planning inventory. They do not replace or renumber the existing **149 design entries** or App Deploy's **410 editorial references**. All new proposals are `design`, `installable: false`, with package source models undecided. No generic premium installer, entitlement protocol or live App Install execution is implemented by these documents.
 
 Read the [edition and premium development strategy](documentation/development/EDITIONS-AND-PREMIUM.md), [module workspace](WCP360_Modules/README.md), [premium connector workspace](WCP360_Plugins/premium/README.md) and [Core licensing guide](WCP360_Core/LICENSING.md). Package licensing must be assessed against its actual relationship with the AGPL Core; separate processes do not automatically establish legal independence.
 
@@ -167,6 +167,16 @@ The [infrastructure coverage matrix](documentation/development/INFRASTRUCTURE-PR
 | DDoS protection | [Upstream/CDN/scrubbing coordination and scoped defensive workflows](WCP360_Modules/ddos-defense-pro/README.md); no guaranteed bandwidth absorption or availability. |
 
 These are design proposals. The current candidate has no general multi-server, container, Kubernetes or hypervisor management runtime. For the target Nginx → Apache → PHP-FPM profile, performance/CDN acceleration must preserve Apache authorization and pass protected-file/private-content qualification before cache or direct-file handoff is allowed. Alternative stacks require their own admitted policy and qualification.
+
+### Platform integrations and reseller hosting
+
+The [eleven-area platform register](documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) maps the expanded requirements to Core owners and specific optional integrations, with source-verified distinctions and acceptance gates.
+
+**Reseller package templates, versioned hosting plans, quotas, assignments and authorized overrides remain free Core scope**, detailed in the [reseller design guide](WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md). Basic/global DNS, wildcard ACME lifecycle, security, local alerts and backup/recovery remain Core duties. A hosting plan named Pro is separate from the WCP360 PRO edition.
+
+Additional connector proposals cover Enhance inventory/migration, CSF/lfd policy evidence, Portainer, Coolify, Dokku, GlusterFS, CephFS/RBD, Nextcloud WebDAV, Traefik, Nginx Proxy Manager, BitNinja, Imunify360, Telegram/SMS/email providers, MySQL/MariaDB, Galera, Redis, MongoDB and external ACME authorities. Existing Cloudflare, CrowdSec, Git delivery, monitoring and backup profiles are enriched instead of duplicated.
+
+The new [DNS/TLS orchestration module](WCP360_Modules/dns-tls-orchestration-pro/README.md) coordinates advanced multi-provider/node campaigns. All integrations remain design proposals: independent platforms require explicit resource ownership and handover, while actual provider/version/license compatibility must be qualified before management is enabled.
 
 ## Technology stack and responsibilities
 
@@ -1578,8 +1588,8 @@ wcp360/
 | Directory | Responsibility | Current status |
 | :--- | :--- | :--- |
 | [WCP360_Core](WCP360_Core/README.md) | Executable Symfony candidate, domain use cases, shared Twig UI, separate Go sources, installer/recovery and tests. Start with the [working guide](WCP360_Core/WORKING-GUIDE.md). | Implemented candidate paths with explicit limits; complete product and production qualification remain pending. |
-| [WCP360_Modules](WCP360_Modules/README.md) | Optional business packages developed outside the 13 Core owners. | 43 PRO proposals, schema, catalogue, authoring structure and acceptance criteria; no executable package. |
-| [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing independent development packages and template, plus 76 [premium connector proposals](WCP360_Plugins/premium/CATALOG.md). |
+| [WCP360_Modules](WCP360_Modules/README.md) | Optional business packages developed outside the 13 Core owners. | 44 PRO proposals, schema, catalogue, authoring structure and acceptance criteria; no executable package. |
+| [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing independent development packages and template, plus 97 [premium connector proposals](WCP360_Plugins/premium/CATALOG.md). |
 | [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures, independently versioned from Core. | Consult its own manifest/status for the selected checkout; local source presence does not establish a ratified production protocol or release. |
 | [WCP360_Build](WCP360_Build/README.md) | Controlled candidate environments, toolchains, verification and future qualified publication. | Existing candidate procedures/evidence have bounded scopes; no qualified production release pipeline is implied. |
 | [WCP360_Releases](WCP360_Releases/README.md) | Qualified version records and immutable artifact references. | No qualified release and no latest pointer. |

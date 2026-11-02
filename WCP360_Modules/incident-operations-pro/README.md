@@ -16,7 +16,7 @@ Advanced incident cases, response coordination, on-call workflow integration and
 
 ## Retained Core boundary
 
-Core retains essential incidents, local notifications and verified ROOT fallback. This module adds team coordination and publication workflows; connector delivery does not prove acknowledgement, and no message is sent without the authorized operation.
+Core retains essential incidents, local notifications, ordinary email/SMS/Telegram or other admitted channel routing and verified ROOT fallback. This module adds advanced team/on-call coordination and reviewed publication workflows; connector delivery does not prove acknowledgement, and optional entitlement never gates basic operational alerts.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

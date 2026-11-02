@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.enhance-interop-pro",
+    "kind":  "plugin",
+    "label":  "Enhance inventory and migration interoperability",
+    "category":  "migration-data",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Transfers",
+                        "Hosting",
+                        "Tenancy",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "apps.fleet-management",
+                           "backup.transfers"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare scoped Enhance API inventory and migration planning for explicitly authorized organizations, websites and related owned resources.",
+    "core_boundary":  "Enhance remains an external source platform and architecture comparison point, not an imported WCP360 engine or second active controller for Core-managed services. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify a concrete upstream API/schema profile and read-only organization/resource permissions; use explicit source ownership and bounded redacted inventory rather than a generic remote admin proxy.",
+                       "Map supported website, domain, database, mail and backup objects into a dry-run import plan, recording incompatible settings and unresolved secrets instead of claiming universal lossless conversion.",
+                       "Rehearse isolated restore and current-authority checks before explicit cutover/handoff; retain source data and rollback evidence, and refuse simultaneous management of the same host, ingress or database by both panels.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

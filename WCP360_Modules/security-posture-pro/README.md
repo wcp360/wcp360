@@ -12,7 +12,7 @@
 
 ## Proposed optional scope
 
-Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, software advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence, tracks reviewed exceptions and produces scoped remediation proposals; scanner investigations, active incident response and DDoS orchestration remain separate workflows.
+Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence and reviewed exceptions, and plans staged multi-node policy campaigns with explicit per-node convergence; investigations, active response and DDoS workflows retain their own owners.
 
 ## Retained Core boundary
 

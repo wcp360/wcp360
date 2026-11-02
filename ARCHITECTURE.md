@@ -339,6 +339,8 @@ PRO targets full access to qualified App Install recipes. Core application insta
 
 The [infrastructure coverage register](documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) makes multi-server hosting, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS explicit. Advanced workflows and provider-specific connectors remain separate; essential Core providers, caching/compression, security, ownership and recovery stay open source. Node roles, partition/fencing, tenant isolation, hypervisor/guest separation, protected-content caching and upstream mitigation require independent acceptance before availability is claimed.
 
+The [eleven-area platform register](documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) extends this map with independent control-plane interop, distributed storage, collaborative defense, reseller packages, Git/App Install, observability, DBaaS and DNS/TLS automation. [Reseller plans and quota enforcement](WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md) remain Core design work; external controllers start with observation/import/migration and cannot concurrently own WCP-managed routes, workloads or secrets.
+
 ### Admission and execution
 
 An installable extension needs an identifiable publisher, artifact digest, verified trust evidence, compatibility/dependency checks, reviewed capability set, owned-data migration strategy, health checks, resource budget, and recovery/removal plan.

@@ -2,9 +2,11 @@
 
 **Planning scope: November 2, 2026.** This register makes nine requested domains explicit in the Community/PRO strategy. It links the authoritative proposal catalogues and defines acceptance boundaries; it provides no runtime, provider admission, qualified infrastructure service or performance guarantee.
 
-There are **43 business-module proposals and 76 connector proposals**, all design-only and non-installable. The [module JSON](../../WCP360_Modules/CATALOG.json) and [connector JSON](../../WCP360_Plugins/premium/CATALOG.json) remain their authorities. Their IDs refer to independently packaged optional workflows, not extra built-in Core modules. The thirteen Core owners, 233 essential capabilities and original 149 design entries retain their existing scope and delivery status.
+There are **44 business-module proposals and 97 connector proposals**, all design-only and non-installable. The [module JSON](../../WCP360_Modules/CATALOG.json) and [connector JSON](../../WCP360_Plugins/premium/CATALOG.json) remain their authorities. Their IDs refer to independently packaged optional workflows, not extra built-in Core modules. The thirteen Core owners, 233 essential capabilities and original 149 design entries retain their existing scope and delivery status.
 
 Read the [edition strategy](EDITIONS-AND-PREMIUM.md), [Core status](../../WCP360_Core/STATUS.md), [Core structure](../../WCP360_Core/STRUCTURE.md) and [AGPL licensing](../../WCP360_Core/LICENSING.md) alongside this document.
+
+The [eleven-area platform register](PLATFORM-INTEGRATIONS-COVERAGE.md) complements these infrastructure boundaries with named control-plane integrations, reseller packages, Git/App Install, monitoring, DBaaS and DNS/TLS. It records source-verified product distinctions; neither register is an installability claim.
 
 ## Coverage and ownership
 

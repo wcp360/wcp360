@@ -12,11 +12,11 @@
 
 ## Proposed optional scope
 
-A curated application installation product with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. The 410 editorial references are discovery input; each deliverable recipe requires independent qualification and upstream license review.
+A curated application store with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. Native and Compose-derived products require separate qualification; the 410 editorial references are discovery input, never 410 installable or license-cleared recipes.
 
 ## Retained Core boundary
 
-Core retains all 233 essential capabilities, application/resource ownership, ordinary hosting, local backup/recovery and the seven engine adapters. AppInstall Pro adds qualified optional application recipes and orchestration through detached extension contracts; it creates no privileged executor, legal compatibility decision or automatic installability for catalogue entries.
+Core retains all 233 essential capabilities, application/resource ownership, ordinary hosting, local backup/recovery and the seven engine adapters. AppInstall Pro adds qualified optional application recipes and orchestration through detached contracts; a storefront or Compose file cannot supply a privileged executor, legal compatibility decision or automatic installability.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

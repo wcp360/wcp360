@@ -12,7 +12,7 @@
 
 ## Proposed optional scope
 
-Advanced Docker/OCI workload lifecycle management: reviewed images/build provenance, scoped containers and application groups, private networks, ports, volumes, secret references, effective quotas, logs/health, coordinated updates and verified backups. Every exposed operation depends on an explicitly admitted provider and owned resource.
+Advanced Docker/OCI and admitted Compose workload orchestration: reviewed images/build provenance, application groups, networks, ports, volumes, secrets, effective budgets, health/logs, coordinated updates and restore. Qualified Portainer, Coolify or Dokku connectors can supply declared managed-resource capabilities; they are distinct external products, not interchangeable Docker engines.
 
 ## Retained Core boundary
 

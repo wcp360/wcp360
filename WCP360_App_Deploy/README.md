@@ -35,6 +35,8 @@ This is a product boundary, not a working entitlement gate or installer. Existin
 
 The [infrastructure coverage register](../documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) relates Docker, Kubernetes, VM, multi-server, storage, CDN and performance/security workflows to their Core owners. Each recipe must bind a qualified provider/isolation profile, persistent data, ingress and recovery. A Docker or Kubernetes label does not qualify Discourse, WordPress or any other application on all targets; cache acceleration must preserve the adopted Apache/protected-content boundary.
 
+The [eleven-area platform register](../documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) distinguishes external PaaS/proxy controllers, qualified recipe orchestration and storage backends. Nextcloud is an application that can use an S3 backend, with a separate WebDAV connector profile; it is not an S3 server. No Portainer/Coolify/Dokku integration may submit arbitrary Compose or silently take ownership of existing WCP resources.
+
 ## Integration and delivery
 
 The candidate Core catalogue command reads fixed CSV metadata through a typed Hosting port. It performs no installation, package download, provider connection or host change. Every returned candidate remains non-installable. Missing catalogue files must not prevent Core boot; inspect the command's unavailable/failed result instead of inventing success. See the [exact boundary](docs/CORE-INTEGRATION.md).

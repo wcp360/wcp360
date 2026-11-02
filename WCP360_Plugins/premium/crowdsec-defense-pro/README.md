@@ -27,6 +27,8 @@ Local firewall and baseline hosting security stay free Core. Provider decisions 
 1. Qualify selected CrowdSec interfaces, admitted signal sources and tenant-safe decision scopes with redacted telemetry and explicit data-sharing consent.
 2. Stage defensive decisions with reviewed expiry, trusted client-IP provenance, false-positive rollback and current Core authorization before any native enforcement.
 3. Exercise provider outage, stale decisions, forged signals and operator lockout recovery; local L7 or firewall controls cannot guarantee protection against upstream L3/L4 saturation.
+4. Track observation, admission and effective enforcement per node with explicit applied, failed or unknown outcomes; provider decisions, local caches and polling do not guarantee immediate global blocking.
+5. Qualify delayed propagation, network partitions, expiry, trusted proxy client-IP attribution and rollback under a single admitted enforcement owner without exposing bouncer/agent credentials.
 
 The complete [acceptance record](docs/ACCEPTANCE.md) defines evidence still required. No checks are marked complete, and no SDK/provider version, target compatibility, release artifact or production entitlement is selected.
 
@@ -37,3 +39,9 @@ Only this README, the [proposal metadata](package.proposal.json) and [acceptance
 The Core license is [AGPL-3.0-only](../../../WCP360_Core/LICENSING.md). This proposal does not choose the connector's license, price, source distribution model, key or vendor URL. A process/API boundary does not automatically permit a proprietary derivative. Review [editions and premium boundaries](../../../documentation/development/EDITIONS-AND-PREMIUM.md) and [plugin lifecycle requirements](../../../documentation/development/PLUGIN-LIFECYCLE.md).
 
 [Catalogue overview](../README.md) · [Readable inventory](../CATALOG.md) · [Shared proposal schema](../../../WCP360_Modules/schemas/package-proposal.schema.json)
+
+## Upstream evidence and qualification limits
+
+Official documentation reviewed for this proposal identifies upstream interfaces and constraints. It does not select an executable artifact, supported release or OS/API matrix, nor establish WCP360 compatibility. Recheck provenance, current maintenance and the selected profile before implementation or admission.
+
+- [CrowdSec Apache remediation modes](https://docs.crowdsec.net/u/bouncers/apache_bouncer/)

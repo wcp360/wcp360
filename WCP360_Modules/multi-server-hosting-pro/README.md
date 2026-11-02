@@ -12,7 +12,7 @@
 
 ## Proposed optional scope
 
-Advanced hosting orchestration across admitted servers: enrollment workflows, trust review, tenant/resource placement, scoped node routing, capacity groups, maintenance/drain waves and fleet care. It coordinates existing per-resource operations and observed outcomes rather than introducing a second authoritative node or customer registry.
+Advanced hosting orchestration across admitted servers and separately qualified Web, database, mail, authoritative DNS or mixed node roles: enrollment/trust, placement, scoped routing, capacity groups, maintenance/drain waves and fleet care. Resource owners and role-specific data/recovery semantics stay authoritative; this proposal is not a universal cluster implementation.
 
 ## Retained Core boundary
 

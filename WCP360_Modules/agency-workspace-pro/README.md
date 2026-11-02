@@ -12,11 +12,11 @@
 
 ## Proposed optional scope
 
-Advanced agency portfolio workspaces with scoped branding, client-facing views, resource links and coordinated handoffs. Optional support-system connectors can enrich workflows without becoming the source of technical ownership.
+Advanced agency and reseller portfolio workspaces with scoped branding, cross-account productivity views, reviewed client handoffs and optional support-system integration. It reuses free Core reseller packages, templates, quotas, assignments and delegation rather than selling an alternative account or hosting-plan authority.
 
 ## Retained Core boundary
 
-Core keeps customer/reseller lifecycle, ordinary delegation, plans, quotas and essential UI. This module adds portfolio productivity and branding within existing scope; no paid workspace can hide operator identity, weaken security messages or become necessary for client hosting access.
+Core Tenancy retains customer/reseller lifecycle, resource ceilings, plan/package and template builders, quota rules, versioning, assignments, scoped overrides, ordinary delegation and essential UI. This module adds advanced portfolio productivity and branding only; no paid workspace can gate those features, change tenant authority, hide operator identity or become necessary for hosting access.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

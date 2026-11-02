@@ -7,16 +7,16 @@
 | Planning ID | `module.observability-pro` |
 | Category | `observability` |
 | Core owners | Observability, Platform, Tenancy, Operations |
-| Source catalogue keys | `observe.prometheus`, `observe.opentelemetry`, `observe.grafana`, `observe.synthetics` |
+| Source catalogue keys | `observe.prometheus`, `observe.opentelemetry`, `observe.grafana`, `observe.synthetics`, `notify.sms`, `notify.team-messaging` |
 | Selected package dependencies | None; Core contracts and qualified providers remain prerequisites. |
 
 ## Proposed optional scope
 
-Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry sources. Optional external collection and synthetic scenarios are explicitly scoped, budgeted and source-attributed.
+Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry and bounded HTTP/HTTPS, TCP, DNS and ICMP observations where admitted. Source/time, freshness, probe vantage point and provider limits remain visible; basic local monitoring and notification channels are free Core responsibilities.
 
 ## Retained Core boundary
 
-Core retains required metrics/history, service checks, local alerts, incidents, audit and diagnostics. This module adds comparative objectives and richer visualization; it does not become the only health display or replace Core telemetry authority.
+Core retains required metrics/history, ordinary HTTP/TCP/DNS/ICMP checks where admitted, local alerts/incidents, diagnostics and essential notification routing. This module adds comparative objectives, richer visualization and advanced multi-vantage campaigns; Telegram/SMS/email transport connectors do not replace Core notification ownership or make premium necessary for basic alerts.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

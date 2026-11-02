@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.imunify360-defense-pro",
+    "kind":  "plugin",
+    "label":  "Imunify360 defensive interoperability",
+    "category":  "security-defense",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "security.imunify360"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare licensed Imunify360 observations and reviewed defensive outcomes through a bounded Core-side integration.",
+    "core_boundary":  "The documented local CLI does not establish a generic remote HTTP API. PHP plugins and the SDK receive no agent shell, arbitrary options, root channel or privileged UI-login token. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the installed product, licensed capabilities, platform and fixed Core adapter outputs; start with bounded redacted incident/list observations rather than CLI passthrough.",
+                       "Separate local/group scope, allow, challenge and drop decisions; current Core authority and a single admitted writer govern each effect and any sharing policy.",
+                       "Exercise delayed per-node application, provider conflict, expired decisions and false positives; refuse root UI-token passthrough and retain offline recovery if the product or connector stops.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

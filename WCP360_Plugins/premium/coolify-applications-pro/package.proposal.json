@@ -1,0 +1,36 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.coolify-applications-pro",
+    "kind":  "plugin",
+    "label":  "Coolify application interoperability",
+    "category":  "application-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "apps.fleet-management",
+                           "delivery.providers",
+                           "compute.containers"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare scoped Coolify team/project/application inventory and reviewed deployment interoperability for externally managed resources.",
+    "core_boundary":  "Coolify does not become a second writer for WCP360 hosts, Docker workloads, ingress or databases. Core retains native application admission, routing and recovery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify one Coolify deployment/API profile with explicit team/project/server ownership, minimum token abilities and source-address restrictions where supported.",
+                       "Begin with bounded read-only inventory; admit deployment requests only for explicitly externally managed resources with reviewed artifacts, inputs and current tenant authority.",
+                       "Exercise revoked tokens, conflicting status, uncertain deployment completion and restoration before ownership transfer; no token, webhook or provider success bypasses Core admission.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

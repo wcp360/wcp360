@@ -8,6 +8,8 @@ Start here when changing: **Account ownership, plans and delegated quotas.**
 
 The [local licensing design reservation](design/licensing/README.md) prepares commercial entitlement ownership without implementing a license client or changing Core availability. Package admission and lifecycle remain owned by ExtensionManagement. See the [Core structure](../../../STRUCTURE.md) and [extension resource index](../../../resources/extensions/README.md).
 
+The [reseller-package guide](RESELLER-PACKAGES.md) prepares Core plan templates, immutable versions, quotas, aggregate reservations, assignment, overrides and downgrade/recovery acceptance. These remain open-source Core duties; no builder, quota engine or provisioning implementation is introduced by that guide. It separates hosting-plan labels from optional PRO entitlements and retains the current M4 status.
+
 Use the common [module layout](../README.md) for Domain, Application, Infrastructure and UI code. Separate tenant identity from Linux process identity; delegated scope cannot widen ROOT policy.
 
 - [Core navigation index](../../../NAVIGATION.md)

@@ -1,0 +1,33 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.traefik-routing-pro",
+    "kind":  "plugin",
+    "label":  "Traefik routing interoperability",
+    "category":  "proxy-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "network.traefik"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare redacted Traefik route observations and a separately qualified dynamic-provider interoperability profile.",
+    "core_boundary":  "Native ingress, TLS and baseline routing remain free Core. The dashboard/API is not treated as a generic write API; the plugin gets no Docker socket, arbitrary configuration file or public admin endpoint. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify a selected API/provider profile and exact entrypoint/router/service ownership; begin with authenticated internal observations and redact sensitive configuration.",
+                       "Admit any future route effects through a reviewed Core/provider writer, not arbitrary labels, files, backend URLs or a fabricated dashboard mutation API.",
+                       "Preserve the target Apache all-traffic/.htaccess contract, TLS ownership and trusted client-IP chain; exercise conflicting writers, failed reload/withdrawal and private-route recovery before handoff.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

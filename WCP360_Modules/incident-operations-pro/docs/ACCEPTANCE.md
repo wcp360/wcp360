@@ -5,10 +5,11 @@
 ## Package-specific checks
 
 1. Keep incident membership, evidence visibility and public/private status content explicitly scoped.
-2. Distinguish queued, sent, acknowledged and failed notifications using connector evidence and bounded retries.
-3. Require authorized review for external publication and prevent sensitive host/customer data from entering public drafts.
-4. Exercise connector outages, duplicate events, shift changes and concurrent incident updates with current-authority checks.
-5. Disabling the module must preserve local incident history, Core alerts and independent response access.
+2. Resolve channel ownership, recipient identity and current notification permission through Core policy for Telegram, SMS, email and other admitted transports; external contacts and connector credentials remain scoped.
+3. Distinguish queued, provider-accepted, sent, delivered where evidenced, acknowledged and failed notifications with receipts, deduplication and bounded retries; do not claim instantaneous delivery.
+4. Require authorized review for external publication and prevent sensitive host/customer data from entering public drafts.
+5. Exercise connector outages, duplicate events, shift changes, channel revocation and concurrent incident updates with current-authority checks and Core local fallback.
+6. Disabling the module must preserve local incident history, ordinary free Core alerts and independent response access.
 
 ## Shared release and exit checks
 

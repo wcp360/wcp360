@@ -4,11 +4,12 @@
 
 ## Package-specific checks
 
-1. Catalogue each check with fixed inputs, permissions, resource/tenant scope, budgets and explicit unavailable states.
-2. Treat paths, logs and returned diagnostics as untrusted data; redact secrets and prevent output from becoming executable markup or instructions.
-3. Keep observation and repair separate; a repair invokes the owning module's qualified operation with current authority and recovery evidence.
-4. Test malicious arguments, resource exhaustion, failed checks and source outages without fabricating healthy states.
-5. Preserve Core diagnostic access and independent repair/recovery when the Toolbox is removed.
+1. Catalogue each named check with fixed typed inputs, permissions, resource/tenant scope, budgets and explicit unavailable states.
+2. For HTTP/HTTPS, TCP, DNS or ICMP check bundles, require admitted protocols/targets, bounded resolution/redirects, time/rate/size/concurrency and correct capability/privilege handling; no unrestricted scanner or raw shell is exposed.
+3. Treat paths, logs and returned diagnostics as untrusted data; redact secrets and prevent output from becoming executable markup or instructions.
+4. Keep observation and repair separate; a repair invokes the owning module's qualified operation with current authority, resource revision and recovery evidence.
+5. Test malicious arguments, wrong-tenant/internal-control targets, exhaustion, failed checks and source outages without fabricating healthy states.
+6. Preserve free Core diagnostics, ordinary local/remote checks where admitted, essential alerts and independent repair/recovery when Toolbox is removed.
 
 ## Shared release and exit checks
 

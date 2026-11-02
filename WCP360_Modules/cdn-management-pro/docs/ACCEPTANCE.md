@@ -4,17 +4,17 @@
 
 ## Package-specific checks
 
-1. Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before requesting an edge change.
-2. Qualify origin TLS, certificate/hostname validation, SNI, origin authentication, direct-origin exposure policy and management-recovery access without disabling mandatory checks.
-3. Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for logged-in users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods to prevent poisoning or cross-account disclosure.
-4. Preserve all-request Apache authorization in the current Nginx -> Apache -> FPM target: default edge-cache/direct-file remains disabled, including for CSS/assets protected by nested .htaccess or directory access rules.
-5. Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content tests before any CDN cache policy or authority handoff; compression and CDN connectivity do not authorize public caching.
-6. Qualify compression negotiation, variant isolation, double-compression prevention, effective resource budgets and supported rollback. Secret-bearing dynamic compression requires its own risk/correctness decision and must remain bypassed when unqualified.
-7. Implement bounded scoped purge/invalidation with provider receipts, replay handling and explicit propagation uncertainty; acceptance is not global purge completion.
-8. Constrain rewrites, redirects, upstream destinations, compression and edge-worker features to admitted capabilities and separately reviewed code where applicable.
-9. Measure cache correctness, origin/offload behavior, stale responses, error rates and request costs for each provider/profile; avoid treating CDN activation as proof of faster or safer delivery.
-10. Exercise provider outage, credential rotation/revocation, DNS/certificate changes and failed deployments with a documented service-specific exit/recovery path.
-11. Disabling premium orchestration must preserve current delivery policy and independent Core origin/DNS/TLS control; provider removal requires dependency review rather than silently breaking sites.
+1. Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before an edge change.
+2. Qualify exact provider/API/version/plan limits and separately admitted features, including Cloudflare proxy/cache rules, certificate modes, origin authentication, purge scope/rate and request/body limits; do not promise all plans or features.
+3. Require validated origin TLS, hostname/SNI/certificate checks and any admitted origin authentication; visitor-edge encryption alone or an encryption-only origin mode is not verified origin identity. Review direct-origin exposure and management recovery separately.
+4. Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for authenticated users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods.
+5. Preserve all-request Apache authorization in the current Nginx -> Apache -> FPM target: edge-cache/direct-file stays off by default, including CSS/assets protected by nested .htaccess or directory rules.
+6. Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content checks before any CDN cache policy or authority handoff; connectivity or compression is not permission for public caching.
+7. Qualify compression negotiation, variant separation, double-compression prevention, budgets and rollback. Secret-bearing dynamic compression needs its own risk/correctness decision and stays bypassed when unqualified.
+8. Bound scoped purge/invalidation using provider receipts, replay control and measured propagation uncertainty; provider acceptance is not immediate global completion.
+9. Constrain rewrites, redirects, upstream destinations and edge-worker features to admitted capabilities and reviewed code; ingress Traefik/Nginx Proxy Manager workflows remain under Network Traffic rather than creating a competing CDN owner.
+10. Measure correctness, origin/offload behavior, stale responses, error rates and costs per profile; activation alone proves neither speed nor protection.
+11. Exercise provider outage, credentials revocation/rotation and DNS/certificate changes with an explicit exit route; disabling orchestration preserves delivery and independent free Core DNS/TLS/origin control.
 
 ## Shared release and exit checks
 

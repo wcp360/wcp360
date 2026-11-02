@@ -24,13 +24,15 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced load-balancer, global-routing and overlay-network orchestration with reviewed listener/upstream policies, measured checks and staged changes across qualified providers. CDN cache/content delivery is owned by CDN Management Pro, DDoS-response policy by DDoS Defense Pro and workload placement by Multi-server Hosting Pro.",
+    "summary":  "Advanced load-balancer, global-routing, ingress and overlay-network orchestration with reviewed listeners/upstreams, measured checks and staged changes across qualified HAProxy, Traefik, Nginx Proxy Manager or other providers. Provider connectors supply admitted capabilities; CDN cache/content delivery, DDoS response and workload placement retain distinct workflow owners.",
     "core_boundary":  "Core retains baseline IP/network/firewall administration, native gateway/provider foundations, management-access recovery and the seven essential engine adapters. This module coordinates advanced traffic policy through accepted owned operations, not arbitrary scans, tunnels, raw firewall commands or a competing routing authority.",
     "acceptance":  [
-                       "Map public/private listeners, routing authority, certificates and allowed upstreams before accepting a traffic plan.",
-                       "Qualify protocol, source-address, timeout and health semantics for each selected provider combination.",
-                       "Test management lockout prevention, failed configuration checks, lost connectivity and supported rollback.",
-                       "Constrain probe and tunnel destinations, rate limits and credentials; reject metadata/control-plane reachability.",
-                       "Disable new automation without removing current routing or the Core\u0027s independent network recovery route."
+                       "Map public/private listeners, domain/tenant routing authority, certificate ownership and allowed upstreams before accepting a traffic plan.",
+                       "Qualify each HAProxy, Traefik or Nginx Proxy Manager API/version/profile, protocols, source-address handling, TLS termination, timeout and health semantics; their capabilities are not interchangeable or already admitted.",
+                       "Choose one authoritative ingress/reverse-proxy controller for each resource; reconcile external-manager changes through declared contracts rather than running competing reconcilers or exposing raw config/root sockets.",
+                       "Keep current Nginx -\u003e Apache -\u003e FPM all-request Apache authorization and protected-file semantics; an ingress provider does not authorize edge direct-file or response-cache bypass.",
+                       "Test management lockout prevention, failed configuration checks, stale routes, lost connectivity and supported rollback with current authority and resource revisions.",
+                       "Constrain probe, tunnel and upstream destinations, budgets, credentials and egress; reject unauthorized metadata/control-plane reachability and arbitrary network scans.",
+                       "Disable new orchestration without removing established routing or the free Core\u0027s independent DNS/TLS/network administration and recovery route."
                    ]
 }

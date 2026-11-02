@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.external-acme-authority-pro",
+    "kind":  "plugin",
+    "label":  "Additional ACME authority connector",
+    "category":  "certificate-providers",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "IdentityAccess",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "domains.acme-authorities",
+                           "domains.dns01"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare an explicitly selected additional ACME authority/account policy using already admitted challenge providers.",
+    "core_boundary":  "Core ACME, automatic renewal, wildcard DNS-01 and baseline TLS remain free. This proposal adds authority-specific interoperability and does not duplicate Cloudflare/Route53 DNS drivers or become a competing certificate writer. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify an admitted authority endpoint, account policy, trust chain and any external-account-binding requirements; keep private/account keys in durable scoped secret storage without selecting a vendor or promising unlimited issuance.",
+                       "Use existing admitted DNS-01 provider scopes for authorized wildcard names, measured TXT propagation and concurrent-order-safe cleanup; no broad DNS credentials or deletion of another challenge is allowed.",
+                       "Exercise rejected orders, rate limits, expiry, renewal and restart recovery with persisted order/account state; avoid new issuance on every restart and preserve installed certificates during provider outage or removal.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

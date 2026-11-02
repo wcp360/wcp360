@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.bitninja-defense-pro",
+    "kind":  "plugin",
+    "label":  "BitNinja defensive interoperability",
+    "category":  "security-defense",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "security.threat-intel",
+                           "security.siem"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare scoped BitNinja observations and reviewed defensive decision interoperability using a selected provider API profile.",
+    "core_boundary":  "Baseline firewall, WAF and Core security remain free. Product credentials, account reputation and provider claims never become Core authorization or a promise of universal immediate blocking. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the exact provider API, account/server scope and credential capabilities; begin with redacted observations and explicit sharing consent.",
+                       "Keep detection, account/global challenge, allow and block states distinct; stage effects through an admitted owner with trusted client-IP provenance, expiry, exceptions and operator approval.",
+                       "Record observed, admitted, applied, failed or unknown state per node; exercise delayed propagation, partitions, false positives, revocation and local lockout recovery without live customer attacks.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

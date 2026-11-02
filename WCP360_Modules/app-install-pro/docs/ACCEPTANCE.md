@@ -5,10 +5,12 @@
 ## Package-specific checks
 
 1. Qualify each offered recipe on an explicit application/version/OS/architecture/runtime/database/provider matrix; unsupported combinations must remain unavailable.
-2. Pin and verify upstream sources and recipe artifacts, record the applicable upstream licenses and redistribution/source obligations, and refuse unreviewed artifacts or incompatible combinations.
+2. Pin and verify upstream sources, image digests and recipe artifacts; record upstream licenses and redistribution/source obligations, including Nextcloud or other application products, and refuse unreviewed or incompatible combinations.
 3. Exercise fresh install, interrupted install, update, supported rollback, backup/restore and removal with owned writable paths, secret references, data retention and per-instance results.
-4. Run dependency installers as the application identity through admitted operations; deny arbitrary executable hooks, shell text, tenant escapes and access to Core credentials.
-5. Demonstrate that removing or disabling AppInstall Pro preserves installed applications, canonical resource inventory, local recovery and access through the free Core.
+4. Admit only explicitly qualified Compose versions and features into a canonical typed workload/resource plan. Reject arbitrary raw YAML passthrough, host sockets, sensitive mounts, privileged/host namespaces, unbounded resource requests and hidden competing managers.
+5. Treat application and build payloads as guest/workload code executed under admitted scoped identities with isolation and budgets; no package or recipe hook becomes a host shell or obtains Core credentials.
+6. Distinguish native application recipes, Docker/Compose workload definitions and externally managed Portainer/Coolify/Dokku resources; select one effect owner instead of two reconcilers silently changing the same deployment.
+7. Demonstrate that removing or disabling AppInstall Pro preserves installed applications, canonical resource inventory, local recovery and access through the free Core.
 
 ## Shared release and exit checks
 

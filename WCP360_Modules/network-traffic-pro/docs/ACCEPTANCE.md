@@ -4,11 +4,13 @@
 
 ## Package-specific checks
 
-1. Map public/private listeners, routing authority, certificates and allowed upstreams before accepting a traffic plan.
-2. Qualify protocol, source-address, timeout and health semantics for each selected provider combination.
-3. Test management lockout prevention, failed configuration checks, lost connectivity and supported rollback.
-4. Constrain probe and tunnel destinations, rate limits and credentials; reject metadata/control-plane reachability.
-5. Disable new automation without removing current routing or the Core's independent network recovery route.
+1. Map public/private listeners, domain/tenant routing authority, certificate ownership and allowed upstreams before accepting a traffic plan.
+2. Qualify each HAProxy, Traefik or Nginx Proxy Manager API/version/profile, protocols, source-address handling, TLS termination, timeout and health semantics; their capabilities are not interchangeable or already admitted.
+3. Choose one authoritative ingress/reverse-proxy controller for each resource; reconcile external-manager changes through declared contracts rather than running competing reconcilers or exposing raw config/root sockets.
+4. Keep current Nginx -> Apache -> FPM all-request Apache authorization and protected-file semantics; an ingress provider does not authorize edge direct-file or response-cache bypass.
+5. Test management lockout prevention, failed configuration checks, stale routes, lost connectivity and supported rollback with current authority and resource revisions.
+6. Constrain probe, tunnel and upstream destinations, budgets, credentials and egress; reject unauthorized metadata/control-plane reachability and arbitrary network scans.
+7. Disable new orchestration without removing established routing or the free Core's independent DNS/TLS/network administration and recovery route.
 
 ## Shared release and exit checks
 

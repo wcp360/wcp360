@@ -12,7 +12,7 @@
 
 ## Proposed optional scope
 
-Advanced load-balancer, global-routing and overlay-network orchestration with reviewed listener/upstream policies, measured checks and staged changes across qualified providers. CDN cache/content delivery is owned by CDN Management Pro, DDoS-response policy by DDoS Defense Pro and workload placement by Multi-server Hosting Pro.
+Advanced load-balancer, global-routing, ingress and overlay-network orchestration with reviewed listeners/upstreams, measured checks and staged changes across qualified HAProxy, Traefik, Nginx Proxy Manager or other providers. Provider connectors supply admitted capabilities; CDN cache/content delivery, DDoS response and workload placement retain distinct workflow owners.
 
 ## Retained Core boundary
 

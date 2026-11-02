@@ -1,6 +1,6 @@
 {
     "schema":  "wcp360.premium-package-catalogue/1",
-    "count":  76,
+    "count":  97,
     "packages":  [
                      {
                          "schema":  "wcp360.premium-package-proposal/1",
@@ -2344,6 +2344,8 @@
                                             "Qualify selected CrowdSec interfaces, admitted signal sources and tenant-safe decision scopes with redacted telemetry and explicit data-sharing consent.",
                                             "Stage defensive decisions with reviewed expiry, trusted client-IP provenance, false-positive rollback and current Core authorization before any native enforcement.",
                                             "Exercise provider outage, stale decisions, forged signals and operator lockout recovery; local L7 or firewall controls cannot guarantee protection against upstream L3/L4 saturation.",
+                                            "Track observation, admission and effective enforcement per node with explicit applied, failed or unknown outcomes; provider decisions, local caches and polling do not guarantee immediate global blocking.",
+                                            "Qualify delayed propagation, network partitions, expiry, trusted proxy client-IP attribution and rollback under a single admitted enforcement owner without exposing bouncer/agent credentials.",
                                             "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
                                             "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
                                             "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
@@ -2514,6 +2516,726 @@
                                             "Select and qualify an admitted cache distribution/API profile and Core binding; do not expose a raw administration socket, arbitrary VCL or backend URL to the plugin.",
                                             "Enable cache handoff only under a separately admitted profile proving protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge correctness; otherwise bypass caching entirely.",
                                             "Qualify content encoding, Vary/ETag, freshness, invalidation and rollback independently with reproducible application measurements; compression is not public cache permission and no universal speedup is promised.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.portainer-management-pro",
+                         "kind":  "plugin",
+                         "label":  "Portainer environment interoperability",
+                         "category":  "compute-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Operations",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "compute.containers",
+                                                "compute.node-groups"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare selected Portainer environment inventory and explicitly scoped interoperability through an admitted Core integration.",
+                         "core_boundary":  "Portainer-managed resources remain externally owned until an explicit import/handoff is authorized. Its Docker/Kubernetes proxy is not delegated to the plugin; native Core Docker controls remain free. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify a selected Portainer product/API profile with per-user token permissions, exact environment/team/resource ownership and bounded redacted inventory.",
+                                            "Refuse raw Docker/Kubernetes passthrough, arbitrary stack/Compose inputs and mutation of resources actively controlled by Core; any operation needs a separate admitted use case.",
+                                            "Exercise revoked access, stale inventory, partial external changes and retained-volume recovery; disabling the connector must not remove environments or stop hosted workloads.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.coolify-applications-pro",
+                         "kind":  "plugin",
+                         "label":  "Coolify application interoperability",
+                         "category":  "application-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "Operations",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.fleet-management",
+                                                "delivery.providers",
+                                                "compute.containers"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare scoped Coolify team/project/application inventory and reviewed deployment interoperability for externally managed resources.",
+                         "core_boundary":  "Coolify does not become a second writer for WCP360 hosts, Docker workloads, ingress or databases. Core retains native application admission, routing and recovery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify one Coolify deployment/API profile with explicit team/project/server ownership, minimum token abilities and source-address restrictions where supported.",
+                                            "Begin with bounded read-only inventory; admit deployment requests only for explicitly externally managed resources with reviewed artifacts, inputs and current tenant authority.",
+                                            "Exercise revoked tokens, conflicting status, uncertain deployment completion and restoration before ownership transfer; no token, webhook or provider success bypasses Core admission.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.dokku-applications-pro",
+                         "kind":  "plugin",
+                         "label":  "Dokku application interoperability",
+                         "category":  "application-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.fleet-management",
+                                                "delivery.git",
+                                                "runtime.workers"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare selected Dokku application inventory and a reviewed Core-mediated deployment interoperability profile.",
+                         "core_boundary":  "Dokku OSS local deployment behavior and Dokku Pro multi-server UI are distinct profiles. A plugin receives no SSH shell, arbitrary Dokku commands or direct Docker access. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify the exact upstream distribution, transport and capability profile; do not infer multi-server orchestration from OSS local scheduling or optional Pro interfaces.",
+                                            "Keep initial import/observation read-only and route any future structured application operation through a bounded admitted Core adapter with pinned host identity and app ownership.",
+                                            "Exercise deployment failure, worker interruption, secret redaction and retained-data recovery; never install upstream plugins, execute arbitrary hooks or take over active Core resources.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.glusterfs-storage-pro",
+                         "kind":  "plugin",
+                         "label":  "GlusterFS storage interoperability",
+                         "category":  "storage-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Files",
+                                             "BackupRestore",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "storage.glusterfs"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare bounded observations of admitted GlusterFS volumes, peers and recovery state through a Core-owned storage provider.",
+                         "core_boundary":  "No gluster shell, arbitrary brick path or cluster-wide root authority is delegated. Basic local storage stays free; distributed storage is not treated as a generic object bucket. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify release maintenance, artifact provenance and an exact Core provider profile before claiming a supported host/API matrix; record peer, volume, brick and tenant ownership.",
+                                            "Observe quorum, health and pending/split-brain healing separately from effects; never auto-select an authoritative copy, force healing or detach a peer from a plugin decision.",
+                                            "Exercise network partitions, full volumes, mount dependencies and interrupted recovery; preserve source data and require separate backup/recovery review before removal or destructive repair.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.cephfs-storage-pro",
+                         "kind":  "plugin",
+                         "label":  "CephFS filesystem connector",
+                         "category":  "storage-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Files",
+                                             "BackupRestore",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "storage.ceph"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare filesystem-specific Ceph observations and reviewed subvolume/client integration separate from existing Ceph RGW object storage.",
+                         "core_boundary":  "CephFS file access, RBD block images and RGW object access have distinct authority and recovery contracts. The plugin has no cluster-admin key, mount command or direct RADOS access. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify a selected CephFS/Core-provider profile with filesystem, subtree/subvolume, client and tenant ownership; separately constrain MDS paths and underlying RADOS/OSD namespaces.",
+                                            "Review client capabilities, quotas, snapshots, mounts and live consumers independently; filesystem path restriction alone is not accepted as complete tenant isolation.",
+                                            "Exercise degraded metadata/data services, revoked capabilities and interrupted snapshots/restores; disconnecting a client must not delete a subvolume or retained backup.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.ceph-rbd-storage-pro",
+                         "kind":  "plugin",
+                         "label":  "Ceph RBD block-storage connector",
+                         "category":  "storage-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "BackupRestore",
+                                             "Operations",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "storage.ceph",
+                                                "compute.images"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare block-image-specific inventory and reviewed attachment/snapshot integration for explicitly owned Ceph RBD resources.",
+                         "core_boundary":  "An RBD image is not a CephFS share or RGW/S3 object. Core controls block-device mappings, guest ownership, fencing and recovery; no host device or cluster-admin interface reaches the plugin. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify a selected image/pool/namespace/client and Core-provider profile with storage capabilities, guest ownership and explicitly supported image features.",
+                                            "Validate active consumers, cooperative versus exclusive access and fencing before attachment or recovery; an exclusive-lock feature is not assumed to make arbitrary multi-writer filesystem use safe.",
+                                            "Exercise stale clients, interrupted snapshots and ambiguous detach; never break locks, blocklist clients, discard images or purge retained snapshots without separately admitted authority and recovery evidence.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.traefik-routing-pro",
+                         "kind":  "plugin",
+                         "label":  "Traefik routing interoperability",
+                         "category":  "proxy-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "network.traefik"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare redacted Traefik route observations and a separately qualified dynamic-provider interoperability profile.",
+                         "core_boundary":  "Native ingress, TLS and baseline routing remain free Core. The dashboard/API is not treated as a generic write API; the plugin gets no Docker socket, arbitrary configuration file or public admin endpoint. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify a selected API/provider profile and exact entrypoint/router/service ownership; begin with authenticated internal observations and redact sensitive configuration.",
+                                            "Admit any future route effects through a reviewed Core/provider writer, not arbitrary labels, files, backend URLs or a fabricated dashboard mutation API.",
+                                            "Preserve the target Apache all-traffic/.htaccess contract, TLS ownership and trusted client-IP chain; exercise conflicting writers, failed reload/withdrawal and private-route recovery before handoff.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.nginx-proxy-manager-pro",
+                         "kind":  "plugin",
+                         "label":  "Nginx Proxy Manager interoperability",
+                         "category":  "proxy-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "domains.cdn-edge"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare explicit proxy-host, stream and TLS inventory/import planning for a selected Nginx Proxy Manager deployment.",
+                         "core_boundary":  "This proposal does not assume a stable management API or generic clustered load balancer. Native Nginx ingress remains free Core; no automatic port 80/443 takeover or competing TLS writer is admitted. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Start with a reviewed read-only observation/export profile; qualify an exact upstream management contract before proposing automated mutations.",
+                                            "Bind proxy hosts, destinations, access lists, certificates and streams to owned resources; reject arbitrary configuration, backend URLs and transfer of active Core-managed ingress without approval.",
+                                            "Exercise private-route/access-list behavior, Apache/.htaccess preservation, origin/TLS/client-IP handling and failed cutover recovery; retain prior ingress ownership until the handoff is explicitly complete.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.bitninja-defense-pro",
+                         "kind":  "plugin",
+                         "label":  "BitNinja defensive interoperability",
+                         "category":  "security-defense",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.threat-intel",
+                                                "security.siem"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare scoped BitNinja observations and reviewed defensive decision interoperability using a selected provider API profile.",
+                         "core_boundary":  "Baseline firewall, WAF and Core security remain free. Product credentials, account reputation and provider claims never become Core authorization or a promise of universal immediate blocking. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify the exact provider API, account/server scope and credential capabilities; begin with redacted observations and explicit sharing consent.",
+                                            "Keep detection, account/global challenge, allow and block states distinct; stage effects through an admitted owner with trusted client-IP provenance, expiry, exceptions and operator approval.",
+                                            "Record observed, admitted, applied, failed or unknown state per node; exercise delayed propagation, partitions, false positives, revocation and local lockout recovery without live customer attacks.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.imunify360-defense-pro",
+                         "kind":  "plugin",
+                         "label":  "Imunify360 defensive interoperability",
+                         "category":  "security-defense",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.imunify360"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare licensed Imunify360 observations and reviewed defensive outcomes through a bounded Core-side integration.",
+                         "core_boundary":  "The documented local CLI does not establish a generic remote HTTP API. PHP plugins and the SDK receive no agent shell, arbitrary options, root channel or privileged UI-login token. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify the installed product, licensed capabilities, platform and fixed Core adapter outputs; start with bounded redacted incident/list observations rather than CLI passthrough.",
+                                            "Separate local/group scope, allow, challenge and drop decisions; current Core authority and a single admitted writer govern each effect and any sharing policy.",
+                                            "Exercise delayed per-node application, provider conflict, expired decisions and false positives; refuse root UI-token passthrough and retain offline recovery if the product or connector stops.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.csf-lfd-policy-pro",
+                         "kind":  "plugin",
+                         "label":  "CSF and lfd policy evidence connector",
+                         "category":  "security-defense",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.threat-intel",
+                                                "security.siem",
+                                                "automation.event-rules"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare CSF/lfd evidence import and reviewed clustering-policy interoperability without replacing free Core firewall control.",
+                         "core_boundary":  "This is optional evidence/coordination, not a paid native firewall driver. No upstream fork is selected, no separate official ClusterCSF product is assumed and no CSF/root command reaches the plugin. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Record source/fork provenance, maintenance policy, artifact integrity and exact supported platform before any qualification; the cPanel-maintained fork is evidence of a distinct source, not automatic WCP360 compatibility.",
+                                            "Start with bounded redacted observations/exports; qualify any lfd peer/clustering profile, credentials, fan-out scope and conflicting-writer refusal separately through Core.",
+                                            "Exercise stale peer decisions, replay, partitions, expiry, false positives and operator lockout recovery; never propagate every detection as an immediate global block or change update sources automatically.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.telegram-notifications-pro",
+                         "kind":  "plugin",
+                         "label":  "Telegram notification connector",
+                         "category":  "collaboration-support",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "Operations",
+                                             "IdentityAccess"
+                                         ],
+                         "catalogue_keys":  [
+                                                "notify.team-messaging"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare redacted Telegram Bot API event delivery to explicitly enrolled chats and recipients.",
+                         "core_boundary":  "Telegram messages and chat membership do not grant Core login, command execution or incident-response authority. Essential local email and alerts remain free Core capabilities. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify bot credentials, recipient/chat ownership, explicit enrollment and per-tenant disclosure rules; do not accept browser-supplied arbitrary destinations.",
+                                            "Begin with outbound notifications; any optional incoming webhook requires secret-token validation, replay/idempotency controls and separate current Core actor authorization.",
+                                            "Bound message size, retry, rate and retention; distinguish provider acceptance from delivery evidence and preserve local alerts when tokens or destinations are revoked.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.twilio-sms-pro",
+                         "kind":  "plugin",
+                         "label":  "Twilio SMS notification connector",
+                         "category":  "collaboration-support",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "Operations",
+                                             "IdentityAccess"
+                                         ],
+                         "catalogue_keys":  [
+                                                "notify.sms"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare consented SMS alert delivery through an explicitly scoped Twilio account and verified recipient policy.",
+                         "core_boundary":  "An SMS destination is an external disclosure and spending boundary. Provider delivery events are not authentication, authorization or permission to replace essential local alerts. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify account/sender capabilities, verified recipient consent and per-tenant event, volume and spending limits without promising universal country or route availability.",
+                                            "Validate status-callback authenticity and event binding under the selected provider contract; prevent replay, duplicate sends and cross-tenant message disclosure.",
+                                            "Exercise throttling, revoked credentials, delayed/failed delivery and retries with redacted payloads; local Core recovery and baseline notifications remain usable.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.brevo-email-pro",
+                         "kind":  "plugin",
+                         "label":  "Brevo transactional email connector",
+                         "category":  "collaboration-support",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Mail",
+                                             "Observability",
+                                             "Operations",
+                                             "IdentityAccess"
+                                         ],
+                         "catalogue_keys":  [
+                                                "mail.smtp-relays"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare an optional Brevo transactional sender/relay profile with scoped delivery feedback and deliberate route changes.",
+                         "core_boundary":  "Local email, baseline alert delivery and Core mail administration stay free. The connector does not export mailboxes, route arbitrary customer content or silently replace a working local recovery channel. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify an admitted API or SMTP profile, verified sender/domain ownership, scoped credentials, consent and bounded recipient/data policies.",
+                                            "Authenticate and bind any delivery feedback under a reviewed webhook profile; distinguish request acceptance, delivery, bounce and suppression without guaranteeing deliverability.",
+                                            "Exercise provider failure, duplicates, redaction and credential rotation; removal requires an explicit safe route transition and preserved local alerts, not automatic fallback that resends private data.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.external-mysql-mariadb-pro",
+                         "kind":  "plugin",
+                         "label":  "External MySQL and MariaDB connector",
+                         "category":  "database-services",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Data",
+                                             "BackupRestore",
+                                             "Operations",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "data.external-databases",
+                                                "data.sql-analysis"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare separately qualified external MySQL and MariaDB observations and reviewed tenant database operations.",
+                         "core_boundary":  "The control-plane PostgreSQL database stays outside customer database administration. A remote database credential does not grant arbitrary SQL, server-global authority or ownership of an existing Core-managed service. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify MySQL and MariaDB engine/client/authentication profiles independently with admitted endpoint, verified TLS identity, database/user ownership and minimum privileges.",
+                                            "Begin with bounded prepared observation queries; separately admit account/schema/backup operations with cost limits and redacted diagnostics, never a generic SQL console or insecure TLS fallback.",
+                                            "Exercise revoked privileges, partial schema operations, engine-specific restore compatibility and uncertain writes; retain data and prove isolated recovery before a separately authorized destructive action.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.galera-cluster-pro",
+                         "kind":  "plugin",
+                         "label":  "Galera cluster observation connector",
+                         "category":  "database-services",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Data",
+                                             "BackupRestore",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "data.replication",
+                                                "data.external-databases"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare a selected Galera-capable database cluster profile for bounded health, quorum and recovery observations.",
+                         "core_boundary":  "A clustered database does not guarantee uninterrupted service or safe automatic failover. Core retains cluster ownership and recovery authority; no plugin bootstrap, arbitrary SQL or host command is admitted. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify the exact engine/Galera/provider topology, credentials, observed members and quorum/replication states without assuming interchangeable MySQL/MariaDB distributions.",
+                                            "Keep initial health and flow-control observations read-only; treat partition, stale state and lost quorum as recovery decisions rather than automatically forcing a primary component.",
+                                            "Rehearse isolated consistency, state-transfer, backup and whole-cluster recovery scenarios; never bootstrap both sides of a partition or retry an uncertain destructive recovery.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.redis-service-pro",
+                         "kind":  "plugin",
+                         "label":  "Tenant Redis service connector",
+                         "category":  "database-services",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Data",
+                                             "Platform",
+                                             "Operations",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "runtime.redis",
+                                                "data.external-databases"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare an optional tenant Redis service profile with explicit credentials, memory policy and bounded observations.",
+                         "core_boundary":  "Hosted application Redis is separate from the Core job transport and sessions. Logical database numbers or key prefixes alone are not accepted as a complete tenant-security boundary. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify the selected product/deployment and Core provider with dedicated instance or demonstrably sufficient ACL/command/key/channel isolation, authenticated transport and tenant ownership.",
+                                            "Bound memory, eviction, connection and observation costs; forbid broad database-wide flush/config/script operations or access to Core transport keys through a customer profile.",
+                                            "Exercise credential revocation, expired connections, memory pressure, unavailable replicas and restore evidence; refuse unsafe cross-tenant command scope and preserve Core background processing independently.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.mongodb-service-pro",
+                         "kind":  "plugin",
+                         "label":  "External MongoDB service connector",
+                         "category":  "database-services",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Data",
+                                             "BackupRestore",
+                                             "Operations",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "data.external-databases"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare a selected MongoDB deployment profile for authorized database inventory, observations and reviewed recovery workflows.",
+                         "core_boundary":  "The proposal does not imply support for every distribution, cloud edition or database operation. No unrestricted admin database, arbitrary pipeline/query execution or Core datastore access is delegated. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify product/edition, deployment topology, protocol/client, authentication, database-scoped roles and verified TLS identity with explicit tenant ownership.",
+                                            "Start with bounded read-only observations; separately review any account, schema/index, backup or restore capability with redaction and resource limits.",
+                                            "Exercise revoked roles, replica failover, partial writes and isolated backup/restore compatibility; retain data on connector removal and require explicit authorization for database purge.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.external-acme-authority-pro",
+                         "kind":  "plugin",
+                         "label":  "Additional ACME authority connector",
+                         "category":  "certificate-providers",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "IdentityAccess",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "domains.acme-authorities",
+                                                "domains.dns01"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare an explicitly selected additional ACME authority/account policy using already admitted challenge providers.",
+                         "core_boundary":  "Core ACME, automatic renewal, wildcard DNS-01 and baseline TLS remain free. This proposal adds authority-specific interoperability and does not duplicate Cloudflare/Route53 DNS drivers or become a competing certificate writer. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify an admitted authority endpoint, account policy, trust chain and any external-account-binding requirements; keep private/account keys in durable scoped secret storage without selecting a vendor or promising unlimited issuance.",
+                                            "Use existing admitted DNS-01 provider scopes for authorized wildcard names, measured TXT propagation and concurrent-order-safe cleanup; no broad DNS credentials or deletion of another challenge is allowed.",
+                                            "Exercise rejected orders, rate limits, expiry, renewal and restart recovery with persisted order/account state; avoid new issuance on every restart and preserve installed certificates during provider outage or removal.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.nextcloud-webdav-pro",
+                         "kind":  "plugin",
+                         "label":  "Nextcloud application WebDAV connector",
+                         "category":  "application-platforms",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Files",
+                                             "Transfers",
+                                             "IdentityAccess",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.business-recipes",
+                                                "backup.transfers"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare an authenticated Nextcloud application/WebDAV client profile for explicitly owned remote file references and reviewed transfers.",
+                         "core_boundary":  "Nextcloud is an application and WebDAV service, not a substitute S3 object-storage server. Its optional S3 primary backend does not make it interchangeable with MinIO, Ceph RGW or their administrative APIs. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify a selected Nextcloud/WebDAV profile, account/app-password permissions and owned remote collection; distinguish authenticated account resources from separately authorized public-share links.",
+                                            "Review URI/path encoding, traversal, redirects, locks, size limits, quota and conflict handling; no arbitrary destination, Core file authority takeover or remote credential disclosure is allowed.",
+                                            "Exercise interrupted transfers, access revocation, concurrent edits and failed cutover with checksums and retained source; deletion/overwrite needs explicit authority and restore evidence.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                                            "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                                            "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                                            "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "plugin.enhance-interop-pro",
+                         "kind":  "plugin",
+                         "label":  "Enhance inventory and migration interoperability",
+                         "category":  "migration-data",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Transfers",
+                                             "Hosting",
+                                             "Tenancy",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.fleet-management",
+                                                "backup.transfers"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Prepare scoped Enhance API inventory and migration planning for explicitly authorized organizations, websites and related owned resources.",
+                         "core_boundary":  "Enhance remains an external source platform and architecture comparison point, not an imported WCP360 engine or second active controller for Core-managed services. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+                         "acceptance":  [
+                                            "Qualify a concrete upstream API/schema profile and read-only organization/resource permissions; use explicit source ownership and bounded redacted inventory rather than a generic remote admin proxy.",
+                                            "Map supported website, domain, database, mail and backup objects into a dry-run import plan, recording incompatible settings and unresolved secrets instead of claiming universal lossless conversion.",
+                                            "Rehearse isolated restore and current-authority checks before explicit cutover/handoff; retain source data and rollback evidence, and refuse simultaneous management of the same host, ingress or database by both panels.",
+                                            "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
                                             "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
                                             "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
                                             "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."

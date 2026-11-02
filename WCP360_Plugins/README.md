@@ -14,11 +14,11 @@ Package sources and their existing manifest shapes are preserved. Their director
 
 ## Premium connector proposals
 
-The [premium proposal inventory](premium/README.md) contains **76 optional provider/connectors in 15 categories**. Its [JSON catalogue](premium/CATALOG.json) is authoritative; [CATALOG.md](premium/CATALOG.md) is the readable view. Each proposal has a documented Core boundary, exact references to the existing 149-entry catalogue and an acceptance record.
+The [premium proposal inventory](premium/README.md) contains **97 optional provider/connectors in 19 categories**. Its [JSON catalogue](premium/CATALOG.json) is authoritative; [CATALOG.md](premium/CATALOG.md) is the readable view. Each proposal has a documented Core boundary, exact references to the existing 149-entry catalogue and an acceptance record.
 
-All 76 proposals are `design`, `installable: false` and `source_model: undecided`; no implemented package or production manifest is implied. The separate [premium template](premium/_template/README.md) preserves the existing template above. The [43 business module proposals](../WCP360_Modules/CATALOG.md) describe optional workflows rather than provider connectors.
+All 97 proposals are `design`, `installable: false` and `source_model: undecided`; no implemented package or production manifest is implied. The separate [premium template](premium/_template/README.md) preserves the existing template above. The [44 business module proposals](../WCP360_Modules/CATALOG.md) describe optional workflows rather than provider connectors.
 
-The proposals explicitly cover advanced multi-server workflows, Docker/Kubernetes/VM providers, storage platforms, CDN/performance profiles and defensive cybersecurity/DDoS integrations. Core retains the native controls, compression, target Apache access rules and local recovery; provider interfaces and OS support still require qualification.
+The proposals explicitly cover advanced multi-server workflows, Docker/Kubernetes/VM providers, storage platforms, CDN/performance profiles and defensive cybersecurity/DDoS integrations. Coverage also includes external application/proxy platforms, tenant database services, consented notifications and additional ACME authority profiles. Core retains native controls, compression, target Apache access rules, local email/TLS/wildcard and recovery; interfaces, maintenance, resource ownership and OS support still require qualification.
 
 The seven `engine.*` adapters and the **233 essential hosting capabilities remain free Core scope**. The chosen Core license is [AGPL-3.0-only](../WCP360_Core/LICENSING.md). No premium package license, price, source distribution model, key or vendor URL is chosen here. A separate API/process does not automatically establish legal independence for a proprietary derivative; see [editions and premium boundaries](../documentation/development/EDITIONS-AND-PREMIUM.md).
 

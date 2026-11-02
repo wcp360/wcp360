@@ -20,21 +20,25 @@
                            "storage.ceph",
                            "storage.glusterfs",
                            "storage.object-storage",
-                           "storage.raid-lvm"
+                           "storage.raid-lvm",
+                           "storage.nfs",
+                           "storage.smb"
                        ],
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced storage lifecycle orchestration covering performance/resilience tiers, pools, volumes, measured capacity, encryption-key references, snapshots, replication and controlled migration across qualified local or distributed providers. Each engine\u0027s durability, consistency, effective quota and restore semantics remain explicit.",
+    "summary":  "Advanced storage lifecycle orchestration across separately qualified local, GlusterFS and Ceph block/file/object providers: tiers, pools, volumes, capacity, key references, snapshots, replication and controlled migration. S3-compatible endpoints are object-service capabilities, while Nextcloud is a separately qualified application consuming storage, not an S3 server or filesystem engine.",
     "core_boundary":  "Core retains essential local storage/device policy, filesystem quotas, ownership, encryption boundaries, ordinary snapshots where admitted and local backup/restore. This module adds advanced cross-pool/provider policy and orchestration; native storage/provider foundations remain open source, and no package receives arbitrary device paths, raw mount commands or the only recovery key.",
     "acceptance":  [
-                       "Qualify each engine/version/topology and storage tier using observed latency, resilience and durability characteristics; a tier name never proves performance or redundancy.",
-                       "Resolve authoritative pool/volume identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.",
+                       "Qualify each engine/version/topology and storage tier using measured latency, durability, consistency and resilience; distinguish Ceph RBD block, CephFS file, RGW object and GlusterFS file capabilities rather than claiming equivalence.",
+                       "Resolve authoritative pool/volume/bucket/share identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.",
+                       "Admit NFS/SMB/object gateways only under qualified identity, protocol, mount and network models; S3 API compatibility does not establish POSIX semantics, every S3 feature or durability guarantees.",
+                       "Treat Nextcloud as an application with its own database, data directory/object-store compatibility, locking/background jobs, upstream license and backup/restore evidence; do not advertise it as an S3 server or bypass its application data lifecycle.",
                        "Review encryption-at-rest support, key references, rotation, escrow/recovery and failure behavior without exporting plaintext keys into package data or logs.",
                        "Coordinate snapshots with application/database consistency and retention; a local snapshot is not evidence of an independent backup or a tested restore.",
-                       "Qualify replication direction, lag, snapshot compatibility, fencing and recovery-point selection before an orchestrated promotion or migration.",
-                       "Exercise full pools, read-only filesystems, interrupted copies, failed mounts, concurrent changes and lost connectivity with explicit uncertain outcomes and reconciliation.",
-                       "Refuse destructive pool/volume/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.",
-                       "Removing or expiring orchestration must preserve mounted workloads, Core storage control, retained snapshots/backups, key recovery and a supported service-specific exit route."
+                       "Qualify replication direction, lag, consistency, fencing and recovery-point selection before promotion or migration; distinguish a resilient storage pool from application-level service availability.",
+                       "Exercise full pools, failed disks, read-only filesystems, interrupted copies, failed mounts, concurrent changes and partitions with explicit uncertainty and reconciliation.",
+                       "Refuse destructive pool/volume/bucket/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.",
+                       "Removing orchestration must preserve mounted workloads, ordinary Core storage control, retained recovery material, key access and a supported service-specific exit route."
                    ]
 }

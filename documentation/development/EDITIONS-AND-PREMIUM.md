@@ -11,8 +11,8 @@ The [Core working guide](../../WCP360_Core/WORKING-GUIDE.md), [current status](.
 | Community | The Core is 100% open source under AGPL-3.0-only. | The existing candidate remains incomplete; open-source scope is not a claim that every planned capability works. |
 | Essential platform | The thirteen Core domain owners, 233 essential functional capabilities and seven Core engine/provider adapters remain in the open-source perimeter. | Their individual implementation and qualification states still apply. No essential adapter is moved behind a premium entitlement. |
 | PRO | A commercial offer of optional business modules, connectors and advanced workflows using the same Core. | No executable edition selector, subscription entitlement verifier or PRO activation protocol is delivered by this document. |
-| Premium business modules | Independently versioned packages under `WCP360_Modules/`. | The catalogue contains 43 design proposals, not 43 installable packages. |
-| Premium connectors | Independently versioned integrations under `WCP360_Plugins/premium/`. | The catalogue contains 76 design proposals, not 76 admitted or qualified connectors. |
+| Premium business modules | Independently versioned packages under `WCP360_Modules/`. | The catalogue contains 44 design proposals, not 44 installable packages. |
+| Premium connectors | Independently versioned integrations under `WCP360_Plugins/premium/`. | The catalogue contains 97 design proposals, not 97 admitted or qualified connectors. |
 | App Install PRO | Full access to application installation workflows for recipes that have passed the required qualification and admission checks. | No executable general App Installer exists today; the 410 App Deploy references are not all installable applications. |
 | Package licensing | Decide and publish the source model and license for each optional artifact before release. | Premium source models and licenses remain undecided. A commercial product may also be open source. |
 | SDK | Keep a separate dependency and distribution boundary. | The SDK license requires its own decision; Core licensing does not silently settle it. |
@@ -77,9 +77,11 @@ flowchart TB
 
 ## Infrastructure and edge coverage
 
-The [nine-domain infrastructure register](INFRASTRUCTURE-PREMIUM-COVERAGE.md) covers multi-server hosting/management, storage, Docker, Kubernetes, VPS/VM, performance booster/compression, CDN, cybersecurity and DDoS. It maps the advanced workflows to Core owners and provider connectors, with lifecycle, isolation and measurement gates. The 43 modules and 76 connectors total 119 proposals; the original 149-entry design inventory is unchanged.
+The [nine-domain infrastructure register](INFRASTRUCTURE-PREMIUM-COVERAGE.md) covers multi-server hosting/management, storage, Docker, Kubernetes, VPS/VM, performance booster/compression, CDN, cybersecurity and DDoS. It maps the advanced workflows to Core owners and provider connectors, with lifecycle, isolation and measurement gates. The 44 modules and 97 connectors total 141 proposals; the original 149-entry design inventory is unchanged.
 
 Ordinary hosting, admitted provider foundations, local storage/quota management, safe cache/compression and essential security remain Core scope. Premium packages orchestrate advanced workflows; they cannot bypass protected-file authorization, tenant scope, distributed effect fencing or recovery. A namespace, container, snapshot, compression switch or local firewall is not by itself proof of isolation, backup, speed or upstream DDoS protection.
+
+The [eleven-area platform register](PLATFORM-INTEGRATIONS-COVERAGE.md) adds the named integration and hosting workflows without duplicating Core owners. [Reseller templates, plans, quotas, assignments and authorized overrides](../../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md), basic/global DNS, wildcard certificate lifecycle, essential security and baseline notifications remain open-source Core duties. The additional DNS/TLS module provides advanced cross-provider/node orchestration, with no paywall over those foundations.
 
 ## Open-source licensing and commercial rights
 

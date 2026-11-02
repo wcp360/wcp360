@@ -5,13 +5,15 @@
 ## Package-specific checks
 
 1. Qualify Docker/OCI versions and rootful/rootless assumptions, peer identity, cgroup delegation and actual CPU/RAM/PID/storage/log enforcement before declaring support.
-2. Pin images to reviewed immutable digests with upstream source/license and provenance checks; isolate builds and refuse unreviewed image/build privileges.
-3. Map tenant workload identity, UID/GID policy, allowed mounts, ports and network/egress ownership; refuse host sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.
-4. Manage volume data, consistency boundaries, database dependencies, encryption/secret references and retention explicitly rather than treating container recreation as data recovery.
-5. Bound logs, exec-like diagnostic capabilities, health checks and resource observations; module APIs cannot become arbitrary container or host command dispatch.
-6. Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, health evidence and per-workload outcomes.
-7. Rehearse backup/restore of application data plus required configuration/secrets references on isolated targets; test failed pulls, full storage, daemon loss and interrupted updates.
-8. On expiry/removal, stop new premium orchestration safely while containers, data, ordinary Core provider control and independent recovery remain available.
+2. Pin images to reviewed immutable digests with upstream license/provenance checks; isolate builds and refuse unreviewed image/build privileges.
+3. Admit Compose versions/features through a canonical typed plan; validate service identities, dependencies, mounts, networks, ports, health and effective budgets rather than sending arbitrary raw YAML or shell text to a daemon.
+4. Map tenant UID/GID, allowed mounts, ports and network/egress ownership; refuse host Docker sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.
+5. Select one authoritative effect/reconciliation owner per deployment when using Portainer, Coolify or Dokku. Connector capabilities, manager-owned metadata and Core resource mappings must be version-qualified; no two managers silently mutate the same workload.
+6. Manage volumes, database consistency, encryption/secret references and retention explicitly; container recreation is not data recovery.
+7. Bound logs, named diagnostic capabilities, health checks and observations; this product cannot become arbitrary container/host exec or an unrestricted daemon API.
+8. Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, measured health and per-workload outcomes.
+9. Rehearse isolated backup/restore of application data and required configuration/secret references; test failed pulls, full storage, daemon/manager loss and interrupted updates.
+10. On expiry/removal preserve workloads, data, ordinary free Core provider control and independent recovery while stopping new premium orchestration safely.
 
 ## Shared release and exit checks
 
