@@ -6,6 +6,7 @@ Technical documentation is grouped here so the repository root can focus on proj
 
 | Need | Maintained source |
 | :--- | :--- |
+| Find consolidated branch histories and source locations on main | [Integration register](governance/branches/BRANCH-INTEGRATION-2026-11-02.md) |
 | Resume a bounded Core change and keep documents consistent | [Core working guide](../WCP360_Core/WORKING-GUIDE.md) |
 | See the verified revision, evidence, current limits and next checkpoint | [Core status](../WCP360_Core/STATUS.md) |
 | Follow dependency order and acceptance | [Core roadmap](../WCP360_Core/ROADMAP.md) |

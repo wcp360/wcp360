@@ -80,7 +80,7 @@
                          "disposition":  "Governance verification/traceability tools retained with explicit historical/current scopes."
                      }
                  ],
-    "open_prs":  [
+    "initial_open_prs":  [
                      {
                          "number":  116,
                          "head":  "implementation/core-executable-foundation-20261031",
@@ -163,7 +163,7 @@
     "local_runtime_tests":  "not_run: user instruction",
     "independent_E3":  "not_established",
     "production_qualification":  "not_established",
-    "status":  "LOCAL_INTEGRATION_COMPLETE_MAIN_PENDING",
+    "status":  "MAIN_PUBLISHED",
     "integration_source":  "edcfe4a1b752333b3b6744f4d9df7554d792c4c5",
     "merge_commits":  [
                           "f4c16b096565555b310bfd32e43b7aba4d975a43",
@@ -176,5 +176,108 @@
                           "64c0bf670acf37b556da70f3b7669b4ce8a7906b",
                           "37ac60d8009cf9f39d2a218d81655a5690c46117",
                           "edcfe4a1b752333b3b6744f4d9df7554d792c4c5"
-                      ]
+                      ],
+    "main_merge_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+    "ci_head_sha":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+    "tested_pr_merge_sha":  "bbb68ff106eea399da9b787b2c9e13dde4d408c9",
+    "ci_runs":  [
+                    {
+                        "id":  41542397450,
+                        "name":  "SC-M01 inert control-protocol research tests",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397450"
+                    },
+                    {
+                        "id":  41542397471,
+                        "name":  "Full platform candidate verification",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397471"
+                    },
+                    {
+                        "id":  41542397754,
+                        "name":  "SC-M01 input fingerprints (current relocation and historical fixtures)",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397754"
+                    },
+                    {
+                        "id":  41542397475,
+                        "name":  "SC-M01 historical reference traceability (noncanonical)",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397475"
+                    },
+                    {
+                        "id":  41542397519,
+                        "name":  "SC-M01 integrated development-source review (noncanonical)",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397519"
+                    },
+                    {
+                        "id":  41542397455,
+                        "name":  "SC-M01 IPC-B Go research-only framing tests",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397455"
+                    },
+                    {
+                        "id":  41542397446,
+                        "name":  "Repository guardrails",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397446"
+                    },
+                    {
+                        "id":  41542397637,
+                        "name":  "SC-M01 inert daemon foundation",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397637"
+                    },
+                    {
+                        "id":  41542397631,
+                        "name":  "File Manager standalone candidate",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397631"
+                    },
+                    {
+                        "id":  41542397484,
+                        "name":  "Core executable candidate",
+                        "event":  "pull_request",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542397484"
+                    },
+                    {
+                        "id":  41542379857,
+                        "name":  "Full platform candidate verification",
+                        "event":  "push",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542379857"
+                    },
+                    {
+                        "id":  41542379851,
+                        "name":  "SC-M01 inert daemon foundation",
+                        "event":  "push",
+                        "head":  "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+                        "result":  "success",
+                        "url":  "https://github.com/yyogas/wcp360/actions/runs/41542379851"
+                    }
+                ],
+    "path_evidence":  "BRANCH-INTEGRATION-2026-11-02.paths.json",
+    "retirement_policy":  "Each work ref is removed only after its current head is confirmed in main and an exact deletion lease is supplied."
 }

@@ -1,6 +1,6 @@
 # Branch integration — November 2, 2026
 
-**Local integration status:** all fifteen frozen branch heads are ancestors of the integration candidate. Publication to main and branch retirement are pending remote verification.
+**Published to main on November 3, 2026:** [merge d6f04e169706](https://github.com/yyogas/wcp360/commit/d6f04e1697062cb0f1b0f1f46ad676eddab12fe9) through [PR #116](https://github.com/yyogas/wcp360/pull/116). All fifteen frozen input heads are ancestors of main; its source tree matches the candidate that passed all 30 configured GitHub checks. Work refs are retired only after separate ancestry/lease verification.
 
 This register records the user's instruction to finish all work branches and consolidate their retained work into `main`. The frozen input contains **15 branches: main and 14 work branches**, with 11 open pull requests. The earlier [October 31 reconciliation](BRANCH-RECONCILIATION-2026-10-31.md) remains historical evidence.
 
@@ -52,3 +52,5 @@ The integration is publication of development candidates under the user's consol
 ## Branch completion
 
 After main contains the tested integration, verify each frozen branch SHA against main, close any remaining superseded/stacked pull requests with an integration reference, and remove only the verified work-branch refs. Keep main, immutable Git history, source inventories and the dated records. Continue subsequent local work from main.
+
+Content evidence: [411 changed-path records](BRANCH-INTEGRATION-2026-11-02.paths.json), including 337 byte/mode-identical retained files and 74 explicit path/shared-content resolutions. These records cover historical work branches; the complete current workspace is retained through its frozen implementation head.

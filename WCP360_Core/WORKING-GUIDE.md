@@ -9,14 +9,14 @@ Use this page to resume development, locate the authoritative description of a c
 1. Read [STATUS.md](STATUS.md) for the last verified executable revision, its CI scope, open qualification boundaries and the next candidate checkpoint.
 2. Read the relevant milestone in [ROADMAP.md](ROADMAP.md). A candidate helper or a folder does not close a production milestone.
 3. Find the owner in [NAVIGATION.md](NAVIGATION.md), then read that module's README and concrete source guide. Use [STRUCTURE.md](STRUCTURE.md) for cross-module growth boundaries.
-4. Check applicable specifications and current product decisions. Keep the existing branch and the authorized scope. The current workflow uses `implementation/core-executable-foundation-20261031` and [draft PR #116](https://github.com/yyogas/wcp360/pull/116); do not create another branch as an organizational shortcut.
+4. Check applicable specifications and current product decisions. Keep the existing branch and the authorized scope. Development is consolidated on `main` through [PR #116](https://github.com/yyogas/wcp360/pull/116). Follow the [branch integration register](../documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md); do not create another branch as an organizational shortcut.
 5. Implement one complete bounded slice with validation/refusal behavior, update its owning documents and record exact-source evidence before changing its delivery status.
 
 ## Which document owns which answer?
 
 | Question | Maintained source | Update it when |
 | :--- | :--- | :--- |
-| What is WCP360, who uses it and what is the target stack? | [Public overview](../README_GITHUB.md), with the published root README kept in sync | Product scope, target choices or public entry points change. |
+| What is WCP360, who uses it and what is the target stack? | [Public overview](../README_GITHUB.md), with the dated root workspace README kept as historical context | Product scope, target choices or public entry points change. |
 | What has actually been verified, and what comes next? | [STATUS.md](STATUS.md) | A new executable checkpoint is verified or the selected next increment changes. |
 | What is the dependency order and acceptance for the complete Core? | [ROADMAP.md](ROADMAP.md) | Milestone scope, dependencies or evidenced maturity change. |
 | Which of the 233 capabilities is implemented? | [CAPABILITY-MAP.md](CAPABILITY-MAP.md) | The owning behavior and its evidence justify a status/detail change. |

@@ -1,6 +1,6 @@
 # Current WCP360 Core status
 
-**Updated: November 2, 2026. Executable development candidate; complete hosting and production qualification remain open.**
+**Updated: November 3, 2026. Executable development candidate; complete hosting and production qualification remain open.**
 
 Read [WORKING-GUIDE.md](WORKING-GUIDE.md) to resume work. Use [ROADMAP.md](ROADMAP.md) for dependency order and acceptance, [CAPABILITY-MAP.md](CAPABILITY-MAP.md) for the 233 capability statuses and [NAVIGATION.md](NAVIGATION.md) to locate code.
 
@@ -8,11 +8,11 @@ Read [WORKING-GUIDE.md](WORKING-GUIDE.md) to resume work. Use [ROADMAP.md](ROADM
 
 | Item | Exact reference |
 | :--- | :--- |
-| Development branch | `implementation/core-executable-foundation-20261031` |
-| Review | [Draft PR #116](https://github.com/yyogas/wcp360/pull/116); no merge or production promotion implied. |
-| Runtime source | [da265278c20e230d5ba4614647a8271f4b0d7506](https://github.com/yyogas/wcp360/commit/da265278c20e230d5ba4614647a8271f4b0d7506) |
-| Source tree | `dc0620b968ca01360f9c8f8d5675b688715a6757` |
-| Executed evidence | [Workflow 41460846945](https://github.com/yyogas/wcp360/actions/runs/41460846945): **14/14 jobs successful**. |
+| Development branch | `main`; all frozen work-branch inputs are tracked by the [integration register](../documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md). |
+| Publication | [PR #116](https://github.com/yyogas/wcp360/pull/116) consolidates development sources; independent review and production qualification remain distinct. |
+| Runtime source | [59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302](https://github.com/yyogas/wcp360/commit/59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302) |
+| Source tree | `8d97f4dec3b85c3bf3e1d13de47c5fde508aa2d6` |
+| Executed evidence | [Workflow 41542397484](https://github.com/yyogas/wcp360/actions/runs/41542397484): **14/14 jobs successful**. |
 | Local execution | Stopped under the current working instruction; documentation/source inspection does not restart it. |
 | Production state | Not qualified; `CODE-BASELINE=NONE`. No stable release or `latest` pointer. |
 

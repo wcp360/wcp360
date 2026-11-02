@@ -1,6 +1,6 @@
 # WCP360 Workspace
 
-> **Point d’entrée actuel du Core — 2 novembre 2026 :** consulter le [guide de travail](WCP360_Core/WORKING-GUIDE.md), l’[état vérifié](WCP360_Core/STATUS.md) et la [roadmap](WCP360_Core/ROADMAP.md). Ce fichier local contient une réécriture en cours et des inventaires historiques conservés ; les descriptions datées ci-dessous ne constituent pas l’état de livraison actuel. Le [README GitHub](README_GITHUB.md) présente la synthèse publique synchronisée. Les sources Site officiel et Internal citées dans l’historique sont hors du checkout Standalone.
+> **Point d’entrée actuel du Core — 3 novembre 2026 :** consulter le [guide de travail](WCP360_Core/WORKING-GUIDE.md), l’[état vérifié](WCP360_Core/STATUS.md) et la [roadmap](WCP360_Core/ROADMAP.md). Ce fichier local contient une réécriture en cours et des inventaires historiques conservés ; les descriptions datées ci-dessous ne constituent pas l’état de livraison actuel. Le [README GitHub](README_GITHUB.md) présente la synthèse publique synchronisée. Les sources Site officiel et Internal citées dans l’historique sont hors du checkout Standalone.
 
 Espace de travail du projet **WCP360 (Web Control Panel 360)**. Il regroupe la documentation de référence, le prototype du panneau de contrôle, le site officiel statique, un espace vendeur privé et des modules distribués séparément.
 

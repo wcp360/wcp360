@@ -46,7 +46,7 @@ WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, 
 The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. The operating-system targets are **Debian 12 and 13, and Ubuntu 22.04, 24.04 and 26.04 LTS**. Go agents perform controlled system operations; Python is reserved for specialized diagnostics. Nginx fronts the panel, while the new general-purpose hosting target adds a private Apache event backend before isolated PHP-FPM. Target declarations, native-package tests and complete installation qualification have distinct [platform evidence boundaries](documentation/development/SUPPORTED-PLATFORMS.md).
 
 > [!NOTE]
-> **In development — status updated on November 2, 2026.** This README distinguishes the executable Core candidate, the target product and production qualification. Current Core work uses `implementation/core-executable-foundation-20261031` and [draft PR #116](https://github.com/yyogas/wcp360/pull/116); historical source branches remain separate. Start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md). The [baseline manifest](documentation/manifests/WCP360-BM-0001.md) retains its own canonical scope and `CODE-BASELINE = NONE`.
+> **In development — status updated on November 3, 2026.** This README distinguishes the executable Core candidate, the target product and production qualification. Development sources are consolidated on `main` through [PR #116](https://github.com/yyogas/wcp360/pull/116). The [integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) preserves the fifteen input heads and their content dispositions; SOURCE remains a separate workbench. Start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md). The [baseline manifest](documentation/manifests/WCP360-BM-0001.md) retains its own canonical scope and `CODE-BASELINE = NONE`.
 
 ## Contents
 
@@ -1486,7 +1486,7 @@ The [central Core status](WCP360_Core/STATUS.md) distinguishes executable candid
 
 | Component | Documented status |
 | :--- | :--- |
-| Current Core development | Executable PHP 8.4 / Symfony 7.4 candidate under WCP360_Core, developed on `implementation/core-executable-foundation-20261031` in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). It is distinct from historical SOURCE candidates and from an installable production release. |
+| Current Core development | Executable PHP 8.4 / Symfony 7.4 candidate under WCP360_Core, published on `main` through [PR #116](https://github.com/yyogas/wcp360/pull/116). It is distinct from historical SOURCE candidates and from an installable production release. |
 | Authentication and presentation | Username-based USER/ROOT contexts, optional administrator MFA, candidate sessions/recovery, Twig/Turbo/Stimulus/AssetMapper and prototype-derived WCP360 CSS. Complete production IAM and the target UI library remain open. |
 | Data and operations | PostgreSQL 17 development verification, DBAL queries/migrations and bounded candidate jobs. ORM mapping, Messenger transports and general durable effect contracts remain open. |
 | Hosting and Go | Seven inert application previews, separate existing runtime profiles and narrowly guarded isolated FPM effects. Native general installation, real-domain/TLS lifecycle, stack switching and production qualification remain open. |
@@ -1494,7 +1494,7 @@ The [central Core status](WCP360_Core/STATUS.md) distinguishes executable candid
 | Application catalogue | Read-only Core bridge to AppDeploy editorial metadata. Draft descriptors and lifecycle guides do not authorize installation. |
 | Extension management | Fixed reference-plugin lifecycle candidate; general package admission, publisher trust, premium licensing and production supervision remain unfinished. |
 | Panel prototype | HTML/CSS/JavaScript demo sources in WCP360_Prototype; visual reference for the candidate, with simulated operations and browser storage. |
-| Historical source branches | `source/full-platform-candidate` and the inert daemon lanes retain their dated source/review scope; they are not the current Symfony Core implementation. |
+| Standalone source workbench | SOURCE/platform, SOURCE/ui and SOURCE/daemon are available on `main` with their separate historical candidate scope; they are not loaded into the Symfony Core. |
 | File Manager 0.3.0 alpha Pro and Insights | Separate development packages/prototypes with their own manifests and integration limits. Their presence does not qualify a general plugin platform. |
 | Production release | None. Full installation, providers, security acceptance, recovery and independent release qualification remain required. |
 
@@ -1514,7 +1514,7 @@ cd wcp360
 git branch --all
 ```
 
-Read the [working guide](WCP360_Core/WORKING-GUIDE.md), [candidate status](WCP360_Core/STATUS.md) and [baseline manifest](documentation/manifests/WCP360-BM-0001.md). Use the current Core branch/PR for its documented development candidate, and the dated branches below when studying historical components. A clone of `main` is not a complete panel installer.
+Read the [working guide](WCP360_Core/WORKING-GUIDE.md), [candidate status](WCP360_Core/STATUS.md) and [baseline manifest](documentation/manifests/WCP360-BM-0001.md). Use `main` for the documented Core candidate and the separate SOURCE/research workbenches; consult the integration register for immutable historical heads. A clone of `main` is not a complete panel installer.
 
 ### Install standalone File Manager dependencies
 
@@ -1608,39 +1608,27 @@ The earlier versioned installer templates now live under [Core installer scaffol
 
 The earlier root src reservation and archive cleanup are recorded in [immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive) and [repository history/path mapping](documentation/REPOSITORY-STRUCTURE.md). Vendor Internal and the public website remain separate product concerns; their local workspace presence is not evidence of publication on `main`.
 
-Existing candidate source locations remain separate; this organizational change does not merge them:
+Consolidated candidate sources remain independent workbenches:
 
-| Location | Reference branch |
+| Location | Maintained source |
 | :--- | :--- |
-| `SOURCE/platform/`, `SOURCE/ui/`, `SOURCE/daemon/` | `source/full-platform-candidate` |
-| `SOURCE/daemon/` — inert CLI foundation | `source/sc-m01-inert-daemon` |
-| `WCP360_Extensions/WCP360-File-Manager/` | `extensions/file-manager-v0.3.0-import` |
-
+| [SOURCE/platform](SOURCE/platform/README.md), [SOURCE/ui](SOURCE/ui/README.md), [SOURCE/daemon](SOURCE/daemon/README.md) | Standalone framework-independent and inert-daemon candidates on main; no Core boot/autoload integration. |
+| [research/architecture-lab](research/architecture-lab/) | Inert protocol labs, separately verified. |
+| [WCP360_Plugins/wcp360-file-manager-xampp](WCP360_Plugins/wcp360-file-manager-xampp/README.md) | One standalone File Manager source tree and its CI/provenance harness. |
 
 ## GitHub branches
 
-The **November 2, 2026 inventory records 15 branches**. Current Core work continues on **one existing branch**, `implementation/core-executable-foundation-20261031`, in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Use the [working guide](WCP360_Core/WORKING-GUIDE.md) and [status](WCP360_Core/STATUS.md) for current orientation; this is not a claim that the candidate has merged into `main` or become a production release.
+Development is consolidated on **main** through [PR #116](https://github.com/yyogas/wcp360/pull/116). The [November 2 integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) records all **15 input branches**, their immutable heads and file dispositions. Work-branch refs are retired only after their heads are verified as ancestors of main; source history is preserved.
 
-The table below preserves the **historical 14-branch snapshot from October 31, 2026**: two documentation branches consolidated, one historical integration bundle retained, and ten PR candidates kept at their review SHAs. These are dated dispositions, not a live PR-status feed. See the [reconciliation](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) and [path/blob evidence](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.json).
-
-| Branch in the October 31 snapshot | Disposition recorded at that date |
+| Work | Source on main |
 | :--- | :--- |
-| [`audit/closure-matrix-refresh-2026-10-03`](https://github.com/yyogas/wcp360/tree/audit/closure-matrix-refresh-2026-10-03) | Integrated as a dated historical closure matrix; no audit closure claimed. |
-| [`design-system/import-v2.5.3.36.4-markdown`](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown) | Consolidated: 20 existing identical documents reused; 2 metadata files archived. |
-| [`extensions/file-manager-v0.3.0-import`](https://github.com/yyogas/wcp360/tree/extensions/file-manager-v0.3.0-import) | [PR #113](https://github.com/yyogas/wcp360/pull/113): path reconciliation, final owner revalidation and independent review pending. |
-| [`integration/sc-m01-owner-readiness-20261026`](https://github.com/yyogas/wcp360/tree/integration/sc-m01-owner-readiness-20261026) | Historical bundle; [PR #90](https://github.com/yyogas/wcp360/pull/90) closed without merge. Current narrow PRs take precedence. |
-| [`main`](https://github.com/yyogas/wcp360/tree/main) | Reference; existing source imports and canonical contracts preserved. |
-| [`maintenance/sc-m01-repository-guardrails`](https://github.com/yyogas/wcp360/tree/maintenance/sc-m01-repository-guardrails) | [PR #42](https://github.com/yyogas/wcp360/pull/42): independent review and current-base checks pending. |
-| [`research/sc-m01-control-protocol-options-20261026`](https://github.com/yyogas/wcp360/tree/research/sc-m01-control-protocol-options-20261026) | [PR #88](https://github.com/yyogas/wcp360/pull/88): research only; independent review pending. |
-| [`research/sc-m01-ipcb-go-framing-20261027`](https://github.com/yyogas/wcp360/tree/research/sc-m01-ipcb-go-framing-20261027) | [PR #94](https://github.com/yyogas/wcp360/pull/94): research only; independent review pending. |
-| [`source/full-platform-candidate`](https://github.com/yyogas/wcp360/tree/source/full-platform-candidate) | Draft [PR #109](https://github.com/yyogas/wcp360/pull/109): wider scope decisions and independent review pending. |
-| [`source/sc-m01-domain-foundation`](https://github.com/yyogas/wcp360/tree/source/sc-m01-domain-foundation) | Draft [PR #110](https://github.com/yyogas/wcp360/pull/110): stacked on #108; wider scope decisions and independent review pending. |
-| [`source/sc-m01-inert-daemon`](https://github.com/yyogas/wcp360/tree/source/sc-m01-inert-daemon) | [PR #108](https://github.com/yyogas/wcp360/pull/108): selected inert slice; independent review pending. |
-| [`test/sc-m01-cli-process-contract`](https://github.com/yyogas/wcp360/tree/test/sc-m01-cli-process-contract) | [PR #114](https://github.com/yyogas/wcp360/pull/114): stacked on #108; independent review pending. |
-| [`tooling/sc-m01-contract-traceability-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-contract-traceability-20261026) | [PR #87](https://github.com/yyogas/wcp360/pull/87): historical reference tooling; independent review pending. |
-| [`tooling/sc-m01-preflight-checks-20261026`](https://github.com/yyogas/wcp360/tree/tooling/sc-m01-preflight-checks-20261026) | Draft [PR #86](https://github.com/yyogas/wcp360/pull/86): read-only 8/8 preflight; independent review pending. |
+| Current Symfony Core | [WCP360_Core](WCP360_Core/README.md), [working guide](WCP360_Core/WORKING-GUIDE.md) and [status](WCP360_Core/STATUS.md). |
+| Standalone platform and inert daemon | [SOURCE workbench](SOURCE/README.md); this is separate from the current Symfony runtime. |
+| Research and verification | [Architecture labs](research/architecture-lab/), [governance tooling](tools/governance/) and [repository checks](tools/repository/). |
+| Standalone File Manager | [Canonical plugin source](WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
+| Historical branch evidence | [October 31 reconciliation](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) and [November 2 content register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.json). |
 
-Research, source candidates and tooling branches require the applicable scope, test and review decisions before promotion. Branch existence, a successful historical workflow or GitHub's mergeable flag does not establish independent approval or an installable release. No branch was deleted.
+Continue routine Core work on main. Integration records and successful tests do not establish independent approval, a complete hosting engine or an installable production release.
 
 ## Documentation and contributing
 
@@ -1650,9 +1638,9 @@ Research, source candidates and tooling branches require the applicable scope, t
 | Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/documentation/governance/PROJECT-STATUS.md). |
 | Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/documentation/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
 | Understand the architecture | [ARCHITECTURE.md](ARCHITECTURE.md): components, flows, data authority, system agents, extensions, and deployment boundaries. |
-| Work on the current Core | [Working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md), [Core navigation](WCP360_Core/NAVIGATION.md) and [draft PR #116](https://github.com/yyogas/wcp360/pull/116). |
-| Study historical application sources | [Full historical candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [framework-independent kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
-| Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
+| Work on the current Core | [Working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md), [Core navigation](WCP360_Core/NAVIGATION.md) and [integration PR #116](https://github.com/yyogas/wcp360/pull/116). |
+| Study historical application sources | [Full historical candidate overview](https://github.com/yyogas/wcp360/blob/main/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [framework-independent kernel README](https://github.com/yyogas/wcp360/blob/main/SOURCE/platform/README.md). |
+| Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/main/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Follow release qualification | [Qualified version records](WCP360_Releases/README.md), [build procedures](WCP360_Build/README.md) and [installer scaffolds](WCP360_Core/installer/scaffolds/README.md). |
 | Explore the imported workspace | [Core](WCP360_Core/README.md), [Prototype](WCP360_Prototype/README.md), [developer documentation](WCP360_Developper/README.md), and [plugins](WCP360_Plugins/). |

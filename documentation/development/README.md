@@ -100,7 +100,7 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - Insights remains a UI/metadata prototype. Its version and crypto declarations do not prove a production transport or lifecycle.
 - The two package manifest shapes are not silently unified. Define and ratify one production manifest contract, then provide explicit migration/validation for existing packages.
 - Existing #108/#114/#110/#109 candidates keep their SHA-bound reviews. This scaffold does not copy or merge them into the target folders.
-- Current Core development uses the single existing `implementation/core-executable-foundation-20261031` branch and draft PR #116. Do not create a new Core branch for routine continuation. The [working guide](../../WCP360_Core/WORKING-GUIDE.md) records the update workflow; independent SDK/plugin/release branch decisions require their own task scope. Keep changes bounded and preserve unrelated working-tree edits.
+- Core development is consolidated on `main` through PR #116. The [integration register](../governance/branches/BRANCH-INTEGRATION-2026-11-02.md) records all frozen source heads and their retained content. Do not create a new Core branch for routine continuation. The [working guide](../../WCP360_Core/WORKING-GUIDE.md) records the update workflow; independent SDK/plugin/release branch decisions require their own task scope. Keep changes bounded and preserve unrelated working-tree edits.
 - Core, SDK and plugins have independent versions and compatibility matrices. A plugin update does not require a new Core release when the approved compatibility contract remains satisfied.
 
 ## Detailed implementation guides

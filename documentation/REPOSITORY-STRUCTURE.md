@@ -1,5 +1,7 @@
 # Repository structure
 
+> **Current navigation — November 3, 2026:** development sources are consolidated on main. Follow the [integration register](governance/branches/BRANCH-INTEGRATION-2026-11-02.md), [Core working guide](../WCP360_Core/WORKING-GUIDE.md) and [current status](../WCP360_Core/STATUS.md). The dated reorganization account below remains historical; SOURCE/research are separate retained candidates.
+
 **Effective:** October 31, 2026. This is a directory and navigation change, not implementation, owner-contract ratification or release authorization.
 
 ```text
