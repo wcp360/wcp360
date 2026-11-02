@@ -21,14 +21,17 @@ final class PermissionController extends AbstractController
     public function index(Request $request): Response
     {
         $actor = $this->administrator();
+        if (array_diff(array_keys($request->query->all()), ['page', 'user'])) throw new BadRequestHttpException('Invalid access-list filters.');
         $page = $request->query->getString('page', '1');
+        $user = $request->query->getString('user', '');
+        if ($user !== '') $user = \Wcp360\Core\Shared\Http\CursorPageQuery::uuid($user);
         if (preg_match('/^[1-9][0-9]{0,4}$/D', $page) !== 1 || (int) $page > 10000) {
             throw new BadRequestHttpException('Invalid access-list page.');
         }
 
         return $this->render('identity/permissions.html.twig', [
             'context' => 'admin', 'page_title' => 'Accès des utilisateurs',
-            'report' => $this->administration->listing($actor->id, (int) $page),
+            'report' => $this->administration->listing($actor->id, (int) $page, $user !== '' ? $user : null),
         ]);
     }
 
@@ -36,6 +39,8 @@ final class PermissionController extends AbstractController
     public function change(Request $request, string $actor, string $tenant): Response
     {
         $administrator = $this->administrator();
+        $view = $request->query->getString('view', '');
+        if (array_diff(array_keys($request->query->all()), ['view']) || !in_array($view, ['', 'user'], true)) throw new BadRequestHttpException('Invalid access-change view.');
         $input = $request->request->all();
         if (array_diff(array_keys($input), ['_token', 'denied']) || !is_string($input['_token'] ?? null)
             || !is_string($input['denied'] ?? null) || !in_array($input['denied'], ['0', '1'], true)) {
@@ -46,7 +51,9 @@ final class PermissionController extends AbstractController
         }
         $this->administration->setDenied($administrator->id, $actor, $tenant, $input['denied'] === '1');
 
-        return new RedirectResponse('/workbench/access', 303);
+        return $view === 'user'
+            ? $this->redirectToRoute('wcp_access_permissions', ['user' => $actor], 303)
+            : new RedirectResponse('/workbench/access', 303);
     }
 
     private function administrator(): Principal

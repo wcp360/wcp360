@@ -62,6 +62,8 @@ The [administrator audit journal](src/Module/Observability/README.md) provides b
 
 The ADMIN surface represents the [server root administrator](src/Module/IdentityAccess/README.md#server-root-administrator) and is presented as ROOT. Its [server overview](src/Module/Platform/README.md#root-server-overview) shows observed OS, architecture, memory and storage capacity; the PHP runtime remains separated from privileged Linux execution.
 
+The [ROOT hosting account inventory](src/Module/IdentityAccess/README.md#root-hosting-account-inventory) lists Core login identities with bounded search/state filters and opens the selected user's existing access-management workflow. Account metadata reads require current ROOT authority and preserve default PostgreSQL grants.
+
 ## Source layout
 
 ```text

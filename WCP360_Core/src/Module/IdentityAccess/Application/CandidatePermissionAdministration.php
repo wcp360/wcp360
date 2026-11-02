@@ -16,14 +16,23 @@ final readonly class CandidatePermissionAdministration
 
     public function __construct(private WorkbenchStore $store) {}
 
-    /** @return array{items: list<array{user_id: string, email: string, active: bool, tenant_id: string, tenant_name: string, denied: bool}>, page: int, has_next: bool} */
-    public function listing(string $admin, int $page = 1): array
+    /** @return array{items:list<array{user_id:string,email:string,active:bool,tenant_id:string,tenant_name:string,denied:bool}>,page:int,has_next:bool,selected_user:array{id:string,username:string}|null} */
+    public function listing(string $admin, int $page = 1, ?string $user = null): array
     {
         $this->store->requireAdmin($admin);
-        if ($page < 1 || $page > 10000) {
-            throw new \InvalidArgumentException('Invalid permission page.');
+        if ($page < 1 || $page > 10000) throw new \InvalidArgumentException('Invalid permission page.');
+        $scope = (new CandidateAuthorization($this->store->db))->adminScopeSql();
+        $selected = null;
+        if ($user !== null) {
+            $user = \Wcp360\Core\Shared\Http\CursorPageQuery::uuid($user);
+            $row = $this->store->db->fetchAssociative("SELECT id,username FROM wcp_candidate_users WHERE id=? AND context='user' AND EXISTS (".$scope.')', [$user, $admin]);
+            if ($row === false) throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+            $selected = ['id' => (string) $row['id'], 'username' => (string) $row['username']];
         }
         $offset = ($page - 1) * self::PAGE_SIZE;
+        $filter = $user === null ? '' : ' AND u.id=?';
+        $params = [CandidateAuthorization::HOSTING_PLAN, $admin];
+        if ($user !== null) $params[] = $user;
         $rows = $this->store->db->fetchAllAssociative(
             "SELECT u.id AS user_id, u.email, u.active, t.id AS tenant_id, t.name AS tenant_name,
                 CASE WHEN d.user_id IS NULL THEN 0 ELSE 1 END AS denied
@@ -32,25 +41,20 @@ final readonly class CandidatePermissionAdministration
             JOIN wcp_candidate_tenants t ON t.id = m.tenant_id
             LEFT JOIN wcp_candidate_permission_denials d
                 ON d.user_id = m.user_id AND d.tenant_id = m.tenant_id AND d.permission = m.permission
-            WHERE m.permission = ?
+            WHERE m.permission = ? AND EXISTS (".$scope.')'.$filter."
             ORDER BY u.email, u.id, t.name, t.id
-            LIMIT 101 OFFSET ".$offset,
-            [CandidateAuthorization::HOSTING_PLAN],
+            LIMIT 101 OFFSET ".$offset, $params,
         );
         $hasNext = count($rows) > self::PAGE_SIZE;
-        if ($hasNext) {
-            array_pop($rows);
-        }
+        if ($hasNext) array_pop($rows);
         $items = array_map(static fn (array $row): array => [
-            'user_id' => (string) $row['user_id'],
-            'email' => (string) $row['email'],
-            'active' => (bool) $row['active'],
-            'tenant_id' => (string) $row['tenant_id'],
-            'tenant_name' => (string) $row['tenant_name'],
-            'denied' => (bool) $row['denied'],
+            'user_id' => (string) $row['user_id'], 'email' => (string) $row['email'],
+            'active' => (bool) $row['active'], 'tenant_id' => (string) $row['tenant_id'],
+            'tenant_name' => (string) $row['tenant_name'], 'denied' => (bool) $row['denied'],
         ], $rows);
+        $this->store->requireAdmin($admin);
 
-        return ['items' => $items, 'page' => $page, 'has_next' => $hasNext];
+        return ['items' => $items, 'page' => $page, 'has_next' => $hasNext, 'selected_user' => $selected];
     }
 
     /** Removing a block does not create or restore a membership. */

@@ -655,6 +655,25 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
     }
 
+    public function testRootUserInventoryAndSelectedAccessNeedOnlyExistingAdminReadGrants(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $service = new \Wcp360\Core\Module\IdentityAccess\Application\ListHostingUsers($db,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db));
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $page = $service->page($this->fixture['users']['admin'],
+            \Wcp360\Core\Module\IdentityAccess\Domain\UserListQuery::fromArray([]));
+        self::assertSame(['alice','bob'], array_column($page['items'], 'username'));
+        $permissions = new CandidatePermissionAdministration(new WorkbenchStore($db));
+        $selected = $permissions->listing($this->fixture['users']['admin'], 1, $this->fixture['users']['alice']);
+        self::assertCount(1, $selected['items']);
+        self::assertSame('alice', $selected['selected_user']['username']);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

@@ -252,6 +252,14 @@ The [server overview](src/Module/Platform/README.md#root-server-overview) adds a
 
 [Service](tests/Integration/ServerOverviewTest.php), [HTTP/MFA](tests/Integration/ServerJourneyTest.php), [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) and platform definitions cover refusal, racing revocation, optional/enabled MFA, projection, unknown/zero measurements, escaping, bounded files, methods and default grants. Exact-source CI belongs to draft PR #116. Local executable checks remain stopped. M1/M9 stay open; approximately 20% and capability counts unchanged.
 
+### ROOT hosting account inventory and selected access workflow
+
+[IdentityAccess](src/Module/IdentityAccess/README.md#root-hosting-account-inventory) now exposes a bounded ROOT-only USER login inventory through browser/API, with username fragment and active-flag filters, literal underscore matching, shared cursor transport, stable ASCII ordering and fixed credential-free projection. Current ROOT scope accompanies every read and is rechecked before publication. Inactive/membership-free identities remain visible; ADMIN identities and unauthorized USER callers remain excluded.
+
+The account table opens the existing permission workflow for one selected USER. Selection survives membership pagination and block/unblock redirects. Invalid selection/navigation refuses before effects; fixed same-target navigation does not confer authority. Existing Origin/CSRF/fresh-proof/locked-transaction/audit gates and unfiltered behavior remain. No new privilege, schema, migration, dependency, account creation/activation/deletion or Unix identity change is added.
+
+[Query](tests/Unit/UserListQueryTest.php), [repository](tests/Integration/ListHostingUsersTest.php), [HTTP workflow](tests/Integration/UserListJourneyTest.php) and [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) definitions cover refusal, current/racing revocation, projection, cursors, live changes, SQLite, selection and write navigation. Execution must be bound to the current source in draft PR #116; local executable checks stay stopped. M1/M4 remain open, approximately 20% overall and capability counts unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

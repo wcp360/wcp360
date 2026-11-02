@@ -15,6 +15,8 @@ Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369
 | The Core/root README diagrams omitted directories that already exist. | Update the diagrams and link this owner map from the navigation indexes. |
 
 
+The [ROOT hosting account inventory](src/Module/IdentityAccess/README.md#root-hosting-account-inventory) adds bounded USER login identity reads and selected-user navigation into existing access blocks. This is not the complete customer/reseller/Unix-account lifecycle; capability counts and completion estimates remain unchanged.
+
 ## Delivery snapshot
 
 **Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
@@ -103,7 +105,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
 | :--- | :--- | :--- | :--- | :--- |
 | Sign-in and sign-out | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Demonstrated — Candidate sign-in/out forms, CSRF and real HTTP sessions. | [M1](ROADMAP.md#m1) |
-| Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Mandatory administrator TOTP enrollment/challenge, encrypted seeds and durable replay/attempt controls; production integration remains open. | [M1](ROADMAP.md#m1) |
+| Multifactor authentication | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Optional per-account administrator TOTP enrollment/challenge, encrypted seeds and durable replay/attempt controls; enabled factors remain enforced and production integration remains open. | [M1](ROADMAP.md#m1) |
 | Passkeys / WebAuthn | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Planned | [M1](ROADMAP.md#m1) |
 | Access recovery | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Ten hashed single-use second-factor codes and password-confirmed factor reset; password recovery and independent emergency access absent. | [M1](ROADMAP.md#m1) |
 | Session management | [IdentityAccess](src/Module/IdentityAccess/README.md) | Owning domain and shared contracts | Partial — Separate candidate USER/ADMIN registries, bound rotated cookies, bounded own-account inventory and password-confirmed revocation/logout; canonical session storage/grants and full production administration absent. | [M1](ROADMAP.md#m1) |

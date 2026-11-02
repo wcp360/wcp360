@@ -99,6 +99,31 @@ The [code handoff guide](../../../installer/recovery/RECOVERY-CODES.md) describe
 
 The key reader permits only its runtime surface, or an explicitly requested setup target, and never falls back to another key or APP_SECRET/MFA material. No additional code table or runtime grant is introduced. The session-isolated profile remains unavailable for this new bearer path. Email request/delivery, notifications, individual code revocation, restore-aware key lifecycle and production acceptance remain unfinished; restoring old verifier state requires key rotation. CI sources, not local execution, define this increment's verification scope.
 
+## ROOT hosting account inventory
+
+[UserListQuery](Domain/UserListQuery.php), [ListHostingUsers](Application/ListHostingUsers.php) and [UserListController](UI/Http/UserListController.php) implement `GET /workbench/users` and `GET /workbench/v1/users` for the current server root administrator. The ROOT sidebar and command palette link the [WCP360 account table](../../../templates/identity/users.html.twig).
+
+This inventory contains **USER-context Core login identities**, including inactive identities and identities without a membership. It does not list ADMIN/root identities or claim a full customer/reseller/Unix-account lifecycle. The only fields are ID, username, contact email and a boolean login-active flag. Credentials, password revisions, MFA/session material, lock markers and configuration contents are excluded. Contact email is administrator-only personal data; no USER-facing account directory or public lookup is introduced.
+
+| Selector | Supported values |
+| :--- | :--- |
+| `q` | Lowercased/trimmed ASCII username fragment, at most 32 letters/digits/underscores; underscore is matched literally, not as a SQL wildcard. Empty means all. |
+| `state` | Empty, `active` or `inactive`; this is the Core login flag, not a hosted-service health or tenant block state. |
+| `limit` | Shared 25 (default)/50/100 bounds. |
+| `after`, `before` | One exclusive canonicalizable UUID cursor; both together are refused. |
+
+Unknown fields, arrays/nonstrings, SQL/sort/column selectors, wildcards and malformed values fail with 400. Missing, ADMIN or filter-excluded pivots also fail with 400. Ordering and comparisons use username ASCII order (PostgreSQL C / SQLite BINARY), then UUID. Current active ROOT admission is checked before the query, included in each pivot/page/boundary read and rechecked before return. The API uses existing completed ADMIN authentication, optional/enabled MFA, safe errors and no-store. HEAD has no body; mutating inventory methods are unsupported.
+
+Filters reset cursors. This is live cursor navigation rather than a snapshot; inserts, renames and active-flag changes can change later results. No offset/total-count query, membership aggregation or export is added to the inventory. Limits bound response rows; large-volume performance/index qualification remains open. Reads do not append business audit or change account state. Existing restricted ADMIN identity-read grants suffice; no new schema, migration, dependency, role grant or audit-read opt-in is required.
+
+### Selected account access management
+
+The inventory links to `/workbench/access?user={UUID}`. The existing [permission listing](Application/CandidatePermissionAdministration.php) now accepts an optional selected USER identity, with its own current-ROOT scope on selection/rows and final admission check. Unknown or ADMIN identities return 404; a valid account without memberships displays an empty selected view. The existing 100-row/page 1–10,000 membership pagination remains separate from the cursor-based account inventory and preserves selection across pages.
+
+[PermissionController](UI/Http/PermissionController.php) accepts only `page` and `user` on the listing. Filtered action forms add the fixed `view=user` query flag; successful block/unblock returns to the same target's selected view. Unknown navigation fields/values fail before mutation. The flag never supplies authority or an arbitrary return URL. Legacy unfiltered forms keep their original redirect. Current ADMIN authentication/optional-enabled MFA, fresh proof, exact Origin, target-bound CSRF, current locked authority, transaction and mandatory transition audit remain the existing write boundary. Removing a block grants no new membership and does not reactivate a login or cancel an already-dispatched effect.
+
+[Query definitions](../../../tests/Unit/UserListQueryTest.php), [repository/race/SQLite/selected-user checks](../../../tests/Integration/ListHostingUsersTest.php), [ROOT browser/API/write-navigation journeys](../../../tests/Integration/UserListJourneyTest.php) and [actual restricted PostgreSQL reads](../../../tests/Integration/CandidateDatabaseRolesTest.php) cover this slice; existing permission regressions retain Origin/CSRF/MFA/write checks. Exact-source CI belongs to draft PR #116. Local executable checks remain stopped. Complete account lifecycle, native root authentication, general production policy and privileged effects remain unfinished.
+
 ## Candidate authorization and access blocks
 
 The shared decision allows `candidate.hosting.plan` only when the actor is an active USER account, holds the exact permission membership for the requested tenant and has no matching explicit denial. Unknown permissions, malformed identifiers, inactive users and mismatched tenants fail closed. Administrator context does not supply tenant authority. Visibility and execution use the same database rule; queued hosting plans recheck current authority when processed.

@@ -1,0 +1,26 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Comptes d’hébergement' %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1>Comptes d’hébergement</h1><p class="wcp-page-sub">Retrouvez les utilisateurs du panneau et gérez leurs accès par espace d’hébergement.</p></div></div>
+<section class="wcp-panel">
+<div class="wcp-panel-body">
+<form action="{{ path('wcp_users') }}" method="get" aria-label="Filtrer les comptes d’hébergement">
+<div class="wcp-grid-2">
+<div><label for="users-search">Nom d’utilisateur</label><input id="users-search" name="q" type="search" value="{{ filters.q }}" maxlength="32" placeholder="Tout ou partie du nom" spellcheck="false"><p class="field-help">Lettres, chiffres et tiret bas (_), sans caractère générique.</p></div>
+<div><label for="users-state">État du compte</label><select id="users-state" name="state"><option value="">Tous les états</option><option value="active"{% if filters.state == 'active' %} selected{% endif %}>Actif</option><option value="inactive"{% if filters.state == 'inactive' %} selected{% endif %}>Inactif</option></select></div>
+<div><label for="users-limit">Résultats affichés</label><select id="users-limit" name="limit">{% for size in [25,50,100] %}<option value="{{ size }}"{% if size == filters.limit %} selected{% endif %}>{{ size }}</option>{% endfor %}</select></div>
+</div><div class="actions"><button class="button" type="submit">Filtrer</button><a class="button secondary" href="{{ path('wcp_users') }}">Réinitialiser les filtres</a></div>
+</form>
+</div>
+<div class="table-scroll"><table><caption>Identités de connexion à l’espace d’hébergement, par nom d’utilisateur</caption><thead><tr><th scope="col">Nom d’utilisateur</th><th scope="col">E-mail de contact</th><th scope="col">État du compte</th><th scope="col">Accès aux espaces</th></tr></thead><tbody>
+{% for user in page.items %}
+<tr data-hosting-user-id="{{ user.id }}"><td><strong>{{ user.username }}</strong></td><td>{{ user.email }}</td><td>{{ user.active ? 'Actif' : 'Inactif' }}</td><td><a href="{{ path('wcp_access_permissions',{user:user.id}) }}">Gérer les accès de {{ user.username }}</a></td></tr>
+{% else %}<tr><td colspan="4"><div class="wcp-core-empty"><h2>Aucun compte pour ces filtres</h2><p>Modifiez votre recherche pour retrouver un compte.</p></div></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="wcp-panel-body"><p role="status">{{ page.items|length }} compte{{ page.items|length != 1 ? 's' : '' }} affiché{{ page.items|length != 1 ? 's' : '' }}</p>
+{% include 'components/data/cursor-pagination.html.twig' with {pagination:page.pagination,filters:filters,list_route:'wcp_users',pagination_label:'Pagination des comptes',previous_label:'Précédents',next_label:'Suivants'} only %}
+<p class="muted">L’état du compte concerne sa connexion au panneau. Les droits d’hébergement se gèrent espace par espace.</p>
+</div>
+</section>
+<a class="button secondary" href="{{ path('wcp_dashboard') }}">Retour au tableau de bord</a>
+{% endblock %}

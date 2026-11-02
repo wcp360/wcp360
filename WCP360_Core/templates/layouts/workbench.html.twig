@@ -11,6 +11,7 @@
         {label: 'Vue du serveur', href: path('wcp_server'), icon: 'server', active: route == 'wcp_server'},
         {label: 'Serveurs d’application', href: path('wcp_dashboard') ~ '#runtime', icon: 'server', active: false},
         {label: 'Extensions', href: path('wcp_dashboard') ~ '#plugins', icon: 'package', active: false},
+        {label: 'Comptes d’hébergement', href: path('wcp_users'), icon: 'users', active: route == 'wcp_users'},
         {label: 'Accès des utilisateurs', href: path('wcp_access_permissions'), icon: 'users', active: route == 'wcp_access_permissions'},
         {label: 'Journal d’audit', href: path('wcp_audit'), icon: 'clock', active: route == 'wcp_audit'}
     ]) %}
