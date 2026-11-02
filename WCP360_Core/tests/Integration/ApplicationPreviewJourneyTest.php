@@ -81,19 +81,32 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         return $state;
     }
 
-    public function testRootCanInspectSixRecipesAndThreeProfilesWithPrivateHead(): void
+    public function testRootCanInspectSevenRecipesAndThreeProfilesWithPrivateHead(): void
     {
         $this->login();
         $before = $this->state();
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseIsSuccessful();
-        self::assertCount(6, $this->data()['recipes']);
+        $catalogue = $this->data();
+        self::assertSame('wcp360.candidate.application-recipes/2', $catalogue['schema']);
+        self::assertCount(7, $catalogue['recipes']);
+        $recipes = array_column($catalogue['recipes'], null, 'id');
+        self::assertSame('wcp360.candidate.application-plan/2', $recipes['nginx_apache_php_fpm']['plan_schema']);
+        self::assertSame(['nginx','apache','php_fpm','htaccess'], $recipes['nginx_apache_php_fpm']['artifacts']);
+        self::assertTrue($recipes['nginx_apache_php_fpm']['htaccess_supported']);
+        foreach (['nginx_php_fpm','nginx_frankenphp','apache_php_fpm','apache_frankenphp','caddy_php_fpm','caddy_frankenphp'] as $legacy) {
+            self::assertSame('wcp360.candidate.application-plan/1', $recipes[$legacy]['plan_schema']);
+        }
         self::assertSame(['php','front_controller','wordpress'], array_column($this->data()['profiles'], 'id'));
         self::assertFalse($this->data()['deployment_available']);
         self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
         $this->browser->request('HEAD', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseIsSuccessful();
         self::assertSame('', $this->browser->getResponse()->getContent());
+        $crawler = $this->browser->request('GET', $this->url('/workbench/settings'));
+        self::assertResponseIsSuccessful();
+        self::assertCount(7, $crawler->filter('#application-recipe option'));
+        self::assertSame('nginx_php_fpm', $crawler->filter('#application-recipe option')->first()->attr('value'));
         self::assertSame($before, $this->state());
     }
 
@@ -107,6 +120,7 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
                 $this->api(['hostname'=>'app.test','recipe'=>$recipe,'application'=>$application], $token);
                 self::assertResponseIsSuccessful();
                 $data = $this->data();
+                self::assertSame('wcp360.candidate.application-preview/1', $data['schema']);
                 self::assertSame($application, $data['application']);
                 self::assertFalse($data['worker_mode']);
                 self::assertFalse($data['host_changes']);
@@ -124,18 +138,86 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         self::assertSame($before, $this->state());
     }
 
+    public function testHybridPreviewUsesApacheForAllContentAcrossThreeProfilesWithoutWritesOrActivation(): void
+    {
+        $this->login();
+        $token = $this->token();
+        $before = $this->state();
+        $identities = [];
+        foreach (['php','front_controller','wordpress'] as $application) {
+            $fields = ['hostname'=>'hybrid.test','recipe'=>'nginx_apache_php_fpm',
+                'application'=>$application,'require_htaccess'=>true];
+            $this->api($fields, $token);
+            self::assertResponseIsSuccessful();
+            $data = $this->data();
+            self::assertSame('wcp360.candidate.application-preview/2', $data['schema']);
+            self::assertSame('nginx_apache', $data['web_server']);
+            self::assertSame('php_fpm', $data['application_server']);
+            self::assertSame($application, $data['application']);
+            self::assertTrue($data['htaccess_supported']);
+            self::assertSame(['nginx','apache','php_fpm','htaccess'], array_keys($data['files']));
+            self::assertSame('single_site_loopback', $data['scope']);
+            self::assertSame('not_reserved', $data['listener_allocation']);
+            self::assertSame('disabled', $data['dynamic_page_cache']);
+            foreach (['host_changes','persisted','deployment_available','performance_measured','worker_mode'] as $flag) {
+                self::assertFalse($data[$flag]);
+            }
+            self::assertMatchesRegularExpression('/^[0-9a-f-]{14}7[0-9a-f-]{21}$/D', $data['preview_site_id']);
+            self::assertNotContains($data['preview_site_id'], $identities);
+            $identities[] = $data['preview_site_id'];
+            self::assertStringContainsString('127.0.0.1:8082', $data['files']['nginx']['content']);
+            self::assertStringContainsString('127.0.0.1:8083', $data['files']['apache']['content']);
+            self::assertSame(['not_run','not_run','not_run','not_run'],
+                array_column($data['syntax_checks']['checks'], 'status'));
+            self::assertFalse($data['syntax_checks']['activation_authorized']);
+            self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
+
+            $this->browser->request('POST', $this->url(self::FORM), ['_token'=>$token,
+                'hostname'=>'hybrid-browser.test','recipe'=>'nginx_apache_php_fpm',
+                'application'=>$application,'require_htaccess'=>'1','check_syntax'=>'1']);
+            self::assertResponseIsSuccessful();
+            self::assertSelectorCount(4, '[data-application-artifact]');
+            foreach (['nginx','apache','php_fpm','htaccess'] as $artifact) {
+                self::assertSelectorExists('[data-application-artifact="'.$artifact.'"]');
+            }
+            self::assertSelectorTextContains('[data-application-topology]', 'Apache');
+            self::assertSelectorTextContains('[data-application-topology]', '127.0.0.1:8082');
+            self::assertSelectorTextContains('[data-application-topology]', '127.0.0.1:8083');
+            self::assertSelectorTextContains('[data-application-htaccess]', 'natif');
+            self::assertSelectorCount(4, '[data-syntax-artifact]');
+            self::assertSelectorExists('[data-syntax-artifact="apache"][data-syntax-status="not_configured"]');
+            self::assertSelectorExists('[data-syntax-artifact="php_fpm"][data-syntax-status="not_run"]');
+            self::assertSelectorExists('[data-syntax-artifact="htaccess"][data-syntax-status="not_run"]');
+            self::assertStringContainsString('&lt;Directory', (string) $this->browser->getResponse()->getContent());
+            self::assertStringNotContainsString('<Directory ', (string) $this->browser->getResponse()->getContent());
+            self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('private'));
+            $browserId = $this->browser->getCrawler()->filter('[data-application-id]')->text();
+            self::assertNotContains($browserId, $identities);
+            $identities[] = $browserId;
+        }
+        self::assertSame($before, $this->state());
+    }
+
     public function testAnonymousAndHostingUserCannotReadOrGenerateRootRecipes(): void
     {
+        $before = $this->state();
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseStatusCodeSame(401);
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','check_syntax'=>true], 'forged');
-        self::assertResponseStatusCodeSame(401);
+        foreach (['nginx_php_fpm','nginx_apache_php_fpm'] as $recipe) {
+            $this->api(['hostname'=>'app.test','recipe'=>$recipe,'check_syntax'=>true], 'forged');
+            self::assertResponseStatusCodeSame(401);
+        }
+        self::assertSame($before, $this->state());
         $this->bootBrowser('user');
         $this->login('alice');
+        $before = $this->state();
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseStatusCodeSame(403);
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','check_syntax'=>true], 'forged');
-        self::assertResponseStatusCodeSame(403);
+        foreach (['nginx_php_fpm','nginx_apache_php_fpm'] as $recipe) {
+            $this->api(['hostname'=>'app.test','recipe'=>$recipe,'check_syntax'=>true], 'forged');
+            self::assertResponseStatusCodeSame(403);
+        }
+        self::assertSame($before, $this->state());
     }
 
     public function testInvalidSelectorsHtaccessRequirementsAndResourceArgumentsNeverFallBack(): void
@@ -143,20 +225,26 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         $this->login();
         $token = $this->token();
         $before = $this->state();
-        $valid = ['hostname'=>'app.test','recipe'=>'nginx_php_fpm','application'=>'php'];
-        foreach ([
-            [], array_replace($valid,['hostname'=>'example.com']), array_replace($valid,['recipe'=>'unknown']),
-            array_replace($valid,['application'=>'worker']), array_replace($valid,['application'=>null]),
-            array_replace($valid,['require_htaccess'=>true]), array_replace($valid,['require_htaccess'=>1]),
-            $valid+['site_id'=>$this->fixture['tenants']['alice']], $valid+['actor'=>$this->fixture['users']['admin']],
-            $valid+['path'=>'/private-application-input'], $valid+['port'=>443], $valid+['apply'=>true],
-            $valid+['check_syntax'=>true,'config'=>'server { }'], $valid+['check_syntax'=>true,'binary'=>'/bin/sh'],
-        ] as $fields) {
-            $this->api($fields, $token);
+        foreach (['nginx_php_fpm','nginx_apache_php_fpm'] as $recipe) {
+            $valid = ['hostname'=>'app.test','recipe'=>$recipe,'application'=>'php'];
+            foreach ([
+                [], array_replace($valid,['hostname'=>'example.com']), array_replace($valid,['recipe'=>'unknown']),
+                array_replace($valid,['application'=>'worker']), array_replace($valid,['application'=>null]),
+                array_replace($valid,['require_htaccess'=>1]), array_replace($valid,['require_htaccess'=>null]),
+                $valid+['site_id'=>$this->fixture['tenants']['alice']], $valid+['actor'=>$this->fixture['users']['admin']],
+                $valid+['path'=>'/private-application-input'], $valid+['port'=>443], $valid+['apply'=>true],
+                $valid+['upstream_url'=>'http://127.0.0.1:8080/private-application-input'],
+                $valid+['backend_url'=>'http://169.254.169.254/'],
+                $valid+['check_syntax'=>true,'config'=>'server { }'], $valid+['check_syntax'=>true,'binary'=>'/bin/sh'],
+            ] as $fields) {
+                $this->api($fields, $token);
+                self::assertResponseStatusCodeSame(400);
+                self::assertStringNotContainsString('private-application-input', $this->browser->getResponse()->getContent());
+            }
+            $this->api($valid, $token, [], '?apply=1');
             self::assertResponseStatusCodeSame(400);
-            self::assertStringNotContainsString('private-application-input', $this->browser->getResponse()->getContent());
         }
-        $this->api($valid, $token, [], '?apply=1');
+        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','require_htaccess'=>true], $token);
         self::assertResponseStatusCodeSame(400);
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes?apply=1'));
         self::assertResponseStatusCodeSame(400);
@@ -168,18 +256,22 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         $this->login();
         $token = $this->token();
         $before = $this->state();
-        $valid = ['hostname'=>'app.test','recipe'=>'nginx_php_fpm'];
-        foreach (['forged',''] as $bad) {
-            $this->api($valid, $bad);
+        foreach (['nginx_php_fpm','nginx_apache_php_fpm'] as $recipe) {
+            $valid = ['hostname'=>'app.test','recipe'=>$recipe];
+            foreach (['forged',''] as $bad) {
+                $this->api($valid, $bad);
+                self::assertResponseStatusCodeSame(403);
+            }
+            $this->api($valid, $token, ['HTTP_ORIGIN'=>'http://other.localhost']);
             self::assertResponseStatusCodeSame(403);
         }
-        $this->api($valid, $token, ['HTTP_ORIGIN'=>'http://other.localhost']);
-        self::assertResponseStatusCodeSame(403);
         foreach (['{','null',str_repeat(' ',4097)] as $body) {
             $this->browser->request('POST', $this->url(self::API), [], [],
                 ['CONTENT_TYPE'=>'application/json','HTTP_X_CSRF_TOKEN'=>$token], $body);
             self::assertResponseStatusCodeSame(400);
         }
+        $this->api(['hostname'=>'app.test','recipe'=>'nginx_apache_php_fpm'], $token, ['CONTENT_TYPE'=>'text/plain']);
+        self::assertResponseStatusCodeSame(400);
         $this->browser->request('GET', $this->url(self::FORM));
         self::assertResponseStatusCodeSame(405);
         self::assertSame($before, $this->state());
@@ -189,18 +281,33 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
     {
         $this->login();
         $token = $this->token();
+        $before = $this->state();
         $session = $this->browser->getRequest()->getSession();
         $proof = $session->get('_wcp_password_proof');
         self::assertIsArray($proof);
         $proof['at'] = time()-301;
         $session->set('_wcp_password_proof', $proof);
         $session->save();
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm'], $token);
-        self::assertResponseStatusCodeSame(403);
+        foreach (['nginx_php_fpm','nginx_apache_php_fpm'] as $recipe) {
+            $this->api(['hostname'=>'app.test','recipe'=>$recipe], $token);
+            self::assertResponseStatusCodeSame(403);
+        }
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseIsSuccessful();
-    }
+        self::assertSame($before, $this->state());
 
+        $crawler = $this->browser->request('GET', $this->url('/account/reauthenticate'));
+        self::assertResponseIsSuccessful();
+        $this->browser->submit($crawler->selectButton('Confirmer mon mot de passe')->form(['_password'=>WorkbenchFixture::PASSWORD]));
+        for ($i=0; $i<3 && $this->browser->getResponse()->isRedirect(); ++$i) $this->browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        $token = $this->token();
+        $before = $this->state();
+        $this->api(['hostname'=>'app.test','recipe'=>'nginx_apache_php_fpm','require_htaccess'=>true], $token);
+        self::assertResponseIsSuccessful();
+        self::assertSame('wcp360.candidate.application-preview/2', $this->data()['schema']);
+        self::assertSame($before, $this->state());
+    }
 
     public function testOptedInBrowserAndApiChecksRemainPrivatePartialAndDoNotChangeState(): void
     {
@@ -265,13 +372,23 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         $result = $mfa->check($this->fixture['users']['admin'], TOTP::createFromSecret($setup['secret'])->now());
         self::assertNotNull($result);
         $this->login();
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','check_syntax'=>true], 'pending');
-        self::assertResponseStatusCodeSame(403);
+        $this->browser->request('POST', $this->url(self::FORM), ['_token'=>'pending',
+            'hostname'=>'app.test','recipe'=>'nginx_apache_php_fpm','require_htaccess'=>'1']);
+        self::assertResponseRedirects('/mfa');
+        foreach (['nginx_php_fpm','nginx_apache_php_fpm'] as $recipe) {
+            $this->api(['hostname'=>'app.test','recipe'=>$recipe,'check_syntax'=>true], 'pending');
+            self::assertResponseStatusCodeSame(403);
+        }
         $crawler = $this->browser->request('GET', $this->url('/mfa'));
         $this->browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>$result['recovery_codes'][0]]));
         self::assertResponseRedirects('/');
         $token = $this->token();
-        $this->api(['hostname'=>'app.test','recipe'=>'caddy_frankenphp','application'=>'wordpress','check_syntax'=>true], $token);
-        self::assertResponseIsSuccessful();
+        $before = $this->state();
+        foreach (['caddy_frankenphp','nginx_apache_php_fpm'] as $recipe) {
+            $this->api(['hostname'=>'app.test','recipe'=>$recipe,'application'=>'wordpress','check_syntax'=>true], $token);
+            self::assertResponseIsSuccessful();
+        }
+        self::assertSame('wcp360.candidate.application-preview/2', $this->data()['schema']);
+        self::assertSame($before, $this->state());
     }
 }

@@ -37,6 +37,8 @@ func RenderApplication(r Request, recipe, application string) (ApplicationPlan, 
 	switch recipe {
 	case "nginx_php_fpm":
 		web, runtime = "nginx", "php_fpm"
+	case "nginx_apache_php_fpm":
+		web, runtime = "nginx_apache", "php_fpm"
 	case "nginx_frankenphp":
 		web, runtime = "nginx", "frankenphp_classic"
 	case "apache_php_fpm":
@@ -55,13 +57,17 @@ func RenderApplication(r Request, recipe, application string) (ApplicationPlan, 
 	if web == "caddy" && runtime == "php_fpm" {
 		frontUser = "caddy"
 	}
+	listen := "127.0.0.1:8082"
+	if web == "nginx_apache" {
+		listen = "127.0.0.1:8083"
+	}
 	values := struct {
-		ID, Host, User, Root, FrontUser string
-		Front, Backend                 bool
+		ID, Host, User, Root, FrontUser, Listen string
+		Front, Backend                        bool
 	}{
 		ID: r.SiteID, Host: r.Hostname, User: fmt.Sprintf("wcp_%x", digest[:12]),
 		Root: "/srv/wcp360-candidate/applications/" + r.SiteID + "/public",
-		FrontUser: frontUser, Front: application != "php",
+		FrontUser: frontUser, Listen: listen, Front: application != "php",
 		Backend: web != "caddy",
 	}
 	render := func(name string) (string, error) {
@@ -82,7 +88,13 @@ func RenderApplication(r Request, recipe, application string) (ApplicationPlan, 
 	plan := ApplicationPlan{Schema: "wcp360.candidate.application-plan/1", Application: application,
 		Recipe: recipe, WebServer: web, ApplicationServer: runtime}
 	targets := map[string]*string{}
-	if web == "nginx" {
+	if web == "nginx_apache" {
+		// A distinct preview schema preserves all existing recipe contracts.
+		plan.Schema = "wcp360.candidate.application-plan/2"
+		targets["nginx-apache-proxy.conf.tmpl"] = &plan.Nginx
+		targets["apache-fpm.conf.tmpl"] = &plan.Apache
+		targets["htaccess.tmpl"] = &plan.Htaccess
+	} else if web == "nginx" {
 		name := "nginx-fpm.conf.tmpl"
 		if runtime == "frankenphp_classic" {
 			name = "nginx-proxy.conf.tmpl"

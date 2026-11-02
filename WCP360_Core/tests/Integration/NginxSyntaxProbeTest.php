@@ -16,7 +16,7 @@ final class NginxSyntaxProbeTest extends KernelTestCase
     /** @return iterable<string,array{string,string}> */
     public static function recipes(): iterable
     {
-        foreach (['nginx_php_fpm', 'nginx_frankenphp'] as $recipe) {
+        foreach (['nginx_php_fpm', 'nginx_frankenphp', 'nginx_apache_php_fpm'] as $recipe) {
             foreach (['php', 'front_controller', 'wordpress'] as $application) {
                 yield $recipe.'/'.$application => [$recipe, $application];
             }

@@ -26,13 +26,15 @@ final class NativeApplicationPlanSyntaxTest extends TestCase
                 ['apache' => 'not_configured', 'caddy' => 'not_configured', 'systemd_unit' => 'not_run']],
             'caddy_php_fpm' => [['caddy'], ['caddy' => 'not_configured', 'php_fpm' => 'not_run']],
             'caddy_frankenphp' => [['frankenphp'], ['caddy' => 'not_configured', 'systemd_unit' => 'not_run']],
+            'nginx_apache_php_fpm' => [['nginx'],
+                ['nginx' => 'not_configured', 'apache' => 'not_configured', 'php_fpm' => 'not_run', 'htaccess' => 'not_run']],
         ];
         $combinations = 0;
 
         foreach (ApplicationRecipeCatalogue::report()['recipes'] as $choice) {
             foreach (ApplicationRecipeCatalogue::profiles() as $profile) {
                 [$expectedTools, $expectedStatuses] = $expectations[$choice['id']];
-                $fields = ['schema' => 'wcp360.candidate.application-plan/1', 'application' => $profile['id'],
+                $fields = ['schema' => ApplicationRecipeCatalogue::planSchema($choice['id']), 'application' => $profile['id'],
                     'recipe' => $choice['id'], 'web_server' => $choice['web_server'],
                     'application_server' => $choice['application_server']];
                 foreach ($choice['artifacts'] as $artifact) $fields[$artifact] = "synthetic:$artifact\n";
@@ -57,7 +59,7 @@ final class NativeApplicationPlanSyntaxTest extends TestCase
             }
         }
 
-        self::assertSame(18, $combinations);
+        self::assertSame(21, $combinations);
     }
 
     public function testUnknownToolNamesPathsAndCommandFragmentsAreRefusedBeforePlatformChecks(): void

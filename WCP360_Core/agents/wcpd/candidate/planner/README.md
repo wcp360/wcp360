@@ -54,9 +54,11 @@ Preview writes no jobs, sites, defaults, activations or business audit. It does 
 
 ## Application-profile recipes
 
-[RenderApplication](application.go) generates a separate `wcp360.candidate.application-plan/1` family. Input adds `application` (php, front_controller or wordpress) and one of six Nginx/Apache/Caddy × PHP-FPM/FrankenPHP-classic recipe IDs. These selectors conflict with application_server, web_stack and worker_acknowledged; recipe without application is refused. The ordered output has schema/application/recipe/web_server/application_server followed by only that recipe's artifacts. Existing plan/1–3 paths and shapes remain unchanged.
+[RenderApplication](application.go) generates a separate `wcp360.candidate.application-plan/1` family. Input adds `application` (php, front_controller or wordpress) and one of the six original Nginx/Apache/Caddy × PHP-FPM/FrankenPHP-classic recipe IDs. The additive nginx_apache_php_fpm recipe emits only `wcp360.candidate.application-plan/2`, with web_server=nginx_apache and exactly nginx/apache/php_fpm/htaccess. The old six recipes retain version-1 envelopes and bytes. These selectors conflict with application_server, web_stack and worker_acknowledged; recipe without application is refused. The ordered output has schema/application/recipe/web_server/application_server followed by only that recipe's artifacts. Existing plan/1–3 paths and shapes remain unchanged.
 
 The [profile guide](../../../../src/Module/Hosting/APPLICATION-PROFILES.md) defines routing, ownership, native .htaccess boundaries and qualification. WordPress is a reference application. No persistent worker is implied. All profiles are inert, loopback-only and unreserved; no application, database, package, config or service is installed. Page caching stays disabled. The CLI never accepts caller-chosen paths, ports, executables or deployment flags. Source/template tests do not establish live Apache/Caddy/FrankenPHP/application correctness or performance.
+
+The target preview proxies all content from Nginx 127.0.0.1:8082 to Apache 127.0.0.1:8083, both unreserved. Apache/FPM/.htaccess use the existing canonical templates, with only the Apache listener parameter differing. There is no edge filesystem-serving shortcut or dynamic page cache. Event MPM/module availability, native Apache/FPM validation, actual HTTP behavior and multi-tenant isolation remain unqualified. No installed runtime, live backend or default migration is selected.
 
 ## Verification
 

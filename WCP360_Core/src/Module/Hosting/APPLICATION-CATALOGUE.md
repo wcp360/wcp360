@@ -73,7 +73,7 @@ Before execution, the existing owners must admit exact artifacts/publisher trust
 
 Installation, configuration, update, uninstall, backup, restore, inspection and reconciliation have separate lifecycle requirements. Uninstall retains data by default; purge is a distinct authorized action. A failed update or old image does not establish a reversible database migration.
 
-PHP topology previews are another family: [ApplicationRecipeCatalogue](../../Shared/Platform/ApplicationRecipeCatalogue.php) describes six web/PHP configuration combinations. It is not the application installation catalogue, and the planned Nginx/Apache/FPM default is still a separate implementation task.
+PHP topology previews are another family: [ApplicationRecipeCatalogue](../../Shared/Platform/ApplicationRecipeCatalogue.php) describes seven web/PHP configuration combinations, including the versioned Nginx/Apache/FPM target preview. It is separate from the application installation catalogue. Installing and activating the target default still requires its provider and lifecycle implementation.
 
 ## Evidence and remaining delivery
 

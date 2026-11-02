@@ -15,6 +15,10 @@
 
 Run `composer check` from Core for Symfony-aware PHPStan, analyzer regressions, PHPUnit and framework lints. Run `composer test:browser` in the documented Chromium/WebDriver environment. See the [testing guide](../../documentation/development/TESTING.md) for commands, scopes, fixture safeguards and Linux/VM evidence. The deliberate-error PHPStan fixtures live in `tools/phpstan/fixtures`, outside application test discovery.
 
+## Versioned target web-stack preview
+
+The seventh [application topology](../src/Module/Hosting/APPLICATION-PROFILES.md#nginx-to-apache-target-preview) is checked through Go renderer/CLI compatibility definitions, [strict document decoding](Unit/ApplicationPlanDocumentTest.php), [authorized preview services](Integration/ApplicationPlanPreviewTest.php), [ROOT browser/API journeys](Integration/ApplicationPreviewJourneyTest.php) and the [native Nginx artifact matrix](Integration/NginxSyntaxProbeTest.php). Historical recipe documents remain version 1; the Nginx/Apache/FPM target requires version 2. These tests distinguish generated configuration and partial grammar coverage from missing Apache/event/FPM/HTTP qualification. Execution outcomes must identify the exact CI source; local executable checks remain stopped.
+
 ## Candidate application catalogue
 
 [Query tests](Unit/ApplicationCatalogueQueryTest.php), [console tests](Unit/ApplicationCatalogueCommandTest.php), [CSV reader tests](Integration/CsvApplicationCatalogueSourceTest.php) and [container wiring tests](Integration/ApplicationCatalogueWiringTest.php) cover the [read-only catalogue bridge](../src/Module/Hosting/APPLICATION-CATALOGUE.md). They exercise bounded input, strict CSV parsing, normalized-name collisions, generic failure results, worker/setup-only access, raw JSON and optional workspace discovery. The shared [synthetic fixture](Fixtures/ApplicationCatalogueFixture.php) contains no application packages or credentials. Test definitions do not qualify application installation or replace exact-revision CI results; no local PHP execution is required for this change.

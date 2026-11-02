@@ -8,7 +8,7 @@ This document adopts the project owner's supplied web-server strategy. It define
 
 The target default for **new general-purpose hosting installations** is **Nginx → Apache MPM event → PHP-FPM**. Nginx owns the public edge; Apache applies controlled native per-directory rules; isolated PHP-FPM pools execute hosted PHP. These are components on a node, not a requirement for three servers.
 
-The implemented candidate still defaults to **Nginx → PHP-FPM**. The existing six [application recipes](APPLICATION-PROFILES.md) do not include the new three-layer topology. No runtime setting, catalogue value, database constraint, stored plan or existing site's assignment changes through this documentation update.
+The implemented candidate still defaults to **Nginx → PHP-FPM**. The [application recipes](APPLICATION-PROFILES.md) now add the three-layer topology as a seventh inert preview with a dedicated version-2 document. It remains a target for future installation defaults. Current runtime settings, database constraints, stored plans and existing site assignments retain their behavior.
 
 Existing `php_fpm` / `classic` / revision 1 and plan/1 retain their Nginx/FPM meaning. Existing `frankenphp_worker` / `advanced` and plan/2 retain their Nginx-edge Worker meaning; the separate Modern plan/3 remains a Worker preview. A new topology requires its own explicit versioned representation, reviewed forward migration and decoder/consumer support. A global default applies to new inheriting resources only. Existing installations and sites require a separately reviewed transition. The panel application's own runtime is a separate decision.
 

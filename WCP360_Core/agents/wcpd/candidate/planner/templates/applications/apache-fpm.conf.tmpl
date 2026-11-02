@@ -1,6 +1,6 @@
 # Inert Apache 2.4 event/FPM recipe; required modules must be admitted separately.
-Listen 127.0.0.1:8082
-<VirtualHost 127.0.0.1:8082>
+Listen {{.Listen}}
+<VirtualHost {{.Listen}}>
     ServerName {{.Host}}
     DocumentRoot "{{.Root}}"
     ProxyRequests Off

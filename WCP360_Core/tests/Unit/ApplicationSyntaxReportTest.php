@@ -24,7 +24,7 @@ final class ApplicationSyntaxReportTest extends TestCase
     private static function fields(string $recipe, string $application): array
     {
         $choice = ApplicationRecipeCatalogue::choice($recipe);
-        $fields = ['schema' => 'wcp360.candidate.application-plan/1', 'application' => $application,
+        $fields = ['schema' => ApplicationRecipeCatalogue::planSchema($recipe), 'application' => $application,
             'recipe' => $recipe, 'web_server' => $choice['web_server'], 'application_server' => $choice['application_server']];
         foreach ($choice['artifacts'] as $artifact) $fields[$artifact] = "synthetic:$recipe:$application:$artifact\n";
         return $fields;

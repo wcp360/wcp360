@@ -11,7 +11,7 @@ Scope: `WCP360_Core/`, on the existing development branch. Templates, services, 
 | Area | Existing candidate evidence | Remaining delivery boundary |
 | :--- | :--- | :--- |
 | Durable PHP profiles | Classic Nginx/FPM and opt-in Advanced Nginx/FrankenPHP Worker; explicit revision 1 metadata. | New topology identity, capability model and explicit upgrades; no silent reinterpretation. |
-| Application previews | Six PHP recipes, three application behaviors, ROOT browser/API/Go generation. | Nginx/Apache/FPM is missing; previews do not create live applications. |
+| Application previews | Six original recipes plus a version-2 Nginx/Apache/FPM target preview; three application behaviors, ROOT browser/API/Go generation. | Native Apache/event/FPM/HTTP qualification remains open; previews do not create live applications. |
 | Native syntax inspection | Bounded opt-in Nginx grammar and Caddy/FrankenPHP adaptation with exact artifact hashes. | Real provider availability, Apache/FPM/module harnesses, full semantic/HTTP/systemd qualification. |
 | Controlled effects | Guarded isolated FPM activation, separate permissions/revisions and uncertain-outcome handling. | General production provider lifecycle and effects across claimed OS targets. |
 | Installer and operations | Checkout preparation/resume, host/artifact inspection and bounded durable jobs. | Production identity/grant integration, trusted artifacts, native installation, wizard and general fencing/recovery. |
@@ -48,8 +48,8 @@ Design, inert rendering and disposable CI harnesses may progress while productio
 
 | Stage | Status | Main owner | Dependency |
 | :--- | :--- | :--- | :--- |
-| WS0 — Versioned model | Decision documented; implementation pending | Hosting / Platform / Operations | Required M1/M2 contracts. |
-| WS1 — New default renderer | Missing; existing six-recipe foundation reusable | Hosting / Go planner | WS0 preview contract. |
+| WS0 — Versioned model | Candidate preview versioning implemented; durable production model open | Hosting / Platform / Operations | Required M1/M2 contracts. |
+| WS1 — New default renderer | Inert target renderer implemented; Apache/FPM/HTTP harnesses open | Hosting / Go planner | WS0 preview contract. |
 | WS2 — Providers and isolation | Partial candidate foundations | Hosting / Platform | WS0/WS1, trusted provider admission. |
 | WS3 — Live resource lifecycle | Isolated FPM experiment only | Hosting / Operations / Setup | WS2 and relevant M1–M4 acceptance. |
 | WS4 — Rules and PHP apps | Preview examples only | Hosting / Files | WS3 plus required M4 limits, M6 files/data and M7 recovery. |
@@ -182,8 +182,8 @@ Release evidence includes exact source/artifact/provider revisions, signed distr
 
 ## Next concrete implementation slice
 
-1. Review the WS0 topology/version/capability contract and migration impact across the existing catalogue, Go renderer, strict documents and durable consumers.
-2. Implement **WS1: an inert Nginx → Apache event → FPM preview** with safe all-requests-to-Apache routing, exact artifact inspection and controlled native parser harnesses.
+1. Retain the reviewed candidate WS0-preview contract: catalogue/2 announces plan/1 for the six original recipes and plan/2 only for the new Nginx/Apache/FPM recipe. Complete the separate durable ownership/provider/migration contracts before any persisted selection or activation.
+2. Complete **WS1 native acceptance** around the implemented inert target renderer: admitted Apache event/modules and FPM harnesses, actual per-directory/static/PHP behavior and exact artifact evidence. Current Nginx grammar coverage is partial; missing/unexecuted stages remain explicit.
 3. Use its evidence to select and qualify the first native provider/target under WS2, while M1/M2/M3 production prerequisites continue.
 4. Develop the registered application/backend and container contracts in parallel where independent; implement Docker/Discourse activation only after their authority, data and recovery prerequisites.
 

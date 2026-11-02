@@ -64,7 +64,7 @@ The six non-service families are indexed under [resources](../README.md): applic
 | `.../php-fpm.conf.tmpl` | Fixed pool model | Per-site versions/extensions, tenant UID, live reload |
 | `.../Caddyfile.tmpl`, `nginx-frankenphp.conf.tmpl`, `frankenphp.service.tmpl` | Opt-in Worker plan/2 | Native install, drain/switch, health and selected confinement |
 | `.../Caddyfile-modern.tmpl`, `frankenphp-modern.service.tmpl` | Separate direct Worker plan/3 preview | No durable selection, allocated public listener, TLS ownership or native activation |
-| `.../applications/*.tmpl` | Six PHP application recipes, three routing profiles | Includes Apache/Caddy/FPM/FrankenPHP classic; no new default hybrid driver, live app installation or general production qualification |
+| `.../applications/*.tmpl` | Seven PHP application recipes, three routing profiles | Includes the inert Nginx/Apache/FPM target driver and existing Apache/Caddy/FPM/FrankenPHP classic previews; no live app installation or general production qualification |
 | `systemd/candidate/wcp-candidate-agent.service` | `User=wcp-agent-test`, no capabilities | Canonical agent identity and packaging paths |
 | `systemd/candidate/wcp-candidate-broker.service` | Disposable VM broker | Minimal-root production `wcp-privd` contract |
 | `systemd/candidate/wcp-candidate-vm-arm.service` | `WCP_ISOLATED_TEST_VM=1` boot re-arm | Must never ship on a production host |

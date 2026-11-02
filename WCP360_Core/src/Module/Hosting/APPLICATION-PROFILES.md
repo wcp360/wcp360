@@ -1,10 +1,10 @@
 # Reusable PHP application profiles
 
-The Core separates the application's routing needs from its web server and PHP runtime. WordPress is a reference case, not the definition of the engine. The same pipeline renders ordinary PHP, front-controller frameworks and compatible CMS applications without duplicating six application installers.
+The Core separates the application's routing needs from its web server and PHP runtime. WordPress is a reference case, not the definition of the engine. The same pipeline renders ordinary PHP, front-controller frameworks and compatible CMS applications through one configuration engine.
 
 ## Current implementation
 
-The [adopted strategy](WEB-SERVER-STRATEGY.md) adds a **target** general-purpose default, Nginx → Apache event → PHP-FPM. That seventh PHP topology is not part of the six recipes below. The [ordered roadmap](WEB-SERVER-ROADMAP.md) requires a distinct versioned contract and an inert preview first; current recipe names, stored assignments and generated plan formats retain their meaning. Native/container HTTP applications, including Docker/Discourse, are a separate execution family rather than extra PHP recipes.
+The [adopted strategy](WEB-SERVER-STRATEGY.md) adds a **target** general-purpose default, Nginx → Apache event → PHP-FPM. The seventh topology is now an inert preview with a distinct version-2 contract. The [ordered roadmap](WEB-SERVER-ROADMAP.md) still requires native provider and lifecycle qualification; existing recipe names, stored assignments and version-1 plan bytes retain their meaning. Native/container HTTP applications, including Docker/Discourse, are a separate execution family rather than extra PHP recipes.
 
 The [catalogue](../../Shared/Platform/ApplicationRecipeCatalogue.php), [Go renderer](../../../agents/wcpd/candidate/planner/application.go) and strict [document](Domain/ApplicationPlanDocument.php) implement inert configuration previews. They do not install an application, database, package or service, reserve listeners, create a durable site/job, enable native activation or establish production compatibility.
 
@@ -16,6 +16,7 @@ The [catalogue](../../Shared/Platform/ApplicationRecipeCatalogue.php), [Go rende
 | apache_frankenphp | Apache HTTP proxy to private Unix socket | FrankenPHP classic | No; proxy bypasses local filesystem handling |
 | caddy_php_fpm | Caddy | Per-site PHP-FPM pool | No; managed server rules |
 | caddy_frankenphp | Caddy embedded in FrankenPHP | FrankenPHP classic, direct | No; managed server rules |
+| nginx_apache_php_fpm | Nginx to private Apache; event MPM is a target requirement | Per-site PHP-FPM pool | Restricted rewrite example; full rule/module acceptance remains open |
 
 Profiles are `php` (existing scripts/directory indexes, no general fallback), `front_controller` (index.php routing, for suitably installed Symfony/Laravel and similar applications) and `wordpress` (a front-controller reference case). Framework dependencies, PHP extensions, database needs, writable directories and application-specific security remain separate acceptance requirements. No arbitrary CMS/plugin compatibility is inferred.
 
@@ -27,11 +28,21 @@ ROOT settings offer a shared form. `GET /workbench/v1/application/recipes` retur
 
 The CLI adds explicit application=php|front_controller|wordpress plus recipe selectors to its fixed plan command. Any application_server, web_stack or worker_acknowledged field conflicts with this family; recipe without application is refused. Existing inputs/outputs retain their meaning.
 
-The ordered `wcp360.candidate.application-plan/1` envelope contains schema, application, recipe, web_server, application_server and exactly the recipe's artifact fields. String/JSON limits reuse [PlanDocumentFields](Domain/PlanDocumentFields.php). Old plan decoders reject it. The fixed-binary process keeps its scrubbed environment, five-second deadline and bounded stdout; renderer errors are generic and browser artifacts escaped.
+The catalogue uses `wcp360.candidate.application-recipes/2`; each entry declares its `plan_schema`. The six original recipes retain `wcp360.candidate.application-plan/1` and preview/1. Only nginx_apache_php_fpm uses `wcp360.candidate.application-plan/2` and preview/2, with web_server=nginx_apache and the four exact nginx/apache/php_fpm/htaccess artifacts. The strict decoder derives the schema from the selected recipe and refuses cross-version envelopes. Each ordered plan envelope contains schema, application, recipe, web_server, application_server and exactly the recipe's artifact fields. String/JSON limits reuse [PlanDocumentFields](Domain/PlanDocumentFields.php). Old plan decoders reject it. The fixed-binary process keeps its scrubbed environment, five-second deadline and bounded stdout; renderer errors are generic and browser artifacts escaped.
 
-Each preview generates a synthetic UUIDv7 and fixed application paths, site UID, sockets and non-root pool/service text. The frontend is HTTP on unreserved 127.0.0.1:8082; proxy backends use private Unix sockets (their Caddy address is not a TCP reservation). Neither caller-selected resources/paths/ports/commands nor deployment flags are accepted. All three profiles use the same bounded renderer. No real application or tenant is selected, no filesystem is read/written by the renderer, and no business state/audit is changed.
+Each preview generates a synthetic UUIDv7 and fixed application paths, site UID, sockets and non-root pool/service text. The frontend is HTTP on unreserved 127.0.0.1:8082; FrankenPHP proxy backends use private Unix sockets (their Caddy address is not a TCP reservation). The new chain uses a separate fixed, unreserved Apache HTTP backend at 127.0.0.1:8083. Neither caller-selected resources/paths/ports/commands nor deployment flags are accepted. All three profiles use the same bounded renderer. No real application or tenant is selected, no filesystem is read/written by the renderer, and no business state/audit is changed.
 
 Native .htaccess is an explicit compatibility requirement. An unsupported combination is refused rather than translated arbitrarily or silently substituted. Apache/FPM emits a fixed rewrite example and directive allowlist; the allowlist does not make arbitrary user RewriteRule flags safe. Future deployment must own configuration changes, filesystem/network authority and module admission. Apache/FrankenPHP HTTP proxying is not advertised as native .htaccess handling.
+
+## Nginx to Apache target preview
+
+The new edge proxies every content request to the private Apache vhost, including static files, uploads and PHP. It generates no direct filesystem-serving route, FastCGI shortcut or dynamic page cache. Apache retains the existing fixed directory/file guards and application-specific rewrite example; PHP execution uses its per-site Unix FPM socket. All three application profiles use this same composition.
+
+Host and forwarded origin/client headers are generated by the edge. Proxy cache/store and error interception are disabled so Apache remains responsible for content access decisions and its error status. The preview does not resolve public TLS, backend admission, actual redirects, runtime health or multi-tenant listener isolation. Fixed loopback ports are illustrative resources, not allocations.
+
+Apache, FPM and .htaccess template ownership is shared with the original Apache/FPM recipe; the old listener remains 8082 and the new backend is 8083. Existing six-recipe byte fixtures guard compatibility. The current default and durable Classic/Advanced assignments are unchanged. No database migration, installed identity or effect dispatch is added.
+
+Event MPM, module availability, safe mutable .htaccess flags, FPM identity/socket access and end-to-end request semantics remain qualification prerequisites. In particular, a successful Nginx grammar check is not an Apache/module/FPM/HTTP acceptance result. Official [Nginx proxy documentation](https://nginx.org/en/docs/http/ngx_http_proxy_module.html) and [Apache FastCGI documentation](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) describe the relevant server interfaces; they do not qualify this generated integration.
 
 ## Optional native syntax checks
 

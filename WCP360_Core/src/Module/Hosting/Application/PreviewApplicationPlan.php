@@ -41,7 +41,7 @@ final readonly class PreviewApplicationPlan
             throw new BadRequestHttpException('Unknown Application recipe.');
         }
         if ($requireHtaccess && !$choice['htaccess_supported']) {
-            throw new BadRequestHttpException('Native .htaccess requires the Apache/PHP-FPM recipe.');
+            throw new BadRequestHttpException('Native .htaccess requires an Apache/PHP-FPM recipe, directly or behind Nginx.');
         }
         $site = WorkbenchStore::id();
         try {
@@ -51,7 +51,7 @@ final readonly class PreviewApplicationPlan
             throw new ServiceUnavailableHttpException(null, 'Application preview is unavailable. No installation was dispatched.');
         }
         $this->authorization->requireAdmin($actor);
-        return ['schema' => 'wcp360.candidate.application-preview/1', 'application' => $application,
+        return ['schema' => $recipe === 'nginx_apache_php_fpm' ? 'wcp360.candidate.application-preview/2' : 'wcp360.candidate.application-preview/1', 'application' => $application,
             'recipe' => $recipe, 'web_server' => $choice['web_server'], 'application_server' => $choice['application_server'],
             'htaccess_supported' => $choice['htaccess_supported'], 'scope' => 'single_site_loopback',
             'host_changes' => false, 'persisted' => false, 'deployment_available' => false,

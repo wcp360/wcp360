@@ -20,7 +20,7 @@ Separate application identity/recipe from topology, runtime mode and provider. A
 | Lifecycle | Install/configure/start/suspend/drain/update/inspect/remove with idempotency and observed state. |
 | Recovery | Consistent database/files/uploads/configuration restore and supported migration/rollback constraints. |
 
-Recipes contribute requirements, not commands with unlimited authority. Do not duplicate the six current PHP renderer templates or turn arbitrary tenant Compose/YAML into a privileged plan. See [Platform's container boundary](../../../Platform/design/containers/README.md).
+Recipes contribute requirements, not commands with unlimited authority. Do not duplicate the current PHP renderer templates or turn arbitrary tenant Compose/YAML into a privileged plan. See [Platform's container boundary](../../../Platform/design/containers/README.md).
 
 The new default topology Nginx → Apache event → PHP-FPM remains an implementation target. Existing Nginx/FPM and Worker assignments retain their meaning. All content passes Apache where native .htaccess is claimed; non-PHP HTTP backends do not need a PHP layer.
 

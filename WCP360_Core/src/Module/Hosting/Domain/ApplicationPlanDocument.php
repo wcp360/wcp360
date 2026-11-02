@@ -35,7 +35,7 @@ final readonly class ApplicationPlanDocument
         $choice = ApplicationRecipeCatalogue::choice($recipe);
         $checked = PlanDocumentFields::check($fields,
             ['schema', 'application', 'recipe', 'web_server', 'application_server', ...$choice['artifacts']],
-            'wcp360.candidate.application-plan/1');
+            ApplicationRecipeCatalogue::planSchema($recipe));
         if ($checked['application'] !== $application || $checked['recipe'] !== $choice['id'] || $checked['web_server'] !== $choice['web_server']
             || $checked['application_server'] !== $choice['application_server']) {
             throw new \InvalidArgumentException('Candidate Application plan rejected.');

@@ -539,9 +539,17 @@ Cross-domain security, monitoring, UI and recovery tests are developed with each
 
 The immediate work remains M1 foundations and their acceptance evidence. Installer/wizard preparation can continue where independent; privileged activation depends on the necessary M1/M2 interfaces and tests. This roadmap is not permission to bypass those prerequisites.
 
+## Versioned Nginx/Apache/FPM target preview
+
+The [PHP application-profile engine](src/Module/Hosting/APPLICATION-PROFILES.md#nginx-to-apache-target-preview) now adds a seventh inert recipe for the target Nginx → Apache event → PHP-FPM composition. Its catalogue advertises each recipe's plan schema: the six historical recipes retain application-plan/1 and preview/1, while nginx_apache_php_fpm requires application-plan/2 and preview/2. No existing stored plan, Classic/Advanced assignment, installation default, database grant or privileged execution path changes.
+
+Go generates Nginx, Apache, FPM and .htaccess text from canonical templates. The edge routes all content to a distinct fixed private Apache port; it has no direct static/FastCGI/cache path. ROOT can inspect all three application behaviors through the existing fresh-authentication, Origin/CSRF and optional/enabled MFA boundary. Apache/event/module, FPM identity/socket and actual HTTP/per-directory acceptance remain open; optional Nginx grammar checks and exact hashes do not establish those results.
+
+[Go/CLI compatibility definitions](agents/wcpd/candidate/planner/application_test.go), [strict document tests](tests/Unit/ApplicationPlanDocumentTest.php), [service tests](tests/Integration/ApplicationPlanPreviewTest.php), [browser/API journeys](tests/Integration/ApplicationPreviewJourneyTest.php) and [native Nginx matrix](tests/Integration/NginxSyntaxProbeTest.php) define this slice. Exact-source execution belongs to draft PR #116; local executable checks remain stopped. WS0 candidate preview versioning and the WS1 renderer advance within their bounded scope; durable provider/lifecycle contracts, full WS1 acceptance and M1/M2 remain open. Capability statuses/counts and the approximately 20% estimate are unchanged.
+
 ## Application catalogue integration candidate
 
-[WCP360_App_Deploy](../WCP360_App_Deploy/README.md) owns the supplied 410-reference editorial catalogue and draft recipes. The [Core read-only bridge](src/Module/Hosting/APPLICATION-CATALOGUE.md) adds a bounded fixed CSV reader, typed query and worker/setup inspection command. Candidate classifications, source labels and proposed access remain metadata; deployment/installability stay false. Recipe authoring and lifecycle guides are separate from the six topology previews. General installation/update/removal, trusted recipe release admission, application instances, provider execution and recovery remain open; capability statuses and the completion estimate are unchanged.
+[WCP360_App_Deploy](../WCP360_App_Deploy/README.md) owns the supplied 410-reference editorial catalogue and draft recipes. The [Core read-only bridge](src/Module/Hosting/APPLICATION-CATALOGUE.md) adds a bounded fixed CSV reader, typed query and worker/setup inspection command. Candidate classifications, source labels and proposed access remain metadata; deployment/installability stay false. Recipe authoring and lifecycle guides are separate from the seven topology previews. General installation/update/removal, trusted recipe release admission, application instances, provider execution and recovery remain open; capability statuses and the completion estimate are unchanged.
 
 ## Modular structure and growth preparation
 
