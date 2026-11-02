@@ -39,6 +39,7 @@ TRACKABLE = (
     ".env.example",
     "src/backend/.env.example",
     "README.md",
+    "SOURCE/platform/src/Shared/SecretSafe.php",
     "governance/audits/AUDIT-WCP-0100/INDEX.md",
 )
 IGNORED = (
@@ -57,6 +58,9 @@ IGNORED = (
     "database/migrations/production.backup.sql", "export.sql.gz",
     "node_modules/pkg/index.js", "src/backend/vendor/pkg/file.php",
     "__pycache__/check.pyc", ".DS_Store",
+    "SOURCE/platform/src/Shared/secrets.json",
+    "WCP360_Build/build/toolchains/php/php.exe",
+    "WCP360_Build/build/generated/output.bin",
 )
 
 

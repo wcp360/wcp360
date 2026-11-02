@@ -1,5 +1,12 @@
 # WCP360 — Contrôle ciblé des secrets du dépôt
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 Date : 2026-10-02. Statut : **IMPLEMENTATION CANDIDATE — REVIEW**.
 
 Périmètre : maintenance autorisée par CONTRIBUTING.md, en complément de la PR #42 et d'AUDIT-WCP-0109. Ce livrable n'est pas le moteur de sécurité applicatif et ne remplace aucune des publications #6/#7/#9. SC-M01 reste PAUSED, SC-M02 NOT AUTHORIZED, CODE-BASELINE NONE.
@@ -56,7 +63,7 @@ Engineering/DevOps : examiner le code, les limites, les messages et le job. Secu
 
 ## Références
 
-- Règle existante du projet : [CONTRIBUTING.md](../../CONTRIBUTING.md).
+- Règle existante du projet : [CONTRIBUTING.md](../../../CONTRIBUTING.md).
 - Git, lecture d'objets : https://git-scm.com/docs/git-cat-file.
 - Python, sous-processus et délais : https://docs.python.org/3/library/subprocess.html.
 - Formats/préfixes des tokens GitHub, dont l'évolution des tokens d'installation : https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github.

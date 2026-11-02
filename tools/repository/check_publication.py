@@ -55,7 +55,7 @@ def _env(home: Path) -> dict[str, str]:
     }
 
 
-def inspect(repo: Path, ref: str) -> dict:
+def inspect(repo: Path, ref: str, *, inventory_only: bool = False) -> dict:
     if ref != "HEAD" and not OID.fullmatch(ref):
         raise InventoryError("INVALID_REF")
     git = shutil.which("git")
@@ -159,6 +159,30 @@ def inspect(repo: Path, ref: str) -> dict:
         by_path = {r["path"]: r for r in records}
         if len(by_path) != len(records):
             raise InventoryError("DUPLICATE_PATH")
+        if inventory_only:
+            return {
+                "format": "WCP360-PUBLICATION-INVENTORY/3",
+                "commit": commit, "tree": tree,
+                "scope": "complete committed Git metadata inventory only",
+                "overall_project_publication": "NOT_CERTIFIED_COMPLETE",
+                "source_library_byte_equivalence": "NOT_APPLICABLE",
+                "application_tests_executed": 0, "secret_scan": False,
+                "file_count": len(records),
+                "regular_file_count": sum(r["type"] == "blob" for r in records),
+                "symlink_count": sum(r["type"] == "symlink" for r in records),
+                "total_bytes": total_bytes,
+                "mirror": {
+                    "status": "NOT_APPLICABLE",
+                    "reason": "EXPLICIT_METADATA_INVENTORY_ONLY_MODE",
+                    "verified_against_manifest": False,
+                },
+                "audit": {
+                    "status": "NOT_APPLICABLE",
+                    "reason": "HISTORICAL_AUDIT_NOT_CHECKED_IN_INVENTORY_MODE",
+                    "missing": [],
+                },
+                "records": sorted(records, key=lambda r: r["path"]),
+            }
         if MANIFEST not in by_path or by_path[MANIFEST]["type"] != "blob":
             raise InventoryError("MISSING_MIRROR_MANIFEST")
 
@@ -296,9 +320,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo", type=Path, default=Path.cwd())
     parser.add_argument("--ref", default="HEAD")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--inventory-only", action="store_true",
+                        help="metadata inventory only; never verifies historical mirror integrity")
     args = parser.parse_args(argv)
     try:
-        report = inspect(args.repo, args.ref)
+        report = inspect(args.repo, args.ref, inventory_only=args.inventory_only)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         with args.output.open("x", encoding="utf-8") as handle:
             handle.write(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
@@ -306,7 +332,7 @@ def main(argv: list[str] | None = None) -> int:
             {k: report[k] for k in ("commit", "file_count", "total_bytes", "mirror", "audit")},
             ensure_ascii=True,
         ))
-        return 0 if report["mirror"]["verified_against_manifest"] and not report["audit"]["missing"] else 1
+        return 0 if args.inventory_only or (report["mirror"]["verified_against_manifest"] and not report["audit"]["missing"]) else 1
     except (OSError, InventoryError, UnicodeError, subprocess.SubprocessError) as exc:
         code = str(exc) if isinstance(exc, InventoryError) else "CHECK_FAILED"
         print(json.dumps({"status": "ERROR", "error_code": code}, ensure_ascii=True),

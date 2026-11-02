@@ -1,5 +1,12 @@
 # WCP360 — SC-M01 derived API / IPC / permission test-reference index
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 **Historical snapshot date:** 2026-10-26
 **Applicability clarified:** 2026-10-30
 **Status:** DERIVED EVIDENCE / NON-CANONICAL — NOT OWNER QA TEST BASELINE

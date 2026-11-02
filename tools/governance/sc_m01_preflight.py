@@ -93,7 +93,9 @@ def check_manifest(data: dict[str, Any]) -> list[dict[str, Any]]:
     return artifacts
 
 
-def inspect(repo: Path, data: dict[str, Any]) -> dict[str, Any]:
+def inspect(repo: Path, data: dict[str, Any], *, input_layout: str = "legacy") -> dict[str, Any]:
+    if input_layout not in ("legacy", "documentation"):
+        raise ValueError("unsupported input layout")
     artifacts = check_manifest(data)
     rows = []
     matched = 0
@@ -112,7 +114,7 @@ def inspect(repo: Path, data: dict[str, Any]) -> dict[str, Any]:
         if relative is None:
             row["status"] = "PATH_NOT_DEFINED"
         else:
-            path = _safe_repo_file(repo, relative)
+            path = _safe_repo_file(repo, ("documentation/" if input_layout == "documentation" else "") + relative)
             if not path.is_file():
                 row["status"] = "NOT_PRESENT"
             else:
@@ -130,6 +132,7 @@ def inspect(repo: Path, data: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "scope": "LOCAL_WORKTREE_ONLY",
+        "input_layout": input_layout,
         "publication_authority": "NONE",
         "implementation_authorization": "NONE",
         "manifest_source_main_sha": data.get("source_main_sha"),
@@ -153,6 +156,8 @@ def main(argv: list[str] | None = None) -> int:
         "--require-all-pinned", action="store_true",
         help="return exit 2 unless all eight local artifacts match configured pins",
     )
+    parser.add_argument("--input-layout", choices=("legacy", "documentation"), default="legacy",
+                        help="fixed locator layout; original manifest paths and pins stay unchanged")
     args = parser.parse_args(argv)
 
     try:
@@ -160,7 +165,7 @@ def main(argv: list[str] | None = None) -> int:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         if not isinstance(manifest, dict):
             raise ValueError("manifest root must be an object")
-        report = inspect(args.repo, manifest)
+        report = inspect(args.repo, manifest, input_layout=args.input_layout)
     except (ValueError, OSError, json.JSONDecodeError) as exc:
         print("SC-M01 preflight error: " + str(exc), file=sys.stderr)
         return 3

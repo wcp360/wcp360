@@ -1,5 +1,12 @@
 # WCP360 — Détection ciblée avant commit et correction du périmètre
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 Date : 2026-10-02. Statut : **CORRECTIF / EXTENSION CANDIDATE — REVIEW**. PR #42 ; suivi #41, volet AUDIT-WCP-0109. Base du lot : `6df0afc6f12931d039e75ba13b7494d54b0523c9`.
 
 Ce lot étend le contrôleur existant, sans ajouter de moteur de sécurité applicatif. Aucun contrat propriétaire, schéma DB, code sous src/, migration, service ou baseline n'est modifié. Il ne remplace pas les exports #6/#7/#9. SC-M01 reste PAUSED, SC-M02 NOT AUTHORIZED, CODE-BASELINE NONE.

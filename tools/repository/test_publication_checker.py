@@ -181,5 +181,35 @@ class PublicationTests(Fixture):
         self.assertEqual(target.read_text(encoding="utf-8"), "original")
 
 
+    def test_explicit_inventory_mode_never_certifies_present_mirror(self):
+        report = checker.inspect(self.repo, "HEAD", inventory_only=True)
+        self.assertEqual(report["mirror"]["status"], "NOT_APPLICABLE")
+        self.assertFalse(report["mirror"]["verified_against_manifest"])
+        self.assertEqual(report["file_count"], 6)
+        self.assertEqual(report["overall_project_publication"], "NOT_CERTIFIED_COMPLETE")
+
+    def test_inventory_mode_accepts_absent_historical_mirror_only_explicitly(self):
+        shutil.rmtree(self.repo / checker.MIRROR)
+        self.commit()
+        with self.assertRaisesRegex(checker.InventoryError, "MISSING_MIRROR_MANIFEST"):
+            checker.inspect(self.repo, "HEAD")
+        report = checker.inspect(self.repo, "HEAD", inventory_only=True)
+        self.assertEqual(report["mirror"]["reason"], "EXPLICIT_METADATA_INVENTORY_ONLY_MODE")
+        self.assertEqual(report["file_count"], 4)
+
+    def test_inventory_mode_still_refuses_gitlinks(self):
+        head = self.git("rev-parse", "HEAD").stdout.decode().strip()
+        self.git("update-index", "--add", "--cacheinfo", "160000," + head + ",external")
+        self.git("commit", "-qm", "synthetic gitlink")
+        with self.assertRaisesRegex(checker.InventoryError, "UNSUPPORTED_TREE_ENTRY"):
+            checker.inspect(self.repo, "HEAD", inventory_only=True)
+
+    def test_inventory_cli_has_explicit_success_without_mirror_certification(self):
+        output = self.repo / "metadata-report.json"
+        code, _, _ = self.run_main("--inventory-only", "--output", str(output))
+        self.assertEqual(code, 0)
+        report = json.loads(output.read_text(encoding="utf-8"))
+        self.assertFalse(report["mirror"]["verified_against_manifest"])
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

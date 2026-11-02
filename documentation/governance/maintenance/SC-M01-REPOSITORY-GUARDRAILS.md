@@ -1,5 +1,12 @@
 # WCP360 — Maintenance ciblée du dépôt avant SC-M01
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 Date : 2026-10-02. Statut : **CORRECTIF CANDIDAT — REVIEW**.
 
 Références : AUDIT-WCP-0111 et volet initial AUDIT-WCP-0109 ; suivi unique [#41](https://github.com/yyogas/wcp360/issues/41). Base de branche : `d802dfdfad25f91f030c7ff7656310d05f57c311`, fusion documentaire de la PR #40. Le code applicatif, les spécifications canoniques, les versions DOC/DESIGN et les critères de reprise ne changent pas.

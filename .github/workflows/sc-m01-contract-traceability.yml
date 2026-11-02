@@ -1,59 +1,63 @@
-name: SC-M01 contract reference traceability (noncanonical)
+name: SC-M01 historical reference traceability (noncanonical)
 
 on:
-  pull_request:
+  push:
+    branches: [main]
     paths:
-      - "tools/governance/sc_m01_contract_traceability.py"
-      - "tools/governance/test_sc_m01_contract_traceability.py"
-      - "tools/governance/sc_m01_privileged_mapping_check.py"
-      - "tools/governance/test_sc_m01_privileged_mapping_check.py"
-      - "tools/governance/sc_m01_qa_annex_consistency.py"
-      - "tools/governance/test_sc_m01_qa_annex_consistency.py"
-      - "tools/governance/sc_m01_qa_single_file_check.py"
-      - "tools/governance/test_sc_m01_qa_single_file_check.py"
-      - "governance/proposals/WCP360_SC-M01_Test_Baseline_v1.0_SINGLE_FILE_OWNER_SIGNOFF_CANDIDATE.md"
-      - "governance/proposals/SC-M01-QA-TEST-BASELINE-v1.0-OWNER-CANDIDATE.md"
-      - "governance/proposals/SC-M01-QA-A01-A20-OWNER-DECISION-PACKET-v0.1.md"
-      - "governance/handoffs/SC-M01-QA-CANONICAL-COVERAGE-INDEX.json"
-      - "governance/proposals/SC-M01-QA-133-TEST-RECORDS-OWNER-CANDIDATE-v0.1.json"
-      - "governance/proposals/SC-M01-QA-66-SECURITY-TEST-ANNEX-OWNER-CANDIDATE-v0.1.json"
-      - "governance/verification/SC-M01-CONTRACT-TRACEABILITY-2026-10-26.json"
-      - "governance/verification/SC-M01-CONTRACT-TRACEABILITY-README.md"
-      - "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
-      - "specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md"
-      - "specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
-      - "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
+      - "tools/governance/**"
+      - "documentation/governance/verification/**"
+      - "documentation/specifications/**"
       - ".github/workflows/sc-m01-contract-traceability.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "tools/governance/**"
+      - "documentation/governance/verification/**"
+      - "documentation/specifications/**"
+      - ".github/workflows/sc-m01-contract-traceability.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  reference-check:
+  historical-reference-check:
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
-      - name: Checkout without persisted credentials
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Checkout with immutable historical Git inputs available
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - name: Python standard library version
-        run: python3 --version
-      - name: Unit / adversarial validation
-        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_contract_traceability.py' -v
-      - name: Negative Security↔IPC operation/parent binding tests
-        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_privileged_mapping_check.py' -v
-      - name: Verify 47 IPC-B operations against Security source
-        run: python3 tools/governance/sc_m01_privileged_mapping_check.py
-      - name: Historical 199-record QA source-linkage and fake-PASS negative tests
-        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_qa_annex_consistency.py' -v
-      - name: Verify historical QA proposal candidates retain pending status
-        run: python3 tools/governance/sc_m01_qa_annex_consistency.py --json
-      - name: Historical QA single-file proposal adversarial tests
-        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_qa_single_file_check.py' -v
-      - name: Verify historical QA proposal integrity (current final QA outside scope)
-        run: python3 tools/governance/sc_m01_qa_single_file_check.py --json
-      - name: Verify exact reference traceability snapshot
-        run: python3 tools/governance/sc_m01_contract_traceability.py --mode check
-      - name: Reference-only summary
-        run: python3 tools/governance/sc_m01_contract_traceability.py --mode summary
+          fetch-depth: 0
+      - name: Prepare bounded private historical fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/scm01-evidence"
+          python3 tools/governance/sc_m01_historical_inputs.py --output "$RUNNER_TEMP/scm01-inputs" > "$RUNNER_TEMP/scm01-evidence/historical-provenance.json"
+      - name: Run source-binding mutation and fake-PASS refusal tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in test_sc_m01_contract_traceability.py test_sc_m01_privileged_mapping_check.py test_sc_m01_qa_annex_consistency.py test_sc_m01_qa_single_file_check.py; do
+            python3 -m unittest discover -s "$RUNNER_TEMP/scm01-inputs/tools/governance" -p "$test" -v
+          done
+      - name: Verify unchanged 86 API, 47 IPC and 82 permission historical snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/scm01-inputs/tools/governance/sc_m01_contract_traceability.py" --mode check
+          python3 "$RUNNER_TEMP/scm01-inputs/tools/governance/sc_m01_privileged_mapping_check.py"
+          python3 "$RUNNER_TEMP/scm01-inputs/tools/governance/sc_m01_qa_annex_consistency.py" --json > "$RUNNER_TEMP/scm01-evidence/historical-qa-annex.json"
+          python3 "$RUNNER_TEMP/scm01-inputs/tools/governance/sc_m01_qa_single_file_check.py" --json > "$RUNNER_TEMP/scm01-evidence/historical-qa-single-file.json"
+      - name: Preserve historical reference evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: scm01-historical-references-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/scm01-evidence/*.json
+          if-no-files-found: error
+          retention-days: 30
+
+# Historical proposal consistency is separate from current Core tests and approval.

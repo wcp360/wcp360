@@ -1,5 +1,12 @@
 # SC-M01 artifact fingerprint preflight (NON-CANONICAL)
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 Current snapshot: 2026-10-30. GitHub issue #13 / #41.
 
 The 8-artifact manifest and Python tool are **read-only repository tooling**. They do not create implementation code, change a baseline, approve DB/QA/Engineering contents, verify E3 or open the SC-M01 gate.

@@ -16,6 +16,8 @@ secrets*
 # Their contents still require review; never store actual credentials here.
 !/documentation/**/secrets.md
 !/specifications/**/secrets.md
+# Reviewed source helper; no general exception for secrets-named files.
+!/SOURCE/platform/src/Shared/SecretSafe.php
 private/
 .secret/
 secrets/
@@ -56,6 +58,8 @@ vendor/
 dist/
 # Root build output only; keep packaging/build and tools/build trackable.
 /build/
+# Downloaded local build toolchains and generated build output remain private.
+/WCP360_Build/build/
 coverage/
 .cache/
 .phpunit.cache/
@@ -72,6 +76,3 @@ Thumbs.db
 # Local overrides
 *.local
 config/local/
-
-# Local downloaded toolchains remain private/generated.
-/WCP360_Build/build/

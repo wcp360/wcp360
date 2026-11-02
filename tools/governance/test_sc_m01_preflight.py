@@ -134,6 +134,23 @@ class PreflightTests(unittest.TestCase):
         )
 
 
+    def test_documentation_layout_checks_same_bytes_without_rewriting_manifest(self) -> None:
+        original = json.dumps(self.manifest, sort_keys=True)
+        for entry in self.entries:
+            old = self.repo / entry["path"]
+            relocated = self.repo / "documentation" / entry["path"]
+            relocated.parent.mkdir(parents=True, exist_ok=True)
+            old.rename(relocated)
+        report = inspect(self.repo, self.manifest, input_layout="documentation")
+        self.assertEqual(report["exact_pins_matching"], 8)
+        self.assertEqual(report["input_layout"], "documentation")
+        self.assertEqual(json.dumps(self.manifest, sort_keys=True), original)
+        self.assertEqual(inspect(self.repo, self.manifest)["exact_pins_matching"], 0)
+
+    def test_unknown_input_layout_is_refused(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported input layout"):
+            inspect(self.repo, self.manifest, input_layout="../outside")
+
 class CurrentSnapshotTests(unittest.TestCase):
     """Exercise published canonical bytes and strict CLI failure semantics."""
 
