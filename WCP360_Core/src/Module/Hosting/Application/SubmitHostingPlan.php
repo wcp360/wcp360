@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Wcp360\Core\Module\Hosting\Application;
 
 use Wcp360\Core\Module\Hosting\Domain\CandidateHostname;
+use Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Module\Platform\Application\ApplicationServerSettings;
 use Symfony\Component\Uid\Uuid;
@@ -67,6 +68,7 @@ final readonly class SubmitHostingPlan
             $db->insert('wcp_candidate_sites', [
                 'id' => $site, 'tenant_id' => $tenant, 'hostname' => $host, 'state' => 'PLAN_QUEUED', 'revision' => 1,
                 'application_server' => $server->value, 'worker_acknowledged' => (int) $acknowledged,
+                ...SiteRuntimeProfile::forServer($server)->storage(),
             ]);
             $db->insert('wcp_candidate_jobs', [
                 'id' => $job, 'tenant_id' => $tenant, 'site_id' => $site, 'actor_id' => $actor,

@@ -51,7 +51,7 @@ final class SiteListJourneyTest extends WebTestCase
 
     public function testNavigationFiltersSharedPaginationAndTaskLinkUseTheWcpLayout(): void
     {
-        $this->store->db->executeStatement("UPDATE wcp_candidate_sites SET application_server='frankenphp_worker',worker_acknowledged=1 WHERE hostname='job-alice-2.test'");
+        $this->store->db->executeStatement("UPDATE wcp_candidate_sites SET application_server='frankenphp_worker',worker_acknowledged=1,web_stack='advanced' WHERE hostname='job-alice-2.test'");
         $this->login();
         self::assertSelectorExists('a[href="/workbench/sites"]');
         $crawler = $this->browser->request('GET', 'http://user.localhost/workbench/sites');

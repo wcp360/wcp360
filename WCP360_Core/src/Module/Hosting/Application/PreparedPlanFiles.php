@@ -7,7 +7,7 @@ namespace Wcp360\Core\Module\Hosting\Application;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Wcp360\Core\Module\Hosting\Domain\ApplicationServer;
+use Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile;
 use Wcp360\Core\Module\Hosting\Domain\PreparedPlanDocument;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 
@@ -24,7 +24,7 @@ final readonly class PreparedPlanFiles
         if ($row['state'] === 'SUCCEEDED') {
             try {
                 if (!is_string($row['result'])) throw new \InvalidArgumentException('Missing plan.');
-                $files = PreparedPlanDocument::decode($row['result'], ApplicationServer::from($row['application_server']))->files();
+                $files = PreparedPlanDocument::decode($row['result'], SiteRuntimeProfile::fromStorage($row)->server)->files();
             } catch (\Throwable) {
                 // Never reflect corrupt JSON, embedded data or decoder/driver details to the browser.
                 throw new ServiceUnavailableHttpException(null, 'Prepared plan files are unavailable.');

@@ -81,7 +81,7 @@ final class ListPreparedSitesTest extends KernelTestCase
     {
         HostingJobsFixture::seed($this->store->db, $this->fixture, 6);
         HostingJobsFixture::seed($this->store->db, $this->fixture, 1, 'bob', 10000);
-        $this->store->db->executeStatement("UPDATE wcp_candidate_sites SET application_server='frankenphp_worker',worker_acknowledged=1,state='PLAN_FAILED' WHERE hostname='job-alice-2.test'");
+        $this->store->db->executeStatement("UPDATE wcp_candidate_sites SET application_server='frankenphp_worker',worker_acknowledged=1,web_stack='advanced',state='PLAN_FAILED' WHERE hostname='job-alice-2.test'");
         $before = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_sites ORDER BY id');
         $jobs = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_jobs ORDER BY id');
         $audit = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_audit ORDER BY id');

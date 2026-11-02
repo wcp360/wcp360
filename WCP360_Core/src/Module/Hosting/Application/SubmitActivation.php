@@ -18,6 +18,11 @@ final readonly class SubmitActivation
             $site=$db->fetchAssociative('SELECT * FROM wcp_candidate_sites WHERE id=? AND tenant_id=?'.$lock,[$plan['site_id'],$plan['tenant_id']]);
             $this->store->requireActivationGrant($actor,$plan['tenant_id']);
             if(!$site||$site['application_server']!=='php_fpm'||$site['state']!=='PLAN_READY'||(int)$site['revision']!==2||$plan['state']!=='SUCCEEDED')throw new ConflictHttpException('A successful initial PHP-FPM plan is required.');
+            try {
+                \Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile::fromStorage($site);
+            } catch (\InvalidArgumentException) {
+                throw new ConflictHttpException('A valid Classic runtime profile is required.');
+            }
             $old=$db->fetchOne('SELECT id FROM wcp_candidate_activations WHERE plan_job_id=?',[$planId]);
             if(is_string($old))return $old;
             $id=WorkbenchStore::id();

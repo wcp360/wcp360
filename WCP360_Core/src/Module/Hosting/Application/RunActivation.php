@@ -46,8 +46,9 @@ final readonly class RunActivation
     {
         if(!$this->availability->enabled)throw new \RuntimeException('Provisioning disabled.');
         $this->store->requireActivationGrant($row['actor_id'],$row['tenant_id']);
-        $site=$this->store->db->fetchAssociative('SELECT hostname,revision,application_server,state FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',[$row['site_id'],$row['tenant_id']]);
+        $site=$this->store->db->fetchAssociative('SELECT hostname,revision,application_server,state,web_stack,stack_revision FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',[$row['site_id'],$row['tenant_id']]);
         if(!$site||(int)$site['revision']!==(int)$row['expected_revision']||$site['application_server']!=='php_fpm'||$site['state']!=='PLAN_READY')throw new \RuntimeException('Site revision changed.');
+        \Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile::fromStorage($site);
         return ['schema'=>'wcp360.candidate.provision/1','operation'=>$operation,'job_id'=>$row['id'],'tenant_id'=>$row['tenant_id'],'site_id'=>$row['site_id'],'hostname'=>$site['hostname'],'expected_revision'=>(int)$row['expected_revision']];
     }
     /** @param array<string,mixed> $row */

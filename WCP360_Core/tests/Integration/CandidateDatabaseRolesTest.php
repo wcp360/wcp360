@@ -424,6 +424,44 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testPersistedSiteProfilesUseExistingUserWorkerGrantsWithoutGivingAdminSiteAccess(): void
+    {
+        $this->provider->provision($this->passwords);
+        $user = $this->login('user');
+        $userStore = new WorkbenchStore($user);
+        $policy = new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true);
+        $submit = new SubmitHostingPlan($userStore, $policy, new ApplicationServerSettings($userStore, $policy));
+        $ids = [];
+        foreach (['php_fpm' => 'classic', 'frankenphp_worker' => 'advanced'] as $engine => $stack) {
+            $job = $submit->submit($this->fixture['users']['alice'], [
+                'tenant_id' => $this->fixture['tenants']['alice'], 'hostname' => 'profile-'.$stack.'.test',
+                'idempotency_key' => 'restricted-profile-'.$stack.'-2026',
+                'application_server' => $engine, 'worker_acknowledged' => $engine === 'frankenphp_worker',
+            ])['job_id'];
+            $row = $userStore->job($this->fixture['users']['alice'], $job);
+            self::assertSame($stack, $row['web_stack']);
+            self::assertSame(1, (int) $row['stack_revision']);
+            $ids[] = $job;
+        }
+        foreach (['web_stack=web_stack', 'stack_revision=stack_revision'] as $change) {
+            try { $user->executeStatement('UPDATE wcp_candidate_sites SET '.$change.' WHERE false'); self::fail('USER acquired profile update grants.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+        $worker = $this->login('worker');
+        $run = new RunHostingPlan(new WorkbenchStore($worker), self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class), $policy);
+        $completed = [$run->runOne(), $run->runOne()];
+        self::assertEqualsCanonicalizing($ids, $completed);
+        foreach ($ids as $id) {
+            self::assertSame('SUCCEEDED', $user->fetchOne('SELECT state FROM wcp_candidate_jobs WHERE id=?', [$id]));
+            self::assertNotEmpty((new \Wcp360\Core\Module\Hosting\Application\PreparedPlanFiles($userStore))->inspect($this->fixture['users']['alice'], $id)['files']);
+        }
+        $admin = $this->login('admin');
+        try { $admin->fetchOne('SELECT web_stack FROM wcp_candidate_sites LIMIT 1'); self::fail('ROOT preview broadened site grants.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        self::assertSame($this->roles['user'], $user->fetchOne('SELECT current_user'));
+        self::assertSame($this->roles['worker'], $worker->fetchOne('SELECT current_user'));
+    }
+
     public function testModernPreviewUsesOnlyExistingRootIdentityReadsAndCannotReadAudit(): void
     {
         $this->provider->provision($this->passwords);

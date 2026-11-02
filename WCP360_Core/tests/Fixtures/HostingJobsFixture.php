@@ -21,6 +21,7 @@ final class HostingJobsFixture
                 'id' => $site, 'tenant_id' => $fixture['tenants'][$name], 'hostname' => 'job-'.$name.'-'.($offset + $i).'.test',
                 'state' => $state === 'SUCCEEDED' ? 'PLAN_READY' : 'PLAN_QUEUED', 'revision' => 1,
                 'application_server' => 'php_fpm', 'worker_acknowledged' => 0,
+                'web_stack' => 'classic', 'stack_revision' => 1,
             ]);
             $db->insert('wcp_candidate_jobs', [
                 'id' => $id, 'tenant_id' => $fixture['tenants'][$name], 'site_id' => $site, 'actor_id' => $fixture['users'][$name],

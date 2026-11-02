@@ -7,6 +7,7 @@ namespace Wcp360\Core\Module\Operations\Infrastructure;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Uid\Uuid;
+use Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile;
 
 /**
  * Fixed candidate plan transitions; not a general job executor or lease manager.
@@ -46,12 +47,12 @@ final readonly class HostingPlanQueue
      * Publish only a still-running plan. A lost publication race has no writes/audit.
      * A NULL result means rendering failed. Observed access revocation discards a rendered result.
      */
-    public function finish(string $id, ?string $result): bool
+    public function finish(string $id, ?string $result, ?SiteRuntimeProfile $expectedProfile = null): bool
     {
         $this->requireOwnTransaction();
         if (!Uuid::isValid($id)) throw new \InvalidArgumentException('Invalid candidate job identity.');
 
-        return $this->store->db->transactional(function () use ($id, $result): bool {
+        return $this->store->db->transactional(function () use ($id, $result, $expectedProfile): bool {
             $db = $this->store->db;
             $row = $db->fetchAssociative('SELECT '.self::FIELDS." FROM wcp_candidate_jobs WHERE id=? AND state='RUNNING'".$this->lock(), [$id]);
             if ($row === false) return false;
@@ -60,6 +61,17 @@ final readonly class HostingPlanQueue
                     $this->store->requirePermission($row['actor_id'], $row['tenant_id']);
                 } catch (AccessDeniedHttpException) {
                     // Revocation observed at publication is a known refusal, never a successful plan.
+                    $result = null;
+                }
+            }
+            if ($result !== null && $expectedProfile !== null) {
+                // Hold the site row lock through publication; a changed topology cannot publish old output.
+                $site = $db->fetchAssociative(
+                    'SELECT application_server,web_stack,stack_revision FROM wcp_candidate_sites WHERE id=? AND tenant_id=?'.$this->lock(),
+                    [$row['site_id'], $row['tenant_id']]);
+                try {
+                    if ($site === false || !$expectedProfile->matches(SiteRuntimeProfile::fromStorage($site))) $result = null;
+                } catch (\InvalidArgumentException) {
                     $result = null;
                 }
             }

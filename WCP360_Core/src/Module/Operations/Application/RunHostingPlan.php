@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wcp360\Core\Module\Operations\Application;
 
 use Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy;
+use Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile;
 use Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer;
 use Wcp360\Core\Module\Operations\Infrastructure\HostingPlanQueue;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
@@ -24,19 +25,21 @@ final readonly class RunHostingPlan
         $job = $this->queue->claim();
         if ($job === null) return null;
         $result = null;
+        $profile = null;
         try {
             $this->store->requirePermission($job['actor_id'], $job['tenant_id']);
             $site = $this->store->db->fetchAssociative(
-                'SELECT hostname,application_server,worker_acknowledged FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',
+                'SELECT hostname,application_server,worker_acknowledged,web_stack,stack_revision FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',
                 [$job['site_id'], $job['tenant_id']]);
             if ($site === false) throw new \RuntimeException('Plan site unavailable.');
-            $server = $this->policy->select($site['application_server'], 'php_fpm', (bool) $site['worker_acknowledged']);
+            $profile = SiteRuntimeProfile::fromStorage($site);
+            $server = $this->policy->select($profile->server->value, 'php_fpm', (bool) $site['worker_acknowledged']);
             $result = json_encode($this->renderer->render($job['site_id'], $site['hostname'], $server, (bool) $site['worker_acknowledged']), JSON_THROW_ON_ERROR);
         } catch (\Throwable) {
             // No privileged effect is dispatched by the renderer; publish a bounded failure.
             $result = null;
         }
-        if (!$this->queue->finish($job['id'], $result)) {
+        if (!$this->queue->finish($job['id'], $result, $profile)) {
             throw new \RuntimeException('Job state changed; result publication refused.');
         }
 
