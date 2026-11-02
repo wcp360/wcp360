@@ -20,9 +20,23 @@ func mustCatalog(t *testing.T) Catalog {
 	return c
 }
 
+func ownerSourcePath(t *testing.T, historicalPath string) string {
+	t.Helper()
+	// Keep the embedded historical path while admitting only reviewed relocations.
+	switch historicalPath {
+	case "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+		"specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+		"specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md":
+		return filepath.Join("../../../..", "documentation", historicalPath)
+	default:
+		t.Fatalf("unrecognized owner source path: %s", historicalPath)
+		return ""
+	}
+}
+
 func TestCanonicalSourcePins(t *testing.T) {
 	for _, source := range mustCatalog(t).Sources() {
-		data, err := os.ReadFile(filepath.Join("../../../..", source.Path))
+		data, err := os.ReadFile(ownerSourcePath(t, source.Path))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -195,7 +209,7 @@ func TestEveryRegistryCellMatchesOwnerSource(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, source := range c.Sources() {
-		raw, err := os.ReadFile(filepath.Join("../../../..", source.Path))
+		raw, err := os.ReadFile(ownerSourcePath(t, source.Path))
 		if err != nil {
 			t.Fatal(err)
 		}
