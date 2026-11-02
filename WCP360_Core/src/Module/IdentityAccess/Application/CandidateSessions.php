@@ -245,6 +245,31 @@ final readonly class CandidateSessions
         });
     }
 
+    /** Revoke the current account's other registrations without loading their metadata. */
+    public function revokeOthers(string $actor, string $surface, string $selector,
+        #[\SensitiveParameter] string $sessionId, int $requiredStrength = 1): int
+    {
+        $table = self::table($surface);
+
+        return $this->store->db->transactional(function () use ($actor, $surface, $table, $selector, $sessionId, $requiredStrength): int {
+            $this->requireActor($actor, $surface, true);
+            if (!$this->current($actor, $surface, $selector, $sessionId, $requiredStrength, false)) {
+                throw new AccessDeniedHttpException('Current bound session required.');
+            }
+            $now = $this->now();
+            $changed = $this->store->db->executeStatement("UPDATE $table SET revoked_at = CASE WHEN last_seen_at > ? THEN last_seen_at ELSE ? END WHERE user_id = ? AND id <> ? AND revoked_at IS NULL", [$now, $now, $actor, $selector]);
+            if (!$this->current($actor, $surface, $selector, $sessionId, $requiredStrength, false)) {
+                throw new AccessDeniedHttpException('Current bound session required.');
+            }
+            if ($changed > 0) {
+                // One aggregate event references the retained selector; raw bindings stay private.
+                $this->store->audit($actor, null, 'candidate.session.others_revoked', $selector);
+            }
+
+            return (int) $changed;
+        });
+    }
+
     private static function table(string $surface): string
     {
         return match ($surface) {

@@ -17,6 +17,8 @@ Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369
 
 The [ROOT hosting account inventory](src/Module/IdentityAccess/README.md#root-hosting-account-inventory) adds bounded USER login identity reads and selected-user navigation into existing access blocks. This is not the complete customer/reseller/Unix-account lifecycle; capability counts and completion estimates remain unchanged.
 
+The [other-session revocation action](src/Module/IdentityAccess/README.md#disconnecting-other-sessions) retains the current USER/ROOT browser, rechecks current credentials/session/factor policy and atomically audits an account-scoped bulk update. Session management and Revocation and role changes remain Partial; existing counts and the approximately 20% estimate remain unchanged.
+
 ## Delivery snapshot
 
 **Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.

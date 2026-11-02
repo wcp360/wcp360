@@ -17,7 +17,7 @@ final readonly class PasswordChangeErrors
     #[AsEventListener(event: 'kernel.exception', priority: -64)]
     public function redact(#[\SensitiveParameter] ExceptionEvent $event): void
     {
-        if (!$event->isMainRequest() || !in_array($event->getRequest()->getPathInfo(), ['/account/password', '/reset-password', '/account/security/mfa/recovery-codes'], true)) return;
+        if (!$event->isMainRequest() || !in_array($event->getRequest()->getPathInfo(), ['/account/password', '/reset-password', '/account/security/mfa/recovery-codes', '/account/sessions/revoke-others'], true)) return;
         $event->setResponse($this->responder->exception($event->getRequest(), $event->getThrowable()));
     }
 }

@@ -141,6 +141,168 @@ final class SessionJourneyTest extends WebTestCase
         }
     }
 
+    public function testRevokeOthersPreservesCurrentCookieAndBlocksTheOtherCookieAfterRestart(): void
+    {
+        $this->login();
+        $other = $this->selector();
+        $otherCookies = $this->cookies();
+        $this->newBrowserLogin();
+        $current = $this->selector();
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        self::assertSelectorExists('input#password-others[autocomplete="current-password"]');
+        $this->browser->submit($crawler->selectButton('Déconnecter les autres sessions')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseRedirects('/account/sessions', 303);
+        $this->browser->followRedirect();
+        self::assertSelectorTextContains('[role="status"]', 'Cette session reste ouverte.');
+        self::assertSame($current, $this->selector());
+        self::assertNotNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_user_sessions WHERE id=?', [$other]));
+        $survivorCookies = $this->cookies();
+        $this->bootBrowser('user');
+        $this->useCookies($otherCookies);
+        $this->browser->request('GET', $this->url('/account/sessions'));
+        self::assertResponseRedirects('/login');
+        $this->useCookies($survivorCookies);
+        $this->browser->request('GET', $this->url('/account/sessions'));
+        self::assertResponseIsSuccessful();
+        self::assertSame($current, $this->selector());
+    }
+
+    public function testRevokeOthersWithNoOtherSessionReturnsAnExplicitNoOp(): void
+    {
+        $this->login();
+        $current = $this->selector();
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        $this->browser->submit($crawler->selectButton('Déconnecter les autres sessions')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseRedirects('/account/sessions', 303);
+        $this->browser->followRedirect();
+        self::assertSelectorTextContains('[role="status"]', 'Aucune autre session');
+        self::assertSame($current, $this->selector());
+        self::assertSame(0, (int) $this->store->db->fetchOne("SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.session.others_revoked'"));
+    }
+
+    public function testRevokeOthersRequiresItsOwnCsrfOriginBoundBodyAndPasswordBudget(): void
+    {
+        $this->login();
+        $this->newBrowserLogin();
+        $current = $this->selector();
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        $token = $crawler->selectButton('Déconnecter les autres sessions')->form()->getValues()['_token'];
+        $base = ['_token' => $token, 'current_password' => WorkbenchFixture::PASSWORD];
+        foreach ([
+            [$base + ['actor' => $this->fixture['users']['bob']], '', 'http://user.localhost', 400],
+            [$base + ['selector' => $current], '', 'http://user.localhost', 400],
+            [$base, '?return=https://example.test', 'http://user.localhost', 400],
+            [array_replace($base, ['_token' => 'invalid']), '', 'http://user.localhost', 403],
+            [$base, '', 'http://other.localhost', 403],
+        ] as [$fields, $query, $origin, $status]) {
+            $this->browser->request('POST', $this->url('/account/sessions/revoke-others'.$query), $fields, [], ['HTTP_ORIGIN' => $origin]);
+            self::assertResponseStatusCodeSame($status);
+        }
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT reauth_attempts FROM wcp_candidate_user_sessions WHERE id=?', [$current]));
+        $singleToken = $this->targetedCsrf($current);
+        $this->browser->request('POST', $this->url('/account/sessions/revoke-others'), array_replace($base, ['_token' => $singleToken]));
+        self::assertResponseStatusCodeSame(403);
+        $wrong = 'wrong-synthetic-password-never-echo';
+        for ($i = 0; $i < 5; ++$i) {
+            $this->browser->request('POST', $this->url('/account/sessions/revoke-others'),
+                array_replace($base, ['current_password' => $wrong]), [], ['HTTP_ORIGIN' => 'http://user.localhost']);
+            self::assertResponseStatusCodeSame(403);
+            self::assertStringNotContainsString($wrong, (string) $this->browser->getResponse()->getContent());
+        }
+        $this->browser->request('POST', $this->url('/account/sessions/revoke-others'), $base);
+        self::assertResponseStatusCodeSame(429);
+        self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
+        self::assertSame(0, (int) $this->store->db->fetchOne("SELECT COUNT(*) FROM wcp_candidate_user_sessions WHERE revoked_at IS NOT NULL"));
+    }
+
+    public function testRevokeOthersHasNoGetEffectAndRequiresAuthentication(): void
+    {
+        $this->browser->request('POST', $this->url('/account/sessions/revoke-others'), ['current_password' => 'synthetic']);
+        self::assertResponseRedirects('/login');
+        $this->login();
+        $this->browser->request('GET', $this->url('/account/sessions/revoke-others'));
+        self::assertResponseStatusCodeSame(405);
+        self::assertSame(0, (int) $this->store->db->fetchOne("SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.session.others_revoked'"));
+    }
+
+    public function testPasswordOnlyRootCanRevokeOthersWithFreshPasswordProof(): void
+    {
+        $this->bootBrowser('admin', true);
+        $this->login('admin');
+        $other = $this->selector();
+        $this->newBrowserLogin('admin');
+        $current = $this->selector();
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        $this->browser->submit($crawler->selectButton('Déconnecter les autres sessions')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseRedirects('/account/sessions', 303);
+        $this->browser->followRedirect();
+        self::assertSame($current, $this->selector());
+        self::assertNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_admin_sessions WHERE id=?', [$current]));
+        self::assertNotNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_admin_sessions WHERE id=?', [$other]));
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_mfa WHERE sealed_secret IS NOT NULL'));
+    }
+
+    public function testExpiredRootProofIsRefusedBeforeControllerWithoutExposingPassword(): void
+    {
+        $this->bootBrowser('admin', true);
+        $this->login('admin');
+        $this->newBrowserLogin('admin');
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        $form = $crawler->selectButton('Déconnecter les autres sessions')->form(['current_password' => WorkbenchFixture::PASSWORD]);
+        $session = $this->browser->getRequest()->getSession();
+        $proof = $session->get('_wcp_password_proof');
+        self::assertIsArray($proof);
+        $proof['at'] = time() - 301;
+        $session->set('_wcp_password_proof', $proof);
+        $session->save();
+        $this->browser->submit($form);
+        self::assertResponseStatusCodeSame(403);
+        self::assertStringNotContainsString(WorkbenchFixture::PASSWORD, (string) $this->browser->getResponse()->getContent());
+        self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
+        self::assertSame(0, (int) $this->store->db->fetchOne('SELECT COUNT(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NOT NULL'));
+    }
+
+    public function testEnabledRootMfaAndPendingLoginRespectTheSameRevocationBoundary(): void
+    {
+        $pending = $this->pendingAdministrator();
+        $this->browser->request('POST', $this->url('/account/sessions/revoke-others'), ['_token' => 'invalid', 'current_password' => WorkbenchFixture::PASSWORD]);
+        self::assertContains($this->browser->getResponse()->getStatusCode(), [302, 303]);
+        self::assertContains($this->browser->getResponse()->headers->get('Location'), ['/mfa', 'http://admin.localhost/mfa']);
+        $this->browser->submit($pending['crawler']->selectButton('Valider la MFA')->form(['_auth_code' => TOTP::createFromSecret($pending['secret'])->now()]));
+        self::assertResponseIsSuccessful();
+        $current = $this->selector();
+        $other = self::getContainer()->get(CandidateSessions::class)->issue($this->fixture['users']['admin'], 'admin', str_repeat('z', 32));
+        $before = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery ORDER BY code_hash');
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        $this->browser->submit($crawler->selectButton('Déconnecter les autres sessions')->form(['current_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseRedirects('/account/sessions', 303);
+        $this->browser->followRedirect();
+        self::assertSame($current, $this->selector());
+        self::assertNotNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_admin_sessions WHERE id=?', [$other]));
+        self::assertSame($before, $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery ORDER BY code_hash'));
+        self::assertSame(2, (int) $this->store->db->fetchOne('SELECT auth_strength FROM wcp_candidate_admin_sessions WHERE id=?', [$current]));
+    }
+
+    public function testRevokeOthersAuditFailureReturnsRedactedErrorAndRollsBack(): void
+    {
+        $this->login();
+        $other = $this->selector();
+        $this->newBrowserLogin();
+        $current = $this->selector();
+        $crawler = $this->browser->request('GET', $this->url('/account/sessions'));
+        $form = $crawler->selectButton('Déconnecter les autres sessions')->form(['current_password' => WorkbenchFixture::PASSWORD]);
+        $this->rejectAuditKind('candidate.session.others_revoked');
+        try {
+            $this->browser->submit($form);
+            self::assertResponseStatusCodeSame(503);
+            self::assertStringNotContainsString(WorkbenchFixture::PASSWORD, (string) $this->browser->getResponse()->getContent());
+            self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
+            foreach ([$current, $other] as $selector) {
+                self::assertNull($this->store->db->fetchOne('SELECT revoked_at FROM wcp_candidate_user_sessions WHERE id=?', [$selector]));
+            }
+        } finally { $this->allowAuditInserts(); }
+    }
+
     public function testAccountListsOwnIndependentSessionsWithoutOtherAccounts(): void
     {
         $this->login();
@@ -345,7 +507,7 @@ final class SessionJourneyTest extends WebTestCase
 
     private function rejectAuditKind(string $kind): void
     {
-        if (!in_array($kind, ['candidate.session.reauthentication_attempted', 'candidate.session.revoked'], true)) {
+        if (!in_array($kind, ['candidate.session.reauthentication_attempted', 'candidate.session.revoked', 'candidate.session.others_revoked'], true)) {
             throw new \InvalidArgumentException('Unsupported audit failure injection.');
         }
         if ($this->store->db->getDatabasePlatform() instanceof SQLitePlatform) {

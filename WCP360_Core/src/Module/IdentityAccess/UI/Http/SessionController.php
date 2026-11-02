@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions;
+use Wcp360\Core\Module\IdentityAccess\Application\RevokeOtherSessions;
 use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 
@@ -48,6 +49,33 @@ final class SessionController extends AbstractController
     public function revokeAll(Request $request): Response
     {
         return $this->change($request, null);
+    }
+
+    #[Route('/account/sessions/revoke-others', name: 'wcp_sessions_revoke_others', methods: ['POST'])]
+    public function revokeOthers(#[\SensitiveParameter] Request $request,
+        RevokeOtherSessions $revocation): Response
+    {
+        $user = $this->owner();
+        if ($request->query->count() !== 0
+            || array_diff(array_keys($request->request->all()), ['_token', 'current_password']) !== []) {
+            throw new BadRequestHttpException('Invalid session revocation.');
+        }
+        $this->confirmation->confirm($request, $user, 'session_revoke_others');
+        $session = $request->getSession();
+        $selector = $this->selector($request);
+        $proof = $user->context === 'admin'
+            ? $session->get($this->mfa->status($user->id)['enabled'] ? '_wcp_mfa_proof' : '_wcp_password_proof') : null;
+        try {
+            $count = $revocation->revoke($user, $selector, $session->getId(), is_array($proof) ? $proof : null);
+        } catch (\Throwable $error) {
+            $session->invalidate();
+            $this->tokens->setToken(null);
+            throw $error;
+        }
+        $this->addFlash('sessions', $count === 0 ? 'Aucune autre session à déconnecter.'
+            : 'Les autres sessions ont été déconnectées. Cette session reste ouverte.');
+
+        return new RedirectResponse('/account/sessions', 303);
     }
 
     #[Route('/account/sessions/{id}/revoke', name: 'wcp_sessions_revoke', methods: ['POST'])]

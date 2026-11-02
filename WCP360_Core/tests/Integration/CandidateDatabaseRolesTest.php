@@ -424,6 +424,42 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testOtherSessionRevocationUsesExistingUserAndRootGrantsWithoutAuditReads(): void
+    {
+        $this->provider->provision($this->passwords);
+        foreach (['user' => 'alice', 'admin' => 'admin'] as $surface => $name) {
+            $logger = new class extends AbstractLogger {
+                public array $records = [];
+                public function log($level, string|\Stringable $message, array $context = []): void { $this->records[] = [(string) $message, $context]; }
+            };
+            $db = $this->login($surface, null, $logger);
+            $store = new WorkbenchStore($db);
+            $sessions = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store);
+            $snapshot = \Wcp360\Core\Module\IdentityAccess\Infrastructure\RecoveryAccountSnapshot::find($db, $this->fixture['users'][$name], $surface);
+            self::assertNotNull($snapshot);
+            $actor = $snapshot['actor'];
+            $sid = str_repeat($surface === 'user' ? 'u' : 'a', 32);
+            $current = $sessions->issue($actor->id, $surface, $sid);
+            $other = $sessions->issue($actor->id, $surface, str_repeat('o', 32));
+            $service = new \Wcp360\Core\Module\IdentityAccess\Application\RevokeOtherSessions($store, $sessions,
+                new \Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa($store, ''),
+                new RuntimeContext($surface, true, 'test', $surface.'.localhost'));
+            $logger->records = [];
+            self::assertSame(1, $service->revoke($actor, $current, $sid,
+                $surface === 'admin' ? ['actor' => $actor->id, 'revision' => 0, 'at' => time()] : null));
+            self::assertSame($this->roles[$surface], $db->fetchOne('SELECT current_user'));
+            self::assertTrue($sessions->current($actor->id, $surface, $current, $sid, 1, false));
+            self::assertNotNull($this->maintenance->fetchOne('SELECT revoked_at FROM wcp_candidate_'.$surface.'_sessions WHERE id=?', [$other]));
+            foreach ([$actor->getPassword(), $sid] as $secret) self::assertStringNotContainsString($secret, serialize($logger->records));
+            self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.session.others_revoked' AND resource_id=?", [$current]));
+            try { $db->fetchOne('SELECT id FROM wcp_candidate_audit LIMIT 1'); self::fail('Audit reads became accessible.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+            $opposite = $surface === 'user' ? 'admin' : 'user';
+            try { $db->fetchOne('SELECT id FROM wcp_candidate_'.$opposite.'_sessions LIMIT 1'); self::fail('Opposite sessions became accessible.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+    }
+
     public function testBackupCodeRenewalWorksWithUnchangedAdministratorGrantsAndRedactedProfiles(): void
     {
         $this->provider->provision($this->passwords);
