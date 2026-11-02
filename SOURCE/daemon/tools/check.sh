@@ -48,6 +48,8 @@ pass
 
 gate=daemon-gofmt
 gofmt -l SOURCE/daemon > "$output/gofmt.txt"
+gofmt -d SOURCE/daemon > "$output/gofmt.diff" || { cat "$output/gofmt.diff" >&2; exit 1; }
+if test -s "$output/gofmt.txt"; then cat "$output/gofmt.diff" >&2; fi
 test ! -s "$output/gofmt.txt"
 pass
 gate=daemon-vet
@@ -59,13 +61,18 @@ go -C SOURCE/daemon test -mod=readonly -count=1 -json \
 pass
 
 gate=daemon-inert-import-boundary
-# Production packages may import only the CLI boundary, io and os. This gate is
-# deliberately narrow and must be explicitly changed when another slice opens.
-go -C SOURCE/daemon list -f '{{join .Imports "\n"}}' ./cmd/wcpd ./internal/cli > "$output/imports.txt"
-while IFS= read -r imported; do
-    case "$imported" in
-        ''|io|os|github.com/yyogas/wcp360/daemon/internal/cli) ;;
-        *) printf 'Unexpected production import: %s\n' "$imported" >&2; exit 1 ;;
+# Keep executable OS access confined to cmd/wcpd. Pure policies/catalogs cannot
+# acquire filesystem, process, socket, database or arbitrary package imports.
+go -C SOURCE/daemon list -f '{{ $pkg := .ImportPath }}{{range .Imports}}{{printf "%s %s\n" $pkg .}}{{end}}' ./... > "$output/imports.txt"
+while read -r package imported; do
+    case "$package:$imported" in
+        :|github.com/yyogas/wcp360/daemon/cmd/wcpd:os|github.com/yyogas/wcp360/daemon/cmd/wcpd:github.com/yyogas/wcp360/daemon/internal/cli) ;;
+        github.com/yyogas/wcp360/daemon/internal/cli:io|github.com/yyogas/wcp360/daemon/internal/cli:encoding/json|github.com/yyogas/wcp360/daemon/internal/cli:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
+        github.com/yyogas/wcp360/daemon/internal/contracts:embed|github.com/yyogas/wcp360/daemon/internal/contracts:encoding/json|github.com/yyogas/wcp360/daemon/internal/contracts:errors|github.com/yyogas/wcp360/daemon/internal/contracts:sort) ;;
+        github.com/yyogas/wcp360/daemon/internal/sessionpolicy:time|github.com/yyogas/wcp360/daemon/internal/sessionpolicy:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
+        github.com/yyogas/wcp360/daemon/internal/browserpolicy:context|github.com/yyogas/wcp360/daemon/internal/browserpolicy:encoding/base64|github.com/yyogas/wcp360/daemon/internal/browserpolicy:crypto/subtle|github.com/yyogas/wcp360/daemon/internal/browserpolicy:net/url|github.com/yyogas/wcp360/daemon/internal/browserpolicy:strings|github.com/yyogas/wcp360/daemon/internal/browserpolicy:time|github.com/yyogas/wcp360/daemon/internal/browserpolicy:github.com/yyogas/wcp360/daemon/internal/contracts|github.com/yyogas/wcp360/daemon/internal/browserpolicy:github.com/yyogas/wcp360/daemon/internal/sessionpolicy) ;;
+        github.com/yyogas/wcp360/daemon/internal/consistency:bytes|github.com/yyogas/wcp360/daemon/internal/consistency:time|github.com/yyogas/wcp360/daemon/internal/consistency:github.com/yyogas/wcp360/daemon/internal/contracts) ;;
+        *) printf 'Unexpected production import: %s %s\n' "$package" "$imported" >&2; exit 1 ;;
     esac
 done < "$output/imports.txt"
 pass

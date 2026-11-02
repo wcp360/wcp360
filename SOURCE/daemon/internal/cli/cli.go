@@ -2,10 +2,15 @@
 // It accepts no configuration, commands, paths, addresses or credentials.
 package cli
 
-import "io"
+import (
+	"encoding/json"
+	"io"
+
+	"github.com/yyogas/wcp360/daemon/internal/contracts"
+)
 
 const (
-	usage   = "Usage: wcpd [--help | --version | --check]\nSC-M01 inert foundation: no listener, database or privileged operation.\n"
+	usage   = "Usage: wcpd [--help | --version | --check | --contracts]\nSC-M01 inert foundation: no listener, database or privileged operation.\n"
 	version = "wcpd: SC-M01 inert foundation (CODE-BASELINE NONE)\n"
 	status  = "{\"component\":\"wcpd\",\"mode\":\"inert-foundation\",\"control_transport\":\"disabled\",\"privileged_operations\":\"disabled\"}\n"
 )
@@ -25,6 +30,16 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			message = version
 		case "--check":
 			message = status
+		case "--contracts":
+			catalog, err := contracts.Load()
+			if err != nil {
+				return 1
+			}
+			report, err := json.Marshal(catalog.Counts())
+			if err != nil {
+				return 1
+			}
+			message = string(report) + "\n"
 		default:
 			return reject(stderr)
 		}

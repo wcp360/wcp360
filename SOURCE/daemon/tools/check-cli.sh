@@ -8,10 +8,11 @@ cases="$output/cli-process"
 mkdir -p "$cases"
 : > "$output/cli-process.tsv"
 : > "$cases/empty.expected"
-printf '%s\n' 'Usage: wcpd [--help | --version | --check]' \
+printf '%s\n' 'Usage: wcpd [--help | --version | --check | --contracts]' \
     'SC-M01 inert foundation: no listener, database or privileged operation.' > "$cases/help.expected"
 printf '%s\n' 'wcpd: SC-M01 inert foundation (CODE-BASELINE NONE)' > "$cases/version.expected"
 printf '%s\n' '{"component":"wcpd","mode":"inert-foundation","control_transport":"disabled","privileged_operations":"disabled"}' > "$cases/check.expected"
+printf '%s\n' '{"permissions":82,"api_contracts":86,"ipc_operations":47,"error_codes":23}' > "$cases/contracts.expected"
 printf '%s\n' 'wcpd: unsupported arguments; use --help' > "$cases/rejection.expected"
 
 run_case() {
@@ -36,6 +37,8 @@ run_case help 0 help empty --help
 run_case short-help 0 help empty -h
 run_case version 0 version empty --version
 run_case check 0 check empty --check
+run_case contracts 0 contracts empty --contracts
+cp "$cases/contracts.stdout" "$output/contracts.json"
 cp "$cases/check.stdout" "$output/smoke-status.json"
 
 # Byte-for-byte comparisons catch echoed input, stream mix-ups and extra output.
@@ -73,6 +76,7 @@ stdout_failure help-output-failure --help
 stdout_failure short-help-output-failure -h
 stdout_failure version-output-failure --version
 stdout_failure check-output-failure --check
+stdout_failure contracts-output-failure --contracts
 
 stderr_failure() {
     name=$1
@@ -89,5 +93,5 @@ stderr_failure() {
 stderr_failure rejection-output-failure --token=synthetic-secret
 stderr_failure extra-argument-output-failure --help synthetic-secret
 
-test "$(wc -l < "$output/cli-process.tsv")" -eq 21
+test "$(wc -l < "$output/cli-process.tsv")" -eq 23
 cat "$output/cli-process.tsv"

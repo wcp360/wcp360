@@ -182,7 +182,19 @@ final class ContractIntegrity
         if ($relative === '' || str_contains($relative, '..') || !str_starts_with($relative, 'specifications/')) {
             throw new ContractViolation('invalid canonical source path in derived contract');
         }
-        $path = rtrim($repositoryRoot, '/') . '/' . $relative;
+        // Retain historical source_path/blob provenance; resolve only these
+        // five reviewed relocations in the organized checkout.
+        $locations = [
+            'specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md' => 'documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md',
+            'specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md' => 'documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md',
+            'specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md' => 'documentation/specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md',
+            'specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md' => 'documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md',
+            'specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md' => 'documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md',
+        ];
+        if (!isset($locations[$relative])) {
+            throw new ContractViolation('unrecognized canonical source relocation');
+        }
+        $path = rtrim($repositoryRoot, '/') . '/' . $locations[$relative];
         if (!is_file($path)) {
             throw new ContractViolation('canonical source file missing: ' . $relative);
         }

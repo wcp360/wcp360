@@ -13,6 +13,15 @@ prepare() {
     fixture="$fixtures/$1"
     mkdir -p "$fixture/SOURCE" "$fixture/out" "$fixture/bin"
     cp -R "$repo_root/SOURCE/daemon" "$fixture/SOURCE/daemon"
+    # Preserve the two pinned source inputs required by pure-policy tests.
+    # Fixture copies are not a second repository authority.
+    for input in \
+        documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md \
+        documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md
+    do
+        mkdir -p "$fixture/$(dirname "$input")"
+        cp "$repo_root/$input" "$fixture/$input"
+    done
     chmod -R u+w "$fixture"
 }
 reject_at() {
