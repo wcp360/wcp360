@@ -1,0 +1,5 @@
+<nav class="actions" aria-label="{{ pagination_label }}">
+{% if pagination.previous %}<a class="button secondary" rel="prev" href="{{ path(list_route,filters|merge({before:pagination.previous})) }}">{{ previous_label }}</a>{% endif %}
+<a class="button secondary" href="{{ path(list_route,filters) }}">Premiers résultats</a>
+{% if pagination.next %}<a class="button secondary" rel="next" href="{{ path(list_route,filters|merge({after:pagination.next})) }}">{{ next_label }}</a>{% endif %}
+</nav>

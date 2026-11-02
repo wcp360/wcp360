@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WCP360 — WCP-USER</title>
+  <link rel="stylesheet" href="../shared/app.css">
+</head>
+<body>
+<div class="app">
+  <aside class="rail" aria-label="Contextes">
+    <div class="logo">W</div>
+    <button title="Organisation">◫</button><button title="Environnements">◇</button><button title="Épinglés">☆</button>
+    <div class="rail-spacer"></div><button data-theme-toggle title="Thème">◐</button>
+  </aside>
+  <aside class="sidebar" data-sidebar>
+    <div class="workspace"><span class="eyebrow">WCP-USER</span><strong>Acme Hosting · Production</strong></div>
+    <section class="nav-section"><div class="nav-title">Vue d’ensemble</div><nav class="nav"><a class="active" href="#"><span class="dot"></span>Accueil</a><a href="#"><span class="dot"></span>Applications</a><a href="#"><span class="dot"></span>Domaines & DNS</a></nav></section>
+    <section class="nav-section"><div class="nav-title">Hébergement</div><nav class="nav"><a href="#"><span class="dot"></span>Fichiers</a><a href="#"><span class="dot"></span>Bases de données</a><a href="#"><span class="dot"></span>E-mail</a><a href="#"><span class="dot"></span>SSL</a><a href="#"><span class="dot"></span>Sauvegardes</a></nav></section>
+    <section class="nav-section"><div class="nav-title">Opérations</div><nav class="nav"><a href="#"><span class="dot"></span>Jobs</a><a href="#"><span class="dot"></span>Monitoring</a><a href="#"><span class="dot"></span>Automatisations</a><a href="#"><span class="dot"></span>Paramètres</a></nav></section>
+  </aside>
+  <main class="main">
+    <header class="header"><button class="icon-btn menu-toggle" data-menu-toggle>☰</button><button class="command-trigger" data-command-open><span class="command-text">Rechercher ou exécuter une commande…</span><span class="kbd">⌘ K</span></button><div class="header-actions"><button class="icon-btn" title="Jobs">◴</button><button class="icon-btn" title="Notifications">♢</button></div></header>
+    <div class="content">
+      <div class="page-head"><div><span class="eyebrow">Espace client</span><h1>Bonjour, votre plateforme est stable.</h1><p>Applications, domaines, e-mail, sauvegardes et opérations de votre environnement depuis une vue unique.</p></div><button class="primary">Créer une application</button></div>
+      <section class="metrics"><div class="card metric"><div class="label">Applications</div><div class="value">12</div><div class="trend">12 actives</div></div><div class="card metric"><div class="label">Domaines</div><div class="value">27</div><div class="trend">DNS synchronisé</div></div><div class="card metric"><div class="label">Sauvegardes</div><div class="value">98.7%</div><div class="trend">Politique respectée</div></div><div class="card metric"><div class="label">Jobs actifs</div><div class="value">3</div><div class="trend">Aucune erreur critique</div></div></section>
+      <div class="grid"><section class="card"><div class="card-head"><h2>Applications récentes</h2><span class="eyebrow">Production</span></div><div class="card-body"><table class="table"><thead><tr><th>Application</th><th>État</th><th>Runtime</th><th>Dernier déploiement</th></tr></thead><tbody><tr><td>shop-main</td><td><span class="badge good">● saine</span></td><td>PHP</td><td>il y a 18 min</td></tr><tr><td>api-public</td><td><span class="badge good">● saine</span></td><td>Runtime</td><td>hier</td></tr><tr><td>staging-cms</td><td><span class="badge warn">● attention</span></td><td>PHP</td><td>il y a 4 j</td></tr></tbody></table></div></section><aside class="card"><div class="card-head"><h2>Action Center</h2><span class="badge warn">3</span></div><div class="card-body action-list"><div class="action"><strong>Certificat à renouveler</strong><span>example.fr · expiration dans 9 jours</span></div><div class="action"><strong>Sauvegarde à vérifier</strong><span>database-prod · dernier contrôle incomplet</span></div><div class="action"><strong>DNS en attente</strong><span>2 changements nécessitent une vérification</span></div></div></aside></div>
+    </div>
+  </main>
+</div>
+<dialog class="command" data-command><div class="command-search"><span>⌕</span><input autofocus placeholder="Applications, domaines, jobs…"><button class="icon-btn" data-command-close>×</button></div><div class="command-list"><button>Créer une application</button><button>Ouvrir les jobs actifs</button><button>Rechercher un domaine</button><button>Créer une sauvegarde</button></div></dialog>
+<script src="../shared/app.js"></script>
+</body></html>

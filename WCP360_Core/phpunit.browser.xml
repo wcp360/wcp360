@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true" failOnWarning="true" failOnRisky="true" cacheDirectory="var/phpunit-cache/browser">
+  <php><env name="KERNEL_CLASS" value="Wcp360\Core\Kernel" force="true"/><server name="KERNEL_CLASS" value="Wcp360\Core\Kernel" force="true"/><env name="PANTHER_ERROR_SCREENSHOT_DIR" value="./var/browser-errors"/></php>
+  <extensions><bootstrap class="Symfony\Component\Panther\ServerExtension"/></extensions>
+  <testsuites><testsuite name="Real browser"><directory>tests/Browser</directory></testsuite></testsuites>
+</phpunit>

@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.openai-provider-pro",
+  "kind": "plugin",
+  "label": "OpenAI assistance provider connector",
+  "category": "ai-mcp",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "ExtensionManagement",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "automation.ai-readonly",
+    "automation.ai-missions"
+  ],
+  "dependencies": [],
+  "summary": "Prepare an optional OpenAI provider adapter for explicitly consented, redacted assistance and reviewed operation proposals.",
+  "core_boundary": "A model response is untrusted content; Core retains identity, permissions, approvals and all host execution decisions. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Select a reviewed provider interface and model policy with explicit data-disclosure consent, retention settings and bounded cost controls.",
+    "Exercise prompt injection, secret extraction, cross-tenant context leakage and invented operation requests using redacted fixtures.",
+    "Keep assistance read-only by default; any future tool proposal requires current Core authorization, explicit approval and bounded audited use cases.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

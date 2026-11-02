@@ -1,0 +1,729 @@
+{
+  "version": "1.0",
+  "source_path": "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+  "source_blob_sha": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea",
+  "count": 86,
+  "domain_count": 30,
+  "domains": [
+    "api",
+    "applications",
+    "approvals",
+    "audit",
+    "automations",
+    "backups",
+    "break_glass",
+    "clusters",
+    "databases",
+    "domains",
+    "email",
+    "files",
+    "iam",
+    "impersonation",
+    "incidents",
+    "jobs",
+    "monitoring",
+    "network",
+    "notifications",
+    "privilege",
+    "processes",
+    "security",
+    "servers",
+    "service_config",
+    "settings",
+    "ssl",
+    "storage",
+    "support",
+    "updates",
+    "webhooks"
+  ],
+  "actions": [
+    {
+      "contract_id": "API-WCP-0709",
+      "action_id": "api.tokens.manage",
+      "domain": "api",
+      "surface": "BOTH",
+      "permission_id": "api.tokens.manage",
+      "resource_type": "api_token"
+    },
+    {
+      "contract_id": "API-WCP-0102",
+      "action_id": "applications.create",
+      "domain": "applications",
+      "surface": "WCP-USER",
+      "permission_id": "applications.create",
+      "resource_type": "application"
+    },
+    {
+      "contract_id": "API-WCP-0104",
+      "action_id": "applications.deploy",
+      "domain": "applications",
+      "surface": "WCP-USER",
+      "permission_id": "applications.deploy",
+      "resource_type": "application"
+    },
+    {
+      "contract_id": "API-WCP-0106",
+      "action_id": "applications.maintenance.set",
+      "domain": "applications",
+      "surface": "WCP-USER",
+      "permission_id": "applications.maintenance",
+      "resource_type": "application"
+    },
+    {
+      "contract_id": "API-WCP-0101",
+      "action_id": "applications.read",
+      "domain": "applications",
+      "surface": "WCP-USER",
+      "permission_id": "applications.read",
+      "resource_type": "application"
+    },
+    {
+      "contract_id": "API-WCP-0105",
+      "action_id": "applications.rollback",
+      "domain": "applications",
+      "surface": "WCP-USER",
+      "permission_id": "applications.deploy",
+      "resource_type": "application"
+    },
+    {
+      "contract_id": "API-WCP-0103",
+      "action_id": "applications.runtime.update",
+      "domain": "applications",
+      "surface": "WCP-USER",
+      "permission_id": "applications.runtime.manage",
+      "resource_type": "application"
+    },
+    {
+      "contract_id": "API-WCP-1005",
+      "action_id": "approvals.decide",
+      "domain": "approvals",
+      "surface": "POLICY",
+      "permission_id": "approvals.decide",
+      "resource_type": "approval"
+    },
+    {
+      "contract_id": "API-WCP-1004",
+      "action_id": "approvals.request",
+      "domain": "approvals",
+      "surface": "POLICY",
+      "permission_id": "approvals.request",
+      "resource_type": "approval"
+    },
+    {
+      "contract_id": "API-WCP-0008",
+      "action_id": "audit.export",
+      "domain": "audit",
+      "surface": "POLICY",
+      "permission_id": "audit.export",
+      "resource_type": "audit_export"
+    },
+    {
+      "contract_id": "API-WCP-0006",
+      "action_id": "audit.read",
+      "domain": "audit",
+      "surface": "POLICY",
+      "permission_id": "audit.read",
+      "resource_type": "audit_record"
+    },
+    {
+      "contract_id": "API-WCP-1002",
+      "action_id": "automations.manage",
+      "domain": "automations",
+      "surface": "BOTH",
+      "permission_id": "automations.manage",
+      "resource_type": "automation"
+    },
+    {
+      "contract_id": "API-WCP-0602",
+      "action_id": "backups.create",
+      "domain": "backups",
+      "surface": "WCP-USER",
+      "permission_id": "backups.create",
+      "resource_type": "backup"
+    },
+    {
+      "contract_id": "API-WCP-0605",
+      "action_id": "backups.delete",
+      "domain": "backups",
+      "surface": "WCP-USER",
+      "permission_id": "backups.delete",
+      "resource_type": "backup"
+    },
+    {
+      "contract_id": "API-WCP-0603",
+      "action_id": "backups.policy.update",
+      "domain": "backups",
+      "surface": "WCP-USER",
+      "permission_id": "backups.policy.manage",
+      "resource_type": "backup_policy"
+    },
+    {
+      "contract_id": "API-WCP-0601",
+      "action_id": "backups.read",
+      "domain": "backups",
+      "surface": "WCP-USER",
+      "permission_id": "backups.read",
+      "resource_type": "backup"
+    },
+    {
+      "contract_id": "API-WCP-0604",
+      "action_id": "backups.restore",
+      "domain": "backups",
+      "surface": "WCP-USER",
+      "permission_id": "backups.restore",
+      "resource_type": "backup"
+    },
+    {
+      "contract_id": "API-WCP-0708",
+      "action_id": "break_glass.start",
+      "domain": "break_glass",
+      "surface": "EMERGENCY",
+      "permission_id": "break_glass.use",
+      "resource_type": "break_glass_session"
+    },
+    {
+      "contract_id": "API-WCP-0807",
+      "action_id": "clusters.failover",
+      "domain": "clusters",
+      "surface": "WCP-ADMIN",
+      "permission_id": "clusters.failover",
+      "resource_type": "cluster"
+    },
+    {
+      "contract_id": "API-WCP-0806",
+      "action_id": "clusters.read",
+      "domain": "clusters",
+      "surface": "WCP-ADMIN",
+      "permission_id": "clusters.read",
+      "resource_type": "cluster"
+    },
+    {
+      "contract_id": "API-WCP-0302",
+      "action_id": "databases.create",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.create",
+      "resource_type": "database"
+    },
+    {
+      "contract_id": "API-WCP-0303",
+      "action_id": "databases.delete",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.delete",
+      "resource_type": "database"
+    },
+    {
+      "contract_id": "API-WCP-0307",
+      "action_id": "databases.export",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.export",
+      "resource_type": "database"
+    },
+    {
+      "contract_id": "API-WCP-0305",
+      "action_id": "databases.grants.set",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.grants.manage",
+      "resource_type": "grant_set"
+    },
+    {
+      "contract_id": "API-WCP-0306",
+      "action_id": "databases.import",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.import",
+      "resource_type": "database"
+    },
+    {
+      "contract_id": "API-WCP-0301",
+      "action_id": "databases.read",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.read",
+      "resource_type": "database"
+    },
+    {
+      "contract_id": "API-WCP-0308",
+      "action_id": "databases.restore",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.restore",
+      "resource_type": "database"
+    },
+    {
+      "contract_id": "API-WCP-0304",
+      "action_id": "databases.users.manage",
+      "domain": "databases",
+      "surface": "WCP-USER",
+      "permission_id": "databases.users.manage",
+      "resource_type": "database_identity"
+    },
+    {
+      "contract_id": "API-WCP-0202",
+      "action_id": "domains.create",
+      "domain": "domains",
+      "surface": "WCP-USER",
+      "permission_id": "domains.create",
+      "resource_type": "domain"
+    },
+    {
+      "contract_id": "API-WCP-0205",
+      "action_id": "domains.dnssec.set",
+      "domain": "domains",
+      "surface": "WCP-USER",
+      "permission_id": "domains.dnssec.manage",
+      "resource_type": "domain"
+    },
+    {
+      "contract_id": "API-WCP-0201",
+      "action_id": "domains.read",
+      "domain": "domains",
+      "surface": "WCP-USER",
+      "permission_id": "domains.read",
+      "resource_type": "domain"
+    },
+    {
+      "contract_id": "API-WCP-0203",
+      "action_id": "domains.record.create",
+      "domain": "domains",
+      "surface": "WCP-USER",
+      "permission_id": "domains.write",
+      "resource_type": "dns_record"
+    },
+    {
+      "contract_id": "API-WCP-0204",
+      "action_id": "domains.record.delete",
+      "domain": "domains",
+      "surface": "WCP-USER",
+      "permission_id": "domains.write",
+      "resource_type": "dns_record"
+    },
+    {
+      "contract_id": "API-WCP-0001",
+      "action_id": "domains.record.update",
+      "domain": "domains",
+      "surface": "WCP-USER",
+      "permission_id": "domains.write",
+      "resource_type": "dns_record"
+    },
+    {
+      "contract_id": "API-WCP-0405",
+      "action_id": "email.aliases.manage",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.aliases.manage",
+      "resource_type": "mail_alias"
+    },
+    {
+      "contract_id": "API-WCP-0407",
+      "action_id": "email.antispam.update",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.antispam.manage",
+      "resource_type": "mail_config"
+    },
+    {
+      "contract_id": "API-WCP-0406",
+      "action_id": "email.auth.apply",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.auth.manage",
+      "resource_type": "mail_domain"
+    },
+    {
+      "contract_id": "API-WCP-0403",
+      "action_id": "email.domains.manage",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.domains.manage",
+      "resource_type": "mail_domain"
+    },
+    {
+      "contract_id": "API-WCP-0404",
+      "action_id": "email.mailboxes.manage",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.mailboxes.manage",
+      "resource_type": "mailbox"
+    },
+    {
+      "contract_id": "API-WCP-0401",
+      "action_id": "email.read",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.read",
+      "resource_type": "mail_config"
+    },
+    {
+      "contract_id": "API-WCP-0402",
+      "action_id": "email.settings.update",
+      "domain": "email",
+      "surface": "WCP-USER",
+      "permission_id": "email.manage",
+      "resource_type": "mail_config"
+    },
+    {
+      "contract_id": "API-WCP-0505",
+      "action_id": "files.access.manage",
+      "domain": "files",
+      "surface": "WCP-USER",
+      "permission_id": "files.access.manage",
+      "resource_type": "file_access"
+    },
+    {
+      "contract_id": "API-WCP-0503",
+      "action_id": "files.delete",
+      "domain": "files",
+      "surface": "WCP-USER",
+      "permission_id": "files.delete",
+      "resource_type": "file"
+    },
+    {
+      "contract_id": "API-WCP-0504",
+      "action_id": "files.permissions.update",
+      "domain": "files",
+      "surface": "WCP-USER",
+      "permission_id": "files.permissions.manage",
+      "resource_type": "file"
+    },
+    {
+      "contract_id": "API-WCP-0501",
+      "action_id": "files.read",
+      "domain": "files",
+      "surface": "WCP-USER",
+      "permission_id": "files.read",
+      "resource_type": "file"
+    },
+    {
+      "contract_id": "API-WCP-0502",
+      "action_id": "files.write",
+      "domain": "files",
+      "surface": "WCP-USER",
+      "permission_id": "files.write",
+      "resource_type": "file"
+    },
+    {
+      "contract_id": "API-WCP-0906",
+      "action_id": "iam.account_overrides.manage",
+      "domain": "iam",
+      "surface": "WCP-ADMIN",
+      "permission_id": "iam.account_overrides.manage",
+      "resource_type": "account_override"
+    },
+    {
+      "contract_id": "API-WCP-0904",
+      "action_id": "iam.features.manage",
+      "domain": "iam",
+      "surface": "WCP-ADMIN",
+      "permission_id": "iam.features.manage",
+      "resource_type": "feature_set"
+    },
+    {
+      "contract_id": "API-WCP-0903",
+      "action_id": "iam.plans.manage",
+      "domain": "iam",
+      "surface": "WCP-ADMIN",
+      "permission_id": "iam.plans.manage",
+      "resource_type": "plan"
+    },
+    {
+      "contract_id": "API-WCP-0905",
+      "action_id": "iam.resellers.manage",
+      "domain": "iam",
+      "surface": "WCP-ADMIN",
+      "permission_id": "iam.resellers.manage",
+      "resource_type": "delegation"
+    },
+    {
+      "contract_id": "API-WCP-0902",
+      "action_id": "iam.roles.manage",
+      "domain": "iam",
+      "surface": "WCP-ADMIN",
+      "permission_id": "iam.roles.manage",
+      "resource_type": "role"
+    },
+    {
+      "contract_id": "API-WCP-0901",
+      "action_id": "iam.users.manage",
+      "domain": "iam",
+      "surface": "WCP-ADMIN",
+      "permission_id": "iam.users.manage",
+      "resource_type": "principal"
+    },
+    {
+      "contract_id": "API-WCP-0707",
+      "action_id": "impersonation.start",
+      "domain": "impersonation",
+      "surface": "WCP-ADMIN",
+      "permission_id": "impersonation.start",
+      "resource_type": "impersonation_session"
+    },
+    {
+      "contract_id": "API-WCP-1007",
+      "action_id": "incidents.manage",
+      "domain": "incidents",
+      "surface": "BOTH",
+      "permission_id": "incidents.manage",
+      "resource_type": "incident"
+    },
+    {
+      "contract_id": "API-WCP-0005",
+      "action_id": "jobs.cancel",
+      "domain": "jobs",
+      "surface": "BOTH",
+      "permission_id": "jobs.cancel",
+      "resource_type": "job"
+    },
+    {
+      "contract_id": "API-WCP-0004",
+      "action_id": "jobs.read",
+      "domain": "jobs",
+      "surface": "BOTH",
+      "permission_id": "jobs.read",
+      "resource_type": "job"
+    },
+    {
+      "contract_id": "API-WCP-1006",
+      "action_id": "monitoring.read",
+      "domain": "monitoring",
+      "surface": "BOTH",
+      "permission_id": "monitoring.read",
+      "resource_type": "monitoring"
+    },
+    {
+      "contract_id": "API-WCP-0809",
+      "action_id": "network.firewall.apply",
+      "domain": "network",
+      "surface": "WCP-ADMIN",
+      "permission_id": "network.firewall.manage",
+      "resource_type": "firewall_policy"
+    },
+    {
+      "contract_id": "API-WCP-0808",
+      "action_id": "network.read",
+      "domain": "network",
+      "surface": "WCP-ADMIN",
+      "permission_id": "network.read",
+      "resource_type": "network"
+    },
+    {
+      "contract_id": "API-WCP-0810",
+      "action_id": "network.routes.update",
+      "domain": "network",
+      "surface": "WCP-ADMIN",
+      "permission_id": "network.routes.manage",
+      "resource_type": "route_policy"
+    },
+    {
+      "contract_id": "API-WCP-1003",
+      "action_id": "notifications.manage",
+      "domain": "notifications",
+      "surface": "BOTH",
+      "permission_id": "notifications.manage",
+      "resource_type": "notification_route"
+    },
+    {
+      "contract_id": "API-WCP-0706",
+      "action_id": "privilege.elevate",
+      "domain": "privilege",
+      "surface": "POLICY",
+      "permission_id": "privilege.elevate",
+      "resource_type": "privileged_session"
+    },
+    {
+      "contract_id": "API-WCP-0007",
+      "action_id": "processes.kill",
+      "domain": "processes",
+      "surface": "WCP-ADMIN",
+      "permission_id": "processes.kill",
+      "resource_type": "process"
+    },
+    {
+      "contract_id": "API-WCP-0813",
+      "action_id": "processes.read",
+      "domain": "processes",
+      "surface": "WCP-ADMIN",
+      "permission_id": "processes.read",
+      "resource_type": "process"
+    },
+    {
+      "contract_id": "API-WCP-0003",
+      "action_id": "processes.terminate",
+      "domain": "processes",
+      "surface": "WCP-ADMIN",
+      "permission_id": "processes.terminate",
+      "resource_type": "process"
+    },
+    {
+      "contract_id": "API-WCP-0702",
+      "action_id": "security.keys.manage",
+      "domain": "security",
+      "surface": "BOTH",
+      "permission_id": "security.keys.manage",
+      "resource_type": "key"
+    },
+    {
+      "contract_id": "API-WCP-0704",
+      "action_id": "security.network.update",
+      "domain": "security",
+      "surface": "BOTH",
+      "permission_id": "security.network.manage",
+      "resource_type": "network_policy"
+    },
+    {
+      "contract_id": "API-WCP-0701",
+      "action_id": "security.sessions.manage",
+      "domain": "security",
+      "surface": "BOTH",
+      "permission_id": "security.sessions.manage",
+      "resource_type": "session"
+    },
+    {
+      "contract_id": "API-WCP-0703",
+      "action_id": "security.tokens.manage",
+      "domain": "security",
+      "surface": "BOTH",
+      "permission_id": "security.tokens.manage",
+      "resource_type": "security_token"
+    },
+    {
+      "contract_id": "API-WCP-0705",
+      "action_id": "security.waf.update",
+      "domain": "security",
+      "surface": "BOTH",
+      "permission_id": "security.waf.manage",
+      "resource_type": "waf_policy"
+    },
+    {
+      "contract_id": "API-WCP-0801",
+      "action_id": "servers.read",
+      "domain": "servers",
+      "surface": "WCP-ADMIN",
+      "permission_id": "servers.read",
+      "resource_type": "server"
+    },
+    {
+      "contract_id": "API-WCP-0002",
+      "action_id": "servers.reboot",
+      "domain": "servers",
+      "surface": "WCP-ADMIN",
+      "permission_id": "servers.reboot",
+      "resource_type": "server"
+    },
+    {
+      "contract_id": "API-WCP-0802",
+      "action_id": "servers.service.reload",
+      "domain": "servers",
+      "surface": "WCP-ADMIN",
+      "permission_id": "servers.services.manage",
+      "resource_type": "service"
+    },
+    {
+      "contract_id": "API-WCP-0803",
+      "action_id": "servers.service.restart",
+      "domain": "servers",
+      "surface": "WCP-ADMIN",
+      "permission_id": "servers.services.manage",
+      "resource_type": "service"
+    },
+    {
+      "contract_id": "API-WCP-0816",
+      "action_id": "service_config.apply",
+      "domain": "service_config",
+      "surface": "WCP-ADMIN",
+      "permission_id": "service_config.write",
+      "resource_type": "service_config"
+    },
+    {
+      "contract_id": "API-WCP-0815",
+      "action_id": "service_config.read",
+      "domain": "service_config",
+      "surface": "WCP-ADMIN",
+      "permission_id": "service_config.read",
+      "resource_type": "service_config"
+    },
+    {
+      "contract_id": "API-WCP-1011",
+      "action_id": "settings.profile.update",
+      "domain": "settings",
+      "surface": "WCP-USER",
+      "permission_id": "settings.profile.manage",
+      "resource_type": "profile"
+    },
+    {
+      "contract_id": "API-WCP-0814",
+      "action_id": "settings.system.update",
+      "domain": "settings",
+      "surface": "WCP-ADMIN",
+      "permission_id": "settings.system.manage",
+      "resource_type": "system_settings"
+    },
+    {
+      "contract_id": "API-WCP-1009",
+      "action_id": "ssl.manage",
+      "domain": "ssl",
+      "surface": "BOTH",
+      "permission_id": "ssl.manage",
+      "resource_type": "certificate"
+    },
+    {
+      "contract_id": "API-WCP-1008",
+      "action_id": "ssl.read",
+      "domain": "ssl",
+      "surface": "BOTH",
+      "permission_id": "ssl.read",
+      "resource_type": "certificate"
+    },
+    {
+      "contract_id": "API-WCP-0812",
+      "action_id": "storage.expand",
+      "domain": "storage",
+      "surface": "WCP-ADMIN",
+      "permission_id": "storage.expand",
+      "resource_type": "storage"
+    },
+    {
+      "contract_id": "API-WCP-0811",
+      "action_id": "storage.read",
+      "domain": "storage",
+      "surface": "WCP-ADMIN",
+      "permission_id": "storage.read",
+      "resource_type": "storage"
+    },
+    {
+      "contract_id": "API-WCP-1010",
+      "action_id": "support.bundle.create",
+      "domain": "support",
+      "surface": "BOTH",
+      "permission_id": "support.bundle.create",
+      "resource_type": "support_bundle"
+    },
+    {
+      "contract_id": "API-WCP-0805",
+      "action_id": "updates.apply",
+      "domain": "updates",
+      "surface": "WCP-ADMIN",
+      "permission_id": "updates.apply",
+      "resource_type": "update_plan"
+    },
+    {
+      "contract_id": "API-WCP-0804",
+      "action_id": "updates.read",
+      "domain": "updates",
+      "surface": "WCP-ADMIN",
+      "permission_id": "updates.read",
+      "resource_type": "update_plan"
+    },
+    {
+      "contract_id": "API-WCP-1001",
+      "action_id": "webhooks.manage",
+      "domain": "webhooks",
+      "surface": "BOTH",
+      "permission_id": "webhooks.manage",
+      "resource_type": "webhook"
+    }
+  ]
+}

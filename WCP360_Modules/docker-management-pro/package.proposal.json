@@ -1,0 +1,44 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.docker-management-pro",
+    "kind":  "module",
+    "label":  "Docker Management Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Tenancy",
+                        "Files",
+                        "Data",
+                        "Operations",
+                        "Observability",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "compute.containers",
+                           "compute.images",
+                           "compute.rolling-operations",
+                           "backup.restore-tests"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced Docker/OCI and admitted Compose workload orchestration: reviewed images/build provenance, application groups, networks, ports, volumes, secrets, effective budgets, health/logs, coordinated updates and restore. Qualified Portainer, Coolify or Dokku connectors can supply declared managed-resource capabilities; they are distinct external products, not interchangeable Docker engines.",
+    "core_boundary":  "Essential native hosting, storage, isolation, permissions and any future qualified Docker/provider foundations remain open source. This module adds advanced workload orchestration through Core contracts; it never hands a tenant or package the host Docker socket, unrestricted daemon API, privileged containers, raw root commands or Core credentials.",
+    "acceptance":  [
+                       "Qualify Docker/OCI versions and rootful/rootless assumptions, peer identity, cgroup delegation and actual CPU/RAM/PID/storage/log enforcement before declaring support.",
+                       "Pin images to reviewed immutable digests with upstream license/provenance checks; isolate builds and refuse unreviewed image/build privileges.",
+                       "Admit Compose versions/features through a canonical typed plan; validate service identities, dependencies, mounts, networks, ports, health and effective budgets rather than sending arbitrary raw YAML or shell text to a daemon.",
+                       "Map tenant UID/GID, allowed mounts, ports and network/egress ownership; refuse host Docker sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.",
+                       "Select one authoritative effect/reconciliation owner per deployment when using Portainer, Coolify or Dokku. Connector capabilities, manager-owned metadata and Core resource mappings must be version-qualified; no two managers silently mutate the same workload.",
+                       "Manage volumes, database consistency, encryption/secret references and retention explicitly; container recreation is not data recovery.",
+                       "Bound logs, named diagnostic capabilities, health checks and observations; this product cannot become arbitrary container/host exec or an unrestricted daemon API.",
+                       "Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, measured health and per-workload outcomes.",
+                       "Rehearse isolated backup/restore of application data and required configuration/secret references; test failed pulls, full storage, daemon/manager loss and interrupted updates.",
+                       "On expiry/removal preserve workloads, data, ordinary free Core provider control and independent recovery while stopping new premium orchestration safely."
+                   ]
+}

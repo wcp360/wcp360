@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.openstack-pro",
+    "kind":  "plugin",
+    "label":  "OpenStack project infrastructure connector",
+    "category":  "compute-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "automation.terraform-opentofu",
+                           "compute.node-groups",
+                           "compute.images"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare explicitly project-scoped OpenStack inventory and authorized server, volume and network lifecycle plans.",
+    "core_boundary":  "Cloud project rights do not grant Core root, cloud-admin or unrestricted cross-project infrastructure control. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Select a concrete OpenStack deployment and service/API capability profile with admitted identity project, region and resource ownership.",
+                       "Qualify image, flavor, network, security-group and volume mappings with least-privilege credentials and explicit cost/quota decisions.",
+                       "Exercise asynchronous server/volume operations, lost acknowledgements and region outage; retain attached data and reconcile observed state before destructive retry.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

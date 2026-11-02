@@ -1,0 +1,11 @@
+<section class="wcp-panel"><div class="wcp-panel-head"><h2 class="wcp-panel-title">Aperçu Modern — Caddy/FrankenPHP autonome</h2></div><div class="wcp-panel-body">
+<p>Générez un Caddyfile et un service pour un site de démonstration, sans Nginx. Le plan utilise uniquement HTTP sur 127.0.0.1:8082. Aucun port n’est réservé, aucun compte ou service n’est créé.</p>
+{% if not worker_plans_enabled %}<p class="notice" data-modern-unavailable>La préparation de plans Worker doit être autorisée par l’opérateur avant cet aperçu.</p>{% endif %}
+<form method="post" action="{{ path('wcp_modern_preview') }}" data-turbo-frame="_top" data-controller="form-guard" data-action="submit->form-guard#submit">
+<input type="hidden" name="_token" value="{{ csrf_token('modern-plan-preview') }}">
+<label for="modern-hostname">Domaine de démonstration</label><input id="modern-hostname" name="hostname" required maxlength="253" pattern="[a-z0-9.-]+\.test" placeholder="modern-preview.test" autocomplete="off">
+<label class="checkbox-row"><input type="checkbox" name="worker_acknowledged" value="1" required{% if not worker_plans_enabled %} disabled{% endif %}><span>Je confirme que l’application supporte les workers persistants et réinitialise son état entre les requêtes.</span></label>
+<button class="button secondary" type="submit" data-form-guard-target="button"{% if not worker_plans_enabled %} disabled{% endif %}>Prévisualiser Modern</button><p class="field-help" role="status" data-form-guard-target="status"></p>
+</form>
+<p class="field-help">Cet aperçu ne crée pas d’hébergement ni de tâche et n’active pas Modern dans le sélecteur. L’activation multi-sites, les adresses publiques, le TLS et la migration restent à développer.</p>
+</div></section>

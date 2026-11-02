@@ -1,6 +1,8 @@
 # WCP360 build and qualification
 
-**Status: build procedure/layout reserved; no new CI workflow or product builder is implemented here.**
+**Status: the executable Core candidate has a development Docker/Compose environment and CI verification workflow; stable-release qualification and publication remain unimplemented.**
+
+See [the candidate guide](../documentation/development/EXECUTABLE-CANDIDATE.md), [its environment](environments/core-candidate/README.md) and [the source audit](verification/CORE-CANDIDATE-AUDIT.md). The pipeline tests the candidate; it does not promote CODE-BASELINE or publish a stable release.
 
 Build from reviewed Core, SDK and plugin revisions with their approved toolchains/locks. Assemble each component independently; run relevant checks before a candidate becomes a release.
 

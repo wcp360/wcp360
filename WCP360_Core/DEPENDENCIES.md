@@ -1,19 +1,29 @@
 # Dependency locations and ownership
 
-The Core, SDK and detached plugins have separate dependency graphs. This guide identifies the future real files; **no dependency manifest or lock is fabricated by this layout change.**
+The Core, SDK and detached plugins have separate dependency graphs. The executable Core candidate has a real reviewed Composer manifest and lock; generated dependencies remain outside versioned source.
 
 | Component | Definition and lock | Generated/downloaded contents | Update boundary |
 | :--- | :--- | :--- | :--- |
-| Core PHP/Symfony | WCP360_Core/composer.json and composer.lock, when the approved bootstrap is implemented | WCP360_Core/vendor/ | Review dependency and lock changes together; build/install the qualified locked graph |
+| Core PHP/Symfony | [composer.json](composer.json) and [composer.lock](composer.lock) | WCP360_Core/vendor/ | Review dependency and lock changes together; install the locked graph, then qualify the affected candidate paths |
 | Detached PHP plugin | WCP360_Plugins/<plugin>/composer.json and application lock | Its own vendor/ | Plugin package only; never edit Core dependencies during plugin installation |
 | Public PHP SDK | WCP360_SDK/php library definition and compatibility policy | Consumer-owned Composer resolution | Independently versioned library; host applications retain their own locks |
 | Go agent/broker | Separate agents/<component>/go.mod and go.sum | Go module cache; vendoring only if explicitly selected | Approved component toolchain and protocol tests; no common PHP vendor folder |
 | Python diagnostic tool | Tool-specific package definition and the accepted reproducibility inputs | Isolated environment outside versioned source | Specialized non-root tool; dependency choice is not authority to run arbitrary Python on the host |
 | Symfony frontend | Core Composer graph, AssetMapper/importmap and approved CSS compiler inputs | Prepared production assets | Use the selected Symfony pipeline; do not introduce an npm runtime dependency merely to organize folders |
 | Optional Node build/test package | Its own package.json and selected lock, where actually needed | Package-local node_modules/ | Build/test component only; pin and review its toolchain |
-| Linux services and libraries | Accepted package/version/source records under WCP360_Build/environments and the installer contract | Installed OS packages and package-managed files | Selected Debian target and service adapter; not Composer vendor or npm dependencies |
+| Linux services and libraries | Accepted package/version/source records under WCP360_Build/environments and the installer contract | Installed OS packages and package-managed files | Selected Debian/Ubuntu target and service adapter; not Composer vendor or npm dependencies |
 
 Composer's application lock and Go's module metadata have different semantics. Do not manufacture a single dependency file spanning PHP, Go, Python and Debian. A service-resource folder is not a list of packages to install automatically.
+
+## Candidate administrator MFA dependencies
+
+| Locked package | Version | Responsibility |
+| :--- | :--- | :--- |
+| `scheb/2fa-bundle` | 8.7.0 | Symfony second-factor authentication state, role withholding and challenge integration. |
+| `spomky-labs/otphp` | 11.5.0 | TOTP generation and verification; Core adds database-backed replay/attempt controls. |
+| `paragonie/constant_time_encoding` | 3.1.3 | OTPHP's transitive encoding dependency. |
+
+The [IdentityAccess implementation](src/Module/IdentityAccess/README.md) uses PHP's Sodium extension for authenticated seed encryption and a separate private `WCP_MFA_KEY`. Package installation does not supply that key or establish production identity isolation. MFA dependency changes require the service and HTTP regressions plus the existing Core checks; update the manifest and lock together.
 
 ## Updating a dependency
 

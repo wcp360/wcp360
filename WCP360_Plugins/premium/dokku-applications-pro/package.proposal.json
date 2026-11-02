@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.dokku-applications-pro",
+    "kind":  "plugin",
+    "label":  "Dokku application interoperability",
+    "category":  "application-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "apps.fleet-management",
+                           "delivery.git",
+                           "runtime.workers"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare selected Dokku application inventory and a reviewed Core-mediated deployment interoperability profile.",
+    "core_boundary":  "Dokku OSS local deployment behavior and Dokku Pro multi-server UI are distinct profiles. A plugin receives no SSH shell, arbitrary Dokku commands or direct Docker access. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the exact upstream distribution, transport and capability profile; do not infer multi-server orchestration from OSS local scheduling or optional Pro interfaces.",
+                       "Keep initial import/observation read-only and route any future structured application operation through a bounded admitted Core adapter with pinned host identity and app ownership.",
+                       "Exercise deployment failure, worker interruption, secret redaction and retained-data recovery; never install upstream plugins, execute arbitrary hooks or take over active Core resources.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

@@ -72,6 +72,27 @@ test('invalid stored types return to defaults',() => {const config=model.restore
 test('corrupt JSON recovers the mode chooser',() => assert.ok(harness({'wcp360-setup-wizard-v1':'{broken'}).host.innerHTML.includes('data-setup-mode="quick"')));
 test('stale preflight is not trusted after reload',() => {const h=harness({'wcp360-setup-wizard-v1':JSON.stringify({mode:'quick',step:3,preflight:true,config:defaults})});assert.equal(h.state().preflight,false);h.click('next');assert.equal(h.events.length,0);});
 test('quick setup persists settings and one operation',() => {const h=harness();quickReview(h);h.click('next');assert.equal(h.state().completed,true);assert.equal(h.settings().access.mfaRoot,true);assert.equal(h.events.filter(event => event.type === 'wcp:operation').length,1);assert.ok(h.host.innerHTML.includes('Simulated initialization'));});
+test('quick setup persists the selected identity and management address',() => {
+  const h=harness();quickReview(h);h.click('next');const settings=h.settings();
+  assert.deepEqual(settings.identity,{hostname:'wcp-admin.example.com',rootEmail:'admin@example.com',securityEmail:'admin@example.com',timezone:'Europe/Paris'});
+  assert.deepEqual(settings.network,{primaryIpv4:'203.0.113.10',primaryIpv6:'',ipv6:false});
+});
+test('expert identity and IPv4 selections reach System Settings exactly',() => {
+  const h=harness();h.click('mode','expert');h.click('next');
+  h.change('identity.hostname','panel.custom.example');h.change('identity.adminEmail','operations@example.net');h.change('identity.timezone','UTC');h.change('identity.environment','Lab');
+  h.click('next');h.click('next');h.click('next');h.change('network.publicIp','198.51.100.42');
+  for(let index=0;index<5;index++)h.click('next');h.click('preflight');h.click('next');
+  const settings=h.settings();assert.equal(h.state().completed,true);assert.equal(settings.environment,'Lab');
+  assert.deepEqual(settings.identity,{hostname:'panel.custom.example',rootEmail:'operations@example.net',securityEmail:'operations@example.net',timezone:'UTC'});
+  assert.deepEqual(settings.network,{primaryIpv4:'198.51.100.42',primaryIpv6:'',ipv6:false});
+});
+test('setup preserves other identity and network settings including configured IPv6',() => {
+  const previous={version:5,identity:{hostname:'old.example.com',rootEmail:'old@example.com',securityEmail:'security@example.com',timezone:'UTC',serverName:'retained-control',supportEmail:'support@example.net',ntpEnabled:false},network:{primaryIpv4:'192.0.2.8',primaryIpv6:'2001:db8:1::8',ipv6:true,interface:'ens19',gateway:'192.0.2.1',mtu:1450,managementCidr:'10.30.0.0/16'}};
+  const h=harness({'wcp360-system-settings-v1':JSON.stringify(previous)});quickReview(h);h.click('next');const settings=h.settings();
+  assert.deepEqual(settings.identity,{...previous.identity,hostname:'wcp-admin.example.com',rootEmail:'admin@example.com',securityEmail:'admin@example.com',timezone:'Europe/Paris'});
+  assert.deepEqual(settings.network,{...previous.network,primaryIpv4:'203.0.113.10'});
+  assert.equal(settings.version,6);
+});
 test('expert runtime selection reaches settings without an event side effect',() => {const h=harness();h.click('mode','expert');for(let index=0;index<7;index++)h.click('next');h.change('runtime.php','8.3');h.click('next');h.click('next');h.click('preflight');h.click('next');assert.equal(h.state().completed,true);assert.equal(h.settings().runtime.php,'8.3');});
 test('failed fixture blocks and ready fixture recovers',() => {const h=harness();h.click('mode','quick');h.click('next');h.click('next');h.fixture('disk');h.click('preflight');assert.equal(h.state().preflight,false);assert.ok(h.host.innerHTML.includes('Failed · demo'));h.click('next');assert.equal(h.state().step,2);h.fixture('ready');h.click('preflight');h.click('next');h.click('next');assert.equal(h.state().completed,true);});
 test('invalid hostname prevents leaving the form',() => {const h=harness();h.click('mode','quick');h.click('next');h.change('identity.hostname','localhost');h.click('next');assert.equal(h.state().step,1);assert.ok(h.host.innerHTML.includes('fully qualified'));});
@@ -80,6 +101,12 @@ test('settings storage failure never reports success or queues a job',() => {con
 test('malformed previous settings are reported without queuing a job',() => {const h=harness({'wcp360-system-settings-v1':'{broken'});quickReview(h);h.click('next');assert.equal(h.events.length,0);assert.equal(h.state().completed,false);assert.ok(h.host.innerHTML.includes('could not be read'));});
 test('malformed revision metadata is normalized',() => {const h=harness({'wcp360-system-settings-v1':JSON.stringify({version:'broken',versions:'broken'})});quickReview(h);h.click('next');assert.equal(h.settings().version,1);assert.equal(h.settings().versions.length,1);});
 test('draft storage failure never reports completion',() => {const h=harness();quickReview(h);h.deny('wcp360-setup-wizard-v1');h.click('next');assert.equal(h.events.length,0);assert.equal(h.storage.has('wcp360-system-settings-v1'),false);assert.ok(!h.host.innerHTML.includes('setup-complete-card'));});
+test('draft failure restores the original identity and network settings byte for byte',() => {
+  const previous=JSON.stringify({version:9,identity:{hostname:'retained.example.com',rootEmail:'retained@example.com',timezone:'UTC'},network:{primaryIpv4:'192.0.2.9',primaryIpv6:'2001:db8::9',ipv6:true,mtu:1450}});
+  const h=harness({'wcp360-system-settings-v1':previous});quickReview(h);h.deny('wcp360-setup-wizard-v1');h.click('next');
+  assert.equal(h.events.length,0);assert.equal(h.state().completed,false);assert.equal(h.storage.get('wcp360-system-settings-v1'),previous);
+  assert.ok(!h.host.innerHTML.includes('setup-complete-card'));
+});
 
 const searchContext={window:{}};vm.runInNewContext(source('prototype-search.js'),searchContext);
 const search=searchContext.window.WCPPrototypeSearch.matches;

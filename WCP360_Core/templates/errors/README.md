@@ -1,12 +1,11 @@
 # Error-page templates
 
-**Status: template source location reserved; no custom error handler is implemented here.**
+**Status: branded candidate exception page implemented; production error contracts remain unfinished.**
 
-Place approved browser-facing not-found, denied, unavailable and unexpected-error presentations here. Keep page layout context and localization explicit. Reusable inline alerts and operation feedback belong in components/feedback rather than duplicated error pages.
+[http.html.twig](http.html.twig) extends the existing WCP360 auth layout and official surface branding. It receives only fixed French messages, status and a server-generated request reference from the [shared HTTP responder](../../src/Shared/Http/README.md). The template does not receive the exception, request payload, SQL, private resource details or a stack trace. Content is escaped by Twig.
 
-Present safe messages and an allowed correlation reference without leaking stack traces, secret values, private paths or another tenant's resource existence. Exception-to-status/error-code mapping remains in the approved server boundary; a template must not invent production error contracts or authorization behavior.
+Authentication redirects and explicitly rendered domain forms stay with their existing owners. Shared heads disable Turbo snapshots; HTTP responses retain no-store, CSP and no-referrer controls. If rendering fails, the responder returns a fixed plain-text fallback without invoking another error template. Neither error presentation nor a reference grants access, retries a mutation or determines an uncertain operation's outcome.
 
 - [Template map](../README.md)
 - [Feedback components](../components/feedback/README.md)
-- [Localization](../../translations/README.md)
-- [Browser verification](../../tests/Browser/README.md)
+- [Shared transport verification](../../tests/Integration/HttpErrorJourneyTest.php)

@@ -1,60 +1,12 @@
 # WCP360 — SC-M01 First Code: Dependency-Ordered Delivery Plan
 
-## Current MASTER first-slice decision — 2026-10-28
-
-Reviewed main: f07c34a2ffc0feab9dc4f6a6de2b5999ce4a0543.
-Global owner artifact gate: 8/8 ACCEPTED (manifest decision ed8eddac004c453c31ab840cc655b64728fc83ee). DB/QA/Engineering publication issues are resolved. The historical 5/8 sections below are superseded for current planning.
-
-### Selected first implementation scope
-
-Select a narrow M01-01 repository/build/unit-test foundation for the daemon component, after M01-00 pins its accepted inputs. Proposed first PR contents: owner-approved module layout, exact toolchain/dependency metadata, reproducible build and test entry points, a minimal inert executable and unit-test harness. Runtime must expose no listener, positive control dispatch, privileged operation, database connection or external mutation. A no-third-party-runtime-dependency profile is proposed to reduce initial supply-chain scope; DevOps/Engineering must explicitly ratify it.
-
-This selects scope only, not a language/version or implementation authorization. Web/F01, database client/migrations/F03 and frontend/F05 are not activated by this slice. A2 control-wire, A3 durable jobs, A4 authenticated sessions, A5 endpoints, A6 business operations and A7 release/install decisions are deferred until their components are selected. They are not generic blockers for this inert foundation.
-
-### Required owner decisions before code
-
-| Decision | Exact deliverable | Owner | Status |
-|---|---|---|---|
-| F02 | Implementation language + exact compiler/runtime version; verified source/digest, support/patch policy; Debian 13 amd64 compatibility | DevOps, Engineering; Security for provenance | BLOCKED — no final exact choice |
-| F04 | Allowed dependency sources, integrity and lock strategy; explicit adoption/rejection of the proposed no-third-party profile; network/cache rules | DevOps + Security + Engineering | BLOCKED — no activated final policy |
-| F06 | Approved module/package roots and copyable clean-checkout build/unit-test commands with output paths | Engineering + DevOps + QA | BLOCKED — no canonical command set |
-| F07 | Exact formatter/lint/static/security tools and versions, invocation/failure policy; review-based complexity policy may remain as ENG v0.3 declares | Engineering + QA | BLOCKED — tool products/versions pending |
-| F08 | Exact immutable Debian 13 amd64 build/test environment, non-root build identity, network/secret/token/cache boundaries and reproducibility evidence | DevOps + Security | BLOCKED — no pinned environment |
-
-Source evidence: Engineering canonical blob a2d5035454d90f0a252da7041b3a6b239265c557 explicitly leaves ENG-R06 toolchain and ENG-R07 products/versions unresolved. DevOps blob 61edf698c50cf58779b75ba02fba913bf8276c61 fixes the platform/identities but does not select these tools. The main-tree inventory contains no additional final toolchain artifact. Existing F01–F10 proposal blob 4a4a3891303821d64de153f6210e7e7303a9eb9f is review input only; its dated version suggestions must be revalidated by owners, not adopted implicitly.
-
-### Acceptance checks for the first PR
-
-These are proposed verification checks to map to QA's approved foundation families; no new canonical TEST IDs or PASS results are assigned.
-
-1. Clean Debian 13 amd64 checkout builds with only declared pinned inputs.
-2. Wrong compiler version or modified dependency-integrity input fails visibly.
-3. Formatting/static checks and actual unit tests run using the recorded commands and exact candidate SHA.
-4. The executable runs without root, opens no socket, performs no privileged command and mutates no control-plane/tenant state.
-5. Evidence records environment/tool versions, selection, attempts, results and artifact digest without secrets; no fictitious API/IPC end-to-end PASS.
-
-Development start and integration are separate gates. Once the five decisions are owner-final and QA's applicable assertions are READY, MASTER can issue an exact-SHA limited resume. The implementation PR then needs E1 and genuine E3 before merge under current policy; no missing E3 is relabeled as approval. Security/DevOps reviews apply to the actual boundary/CI changes. Production packaging, release and SC-M02 are outside this decision.
-
-### Owner completion packet
-
-DevOps should publish one final toolchain addendum under specifications/devops/ with Engineering concurrence, exact F02/F04/F06/F07/F08 decisions, Security provenance/environment checks and QA command/evidence mapping. Return owner identities, version, FINAL APPROVED CONTENT, source-consumption status, content/version impact, actual blockers, canonical path, commit and blob. F01/F03/F05/F09/F10 must be explicitly deferred unless the chosen implementation activates them. Existing canonical Engineering v0.3 remains accepted; do not reopen its publication merely because this component toolchain addendum is outstanding.
-
-### Decision
-
-SC-M01 FIRST EXECUTABLE SLICE = NOT YET AUTHORIZED — A1 TOOLCHAIN DECISIONS REQUIRED.
-SC-M01 GLOBAL ARTIFACTS = 8/8 ACCEPTED.
-SC-M02 = NOT AUTHORIZED.
-CODE-BASELINE = NONE.
-PRODUCT TESTS EXECUTED IN THIS READINESS CHECK = 0.
-
-This G1 scope/readiness decision is E0+E2 and closes no independent audit finding.
-
----
-
-## Historical planning record — 2026-10-26
-
-The following original snapshot is retained for provenance; the current decision above governs current readiness.
-
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 **Date:** 2026-10-26  
 **Status:** MASTER COORDINATION CANDIDATE / NON-CANONICAL / NO IMPLEMENTATION AUTHORIZATION  
 **Reference:** governance/SC-M01-SCOPE.md, WCP360-BM-0001 FINAL, approved API/IPC/Security/DevOps v1.0 contracts, ENG-WCP-RULESET-0001 owner artifact pending.

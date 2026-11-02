@@ -1,0 +1,17 @@
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Connexion' %}
+{% block content %}
+<p class="auth-eyebrow">{{ context == 'admin' ? 'ADMINISTRATION ROOT' : 'ESPACE D’HÉBERGEMENT' }}</p>
+<h1>Bienvenue sur WCP360</h1>
+<p class="auth-lead">{{ context == 'admin' ? 'Administrez votre serveur, ses hébergements et ses services.' : 'Votre hébergement. Un espace de travail, tout simplement.' }}</p>
+<div class="auth-context"><span class="wcp-core-dot"></span> {{ context == 'admin' ? 'Root — Administration du serveur' : 'Gestion de vos espaces et hébergements' }}</div>
+{% if error %}<p role="alert" class="auth-feedback error">Connexion refusée. Vérifiez vos identifiants et le contexte.</p>{% endif %}
+<form class="auth-form" method="post" action="{{ path('wcp_login') }}" data-turbo-frame="_top">
+    <div><label for="username">Nom d’utilisateur</label><input id="username" name="_username" type="text" required minlength="3" maxlength="32" pattern="[a-z][a-z0-9_]{2,31}" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="username-help" placeholder="{{ context == 'admin' ? 'root' : 'Votre nom d’utilisateur' }}"><p class="field-help" id="username-help">3 à 32 caractères : lettres minuscules, chiffres et tiret bas (_). Commencez par une lettre.</p></div>
+    <div><label for="password">Mot de passe</label><input id="password" name="_password" type="password" required maxlength="256" autocomplete="current-password" placeholder="Votre mot de passe"></div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <button class="button auth-submit" type="submit">Se connecter <span aria-hidden="true">→</span></button>
+</form>
+{% if recovery_available %}<p class="auth-help"><a href="{{ path('wcp_password_recovery') }}" data-turbo-frame="_top">Mot de passe oublié ? Utiliser un code de récupération</a></p>{% endif %}
+<p class="auth-help">Utilisez un compte créé sur cette instance.{% if context == 'admin' %} Votre authentificateur sera demandé uniquement si vous avez activé la MFA.{% endif %}</p>
+{% endblock %}

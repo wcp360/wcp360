@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.collaboration-approvals-pro",
+    "kind":  "module",
+    "label":  "Collaboration Approvals Pro",
+    "category":  "workspace",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "IdentityAccess",
+                        "Operations",
+                        "Tenancy",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "automation.playbooks",
+                           "support.reports",
+                           "workspace.dashboards"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced team review queues, separation-of-duties proposals, change annotations and approval evidence for optional operational workflows. Approvals refer to exact immutable plans and never replace authorization.",
+    "core_boundary":  "Core retains required confirmations, sensitive-action reauthentication, audit and current permission checks. This module adds optional collaborative coordination; it cannot impose a paid approval gate on essential Core use or grant actions to reviewers lacking underlying authority.",
+    "acceptance":  [
+                       "Bind reviewers, decision scope, plan digest and resource revisions to an auditable review record.",
+                       "Reject self-approval or conflicting reviewer roles where the selected policy requires separation, without inventing a universal role hierarchy.",
+                       "Invalidate approval when target state, requested effects, permissions or relevant policy changes.",
+                       "Test concurrent decisions, stale plans, revoked reviewers and repeated execution with effect fencing.",
+                       "Disable optional review workflows safely while preserving canonical Core authorization and retained change evidence."
+                   ]
+}

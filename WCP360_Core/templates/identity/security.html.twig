@@ -1,0 +1,42 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">PROTECTION DE VOTRE COMPTE</p><h1>Sécurité du compte</h1><p class="wcp-page-sub">Choisissez la protection de votre compte et gérez vos accès.</p></div></div>
+<section class="card">
+<h2>Mot de passe</h2><p>Changez votre mot de passe et fermez les sessions de ce compte.</p><a class="button secondary" href="{{ path('wcp_account_password') }}">Changer mon mot de passe</a>
+</section>
+<section class="card">
+<h2>Confirmer mon identité</h2>
+<p>Les modifications sensibles demandent une vérification récente de votre mot de passe{% if mfa.enabled %} et de votre second facteur{% endif %}.</p>
+<a class="button secondary" href="{{ path('wcp_account_reauthenticate') }}">Confirmer mon identité</a>
+</section>
+<section class="card">
+<h2>Authentification multifacteur</h2>
+<p>La MFA est facultative. Vous pouvez utiliser WCP360 avec votre mot de passe seul ou ajouter un authentificateur pour mieux protéger ce compte.</p>
+{% if mfa.enabled %}
+<p class="status" role="status">MFA activée</p>
+<p>Un second facteur est demandé à chaque connexion de ce compte. Sa désactivation exige une vérification récente et votre mot de passe actuel.</p>
+<h3>Codes de secours</h3>
+<p>Si vous avez perdu vos codes, renouvelez-les après une confirmation récente avec votre authentificateur. Les anciens codes seront supprimés et toutes les sessions de ce compte seront fermées. Votre authentificateur restera actif.</p>
+<form action="{{ path('wcp_mfa_recovery_regenerate') }}" method="post" data-turbo="false">
+<input type="hidden" name="_token" value="{{ csrf_token('mfa_recovery_regenerate') }}">
+<label for="recovery-current-password">Mot de passe actuel</label><input id="recovery-current-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required>
+<button class="button secondary" type="submit">Renouveler mes codes de secours</button>
+</form>
+<h3>Désactiver la MFA</h3>
+<form action="{{ path('wcp_mfa_reset') }}" method="post" data-turbo-frame="_top">
+<input type="hidden" name="_token" value="{{ csrf_token('mfa_reset') }}">
+<label for="current-password">Mot de passe actuel</label><input id="current-password" name="current_password" type="password" autocomplete="current-password" maxlength="256" required>
+<p>La désactivation supprime l’authentificateur et les codes de secours, puis ferme les sessions administrateur de ce compte. Vous pourrez ensuite vous connecter avec votre mot de passe seul.</p>
+<button class="button secondary" type="submit">Désactiver la MFA</button>
+</form>
+{% else %}
+<p class="status" role="status">MFA désactivée</p>
+{% if mfa.configured %}
+<p>L’activation reste facultative. Confirmez votre mot de passe, puis validez un code de votre application d’authentification.</p>
+<a class="button" href="{{ path('wcp_mfa_enable') }}">Configurer la MFA</a>
+{% else %}
+<p>L’activation est indisponible tant que la clé de chiffrement du panneau n’est pas configurée. La connexion par mot de passe reste disponible.</p>
+{% endif %}
+{% endif %}
+</section>
+{% endblock %}

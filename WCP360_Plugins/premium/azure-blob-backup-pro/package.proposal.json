@@ -1,0 +1,32 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.azure-blob-backup-pro",
+  "kind": "plugin",
+  "label": "Azure Blob backup destination",
+  "category": "backup-object-storage",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "BackupRestore",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "backup.transfers",
+    "backup.immutable",
+    "storage.object-storage"
+  ],
+  "dependencies": [],
+  "summary": "Prepare account/container-scoped backup transfers and recovery against an admitted Azure Blob profile.",
+  "core_boundary": "This optional destination does not expose the panel database or equate Blob semantics with an unqualified S3 driver. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Bind subscription/account, container and managed object scope to the approved backup policy.",
+    "Qualify credential expiry, encryption-key references and any selected retention/hold behavior.",
+    "Test partial transfer cleanup, foreign-container refusal and recovery of application-consistent artifacts.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

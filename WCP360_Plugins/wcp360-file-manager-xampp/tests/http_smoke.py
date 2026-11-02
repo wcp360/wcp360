@@ -85,7 +85,7 @@ with tempfile.TemporaryDirectory(prefix="fm-http-") as tmp:
         r,b=call("lock_release",{"path":"a.txt","lock_token":lock});check("lock release API",r.status==200)
         r,b=call("share_create",{"path":"a.txt","password":"integration-share-password","ttl":3600});check("share creation",r.status==200); shared=b["data"]
         guest=build_opener()
-        response=guest.open(Request(base+shared["url_path"],data=urlencode({"password":"integration-share-password"}).encode(),headers={"Content-Type":"application/x-www-form-urlencoded"}));check("anonymous protected download",response.read()==b"salut")
+        response=guest.open(Request(base+shared["url_path"],data=urlencode({"password":"integration-share-password"}).encode(),headers={"Content-Type":"application/x-www-form-urlencoded"}),timeout=15);check("anonymous protected download",response.read()==b"salut")
         r,b=call("share_revoke",{"id":shared["id"]});check("share revoked",r.status==200)
         r,b=call("audit");check("audit path and IP",any(i.get("path")=="a.txt" and i.get("ip")=="127.0.0.1" for i in b["data"]["items"]))
         check("audit redacts credentials", "integration-share-password" not in json.dumps(b) and shared["token"] not in json.dumps(b))
@@ -94,9 +94,12 @@ with tempfile.TemporaryDirectory(prefix="fm-http-") as tmp:
         r,b=req("/api/v1/files/session");check("session revoked",r.geturl().endswith("/login"))
         print(json.dumps({"status":"PASS","count":len(checks),"checks":checks},indent=2))
     except Exception:
-        log.flush(); log.seek(0); print(log.read()[-12000:]); print("RESPONSE",r.status,b[:1500]);
-        for f in (v/"log").glob("*"): print(f.read_text()[-8000:]);
-        for f in (v/"logs").glob("*"): print(f.read_text()[-8000:]);
-        raise
+        # Never publish raw responses/logs: they may contain CSRF or share tokens.
+        print(json.dumps({'status':'FAIL','code':'HTTP_SUITE_FAILED','completed':len(checks)}))
+        raise SystemExit(1)
     finally:
-        server.terminate();server.wait(timeout=10);log.close()
+        server.terminate()
+        try: server.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            server.kill(); server.wait(timeout=5)
+        log.close()

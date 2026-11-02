@@ -1,0 +1,7 @@
+wcp_mfa_form:
+    path: /mfa
+    controller: scheb_two_factor.form_controller::form
+    methods: [GET]
+wcp_mfa_check:
+    path: /mfa/check
+    methods: [POST]

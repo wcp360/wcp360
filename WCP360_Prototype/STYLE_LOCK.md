@@ -31,3 +31,7 @@ They must NOT replace the global shell or visual language without an explicit de
 
 ## Deprecated
 V2.5.3.13 Full Shell Migration is deprecated as a visual baseline because it altered the approved V2.5.3.12 style.
+
+## Authorized accessibility maintenance — 2026-11-01
+
+The requested UI/UX modernization authorizes the contrast, typography, focus, touch-target and responsive corrections recorded in [25-ui-ux-remediation.md](25-ui-ux-remediation.md). These corrections retain the WCP360 branding, shared shell and canonical route ownership. The version numbers above remain historical design references.

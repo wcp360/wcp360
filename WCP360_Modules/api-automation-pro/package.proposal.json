@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.api-automation-pro",
+    "kind":  "module",
+    "label":  "API Automation Pro",
+    "category":  "automation",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Operations",
+                        "IdentityAccess",
+                        "Platform",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "automation.event-rules",
+                           "automation.playbooks",
+                           "automation.chatops"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced workflow composition over existing public API/events, with reusable scoped parameters, delivery traces and approved cross-resource automations. Channel- and provider-specific integrations remain separately qualified connectors.",
+    "core_boundary":  "Core keeps its APIs, SDK contracts, webhooks/events, jobs and ordinary automation primitives. This module adds optional workflow composition and correlation; it cannot invent new public endpoints, grants, arbitrary callbacks or raw privileged effects.",
+    "acceptance":  [
+                       "Select only accepted versioned API/event operations and bind actor, tenant, resource and secret references explicitly.",
+                       "Verify event authenticity, ordering assumptions, replay controls and delivery uncertainty before triggering an effect.",
+                       "Bound retry, recursion, concurrency and outbound destination policy, including redirects and resolved addresses.",
+                       "Recheck current authority and resource versions at execution; expose uncertain multi-step results for reconciliation.",
+                       "Stop new triggers without losing canonical jobs, API access, local administration or recovery when disabled."
+                   ]
+}

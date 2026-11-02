@@ -1,0 +1,28 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Vue du serveur' %}
+{% set server = report.server %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1>Vue du serveur</h1><p class="wcp-page-sub">Système, mémoire et stockage visibles par le panneau.</p></div><div class="wcp-page-actions"><a class="button secondary" href="{{ path('wcp_server') }}">Actualiser</a><a class="button secondary" href="{{ path('wcp_services') }}">Services du serveur</a></div></div>
+<div class="wcp-health-strip" aria-label="Ressources observées">
+<div class="wcp-health-cell"><div class="wcp-health-label">Système</div><div class="wcp-health-value" data-server-platform>{{ server.platform|default(server.os_family) }}</div><div class="wcp-health-meta">{{ server.platform ? 'Plate-forme cible reconnue' : 'Environnement observé' }}</div></div>
+<div class="wcp-health-cell"><div class="wcp-health-label">Architecture</div><div class="wcp-health-value" data-server-architecture>{{ server.architecture }}</div></div>
+<div class="wcp-health-cell"><div class="wcp-health-label">Mémoire totale</div><div class="wcp-health-value" data-server-memory-total>{{ server.memory is not null ? (server.memory.total_bytes / 1073741824)|number_format(2, ',', ' ') ~ ' Gio' : 'Non disponible' }}</div></div>
+<div class="wcp-health-cell"><div class="wcp-health-label">Mémoire disponible</div><div class="wcp-health-value" data-server-memory-available>{{ server.memory is not null ? (server.memory.available_bytes / 1073741824)|number_format(2, ',', ' ') ~ ' Gio' : 'Non disponible' }}</div></div>
+<div class="wcp-health-cell"><div class="wcp-health-label">Stockage libre sur /var</div><div class="wcp-health-value" data-server-storage-free>{{ server.disk is not null ? (server.disk.free_bytes / 1073741824)|number_format(2, ',', ' ') ~ ' Gio' : 'Non disponible' }}</div></div>
+</div>
+<div class="wcp-grid-2">
+<section class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Stockage</h2><p class="wcp-panel-sub">Système de fichiers contenant /var</p></div></div><div class="wcp-panel-body">
+{% if server.disk is not null %}
+<p>{{ ((server.disk.total_bytes - server.disk.free_bytes) / 1073741824)|number_format(2, ',', ' ') }} Gio utilisés sur {{ (server.disk.total_bytes / 1073741824)|number_format(2, ',', ' ') }} Gio.</p>
+<label for="server-storage">Occupation du stockage</label><meter id="server-storage" min="0" max="{{ server.disk.total_bytes }}" value="{{ server.disk.total_bytes - server.disk.free_bytes }}">{{ ((server.disk.total_bytes - server.disk.free_bytes) * 100 / server.disk.total_bytes)|number_format(1, ',', ' ') }} %</meter>
+{% else %}<p>Aucune mesure de stockage disponible dans cet environnement.</p>{% endif %}
+</div></section>
+<section class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Observation</h2><p class="wcp-panel-sub">Lecture à la demande</p></div></div><div class="wcp-panel-body">
+<p>Relevé du <time data-server-observed-at datetime="{{ report.observed_at }}">{{ report.observed_at }}</time> (UTC).</p>
+<p>Les valeurs décrivent l’environnement visible par le panneau. Dans un conteneur, la mémoire disponible et les limites attribuées peuvent être différentes.</p>
+{% if server.os_family != 'Linux' %}<p role="status">Aperçu de développement sous {{ server.os_family }}. Les mesures Linux apparaîtront sur le serveur cible.</p>{% endif %}
+<p><a href="{{ path('wcp_audit') }}">Consulter le journal d’audit</a></p>
+</div></section>
+</div>
+<a class="button secondary" href="{{ path('wcp_dashboard') }}">Retour au tableau de bord</a>
+{% endblock %}

@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.cephfs-storage-pro",
+    "kind":  "plugin",
+    "label":  "CephFS filesystem connector",
+    "category":  "storage-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Files",
+                        "BackupRestore",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "storage.ceph"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare filesystem-specific Ceph observations and reviewed subvolume/client integration separate from existing Ceph RGW object storage.",
+    "core_boundary":  "CephFS file access, RBD block images and RGW object access have distinct authority and recovery contracts. The plugin has no cluster-admin key, mount command or direct RADOS access. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify a selected CephFS/Core-provider profile with filesystem, subtree/subvolume, client and tenant ownership; separately constrain MDS paths and underlying RADOS/OSD namespaces.",
+                       "Review client capabilities, quotas, snapshots, mounts and live consumers independently; filesystem path restriction alone is not accepted as complete tenant isolation.",
+                       "Exercise degraded metadata/data services, revoked capabilities and interrupted snapshots/restores; disconnecting a client must not delete a subvolume or retained backup.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

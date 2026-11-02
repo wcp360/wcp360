@@ -122,6 +122,23 @@ Logs and audit data must never expose passwords, full tokens, private keys, sens
 
 Diagnostic collection and support exports require appropriate consent, scope, redaction, recipient controls, and retention. The optional Insights Connector does not grant remote administration, customer-content collection, or secret export. Metrics and diagnostic identifiers must follow the canonical telemetry policy.
 
+## Engineering verification
+
+The [engineering quality and security catalogue](documentation/development/QUALITY-SECURITY-STACK.md) defines the language, platform and delivery toolchain. The [security test matrix](documentation/development/SECURITY-TEST-MATRIX.md) defines the behaviors and evidence required at each boundary. Tool availability, applicability, configuration and execution results must remain explicit.
+
+| Verification layer | Required assessment context |
+| :--- | :--- |
+| Source and dependencies | Type/static analysis, SAST, secret detection, actual dependency locks and triaged advisory exposure. |
+| Application and contracts | Authentication, sessions, CSRF, tenant/resource authorization, database invariants and strict HTTP/IPC validation. |
+| Privileged operations | Peer identity, declared operations, paths, UID/GID boundaries, idempotence, deadlines, interruptions and uncertain outcomes. |
+| Linux and recovery | Effective isolation and hardening, resource/network controls, service/process failure, installer lifecycle and restore/reboot behavior. |
+| Browser and operational quality | Real user journeys, accessibility, supported browser/runtime behavior and bounded performance/resource checks. |
+| Distribution and CI | Workflow trust, artifact identity/integrity, SBOM/provenance/signature policy, dependency updates and release/recovery evidence. |
+
+Active scans, load tests, kernel/hardening experiments and destructive lifecycle tests must use explicitly authorized disposable targets and synthetic data. A catalogue entry does not authorize changes to a developer host, customer system or third-party service.
+
+Evidence must identify the exact source/artifact, platform, tool/configuration, scope, outcome and relevant limitations. A missing tool, empty scope, scanner failure or unexecuted required check must not be reported as passed. Automated checks supplement independent engineering/security review and do not change canonical release gates, finding severity, exclusions or accepted risks.
+
 ## Security assessment
 
 Report plausible, reachable failures of authentication, authorization, tenant or surface isolation, privileged execution, browser security, filesystem confinement, secret protection, backup access, artifact trust, or availability.
@@ -161,6 +178,6 @@ documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IM
 
 - [Permission Registry](documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): approved permissions and namespace rules.
 - [Security Baseline](documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): required boundaries, protocol constraints, and negative test expectations.
-- [Review and merge evidence policy](documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
+- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
 
 This policy summarizes existing requirements and defines reporting guidance. It does not amend canonical contracts, authorize implementation or release, certify compliance, or close audit findings. Conflicting requirements must be resolved by the responsible owner.

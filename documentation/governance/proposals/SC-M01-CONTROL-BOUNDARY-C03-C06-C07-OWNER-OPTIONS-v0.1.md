@@ -1,5 +1,12 @@
 # WCP360 — SC-M01 control boundary C03/C06/C07: decision-ready options v0.1
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 **Date:** 2026-10-26  
 **Status:** R&D PROPOSAL — REVIEW REQUIRED — NON-NORMATIVE — NOT SOURCE-CODE CONSUMABLE  
 **Owners for normative acceptance:** API / IPC / CONTRACTS (C06/C07), SECURITY / HARDENING (C03/trust), DEVOPS / BUILD / RELEASE (socket/service), DATABASE (durable jobs), TESTS / QA (cases)  

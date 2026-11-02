@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.nextcloud-webdav-pro",
+    "kind":  "plugin",
+    "label":  "Nextcloud application WebDAV connector",
+    "category":  "application-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Files",
+                        "Transfers",
+                        "IdentityAccess",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "apps.business-recipes",
+                           "backup.transfers"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare an authenticated Nextcloud application/WebDAV client profile for explicitly owned remote file references and reviewed transfers.",
+    "core_boundary":  "Nextcloud is an application and WebDAV service, not a substitute S3 object-storage server. Its optional S3 primary backend does not make it interchangeable with MinIO, Ceph RGW or their administrative APIs. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify a selected Nextcloud/WebDAV profile, account/app-password permissions and owned remote collection; distinguish authenticated account resources from separately authorized public-share links.",
+                       "Review URI/path encoding, traversal, redirects, locks, size limits, quota and conflict handling; no arbitrary destination, Core file authority takeover or remote credential disclosure is allowed.",
+                       "Exercise interrupted transfers, access revocation, concurrent edits and failed cutover with checksums and retained source; deletion/overwrite needs explicit authority and restore evidence.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

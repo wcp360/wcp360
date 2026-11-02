@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.libvirt-kvm-pro",
+    "kind":  "plugin",
+    "label":  "libvirt and KVM managed adapter",
+    "category":  "compute-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "compute.libvirt",
+                           "compute.images",
+                           "compute.node-groups"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare reviewed libvirt/KVM guest inventory and bounded lifecycle integration through a qualified Core-side provider.",
+    "core_boundary":  "The plugin receives no libvirt socket, arbitrary domain XML, QEMU arguments, host device access or direct privileged broker interface. Core owns hypervisor operations. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the Core-mediated provider, libvirt transport, hypervisor capability and explicit guest/storage/network ownership for each supported host profile.",
+                       "Admit reviewed guest templates and CPU/memory/disk/network limits; separate guest permissions from host-wide device, bridge, migration and maintenance privileges.",
+                       "Exercise failed start, migration interruption, snapshot consistency and uncertain completion; preserve disks and backup evidence before any separately authorized purge.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

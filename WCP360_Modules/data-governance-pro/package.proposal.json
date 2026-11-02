@@ -1,0 +1,38 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.data-governance-pro",
+    "kind":  "module",
+    "label":  "Data Governance Pro",
+    "category":  "governance",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "IdentityAccess",
+                        "Tenancy",
+                        "Files",
+                        "Data",
+                        "Mail",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "governance.data-requests",
+                           "governance.erasure",
+                           "governance.retention-holds",
+                           "governance.residency"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced multi-resource privacy-request cases with discovery scope, approvals, redacted exports, retention holds and coordinated deletion proposals. The owning resource module still determines each supported operation and its recoverability.",
+    "core_boundary":  "Core keeps essential access control, lawful retention configuration, resource export/deletion and data minimization. Governance adds case coordination; it does not override holds, policy, tenant ownership or the permissions needed for each effect.",
+    "acceptance":  [
+                       "Identify affected resources, responsible owners and declared exceptions before producing an export or erasure plan.",
+                       "Separate legal/policy decisions from technical execution and require the authorized reviewer for each stage.",
+                       "Test incomplete discovery, unavailable adapters, active holds, conflicting retention and partial deletion outcomes.",
+                       "Minimize case contents, encrypt permitted exports and bind download access to its intended recipient and scope.",
+                       "Disable case orchestration while preserving Core resource control, required retention and independent request records."
+                   ]
+}

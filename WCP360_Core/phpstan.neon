@@ -1,0 +1,32 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+
+parameters:
+    level: 8
+    phpVersion: 80400
+    paths:
+        - src
+        - migrations
+        - config/bootstrap.php
+        - public/index.php
+        - bin/console
+        - installer/preflight/candidate.php
+        - installer/preflight/platform.php
+        - installer/preflight/runtime-plan.php
+        - installer/preflight/runtime-readiness.php
+        - installer/preflight/runtime-identity.php
+        - installer/preflight/native-plan.php
+        - installer/preflight/artifact.php
+        - installer/recipes/candidate-install.php
+        - tools/phpstan/bootstrap.php
+        - tools/phpstan/prepare.php
+        - tools/phpstan/console-application.php
+        - tools/phpstan/verify.php
+        - ../WCP360_SDK/php/CandidateJobSummary.php
+        - ../WCP360_Plugins/wcp360-reference-report/bin/report.php
+        - ../WCP360_Build/verification/candidate-platform-core-fixture.php
+    tmpDir: var/phpstan
+    symfony:
+        containerXmlPath: var/cache/test/user/Wcp360_Core_KernelTestDebugContainer.xml
+        consoleApplicationLoader: tools/phpstan/console-application.php

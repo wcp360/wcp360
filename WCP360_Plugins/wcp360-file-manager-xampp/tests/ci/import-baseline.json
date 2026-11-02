@@ -1,0 +1,315 @@
+{
+  "commit": "84fd6db367435513cba807c6008a04b0529c6784",
+  "files": [
+    {
+      "path": ".github/workflows/tests.yml",
+      "sha256": "cfc668083adf99916b5e20da3e31da9f3d2fe8f71ea0789cc2f8a5905642a16e",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "5a03fa169f8bba8d61a1fce6cc82aaceebbe5047306909bc40b988be5de8a463",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": ".htaccess",
+      "sha256": "0dfc69dfa3ac07cf072d2342c18cc829830ab2bc5419880bf806af9a471b898e",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "DEMARRER-WINDOWS.bat",
+      "sha256": "d160ef95ffb2b05bb055bf53cf68a72f7dbdedd3108efa1b46cfdf7f220ef159",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "LIRE-MOI-WINDOWS.txt",
+      "sha256": "9ad2bf64b759ff9ac328e2924bc57d6fec0d3f030f5ef9c1d4adbc107ca1eebc",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "MISE-A-JOUR.txt",
+      "sha256": "53b07197808cc6eeb9bcec74755aa11a397aabbeb07cfb6746047b88ed351d38",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "PUBLICATION-GITHUB.md",
+      "sha256": "04e18b0cd941089efda826e037365def70f19a778aa5f376b08b9835cb30443e",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "README.md",
+      "sha256": "2204391f959ead3808aaeb2de48516aaedc1aabf372feeebee3617cf043ccb2b",
+      "harness_delta_allowed": true
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "sha256": "6e4401697d4a1454e7cdad76c5ba06f4f162c25321f865fad449b459fb8259d2",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "composer.json",
+      "sha256": "2d0fea5f8792b409e5ea94bb8befd4c48a968f1d8ee7734ea4c6b75107b419c1",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "composer.lock",
+      "sha256": "e6737488afcaced94354ecf29fcf9060cb16e107d3115e50f68c888cdbd0a394",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/API.md",
+      "sha256": "864616b587758cac928849c770cd7ef12a699af309a41b8cb6fce3eda9c95755",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "sha256": "7450661811d116f67c7a8fd1f86749cd544d76ad575f67a61a99d1c6bda57daa",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/INTEGRATION-WCP360.md",
+      "sha256": "96f8e93a1b612500590fa1169d868f73a6080add2dbaa0a0b86dfda322b1ec1b",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/PRO-TOOLS.md",
+      "sha256": "da618cb80d8f9889c30cb6bc9675aa5c4db11a97582600c11f6144259d9eb3f3",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/SECURITY.md",
+      "sha256": "932acb3cb6b97fc8af7f37a21fa27929a7ec1a1d9885a58d16d46a1f1faf33af",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/VALIDATION-0.1.0-HISTORIQUE.md",
+      "sha256": "604bc23e9297d882dadb8fca32ebe618d21f007fea2b0d60855432af13f2e4d5",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "sha256": "4b4e8b100ecbab1b297526c493e96a6a074ee0a4497870b53ed1107e60b83ca6",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/browser.json",
+      "sha256": "66394185d10c46ee1a90d8236126e04e9392d9e5d3d73347f6d9c89b5ef6a0c1",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/composer-validate.txt",
+      "sha256": "43add299dc97ecbd90ec2dc456ef5a0bd824bb9abdae2a3d7cdb520e21f8e86d",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/dependency-audit.json",
+      "sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/http-packaged-runtime.json",
+      "sha256": "b5beec88d2eb5fbfc68b19e530d8e44c14839ae72d9a9005ef9c88ec36743cd9",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/http.json",
+      "sha256": "b5beec88d2eb5fbfc68b19e530d8e44c14839ae72d9a9005ef9c88ec36743cd9",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/php-lint.txt",
+      "sha256": "1c7321ed9b145cc4b5ca91b3ce7003c8861d2995760ce431d33259c2320b70f0",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/phpunit.txt",
+      "sha256": "e15384d31b70766a89ba13a2f391ce53d83c92198e9437bcb25bad2b2bf079c2",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/phpunit.xml",
+      "sha256": "d8567345dc8439de69e218f686029e5dc9a07a850574ff2e120fc369af9dd5b8",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "docs/validation/setup.json",
+      "sha256": "a574254173419443521835f9eda580d12eaa9eb541bcdd76a7f4b7d9f9bd80f4",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "extension.json",
+      "sha256": "b51a8e342f9f89a4c36883621ad6653c1dbf4e1f2c5fd4d0e1e88f90ae8394c8",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "index.html",
+      "sha256": "bd9d95b313bef91dead5e906e5c32ee7d106181b59337dc03234866cf882ff67",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "phpunit.xml",
+      "sha256": "0146fbbb721f07ccc31f515df3412ccf082ec21b381101500c5f1ceb3245aadc",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "resources/config/services.php",
+      "sha256": "ca85b4a4eb7cfa1aae7b75273d433e62db6f9a5638f156754cca49f846a8912a",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "resources/public/app.js",
+      "sha256": "db167d65cdad63ae63259e22dd090246d9de5543857ec39712261c56e5ab3905",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "resources/public/index.html",
+      "sha256": "184a2e1f44b1f1cdea52515e32ceab87e9c1876056c18ff665b7389b6527ad07",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "resources/public/pro.js",
+      "sha256": "0bf27ab84df305c4f9a00b189695a048a182452d01be0e84287e5f724a885f7b",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "resources/public/style.css",
+      "sha256": "725dba0656f3e4ef7e543192016df8a18633c3bb31061be89a4ab830c7537140",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Contract/FileBackend.php",
+      "sha256": "a5128e1ae1e529d332ab12823481d1baa9b26370e782808d2ccf9198c50f2d3a",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Contract/FileError.php",
+      "sha256": "8bb77fa522b97ab60b86210608c0437f0ba0bdec4ac8f076ee16977db63b455f",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Contract/Identity.php",
+      "sha256": "d6357ae199496b0dfc6da2bc04848ebe1b8307f0e921b158bee8cd302071a9e2",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Contract/IdentityProvider.php",
+      "sha256": "43765f03ba084d6f8ca76d970f9f3f11709bab8cd0cce7c2a32c3c599c16c1cf",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Controller/FileController.php",
+      "sha256": "03bf51e27be8dbe75b6a0b1cbae7fa469c089bc1f2700dbc41606f5636447674",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/FileManagerBundle.php",
+      "sha256": "21737255c161212ba079dbfe8f1ace33dcda116d1e2ebca191acd7c221e613d1",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Infrastructure/LocalBackend.php",
+      "sha256": "5bd6bdf53288cdf2dfaaa01782889f53145eb257f2d899963bb7cab704597dd0",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Infrastructure/ProFeatures.php",
+      "sha256": "c0f88bf0beade58cf9d21f31d04e6c0630072e0600059c9d4ea48266ba1de10e",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Infrastructure/UnavailableWcpBackend.php",
+      "sha256": "7140e8cc4147908b6cf34bc4b13c6e9e0d3d7c0c8b07c279896e388a35c39a70",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "src/Security/StandaloneIdentityProvider.php",
+      "sha256": "86b8cb7900cbe9c1952b3d3c66c533f4a59aee75ef5bdc7978f41ccb8104db47",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/Kernel.php",
+      "sha256": "60903988948d560f4fb9710836007f2c94e39be443046cb5c4c854e0fc5082b0",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/LoginController.php",
+      "sha256": "171d52a2e15afef3143848a39246ae9f7f55b04c354dde9ea49b44bdec90218c",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/ShareController.php",
+      "sha256": "a89554fe075d9bc3075af90a8f66302e67158bbb66ce715e70851db724196a1d",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/bin/console",
+      "sha256": "6efb16a7bb0f4dc34a971c4ece8862bb47ee102a84e8a7f0e43b1a29e46db4ce",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/bin/diagnostic.php",
+      "sha256": "1c9c0e11779568ba7a9fd27eab347b1c84c0f7fd814c231a9a4b50b1b464850e",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/bin/setup.php",
+      "sha256": "35458e38a2389182e25d363a0528f314938d3bc40de5430be7f2321a10e85a2f",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/bootstrap.php",
+      "sha256": "6e87debee86e25e70f4aea2fc984cabc497f6fc5865d080180ad154f06c42a0a",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/config/bundles.php",
+      "sha256": "ea9a56ebdced9dfc28b2b20743cb8ab9c02145b2eb23e5be89190549f8f00cf5",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/config/packages.php",
+      "sha256": "9ab3dc4c9d8204cfded412758c971f4fcdcdb1bdddb176ab8119061192285135",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/config/packages/main.php",
+      "sha256": "93ecdefe5e23765dadda3db8fbc35f15d849f8e1892f15f3cc45f99a7026fb6b",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/config/routes.php",
+      "sha256": "910f66d3ec1444948915292730239beb02e55364e3478222fcc81caed01ff3f6",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/config/services.php",
+      "sha256": "095a20f2b1fc6a1fa8c889bdb81083811da8be17b00dbee7ab48470742a75d8c",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "standalone/public/index.php",
+      "sha256": "db084e8aefe4c14a462f25bff25052f52cbdb70a5013e5ec3c7aeb0bcd130077",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "tests/LocalBackendTest.php",
+      "sha256": "82e372adccf2117e11a7101f3e770867de8138b1f3f687f657ca77ea15e6b761",
+      "harness_delta_allowed": false
+    },
+    {
+      "path": "tests/browser.cjs",
+      "sha256": "76f090dcdc11f008b84e174edad32c670757331ae3d5975d4b4d19d464247653",
+      "harness_delta_allowed": true
+    },
+    {
+      "path": "tests/http_smoke.py",
+      "sha256": "39e2faaabf7d93857798a06b199b90db915944c89b2a0b22a5678e63a734a941",
+      "harness_delta_allowed": true
+    },
+    {
+      "path": "tests/setup_smoke.py",
+      "sha256": "cb8e330439f028b0f6c7d9eff76beb92df087f7d23a4056d94e3a45a2a50a6cd",
+      "harness_delta_allowed": true
+    }
+  ]
+}

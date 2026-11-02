@@ -1,0 +1,39 @@
+# Inert one-site loopback preview; not installed or started by the panel.
+[Unit]
+Description=WCP360 candidate Modern worker {{.ID}}
+After=network.target
+
+[Service]
+Type=simple
+User={{.User}}
+Group={{.User}}
+WorkingDirectory=/srv/wcp360-candidate/vhosts/{{.ID}}/public
+ExecStart=/usr/local/bin/frankenphp run --config /var/lib/wcp360-candidate/modern/{{.ID}}/Caddyfile --adapter caddyfile
+Environment=MAX_REQUESTS=500
+Environment=XDG_CONFIG_HOME=/var/lib/wcp360-modern/{{.ID}}/config
+Environment=XDG_DATA_HOME=/var/lib/wcp360-modern/{{.ID}}/data
+RuntimeDirectory=wcp360-modern/{{.ID}}
+RuntimeDirectoryMode=0750
+StateDirectory=wcp360-modern/{{.ID}}
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=60
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ReadWritePaths=/srv/wcp360-candidate/vhosts/{{.ID}}/var
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+MemoryMax=768M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

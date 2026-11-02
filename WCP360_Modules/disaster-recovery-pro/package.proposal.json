@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.disaster-recovery-pro",
+    "kind":  "module",
+    "label":  "Disaster Recovery Pro",
+    "category":  "recovery",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "BackupRestore",
+                        "Transfers",
+                        "Operations",
+                        "Platform",
+                        "Hosting",
+                        "Data",
+                        "Mail"
+                    ],
+    "catalogue_keys":  [
+                           "backup.disaster-recovery",
+                           "backup.restore-tests",
+                           "compute.node-groups"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced multi-resource recovery plans, dependency ordering, isolated exercises and measured recovery objectives. Plans bind actual recovery points, keys, identities and return-to-service checks rather than treating a copied archive as recovery.",
+    "core_boundary":  "Core keeps local restoration, emergency access and individual resource recovery. Disaster Recovery adds optional portfolio-level exercises and coordination, without changing resource authority or introducing unqualified automatic cross-node promotion.",
+    "acceptance":  [
+                       "Resolve every plan dependency to an owned resource, verified backup and available key/reference before accepting an exercise.",
+                       "Measure elapsed recovery and observed data loss for the stated environment; RPO/RTO targets are objectives, not unmeasured guarantees.",
+                       "Restore exercises into isolated destinations with outbound effects controlled and no access to production customer identities.",
+                       "Test missing backups, lost keys, partial restore and split-brain hazards with explicit stop/reconciliation criteria.",
+                       "Provide recovery documentation and references usable without the module, its entitlement service or external control plane."
+                   ]
+}

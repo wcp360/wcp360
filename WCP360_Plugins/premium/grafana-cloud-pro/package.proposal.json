@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.grafana-cloud-pro",
+  "kind": "plugin",
+  "label": "Grafana Cloud observability connector",
+  "category": "observability",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "IdentityAccess",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "observe.grafana",
+    "observe.opentelemetry"
+  ],
+  "dependencies": [],
+  "summary": "Prepare optional hosted observability mappings and authorized dashboard references for approved signals.",
+  "core_boundary": "The connector never makes vendor access a requirement for local diagnostics, baseline alerts or incident recovery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin the selected service/interface profile and bind every destination and dashboard to approved scopes.",
+    "Verify telemetry redaction, tenant separation and permission changes before external sharing.",
+    "Exercise revoked credentials, destination outage and removal while retaining local operation evidence.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.docker-management-adapter-pro",
+    "kind":  "plugin",
+    "label":  "Docker managed operations adapter",
+    "category":  "compute-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "compute.containers",
+                           "compute.images",
+                           "compute.rolling-operations"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare optional fleet-oriented Docker inventory and reviewed workload operations through an admitted Core provider.",
+    "core_boundary":  "Basic container installation, isolation, lifecycle and resource controls remain free Core capabilities. The plugin never receives a Docker socket, broad remote Docker API, broker channel or arbitrary Compose/shell execution. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify an admitted Core container-provider profile, node and tenant ownership; expose only reviewed operation inputs, immutable images and bounded observed state.",
+                       "Qualify rootless and rootful daemon profiles separately with effective CPU, memory, process, storage and network limits. Reviewed in-container UID 0 initialization does not authorize privileged containers, host namespaces or unapproved devices, capabilities or mounts; refuse incompatible profiles.",
+                       "Exercise rolling changes, failed pulls, partial restart and retained volumes; deletion of a container must not silently delete tenant data or bypass backup/recovery decisions.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

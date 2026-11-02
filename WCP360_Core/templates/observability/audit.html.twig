@@ -1,0 +1,35 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Journal d’audit' %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ADMINISTRATION</p><h1>Journal d’audit</h1><p class="wcp-page-sub">Retrouvez les événements enregistrés par le Core et leur référence de requête.</p></div></div>
+<section class="wcp-panel">
+<div class="wcp-panel-body">
+<form action="{{ path('wcp_audit') }}" method="get" aria-label="Filtrer le journal d’audit">
+<div class="wcp-grid-2">
+<div><label for="audit-kind">Type d’événement exact</label><input id="audit-kind" name="kind" value="{{ filters.kind }}" maxlength="64" placeholder="hosting.plan.succeeded"></div>
+<div><label for="audit-request">Référence de requête</label><input id="audit-request" name="request" value="{{ filters.request }}" maxlength="32" spellcheck="false"></div>
+{% for key,label in {actor:'Identifiant de l’acteur',tenant:'Identifiant de l’espace',resource:'Identifiant de la ressource'} %}
+<div><label for="audit-{{ key }}">{{ label }}</label><input id="audit-{{ key }}" name="{{ key }}" value="{{ attribute(filters,key) }}" maxlength="36" spellcheck="false"></div>
+{% endfor %}
+<div><label for="audit-limit">Résultats affichés</label><select id="audit-limit" name="limit">{% for size in [25,50,100] %}<option value="{{ size }}"{% if size == filters.limit %} selected{% endif %}>{{ size }}</option>{% endfor %}</select></div>
+{% for key,label in {from:'À partir de (UTC)',until:'Jusqu’à (UTC)'} %}
+<div><label for="audit-{{ key }}">{{ label }}</label><input id="audit-{{ key }}" name="{{ key }}" value="{{ attribute(filters,key) }}" maxlength="20" placeholder="2026-11-02T00:00:00Z"><p class="field-help">Date UTC complète, bornes incluses.</p></div>
+{% endfor %}
+</div>
+<div class="actions"><button class="button" type="submit">Filtrer</button><a class="button secondary" href="{{ path('wcp_audit') }}">Réinitialiser les filtres</a></div>
+</form>
+<p class="muted">Les références permettent de relier les événements. Ce journal ne contient pas le contenu des configurations, les identifiants de connexion ou les secrets des comptes.</p>
+</div>
+<div class="table-scroll"><table><caption>Événements du Core, du plus récent au plus ancien</caption><thead><tr><th scope="col">Date UTC</th><th scope="col">Événement</th><th scope="col">Acteur</th><th scope="col">Espace</th><th scope="col">Ressource</th><th scope="col">Requête</th><th scope="col">Événement ID</th></tr></thead><tbody>
+{% for event in page.items %}
+<tr data-audit-id="{{ event.id }}"><td><time datetime="{{ event.created_at }}">{{ event.created_at }}</time></td><td>{{ event.kind }}</td>
+{% for value in [event.actor_id,event.tenant_id,event.resource_id,event.request_id,event.id] %}<td>{% if value %}<code>{{ value }}</code>{% else %}<span class="muted">Non renseigné</span>{% endif %}</td>{% endfor %}
+</tr>
+{% else %}<tr><td colspan="7"><div class="wcp-core-empty"><h2>Aucun événement pour ces filtres</h2><p>Modifiez les filtres pour élargir la recherche.</p></div></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="wcp-panel-body"><p role="status">{{ page.items|length }} événement{{ page.items|length != 1 ? 's' : '' }} affiché{{ page.items|length != 1 ? 's' : '' }}</p>
+{% include 'components/data/cursor-pagination.html.twig' with {pagination:page.pagination,filters:filters,list_route:'wcp_audit',pagination_label:'Pagination du journal',previous_label:'Plus récents',next_label:'Plus anciens'} only %}
+</div>
+</section>
+<a class="button secondary" href="{{ path('wcp_dashboard') }}">Retour au tableau de bord</a>
+{% endblock %}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WCP360 artifact staging statement candidate 0.1.0",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "purpose", "package", "artifact", "issued_at", "expires_at"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "purpose": {"const": "artifact-staging"},
+    "package": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "slug", "version", "publisher"],
+      "properties": {
+        "type": {"enum": ["plugin", "module", "app", "core"]},
+        "slug": {"type": "string", "maxLength": 80, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "version": {"type": "string", "maxLength": 96, "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"},
+        "publisher": {"type": "string", "maxLength": 80, "pattern": "^[a-z0-9][a-z0-9.-]*$"}
+      }
+    },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["media_type", "sha256", "size"],
+      "properties": {
+        "media_type": {"const": "application/zip"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "size": {"type": "integer", "minimum": 1, "maximum": 134217728}
+      }
+    },
+    "issued_at": {"$ref": "#/$defs/utc"},
+    "expires_at": {"$ref": "#/$defs/utc"}
+  },
+  "$defs": {"utc": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"}},
+  "$comment": "Runtime also rejects duplicate JSON keys, non-current validity, lifetimes over seven days, identity or trust scope mismatch; signature and ZIP checks are mandatory. Schema alone does not authorize an artifact."
+}

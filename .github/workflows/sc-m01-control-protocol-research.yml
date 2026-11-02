@@ -1,0 +1,30 @@
+name: SC-M01 inert control-protocol research tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "research/architecture-lab/sc-m01-control-protocol/**"
+      - ".github/workflows/sc-m01-control-protocol-research.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "research/architecture-lab/sc-m01-control-protocol/**"
+      - ".github/workflows/sc-m01-control-protocol-research.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  inert-control-research:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Python standard library version
+        run: python3 --version
+      - name: Execute inert parser negative tests only
+        run: python3 -m unittest discover -s research/architecture-lab/sc-m01-control-protocol -p 'test_inert_codec.py' -v

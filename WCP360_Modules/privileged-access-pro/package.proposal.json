@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.privileged-access-pro",
+    "kind":  "module",
+    "label":  "Privileged Access Pro",
+    "category":  "identity",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability",
+                        "Platform"
+                    ],
+    "catalogue_keys":  [
+                           "identity.vaults-kms",
+                           "workspace.web-terminal",
+                           "automation.playbooks"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced just-in-time access requests, reviewed delegation windows and evidence around explicitly approved administrative sessions or secret consumers. Any terminal/provider session is separately qualified and restricted to its authorized non-root identity.",
+    "core_boundary":  "Core owns authorization, credential/session revocation, secrets and the minimal privileged broker. This module adds request/review coordination, not a root terminal, a new permission evaluator or an entitlement-based bypass of existing policy.",
+    "acceptance":  [
+                       "Bind each request and approval to actor, exact resource/action, duration policy and current delegation ceiling without inventing a default duration.",
+                       "Verify that expired, revoked or changed approvals cannot create or continue an admitted effect beyond the underlying contract.",
+                       "Inject secrets by approved reference only and prevent exposure in request text, traces, clipboard defaults or audit payloads.",
+                       "Qualify any session broker with separate non-root identity, scope, resource budgets and immediate revocation evidence.",
+                       "Preserve Core emergency access and session controls when this module or a vault is unavailable."
+                   ]
+}

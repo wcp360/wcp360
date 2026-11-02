@@ -1,10 +1,30 @@
-# First-party image assets
+# WCP360 official interface logos
 
-**Status: frontend source location reserved; no runtime asset is supplied by this README.**
+The two transparent horizontal PNG logos listed below in [branding](branding/) were supplied and approved by the project owner on 2026-11-01. They replace the candidate text mark in the Core.
 
-Approved source logos, illustrations and other image assets used by the Core interface.
+| Surface | Official asset | Source filename | SHA-256 |
+| :--- | :--- | :--- | :--- |
+| USER / customer workspace | [wcp360-user.png](branding/wcp360-user.png) | Logo WCP 360 user.png | 7eee3f091da2aab5c2a77accf098cd17f72d7b8746f714fbb58b4a80f20b37d5 |
+| ADMIN / ROOT administration | [wcp360-admin-root.png](branding/wcp360-admin-root.png) | Logo WCP 360 admin root.png | c92f7a6bb9386edfd9c378565b616995465a37fa5e954c311e03504f17a1e654 |
 
-Customer uploads, generated reports, remote plugin content and private vendor assets do not belong here. Keep source identity, intended usage and relevant attribution with actual assets; publish only approved output through the asset build and public entry-point policy.
+Both originals are **2172 x 724 pixels**, with transparency. Their bytes, colors, proportions and artwork are preserved. CSS keeps the logos transparent and unframed in both themes; it does not recolor or crop the artwork.
+
+## Official browser icons
+
+The owner supplied two additional transparent, square PNGs for browser tabs. Both originals are **1254 x 1254 pixels** and are stored byte-for-byte unchanged.
+
+| Surface | Favicon | Source filename | SHA-256 |
+| :--- | :--- | :--- | :--- |
+| USER | [wcp360-user-favicon.png](branding/wcp360-user-favicon.png) | Logo WCP360 indigo et bleu azur.png | 659c78506f9a40b623f2000ec01dcdb07b43d5946eddc7f71bc7f937b77a769a |
+| ADMIN / ROOT | [wcp360-admin-root-favicon.png](branding/wcp360-admin-root-favicon.png) | Logo circulaire indigo et corail.png | e77e0f7361c0b04650d16287b0e304886b30221f58f516ce1458fdf422640fa0 |
+
+The shared document head uses a dedicated favicon map; the full horizontal logos remain in authentication and workspace layouts. Both maps follow the same server runtime context.
+
+[Central Twig configuration](../../config/packages/twig.yaml) selects branding from the server runtime context, including before login and during MFA/reconfirmation. Query parameters and theme selection do not choose the surface. Branding conveys identity; it grants no role or system privilege. ADMIN and ROOT share the supplied orange artwork.
+
+The [shared image component](../../templates/components/navigation/brand-logo.html.twig) is used by authentication and workspace layouts. Symfony AssetMapper publishes the images as first-party assets. Browser tabs use the dedicated official square icons listed above.
+
+Customer uploads, generated reports, remote plugin content and private vendor assets do not belong here. Additional brand variants need project-owner approval.
 
 - [Frontend source map](../README.md)
 - [Twig template map](../../templates/README.md)

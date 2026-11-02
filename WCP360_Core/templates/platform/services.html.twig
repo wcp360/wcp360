@@ -1,0 +1,36 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Services du serveur' %}
+{% set collection_labels = {observed: 'Collecte disponible', not_configured: 'Observation indisponible', failed: 'Collecte impossible'} %}
+{% set observation_labels = {observed: 'État observé', not_observed: 'Non observé', unavailable: 'Indisponible'} %}
+{% set state_labels = {loaded: 'Chargée', 'not-found': 'Unité non trouvée', masked: 'Masquée', error: 'Erreur', 'bad-setting': 'Configuration invalide', active: 'Actif', inactive: 'Inactif', failed: 'En échec', activating: 'Activation en cours', deactivating: 'Arrêt en cours', reloading: 'Rechargement en cours', running: 'En cours', exited: 'Terminé', dead: 'Arrêté', enabled: 'Activée au démarrage', disabled: 'Désactivée au démarrage', static: 'Statique', unknown: 'Inconnu'} %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1>Services du serveur</h1><p class="wcp-page-sub">États des unités visibles par le panneau, à la demande.</p></div><div class="wcp-page-actions"><a class="button secondary" href="{{ path('wcp_services') }}">Actualiser</a><a class="button secondary" href="{{ path('wcp_server') }}">Vue du serveur</a></div></div>
+<div class="wcp-health-strip" aria-label="Périmètre de l’observation">
+<div class="wcp-health-cell"><div class="wcp-health-label">Collecte</div><div class="wcp-health-value" data-services-collection>{{ collection_labels[report.status] }}</div><div class="wcp-health-meta">Lecture seule</div></div>
+<div class="wcp-health-cell"><div class="wcp-health-label">Familles suivies</div><div class="wcp-health-value">{{ report.services|length }}</div><div class="wcp-health-meta">Liste fixe du Core</div></div>
+<div class="wcp-health-cell"><div class="wcp-health-label">Périmètre</div><div class="wcp-health-value" data-services-scope>Environnement du panneau</div><div class="wcp-health-meta">Espace de noms courant</div></div>
+</div>
+<section class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Observation des services</h2><p class="wcp-panel-sub">Relevé du <time data-services-observed-at datetime="{{ report.observed_at }}">{{ report.observed_at }}</time> (UTC)</p></div></div><div class="wcp-panel-body">
+<p role="status" data-services-status>{% if report.status == 'observed' %}Les états disponibles ont été relevés. Les familles non observées restent explicitement signalées.{% elseif report.status == 'not_configured' %}L’observation des services n’est pas disponible dans cet environnement. Aucun état arrêté ou actif n’est déduit.{% else %}La collecte des services n’a pas abouti. Les états restent indisponibles ; aucun diagnostic interne n’est exposé.{% endif %}</p>
+<p data-services-health>Un état actif décrit une unité système ; il ne prouve pas que l’application répond ni qu’elle est saine. Une unité non trouvée ou non observée ne prouve pas que l’application est absente. La couverture est partielle.</p>
+<p>Cette page ne démarre, n’arrête et ne reconfigure aucun service. Elle n’accorde aucun contrôle système.</p>
+</div>
+<div class="table-scroll"><table><caption>Familles de services et états des unités observées</caption><thead><tr><th scope="col">Service</th><th scope="col">Module propriétaire</th><th scope="col">Observation</th><th scope="col">Unités et états</th></tr></thead><tbody>
+{% for service in report.services %}
+<tr data-service-id="{{ service.id }}"><th scope="row">{{ service.label }}</th><td>{{ service.owner }}</td><td data-service-observation="{{ service.observation }}">{{ observation_labels[service.observation] }}</td><td>
+{% for unit in service.units %}
+<div data-service-unit="{{ unit.id }}"><p><code>{{ unit.id }}</code></p><dl>
+<dt>Chargement</dt><dd data-unit-load>{{ state_labels[unit.load_state]|default(unit.load_state) }}</dd>
+<dt>État actif</dt><dd data-unit-active>{{ state_labels[unit.active_state]|default(unit.active_state) }}</dd>
+<dt>Sous-état</dt><dd data-unit-sub>{{ state_labels[unit.sub_state]|default(unit.sub_state) }}</dd>
+<dt>Activation de l’unité</dt><dd data-unit-file>{{ unit.unit_file_state is not null ? state_labels[unit.unit_file_state]|default(unit.unit_file_state) : 'Non disponible' }}</dd>
+</dl></div>
+{% else %}
+<p class="muted" data-service-unavailable>{% if service.observation == 'not_observed' %}Aucune unité correspondante retournée ; la présence de l’application reste inconnue.{% else %}État des unités non observé.{% endif %}</p>
+{% endfor %}
+</td></tr>
+{% else %}<tr><td colspan="4"><div class="wcp-core-empty"><h2>Aucune observation disponible</h2><p>Aucun état de service ne peut être déduit de cette liste vide.</p></div></td></tr>{% endfor %}
+</tbody></table></div>
+</section>
+<a class="button secondary" href="{{ path('wcp_server') }}">Retour à la vue du serveur</a>
+{% endblock %}

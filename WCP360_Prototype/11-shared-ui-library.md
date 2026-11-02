@@ -104,10 +104,30 @@ Types : texte, email, nombre, mot de passe, textarea, select et checkbox. Les sc
 
 ## Services
 
+- `WCPUI.Overlay.attach({panel, backdrop, source})` gère les tiroirs métier existants ; API détaillée ci-dessous.
 - `WCPUI.Dialog.open({title, description, content, onClose})` renvoie `{element, close, closed}` ; `closed` est une promesse.
 - `await WCPUI.Dialog.confirm({title, message, confirmLabel, typed})` renvoie un booléen. Un seul dialogue du service est actif à la fois.
 - `WCPUI.toast({title, message, tone})` affiche un retour local. `WCPUI.notify(...)` utilise le runtime du produit lorsqu’il existe, sans afficher un second toast.
 - `WCPUI.theme.apply('system' | 'light' | 'dark')` est le propriétaire commun du thème du prototype.
+
+## Tiroirs partagés
+
+```javascript
+const drawer = WCPUI.Overlay.attach({
+  panel: document.querySelector('#operationPanel'),
+  backdrop: document.querySelector('#operationBackdrop'),
+  source: 'my-module'
+});
+
+openButton.addEventListener('click', () => drawer.open(openButton));
+cancelButton.addEventListener('click', () => drawer.close());
+```
+
+L’instance expose `open(trigger)`, `close()`, `destroy()` et la propriété `opened`. Elle pilote la classe `open`, les attributs ARIA, `inert`, le fond, le défilement, le focus et les touches Tab/Échap. Une fermeture sur un tiroir déjà fermé ne déplace pas le focus. Une réouverture après remplacement du formulaire conserve le déclencheur d’origine. Le panneau peut être imbriqué dans le contenu : ses ancêtres restent utilisables, leurs autres descendants sont isolés.
+
+L’événement `wcp:overlay-opening` ferme les panneaux concurrents. Les confirmations natives `WCPUI.Dialog` conservent la priorité sur le clavier. Le composant fournit un nom accessible à partir d’un titre existant ; les consommateurs doivent privilégier un `aria-labelledby` explicite. Appeler `destroy()` avant de supprimer définitivement le panneau. Un nouvel attachement au même panneau détruit l’instance précédente.
+
+Vingt contrôleurs métier utilisent ce service pour vingt-deux panneaux. Les commandes, le Job Center et le Control Center participent au même événement d’exclusion. Les tests d’adaptateurs vérifient ce contrat ; la revue native du navigateur reste distincte.
 - `WCPUI.can(context, capability, target)` fournit un contrat d’affichage UI avec refus par défaut et correspondance exacte du périmètre/propriétaire. Il ne remplace pas une autorisation côté serveur.
 
 ## Vérification

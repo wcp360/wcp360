@@ -1,0 +1,317 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "title":  "WCP360 premium package proposal — planning only",
+    "description":  "Closed planning document for optional detached packages. Passing this schema is not runtime admission, licensing approval, trust, permission or installability.",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema",
+                     "id",
+                     "kind",
+                     "label",
+                     "category",
+                     "tier",
+                     "status",
+                     "installable",
+                     "source_model",
+                     "core_owners",
+                     "catalogue_keys",
+                     "dependencies",
+                     "summary",
+                     "core_boundary",
+                     "acceptance"
+                 ],
+    "properties":  {
+                       "schema":  {
+                                      "const":  "wcp360.premium-package-proposal/1"
+                                  },
+                       "id":  {
+                                  "type":  "string",
+                                  "pattern":  "^(module|plugin)\\.[a-z0-9]+(?:-[a-z0-9]+)*$"
+                              },
+                       "kind":  {
+                                    "enum":  [
+                                                 "module",
+                                                 "plugin"
+                                             ]
+                                },
+                       "label":  {
+                                     "type":  "string",
+                                     "minLength":  1,
+                                     "maxLength":  120
+                                 },
+                       "category":  {
+                                        "type":  "string",
+                                        "pattern":  "^[a-z][a-z0-9-]*$",
+                                        "minLength":  1,
+                                        "maxLength":  64
+                                    },
+                       "tier":  {
+                                    "const":  "pro"
+                                },
+                       "status":  {
+                                      "const":  "design"
+                                  },
+                       "installable":  {
+                                           "const":  false
+                                       },
+                       "source_model":  {
+                                            "const":  "undecided"
+                                        },
+                       "core_owners":  {
+                                           "type":  "array",
+                                           "minItems":  1,
+                                           "maxItems":  13,
+                                           "uniqueItems":  true,
+                                           "items":  {
+                                                         "enum":  [
+                                                                      "IdentityAccess",
+                                                                      "Tenancy",
+                                                                      "Hosting",
+                                                                      "Mail",
+                                                                      "Data",
+                                                                      "Files",
+                                                                      "Operations",
+                                                                      "BackupRestore",
+                                                                      "Transfers",
+                                                                      "Observability",
+                                                                      "Platform",
+                                                                      "ExtensionManagement",
+                                                                      "Setup"
+                                                                  ]
+                                                     }
+                                       },
+                       "catalogue_keys":  {
+                                              "type":  "array",
+                                              "minItems":  1,
+                                              "maxItems":  149,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "enum":  [
+                                                                         "apps.installer",
+                                                                         "apps.wordpress-toolkit",
+                                                                         "apps.cms-recipes",
+                                                                         "apps.business-recipes",
+                                                                         "apps.staging-clones",
+                                                                         "apps.verified-updates",
+                                                                         "apps.fleet-management",
+                                                                         "runtime.nodejs",
+                                                                         "runtime.python",
+                                                                         "runtime.ruby-passenger",
+                                                                         "runtime.go-apps",
+                                                                         "runtime.dependencies",
+                                                                         "runtime.workers",
+                                                                         "runtime.redis",
+                                                                         "runtime.memcached",
+                                                                         "runtime.rabbitmq",
+                                                                         "delivery.git",
+                                                                         "delivery.providers",
+                                                                         "delivery.pipelines",
+                                                                         "delivery.runners",
+                                                                         "delivery.registries",
+                                                                         "delivery.previews",
+                                                                         "delivery.dependency-analysis",
+                                                                         "delivery.deployment-secrets",
+                                                                         "domains.cloudflare",
+                                                                         "domains.route53",
+                                                                         "domains.dns-providers",
+                                                                         "domains.registrars",
+                                                                         "domains.rdap-whois",
+                                                                         "domains.cdn-edge",
+                                                                         "domains.global-routing",
+                                                                         "domains.dns01",
+                                                                         "domains.acme-authorities",
+                                                                         "domains.domain-monitoring",
+                                                                         "mail.roundcube",
+                                                                         "mail.snappymail",
+                                                                         "mail.sogo",
+                                                                         "mail.smtp-relays",
+                                                                         "mail.dmarc",
+                                                                         "mail.bimi",
+                                                                         "mail.mailing-lists",
+                                                                         "mail.mailguard",
+                                                                         "mail.mailbox-migration",
+                                                                         "data.mysql-admin-tools",
+                                                                         "data.pgadmin",
+                                                                         "data.sqlite",
+                                                                         "data.replication",
+                                                                         "data.sql-analysis",
+                                                                         "data.postgres-extensions",
+                                                                         "data.external-databases",
+                                                                         "data.anonymization",
+                                                                         "backup.sftp",
+                                                                         "backup.s3",
+                                                                         "backup.nfs-destination",
+                                                                         "backup.restic",
+                                                                         "backup.borg",
+                                                                         "backup.transfers",
+                                                                         "backup.immutable",
+                                                                         "backup.restore-tests",
+                                                                         "backup.disaster-recovery",
+                                                                         "security.clamav",
+                                                                         "security.maldet",
+                                                                         "security.imunify360",
+                                                                         "security.crowdsec",
+                                                                         "security.waf",
+                                                                         "security.file-integrity",
+                                                                         "security.threat-intel",
+                                                                         "security.forensics",
+                                                                         "security.siem",
+                                                                         "security.advisories",
+                                                                         "identity.oidc",
+                                                                         "identity.saml",
+                                                                         "identity.ldap",
+                                                                         "identity.scim",
+                                                                         "identity.vaults-kms",
+                                                                         "observe.prometheus",
+                                                                         "observe.opentelemetry",
+                                                                         "observe.loki",
+                                                                         "observe.syslog",
+                                                                         "observe.grafana",
+                                                                         "observe.snmp",
+                                                                         "observe.synthetics",
+                                                                         "notify.sms",
+                                                                         "notify.team-messaging",
+                                                                         "notify.oncall",
+                                                                         "notify.push",
+                                                                         "storage.zfs",
+                                                                         "storage.ceph",
+                                                                         "storage.glusterfs",
+                                                                         "storage.nfs",
+                                                                         "storage.smb",
+                                                                         "storage.object-storage",
+                                                                         "storage.raid-lvm",
+                                                                         "compute.proxmox",
+                                                                         "compute.libvirt",
+                                                                         "compute.lxc",
+                                                                         "compute.containers",
+                                                                         "compute.kubernetes",
+                                                                         "compute.images",
+                                                                         "compute.node-groups",
+                                                                         "compute.rolling-operations",
+                                                                         "network.haproxy",
+                                                                         "network.traefik",
+                                                                         "network.vrrp-vip",
+                                                                         "network.wireguard",
+                                                                         "network.interfaces",
+                                                                         "network.sdn",
+                                                                         "network.service-ha",
+                                                                         "hardware.redfish-ipmi",
+                                                                         "hardware.pxe",
+                                                                         "hardware.inventory",
+                                                                         "hardware.sensors",
+                                                                         "commerce.whmcs",
+                                                                         "commerce.blesta",
+                                                                         "commerce.fossbilling",
+                                                                         "commerce.hostbill",
+                                                                         "commerce.usage",
+                                                                         "commerce.business-systems",
+                                                                         "commerce.product-licenses",
+                                                                         "support.helpdesk",
+                                                                         "support.knowledge-base",
+                                                                         "support.status-page",
+                                                                         "support.insights",
+                                                                         "support.reports",
+                                                                         "governance.data-requests",
+                                                                         "governance.erasure",
+                                                                         "governance.retention-holds",
+                                                                         "governance.residency",
+                                                                         "governance.audit-archive",
+                                                                         "automation.playbooks",
+                                                                         "automation.event-rules",
+                                                                         "automation.terraform-opentofu",
+                                                                         "automation.ansible",
+                                                                         "automation.ai-readonly",
+                                                                         "automation.ai-missions",
+                                                                         "automation.chatops",
+                                                                         "automation.energy",
+                                                                         "workspace.white-label",
+                                                                         "workspace.themes",
+                                                                         "workspace.translations",
+                                                                         "workspace.dashboards",
+                                                                         "workspace.web-terminal",
+                                                                         "engine.apache",
+                                                                         "engine.litespeed",
+                                                                         "engine.dns",
+                                                                         "engine.mail",
+                                                                         "engine.firewall",
+                                                                         "engine.mac",
+                                                                         "engine.isolation"
+                                                                     ]
+                                                        },
+                                              "description":  "References to the unchanged 149-entry design catalogue; references never grant authority or transfer essential Core ownership."
+                                          },
+                       "dependencies":  {
+                                            "type":  "array",
+                                            "minItems":  0,
+                                            "maxItems":  149,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^(module|plugin)\\.[a-z0-9]+(?:-[a-z0-9]+)*$"
+                                                      },
+                                            "description":  "Selected package IDs only; Core contracts, provider compatibility and commercial rights require separate review."
+                                        },
+                       "summary":  {
+                                       "type":  "string",
+                                       "minLength":  25,
+                                       "maxLength":  1000
+                                   },
+                       "core_boundary":  {
+                                             "type":  "string",
+                                             "minLength":  50,
+                                             "maxLength":  2000
+                                         },
+                       "acceptance":  {
+                                          "type":  "array",
+                                          "minItems":  3,
+                                          "maxItems":  20,
+                                          "uniqueItems":  true,
+                                          "items":  {
+                                                        "type":  "string",
+                                                        "minLength":  15,
+                                                        "maxLength":  2000
+                                                    }
+                                      }
+                   },
+    "allOf":  [
+                  {
+                      "if":  {
+                                 "properties":  {
+                                                    "kind":  {
+                                                                 "const":  "module"
+                                                             }
+                                                },
+                                 "required":  [
+                                                  "kind"
+                                              ]
+                             },
+                      "then":  {
+                                   "properties":  {
+                                                      "id":  {
+                                                                 "pattern":  "^module\\."
+                                                             }
+                                                  }
+                               }
+                  },
+                  {
+                      "if":  {
+                                 "properties":  {
+                                                    "kind":  {
+                                                                 "const":  "plugin"
+                                                             }
+                                                },
+                                 "required":  [
+                                                  "kind"
+                                              ]
+                             },
+                      "then":  {
+                                   "properties":  {
+                                                      "id":  {
+                                                                 "pattern":  "^plugin\\."
+                                                             }
+                                                  }
+                               }
+                  }
+              ]
+}

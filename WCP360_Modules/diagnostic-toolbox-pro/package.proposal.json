@@ -1,0 +1,38 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.diagnostic-toolbox-pro",
+    "kind":  "module",
+    "label":  "Diagnostic Toolbox Pro",
+    "category":  "automation",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "Platform",
+                        "Hosting",
+                        "Data",
+                        "Mail",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "automation.playbooks",
+                           "support.reports",
+                           "security.forensics",
+                           "observe.synthetics"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced guided diagnostic cases combining named bounded checks, evidence comparison and reviewed repair proposals across service owners. It packages reusable investigation runbooks rather than exposing a terminal.",
+    "core_boundary":  "Core retains baseline diagnostics, local checks, safe error reporting and ordinary repair operations. The Toolbox adds optional guided workflows; developer tools, arbitrary shell/SQL execution and root process control are outside its product interface.",
+    "acceptance":  [
+                       "Catalogue each named check with fixed typed inputs, permissions, resource/tenant scope, budgets and explicit unavailable states.",
+                       "For HTTP/HTTPS, TCP, DNS or ICMP check bundles, require admitted protocols/targets, bounded resolution/redirects, time/rate/size/concurrency and correct capability/privilege handling; no unrestricted scanner or raw shell is exposed.",
+                       "Treat paths, logs and returned diagnostics as untrusted data; redact secrets and prevent output from becoming executable markup or instructions.",
+                       "Keep observation and repair separate; a repair invokes the owning module\u0027s qualified operation with current authority, resource revision and recovery evidence.",
+                       "Test malicious arguments, wrong-tenant/internal-control targets, exhaustion, failed checks and source outages without fabricating healthy states.",
+                       "Preserve free Core diagnostics, ordinary local/remote checks where admitted, essential alerts and independent repair/recovery when Toolbox is removed."
+                   ]
+}

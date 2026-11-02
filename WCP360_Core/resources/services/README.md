@@ -1,12 +1,21 @@
 # Linux-service source directory
 
-This index makes the service's template, owning PHP domain and target configuration boundary easy to locate. **All entries are documented source reservations.** A directory is not evidence that an adapter is implemented, selected, installed or permitted to run.
+The read-only [ROOT service inventory](../../src/Module/Platform/SERVICES.md) lives in Platform. Its fourteen fixed systemd unit names observe nine families without installing providers, validating service health or enabling control. They do not change the 24 resource-family counts or the implementation statuses below.
+
+This index makes the service's template, owning PHP domain and target configuration boundary easy to locate. Entries identify source ownership. Five service families point to the single Go candidate template source; the other entries remain documented resource reservations or disposable-VM units as recorded in the register. A directory is not evidence that an adapter is implemented, selected, installed or permitted to run.
+
+The directory has **24 documented service locations**. Their README reservations prepare the requested layout; they do not install providers or create empty implementation trees. Each service README records its owner, current boundary and remaining work. The [Core roadmap](../../ROADMAP.md) and [structure index](../../STRUCTURE.md) organize the dependencies for future executable/configuration files. The current candidate default remains Nginx/FPM. The [target for new general-purpose installations](../../src/Module/Hosting/WEB-SERVER-STRATEGY.md), Nginx -> Apache event -> FPM, is already an inert application-plan/2 and application-preview/2 recipe among [seven application recipes](../../src/Module/Hosting/APPLICATION-PROFILES.md). Durable selection/default changes, provider installation, apply and native Apache/FPM/HTTP qualification remain unavailable. Existing assignments do not change.
+
+The [per-service roadmap](ROADMAP.md) records status, first deliverable and open backend decisions. Layer order and families that must not receive empty folders yet are in the [resources roadmap](../ROADMAP.md).
 
 | Service resources | Owner | Intended contents |
 | :--- | :--- | :--- |
 | [Nginx](nginx/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Reverse proxy, managed virtual hosts, upstreams, TLS references and FastCGI integration. |
 | [Apache HTTP Server](apache/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Virtual hosts, approved modules, reverse-proxy integration and per-site policy. |
 | [PHP-FPM](php-fpm/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Per-version pool models, PHP directives, process limits and socket ownership. |
+| [FrankenPHP](frankenphp/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Classic and separately qualified Worker profiles, embedded Caddy, private endpoints and dedicated supervision. |
+| [Standalone Caddy](caddy/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Dedicated ingress, FPM/proxy profiles, explicit listener/TLS/admin ownership; distinct from embedded Caddy. |
+| [Docker provider](docker/README.md) | [Platform](../../src/Module/Platform/README.md), Hosting / Operations | Admitted engine/workload resources, images/build provenance, networks, volumes, effective limits and recovery. |
 | [Postfix](postfix/README.md) | [Mail](../../src/Module/Mail/README.md) | SMTP routing, relay policy, domain maps, queue integration and TLS references. |
 | [Dovecot](dovecot/README.md) | [Mail](../../src/Module/Mail/README.md) | IMAP/POP service policy, authentication adapters, mailbox locations and TLS references. |
 | [Rspamd](rspamd/README.md) | [Mail](../../src/Module/Mail/README.md) | Approved spam/antivirus integration, policy, learning endpoints and rate limits. |
@@ -20,11 +29,20 @@ This index makes the service's template, owning PHP domain and target configurat
 | [Host firewall](firewall/README.md) | [Platform](../../src/Module/Platform/README.md) | Reviewed policy inputs, management/service network rules and safe change plans. |
 | [Log rotation](logrotate/README.md) | [Observability](../../src/Module/Observability/README.md) | Service log rotation, retention, identity and bounded reopen behavior. |
 | [Backup tooling](backup/README.md) | [BackupRestore](../../src/Module/BackupRestore/README.md) | Local backup/restore tool profiles, scheduling inputs, retention and restore-verification resources. |
+| [ACME and certificates](acme/README.md) | [Hosting](../../src/Module/Hosting/README.md) | Selected client/challenges, key references, renewal and coordinated deploy to consumers. |
+| [Filesystem quotas](quotas/README.md) | [Tenancy](../../src/Module/Tenancy/README.md), Platform | Registered quota identities, space/inodes, observed enforcement and restore behavior. |
+| [Time synchronization](time-sync/README.md) | [Platform](../../src/Module/Platform/README.md), Setup | Selected time provider, sources, drift observations and safe native qualification. |
+| [Host confinement](confinement/README.md) | [Platform](../../src/Module/Platform/README.md) | Selected MAC/service profiles, explicit identity/path/IPC/network limits and observed enforcement. |
+| [journald / system logs](journald/README.md) | [Observability](../../src/Module/Observability/README.md), Platform | Journal identity, retention/rate budgets, bounded access and export; distinct from durable business audit. |
+
+[Applications](../applications/README.md), [host resources](../host/README.md), [observability](../observability/README.md), [toolbox](../toolbox/README.md), [extension contributions](../extensions/README.md) and [AI](../ai/README.md) are separate resource indexes, not additional Linux services. Follow the [Core structure](../../STRUCTURE.md). The 24-service count excludes these families.
+
+Use the [working guide](../../WORKING-GUIDE.md) to choose the owning source location and [current status](../../STATUS.md) to distinguish implemented candidates from planned or unqualified behavior.
 
 ## One owner for each concern
 
 - The domain owns user-facing policy, authorization, configuration inputs and state transitions.
-- Infrastructure implements the typed adapter for the selected engine/version.
+- Infrastructure implements the typed adapter for the selected engine/version. Add real provider/configuration files only with the owning use case, accepted target/capability/path policy and validation/recovery checks; do not prepare empty adapter/provider/template trees.
 - This directory owns reusable configuration text/profiles; it does not introduce another business service or a second command registry.
 - Agent sources own accepted system operations. Installer bootstrap and ordinary runtime operations use the relevant approved interfaces; no public PHP/plugin-to-root shortcut is created.
 - Tests/Fixtures owns synthetic examples. Do not duplicate fixtures, defaults or validators across templates, PHP, Go and UI code; share or generate from the accepted contract where appropriate.

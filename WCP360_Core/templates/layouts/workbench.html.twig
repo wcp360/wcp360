@@ -1,0 +1,83 @@
+{% import 'components/navigation/icons.html.twig' as ui %}
+{% set route = app.request.attributes.get('_route') %}
+{% set titles = {wcp_account_password: 'Mot de passe', wcp_account_password_change: 'Mot de passe', wcp_account_sessions: 'Mes sessions', wcp_account_security: 'Sécurité du compte', wcp_access_permissions: 'Accès des utilisateurs'} %}
+{% set page_title = page_title|default(titles[route]|default('Tableau de bord')) %}
+{% set admin = context == 'admin' %}
+{% set workspace = [
+    {label: 'Vue d’ensemble', href: path('wcp_dashboard'), icon: 'dashboard', active: route == 'wcp_dashboard'}
+] %}
+{% if admin %}
+    {% set workspace = workspace|merge([
+        {label: 'Vue du serveur', href: path('wcp_server'), icon: 'server', active: route == 'wcp_server'},
+        {label: 'Services du serveur', href: path('wcp_services'), icon: 'server', active: route == 'wcp_services'},
+        {label: 'Paramètres globaux', href: path('wcp_runtime_settings'), icon: 'server', active: route in ['wcp_runtime_settings','wcp_application_server','wcp_modern_preview','wcp_application_preview']},
+        {label: 'Extensions', href: path('wcp_dashboard') ~ '#plugins', icon: 'package', active: false},
+        {label: 'Comptes d’hébergement', href: path('wcp_users'), icon: 'users', active: route == 'wcp_users'},
+        {label: 'Accès des utilisateurs', href: path('wcp_access_permissions'), icon: 'users', active: route == 'wcp_access_permissions'},
+        {label: 'Journal d’audit', href: path('wcp_audit'), icon: 'clock', active: route == 'wcp_audit'}
+    ]) %}
+{% else %}
+    {% set workspace = workspace|merge([
+        {label: 'Hébergements', href: path('wcp_sites'), icon: 'globe', active: route == 'wcp_sites'},
+        {label: 'Tâches', href: path('wcp_jobs'), icon: 'clock', active: route in ['wcp_job','wcp_jobs']}
+    ]) %}
+{% endif %}
+{% set account = [{label: 'Mot de passe', href: path('wcp_account_password'), icon: 'shield', active: route in ['wcp_account_password', 'wcp_account_password_change']}, {label: 'Mes sessions', href: path('wcp_account_sessions'), icon: 'sessions', active: route == 'wcp_account_sessions'}] %}
+{% if admin %}{% set account = account|merge([{label: 'Sécurité du compte', href: path('wcp_account_security'), icon: 'shield', active: route == 'wcp_account_security'}, {label: 'Confirmer mon identité', href: path('wcp_account_reauthenticate'), icon: 'shield', active: route == 'wcp_account_reauthenticate'}]) %}{% endif %}
+{% set groups = [{title: 'Espace de travail', links: workspace}, {title: 'Mon compte', links: account}] %}
+<!doctype html>
+<html lang="fr" data-theme="system">
+<head>{% include 'layouts/head.html.twig' %}</head>
+<body data-controller="appearance shell navigation" data-action="keydown@window->shell#keydown keydown@window->navigation#keydown hashchange@window->shell#highlight">
+<a class="skip" href="#main">Aller au contenu</a>
+<div class="wcp-dashboard-container">
+    <aside id="wcp-sidebar" class="wcp-dashboard-sidebar" data-shell-target="sidebar">
+        <div class="wcp-dashboard-brand">
+            <a class="wcp-core-brand" href="{{ path('wcp_dashboard') }}" aria-label="WCP360, tableau de bord">{% include 'components/navigation/brand-logo.html.twig' %}</a>
+            <span class="wcp-core-scope">{{ admin ? 'ROOT' : 'USER' }}</span>
+        </div>
+        <nav class="wcp-nav" aria-label="Navigation principale" data-action="click->shell#navigate">
+            {% for group in groups %}
+            <div class="wcp-nav-section">
+                <div class="wcp-nav-heading">{{ group.title }}</div>
+                {% for link in group.links %}
+                <a class="wcp-nav-item{{ link.active ? ' active' : '' }}" href="{{ link.href }}" data-current-link{% if link.active %} aria-current="page"{% endif %}>{{ ui.icon(link.icon, 'wcp-nav-icon') }}<span class="wcp-nav-label">{{ link.label }}</span></a>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </nav>
+        <div class="wcp-sidebar-footer">
+            <div class="wcp-core-sidebar-note"><span class="wcp-core-sidebar-symbol">{{ ui.icon('server') }}</span><div><strong>WCP360 Standalone</strong><span>Votre panneau, votre serveur.</span></div></div>
+            <div class="wcp-sidebar-status"><div class="wcp-sidebar-status-row"><span><span class="wcp-core-dot"></span> Instance locale</span><span class="wcp-core-version">CORE</span></div><div class="wcp-sidebar-meta">Environnement de développement</div></div>
+        </div>
+    </aside>
+    <button class="wcp-sidebar-overlay" data-shell-target="overlay" data-action="shell#close" type="button" aria-label="Fermer la navigation"></button>
+    <div class="wcp-dashboard-main">
+        <header class="wcp-dashboard-header">
+            <div class="wcp-header-left"><button class="wcp-menu-btn wcp-mobile-menu" type="button" data-shell-target="toggle" data-action="shell#toggle" aria-controls="wcp-sidebar" aria-expanded="false" aria-label="Ouvrir la navigation">{{ ui.icon('menu') }}</button><span class="wcp-page-title">{{ admin ? 'Administration ROOT' : 'Hébergement' }}</span></div>
+            <button class="wcp-core-search" type="button" data-navigation-target="opener" data-action="navigation#open" aria-haspopup="dialog" aria-controls="wcp-navigation-search">{{ ui.icon('search') }}<span>Rechercher une page…</span><kbd>Ctrl K</kbd></button>
+            <div class="wcp-header-actions">
+                {% include 'components/navigation/theme.html.twig' %}
+                <a class="wcp-avatar" href="{{ path('wcp_account_sessions') }}" aria-label="Mes sessions : {{ app.user.userIdentifier }}" title="{{ app.user.userIdentifier }}">{{ app.user.userIdentifier|slice(0, 2)|upper }}</a>
+                <form action="{{ path('wcp_logout') }}" method="post" data-turbo-frame="_top" class="wcp-core-logout"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button class="wcp-icon-btn" type="submit" aria-label="Déconnexion" title="Déconnexion">{{ ui.icon('logout') }}</button></form>
+            </div>
+        </header>
+        <main id="main" class="wcp-dashboard-content" tabindex="-1">
+            <div class="wcp-content-inner">
+                <div class="wcp-core-breadcrumb"><span>WCP360</span><span aria-hidden="true">/</span><span>{{ admin ? 'Administration du serveur' : 'Espace d’hébergement' }}</span><span aria-hidden="true">/</span><strong>{{ page_title }}</strong></div>
+                <div class="notice">{{ ui.icon('shield') }}<span><strong>Version de développement</strong> · Les plans sont suivis en base. L’activation Linux reste réservée à l’environnement d’essai isolé.</span></div>
+                {% block content %}{% endblock %}
+                <footer class="wcp-core-footer"><span>WCP360 Standalone <span aria-hidden="true">·</span> Un Core indépendant des extensions.</span><span>PHP / Symfony <span aria-hidden="true">·</span> Go</span></footer>
+            </div>
+        </main>
+    </div>
+</div>
+<dialog id="wcp-navigation-search" class="wcp-core-command" data-navigation-target="dialog" data-action="close->navigation#closed" aria-labelledby="wcp-search-title">
+    <div class="wcp-core-command-head"><div><p class="eyebrow">NAVIGATION RAPIDE</p><h2 id="wcp-search-title">Où souhaitez-vous aller ?</h2></div><button class="wcp-icon-btn" type="button" data-action="navigation#close" aria-label="Fermer la recherche">{{ ui.icon('close') }}</button></div>
+    <label class="sr-only" for="wcp-page-search">Rechercher une page du Core</label>
+    <input id="wcp-page-search" type="search" placeholder="Hébergements, sessions…" autocomplete="off" data-navigation-target="query" data-action="input->navigation#filter">
+    <div class="wcp-core-command-results">{% for group in groups %}{% for link in group.links %}<a href="{{ link.href }}" data-navigation-target="item" data-action="navigation#follow">{{ ui.icon(link.icon) }}<span>{{ link.label }}<small>{{ group.title }}</small></span>{{ ui.icon('arrow') }}</a>{% endfor %}{% endfor %}<p data-navigation-target="empty" hidden>Aucune page ne correspond à votre recherche.</p></div>
+    <div class="wcp-core-command-footer">Tab pour parcourir les résultats <span>Échap pour fermer</span></div>
+</dialog>
+</body>
+</html>

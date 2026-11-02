@@ -29,7 +29,6 @@
   const save = () => { try { localStorage.setItem(key, JSON.stringify(state)); } catch (error) {} };
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   let active = tabs.some(tab => tab[0] === location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
-  let returnFocus = null;
   const chip = (label,tone='') => `<span class="wcp-status ${tone}">${escapeHtml(label)}</span>`;
   const action = (kind,label,primary=false,icon='') => `<button type="button" class="wcp-action-btn ${primary ? 'primary' : ''}" data-cert-action="${kind}">${icon ? `<span class="material-symbols-rounded">${icon}</span>` : ''}${label}</button>`;
   const panelHead = (title,copy,controls='') => `<div class="wcp-panel-head crt-panel-head"><div><div class="wcp-panel-title">${title}</div><div class="wcp-panel-sub">${copy}</div></div><div class="crt-actions">${controls}</div></div>`;
@@ -110,6 +109,7 @@
     <div class="crt-tabs" role="tablist" aria-label="SSL and AutoSSL views">${tabs.map(tab => `<button type="button" class="crt-tab" role="tab" data-cert-tab="${tab[0]}" aria-selected="false"><span class="material-symbols-rounded">${tab[1]}</span>${tab[2]}</button>`).join('')}</div><div class="crt-view" tabindex="-1"></div></div>
     <button type="button" class="crt-drawer-backdrop" data-cert-close aria-label="Close certificate operation"></button><aside class="crt-drawer" id="certificateDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="certificateDrawerTitle"><div class="crt-drawer-head"><div><strong id="certificateDrawerTitle">Certificate operation</strong><small data-cert-drawer-sub>Validated ROOT workflow</small></div><button type="button" class="wcp-icon-btn" data-cert-close aria-label="Close"><span class="material-symbols-rounded">close</span></button></div><div class="crt-drawer-body"></div></aside>`;
 
+  const drawerOverlay=window.WCPUI.Overlay.attach({panel:qs('#certificateDrawer'),backdrop:qs('.crt-drawer-backdrop'),source:'certificate-center'});
   const renderView = (focus=false) => {
     qsa('[data-cert-tab]').forEach(button => { const selected = button.dataset.certTab === active; button.classList.toggle('active',selected); button.setAttribute('aria-selected',String(selected)); });
     qs('.crt-view').innerHTML = views[active]();
@@ -120,7 +120,6 @@
   const field = (label,control) => `<label class="crt-field"><span>${label}</span>${control}</label>`;
   const formShell = (kind,body,submit='Create job',dangerous=false) => `<form class="crt-form ${dangerous ? 'crt-danger' : ''}" data-cert-form="${kind}">${body}<div class="crt-feedback" role="status">Validated. The operation was added to Job Center.</div><div class="crt-form-actions"><button type="button" class="wcp-action-btn" data-cert-close>Cancel</button><button type="submit" class="wcp-action-btn ${dangerous ? '' : 'primary'}" data-cert-submit>${submit}</button></div></form>`;
   const openDrawer = (kind,trigger,data={}) => {
-    returnFocus=trigger||document.activeElement;
     const drawer=qs('#certificateDrawer'),body=qs('.crt-drawer-body',drawer),title=qs('#certificateDrawerTitle',drawer),subtitle=qs('[data-cert-drawer-sub]',drawer);
     let content='';
     if (kind === 'issue') {
@@ -139,9 +138,9 @@
     body.innerHTML=content;
     const confirm=qs('[data-cert-confirm]',body),submit=qs('[data-cert-submit]',body);
     if(confirm&&submit){submit.disabled=true;confirm.addEventListener('input',()=>{submit.disabled=confirm.value!==confirm.dataset.expected})}
-    drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');qs('.crt-drawer-backdrop').classList.add('open');document.body.style.overflow='hidden';qs('input,select,textarea',drawer)?.focus();
+    drawerOverlay.open(trigger||document.activeElement);
   };
-  const closeDrawer=()=>{const drawer=qs('#certificateDrawer');drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');qs('.crt-drawer-backdrop').classList.remove('open');document.body.style.overflow='';returnFocus?.focus?.()};
+  const closeDrawer=()=>drawerOverlay.close();
   const emit=(name,kind,risk='medium')=>document.dispatchEvent(new CustomEvent('wcp:operation',{detail:{name,kind,risk,scope:'root',actor:'Yann · ROOT'}}));
   const filterCertificates=()=>{const text=(qs('[data-cert-search]')?.value||'').trim().toLowerCase(),scope=qs('[data-cert-scope]')?.value||'all';qsa('[data-cert-row]').forEach(row=>{row.hidden=Boolean((text&&!row.dataset.search.includes(text))||(scope!=='all'&&row.dataset.scope!==scope))})};
   const bindView=()=>{qs('[data-cert-search]')?.addEventListener('input',filterCertificates);qs('[data-cert-scope]')?.addEventListener('change',filterCertificates)};
@@ -176,7 +175,6 @@
     else emit('Publish certificate policy revision','certificate-policy','high');
     qs('.crt-feedback',form)?.classList.add('show');setTimeout(()=>{closeDrawer();renderView()},350);
   });
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&qs('#certificateDrawer.open'))closeDrawer()});
   window.addEventListener('hashchange',()=>{const name=location.hash.slice(1);if(views[name]){active=name;renderView()}});
   renderView();save();
 })();

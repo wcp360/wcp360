@@ -1,0 +1,32 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.external-postgres-migration-pro",
+  "kind": "plugin",
+  "label": "External PostgreSQL migration connector",
+  "category": "migration-data",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Transfers",
+    "Data",
+    "BackupRestore"
+  ],
+  "catalogue_keys": [
+    "data.external-databases",
+    "data.replication",
+    "backup.transfers"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a reviewed external PostgreSQL migration profile with explicit compatibility and recovery checkpoints.",
+  "core_boundary": "Core PostgreSQL metadata and basic database management stay free; migration credentials do not authorize unrestricted SQL or host execution. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify exact source and destination server, client, extension, encoding and collation profiles with explicit migration privileges.",
+    "Review backup consistency, role mapping, large objects, extension availability and replication assumptions before any staged transfer.",
+    "Rehearse restore and verification on an isolated target; require explicit cutover and rollback decisions without promising zero downtime or universal version compatibility.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

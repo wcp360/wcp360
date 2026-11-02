@@ -1,0 +1,1666 @@
+{
+    "schema":  "wcp360.premium-package-catalogue/1",
+    "count":  44,
+    "packages":  [
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.app-install-pro",
+                         "kind":  "module",
+                         "label":  "AppInstall Pro",
+                         "category":  "applications",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Data",
+                                             "Files",
+                                             "Operations",
+                                             "BackupRestore",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.installer",
+                                                "apps.cms-recipes",
+                                                "apps.business-recipes",
+                                                "apps.verified-updates"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "A curated application store with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. Native and Compose-derived products require separate qualification; the 410 editorial references are discovery input, never 410 installable or license-cleared recipes.",
+                         "core_boundary":  "Core retains all 233 essential capabilities, application/resource ownership, ordinary hosting, local backup/recovery and the seven engine adapters. AppInstall Pro adds qualified optional application recipes and orchestration through detached contracts; a storefront or Compose file cannot supply a privileged executor, legal compatibility decision or automatic installability.",
+                         "acceptance":  [
+                                            "Qualify each offered recipe on an explicit application/version/OS/architecture/runtime/database/provider matrix; unsupported combinations must remain unavailable.",
+                                            "Pin and verify upstream sources, image digests and recipe artifacts; record upstream licenses and redistribution/source obligations, including Nextcloud or other application products, and refuse unreviewed or incompatible combinations.",
+                                            "Exercise fresh install, interrupted install, update, supported rollback, backup/restore and removal with owned writable paths, secret references, data retention and per-instance results.",
+                                            "Admit only explicitly qualified Compose versions and features into a canonical typed workload/resource plan. Reject arbitrary raw YAML passthrough, host sockets, sensitive mounts, privileged/host namespaces, unbounded resource requests and hidden competing managers.",
+                                            "Treat application and build payloads as guest/workload code executed under admitted scoped identities with isolation and budgets; no package or recipe hook becomes a host shell or obtains Core credentials.",
+                                            "Distinguish native application recipes, Docker/Compose workload definitions and externally managed Portainer/Coolify/Dokku resources; select one effect owner instead of two reconcilers silently changing the same deployment.",
+                                            "Demonstrate that removing or disabling AppInstall Pro preserves installed applications, canonical resource inventory, local recovery and access through the free Core."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.wordpress-management-pro",
+                         "kind":  "module",
+                         "label":  "WordPress Management Pro",
+                         "category":  "applications",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Data",
+                                             "Files",
+                                             "Operations",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.wordpress-toolkit",
+                                                "apps.verified-updates",
+                                                "security.advisories"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced WordPress portfolio management covering instance discovery, core/plugin/theme inventory, compatible update campaigns, maintenance windows, hardening recommendations and source-attributed vulnerability tracking. Optional tooling is version-qualified and operates under each site\u0027s identity.",
+                         "core_boundary":  "Ordinary WordPress hosting, PHP stack selection, files, databases, permissions and recovery remain Core capabilities. This module orchestrates reviewed WordPress-specific workflows; it neither guarantees Worker compatibility nor grants access to premium upstream themes/plugins without their own valid terms.",
+                         "acceptance":  [
+                                            "Distinguish standalone and multisite WordPress installations, ownership and read-only observations before offering an operation.",
+                                            "Test supported PHP-FPM and FrankenPHP classic combinations independently; require separate application-specific evidence before any Worker claim.",
+                                            "Bind update batches to exact plugin/theme/core versions, upstream sources, applicable licenses and verified recovery points.",
+                                            "Validate logged-in sessions, commerce carts, cron, uploads and cache purge/bypass behavior before promoting an update; report failed checks without claiming compatibility.",
+                                            "Refuse cross-site credentials, stale instance state and revoked authority; disabling the module must leave WordPress sites and Core recovery usable."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.staging-workflows-pro",
+                         "kind":  "module",
+                         "label":  "Staging Workflows Pro",
+                         "category":  "applications",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Data",
+                                             "Files",
+                                             "Operations",
+                                             "BackupRestore",
+                                             "Tenancy"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.staging-clones",
+                                                "delivery.previews",
+                                                "data.anonymization"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Managed staging environments with controlled file/database cloning, URL remapping, sanitization, isolated credentials, comparison and selective promotion. Expiration and cleanup are tracked per environment rather than silently removing customer data.",
+                         "core_boundary":  "Core continues to own sites, ordinary resource operations, account quotas and backup/restore. Staging adds an optional coordinated workflow; it must not provide a second file/database authority or make a staging clone a production identity.",
+                         "acceptance":  [
+                                            "Create staging under explicit destination ownership and quota checks using an immutable source/recovery-point reference.",
+                                            "Verify data anonymization, separate secrets, suppressed outbound mail and indexing restrictions before granting staging access.",
+                                            "Show file/database/configuration differences and irreversible migration implications before a scoped promotion.",
+                                            "Exercise concurrent source changes, failed promotion and cleanup; keep incomplete outcomes explicit and retain agreed recovery material.",
+                                            "Prove that disabling staging leaves production and retained staging resources accessible through their Core owners."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.application-fleet-pro",
+                         "kind":  "module",
+                         "label":  "Application Fleet Pro",
+                         "category":  "applications",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Tenancy",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.fleet-management",
+                                                "apps.verified-updates",
+                                                "workspace.dashboards"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Cross-application portfolio views with version/dependency drift, qualified campaign targeting, bounded rollout batches and per-instance reporting. Operators can schedule reviewed maintenance across explicitly selected authorized applications.",
+                         "core_boundary":  "Individual site/application operations, baseline inventories, ordinary bulk authorization and job tracking remain in the Core. Fleet views reuse those authorities and do not introduce a global tenant bypass or infer that every application has an installable recipe.",
+                         "acceptance":  [
+                                            "Resolve every campaign target to a current owned resource and qualified application/provider combination.",
+                                            "Test batch budgets, maintenance windows, fairness, cancellation boundaries and per-instance failure isolation.",
+                                            "Recheck permissions and resource revisions when each job executes; revocation must prevent later effects.",
+                                            "Distinguish stale inventory, unavailable checks and verified results without converting missing observations into healthy states.",
+                                            "Disable new campaigns without interrupting installed workloads; retain job outcomes and resource links for Core recovery."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.git-delivery-pro",
+                         "kind":  "module",
+                         "label":  "Git Delivery Pro",
+                         "category":  "delivery",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Files",
+                                             "Operations",
+                                             "IdentityAccess"
+                                         ],
+                         "catalogue_keys":  [
+                                                "delivery.git",
+                                                "delivery.pipelines",
+                                                "delivery.runners",
+                                                "delivery.dependency-analysis"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Repository-driven CI/CD with versioned branch/tag policy, isolated builds, immutable artifacts, environment binding and deployment history. Qualified native or Compose-derived plans remain scoped deployment intent; Git/webhook and Portainer/Coolify/Dokku integrations are separately admitted connectors, never implicit host executors.",
+                         "core_boundary":  "Core owns sites, current authorization, admitted deployment effects, secrets and durable jobs. Git Delivery adds optional repository and pipeline orchestration; repository files, Compose syntax and external managers cannot register privileged commands, gain host sockets, modify Core dependencies or create a competing resource owner.",
+                         "acceptance":  [
+                                            "Bind repository identity, permitted revisions, verified webhook provenance and destination resources explicitly; refuse arbitrary URL schemes, paths and changed trust.",
+                                            "Treat builds and dependency resolution as untrusted non-root work with isolated workspaces, bounded CPU/RAM/PID/disk/time/network and no panel/agent secrets.",
+                                            "Verify artifact identity, provenance and upstream license obligations before passing an immutable reference to an admitted deployment operation.",
+                                            "Parse only qualified Compose versions/features into the same typed workload plan used by admitted deployment owners; validate services, mounts, networks, ports, dependencies, health checks and effective quotas rather than forwarding raw YAML or shell text.",
+                                            "Choose the authoritative deployment manager for each resource when integrating Portainer, Coolify or Dokku; use declared API capabilities and prohibit concurrent independent reconciliation by this module and that manager.",
+                                            "Test trigger replay, concurrent pushes, revoked actors, stale resource revisions, provider interruption and missing acknowledgements without duplicate deployment effects.",
+                                            "Keep the last deployed release serving after connector or module failure; retain history and supported recovery references without claiming every schema migration is reversible."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.deployment-orchestration-pro",
+                         "kind":  "module",
+                         "label":  "Deployment Orchestration Pro",
+                         "category":  "delivery",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Operations",
+                                             "Platform",
+                                             "BackupRestore",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "delivery.pipelines",
+                                                "compute.rolling-operations",
+                                                "network.service-ha"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced release orchestration with stage gates, canary or rolling strategies, traffic checks, drain coordination and supported recovery plans. Strategy availability depends on measured provider and application capabilities.",
+                         "core_boundary":  "Core retains the operation lifecycle, resource revisions, configuration application and ordinary recovery. This module coordinates existing typed operations; it is not an alternate scheduler with root authority or a guarantee that every deployment is reversible.",
+                         "acceptance":  [
+                                            "Admit each strategy only with qualified routing, drain, health and recovery capabilities for its target workloads.",
+                                            "Bind approval, artifact digests, resource versions and the actual execution identity to the reviewed release plan.",
+                                            "Inject failed health checks, lost acknowledgements and worker crashes; preserve service or expose an explicit reconciliation state.",
+                                            "Prevent overlapping release ownership and stale workers from changing traffic or overwriting a newer release.",
+                                            "Keep current workloads and independent Core recovery available when orchestration is disabled."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.database-operations-pro",
+                         "kind":  "module",
+                         "label":  "Database Operations \u0026 DBaaS Pro",
+                         "category":  "data",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Data",
+                                             "Operations",
+                                             "BackupRestore",
+                                             "Platform"
+                                         ],
+                         "catalogue_keys":  [
+                                                "data.replication",
+                                                "data.postgres-extensions",
+                                                "data.external-databases",
+                                                "runtime.redis",
+                                                "backup.restore-tests"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced database-service portfolio and topology workflows for separately qualified MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera capabilities. Proposed scope includes reviewed DBaaS service profiles, replication/cluster planning, replica initialization, measured lag/quorum, controlled promotion, engine-specific backup/restore and maintenance campaigns; no engine or topology is admitted by this proposal.",
+                         "core_boundary":  "Database creation, users/grants, credential rotation, import/export, baseline diagnostics, ordinary engine administration and local backup/restore stay in the free Core. This module adds advanced service/topology orchestration, not a paywall around basic hosted databases. Customer databases/cache clusters never receive control-plane PostgreSQL data or panel Redis queue credentials; a database client is not an engine provider.",
+                         "acceptance":  [
+                                            "Define an explicit engine/version/provider/topology and upstream-license matrix for MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera; list unsupported functions rather than treating the names as interchangeable or already supported.",
+                                            "Define optional DBaaS service profiles using authoritative tenant accounts, quotas, endpoint/TLS policy, effective capacity and measured service objectives; Core-owned basic database provisioning and administration remain available without this package.",
+                                            "Distinguish asynchronous replicas, PostgreSQL promotion mechanisms, Redis Sentinel/Cluster, MongoDB replica sets/shards and Galera multi-primary/quorum semantics; qualify each selected topology and recovery action independently.",
+                                            "Verify membership, current topology/revisions, quorum, witness roles, fencing, lag and recovery-point requirements before promotion or membership changes; refuse split-brain and do not promise automatic availability during partitions.",
+                                            "Qualify consistent engine-native backups, binary/WAL/oplog or persistence requirements, encryption/key references, retention and isolated restore/PITR checks where actually supported; a replica or snapshot is not an independently verified backup.",
+                                            "Use narrowly scoped hosted-database identities and separately authorize engine extension changes through the Data owner; never reuse Core database or queue credentials for customer services.",
+                                            "Exercise interrupted initialization, quorum loss, stale topology, credential revocation, engine upgrades and failed promotion with bounded jobs and explicit reconciliation, not silent primary reselection.",
+                                            "Publish provider-specific endpoint/client behavior, compatibility and recovery evidence before offering a service profile; absence of evidence is planned/unavailable, not DBaaS readiness.",
+                                            "Disabling or expiring orchestration must preserve databases, grants, safe replication state, ordinary Core control and documented engine-specific recovery."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.database-performance-pro",
+                         "kind":  "module",
+                         "label":  "Database Performance Pro",
+                         "category":  "data",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Data",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "data.sql-analysis",
+                                                "data.anonymization",
+                                                "observe.grafana"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Longitudinal database workload analysis with redacted query fingerprints, execution-plan comparison, capacity trends and explainable tuning proposals. Optional diagnostic collection is cost-bounded and never applies schema changes automatically.",
+                         "core_boundary":  "Core keeps baseline engine status, connections/locks, slow-query access and authorized diagnostics. This module adds historical comparative analysis and recommendation workflows without a second SQL execution authority.",
+                         "acceptance":  [
+                                            "Prove that query text, literals and samples are minimized or redacted before storage and export.",
+                                            "Bound diagnostic query time, rows, memory and concurrency; refuse unrestricted SQL supplied as an analysis request.",
+                                            "Mark recommendations with source, capture time, engine/version and uncertainty; distinguish advice from measured improvement.",
+                                            "Require a separately authorized Data operation for any accepted index, extension or configuration change.",
+                                            "Test retention, tenant isolation, unavailable metrics and disabling collection without disturbing hosted database traffic."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.mail-operations-pro",
+                         "kind":  "module",
+                         "label":  "Mail Operations Pro",
+                         "category":  "mail",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Mail",
+                                             "Hosting",
+                                             "Transfers",
+                                             "Operations",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "mail.mailbox-migration",
+                                                "mail.mailing-lists",
+                                                "mail.sogo"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced mail portfolio workflows for provider-assisted mailbox moves, coordinated domain cutovers, optional collaboration-suite integration and large-group policy campaigns. Compatibility is qualified for each source, destination and selected connector.",
+                         "core_boundary":  "All eighteen essential mail capabilities, including domains, mailboxes, quotas, queues, signing, baseline protection and diagnostics, remain Core responsibilities. This module adds optional migration and collaboration orchestration without replacing mail identity or routing policy.",
+                         "acceptance":  [
+                                            "Map source/destination mailboxes and ownership explicitly, including aliases, folder semantics and retained data.",
+                                            "Validate synchronization, duplicates, partial failures, delivery cutover and supported rollback before claiming a completed migration.",
+                                            "Keep collaboration-suite credentials and data outside the Core control plane and require qualified connector behavior.",
+                                            "Recheck Mail permissions for each batch item and record per-mailbox results rather than treating a campaign as one success.",
+                                            "Preserve delivery, mailbox access, Core queue controls and recovery when the module or an external suite is unavailable."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.mail-deliverability-pro",
+                         "kind":  "module",
+                         "label":  "Mail Deliverability Pro",
+                         "category":  "mail",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Mail",
+                                             "Hosting",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "mail.dmarc",
+                                                "mail.bimi",
+                                                "mail.smtp-relays",
+                                                "mail.mailguard"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced multi-domain deliverability reporting with DMARC aggregate analysis, qualified relay comparisons, reputation evidence and reviewed BIMI-related readiness checks. Reports distinguish observations from promises about message delivery.",
+                         "core_boundary":  "Core retains SPF/DKIM/DMARC configuration checks, key rotation, basic delivery diagnostics, outbound abuse controls and local protection. This module adds historical external-report analytics and optional connector orchestration; it cannot sell or guarantee delivery.",
+                         "acceptance":  [
+                                            "Validate report sources, parsers, sizes and retention while minimizing message addresses and customer content.",
+                                            "Separate published DNS policy, externally observed alignment, relay-provider state and inferred recommendations.",
+                                            "Require explicit Mail/Hosting authorization for any resulting signing, DNS or relay change; reports alone never authorize an effect.",
+                                            "Test malformed reports, missing provider data, rate limits and provider outages with honest stale/unknown states.",
+                                            "Ensure removal preserves ordinary mail delivery, baseline signing/protection and Core diagnostics."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.remote-backup-pro",
+                         "kind":  "module",
+                         "label":  "Remote Backup Pro",
+                         "category":  "recovery",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "BackupRestore",
+                                             "Operations",
+                                             "Files",
+                                             "IdentityAccess"
+                                         ],
+                         "catalogue_keys":  [
+                                                "backup.sftp",
+                                                "backup.s3",
+                                                "backup.nfs-destination",
+                                                "backup.restic",
+                                                "backup.borg",
+                                                "backup.immutable"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Remote backup policy orchestration across qualified destinations and engines, with scoped repository bindings, encryption-key references, transfer receipts, retention review and verified restore references. Storage and engine connectors remain independently selected packages.",
+                         "core_boundary":  "Local backup/restore, essential retention controls and independent recovery stay in Core. This module adds optional remote copies and policy coordination; it must not hold the only recovery path or export raw backup keys into logs or package metadata.",
+                         "acceptance":  [
+                                            "Qualify each destination/engine version, authentication method, path/prefix scope and actual encryption/retention behavior.",
+                                            "Distinguish accepted transfer, verified remote artifact and successfully rehearsed restore; verify immutable-storage capabilities rather than assuming them.",
+                                            "Exercise interrupted uploads, repository locks, credential rotation, throttling and non-reversible retention changes.",
+                                            "Prove key recovery and a documented restore route that does not require the running module or vendor service.",
+                                            "Disabling remote orchestration must leave local backup/restore and retained remote artifacts under their existing owners."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.disaster-recovery-pro",
+                         "kind":  "module",
+                         "label":  "Disaster Recovery Pro",
+                         "category":  "recovery",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "BackupRestore",
+                                             "Transfers",
+                                             "Operations",
+                                             "Platform",
+                                             "Hosting",
+                                             "Data",
+                                             "Mail"
+                                         ],
+                         "catalogue_keys":  [
+                                                "backup.disaster-recovery",
+                                                "backup.restore-tests",
+                                                "compute.node-groups"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced multi-resource recovery plans, dependency ordering, isolated exercises and measured recovery objectives. Plans bind actual recovery points, keys, identities and return-to-service checks rather than treating a copied archive as recovery.",
+                         "core_boundary":  "Core keeps local restoration, emergency access and individual resource recovery. Disaster Recovery adds optional portfolio-level exercises and coordination, without changing resource authority or introducing unqualified automatic cross-node promotion.",
+                         "acceptance":  [
+                                            "Resolve every plan dependency to an owned resource, verified backup and available key/reference before accepting an exercise.",
+                                            "Measure elapsed recovery and observed data loss for the stated environment; RPO/RTO targets are objectives, not unmeasured guarantees.",
+                                            "Restore exercises into isolated destinations with outbound effects controlled and no access to production customer identities.",
+                                            "Test missing backups, lost keys, partial restore and split-brain hazards with explicit stop/reconciliation criteria.",
+                                            "Provide recovery documentation and references usable without the module, its entitlement service or external control plane."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.security-posture-pro",
+                         "kind":  "module",
+                         "label":  "Cybersecurity Posture Pro",
+                         "category":  "security",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "IdentityAccess",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.advisories",
+                                                "security.waf",
+                                                "security.file-integrity"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence and reviewed exceptions, and plans staged multi-node policy campaigns with explicit per-node convergence; investigations, active response and DDoS workflows retain their own owners.",
+                         "core_boundary":  "All essential security, tenant isolation, credential/MFA/session protections, host hardening, firewall policy, baseline protection, audit and local recovery remain in the free Core. Cybersecurity Posture adds comparative assessments and exception/evidence workflows, without a second policy authority, raw shell or entitlement-based relaxation of mandatory controls.",
+                         "acceptance":  [
+                                            "Record subject, engine/package version, evidence source/time, freshness and applicability for every posture statement, including unknown and uncollected areas.",
+                                            "Assess identity/secret exposure, configuration drift, TLS and reachable-service policy through qualified bounded observations; do not equate an inventory with a vulnerability scan.",
+                                            "Scope advisory/WAF/file-integrity findings to the actual tenant/resource and provider; coordinate with malware, response and DDoS workflows without duplicating their case or execution authority.",
+                                            "Declare the exact target policy revision, node membership, approved capability matrix, canary/batch budgets and per-node receipts for a cluster policy campaign; distribution is not instantaneous enforcement or cluster-wide success.",
+                                            "Exercise node outages, partitions, stale revisions, revocation and interrupted policy changes. Show applied, pending, rejected, unknown and divergent states separately; reconcile under current authority with supported per-owner recovery.",
+                                            "Preserve the Core-owned baseline firewall/hardening/security policy and management-access recovery on every node; optional profiles cannot weaken mandatory controls or become the only policy path.",
+                                            "Qualify check inputs, rate/resource budgets, redaction and permitted network/filesystem visibility against synthetic fixtures; refuse unrestricted scans or root inspection.",
+                                            "Bind remediation proposals to the owning Core use case, current permission, exact resource revision, meaningful diff and supported recovery procedure.",
+                                            "Exercise false positives, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.",
+                                            "Keep reviewed findings exportable and Core audit, authorized baseline remediation and local incident/recovery access independent of premium entitlement."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.threat-response-pro",
+                         "kind":  "module",
+                         "label":  "Threat Response Pro",
+                         "category":  "security",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "IdentityAccess",
+                                             "Platform",
+                                             "Observability",
+                                             "Operations",
+                                             "Hosting"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.siem",
+                                                "security.crowdsec",
+                                                "security.threat-intel",
+                                                "automation.event-rules"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced response playbooks that correlate selected security signals and propose scoped containment sequences. Reviewed automation can coordinate existing session, account, traffic or application operations with evidence and recovery tracking.",
+                         "core_boundary":  "Core retains baseline alerts, incident handling, session revocation, access blocks and controlled system effects. This module adds optional response coordination; third-party intelligence, a rule match or commercial entitlement never grants an action permission.",
+                         "acceptance":  [
+                                            "Authenticate and bound signal ingestion, provenance, deduplication and trigger recursion before creating a response proposal.",
+                                            "Bind approval and execution to exact targets, current permissions, resource revisions and supported containment operations.",
+                                            "Exercise false positives, simultaneous responders, revoked access and lost acknowledgements without duplicate or cross-tenant effects.",
+                                            "Separate reversible containment from destructive actions and document recovery or manual reconciliation for each stage.",
+                                            "Disabling response automation must leave Core containment, current protection state and incident evidence usable."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.malware-investigation-pro",
+                         "kind":  "module",
+                         "label":  "Malware Investigation Pro",
+                         "category":  "security",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Files",
+                                             "Hosting",
+                                             "Observability",
+                                             "Operations",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.clamav",
+                                                "security.maldet",
+                                                "security.forensics",
+                                                "security.file-integrity"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced investigation cases combining scoped scanner findings, file-change evidence, comparison and reviewed quarantine proposals. Qualified scanning connectors operate as restricted identities against explicitly authorized data.",
+                         "core_boundary":  "Core keeps basic protection policy, file ownership, authorized access and resource recovery. Investigation adds evidence workflows; it cannot run arbitrary uploaded samples, follow unrestricted filesystem paths or make malware absence claims from an incomplete scan.",
+                         "acceptance":  [
+                                            "Record scanner/version/signature freshness, scan scope, skipped paths and collection failures separately from findings.",
+                                            "Handle malicious names, links, archives and sample contents without executing them or escaping the authorized account.",
+                                            "Require current Files/Hosting authority and a verified recovery reference before a supported quarantine or replacement action.",
+                                            "Test evidence retention/redaction, cancelled scans, resource budgets and false-positive restoration.",
+                                            "Removing the package must preserve original ownership, baseline protection, retained evidence references and Core recovery."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.observability-pro",
+                         "kind":  "module",
+                         "label":  "Observability Pro",
+                         "category":  "observability",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "Platform",
+                                             "Tenancy",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "observe.prometheus",
+                                                "observe.opentelemetry",
+                                                "observe.grafana",
+                                                "observe.synthetics",
+                                                "notify.sms",
+                                                "notify.team-messaging"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry and bounded HTTP/HTTPS, TCP, DNS and ICMP observations where admitted. Source/time, freshness, probe vantage point and provider limits remain visible; basic local monitoring and notification channels are free Core responsibilities.",
+                         "core_boundary":  "Core retains required metrics/history, ordinary HTTP/TCP/DNS/ICMP checks where admitted, local alerts/incidents, diagnostics and essential notification routing. This module adds comparative objectives, richer visualization and advanced multi-vantage campaigns; Telegram/SMS/email transport connectors do not replace Core notification ownership or make premium necessary for basic alerts.",
+                         "acceptance":  [
+                                            "Distinguish local measurements, external probes, inferred objectives and stale/absent samples; record time, source, freshness and vantage point without calling missing telemetry healthy.",
+                                            "Qualify HTTP/HTTPS methods/redirects/TLS/body bounds, TCP connect behavior, DNS query/resolver limits and ICMP capability/privilege handling independently; unsupported protocols remain unavailable.",
+                                            "Bind every probe to an authorized asset or explicitly admitted target. Bound DNS resolution, redirects, destination ranges, rate, concurrency, packet/body size, duration and retries; block metadata/control-plane or unintended internal targets without creating a network scanner.",
+                                            "Enforce tenant scope on series, traces, labels, probes and dashboard queries before rendering/export; redact credentials, tokens, cookies and response secrets.",
+                                            "Bound sample cardinality, retention, aggregation cost, outbound buffers and campaign resource use; protect other tenants and Core local observations from probe exhaustion.",
+                                            "Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability or immediate event propagation.",
+                                            "Emit scoped events through Core-owned notification policy for separately admitted Telegram, SMS, email or other transports; basic alerts remain free, and queued/sent/delivered/acknowledged states require distinct evidence.",
+                                            "Prove local Core monitoring, ordinary alert routing and diagnostic fallback remain usable during sink, channel, module or provider outages."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.log-analytics-pro",
+                         "kind":  "module",
+                         "label":  "Log Analytics Pro",
+                         "category":  "observability",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "IdentityAccess",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "observe.loki",
+                                                "observe.syslog",
+                                                "security.siem",
+                                                "governance.audit-archive"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced authorized log exploration with correlation, saved investigations, bounded aggregation and export cases. Optional centralized sinks remain connectors; source logs and immutable business audit retain their original ownership.",
+                         "core_boundary":  "Core keeps baseline logs, audit access, retention and diagnostic redaction. Log Analytics adds investigation conveniences, not unrestricted host journal access, a second audit ledger or permission to read another tenant\u0027s messages.",
+                         "acceptance":  [
+                                            "Authorize every source, cursor, search and export against current account and data sensitivity rules.",
+                                            "Redact secrets and customer content before indexing where required; document retention, legal holds and purge limits.",
+                                            "Bound query cost, regex complexity, time windows, result sizes and streaming buffers.",
+                                            "Treat log text as untrusted data, including terminal escapes and prompt injection, with inert escaped rendering.",
+                                            "Test unavailable sinks, deletion requests and module removal while preserving canonical logs/audit and Core inspection."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.incident-operations-pro",
+                         "kind":  "module",
+                         "label":  "Incident Operations Pro",
+                         "category":  "observability",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "Operations",
+                                             "IdentityAccess"
+                                         ],
+                         "catalogue_keys":  [
+                                                "notify.oncall",
+                                                "notify.team-messaging",
+                                                "support.status-page",
+                                                "support.reports"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced incident cases, response coordination, on-call workflow integration and reviewed public-status drafting. It correlates existing authorized evidence and connector receipts without replacing local alerts.",
+                         "core_boundary":  "Core retains essential incidents, local notifications, ordinary email/SMS/Telegram or other admitted channel routing and verified ROOT fallback. This module adds advanced team/on-call coordination and reviewed publication workflows; connector delivery does not prove acknowledgement, and optional entitlement never gates basic operational alerts.",
+                         "acceptance":  [
+                                            "Keep incident membership, evidence visibility and public/private status content explicitly scoped.",
+                                            "Resolve channel ownership, recipient identity and current notification permission through Core policy for Telegram, SMS, email and other admitted transports; external contacts and connector credentials remain scoped.",
+                                            "Distinguish queued, provider-accepted, sent, delivered where evidenced, acknowledged and failed notifications with receipts, deduplication and bounded retries; do not claim instantaneous delivery.",
+                                            "Require authorized review for external publication and prevent sensitive host/customer data from entering public drafts.",
+                                            "Exercise connector outages, duplicate events, shift changes, channel revocation and concurrent incident updates with current-authority checks and Core local fallback.",
+                                            "Disabling the module must preserve local incident history, ordinary free Core alerts and independent response access."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.enterprise-identity-pro",
+                         "kind":  "module",
+                         "label":  "Enterprise Identity Pro",
+                         "category":  "identity",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "IdentityAccess",
+                                             "Tenancy",
+                                             "Operations",
+                                             "ExtensionManagement"
+                                         ],
+                         "catalogue_keys":  [
+                                                "identity.oidc",
+                                                "identity.saml",
+                                                "identity.ldap",
+                                                "identity.scim"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced federation and provisioning orchestration with reviewed organizational mappings, synchronization plans and identity-source change tracking. OIDC/SAML/directory/SCIM protocol adapters remain separate qualified connectors.",
+                         "core_boundary":  "Local authentication, optional MFA, recovery, permissions and tenant isolation remain Core. This module adds organization-scale workflows and never converts an external claim, group or premium entitlement into authority above current Core policy.",
+                         "acceptance":  [
+                                            "Validate provider trust, tenant binding and current subject mappings through the selected protocol connector.",
+                                            "Show synchronization and deprovisioning plans with conflicts, scope ceilings and explicit account-retention behavior.",
+                                            "Test claim/group changes, revoked sessions, duplicate subjects, provider outages and synchronization replay.",
+                                            "Keep a tested local administrator recovery route independent of federation and commercial/provider availability.",
+                                            "Removing the module must not silently delete local identities, grant broader roles or bypass enabled MFA."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.privileged-access-pro",
+                         "kind":  "module",
+                         "label":  "Privileged Access Pro",
+                         "category":  "identity",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Observability",
+                                             "Platform"
+                                         ],
+                         "catalogue_keys":  [
+                                                "identity.vaults-kms",
+                                                "workspace.web-terminal",
+                                                "automation.playbooks"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced just-in-time access requests, reviewed delegation windows and evidence around explicitly approved administrative sessions or secret consumers. Any terminal/provider session is separately qualified and restricted to its authorized non-root identity.",
+                         "core_boundary":  "Core owns authorization, credential/session revocation, secrets and the minimal privileged broker. This module adds request/review coordination, not a root terminal, a new permission evaluator or an entitlement-based bypass of existing policy.",
+                         "acceptance":  [
+                                            "Bind each request and approval to actor, exact resource/action, duration policy and current delegation ceiling without inventing a default duration.",
+                                            "Verify that expired, revoked or changed approvals cannot create or continue an admitted effect beyond the underlying contract.",
+                                            "Inject secrets by approved reference only and prevent exposure in request text, traces, clipboard defaults or audit payloads.",
+                                            "Qualify any session broker with separate non-root identity, scope, resource budgets and immediate revocation evidence.",
+                                            "Preserve Core emergency access and session controls when this module or a vault is unavailable."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.agency-workspace-pro",
+                         "kind":  "module",
+                         "label":  "Agency Workspace Pro",
+                         "category":  "commercial",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Tenancy",
+                                             "IdentityAccess",
+                                             "Hosting",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "workspace.white-label",
+                                                "workspace.dashboards",
+                                                "support.helpdesk"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced agency and reseller portfolio workspaces with scoped branding, cross-account productivity views, reviewed client handoffs and optional support-system integration. It reuses free Core reseller packages, templates, quotas, assignments and delegation rather than selling an alternative account or hosting-plan authority.",
+                         "core_boundary":  "Core Tenancy retains customer/reseller lifecycle, resource ceilings, plan/package and template builders, quota rules, versioning, assignments, scoped overrides, ordinary delegation and essential UI. This module adds advanced portfolio productivity and branding only; no paid workspace can gate those features, change tenant authority, hide operator identity or become necessary for hosting access.",
+                         "acceptance":  [
+                                            "Resolve agency/reseller/client/resource relationships through Core ownership, delegation and reseller ceilings rather than copying an authority or quota ledger.",
+                                            "Keep hosting package/template creation, versioning, account assignment, quota enforcement and scoped overrides usable through free Core Tenancy; premium views only reference and orchestrate admitted existing operations.",
+                                            "Scope cross-account portfolio views and handoffs to currently delegated resources; test nested resellers, staff revocation, wrong-tenant links and effective ceilings.",
+                                            "Apply branding only through reviewed declarative assets while retaining security, consent and operator context; white labeling never changes identity or permission.",
+                                            "Preserve language/accessibility fallback and usable Core account/hosting-plan navigation when the workspace is disabled.",
+                                            "Keep support records, portfolio preferences and permitted customer data exportable under explicit retention and handoff policy without blocking independent Core access."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.billing-orchestration-pro",
+                         "kind":  "module",
+                         "label":  "Billing Orchestration Pro",
+                         "category":  "commercial",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Tenancy",
+                                             "Operations",
+                                             "IdentityAccess",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "commerce.usage",
+                                                "commerce.whmcs",
+                                                "commerce.blesta",
+                                                "commerce.fossbilling",
+                                                "commerce.hostbill"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced commercial reconciliation between measured usage, external customer/product mappings and reviewed provisioning requests. Provider-specific billing integrations remain connectors; payment processing and pricing stay with the selected external business system.",
+                         "core_boundary":  "Core plans, quotas, ownership, essential hosting, exports and recovery remain independent of billing. This module adds reconciliation and controlled commercial workflow requests; billing events cannot write Core tables, grant permissions or silently stop existing services.",
+                         "acceptance":  [
+                                            "Define measurement units, periods, completeness, corrections and reconciliation evidence before any billable record is exported.",
+                                            "Authenticate external events, bind customer/product/resource mappings and deduplicate retries before requesting a Core operation.",
+                                            "Require current authorization and reviewed suspension/reactivation rules; missing commercial data must not fabricate technical state.",
+                                            "Keep payment secrets and sensitive financial data outside the Core and minimize exported customer information.",
+                                            "Test provider outage, entitlement expiry and module removal while preserving Core login, hosting, export and recovery."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.capacity-planning-pro",
+                         "kind":  "module",
+                         "label":  "Capacity Planning Pro",
+                         "category":  "commercial",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Tenancy",
+                                             "Platform",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "commerce.usage",
+                                                "compute.node-groups",
+                                                "automation.energy",
+                                                "hardware.sensors"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced capacity forecasting, scenario comparison and explained placement recommendations from qualified usage observations. Predictions identify assumptions, data freshness and uncertainty instead of claiming measured enforceable limits.",
+                         "core_boundary":  "Core keeps actual quotas, metering, capacity checks and enforcement. Capacity Planning adds forecasts and optimization proposals; it cannot raise a quota, relocate a workload or interrupt service merely because a model suggests a saving.",
+                         "acceptance":  [
+                                            "Track provenance, measurement units, missing intervals and forecast assumptions for each capacity result.",
+                                            "Validate calculations against synthetic spikes, resets, seasonality gaps and unavailable provider data.",
+                                            "Check tenant policy, real capacity and maintenance constraints again before any separately authorized placement operation.",
+                                            "Bound analysis cost and prevent cross-tenant leakage through aggregated reports.",
+                                            "Disable forecasting without affecting actual Core quota enforcement, metering or local capacity observations."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.compliance-evidence-pro",
+                         "kind":  "module",
+                         "label":  "Compliance Evidence Pro",
+                         "category":  "governance",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "IdentityAccess",
+                                             "Platform",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "governance.audit-archive",
+                                                "support.reports",
+                                                "security.advisories"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced evidence cases, control mappings, review assignments and reproducible exports for internal or external assessments. Reports state their sources and limitations and do not claim regulatory certification from a checklist.",
+                         "core_boundary":  "Core retains baseline compliance, security controls, audit integrity, retention and authorized export. This module organizes optional assessment evidence; it cannot change mandatory policy, create a second authoritative audit history or declare legal compliance automatically.",
+                         "acceptance":  [
+                                            "Map every assessment statement to a source, capture time, scope, control version and review status.",
+                                            "Generate bounded redacted exports with explicit access and evidence-retention policy.",
+                                            "Distinguish missing evidence, failed controls, accepted exceptions and verified observations.",
+                                            "Test tampered source references, changed authority and retention/hold conflicts without overwriting canonical audit.",
+                                            "Keep baseline security/audit access available after module removal and preserve agreed independent evidence references."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.data-governance-pro",
+                         "kind":  "module",
+                         "label":  "Data Governance Pro",
+                         "category":  "governance",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "IdentityAccess",
+                                             "Tenancy",
+                                             "Files",
+                                             "Data",
+                                             "Mail",
+                                             "Observability",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "governance.data-requests",
+                                                "governance.erasure",
+                                                "governance.retention-holds",
+                                                "governance.residency"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced multi-resource privacy-request cases with discovery scope, approvals, redacted exports, retention holds and coordinated deletion proposals. The owning resource module still determines each supported operation and its recoverability.",
+                         "core_boundary":  "Core keeps essential access control, lawful retention configuration, resource export/deletion and data minimization. Governance adds case coordination; it does not override holds, policy, tenant ownership or the permissions needed for each effect.",
+                         "acceptance":  [
+                                            "Identify affected resources, responsible owners and declared exceptions before producing an export or erasure plan.",
+                                            "Separate legal/policy decisions from technical execution and require the authorized reviewer for each stage.",
+                                            "Test incomplete discovery, unavailable adapters, active holds, conflicting retention and partial deletion outcomes.",
+                                            "Minimize case contents, encrypt permitted exports and bind download access to its intended recipient and scope.",
+                                            "Disable case orchestration while preserving Core resource control, required retention and independent request records."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.storage-orchestration-pro",
+                         "kind":  "module",
+                         "label":  "Storage Orchestration Pro",
+                         "category":  "infrastructure",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Files",
+                                             "Tenancy",
+                                             "BackupRestore",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "storage.zfs",
+                                                "storage.ceph",
+                                                "storage.glusterfs",
+                                                "storage.object-storage",
+                                                "storage.raid-lvm",
+                                                "storage.nfs",
+                                                "storage.smb"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced storage lifecycle orchestration across separately qualified local, GlusterFS and Ceph block/file/object providers: tiers, pools, volumes, capacity, key references, snapshots, replication and controlled migration. S3-compatible endpoints are object-service capabilities, while Nextcloud is a separately qualified application consuming storage, not an S3 server or filesystem engine.",
+                         "core_boundary":  "Core retains essential local storage/device policy, filesystem quotas, ownership, encryption boundaries, ordinary snapshots where admitted and local backup/restore. This module adds advanced cross-pool/provider policy and orchestration; native storage/provider foundations remain open source, and no package receives arbitrary device paths, raw mount commands or the only recovery key.",
+                         "acceptance":  [
+                                            "Qualify each engine/version/topology and storage tier using measured latency, durability, consistency and resilience; distinguish Ceph RBD block, CephFS file, RGW object and GlusterFS file capabilities rather than claiming equivalence.",
+                                            "Resolve authoritative pool/volume/bucket/share identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.",
+                                            "Admit NFS/SMB/object gateways only under qualified identity, protocol, mount and network models; S3 API compatibility does not establish POSIX semantics, every S3 feature or durability guarantees.",
+                                            "Treat Nextcloud as an application with its own database, data directory/object-store compatibility, locking/background jobs, upstream license and backup/restore evidence; do not advertise it as an S3 server or bypass its application data lifecycle.",
+                                            "Review encryption-at-rest support, key references, rotation, escrow/recovery and failure behavior without exporting plaintext keys into package data or logs.",
+                                            "Coordinate snapshots with application/database consistency and retention; a local snapshot is not evidence of an independent backup or a tested restore.",
+                                            "Qualify replication direction, lag, consistency, fencing and recovery-point selection before promotion or migration; distinguish a resilient storage pool from application-level service availability.",
+                                            "Exercise full pools, failed disks, read-only filesystems, interrupted copies, failed mounts, concurrent changes and partitions with explicit uncertainty and reconciliation.",
+                                            "Refuse destructive pool/volume/bucket/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.",
+                                            "Removing orchestration must preserve mounted workloads, ordinary Core storage control, retained recovery material, key access and a supported service-specific exit route."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.high-availability-pro",
+                         "kind":  "module",
+                         "label":  "High Availability Pro",
+                         "category":  "infrastructure",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "Data",
+                                             "Operations",
+                                             "Observability",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "network.vrrp-vip",
+                                                "network.service-ha",
+                                                "compute.node-groups",
+                                                "compute.rolling-operations"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced service-continuity coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows on already admitted nodes/providers. Availability is scoped to qualified topology/workload/failure cases; node enrollment and placement orchestration belong to Multi-server Hosting Pro, while application releases remain deployment workflows.",
+                         "core_boundary":  "Core remains a complete standalone panel with essential recovery, ordinary service lifecycle and open-source node/provider authority when implemented. This module adds optional cross-node continuity coordination; it creates neither a second node registry nor an unreviewed remote root/cluster-control path.",
+                         "acceptance":  [
+                                            "Admit topology and peer identities explicitly, including network partitions, quorum/fencing and shared-storage assumptions.",
+                                            "Test split-brain, stale leaders, delayed messages and asymmetric failures before enabling a promotion strategy.",
+                                            "Measure actual service continuity and recovery for each supported workload rather than promising generic zero downtime.",
+                                            "Keep current authorization, resource revisions and audit consistent across every admitted node operation.",
+                                            "Document safe module exit and independent recovery without disabling existing hosted services."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.network-traffic-pro",
+                         "kind":  "module",
+                         "label":  "Network Traffic Pro",
+                         "category":  "networking",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "network.haproxy",
+                                                "network.traefik",
+                                                "domains.global-routing",
+                                                "domains.cdn-edge",
+                                                "network.wireguard"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced load-balancer, global-routing, ingress and overlay-network orchestration with reviewed listeners/upstreams, measured checks and staged changes across qualified HAProxy, Traefik, Nginx Proxy Manager or other providers. Provider connectors supply admitted capabilities; CDN cache/content delivery, DDoS response and workload placement retain distinct workflow owners.",
+                         "core_boundary":  "Core retains baseline IP/network/firewall administration, native gateway/provider foundations, management-access recovery and the seven essential engine adapters. This module coordinates advanced traffic policy through accepted owned operations, not arbitrary scans, tunnels, raw firewall commands or a competing routing authority.",
+                         "acceptance":  [
+                                            "Map public/private listeners, domain/tenant routing authority, certificate ownership and allowed upstreams before accepting a traffic plan.",
+                                            "Qualify each HAProxy, Traefik or Nginx Proxy Manager API/version/profile, protocols, source-address handling, TLS termination, timeout and health semantics; their capabilities are not interchangeable or already admitted.",
+                                            "Choose one authoritative ingress/reverse-proxy controller for each resource; reconcile external-manager changes through declared contracts rather than running competing reconcilers or exposing raw config/root sockets.",
+                                            "Keep current Nginx -\u003e Apache -\u003e FPM all-request Apache authorization and protected-file semantics; an ingress provider does not authorize edge direct-file or response-cache bypass.",
+                                            "Test management lockout prevention, failed configuration checks, stale routes, lost connectivity and supported rollback with current authority and resource revisions.",
+                                            "Constrain probe, tunnel and upstream destinations, budgets, credentials and egress; reject unauthorized metadata/control-plane reachability and arbitrary network scans.",
+                                            "Disable new orchestration without removing established routing or the free Core\u0027s independent DNS/TLS/network administration and recovery route."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.infrastructure-automation-pro",
+                         "kind":  "module",
+                         "label":  "Infrastructure Automation Pro",
+                         "category":  "automation",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Operations",
+                                             "Platform",
+                                             "IdentityAccess",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "automation.playbooks",
+                                                "automation.event-rules",
+                                                "automation.terraform-opentofu",
+                                                "automation.ansible"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced versioned playbooks, reusable workflow parameters and reviewed bulk infrastructure plans. Infrastructure-as-code and configuration-management integrations remain connectors using the same admitted Core contracts.",
+                         "core_boundary":  "Core keeps its scheduler, jobs, API, validation and controlled system operations. This module adds optional workflow authoring and coordination; a workflow cannot register new privileged commands, bypass current policy or treat a dry-run label as proof of no effects.",
+                         "acceptance":  [
+                                            "Restrict steps to closed typed operations and validate scope, resource versions, secrets and execution identity before planning.",
+                                            "Test event loops, recursion, duplicate triggers, budgets, backpressure and per-tenant fairness.",
+                                            "Require approvals bound to the exact plan where policy demands them, then recheck permissions at execution.",
+                                            "Inject failure at each effect boundary and reconcile uncertain outcomes without blindly replaying destructive work.",
+                                            "Stop new workflows cleanly on disablement while retaining active resource ownership and Core job/recovery access."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.diagnostic-toolbox-pro",
+                         "kind":  "module",
+                         "label":  "Diagnostic Toolbox Pro",
+                         "category":  "automation",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Observability",
+                                             "Platform",
+                                             "Hosting",
+                                             "Data",
+                                             "Mail",
+                                             "Operations"
+                                         ],
+                         "catalogue_keys":  [
+                                                "automation.playbooks",
+                                                "support.reports",
+                                                "security.forensics",
+                                                "observe.synthetics"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced guided diagnostic cases combining named bounded checks, evidence comparison and reviewed repair proposals across service owners. It packages reusable investigation runbooks rather than exposing a terminal.",
+                         "core_boundary":  "Core retains baseline diagnostics, local checks, safe error reporting and ordinary repair operations. The Toolbox adds optional guided workflows; developer tools, arbitrary shell/SQL execution and root process control are outside its product interface.",
+                         "acceptance":  [
+                                            "Catalogue each named check with fixed typed inputs, permissions, resource/tenant scope, budgets and explicit unavailable states.",
+                                            "For HTTP/HTTPS, TCP, DNS or ICMP check bundles, require admitted protocols/targets, bounded resolution/redirects, time/rate/size/concurrency and correct capability/privilege handling; no unrestricted scanner or raw shell is exposed.",
+                                            "Treat paths, logs and returned diagnostics as untrusted data; redact secrets and prevent output from becoming executable markup or instructions.",
+                                            "Keep observation and repair separate; a repair invokes the owning module\u0027s qualified operation with current authority, resource revision and recovery evidence.",
+                                            "Test malicious arguments, wrong-tenant/internal-control targets, exhaustion, failed checks and source outages without fabricating healthy states.",
+                                            "Preserve free Core diagnostics, ordinary local/remote checks where admitted, essential alerts and independent repair/recovery when Toolbox is removed."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.ai-assistant-pro",
+                         "kind":  "module",
+                         "label":  "AI Assistant Pro",
+                         "category":  "automation",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Observability",
+                                             "ExtensionManagement"
+                                         ],
+                         "catalogue_keys":  [
+                                                "automation.ai-readonly",
+                                                "automation.ai-missions",
+                                                "automation.chatops"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Optional evidence-linked AI assistance for authorized diagnostics, followed only by reviewed action proposals where underlying operations are qualified. Model/provider connectors and MCP transports remain separately admitted integrations.",
+                         "core_boundary":  "Core stays usable without AI, external model access or premium entitlement. The assistant has no independent permissions, root shell, unrestricted tool registry or hidden execution path; generated text and imported instructions never become execution authority.",
+                         "acceptance":  [
+                                            "Begin with read-only scoped evidence, minimize/redact prompts and document provider retention and data-export choices.",
+                                            "Defend against instructions embedded in logs, files, applications and provider responses; identify evidence and uncertainty in generated output.",
+                                            "Bind any human approval to exact typed actions, targets and resource revisions, then recheck current permissions at execution.",
+                                            "Bound model/tool cost, concurrency, recursion, outbound destinations and retained data; test provider failure and cancellation.",
+                                            "Disabling the assistant or connector must leave hosting, local diagnostics, audit and recovery unchanged and accessible."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.developer-productivity-pro",
+                         "kind":  "module",
+                         "label":  "Developer Productivity Pro",
+                         "category":  "workspace",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Files",
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "workspace.dashboards",
+                                                "delivery.dependency-analysis",
+                                                "delivery.previews",
+                                                "workspace.web-terminal"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced project workspaces with scoped shortcuts, dependency reports, environment comparisons and qualified optional development sessions. The module focuses on multi-project productivity rather than replacing baseline panel forms or file editing.",
+                         "core_boundary":  "Core keeps shared UI components, themes/accessibility, file editing, ordinary command navigation and authorized project operations. This module adds optional project coordination; custom widgets or terminal sessions cannot create an alternate resource authority.",
+                         "acceptance":  [
+                                            "Resolve every widget, environment link and action through current Core ownership and approved scoped APIs.",
+                                            "Qualify any optional development-session broker as a non-root isolated capability with explicit expiry/revocation policy.",
+                                            "Keep repository/dependency metadata and environment differences redacted and source-attributed.",
+                                            "Test disabled providers, stale links, revoked staff access and cross-project leakage.",
+                                            "Restore usable standard Core navigation and project/resource control when the module is disabled."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.collaboration-approvals-pro",
+                         "kind":  "module",
+                         "label":  "Collaboration Approvals Pro",
+                         "category":  "workspace",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Tenancy",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "automation.playbooks",
+                                                "support.reports",
+                                                "workspace.dashboards"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced team review queues, separation-of-duties proposals, change annotations and approval evidence for optional operational workflows. Approvals refer to exact immutable plans and never replace authorization.",
+                         "core_boundary":  "Core retains required confirmations, sensitive-action reauthentication, audit and current permission checks. This module adds optional collaborative coordination; it cannot impose a paid approval gate on essential Core use or grant actions to reviewers lacking underlying authority.",
+                         "acceptance":  [
+                                            "Bind reviewers, decision scope, plan digest and resource revisions to an auditable review record.",
+                                            "Reject self-approval or conflicting reviewer roles where the selected policy requires separation, without inventing a universal role hierarchy.",
+                                            "Invalidate approval when target state, requested effects, permissions or relevant policy changes.",
+                                            "Test concurrent decisions, stale plans, revoked reviewers and repeated execution with effect fencing.",
+                                            "Disable optional review workflows safely while preserving canonical Core authorization and retained change evidence."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.api-automation-pro",
+                         "kind":  "module",
+                         "label":  "API Automation Pro",
+                         "category":  "automation",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Operations",
+                                             "IdentityAccess",
+                                             "Platform",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "automation.event-rules",
+                                                "automation.playbooks",
+                                                "automation.chatops"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced workflow composition over existing public API/events, with reusable scoped parameters, delivery traces and approved cross-resource automations. Channel- and provider-specific integrations remain separately qualified connectors.",
+                         "core_boundary":  "Core keeps its APIs, SDK contracts, webhooks/events, jobs and ordinary automation primitives. This module adds optional workflow composition and correlation; it cannot invent new public endpoints, grants, arbitrary callbacks or raw privileged effects.",
+                         "acceptance":  [
+                                            "Select only accepted versioned API/event operations and bind actor, tenant, resource and secret references explicitly.",
+                                            "Verify event authenticity, ordering assumptions, replay controls and delivery uncertainty before triggering an effect.",
+                                            "Bound retry, recursion, concurrency and outbound destination policy, including redirects and resolved addresses.",
+                                            "Recheck current authority and resource versions at execution; expose uncertain multi-step results for reconciliation.",
+                                            "Stop new triggers without losing canonical jobs, API access, local administration or recovery when disabled."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.application-testing-pro",
+                         "kind":  "module",
+                         "label":  "Application Testing Pro",
+                         "category":  "applications",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Data",
+                                             "Files",
+                                             "Operations",
+                                             "BackupRestore",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.verified-updates",
+                                                "delivery.previews",
+                                                "backup.restore-tests",
+                                                "observe.synthetics"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced customer-application test campaigns using isolated preview environments, version matrices, synthetic user journeys and comparison before promotion. Reports separate installability, compatibility, security checks and measured performance.",
+                         "core_boundary":  "Core\u0027s own tests, quality tools and essential hosted-resource checks remain freely available. This module adds optional application-specific rehearsals; it does not certify applications, imply upstream support or treat passing syntax as runtime compatibility.",
+                         "acceptance":  [
+                                            "Qualify every declared application/runtime/database/provider combination with reproducible pinned fixtures and source references.",
+                                            "Run tests in isolated targets with sanitized data, controlled outbound effects and explicit resource budgets.",
+                                            "Exercise sessions, uploads, background work, database changes, restore and removal behavior relevant to each application.",
+                                            "Record measured workload conditions and failed/unavailable checks without extrapolating production performance.",
+                                            "Require a separately authorized promotion and retain Core resource/recovery access when tests or the module fail."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.portfolio-migration-pro",
+                         "kind":  "module",
+                         "label":  "Portfolio Migration Pro",
+                         "category":  "transfers",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Transfers",
+                                             "Tenancy",
+                                             "Hosting",
+                                             "Files",
+                                             "Data",
+                                             "Mail",
+                                             "Operations",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "apps.fleet-management",
+                                                "mail.mailbox-migration",
+                                                "backup.transfers",
+                                                "automation.playbooks"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced coordinated migrations for many accounts or application portfolios, with provider-specific import plans, staged synchronization, dependency waves and cutover rehearsals. External-panel/format adapters remain separately selected and qualified.",
+                         "core_boundary":  "Core retains ordinary instance transfers, resource mapping, supported import/export and recovery. This module adds optional portfolio planning and bulk coordination; it cannot replace resource owners, claim arbitrary source compatibility or remove the only recovery route.",
+                         "acceptance":  [
+                                            "Inventory source scope, ownership, formats, versions and unavailable items before proposing destination resources.",
+                                            "Validate destination policy, quota, dependencies and per-resource compatibility through existing Core owners.",
+                                            "Test resumable copy, changed source data, final synchronization, DNS/mail cutover and per-item result tracking.",
+                                            "Require reviewed cutover and recovery criteria; retain the source and verified backups until explicit authorized cleanup.",
+                                            "Disabling orchestration must preserve ordinary Core transfers, completed destinations and independent recovery references."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.multi-server-hosting-pro",
+                         "kind":  "module",
+                         "label":  "Multi-server Hosting Pro",
+                         "category":  "infrastructure",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "Tenancy",
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Observability",
+                                             "BackupRestore",
+                                             "Data",
+                                             "Mail",
+                                             "Transfers"
+                                         ],
+                         "catalogue_keys":  [
+                                                "compute.node-groups",
+                                                "compute.rolling-operations",
+                                                "runtime.workers",
+                                                "network.service-ha",
+                                                "automation.playbooks"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced hosting orchestration across admitted servers and separately qualified Web, database, mail, authoritative DNS or mixed node roles: enrollment/trust, placement, scoped routing, capacity groups, maintenance/drain waves and fleet care. Resource owners and role-specific data/recovery semantics stay authoritative; this proposal is not a universal cluster implementation.",
+                         "core_boundary":  "Single-node hosting, identity/tenant boundaries, service control, local recovery and any future admitted node/provider/transport foundations remain open-source Core responsibilities. This premium module adds multi-server workflow intent and coordination only; it has no raw shell, privileged socket, direct Core database access or implicit authority over remote servers.",
+                         "acceptance":  [
+                                            "Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and OS/version/capability evidence; reject unknown, replaced or replayed identities.",
+                                            "Declare Web, database, mail, DNS or mixed roles with actual admitted service capabilities, dependencies, capacity and tenancy constraints; no role name proves readiness, high availability or interchangeability.",
+                                            "Resolve each tenant/resource to authoritative placement, role-specific owner and current route/revision before dispatch; never choose a destination solely from a client-supplied node ID or copy the resource registry.",
+                                            "Qualify scheduling/capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from actual reservations or enforcement.",
+                                            "Exercise leases/fencing, stale workers, concurrent placement, partitions, delayed acknowledgements and unavailable control paths without cross-tenant effects or competing active owners.",
+                                            "Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node receipts and explicit pending/failed/unknown states; convergence is measured, not instantaneous.",
+                                            "Qualify Web routing/TLS, database consistency/quorum, mail queue/mailbox/authentication and DNS zone/delegation/serial behavior through each owner before a role migration or cutover.",
+                                            "Document which workloads continue during controller/provider outages; reconcile uncertain operations rather than blindly replaying them on another node.",
+                                            "Qualify resource migration and return-to-service with Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, independent recovery references and explicit cutover authority.",
+                                            "Disable premium coordination without interrupting established workloads or free Core node/provider foundations, ownership inventory, ordinary service control and recovery."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.docker-management-pro",
+                         "kind":  "module",
+                         "label":  "Docker Management Pro",
+                         "category":  "infrastructure",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "Tenancy",
+                                             "Files",
+                                             "Data",
+                                             "Operations",
+                                             "Observability",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "compute.containers",
+                                                "compute.images",
+                                                "compute.rolling-operations",
+                                                "backup.restore-tests"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced Docker/OCI and admitted Compose workload orchestration: reviewed images/build provenance, application groups, networks, ports, volumes, secrets, effective budgets, health/logs, coordinated updates and restore. Qualified Portainer, Coolify or Dokku connectors can supply declared managed-resource capabilities; they are distinct external products, not interchangeable Docker engines.",
+                         "core_boundary":  "Essential native hosting, storage, isolation, permissions and any future qualified Docker/provider foundations remain open source. This module adds advanced workload orchestration through Core contracts; it never hands a tenant or package the host Docker socket, unrestricted daemon API, privileged containers, raw root commands or Core credentials.",
+                         "acceptance":  [
+                                            "Qualify Docker/OCI versions and rootful/rootless assumptions, peer identity, cgroup delegation and actual CPU/RAM/PID/storage/log enforcement before declaring support.",
+                                            "Pin images to reviewed immutable digests with upstream license/provenance checks; isolate builds and refuse unreviewed image/build privileges.",
+                                            "Admit Compose versions/features through a canonical typed plan; validate service identities, dependencies, mounts, networks, ports, health and effective budgets rather than sending arbitrary raw YAML or shell text to a daemon.",
+                                            "Map tenant UID/GID, allowed mounts, ports and network/egress ownership; refuse host Docker sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.",
+                                            "Select one authoritative effect/reconciliation owner per deployment when using Portainer, Coolify or Dokku. Connector capabilities, manager-owned metadata and Core resource mappings must be version-qualified; no two managers silently mutate the same workload.",
+                                            "Manage volumes, database consistency, encryption/secret references and retention explicitly; container recreation is not data recovery.",
+                                            "Bound logs, named diagnostic capabilities, health checks and observations; this product cannot become arbitrary container/host exec or an unrestricted daemon API.",
+                                            "Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, measured health and per-workload outcomes.",
+                                            "Rehearse isolated backup/restore of application data and required configuration/secret references; test failed pulls, full storage, daemon/manager loss and interrupted updates.",
+                                            "On expiry/removal preserve workloads, data, ordinary free Core provider control and independent recovery while stopping new premium orchestration safely."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.kubernetes-management-pro",
+                         "kind":  "module",
+                         "label":  "Kubernetes Management Pro",
+                         "category":  "infrastructure",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "IdentityAccess",
+                                             "Tenancy",
+                                             "Operations",
+                                             "Observability",
+                                             "Files",
+                                             "Data",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "compute.kubernetes",
+                                                "compute.images",
+                                                "compute.node-groups",
+                                                "compute.rolling-operations",
+                                                "network.service-ha"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced Kubernetes and multi-cluster application orchestration: admitted cluster contexts, namespaces/RBAC, workloads, services/ingress/TLS, persistent volumes, quotas, observations, controlled upgrades and restore. It preserves provider/cluster-specific behavior and does not infer tenant isolation from a namespace name alone.",
+                         "core_boundary":  "Core resource ownership, current permissions, ordinary hosting/security/storage and any future admitted cluster/provider foundations remain OSS. The module adds reviewed advanced orchestration; it cannot issue cluster-admin kubeconfigs to users, expose unrestricted Kubernetes APIs, write Core tables or replace authoritative workload identity.",
+                         "acceptance":  [
+                                            "Enroll each cluster context with reviewed endpoint/CA/peer trust, credential scope, supported API/provider versions and tenant mapping; qualify multi-cluster routing and revocation.",
+                                            "Validate namespace/RBAC/service-account boundaries, admission restrictions, pod security and network policies with negative cross-tenant and host-access cases.",
+                                            "Qualify workload rollout/drain behavior, resource requests/limits, quotas and effective isolation before permitting deployment or scale changes.",
+                                            "Bind services, ingress, public/private listeners, DNS and TLS/certificate ownership explicitly; reject unintended exposure or access to control-plane/metadata destinations.",
+                                            "Map persistent-volume/storage-class identities, access modes, snapshots, application consistency and secret references; namespace deletion is not an accepted backup/removal plan.",
+                                            "Bound logs/events/metrics and approved diagnostics, keeping tokens and sensitive pod configuration out of responses and exports.",
+                                            "Exercise cluster/provider outages, API-version changes, concurrent reconciliations and reviewed upgrades with fencing, health checks and explicit uncertain states.",
+                                            "Rehearse isolated application/data restore and multi-cluster recovery only for supported provider combinations; removal must retain workloads and independent cluster/Core recovery without a premium gate."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.vps-vm-management-pro",
+                         "kind":  "module",
+                         "label":  "VPS / VM Management Pro",
+                         "category":  "infrastructure",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Tenancy",
+                                             "IdentityAccess",
+                                             "Hosting",
+                                             "Files",
+                                             "Operations",
+                                             "Observability",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "compute.proxmox",
+                                                "compute.libvirt",
+                                                "compute.lxc",
+                                                "compute.images",
+                                                "network.interfaces",
+                                                "storage.raid-lvm"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced VPS and virtual-machine lifecycle orchestration across qualified hypervisors/providers: reviewed templates and cloud-init inputs, guest identities, virtual disks, IP/vNIC policy, effective quotas, snapshots, backups, maintenance and explicitly supported migrations. VM, system-container and provider semantics remain distinct.",
+                         "core_boundary":  "Core single-node hosting, baseline network/storage/security, account policy and future admitted virtualization-provider foundations remain open source. This module coordinates guest operations through owned contracts. Admitted cloud-init may carry guest code/configuration, including authorized guest-root actions, within a qualified profile; guest-root never confers host-root. No payload becomes a host hook, host-path escape, unrestricted hypervisor command or direct Core database write.",
+                         "acceptance":  [
+                                            "Qualify every hypervisor/provider/version/architecture/guest combination separately, distinguishing full VMs from system containers and refusing unsupported migrations.",
+                                            "Verify template/image provenance, immutable references, upstream licenses and the admitted cloud-init profile. Guest code/configuration and authorized guest-root customization require their own scoped qualification; protect guest credentials and refuse host hooks, host-path escapes, management-plane commands or host secrets.",
+                                            "Map tenant/guest identity, vCPU/RAM/disk/IO limits, placement and effective enforcement without claiming guest isolation from configuration text alone.",
+                                            "Authorize IP assignments, vNICs, bridges/overlays, firewall boundaries, public exposure and guest-network ownership through the relevant Core/provider contracts.",
+                                            "Qualify create/start/stop/rebuild/resize and console/agent access with exact scope, current authority, resource revisions and bounded diagnostics.",
+                                            "Keep snapshot semantics distinct from independent backups; test consistent guest/data restore and recovery-key references before destructive rebuild or deletion.",
+                                            "Exercise provider loss, full storage, concurrent actions, interrupted operations and qualified cold/live migrations with fencing and honest downtime/recovery evidence.",
+                                            "Disable premium workflows while guests and retained data keep running under independent Core/provider ownership, export and recovery."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.performance-booster-pro",
+                         "kind":  "module",
+                         "label":  "Performance Booster Pro",
+                         "category":  "performance",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "Data",
+                                             "Tenancy",
+                                             "Operations",
+                                             "Observability",
+                                             "BackupRestore"
+                                         ],
+                         "catalogue_keys":  [
+                                                "runtime.redis",
+                                                "runtime.memcached",
+                                                "domains.cdn-edge",
+                                                "data.sql-analysis",
+                                                "observe.synthetics"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced application-aware performance profiles coordinating compatible caches, compression, static/edge delivery, runtime budgets and measured tuning proposals. Profiles distinguish server/runtime/application semantics and qualify correctness before any throughput or latency claim.",
+                         "core_boundary":  "Core retains ordinary caching/compression, native gzip/Brotli where admitted, PHP/OPcache policy, quotas, essential observations and native provider foundations as free capabilities. This module adds comparative measurements, advanced profiles and optimization campaigns only. The current Nginx -\u003e Apache -\u003e FPM target keeps all files under Apache authorization with edge direct-file/response-cache disabled by default; no premium optimization can bypass that authority, tenant isolation or secret-bearing application behavior.",
+                         "acceptance":  [
+                                            "Declare the exact application/version/runtime/provider/cache/compression matrix, workload and resource budget; refuse unsupported profiles and avoid generic Worker-compatibility claims.",
+                                            "Qualify cache keys for Host/tenant/resource, path/query, content/language variants and Vary including Accept-Encoding; enforce expiry, invalidation/purge and bypass for authentication cookies, sessions, carts, admin/private APIs, authorization headers, private responses and state-changing requests.",
+                                            "Validate native gzip/Brotli or other admitted compression against content types, Vary/ETag/content-length behavior, already-compressed data, double compression and effective CPU/memory budgets. Compression never implies permission for public caching.",
+                                            "Keep edge direct-file and response-cache paths off by default in the current Nginx -\u003e Apache -\u003e FPM target. Exercise protected static files such as CSS, nested .htaccess/authorization rules and authenticated/private responses through Apache; an optimizer cannot serve them from an unauthorized edge path.",
+                                            "Require explicit Core-owner admission and versioned authority handoff for any accelerated profile, including file/rule/request semantics, tenant/Host variant separation and revocation; qualified performance evidence alone does not approve a cache or direct-file bypass.",
+                                            "Review dynamic compression of responses containing secrets or attacker-controlled reflections per profile; apply the required prohibition/bypass when risks or correctness are unqualified, rather than enabling it globally.",
+                                            "Check cache namespace/credential separation, effective memory/CPU/storage budgets, eviction and outage behavior without introducing cross-tenant cache leakage.",
+                                            "Bind proposed runtime/database/edge changes to current resource revisions, qualified owning operations, diffs, recovery references and post-change checks.",
+                                            "Benchmark before/after with stated hardware, versions, dataset, concurrency, warm/cold caches, latency/error/resource metrics and reproducible evidence; no unmeasured universal speed claims.",
+                                            "Exercise load, cache/provider loss, stale content, compression negotiation and failed tuning; preserve correctness and a supported recovery or reconciliation route.",
+                                            "Removing or expiring the module must retain Core baseline optimization controls and keep existing sites serving safely without the premium coordinator."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.cdn-management-pro",
+                         "kind":  "module",
+                         "label":  "CDN Management Pro",
+                         "category":  "networking",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "domains.cdn-edge",
+                                                "domains.global-routing",
+                                                "domains.cloudflare",
+                                                "domains.dns-providers",
+                                                "observe.synthetics"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced multi-site CDN/edge orchestration with separately qualified Cloudflare or other provider delivery profiles, origin/DNS binding, cache rules, purge campaigns and TLS review. Provider plans, API permissions, origin-authentication features, cache limits, propagation and cost constraints remain explicit; an account connection never proves every capability.",
+                         "core_boundary":  "Core domain/DNS/TLS authority, ordinary caching/compression, origin security and essential hosting remain free. The current Nginx -\u003e Apache -\u003e FPM target routes all content, including static files, through Apache with edge direct-file/response-cache off by default. This module adds advanced CDN policy coordination only; no protected/private response may move to an edge cache without explicitly admitted, versioned semantics, and no proprietary edge service becomes necessary for Core hosting or recovery.",
+                         "acceptance":  [
+                                            "Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before an edge change.",
+                                            "Qualify exact provider/API/version/plan limits and separately admitted features, including Cloudflare proxy/cache rules, certificate modes, origin authentication, purge scope/rate and request/body limits; do not promise all plans or features.",
+                                            "Require validated origin TLS, hostname/SNI/certificate checks and any admitted origin authentication; visitor-edge encryption alone or an encryption-only origin mode is not verified origin identity. Review direct-origin exposure and management recovery separately.",
+                                            "Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for authenticated users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods.",
+                                            "Preserve all-request Apache authorization in the current Nginx -\u003e Apache -\u003e FPM target: edge-cache/direct-file stays off by default, including CSS/assets protected by nested .htaccess or directory rules.",
+                                            "Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content checks before any CDN cache policy or authority handoff; connectivity or compression is not permission for public caching.",
+                                            "Qualify compression negotiation, variant separation, double-compression prevention, budgets and rollback. Secret-bearing dynamic compression needs its own risk/correctness decision and stays bypassed when unqualified.",
+                                            "Bound scoped purge/invalidation using provider receipts, replay control and measured propagation uncertainty; provider acceptance is not immediate global completion.",
+                                            "Constrain rewrites, redirects, upstream destinations and edge-worker features to admitted capabilities and reviewed code; ingress Traefik/Nginx Proxy Manager workflows remain under Network Traffic rather than creating a competing CDN owner.",
+                                            "Measure correctness, origin/offload behavior, stale responses, error rates and costs per profile; activation alone proves neither speed nor protection.",
+                                            "Exercise provider outage, credentials revocation/rotation and DNS/certificate changes with an explicit exit route; disabling orchestration preserves delivery and independent free Core DNS/TLS/origin control."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.ddos-defense-pro",
+                         "kind":  "module",
+                         "label":  "DDoS Defense Pro",
+                         "category":  "security",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Platform",
+                                             "Hosting",
+                                             "IdentityAccess",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "security.crowdsec",
+                                                "security.waf",
+                                                "security.threat-intel",
+                                                "domains.cdn-edge",
+                                                "network.haproxy",
+                                                "network.service-ha"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced DDoS observation and response coordination across qualified upstream scrubbing/edge providers and admitted local L7 controls. It separates network/transport-layer volumetric mitigation from application-layer rate/WAF policy and reports uncertainty, capacity limits and observed outcomes.",
+                         "core_boundary":  "Core retains essential firewall/rate/protection policy, abuse controls, incident handling and network recovery. This module adds optional advanced DDoS workflows; local rules cannot guarantee protection against upstream link saturation, and no premium entitlement grants arbitrary blocking, traffic capture, attack tooling or root/network authority.",
+                         "acceptance":  [
+                                            "Declare which L3/L4 traffic can be handled only by a qualified upstream provider versus which L7 requests an admitted local/edge control can process; state actual provider and capacity limits.",
+                                            "Map protected resources, origin exposure, provider accounts, allowed policies and current permissions explicitly; prevent one tenant from changing another tenant\u0027s or management traffic.",
+                                            "Validate source-attributed signals, baselines, deduplication, rate windows and false-positive criteria before proposing rate, challenge, routing or filtering actions.",
+                                            "Bind any approved response to exact scope/resource revisions and supported reversible policies; preserve management access, legitimate sessions and an independent emergency recovery route.",
+                                            "Keep packet payloads, personal identifiers and credentials minimized/redacted; restrict destinations and any diagnostics to separately authorized scope.",
+                                            "Test provider outage, signal loss, replay, stale rules, normal traffic spikes, exemptions and failed recovery using bounded synthetic fixtures or explicitly authorized isolated labs only.",
+                                            "Record observed service availability, filtering consequences, errors and recovery under stated conditions; do not claim guaranteed DDoS protection or generate public/third-party attack traffic.",
+                                            "Disable new premium response automation safely while baseline Core protections, existing provider policy, local incidents and independent recovery remain available."
+                                        ]
+                     },
+                     {
+                         "schema":  "wcp360.premium-package-proposal/1",
+                         "id":  "module.dns-tls-orchestration-pro",
+                         "kind":  "module",
+                         "label":  "DNS \u0026 TLS Orchestration Pro",
+                         "category":  "networking",
+                         "tier":  "pro",
+                         "status":  "design",
+                         "installable":  false,
+                         "source_model":  "undecided",
+                         "core_owners":  [
+                                             "Hosting",
+                                             "Platform",
+                                             "IdentityAccess",
+                                             "Tenancy",
+                                             "Operations",
+                                             "Observability"
+                                         ],
+                         "catalogue_keys":  [
+                                                "domains.cloudflare",
+                                                "domains.route53",
+                                                "domains.dns-providers",
+                                                "domains.dns01",
+                                                "domains.acme-authorities",
+                                                "domains.domain-monitoring",
+                                                "domains.global-routing"
+                                            ],
+                         "dependencies":  [
+
+                                          ],
+                         "summary":  "Advanced DNS/TLS portfolio campaigns across qualified providers and admitted nodes: reviewed imports/reconciliation, coordinated changes, staged DNS propagation and certificate rollout, expiry/drift evidence and service-specific recovery. Domain/zone/certificate owners and provider connectors remain distinct; this proposal does not implement an authoritative DNS server or certificate authority.",
+                         "core_boundary":  "Ordinary local/global DNS records and zones, PowerDNS or other admitted Core engine support, DNSSEC, ACME issuance/renewal/deployment, wildcard certificates with DNS-01, permissions and basic automation remain free Core responsibilities. Premium adds optional advanced cross-provider/cross-node portfolio campaigns and evidence, never the only renewal path, a second zone/certificate authority or payment-gated DNS/TLS safety.",
+                         "acceptance":  [
+                                            "Resolve portfolio domains, zones, delegations, certificates, nodes and provider identities to authoritative Core owners and current revisions; review imported differences without taking over unrelated records or copying the DNS registry.",
+                                            "Qualify each provider/API/version and authoritative engine capability separately, including PowerDNS through Core-owned adapters. Keep provider transports in connectors and preserve free DNS records/zones, DNSSEC, ACME, DNS-01 wildcard issuance and ordinary renewal/deployment.",
+                                            "Review imports, merges, conflicts and scoped reconciliation using typed records, DNS semantics, serial/delegation policy and current permissions; no raw zone/config injection or unrestricted provider credentials.",
+                                            "Use versioned campaigns with explicit node/provider scope, canary/batch budgets, idempotency, leases/fencing and per-target receipts; exercise partitions, stale workers, revoked credentials and partial outcomes without instantaneous-convergence claims.",
+                                            "Measure DNS observations from bounded authorized vantage points with TTL, negative caching, resolver/delegation and freshness recorded; an accepted API update or observed resolver answer is not proof of universal propagation.",
+                                            "Stage certificate issuance/renewal and deployment through existing owned operations, scoped DNS-01 permissions and secret references; qualify CA rate/issuance constraints, challenge cleanup, wildcard/apex/SAN identity and key retention without exposing private keys.",
+                                            "Verify hostname/SNI/chain/expiry and each consuming Web/mail/ingress endpoint after deployment; a certificate file or issued serial alone is not evidence that every service presents the intended identity.",
+                                            "Qualify DNSSEC rollover, delegation/provider moves and certificate changes with owner-admitted sequencing and service-specific recovery; destructive rollback cannot assume prior DNS/cache state is instantly restored.",
+                                            "Keep unknown, pending, divergent and failed targets visible with correlation and bounded retries; separate delivery receipts, deployed revisions and measured DNS/TLS observations.",
+                                            "On expiry, disablement or removal preserve DNS serving, certificates/private keys under their Core owner, free renewal/automation, independent control and documented migration/recovery; provider exit must account for active dependencies."
+                                        ]
+                     }
+                 ]
+}

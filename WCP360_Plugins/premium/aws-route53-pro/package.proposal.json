@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.aws-route53-pro",
+  "kind": "plugin",
+  "label": "Amazon Route 53 DNS connector",
+  "category": "dns-cdn-domains",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "IdentityAccess",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "domains.route53",
+    "domains.dns01"
+  ],
+  "dependencies": [],
+  "summary": "Prepare hosted-zone mappings and bounded record/challenge changes for a chosen AWS account.",
+  "core_boundary": "Hosted-zone observation is not authority to replace native DNS, seize a domain or select arbitrary account resources. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Bind account, hosted-zone identity and change batch to a current Hosting domain revision.",
+    "Keep private and public zones distinct and reject ambiguous names or unsupported routing records.",
+    "Exercise asynchronous change inspection, challenge ownership and safe cleanup after lost acknowledgements.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

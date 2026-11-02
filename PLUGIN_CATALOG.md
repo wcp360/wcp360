@@ -6,6 +6,7 @@
 
 ![Catalog scope: 149 design entries](https://img.shields.io/badge/Catalog-149%20design%20entries-4263EB?style=flat-square)
 ![Categories: 21 families](https://img.shields.io/badge/Categories-21%20families-7C3AED?style=flat-square)
+[![Premium: 141 planning proposals](https://img.shields.io/badge/Premium-141%20planning%20proposals-DB2777?style=flat-square)](PREMIUM_CATALOG.md)
 ![Availability: development](https://img.shields.io/badge/Availability-Development-E89B25?style=flat-square)
 
 [Project overview](https://github.com/yyogas/wcp360/blob/main/README.md) · [Family index](#family-index) · [Local packages](#local-package-profiles) · [Plugin contract](#required-plugin-record) · [Security and lifecycle](#security-and-lifecycle) · [Ownership and reuse](#ownership-and-reuse)
@@ -21,6 +22,10 @@ Two development packages are documented separately: **File Manager** and **Insig
 > **NON-NORMATIVE DESIGN CATALOG.** Publication does not imply owner approval, amend canonical contracts, or authorize implementation. Contract decisions require the applicable owner ratification and project gates.
 
 **Catalog revision: October 31, 2026.** The underlying product is in development. This file is a documentation catalog, not a live package registry, release feed, or dependency lockfile. Provider names identify integration targets; they do not establish partnerships, certified compatibility, available licenses, or downloadable WCP360 packages.
+
+## Premium catalogue — current package proposals
+
+Open the **[WCP360 Premium Catalogue](PREMIUM_CATALOG.md)** for the **44 business modules and 97 provider connectors** and the recently added named integrations. The complete views are [modules](WCP360_Modules/CATALOG.md) and [connectors](WCP360_Plugins/premium/CATALOG.md); their JSON inventories remain authoritative. This navigation update is dated November 2, 2026. It preserves the original 149 design entries below and creates no installable package.
 
 ## Contents
 
@@ -658,7 +663,7 @@ Use two distinct fields in the future registry: **documentation maturity** and *
 - [Published specifications](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/README.md) and [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts).
 - [Repository documentation](https://github.com/yyogas/wcp360/blob/main/documentation/README.md).
 - [Design System reference branch](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown/design-system).
-- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/main/documentation/governance/REVIEW-MERGE-POLICY.md).
+- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md).
 
 Imported design references (non-normative):
 

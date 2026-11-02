@@ -1,0 +1,73 @@
+name: wcp360-candidate
+x-core: &core
+  image: wcp360-core-candidate:local
+  build:
+    context: ../../..
+    dockerfile: WCP360_Build/environments/core-candidate/Dockerfile
+  init: true
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: [/tmp, /opt/wcp360/WCP360_Core/var]
+  depends_on:
+    database:
+      condition: service_healthy
+services:
+  database:
+    image: postgres:17-trixie
+    environment:
+      POSTGRES_DB: wcp360_workbench
+      POSTGRES_USER: wcp360_workbench
+      POSTGRES_PASSWORD: ${WCP_DEV_DB_PASSWORD:?Generate a private development database password}
+    volumes: [candidate-db:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U wcp360_workbench -d wcp360_workbench']
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    security_opt: [no-new-privileges:true]
+  user:
+    <<: *core
+    user: '10001:10001'
+    environment:
+      APP_SECRET: ${WCP_USER_SECRET:?Generate a unique user-context secret}
+      WCP_CONTEXT: user
+      WCP_PUBLIC_HOST: user.localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
+      DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
+    ports: ['127.0.0.1:8080:8080']
+  admin:
+    <<: *core
+    user: '10002:10002'
+    environment:
+      APP_SECRET: ${WCP_ADMIN_SECRET:?Generate a separate admin-context secret}
+      WCP_CONTEXT: admin
+      WCP_PUBLIC_HOST: admin.localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
+      DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
+    ports: ['127.0.0.1:8081:8080']
+  worker:
+    <<: *core
+    user: '10003:10003'
+    environment:
+      APP_SECRET: ${WCP_WORKER_SECRET:?Generate a separate worker-context secret}
+      WCP_CONTEXT: worker
+      WCP_PUBLIC_HOST: localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
+      DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
+    command: [sh, -ec, 'while true; do php bin/console wcp:candidate:work; sleep 2; done']
+  setup:
+    <<: *core
+    profiles: [setup]
+    user: '10004:10004'
+    stdin_open: true
+    tty: true
+    environment:
+      APP_SECRET: ${WCP_SETUP_SECRET:?Generate a separate setup-context secret}
+      WCP_CONTEXT: setup
+      WCP_PUBLIC_HOST: localhost
+      WCP_ALLOW_FRANKENPHP_PLANS: ${WCP_ALLOW_FRANKENPHP_PLANS:-0}
+      DATABASE_URL: postgresql://wcp360_workbench:${WCP_DEV_DB_PASSWORD}@database:5432/wcp360_workbench?serverVersion=17&charset=utf8
+    command: [php, bin/console, wcp:candidate:enroll]
+volumes:
+  candidate-db:

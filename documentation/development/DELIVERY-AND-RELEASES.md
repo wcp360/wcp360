@@ -24,7 +24,7 @@ A qualified release record should identify:
 | :--- | :--- |
 | Version/tag and exact source revisions | Bind Core, agents, build inputs and metadata to immutable Git identities. |
 | Core application package | First-party Symfony/Twig code, locked production PHP dependencies and prepared assets; no development credentials/caches. |
-| wcpd and wcp-privd packages | Qualified Debian/amd64 executables for the non-root agent and minimal privileged broker; an inert CLI is not a substitute. |
+| wcpd and wcp-privd packages | Executables qualified for each explicitly supported OS/architecture combination, for the non-root agent and minimal privileged broker; an inert CLI or a native package probe is not a substitute. |
 | Installation package | Reviewed CLI/bootstrap source, package/layout metadata, supported preconditions and recovery behavior. |
 | Integrity/trust metadata | Checksums, signature verification material, provenance and the accepted publisher/trust/revocation policy. |
 | Dependency inventory | SBOM/licenses and vulnerability dispositions for the exact assembled artifact. |
@@ -39,7 +39,7 @@ Large binary assets belong to GitHub Releases or the approved distribution stora
 
 The real installer source belongs in [Core/installer](../../WCP360_Core/installer/README.md). Its target sequence is:
 
-1. Verify supported Debian 13/amd64, platform/toolchain/runtime prerequisites, resources, ports, DNS/time and incompatible existing services.
+1. Verify an exact supported target: Debian 12/13 or Ubuntu 22.04/24.04/26.04 LTS, then its qualified architecture, PHP 8.4/PostgreSQL 17 providers, toolchain prerequisites, resources, ports, DNS/time and incompatible existing services.
 2. Validate the expected artifact identity/trust and installation plan before changing the machine.
 3. Create only the approved identities, directories, configuration boundaries and runtime dependencies.
 4. Install prepared product artifacts; production hosts should not compile Go or resolve arbitrary frontend dependencies.
@@ -48,6 +48,8 @@ The real installer source belongs in [Core/installer](../../WCP360_Core/installe
 7. Hand off to the wizard, persist progress and disable bootstrap access after verified completion.
 
 Repeated execution must distinguish fresh install, resume, repair and upgrade. Detect partial state, hold an installation lock, keep durable progress and provide bounded recovery. A web wizard cannot grant itself a generic privileged shell or keep an unrestricted root session.
+
+The [platform guide](SUPPORTED-PLATFORMS.md) and shared target catalogue distinguish declared targets from executed native-package checks, the complete Debian 13 Core candidate and production qualification. Native PHP defaults differ across the five releases; a release installer must not silently install an incompatible default, add an unqualified PPA, reuse another distribution's suite or accept a derivative through `ID_LIKE`. The Debian 13 privileged candidate and reboot guards stay restricted until reviewed adapters and target VM evidence exist.
 
 ## Setup wizard
 
@@ -76,6 +78,7 @@ Automated/unattended installation must satisfy the same validation and secret-ha
 | Public SDK | Contract compatibility, serialization, failures/retries/redaction and supported consumer matrix. |
 | Detached plugin | Isolated package tests plus Core lifecycle, permission, data and failure-containment integration. |
 | Installer/upgrade | Disposable target install, interruption/resume, failed precondition, upgrade and restore/recovery rehearsal. |
+| Platform/provider | Exact OS recognition; native package probe; qualified PHP 8.4/PostgreSQL 17 supply; complete Core, service and VM recovery checks on each supported combination. |
 | Package/release | Complete content/permission inventory, dependency/secret checks, provenance, signature validation and no excluded private assets. |
 
 Path-scoped CI can keep routine work fast, but any shared SDK/contract/Core-host change also runs its affected integration matrix. Pinned inputs and lock changes require review. No successful workflow is asserted until it actually executes against the recorded candidate/integration.

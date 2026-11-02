@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wcp360:app-deploy:authoring:configuration:template:0",
+  "title": "template candidate configuration input",
+  "description": "Bounded authoring data only; no Core operation consumes this file. References require future authorized registry resolution. JSON Schema format annotations do not replace application validation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "tenantRef",
+    "hostingAccountRef",
+    "domainRef",
+    "capacityProfileRef",
+    "secretRefs"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wcp360.app-deploy.configuration-draft/0"
+    },
+    "tenantRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "hostingAccountRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "domainRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "capacityProfileRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "secretRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "bootstrapCredential": {
+          "$ref": "#/$defs/secretRef"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "resourceRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$",
+      "description": "Opaque authoring reference only. The future Core must resolve and authorize the actual resource; a matching string is not a credential or permission."
+    },
+    "secretRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$",
+      "description": "Opaque authoring reference only. The future Core must resolve and authorize the actual resource; a matching string is not a credential or permission."
+    },
+    "email": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 254,
+      "format": "email",
+      "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+    }
+  }
+}

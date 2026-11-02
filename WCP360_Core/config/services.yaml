@@ -1,0 +1,80 @@
+parameters:
+    env(WCP_CONTEXT): user
+    env(WCP_CANDIDATE): '0'
+    env(WCP_PUBLIC_HOST): user.localhost
+    env(WCP_ALLOW_FRANKENPHP_PLANS): '0'
+    env(WCP_ALLOW_ISOLATED_PROVISIONING): '0'
+    env(WCP_MFA_KEY): ''
+    env(WCP_DATABASE_MODE): shared
+    env(WCP_ALLOW_CANDIDATE_DATABASE_ROLES): '0'
+    env(WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY): '0'
+    env(WCP_ALLOW_CANDIDATE_RECOVERY_CODES): '0'
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    Wcp360\Core\:
+        resource: ../src/
+        exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Module\Hosting\Application\ApplicationCatalogueSource: '@Wcp360\Core\Module\Hosting\Infrastructure\CsvApplicationCatalogueSource'
+    Wcp360\Core\Module\Hosting\Infrastructure\CsvApplicationCatalogueSource:
+        arguments:
+            $path: '%kernel.project_dir%/../WCP360_App_Deploy/WCP360_App_Catalogue_Candidat.csv'
+    Wcp360\Core\Module\Hosting\Application\ModernPlanRenderer: '@Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer'
+    Wcp360\Core\Module\Hosting\Application\ApplicationPlanRenderer: '@Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer'
+    Wcp360\Core\Module\Hosting\Application\ApplicationPlanSyntax: '@Wcp360\Core\Module\Hosting\Infrastructure\NativeApplicationPlanSyntax'
+    Wcp360\Core\Module\Platform\Application\ServerObservation: '@Wcp360\Core\Module\Platform\Infrastructure\LocalServerObservation'
+    Wcp360\Core\Module\Platform\Application\ServiceObservation: '@Wcp360\Core\Module\Platform\Infrastructure\SystemdServiceObservation'
+    Wcp360\Core\Module\IdentityAccess\Domain\RecoveryKeySource: '@Wcp360\Core\Module\IdentityAccess\Infrastructure\RuntimeRecoveryKeys'
+    Wcp360\Core\Module\IdentityAccess\Application\CompletePasswordRecovery:
+        arguments:
+            $databaseMode: '%env(WCP_DATABASE_MODE)%'
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_RECOVERY_CODES)%'
+    Wcp360\Core\Module\Setup\Application\IssuePasswordRecoveryCode:
+        arguments:
+            $databaseMode: '%env(WCP_DATABASE_MODE)%'
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_RECOVERY_CODES)%'
+    Wcp360\Core\Module\IdentityAccess\UI\Http\PasswordRecoveryController:
+        arguments:
+            $limiter: '@limiter.candidate_password_recovery'
+    Wcp360\Core\Module\Setup\Application\RecoverAccountPassword:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_ACCOUNT_RECOVERY)%'
+    Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabaseRoles:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_DATABASE_ROLES)%'
+    Wcp360\Core\Module\Setup\UI\Console\DatabaseRolesCommand:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_CANDIDATE_DATABASE_ROLES)%'
+    Wcp360\Core\Shared\Security\CandidateDatabaseMiddleware:
+        arguments:
+            $mode: '%env(WCP_DATABASE_MODE)%'
+            $context: '%env(WCP_CONTEXT)%'
+    Wcp360\Core\Shared\Security\RuntimeContext:
+        arguments:
+            $context: '%env(WCP_CONTEXT)%'
+            $enabled: '%env(bool:WCP_CANDIDATE)%'
+            $environment: '%kernel.environment%'
+            $host: '%env(WCP_PUBLIC_HOST)%'
+    Wcp360\Core\Module\ExtensionManagement\Application\PluginRegistry:
+        arguments:
+            $pluginRoot: '%kernel.project_dir%/../WCP360_Plugins'
+    Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer:
+        arguments:
+            $binary: '%env(resolve:WCP_PLANNER)%'
+    Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy:
+        arguments:
+            $workerPlansEnabled: '%env(bool:WCP_ALLOW_FRANKENPHP_PLANS)%'
+    Wcp360\Core\Module\Hosting\Application\SubmitActivation:
+        arguments:
+            $enabled: '%env(bool:WCP_ALLOW_ISOLATED_PROVISIONING)%'
+    Wcp360\Core\Module\Hosting\Domain\ProvisioningGateway: '@Wcp360\Core\Module\Hosting\Infrastructure\SocketProvisioningGateway'
+    Wcp360\Core\Module\IdentityAccess\Application\ChangeOwnPassword:
+        arguments:
+            $databaseMode: '%env(WCP_DATABASE_MODE)%'
+    Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa:
+        arguments:
+            $key: '%env(WCP_MFA_KEY)%'
+    Wcp360\Core\Module\IdentityAccess\Infrastructure\AdminTwoFactorProvider:
+        tags:
+            - { name: scheb_two_factor.provider, alias: wcp_candidate_totp }

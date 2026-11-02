@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.cloudflare-dns-pro",
+  "kind": "plugin",
+  "label": "Cloudflare DNS and DNS-01 connector",
+  "category": "dns-cdn-domains",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "IdentityAccess",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "domains.cloudflare",
+    "domains.dns01"
+  ],
+  "dependencies": [],
+  "summary": "Prepare scoped external DNS record and challenge integration for explicitly delegated Cloudflare zones.",
+  "core_boundary": "Core Hosting retains domain ownership, DNS policy and baseline certificate lifecycle; this package adds one optional external provider. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Restrict credentials and every record operation to the admitted zone and authorized resource.",
+    "Exercise DNS-01 record collision, propagation uncertainty and cleanup without deleting unrelated TXT records.",
+    "Verify stale revision, revoked delegation, provider failure and credential rotation without logging tokens.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

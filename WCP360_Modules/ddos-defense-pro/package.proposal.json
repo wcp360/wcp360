@@ -1,0 +1,41 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.ddos-defense-pro",
+    "kind":  "module",
+    "label":  "DDoS Defense Pro",
+    "category":  "security",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "security.crowdsec",
+                           "security.waf",
+                           "security.threat-intel",
+                           "domains.cdn-edge",
+                           "network.haproxy",
+                           "network.service-ha"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced DDoS observation and response coordination across qualified upstream scrubbing/edge providers and admitted local L7 controls. It separates network/transport-layer volumetric mitigation from application-layer rate/WAF policy and reports uncertainty, capacity limits and observed outcomes.",
+    "core_boundary":  "Core retains essential firewall/rate/protection policy, abuse controls, incident handling and network recovery. This module adds optional advanced DDoS workflows; local rules cannot guarantee protection against upstream link saturation, and no premium entitlement grants arbitrary blocking, traffic capture, attack tooling or root/network authority.",
+    "acceptance":  [
+                       "Declare which L3/L4 traffic can be handled only by a qualified upstream provider versus which L7 requests an admitted local/edge control can process; state actual provider and capacity limits.",
+                       "Map protected resources, origin exposure, provider accounts, allowed policies and current permissions explicitly; prevent one tenant from changing another tenant\u0027s or management traffic.",
+                       "Validate source-attributed signals, baselines, deduplication, rate windows and false-positive criteria before proposing rate, challenge, routing or filtering actions.",
+                       "Bind any approved response to exact scope/resource revisions and supported reversible policies; preserve management access, legitimate sessions and an independent emergency recovery route.",
+                       "Keep packet payloads, personal identifiers and credentials minimized/redacted; restrict destinations and any diagnostics to separately authorized scope.",
+                       "Test provider outage, signal loss, replay, stale rules, normal traffic spikes, exemptions and failed recovery using bounded synthetic fixtures or explicitly authorized isolated labs only.",
+                       "Record observed service availability, filtering consequences, errors and recovery under stated conditions; do not claim guaranteed DDoS protection or generate public/third-party attack traffic.",
+                       "Disable new premium response automation safely while baseline Core protections, existing provider policy, local incidents and independent recovery remain available."
+                   ]
+}

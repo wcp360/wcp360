@@ -1,0 +1,10 @@
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = error_title %}
+{% block content %}
+<p class="auth-eyebrow">WCP360 · {{ status_code }}</p>
+<h1>{{ error_title }}</h1>
+<p class="auth-lead">{{ error_message }}</p>
+<p class="field-help">Si vous contactez l’opérateur du panneau, indiquez cette référence :</p>
+<p><code data-request-reference>{{ reference }}</code></p>
+<a class="button auth-submit" href="{{ path('wcp_dashboard') }}">Revenir au panneau <span aria-hidden="true">→</span></a>
+{% endblock %}

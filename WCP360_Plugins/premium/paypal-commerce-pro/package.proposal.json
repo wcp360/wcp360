@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.paypal-commerce-pro",
+  "kind": "plugin",
+  "label": "PayPal commerce connector",
+  "category": "billing-business",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Tenancy",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "commerce.business-systems"
+  ],
+  "dependencies": [],
+  "summary": "Prepare reviewed payment and subscription reconciliation with a selected PayPal merchant integration.",
+  "core_boundary": "Commercial events are inputs to an authorized business workflow, not a privileged command or automatic tenant deletion request. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin the merchant account and supported integration profile; verify event origin and retrieve authoritative transaction state.",
+    "Exercise duplicate, delayed and out-of-order capture, refund and subscription events with bounded idempotent processing.",
+    "Separate transaction records from Core access authority and retain explicit human review for destructive service consequences.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

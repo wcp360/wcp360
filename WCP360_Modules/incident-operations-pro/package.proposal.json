@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.incident-operations-pro",
+    "kind":  "module",
+    "label":  "Incident Operations Pro",
+    "category":  "observability",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "Operations",
+                        "IdentityAccess"
+                    ],
+    "catalogue_keys":  [
+                           "notify.oncall",
+                           "notify.team-messaging",
+                           "support.status-page",
+                           "support.reports"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced incident cases, response coordination, on-call workflow integration and reviewed public-status drafting. It correlates existing authorized evidence and connector receipts without replacing local alerts.",
+    "core_boundary":  "Core retains essential incidents, local notifications, ordinary email/SMS/Telegram or other admitted channel routing and verified ROOT fallback. This module adds advanced team/on-call coordination and reviewed publication workflows; connector delivery does not prove acknowledgement, and optional entitlement never gates basic operational alerts.",
+    "acceptance":  [
+                       "Keep incident membership, evidence visibility and public/private status content explicitly scoped.",
+                       "Resolve channel ownership, recipient identity and current notification permission through Core policy for Telegram, SMS, email and other admitted transports; external contacts and connector credentials remain scoped.",
+                       "Distinguish queued, provider-accepted, sent, delivered where evidenced, acknowledged and failed notifications with receipts, deduplication and bounded retries; do not claim instantaneous delivery.",
+                       "Require authorized review for external publication and prevent sensitive host/customer data from entering public drafts.",
+                       "Exercise connector outages, duplicate events, shift changes, channel revocation and concurrent incident updates with current-authority checks and Core local fallback.",
+                       "Disabling the module must preserve local incident history, ordinary free Core alerts and independent response access."
+                   ]
+}

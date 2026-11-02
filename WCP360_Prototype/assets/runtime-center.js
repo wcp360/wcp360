@@ -137,6 +137,7 @@
   </div>
   <button type="button" class="rtc-drawer-backdrop" data-rtc-close aria-label="Close runtime form"></button>
   <aside class="rtc-drawer" id="rtcDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rtcDrawerTitle"><div class="rtc-drawer-head"><div><strong id="rtcDrawerTitle">Runtime operation</strong><small data-rtc-drawer-sub>Validated ROOT workflow</small></div><button type="button" class="wcp-icon-btn" data-rtc-close aria-label="Close"><span class="material-symbols-rounded">close</span></button></div><div class="rtc-drawer-body"></div></aside>`;
+  const workflowOverlay=WCPUI.Overlay.attach({panel:qs('#rtcDrawer'),backdrop:qs('.rtc-drawer-backdrop'),source:'runtime-center'});
 
   const renderView = (focus = false) => {
     qsa('[data-rtc-tab]').forEach(button => {
@@ -198,19 +199,10 @@
         '<label class="rtc-confirm"><input type="checkbox" required><span><strong>Run native syntax checks and health probes</strong><br>Any failed gate prevents publication and restores the previous revision.</span></label>', 'Validate policy');
     }
     body.innerHTML = content;
-    drawer.classList.add('open');
-    drawer.setAttribute('aria-hidden', 'false');
-    qs('.rtc-drawer-backdrop').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    qs('input,select,textarea', drawer)?.focus();
+    workflowOverlay.open(returnFocus);
   };
   const closeDrawer = () => {
-    const drawer = qs('#rtcDrawer');
-    drawer.classList.remove('open');
-    drawer.setAttribute('aria-hidden', 'true');
-    qs('.rtc-drawer-backdrop').classList.remove('open');
-    document.body.style.overflow = '';
-    returnFocus?.focus?.();
+    workflowOverlay.close();
   };
   const emit = (name, kind, risk = 'medium') => {
     document.dispatchEvent(new CustomEvent('wcp:operation', { detail: { name, kind, risk, scope: 'root', actor: 'Yann · ROOT' } }));
@@ -291,9 +283,6 @@
       closeDrawer();
       renderView();
     }, 450);
-  });
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && qs('#rtcDrawer.open')) closeDrawer();
   });
   window.addEventListener('hashchange', () => {
     const name = location.hash.slice(1);

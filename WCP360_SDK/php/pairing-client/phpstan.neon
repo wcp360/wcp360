@@ -1,0 +1,9 @@
+parameters:
+    level: 5
+    paths:
+        - src
+        - autoload.php
+        - ../../../tools/hub-pair.php
+    bootstrapFiles:
+        - autoload.php
+    tmpDir: ../../../../WCP360_Quality/tools/pairing-client-phpstan

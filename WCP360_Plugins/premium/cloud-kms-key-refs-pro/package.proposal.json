@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.cloud-kms-key-refs-pro",
+  "kind": "plugin",
+  "label": "Cloud KMS key-reference connector",
+  "category": "identity-secrets",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "IdentityAccess",
+    "BackupRestore",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "identity.vaults-kms"
+  ],
+  "dependencies": [],
+  "summary": "Prepare selected cloud key-management integrations for explicit encryption-key references and recovery evidence.",
+  "core_boundary": "Encryption policy and local backup recovery remain Core concerns; possession of a provider credential does not authorize arbitrary decrypt operations. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify one provider and key-service profile at a time with admitted account, region, key purpose and encryption context.",
+    "Exercise key rotation, disabled or deleted keys, denied decrypt requests and recovery of retained backups.",
+    "Record key identifiers and authorization evidence without exporting master key material or promising interchangeable provider semantics.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

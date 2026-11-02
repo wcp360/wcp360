@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.local-inference-provider-pro",
+  "kind": "plugin",
+  "label": "Local inference provider connector",
+  "category": "ai-mcp",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "ExtensionManagement",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "automation.ai-readonly",
+    "automation.ai-missions"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a selected local inference service integration with explicit model, resource and data-isolation policies.",
+  "core_boundary": "An AI model and its orchestration agent are separate from Go wcpd; this proposal does not download weights or grant a model host authority. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify one admitted inference endpoint and model artifact with provenance, applicable license, integrity and resource requirements.",
+    "Bound CPU, memory, accelerator use and request concurrency without promising universal hardware or operating-system support.",
+    "Exercise cross-tenant prompt isolation and malicious model output; keep root actions unavailable and retain useful Core operation when inference stops.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

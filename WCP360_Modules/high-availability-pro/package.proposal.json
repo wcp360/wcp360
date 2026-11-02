@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.high-availability-pro",
+    "kind":  "module",
+    "label":  "High Availability Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Data",
+                        "Operations",
+                        "Observability",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "network.vrrp-vip",
+                           "network.service-ha",
+                           "compute.node-groups",
+                           "compute.rolling-operations"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced service-continuity coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows on already admitted nodes/providers. Availability is scoped to qualified topology/workload/failure cases; node enrollment and placement orchestration belong to Multi-server Hosting Pro, while application releases remain deployment workflows.",
+    "core_boundary":  "Core remains a complete standalone panel with essential recovery, ordinary service lifecycle and open-source node/provider authority when implemented. This module adds optional cross-node continuity coordination; it creates neither a second node registry nor an unreviewed remote root/cluster-control path.",
+    "acceptance":  [
+                       "Admit topology and peer identities explicitly, including network partitions, quorum/fencing and shared-storage assumptions.",
+                       "Test split-brain, stale leaders, delayed messages and asymmetric failures before enabling a promotion strategy.",
+                       "Measure actual service continuity and recovery for each supported workload rather than promising generic zero downtime.",
+                       "Keep current authorization, resource revisions and audit consistent across every admitted node operation.",
+                       "Document safe module exit and independent recovery without disabling existing hosted services."
+                   ]
+}

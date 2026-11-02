@@ -1,6 +1,6 @@
 # WCP360 Pull Request
 
-References: [documentation](https://github.com/yyogas/wcp360/blob/main/documentation/README.md), [baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md), [review policy](https://github.com/yyogas/wcp360/blob/main/documentation/governance/REVIEW-MERGE-POLICY.md) and [legacy path mapping](https://github.com/yyogas/wcp360/blob/main/documentation/PATH-MIGRATION.json).
+References: [documentation](https://github.com/yyogas/wcp360/blob/main/documentation/README.md), [baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md), [review policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md) and [legacy path mapping](https://github.com/yyogas/wcp360/blob/main/documentation/PATH-MIGRATION.json).
 
 ## Scope
 

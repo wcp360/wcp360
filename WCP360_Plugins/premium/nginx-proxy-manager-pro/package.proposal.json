@@ -1,0 +1,33 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.nginx-proxy-manager-pro",
+    "kind":  "plugin",
+    "label":  "Nginx Proxy Manager interoperability",
+    "category":  "proxy-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "domains.cdn-edge"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare explicit proxy-host, stream and TLS inventory/import planning for a selected Nginx Proxy Manager deployment.",
+    "core_boundary":  "This proposal does not assume a stable management API or generic clustered load balancer. Native Nginx ingress remains free Core; no automatic port 80/443 takeover or competing TLS writer is admitted. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Start with a reviewed read-only observation/export profile; qualify an exact upstream management contract before proposing automated mutations.",
+                       "Bind proxy hosts, destinations, access lists, certificates and streams to owned resources; reject arbitrary configuration, backend URLs and transfer of active Core-managed ingress without approval.",
+                       "Exercise private-route/access-list behavior, Apache/.htaccess preservation, origin/TLS/client-IP handling and failed cutover recovery; retain prior ingress ownership until the handoff is explicitly complete.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

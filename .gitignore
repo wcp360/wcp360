@@ -12,6 +12,12 @@
 *.keystore
 credentials*
 secrets*
+# Only named documentation pages may bypass the broad secrets-name rule.
+# Their contents still require review; never store actual credentials here.
+!/documentation/**/secrets.md
+!/specifications/**/secrets.md
+# Reviewed source helper; no general exception for secrets-named files.
+!/SOURCE/platform/src/Shared/SecretSafe.php
 private/
 .secret/
 secrets/
@@ -21,7 +27,8 @@ secrets/
 *.sock
 *.log
 logs/
-runtime/
+# Root runtime output only; do not hide nested source directories.
+/runtime/
 tmp/
 temp/
 cache/
@@ -30,6 +37,15 @@ storage/private/
 
 # Databases / backups / dumps
 *.sql
+# Source-only exceptions. These patterns create no SQL or migration files.
+!/database/migrations/**/*.sql
+!/tests/fixtures/**/*.sql
+# Conventional dump names remain excluded, including inside source exceptions.
+*.dump.sql
+*.backup.sql
+*.sql.gz
+*.sql.bz2
+*.sql.xz
 *.dump
 *.backup
 *.bak
@@ -40,7 +56,10 @@ dumps/
 node_modules/
 vendor/
 dist/
-build/
+# Root build output only; keep packaging/build and tools/build trackable.
+/build/
+# Downloaded local build toolchains and generated build output remain private.
+/WCP360_Build/build/
 coverage/
 .cache/
 .phpunit.cache/

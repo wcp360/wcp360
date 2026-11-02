@@ -1,0 +1,7 @@
+doctrine:
+    dbal:
+        url: '%env(wcp_database:DATABASE_URL)%'
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        enable_lazy_ghost_objects: true
+        auto_mapping: false

@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.coraza-waf-pro",
+    "kind":  "plugin",
+    "label":  "Coraza managed-policy connector",
+    "category":  "security-defense",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "security.waf",
+                           "security.advisories"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare optional reviewed Coraza policy and defensive-observation integration through a qualified Core binding.",
+    "core_boundary":  "This is managed policy integration, not a paywall for a Core engine or permission to inject Go code, arbitrary modules, shell hooks or unrestricted rules. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Select and qualify an exact Core binding and Coraza/CRS capability profile instead of assuming interchangeability across Caddy, Nginx, Apache or application runtimes.",
+                       "Stage site-scoped policy changes with body/resource limits, detection/block decisions, private-route fixtures and measured false-positive/rollback evidence.",
+                       "Exercise policy provenance failure, malicious rule input and provider outage while preserving baseline protection and local recovery; make no universal prevention or performance guarantee.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

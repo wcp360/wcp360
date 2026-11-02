@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.pagerduty-oncall-pro",
+  "kind": "plugin",
+  "label": "PagerDuty incident and on-call connector",
+  "category": "collaboration-support",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "notify.oncall"
+  ],
+  "dependencies": [],
+  "summary": "Prepare incident-event delivery and authorized acknowledgement reconciliation for selected PagerDuty services.",
+  "core_boundary": "Incident status does not authorize host remediation; local incident evidence and service recovery remain Core-owned. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Bind routing keys and incident references to an admitted service, tenant and severity mapping.",
+    "Exercise deduplication, acknowledgement, resolution and out-of-order retries without closing unrelated incidents.",
+    "Keep provider tokens and diagnostic payloads minimized; qualify outage recovery and make undelivered alerts visible locally.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

@@ -1,10 +1,17 @@
 # WCP360 — Security / IPC privileged operation binding review
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 **Date:** 2026-10-26
 **Classification:** DERIVED EVIDENCE / WCP360 HANDOFF — NOT CANONICAL AUTHORITY
 **Source Security:** `specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md` (Git blob `6d74f2f363524511424f839ca7262143c2af95ab`)
 **Source IPC:** `specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md` (Git blob `fec9c74e8413db822662e47c76c40486e282334f`)
-**Tracking:** #13; #41; #91; AUDIT-WCP-0104; source integration PR #90
+**Tracking:** #13; AUDIT-WCP-0104; #41; integration PR #90
 **Owner:** SECURITY / HARDENING (permission/parent authorization) + API / IPC / CONTRACTS (typed action/job/primitive tuples)
 **Related:** TESTS / QA, MODULES, DATABASE when persistence is needed, ARCHITECTURE REVIEW
 **Change of official baseline:** NONE
@@ -18,10 +25,8 @@ The final Security v1.0 matrix and final IPC-B/1 registry have exactly **47 iden
 
 **Neither category is a production-ready dispatcher authorization.** Direct permission names do not establish the full authorization-context/tenant/surface/primitive/grant binding automatically.
 
-A machine check and **21** adversarial Security/IPC reference tests passed in integration PR #90, combined with 70 other read-only/inert research tests (**91 E1 tests total**) on exact head `b1ae801dbc82f0972ab94a9caf0156b86b0b82f1`:
-https://github.com/yyogas/wcp360/actions/runs/40417137735
-
-The check pins the 12 current unresolved permission expressions verbatim as an **unexpected-drift alarm**, not as a list of approved executable grants. The R1 checker/tests require independent review before becoming enforced repository tooling.
+A machine check and 19 adversarial reference tests were run in integrated PR #90, combined with the other read-only/prototype suites (89 tests across all four families):
+https://github.com/yyogas/wcp360/actions/runs/40415211697
 
 No application implementation test was executed by this work.
 

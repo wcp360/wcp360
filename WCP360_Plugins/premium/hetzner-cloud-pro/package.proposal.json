@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.hetzner-cloud-pro",
+  "kind": "plugin",
+  "label": "Hetzner Cloud infrastructure connector",
+  "category": "cloud-infrastructure",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "Operations",
+    "Tenancy"
+  ],
+  "catalogue_keys": [
+    "automation.terraform-opentofu",
+    "compute.node-groups"
+  ],
+  "dependencies": [],
+  "summary": "Prepare an optional project-scoped connector for cloud servers, volumes and network attachments.",
+  "core_boundary": "Native hosting remains local and free; cloud project access does not authorize altering unrelated server resources. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify a pinned provider contract for project identity, server types, locations and volume ownership.",
+    "Keep provisioning, rebuild and delete proposals distinct, with reviewed costs and destructive confirmation.",
+    "Reconcile asynchronous actions and verify recovery when project credentials are revoked mid-operation.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

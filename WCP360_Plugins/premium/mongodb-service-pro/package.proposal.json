@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.mongodb-service-pro",
+    "kind":  "plugin",
+    "label":  "External MongoDB service connector",
+    "category":  "database-services",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Data",
+                        "BackupRestore",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "data.external-databases"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare a selected MongoDB deployment profile for authorized database inventory, observations and reviewed recovery workflows.",
+    "core_boundary":  "The proposal does not imply support for every distribution, cloud edition or database operation. No unrestricted admin database, arbitrary pipeline/query execution or Core datastore access is delegated. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify product/edition, deployment topology, protocol/client, authentication, database-scoped roles and verified TLS identity with explicit tenant ownership.",
+                       "Start with bounded read-only observations; separately review any account, schema/index, backup or restore capability with redaction and resource limits.",
+                       "Exercise revoked roles, replica failover, partial writes and isolated backup/restore compatibility; retain data on connector removal and require explicit authorization for database purge.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

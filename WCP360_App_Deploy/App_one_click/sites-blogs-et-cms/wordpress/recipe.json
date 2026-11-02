@@ -1,0 +1,158 @@
+{
+  "$schema": "../../../schemas/app-recipe.schema.json",
+  "schema": "wcp360.app-deploy.recipe-draft/0",
+  "recipe_id": "dev.app-deploy.wordpress",
+  "recipe_version": "0.1.0-draft.1",
+  "status": "draft",
+  "installable": false,
+  "source_entry": {
+    "name": "WordPress",
+    "category": "Sites, blogs et CMS",
+    "nature": "Application",
+    "proposed_profile": "PHP"
+  },
+  "application_version": null,
+  "artifact": {
+    "resolution": "unresolved",
+    "pinning_required": true,
+    "locator": null,
+    "sha256": null,
+    "oci_digest": null,
+    "source_revision": null,
+    "build_context_sha256": null
+  },
+  "releases": [],
+  "runtime": {
+    "family": "php",
+    "provider_ref": null,
+    "version": null,
+    "provider_digest": null,
+    "qualified_extensions": [],
+    "frankenphp_worker_enabled": false,
+    "frankenphp_worker_adapter_ref": null
+  },
+  "dependencies": [
+    {
+      "role": "database",
+      "candidates": [
+        "mysql",
+        "mariadb"
+      ],
+      "placement": "hosted_service",
+      "selected_version": null,
+      "provider_digest": null,
+      "required": true
+    }
+  ],
+  "hosting": {
+    "topology_ref": null,
+    "native_htaccess": "optional",
+    "private_ingress_required": true,
+    "preserve_upstream_web_server": false,
+    "tls_ownership": "future_core_managed_edge",
+    "frankenphp_worker_support": "not_qualified"
+  },
+  "configuration_schema": "configuration.schema.json",
+  "secret_purposes": [
+    "database_password",
+    "admin_password",
+    "application_salts"
+  ],
+  "data": {
+    "persistent_roles": [
+      "application_files",
+      "database",
+      "uploads",
+      "application_configuration",
+      "plugin_metadata"
+    ],
+    "retain_on_uninstall": true,
+    "purge_policy": "separate_explicit_authorization",
+    "owned_resources_only": true,
+    "backup_consistency": "application_specific_required"
+  },
+  "lifecycle": {
+    "install": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/install.md"
+    },
+    "configure": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/configure.md"
+    },
+    "update": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/update.md"
+    },
+    "uninstall": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/uninstall.md"
+    },
+    "backup": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/backup.md"
+    },
+    "restore": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/restore.md"
+    },
+    "inspect": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/inspect.md"
+    },
+    "reconcile": {
+      "implementation": "not_implemented",
+      "provider_operation_ref": null,
+      "document": "lifecycle/reconcile.md"
+    }
+  },
+  "qualification": {
+    "state": "candidate",
+    "publisher_trust_verified": false,
+    "artifact_integrity_verified": false,
+    "native_installation_implemented": false,
+    "live_activation_implemented": false,
+    "performance_measured": false,
+    "qualified_targets": [],
+    "evidence_scope": "upstream_documentation_only"
+  },
+  "upstream_sources": [
+    {
+      "url": "https://wordpress.org/about/requirements/",
+      "purpose": "requirements",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://developer.wordpress.org/cli/commands/core/install/",
+      "purpose": "installation",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://developer.wordpress.org/cli/commands/core/update-db/",
+      "purpose": "update",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://developer.wordpress.org/advanced-administration/security/backup/",
+      "purpose": "backup_restore",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://developer.wordpress.org/advanced-administration/server/web-server/nginx/",
+      "purpose": "routing",
+      "checked_at": "2026-11-02"
+    },
+    {
+      "url": "https://frankenphp.dev/docs/wordpress/",
+      "purpose": "routing",
+      "checked_at": "2026-11-02"
+    }
+  ]
+}

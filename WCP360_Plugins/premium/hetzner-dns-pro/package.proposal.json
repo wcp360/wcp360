@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.hetzner-dns-pro",
+  "kind": "plugin",
+  "label": "Hetzner DNS connector",
+  "category": "dns-cdn-domains",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "domains.dns-providers",
+    "domains.dns01"
+  ],
+  "dependencies": [],
+  "summary": "Prepare bounded DNS-zone synchronization and challenge support for a selected Hetzner provider profile.",
+  "core_boundary": "A provider account and zone reference do not transfer Core domain ownership or authorize automatic engine migration. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin the supported provider product/API and reconcile its current zone and record identifiers.",
+    "Refuse cross-zone updates and preserve unrelated records during a DNS-01 lifecycle.",
+    "Exercise unavailable capabilities, propagation uncertainty and token rotation with explicit stale state.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

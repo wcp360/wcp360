@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.external-mysql-mariadb-pro",
+    "kind":  "plugin",
+    "label":  "External MySQL and MariaDB connector",
+    "category":  "database-services",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Data",
+                        "BackupRestore",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "data.external-databases",
+                           "data.sql-analysis"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare separately qualified external MySQL and MariaDB observations and reviewed tenant database operations.",
+    "core_boundary":  "The control-plane PostgreSQL database stays outside customer database administration. A remote database credential does not grant arbitrary SQL, server-global authority or ownership of an existing Core-managed service. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify MySQL and MariaDB engine/client/authentication profiles independently with admitted endpoint, verified TLS identity, database/user ownership and minimum privileges.",
+                       "Begin with bounded prepared observation queries; separately admit account/schema/backup operations with cost limits and redacted diagnostics, never a generic SQL console or insecure TLS fallback.",
+                       "Exercise revoked privileges, partial schema operations, engine-specific restore compatibility and uncertain writes; retain data and prove isolated recovery before a separately authorized destructive action.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.application-testing-pro",
+    "kind":  "module",
+    "label":  "Application Testing Pro",
+    "category":  "applications",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Data",
+                        "Files",
+                        "Operations",
+                        "BackupRestore",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "apps.verified-updates",
+                           "delivery.previews",
+                           "backup.restore-tests",
+                           "observe.synthetics"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced customer-application test campaigns using isolated preview environments, version matrices, synthetic user journeys and comparison before promotion. Reports separate installability, compatibility, security checks and measured performance.",
+    "core_boundary":  "Core\u0027s own tests, quality tools and essential hosted-resource checks remain freely available. This module adds optional application-specific rehearsals; it does not certify applications, imply upstream support or treat passing syntax as runtime compatibility.",
+    "acceptance":  [
+                       "Qualify every declared application/runtime/database/provider combination with reproducible pinned fixtures and source references.",
+                       "Run tests in isolated targets with sanitized data, controlled outbound effects and explicit resource budgets.",
+                       "Exercise sessions, uploads, background work, database changes, restore and removal behavior relevant to each application.",
+                       "Record measured workload conditions and failed/unavailable checks without extrapolating production performance.",
+                       "Require a separately authorized promotion and retain Core resource/recovery access when tests or the module fail."
+                   ]
+}

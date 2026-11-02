@@ -1,0 +1,27 @@
+{
+  "source_repository": "yyogas/wcp360",
+  "source_commit": "284daabc8d57a65d3ad11e326baee32898e64254",
+  "adaptation": "Namespace/import relocation only; session decision logic unchanged.",
+  "files": [
+    {
+      "source": "SOURCE/platform/src/Security/SessionLifetimePolicy.php",
+      "source_blob": "36d125d5be23a9d0fb7e39d4f5571e12d6da5338",
+      "target": "WCP360_Core/src/Shared/Security/SessionLifetimePolicy.php"
+    },
+    {
+      "source": "SOURCE/platform/src/Security/SessionKind.php",
+      "source_blob": "da8166a64d97593aa6b54f6dbc5fa8f406675233",
+      "target": "WCP360_Core/src/Shared/Security/SessionKind.php"
+    },
+    {
+      "source": "SOURCE/platform/src/Shared/Surface.php",
+      "source_blob": "257e02e93c003b099e22867115b659de9b9fc04d",
+      "target": "WCP360_Core/src/Shared/Security/Surface.php"
+    },
+    {
+      "source": "SOURCE/platform/src/Shared/ContractViolation.php",
+      "source_blob": "6d050571d3d2240d4b4e5604a745c4b0f0583daa",
+      "target": "WCP360_Core/src/Shared/Security/ContractViolation.php"
+    }
+  ]
+}

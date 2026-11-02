@@ -1,0 +1,45 @@
+security:
+    password_hashers:
+        Wcp360\Core\Module\IdentityAccess\Domain\Principal:
+            algorithm: sodium
+    providers:
+        workbench:
+            id: Wcp360\Core\Module\IdentityAccess\Infrastructure\PrincipalProvider
+    firewalls:
+        main:
+            lazy: true
+            provider: workbench
+            user_checker: Wcp360\Core\Shared\Security\ContextUserChecker
+            entry_point: Wcp360\Core\Shared\Http\CandidateAuthenticationEntryPoint
+            form_login:
+                login_path: wcp_login
+                check_path: wcp_login
+                enable_csrf: true
+                default_target_path: wcp_dashboard
+                use_referer: false
+                always_use_default_target_path: true
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
+            two_factor:
+                auth_form_path: /mfa
+                check_path: /mfa/check
+                post_only: true
+                enable_csrf: true
+                csrf_token_id: two_factor
+                always_use_default_target_path: true
+                default_target_path: /
+                success_handler: Wcp360\Core\Module\IdentityAccess\UI\Http\MfaSuccessHandler
+                failure_handler: Wcp360\Core\Module\IdentityAccess\UI\Http\MfaFailureHandler
+            logout:
+                path: wcp_logout
+                target: wcp_login
+                enable_csrf: true
+    access_control:
+        - { path: '^/health$', roles: PUBLIC_ACCESS }
+        - { path: '^/login$', roles: PUBLIC_ACCESS }
+        - { path: '^/reset-password$', roles: PUBLIC_ACCESS }
+        - { path: '^/logout$', roles: PUBLIC_ACCESS }
+        - { path: '^/mfa/enroll$', roles: ROLE_ADMIN }
+        - { path: '^/mfa(?:/check)?$', roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: '^/', roles: IS_AUTHENTICATED_FULLY }

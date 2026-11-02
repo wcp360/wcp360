@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.registrar-portfolio-pro",
+  "kind": "plugin",
+  "label": "Registrar portfolio connector pack",
+  "category": "dns-cdn-domains",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Transfers",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "domains.registrars",
+    "domains.domain-monitoring"
+  ],
+  "dependencies": [],
+  "summary": "Prepare optional registrar-specific inventory, expiry observations and approved domain-transfer workflows.",
+  "core_boundary": "Baseline domains and DNS stay in Core; registrar commercial operations require explicit provider and resource authority. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Select each registrar API/product explicitly and keep registrant data and transfer material redacted.",
+    "Require distinct review for renewal, transfer, contact changes and any operation with financial effects.",
+    "Test duplicate events, transfer locks, failed renewal observations and preservation of existing DNS service.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

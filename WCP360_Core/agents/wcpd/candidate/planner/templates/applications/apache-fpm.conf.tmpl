@@ -1,0 +1,32 @@
+# Inert Apache 2.4 event/FPM recipe; required modules must be admitted separately.
+Listen {{.Listen}}
+<VirtualHost {{.Listen}}>
+    ServerName {{.Host}}
+    DocumentRoot "{{.Root}}"
+    ProxyRequests Off
+    LimitRequestBody 16777216
+    <Directory "{{.Root}}">
+        Options -Indexes -ExecCGI -Includes +SymLinksIfOwnerMatch
+        AllowOverride None
+        AllowOverrideList RewriteEngine RewriteBase RewriteCond RewriteRule
+        Require all granted
+        DirectoryIndex index.php index.html
+        <FilesMatch "(?i)\.php$">
+            SetHandler "proxy:unix:/run/wcp360-applications/{{.ID}}/php.sock|fcgi://localhost/"
+        </FilesMatch>
+    </Directory>
+    <LocationMatch "(^|/)\.">
+        Require all denied
+    </LocationMatch>
+    <FilesMatch "(?i)\.(php[0-9]+|phtml|phar)$">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "(?i)(^\.|^wp-config\.php|^composer\.(json|lock)$|\.(bak|sql|sqlite|ini|log|conf)$)">
+        Require all denied
+    </FilesMatch>
+    <Directory "{{.Root}}/wp-content/uploads">
+        <FilesMatch "(?i)\.(php[0-9]?|phtml|phar)(/|$)">
+            Require all denied
+        </FilesMatch>
+    </Directory>
+</VirtualHost>

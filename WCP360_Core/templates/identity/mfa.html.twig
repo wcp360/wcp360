@@ -1,0 +1,15 @@
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = enabled ? 'Vérification administrateur' : 'Activer la MFA' %}
+{% block content %}
+<p class="auth-eyebrow">SÉCURITÉ DU COMPTE</p>
+<h1>{{ enabled ? 'Vérification administrateur' : 'Activer la MFA' }}</h1>
+<p class="auth-lead">{{ enabled ? 'La MFA est activée pour ce compte. Validez votre second facteur pour accéder au panneau.' : 'Vous avez choisi d’ajouter un authentificateur. La MFA sera activée après validation de votre code.' }}</p>
+{% if not configured %}<p role="alert">La MFA est indisponible. L’opérateur doit configurer sa clé de chiffrement privée.</p>
+{% else %}
+{% if error %}<p role="alert" class="auth-feedback">Vérification refusée. Vérifiez votre code ou utilisez un code de secours inutilisé.</p>{% endif %}
+{% if secret %}<h2>Configurer votre application d’authentification</h2><p>Ajoutez un compte WCP360 avec cette clé. TOTP : 6 chiffres, période de 30 secondes.</p><code id="mfa-secret">{{ secret }}</code><p class="field-help">Cette clé n’est affichée que dans cette réponse. Le réglage expire dans cinq minutes.</p>
+{% elseif not enabled %}<p>Si vous avez déjà enregistré la clé, saisissez votre code. Sinon, annulez puis recommencez depuis la sécurité du compte.</p>{% endif %}
+<form class="auth-form" action="/mfa/check" method="post" data-turbo-frame="{{ enabled ? '_top' : 'wcp-auth-step' }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token('two_factor') }}"><div><label for="auth-code">Code de l’authentificateur{% if enabled %} ou code de secours{% endif %}</label><input id="auth-code" name="_auth_code" type="text" autocomplete="one-time-code" maxlength="64" required></div><button class="button auth-submit" type="submit">Valider la MFA <span aria-hidden="true">→</span></button></form>
+{% endif %}
+<form class="wcp-auth-logout" action="/logout" method="post" data-turbo-frame="_top"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}"><button class="button secondary" type="submit">{{ enabled ? 'Déconnexion' : 'Annuler l’activation' }}</button></form>
+{% endblock %}

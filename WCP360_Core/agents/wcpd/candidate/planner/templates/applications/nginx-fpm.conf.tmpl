@@ -1,0 +1,21 @@
+# Inert application recipe. One unreserved loopback listener; no deployment.
+server {
+    listen 127.0.0.1:8082;
+    server_name {{.Host}};
+    root {{.Root}};
+    index index.php index.html;
+    client_max_body_size 16m;
+    disable_symlinks on;
+    location ~ (^|/)\. { return 403; }
+    location ~* (?:^|/)(?:wp-config\.php(?:[.~_-].*)?|composer\.(?:json|lock)|.*\.(?:bak|sql|sqlite|ini|log|conf))$ { return 403; }
+    location ~* ^/wp-content/uploads/.*\.(?:php[0-9]?|phtml|phar)(?:/|$) { return 403; }
+    location / { try_files $uri $uri/ {{if .Front}}/index.php?$args{{else}}=404{{end}}; }
+    location ~* \.(?:php[0-9]*|phtml|phar)$ {
+        try_files $uri =404;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTP_PROXY "";
+        fastcgi_pass unix:/run/wcp360-applications/{{.ID}}/php.sock;
+        fastcgi_read_timeout 60s;
+    }
+}

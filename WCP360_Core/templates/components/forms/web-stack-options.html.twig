@@ -1,0 +1,5 @@
+{# Informational catalogue; unsupported profiles are never submitted as engine values. #}
+<div class="table-scroll"><table><caption>Stacks web des hébergements — capacités actuelles</caption><thead><tr><th scope="col">Profil</th><th scope="col">Topologie</th><th scope="col">Préparation de plans</th><th scope="col">Activation</th></tr></thead><tbody>
+{% for stack in web_stacks.choices %}<tr data-web-stack="{{ stack.id }}"><th scope="row">{{ stack.label }}{% if stack.id == web_stacks.default %} — défaut recommandé{% endif %}</th><td>{{ stack.topology }}</td><td>{% if not stack.plan_implemented %}À développer{% elseif stack.selectable_for_plan %}Disponible dans le candidat{% else %}Désactivée — préparation des plans à autoriser{% endif %}</td><td>{{ stack.activation == 'isolated_candidate_only' ? 'Essai isolé uniquement' : 'À développer' }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="field-help">Modern utilise directement Caddy/FrankenPHP. Le mode Worker actuel passe par Nginx et appartient au mix avancé. Apache, le multi-PHP et la migration entre stacks restent à développer.</p>

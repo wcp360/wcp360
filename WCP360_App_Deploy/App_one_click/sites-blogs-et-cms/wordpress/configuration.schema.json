@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wcp360:app-deploy:authoring:configuration:wordpress:0",
+  "title": "wordpress candidate configuration input",
+  "description": "Bounded authoring data only; no Core operation consumes this file. References require future authorized registry resolution. JSON Schema format annotations do not replace application validation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "tenantRef",
+    "hostingAccountRef",
+    "domainRef",
+    "databaseRef",
+    "phpProviderRef",
+    "capacityProfileRef",
+    "siteTitle",
+    "adminUsername",
+    "adminEmail",
+    "locale",
+    "runtimePreference",
+    "requireNativeHtaccess",
+    "secretRefs"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wcp360.app-deploy.configuration-draft/0"
+    },
+    "tenantRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "hostingAccountRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "domainRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "databaseRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "phpProviderRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "capacityProfileRef": {
+      "$ref": "#/$defs/resourceRef"
+    },
+    "siteTitle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+    },
+    "adminUsername": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,59}$"
+    },
+    "adminEmail": {
+      "$ref": "#/$defs/email"
+    },
+    "locale": {
+      "enum": [
+        "en_US",
+        "fr_FR"
+      ]
+    },
+    "runtimePreference": {
+      "enum": [
+        "php_fpm",
+        "frankenphp_classic"
+      ]
+    },
+    "requireNativeHtaccess": {
+      "type": "boolean"
+    },
+    "secretRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "databasePassword",
+        "adminPassword",
+        "salts"
+      ],
+      "properties": {
+        "databasePassword": {
+          "$ref": "#/$defs/secretRef"
+        },
+        "adminPassword": {
+          "$ref": "#/$defs/secretRef"
+        },
+        "salts": {
+          "$ref": "#/$defs/secretRef"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "resourceRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$",
+      "description": "Opaque authoring reference only. The future Core must resolve and authorize the actual resource; a matching string is not a credential or permission."
+    },
+    "secretRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$",
+      "description": "Opaque authoring reference only. The future Core must resolve and authorize the actual resource; a matching string is not a credential or permission."
+    },
+    "email": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 254,
+      "format": "email",
+      "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+    }
+  }
+}

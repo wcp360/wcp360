@@ -1,0 +1,1119 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wcp360\Core\Tests\Integration;
+
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use OTPHP\TOTP;
+use Psr\Log\AbstractLogger;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Console\Tester\CommandTester;
+use Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan;
+use Wcp360\Core\Module\IdentityAccess\Application\CandidatePermissionAdministration;
+use Wcp360\Core\Module\Operations\Application\RunHostingPlan;
+use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
+use Wcp360\Core\Module\Platform\Application\ApplicationServerSettings;
+use Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabasePolicy;
+use Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabaseRoles;
+use Wcp360\Core\Shared\Security\CandidateDatabaseMiddleware;
+use Wcp360\Core\Shared\Security\RuntimeContext;
+use Wcp360\Core\Tests\Fixtures\WorkbenchFixture;
+
+final class CandidateDatabaseRolesTest extends WebTestCase
+{
+    private Connection $maintenance;
+    private CandidateDatabaseRoles $provider;
+    private array $roles = [];
+    private array $passwords = [];
+    private array $connections = [];
+    private array $saved = [];
+    private array $fixture;
+    private bool $cleanup = false;
+
+    protected function setUp(): void
+    {
+        self::bootKernel();
+        $this->maintenance = self::getContainer()->get(Connection::class);
+        if (!$this->maintenance->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            self::markTestSkipped('Actual PostgreSQL candidate role provisioning runs in Linux CI.');
+        }
+        if (!getenv('WCP_TEST_DATABASE_URL') || $this->maintenance->fetchOne('SELECT current_database()') !== 'wcp360_test') {
+            throw new \RuntimeException('Role fixtures require the explicit disposable PostgreSQL test database.');
+        }
+        self::assertTrue((bool) $this->maintenance->fetchOne('SELECT rolsuper FROM pg_catalog.pg_roles WHERE rolname=current_user'));
+        $this->roles = CandidateDatabasePolicy::roles('wcp360_test');
+        self::assertSame(0, $this->roleCount(), 'Existing roles must never be removed by this fixture.');
+        $this->cleanup = true;
+        $this->fixture = WorkbenchFixture::reset($this->maintenance);
+        $this->provider = $this->provider($this->maintenance);
+        foreach (CandidateDatabasePolicy::CONTEXTS as $context) {
+            $this->passwords[$context] = bin2hex(random_bytes(32));
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        self::ensureKernelShutdown();
+        foreach ($this->connections as $connection) {
+            $connection->close();
+        }
+        if ($this->cleanup) {
+            foreach ($this->roles as $role) {
+                if ($this->maintenance->fetchOne('SELECT 1 FROM pg_catalog.pg_roles WHERE rolname=?', [$role])) {
+                    $quoted = $this->maintenance->quoteIdentifier($role);
+                    $this->maintenance->executeStatement('DROP OWNED BY '.$quoted);
+                    $this->maintenance->executeStatement('DROP ROLE '.$quoted);
+                }
+            }
+        }
+        foreach ($this->saved as $name => [$server, $env]) {
+            if ($server === null) { unset($_SERVER[$name]); } else { $_SERVER[$name] = $server; }
+            if ($env === null) { unset($_ENV[$name]); } else { $_ENV[$name] = $env; }
+        }
+        parent::tearDown();
+    }
+
+    public function testPlanReadsOnlyAndNeverNeedsOrReturnsPasswords(): void
+    {
+        $plan = $this->provider->plan();
+        self::assertSame($this->roles, $plan['roles']);
+        self::assertFalse($plan['applied']);
+        self::assertFalse($plan['production_qualified']);
+        self::assertSame(0, $this->roleCount());
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        $this->assertNoSecrets($plan);
+    }
+
+    public function testProvisioningCreatesScramLoginsWithoutApplicationSqlProfilingSecrets(): void
+    {
+        $logger = new class extends AbstractLogger {
+            public array $records = [];
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $this->records[] = [(string) $message, $context];
+            }
+        };
+        $configuration = new Configuration();
+        $configuration->setMiddlewares([new \Doctrine\DBAL\Logging\Middleware($logger)]);
+        $db = DriverManager::getConnection($this->maintenance->getParams(), $configuration);
+        $this->connections[] = $db;
+        $result = $this->provider($db)->provision($this->passwords);
+        self::assertTrue($result['applied']);
+        self::assertSame(3, $this->roleCount());
+        $this->assertNoSecrets($result);
+        $recorded = json_encode($logger->records, JSON_THROW_ON_ERROR);
+        self::assertStringNotContainsString('SCRAM-SHA-256$', $recorded);
+        foreach ($this->passwords as $password) {
+            self::assertStringNotContainsString($password, $recorded);
+        }
+        foreach ($this->roles as $context => $role) {
+            $connection = $this->login($context);
+            self::assertSame($role, $connection->fetchOne('SELECT current_user'));
+            self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM pg_catalog.pg_authid WHERE rolname=? AND rolpassword LIKE 'SCRAM-SHA-256$4096:%' AND rolcanlogin AND NOT (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls)", [$role]));
+        }
+        self::assertSame('candidate.database.roles.created', $this->maintenance->fetchOne('SELECT kind FROM wcp_candidate_audit'));
+        $this->assertRefused(fn () => $this->login('user', str_repeat('0',64))->fetchOne('SELECT 1'));
+    }
+
+    public function testExistingRoleIsNeverAdoptedAlteredOrRepaired(): void
+    {
+        $role = $this->maintenance->quoteIdentifier($this->roles['admin']);
+        $this->maintenance->executeStatement('CREATE ROLE '.$role.' NOLOGIN');
+        $oid = $this->maintenance->fetchOne('SELECT oid FROM pg_catalog.pg_roles WHERE rolname=?', [$this->roles['admin']]);
+        $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+        self::assertSame(1, $this->roleCount());
+        self::assertSame($oid, $this->maintenance->fetchOne('SELECT oid FROM pg_catalog.pg_roles WHERE rolname=?', [$this->roles['admin']]));
+        self::assertFalse((bool) $this->maintenance->fetchOne('SELECT rolcanlogin FROM pg_catalog.pg_roles WHERE rolname=?', [$this->roles['admin']]));
+    }
+
+    public function testAuditFailureRollsBackEveryRoleAndGrant(): void
+    {
+        $this->maintenance->executeStatement("ALTER TABLE public.wcp_candidate_audit ADD CONSTRAINT reject_role_creation CHECK (kind <> 'candidate.database.roles.created')");
+        $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+        self::assertSame(0, $this->roleCount());
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+    }
+
+    public function testPublicColumnGrantCannotSilentlyBroadenThePolicy(): void
+    {
+        $this->maintenance->executeStatement('GRANT SELECT (sealed_secret) ON public.wcp_candidate_mfa TO PUBLIC');
+        try {
+            $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+            self::assertSame(0, $this->roleCount());
+        } finally {
+            $this->maintenance->executeStatement('REVOKE SELECT (sealed_secret) ON public.wcp_candidate_mfa FROM PUBLIC');
+        }
+    }
+
+    public function testUnknownTableAndMissingTableAreRefusedBeforeRoleCreation(): void
+    {
+        $this->maintenance->executeStatement('CREATE TABLE public.wcp_candidate_unreviewed (id INTEGER)');
+        try {
+            $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+            self::assertSame(0, $this->roleCount());
+        } finally {
+            $this->maintenance->executeStatement('DROP TABLE public.wcp_candidate_unreviewed');
+        }
+        $this->maintenance->executeStatement('DROP TABLE public.wcp_candidate_admin_sessions');
+        $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+        self::assertSame(0, $this->roleCount());
+    }
+
+    public function testCanonicalSchemaAndOtherDatabaseAreOutsideTheApplyScope(): void
+    {
+        self::assertNull($this->maintenance->fetchOne("SELECT to_regnamespace('wcp_iam')"));
+        $this->maintenance->executeStatement('CREATE SCHEMA wcp_iam');
+        try {
+            $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+        } finally {
+            $this->maintenance->executeStatement('DROP SCHEMA wcp_iam');
+        }
+        $params = $this->maintenance->getParams();
+        $params['dbname'] = 'postgres';
+        $other = DriverManager::getConnection($params);
+        $this->connections[] = $other;
+        $this->assertRefused(fn () => $this->provider($other)->provision($this->passwords));
+        self::assertSame(0, $this->roleCount());
+    }
+
+    public function testCallerTransactionAndConcurrentProvisionerRemainUntouched(): void
+    {
+        $this->maintenance->beginTransaction();
+        try {
+            $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+            self::assertTrue($this->maintenance->isTransactionActive());
+            self::assertSame(0, $this->roleCount());
+        } finally {
+            $this->maintenance->rollBack();
+        }
+        $lock = DriverManager::getConnection($this->maintenance->getParams());
+        $this->connections[] = $lock;
+        $lock->beginTransaction();
+        try {
+            $lock->fetchOne('SELECT pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtext(current_database()), 3601701)');
+            $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+            self::assertTrue($lock->isTransactionActive());
+            self::assertSame(0, $this->roleCount());
+        } finally {
+            $lock->rollBack();
+        }
+    }
+
+    public function testMissingConstantZeroConstraintIsRefusedAndGrantedMarkerCannotChange(): void
+    {
+        $this->maintenance->executeStatement('ALTER TABLE public.wcp_candidate_users DROP CONSTRAINT wcp_candidate_users_lock_guard_zero');
+        $this->assertRefused(fn () => $this->provider->provision($this->passwords));
+        self::assertSame(0, $this->roleCount());
+        $this->maintenance->executeStatement('ALTER TABLE public.wcp_candidate_users ADD CONSTRAINT wcp_candidate_users_lock_guard_zero CHECK (lock_guard = 0)');
+        $this->provider->provision($this->passwords);
+        foreach (['user', 'admin'] as $context) {
+            $db = $this->login($context);
+            self::assertSame(0, (int) $db->fetchOne('SELECT lock_guard FROM public.wcp_candidate_users LIMIT 1'));
+            try {
+                $db->executeStatement('UPDATE public.wcp_candidate_users SET lock_guard = 1');
+                self::fail('The row-lock marker was mutable.');
+            } catch (DriverException $error) {
+                self::assertSame('23514', $error->getSQLState());
+            }
+            $db->beginTransaction();
+            try {
+                self::assertIsString($db->fetchOne('SELECT id FROM public.wcp_candidate_users LIMIT 1 FOR UPDATE'));
+            } finally {
+                $db->rollBack();
+            }
+        }
+    }
+
+    public function testDatabaseGrantsEnforceSessionMfaIdentityPolicyAndAppendOnlyAuditBoundaries(): void
+    {
+        $this->provider->provision($this->passwords);
+        foreach (CandidateDatabasePolicy::CONTEXTS as $context) {
+            $db = $this->login($context);
+            $denied = [
+                'UPDATE public.wcp_candidate_users SET id=id WHERE false',
+                'UPDATE public.wcp_candidate_users SET password_hash=password_hash WHERE false',
+                'UPDATE public.wcp_candidate_users SET active=active WHERE false',
+                'INSERT INTO public.wcp_candidate_users DEFAULT VALUES',
+                'SELECT id FROM public.wcp_candidate_audit',
+                'UPDATE public.wcp_candidate_audit SET kind=kind WHERE false',
+                'DELETE FROM public.wcp_candidate_audit WHERE false',
+            ];
+            foreach (['user', 'admin'] as $surface) {
+                if ($context !== $surface) {
+                    $denied[] = 'SELECT id FROM public.wcp_candidate_'.$surface.'_sessions';
+                    $denied[] = 'INSERT INTO public.wcp_candidate_'.$surface.'_sessions DEFAULT VALUES';
+                    $denied[] = 'UPDATE public.wcp_candidate_'.$surface.'_sessions SET auth_strength=auth_strength WHERE false';
+                    $denied[] = 'DELETE FROM public.wcp_candidate_'.$surface.'_sessions WHERE false';
+                }
+            }
+            if ($context !== 'admin') {
+                $denied[] = 'SELECT sealed_secret FROM public.wcp_candidate_mfa';
+                $denied[] = 'INSERT INTO public.wcp_candidate_permission_denials DEFAULT VALUES';
+                $denied[] = 'UPDATE public.wcp_candidate_runtime_settings SET revision=revision WHERE false';
+            }
+            if ($context !== 'worker') {
+                $denied[] = 'UPDATE public.wcp_candidate_jobs SET state=state WHERE false';
+            }
+            foreach ($denied as $sql) {
+                try {
+                    $db->executeStatement($sql);
+                    self::fail('Forbidden database capability was accepted.');
+                } catch (DriverException $error) {
+                    self::assertSame('42501', $error->getSQLState());
+                }
+            }
+        }
+    }
+
+    public function testCommandAndHttpUserMfaAdminAndWorkerJourneysUseProvisionedCredentials(): void
+    {
+        $this->context('setup');
+        $this->set('WCP_ALLOW_CANDIDATE_DATABASE_ROLES', '1');
+        foreach ($this->passwords as $context => $password) {
+            $this->set('WCP_CANDIDATE_DATABASE_'.strtoupper($context).'_PASSWORD', $password);
+        }
+        $kernel = self::bootKernel();
+        $command = new CommandTester((new Application($kernel))->find('wcp:candidate:database:roles'));
+        self::assertSame(0, $command->execute(['--apply' => true], ['interactive' => false]));
+        $result = json_decode(trim($command->getDisplay()), true, 16, JSON_THROW_ON_ERROR);
+        self::assertSame('created', $result['status']);
+        $this->assertNoSecrets($result);
+        foreach (CandidateDatabasePolicy::CONTEXTS as $context) {
+            $this->set('WCP_CANDIDATE_DATABASE_'.strtoupper($context).'_PASSWORD', null);
+        }
+
+        $this->set('WCP_ALLOW_CANDIDATE_DATABASE_ROLES', '0');
+        $browser = $this->browser('user');
+        $crawler = $browser->request('GET', 'http://user.localhost/login');
+        $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'alice', '_password' => WorkbenchFixture::PASSWORD]));
+        self::assertResponseRedirects('/');
+        $crawler = $browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSame($this->roles['user'], self::getContainer()->get(Connection::class)->fetchOne('SELECT current_user'));
+        $browser->submit($crawler->filter('form[action="/workbench/plans"]')->form(['hostname' => 'isolated-profile.test']));
+        self::assertResponseRedirects();
+        $browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        $job = $this->maintenance->fetchOne('SELECT id FROM public.wcp_candidate_jobs');
+        $browser->request('GET', 'http://user.localhost/account/sessions');
+        self::assertResponseIsSuccessful();
+
+        $this->context('worker');
+        self::bootKernel();
+        self::assertSame($this->roles['worker'], self::getContainer()->get(Connection::class)->fetchOne('SELECT current_user'));
+        self::assertSame($job, self::getContainer()->get(RunHostingPlan::class)->runOne());
+        self::assertSame('SUCCEEDED', $this->maintenance->fetchOne('SELECT state FROM public.wcp_candidate_jobs WHERE id=?', [$job]));
+
+        $this->context('user');
+        self::bootKernel();
+        $second = self::getContainer()->get(SubmitHostingPlan::class)->submit($this->fixture['users']['alice'], [
+            'tenant_id' => $this->fixture['tenants']['alice'], 'hostname' => 'revoked-profile.test', 'idempotency_key' => 'profile-revocation-0001',
+        ]);
+        $browser = $this->browser('admin');
+        $crawler = $browser->request('GET', 'http://admin.localhost/login');
+        $browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'admin', '_password' => WorkbenchFixture::PASSWORD]));
+        for ($i=0; $i<3 && $browser->getResponse()->isRedirect(); ++$i) { $crawler=$browser->followRedirect(); }
+        self::assertResponseIsSuccessful();
+        self::assertSame('/', $browser->getRequest()->getPathInfo());
+        $crawler=$browser->request('GET', 'http://admin.localhost/account/security/mfa/enable');
+        $crawler=$browser->submit($crawler->selectButton('Configurer la MFA')->form(['current_password'=>WorkbenchFixture::PASSWORD]));
+        $secret=trim($crawler->filter('#mfa-secret')->text());
+        $crawler=$browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>TOTP::createFromSecret($secret)->now()]));
+        self::assertResponseIsSuccessful();
+        self::assertSelectorCount(10, '#recovery-codes code');
+        $backup=trim($crawler->filter('#recovery-codes code')->first()->text());
+        $browser->request('GET', 'http://admin.localhost/');
+        self::assertResponseIsSuccessful();
+        self::assertSame($this->roles['admin'], self::getContainer()->get(Connection::class)->fetchOne('SELECT current_user'));
+        $session=$browser->getRequest()->getSession();
+        $proof=$session->get('_wcp_mfa_proof');
+        self::assertIsArray($proof);
+        $proof['at']=time()-301;
+        $session->set('_wcp_mfa_proof', $proof);
+        $session->save();
+        $crawler=$browser->request('GET', 'http://admin.localhost/account/reauthenticate');
+        self::assertResponseIsSuccessful();
+        $browser->submit($crawler->selectButton('Confirmer mon mot de passe')->form(['_password'=>WorkbenchFixture::PASSWORD]));
+        for ($i=0; $i<3 && $browser->getResponse()->isRedirect(); ++$i) { $crawler=$browser->followRedirect(); }
+        self::assertSame('/mfa', $browser->getRequest()->getPathInfo());
+        self::assertResponseIsSuccessful();
+        $browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>$backup]));
+        self::assertResponseRedirects('/');
+        $browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSame($this->roles['admin'], self::getContainer()->get(Connection::class)->fetchOne('SELECT current_user'));
+        self::assertSame(1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions WHERE revoked_at IS NULL'));
+        $browser->request('GET', 'http://admin.localhost/account/sessions');
+        self::assertResponseIsSuccessful();
+        self::getContainer()->get(ApplicationServerSettings::class)->change($this->fixture['users']['admin'], 'php_fpm', 1);
+        self::getContainer()->get(CandidatePermissionAdministration::class)->setDenied($this->fixture['users']['admin'], $this->fixture['users']['alice'], $this->fixture['tenants']['alice'], true);
+        $browser->request('GET', 'http://admin.localhost/workbench/access');
+        self::assertResponseIsSuccessful();
+
+        $this->context('worker');
+        self::bootKernel();
+        self::assertSame($second['job_id'], self::getContainer()->get(RunHostingPlan::class)->runOne());
+        self::assertSame('FAILED', $this->maintenance->fetchOne('SELECT state FROM public.wcp_candidate_jobs WHERE id=?', [$second['job_id']]));
+        self::assertSame(1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_user_sessions'));
+        self::assertSame(3, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_admin_sessions'));
+    }
+
+
+    public function testIsolatedPasswordChangeUsesOnlyTheMatchingOperationAndKeepsMfa(): void
+    {
+        $this->provider->provision($this->passwords);
+        $originalBob = $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$this->fixture['users']['bob']]);
+        foreach (['user' => 'alice', 'admin' => 'admin'] as $surface => $name) {
+            $db = $this->login($surface);
+            $store = new \Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore($db);
+            $runtime = new RuntimeContext($surface, true, 'test', $surface.'.localhost');
+            $actor = (new \Wcp360\Core\Module\IdentityAccess\Infrastructure\PrincipalProvider($store, $runtime))->loadUserByIdentifier($name);
+            $mfa = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa($store, $_ENV['WCP_MFA_KEY']);
+            $sessions = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store);
+            $sid = str_repeat('a', 32);
+            $selector = $sessions->issue($actor->id, $surface, $sid);
+            $sessions->issue($actor->id, $surface, str_repeat('c', 32));
+            $proof = null;
+            $factor = null;
+            $codes = [];
+            if ($surface === 'admin') {
+                $enrollment = $mfa->startEnrollment($actor->id);
+                $result = $mfa->check($actor->id, TOTP::createFromSecret($enrollment['secret'])->now(), 1);
+                self::assertNotNull($result);
+                $sessions->upgrade($actor->id, $surface, $selector,
+                    \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions::binding($actor->id, $surface, $sid), str_repeat('b',32));
+                $sid = str_repeat('b',32);
+                $proof = ['actor' => $actor->id, 'revision' => $result['revision'], 'at' => time()];
+                $factor = $this->maintenance->fetchAssociative('SELECT * FROM wcp_candidate_mfa WHERE user_id=?', [$actor->id]);
+                $codes = $this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery WHERE user_id=? ORDER BY code_hash', [$actor->id]);
+            }
+            self::assertTrue($sessions->allowReauthentication($actor->id, $surface, $selector, $sid));
+            $service = new \Wcp360\Core\Module\IdentityAccess\Application\ChangeOwnPassword($store, $sessions, $mfa,
+                self::getContainer()->get(\Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class), $runtime, 'session-isolated');
+            self::assertTrue($service->available());
+            $next = 'isolated-next-synthetic-password-2026';
+            $service->change($actor, $selector, $sid, $next, $proof);
+            $hash = $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$actor->id]);
+            self::assertTrue(password_verify($next, $hash));
+            self::assertFalse(password_verify(WorkbenchFixture::PASSWORD, $hash));
+            self::assertFalse($sessions->current($actor->id, $surface, $selector, $sid));
+            self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_'.$surface.'_sessions WHERE user_id=? AND revoked_at IS NULL', [$actor->id]));
+            if ($factor !== null) {
+                self::assertSame($factor, $this->maintenance->fetchAssociative('SELECT * FROM wcp_candidate_mfa WHERE user_id=?', [$actor->id]));
+                self::assertSame($codes, $this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_mfa_recovery WHERE user_id=? ORDER BY code_hash', [$actor->id]));
+            }
+            $audit = serialize($this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_audit'));
+            foreach ([$hash, $actor->getPassword(), $next, $sid] as $secret) self::assertStringNotContainsString($secret, $audit);
+        }
+        self::assertSame($originalBob, $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$this->fixture['users']['bob']]));
+        self::assertSame(2, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.account.password_changed'"));
+        foreach (['user','admin','worker'] as $surface) {
+            try {
+                $this->login($surface)->executeStatement('UPDATE public.wcp_candidate_users SET password_hash=password_hash WHERE false');
+                self::fail('Direct credential writes were granted.');
+            } catch (DriverException $error) {
+                self::assertSame('42501', $error->getSQLState());
+            }
+        }
+    }
+
+    public function testApplicationRecipePreviewsNeedOnlyExistingRootIdentityReadGrants(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $service = new \Wcp360\Core\Module\Hosting\Application\PreviewApplicationPlan(
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\NativeApplicationPlanSyntax::class));
+        foreach ($service->recipes($this->fixture['users']['admin'])['recipes'] as $recipe) {
+            $result = $service->preview($this->fixture['users']['admin'], 'restricted-app.test', $recipe['id'], 'front_controller', false, true);
+            self::assertTrue($result['syntax_checks']['requested']);
+            self::assertFalse($result['syntax_checks']['coverage_complete']);
+            self::assertSame($recipe['artifacts'], array_keys($result['files']));
+            self::assertFalse($result['persisted']);
+        }
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT COUNT(*) FROM wcp_candidate_sites'));
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT COUNT(*) FROM wcp_candidate_jobs'));
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_sites'); self::fail('Recipe preview granted ROOT site access.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+    }
+
+    public function testPersistedSiteProfilesUseExistingUserWorkerGrantsWithoutGivingAdminSiteAccess(): void
+    {
+        $this->provider->provision($this->passwords);
+        $user = $this->login('user');
+        $userStore = new WorkbenchStore($user);
+        $policy = new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true);
+        $submit = new SubmitHostingPlan($userStore, $policy, new ApplicationServerSettings($userStore, $policy));
+        $ids = [];
+        foreach (['php_fpm' => 'classic', 'frankenphp_worker' => 'advanced'] as $engine => $stack) {
+            $job = $submit->submit($this->fixture['users']['alice'], [
+                'tenant_id' => $this->fixture['tenants']['alice'], 'hostname' => 'profile-'.$stack.'.test',
+                'idempotency_key' => 'restricted-profile-'.$stack.'-2026',
+                'application_server' => $engine, 'worker_acknowledged' => $engine === 'frankenphp_worker',
+            ])['job_id'];
+            $row = $userStore->job($this->fixture['users']['alice'], $job);
+            self::assertSame($stack, $row['web_stack']);
+            self::assertSame(1, (int) $row['stack_revision']);
+            $ids[] = $job;
+        }
+        foreach (['web_stack=web_stack', 'stack_revision=stack_revision'] as $change) {
+            try { $user->executeStatement('UPDATE wcp_candidate_sites SET '.$change.' WHERE false'); self::fail('USER acquired profile update grants.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+        $worker = $this->login('worker');
+        $run = new RunHostingPlan(new WorkbenchStore($worker), self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class), $policy);
+        $completed = [$run->runOne(), $run->runOne()];
+        self::assertEqualsCanonicalizing($ids, $completed);
+        foreach ($ids as $id) {
+            self::assertSame('SUCCEEDED', $user->fetchOne('SELECT state FROM wcp_candidate_jobs WHERE id=?', [$id]));
+            self::assertNotEmpty((new \Wcp360\Core\Module\Hosting\Application\PreparedPlanFiles($userStore))->inspect($this->fixture['users']['alice'], $id)['files']);
+        }
+        $admin = $this->login('admin');
+        try { $admin->fetchOne('SELECT web_stack FROM wcp_candidate_sites LIMIT 1'); self::fail('ROOT preview broadened site grants.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        self::assertSame($this->roles['user'], $user->fetchOne('SELECT current_user'));
+        self::assertSame($this->roles['worker'], $worker->fetchOne('SELECT current_user'));
+    }
+
+    public function testModernPreviewUsesOnlyExistingRootIdentityReadsAndCannotReadAudit(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $before = [];
+        foreach (['sites','jobs','activations','audit','runtime_settings'] as $table) {
+            $before[$table] = $this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_'.$table.' ORDER BY id');
+        }
+        $preview = new \Wcp360\Core\Module\Hosting\Application\PreviewModernHostingPlan(
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
+            new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class));
+        $report = $preview->preview($this->fixture['users']['admin'], 'restricted-modern.test', true);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame(['caddy','systemd'], array_keys($report['files']));
+        self::assertFalse($report['persisted']);
+        self::assertFalse($report['activation_available']);
+        foreach ($before as $table => $rows) {
+            self::assertSame($rows, $this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_'.$table.' ORDER BY id'));
+        }
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_audit LIMIT 1'); self::fail('Preview broadened audit reads.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+    }
+
+    public function testRuntimeSettingsReadAndChangeUseExistingRootGrantsAndCorrelatedAppendOnlyAudit(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $store = new WorkbenchStore($db);
+        $settings = new ApplicationServerSettings($store, new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true));
+        $actor = $this->fixture['users']['admin'];
+        self::assertSame(1, $settings->inspect($actor)['settings']['revision']);
+        self::assertSame('classic', $settings->webStacks($actor)['default']);
+        self::assertFalse($settings->webStacks($actor)['native_installation_available']);
+        $reference = str_repeat('e', 32);
+        $settings->change($actor, 'frankenphp_worker', 1, $reference);
+        self::assertSame('frankenphp_worker', $settings->inspect($actor)['settings']['application_server']);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($reference, $this->maintenance->fetchOne("SELECT request_id FROM wcp_candidate_audit WHERE kind='candidate.runtime.default.changed'"));
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_audit LIMIT 1'); self::fail('Default audit reads were broadened.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        $userDb = $this->login('user');
+        try {
+            $userDb->executeStatement("UPDATE wcp_candidate_runtime_settings SET application_server='php_fpm' WHERE id=1");
+            self::fail('USER changed global settings.');
+        } catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        $userSettings = new ApplicationServerSettings(new WorkbenchStore($userDb), new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy());
+        try { $userSettings->inspect($this->fixture['users']['alice']); self::fail('USER inspected ROOT settings.'); }
+        catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {}
+        self::assertSame(2, $settings->current()['revision']);
+    }
+
+    public function testOtherSessionRevocationUsesExistingUserAndRootGrantsWithoutAuditReads(): void
+    {
+        $this->provider->provision($this->passwords);
+        foreach (['user' => 'alice', 'admin' => 'admin'] as $surface => $name) {
+            $logger = new class extends AbstractLogger {
+                public array $records = [];
+                public function log($level, string|\Stringable $message, array $context = []): void { $this->records[] = [(string) $message, $context]; }
+            };
+            $db = $this->login($surface, null, $logger);
+            $store = new WorkbenchStore($db);
+            $sessions = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store);
+            $snapshot = \Wcp360\Core\Module\IdentityAccess\Infrastructure\RecoveryAccountSnapshot::find($db, $this->fixture['users'][$name], $surface);
+            self::assertNotNull($snapshot);
+            $actor = $snapshot['actor'];
+            $sid = str_repeat($surface === 'user' ? 'u' : 'a', 32);
+            $current = $sessions->issue($actor->id, $surface, $sid);
+            $other = $sessions->issue($actor->id, $surface, str_repeat('o', 32));
+            $service = new \Wcp360\Core\Module\IdentityAccess\Application\RevokeOtherSessions($store, $sessions,
+                new \Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa($store, ''),
+                new RuntimeContext($surface, true, 'test', $surface.'.localhost'));
+            $logger->records = [];
+            self::assertSame(1, $service->revoke($actor, $current, $sid,
+                $surface === 'admin' ? ['actor' => $actor->id, 'revision' => 0, 'at' => time()] : null));
+            self::assertSame($this->roles[$surface], $db->fetchOne('SELECT current_user'));
+            self::assertTrue($sessions->current($actor->id, $surface, $current, $sid, 1, false));
+            self::assertNotNull($this->maintenance->fetchOne('SELECT revoked_at FROM wcp_candidate_'.$surface.'_sessions WHERE id=?', [$other]));
+            foreach ([$actor->getPassword(), $sid] as $secret) self::assertStringNotContainsString($secret, serialize($logger->records));
+            self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.session.others_revoked' AND resource_id=?", [$current]));
+            try { $db->fetchOne('SELECT id FROM wcp_candidate_audit LIMIT 1'); self::fail('Audit reads became accessible.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+            $opposite = $surface === 'user' ? 'admin' : 'user';
+            try { $db->fetchOne('SELECT id FROM wcp_candidate_'.$opposite.'_sessions LIMIT 1'); self::fail('Opposite sessions became accessible.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+    }
+
+    public function testBackupCodeRenewalWorksWithUnchangedAdministratorGrantsAndRedactedProfiles(): void
+    {
+        $this->provider->provision($this->passwords);
+        $logger = new class extends AbstractLogger {
+            public array $records = [];
+            public function log($level, string|\Stringable $message, array $context = []): void { $this->records[] = [(string) $message, $context]; }
+        };
+        $db = $this->login('admin', null, $logger);
+        $store = new WorkbenchStore($db);
+        $id = $this->fixture['users']['admin'];
+        $mfa = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateMfa($store, str_repeat('a', 64));
+        $setup = $mfa->startEnrollment($id);
+        $result = $mfa->check($id, TOTP::createFromSecret($setup['secret'])->now(), 1);
+        self::assertNotNull($result);
+        $snapshot = \Wcp360\Core\Module\IdentityAccess\Infrastructure\RecoveryAccountSnapshot::find($db, $id, 'admin');
+        self::assertNotNull($snapshot);
+        $sessions = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store);
+        $old = str_repeat('o', 32);
+        $sid = str_repeat('n', 32);
+        $selector = $sessions->issue($id, 'admin', $old);
+        $sessions->upgrade($id, 'admin', $selector, $sessions::binding($id, 'admin', $old), $sid);
+        $renewal = new \Wcp360\Core\Module\IdentityAccess\Application\RegenerateMfaRecoveryCodes(
+            $store, $mfa, $sessions, new RuntimeContext('admin', true, 'test', 'admin.localhost'));
+        $logger->records = [];
+        $codes = $renewal->regenerate($snapshot['actor'], $selector, $sid, ['actor' => $id, 'revision' => $result['revision'], 'at' => time()]);
+        self::assertCount(10, $codes);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertFalse($sessions->current($id, 'admin', $selector, $sid, 2, false));
+        self::assertTrue($mfa->status($id)['enabled']);
+        $profile = serialize($logger->records);
+        foreach ([...$codes, $snapshot['actor']->getPassword(), $sid, $setup['secret']] as $secret) self::assertStringNotContainsString($secret, $profile);
+        self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.mfa.recovery.regenerated'"));
+    }
+
+    public function testJobInventoryUsesExistingRestrictedUserGrantsWithoutPrivateColumns(): void
+    {
+        \Wcp360\Core\Tests\Fixtures\HostingJobsFixture::seed($this->maintenance, $this->fixture, 30);
+        $this->provider->provision($this->passwords);
+        $db = $this->login('user');
+        $service = new \Wcp360\Core\Module\Operations\Application\ListHostingJobs($db,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db));
+        $query = \Wcp360\Core\Module\Operations\Domain\JobListQuery::fromArray(['tenant' => $this->fixture['tenants']['alice']]);
+        $page = $service->page($this->fixture['users']['alice'], $query);
+        self::assertCount(25, $page['items']);
+        self::assertSame($this->roles['user'], $db->fetchOne('SELECT current_user'));
+        self::assertNotNull($page['pagination']['next']);
+        self::assertStringNotContainsString('private_result_marker', json_encode($page, JSON_THROW_ON_ERROR));
+        $this->maintenance->insert('wcp_candidate_permission_denials', [
+            'user_id' => $this->fixture['users']['alice'], 'tenant_id' => $this->fixture['tenants']['alice'],
+            'permission' => 'candidate.hosting.plan', 'created_by' => $this->fixture['users']['admin'],
+            'created_at' => WorkbenchStore::now(),
+        ]);
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
+        $service->page($this->fixture['users']['alice'], $query);
+    }
+
+    public function testPlanCorrelationSurvivesUserToWorkerHandoffWithoutAuditReadGrants(): void
+    {
+        $this->provider->provision($this->passwords);
+        $userDb = $this->login('user');
+        $userStore = new WorkbenchStore($userDb);
+        $policy = self::getContainer()->get(\Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy::class);
+        $submit = new \Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan($userStore, $policy,
+            new \Wcp360\Core\Module\Platform\Application\ApplicationServerSettings($userStore, $policy));
+        $reference = str_repeat('d', 32);
+        $job = $submit->submit($this->fixture['users']['alice'], [
+            'tenant_id' => $this->fixture['tenants']['alice'], 'hostname' => 'isolated-reference.test',
+            'idempotency_key' => 'isolated-reference-key-2026',
+        ], $reference)['job_id'];
+        self::assertSame($reference, $userDb->fetchOne('SELECT request_id FROM wcp_candidate_jobs WHERE id=?', [$job]));
+        $workerDb = $this->login('worker');
+        $worker = new \Wcp360\Core\Module\Operations\Application\RunHostingPlan(new WorkbenchStore($workerDb),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class), $policy);
+        self::assertSame($job, $worker->runOne());
+        self::assertSame([$reference, $reference, $reference], $this->maintenance->fetchFirstColumn(
+            'SELECT request_id FROM wcp_candidate_audit WHERE resource_id=? ORDER BY id', [$job]));
+        foreach ([$userDb, $workerDb] as $db) {
+            try { $db->fetchOne('SELECT request_id FROM wcp_candidate_audit LIMIT 1'); self::fail('Audit read grant was broadened.'); }
+            catch (\Doctrine\DBAL\Exception\DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+    }
+
+    public function testQueueTransitionsUseWorkerGrantsWhileUserCannotClaimAJob(): void
+    {
+        $ids = \Wcp360\Core\Tests\Fixtures\HostingJobsFixture::seed($this->maintenance, $this->fixture, 2);
+        $this->maintenance->executeStatement("UPDATE wcp_candidate_jobs SET state='QUEUED',result=NULL");
+        $this->provider->provision($this->passwords);
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $userQueue = new \Wcp360\Core\Module\Operations\Infrastructure\HostingPlanQueue(new WorkbenchStore($this->login('user')));
+        try { $userQueue->claim(); self::fail('USER acquired a worker transition.'); }
+        catch (\Doctrine\DBAL\Exception\DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        $queue = new \Wcp360\Core\Module\Operations\Infrastructure\HostingPlanQueue(new WorkbenchStore($this->login('worker')));
+        self::assertSame($ids[0], $queue->claim()['id']);
+        self::assertTrue($queue->finish($ids[0], null));
+        self::assertSame($ids[1], $queue->claim()['id']);
+        self::assertSame(1, $queue->markInterrupted());
+        self::assertFalse($queue->finish($ids[1], '{"synthetic":"late"}'));
+        self::assertSame(['FAILED', 'UNKNOWN_OUTCOME'], $this->maintenance->fetchFirstColumn('SELECT state FROM wcp_candidate_jobs ORDER BY id'));
+        self::assertSame($before + 4, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+    }
+
+    public function testPreparedSiteInventoryKeepsExistingRestrictedReadGrants(): void
+    {
+        \Wcp360\Core\Tests\Fixtures\HostingJobsFixture::seed($this->maintenance, $this->fixture, 30);
+        $this->provider->provision($this->passwords);
+        $db = $this->login('user');
+        $service = new \Wcp360\Core\Module\Hosting\Application\ListPreparedSites($db,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db));
+        $query = \Wcp360\Core\Module\Hosting\Domain\SiteListQuery::fromArray(['tenant' => $this->fixture['tenants']['alice']]);
+        self::assertCount(25, $service->page($this->fixture['users']['alice'], $query)['items']);
+        self::assertSame($this->roles['user'], $db->fetchOne('SELECT current_user'));
+        try {
+            $db->executeStatement("UPDATE public.wcp_candidate_sites SET state='PLAN_FAILED' WHERE tenant_id=?", [$this->fixture['tenants']['alice']]);
+            self::fail('Site state write granted to inventory reader.');
+        } catch (\Doctrine\DBAL\Exception\DriverException $error) {
+            self::assertSame('42501', $error->getSQLState());
+        }
+        $this->maintenance->delete('wcp_candidate_memberships', ['user_id' => $this->fixture['users']['alice']]);
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
+        $service->page($this->fixture['users']['alice'], $query);
+    }
+
+    public function testPreparedPlanExportsNeedOnlyExistingUserReadGrants(): void
+    {
+        $store = new WorkbenchStore($this->maintenance);
+        $policy = self::getContainer()->get(\Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy::class);
+        $job = (new \Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan($store, $policy,
+            new \Wcp360\Core\Module\Platform\Application\ApplicationServerSettings($store, $policy)))->submit(
+                $this->fixture['users']['alice'], ['tenant_id' => $this->fixture['tenants']['alice'],
+                'hostname' => 'isolated-export.test', 'idempotency_key' => 'isolated-export-key-2026'])['job_id'];
+        (new \Wcp360\Core\Module\Operations\Application\RunHostingPlan($store,
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class), $policy))->runOne();
+        $this->provider->provision($this->passwords);
+        $db = $this->login('user');
+        $files = new \Wcp360\Core\Module\Hosting\Application\PreparedPlanFiles(new WorkbenchStore($db));
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        self::assertStringContainsString('server_name isolated-export.test;', $files->download($this->fixture['users']['alice'], $job, 'nginx')['content']);
+        self::assertSame($this->roles['user'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_activations'));
+    }
+
+    public function testAuditReadUpgradeIsExplicitIdempotentAndKeepsUserWorkerAndWritesRestricted(): void
+    {
+        $this->provider->provision($this->passwords);
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $adminDb = $this->login('admin');
+        $events = new \Wcp360\Core\Module\Observability\Application\ListAuditEvents($adminDb,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($adminDb));
+        try { $events->page($this->fixture['users']['admin'], \Wcp360\Core\Module\Observability\Domain\AuditListQuery::fromArray([])); self::fail('Insert-only ADMIN read audit.'); }
+        catch (\Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException $error) { self::assertSame(503, $error->getStatusCode()); }
+        $result = $this->provider->enableAuditReads();
+        self::assertTrue($result['audit_reads']);
+        self::assertTrue($result['changed']);
+        self::assertSame(['INSERT','SELECT'], $result['grants']['admin']['audit']);
+        self::assertTrue($this->provider->auditReadPlan()['audit_reads']);
+        self::assertFalse($this->provider->enableAuditReads()['changed']);
+        self::assertSame($before + 1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.database.audit_reads.enabled'"));
+        self::assertCount($before + 1, $events->page($this->fixture['users']['admin'], \Wcp360\Core\Module\Observability\Domain\AuditListQuery::fromArray([]))['items']);
+        self::assertSame($this->roles['admin'], $adminDb->fetchOne('SELECT current_user'));
+        foreach (['user','worker'] as $context) {
+            $db = $this->login($context);
+            try { $db->fetchOne('SELECT id FROM wcp_candidate_audit'); self::fail('Audit grant escaped ADMIN.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+        foreach (['UPDATE wcp_candidate_audit SET kind=kind WHERE false', 'DELETE FROM wcp_candidate_audit WHERE false'] as $sql) {
+            try { $adminDb->executeStatement($sql); self::fail('Audit write grant broadened.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+        // The existing fixed password upgrade remains compatible with either audit-read state.
+        self::assertTrue($this->provider->passwordChangePlan()['password_changes']['admin']);
+    }
+
+    public function testAuditReadGrantRollsBackWhenItsMandatoryAuditCannotBeInserted(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->maintenance->executeStatement("ALTER TABLE public.wcp_candidate_audit ADD CONSTRAINT reject_audit_read_enable CHECK (kind <> 'candidate.database.audit_reads.enabled')");
+        $this->assertRefused(fn () => $this->provider->enableAuditReads());
+        self::assertFalse(in_array($this->maintenance->fetchOne("SELECT pg_catalog.has_table_privilege(?, 'public.wcp_candidate_audit', 'SELECT')", [$this->roles['admin']]), [true,1,'1','t'], true));
+        self::assertSame(0, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.database.audit_reads.enabled'"));
+    }
+
+    public function testAuditUpgradeRefusesUnexpectedUserReadAuthorityRatherThanRepairingIt(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->maintenance->executeStatement('GRANT SELECT ON public.wcp_candidate_audit TO '.$this->maintenance->quoteIdentifier($this->roles['user']));
+        $this->assertRefused(fn () => $this->provider->enableAuditReads());
+        self::assertFalse(in_array($this->maintenance->fetchOne("SELECT pg_catalog.has_table_privilege(?, 'public.wcp_candidate_audit', 'SELECT')", [$this->roles['admin']]), [true,1,'1','t'], true));
+    }
+
+    public function testAuditReadCommandRequiresAnExplicitExclusiveSetupAction(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->context('setup');
+        $this->set('WCP_ALLOW_CANDIDATE_DATABASE_ROLES', '1');
+        $kernel = self::bootKernel();
+        $command = new CommandTester((new Application($kernel))->find('wcp:candidate:database:roles'));
+        self::assertSame(0, $command->execute(['--audit-reads' => true], ['interactive' => false]));
+        $plan = json_decode(trim($command->getDisplay()), true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame('planned', $plan['status']);
+        self::assertFalse($plan['plan']['audit_reads']);
+        self::assertSame(2, $command->execute(['--audit-reads' => true, '--password-changes' => true], ['interactive' => false]));
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+        self::assertSame(0, $command->execute(['--audit-reads' => true, '--apply' => true], ['interactive' => false]));
+        $result = json_decode(trim($command->getDisplay()), true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame('enabled', $result['status']);
+        self::assertTrue($result['plan']['audit_reads']);
+        $this->assertNoSecrets($result);
+    }
+
+    public function testRootServerOverviewNeedsOnlyExistingAdminIdentityReads(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $service = new \Wcp360\Core\Module\Platform\Application\ServerOverview(
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
+            new \Wcp360\Core\Module\Platform\Infrastructure\LocalServerObservation());
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $report = $service->inspect($this->fixture['users']['admin']);
+        self::assertSame('current_process_namespace', $report['scope']);
+        self::assertSame('Linux', $report['server']['os_family']);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_audit'); self::fail('Server overview enabled unrelated audit access.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+    }
+
+    public function testRootUserInventoryAndSelectedAccessNeedOnlyExistingAdminReadGrants(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $service = new \Wcp360\Core\Module\IdentityAccess\Application\ListHostingUsers($db,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db));
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $page = $service->page($this->fixture['users']['admin'],
+            \Wcp360\Core\Module\IdentityAccess\Domain\UserListQuery::fromArray([]));
+        self::assertSame(['alice','bob'], array_column($page['items'], 'username'));
+        $permissions = new CandidatePermissionAdministration(new WorkbenchStore($db));
+        $selected = $permissions->listing($this->fixture['users']['admin'], 1, $this->fixture['users']['alice']);
+        self::assertCount(1, $selected['items']);
+        self::assertSame('alice', $selected['selected_user']['username']);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+    }
+
+    private function passwordCallFixture(?AbstractLogger $logger = null): array
+    {
+        $db = $this->login('user', null, $logger);
+        $store = new WorkbenchStore($db);
+        $runtime = new RuntimeContext('user', true, 'test', 'user.localhost');
+        $actor = (new \Wcp360\Core\Module\IdentityAccess\Infrastructure\PrincipalProvider($store, $runtime))->loadUserByIdentifier('alice');
+        $sessions = new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store);
+        $sid = str_repeat('s',32);
+        $selector = $sessions->issue($actor->id, 'user', $sid);
+        self::assertTrue($sessions->allowReauthentication($actor->id, 'user', $selector, $sid));
+        $hash = self::getContainer()->get(\Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class)
+            ->hashPassword($actor, 'isolated-next-synthetic-password-2026');
+        return [$db, $actor, $sessions, $selector, $sid, $hash];
+    }
+
+    public function testPasswordOperationRefusesRevokedForeignStaleAndMalformedInputs(): void
+    {
+        $this->provider->provision($this->passwords);
+        [$db, $actor, $sessions, $selector, $sid, $hash] = $this->passwordCallFixture();
+        $routine = new \Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeRoutine($db);
+        $before = $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$actor->id]);
+        foreach ([[$selector, str_repeat('x',32), $hash], [$selector, $sid, 'malformed-hash'],
+            [WorkbenchStore::id(), $sid, $hash], [$selector, $sid, str_replace('m=65536','m=999999',$hash)]] as [$target,$binding,$replacement]) {
+            try { $routine->change($actor, $target, $binding, $replacement, null); self::fail('Invalid credential operation accepted.'); }
+            catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {}
+            self::assertSame($before, $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$actor->id]));
+        }
+        $this->maintenance->update('wcp_candidate_users', ['password_hash'=>'newer-credential-fixture'], ['id'=>$actor->id]);
+        try { $routine->change($actor,$selector,$sid,$hash,null); self::fail('Stale verifier accepted.'); }
+        catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {}
+        self::assertSame('newer-credential-fixture',$this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?',[$actor->id]));
+        $this->maintenance->update('wcp_candidate_users',['password_hash'=>$before],['id'=>$actor->id]);
+        $sessions->revoke($actor->id,'user',$selector);
+        try { $routine->change($actor,$selector,$sid,$hash,null); self::fail('Revoked session accepted.'); }
+        catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {}
+        self::assertSame($before,$this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?',[$actor->id]));
+    }
+
+    public function testRoutineAuditingFailureRollsBackEveryCredentialAndRevocation(): void
+    {
+        $this->provider->provision($this->passwords);
+        [$db,$actor,$sessions,$selector,$sid,$hash] = $this->passwordCallFixture();
+        $this->maintenance->executeStatement("ALTER TABLE public.wcp_candidate_audit ADD CONSTRAINT reject_password_operation CHECK (kind <> 'candidate.account.password_changed')");
+        try {
+            (new \Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeRoutine($db))->change($actor,$selector,$sid,$hash,null);
+            self::fail('Missing mandatory audit accepted.');
+        } catch (\RuntimeException $error) {
+            self::assertNull($error->getPrevious());
+            self::assertStringNotContainsString($hash,(string)$error);
+        }
+        self::assertSame($actor->getPassword(),$this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?',[$actor->id]));
+        self::assertTrue($sessions->current($actor->id,'user',$selector,$sid));
+        self::assertSame(0,(int)$this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.session.revoked'"));
+    }
+
+    public function testRoutineIgnoresTemporaryObjectsAndNativeCallDoesNotProfileSecrets(): void
+    {
+        $this->provider->provision($this->passwords);
+        $logger = new class extends AbstractLogger {
+            public array $records = [];
+            public function log($level, string|\Stringable $message, array $context = []): void { $this->records[] = [(string)$message,$context]; }
+        };
+        [$db,$actor,$sessions,$selector,$sid,$hash] = $this->passwordCallFixture($logger);
+        $logger->records = [];
+        $db->executeStatement('CREATE TEMP TABLE wcp_candidate_users (id UUID)');
+        $db->executeStatement('CREATE TEMP TABLE wcp_candidate_audit (id UUID)');
+        $db->executeStatement('SET search_path TO pg_temp');
+        (new \Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeRoutine($db))->change($actor,$selector,$sid,$hash,null);
+        self::assertSame($hash,$this->maintenance->fetchOne('SELECT password_hash FROM public.wcp_candidate_users WHERE id=?',[$actor->id]));
+        self::assertSame(0,(int)$db->fetchOne('SELECT count(*) FROM pg_temp.wcp_candidate_users'));
+        self::assertSame(0,(int)$db->fetchOne('SELECT count(*) FROM pg_temp.wcp_candidate_audit'));
+        $profile = serialize($logger->records);
+        foreach ([$hash,$actor->getPassword(),$sid] as $secret) self::assertStringNotContainsString($secret,$profile);
+        self::assertSame(1,(int)$this->maintenance->fetchOne("SELECT count(*) FROM public.wcp_candidate_audit WHERE kind='candidate.account.password_changed'"));
+    }
+
+    public function testRoutineCallerGuardRejectsOppositeSurfaceEvenWithMistakenExecuteGrant(): void
+    {
+        $this->provider->provision($this->passwords);
+        [$db,$actor,$sessions,$selector,$sid,$hash] = $this->passwordCallFixture();
+        $signature=\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::signature('user');
+        $this->maintenance->executeStatement('GRANT EXECUTE ON FUNCTION '.$signature.' TO '.$this->maintenance->quoteIdentifier($this->roles['admin']));
+        $other=$this->login('admin')->getNativeConnection();
+        self::assertInstanceOf(\PDO::class,$other);
+        try {
+            $statement=$other->prepare('SELECT public.wcp_candidate_user_password_change(?::uuid,?::text,?::text,?::text,?::uuid,?::text,NULL,NULL)');
+            $statement->execute([$actor->id,$actor->username,$actor->getPassword(),$hash,$selector,$sid]);
+            self::fail('Opposite connection role used the password operation.');
+        } catch (\PDOException $error) { self::assertSame('42501',$error->getCode()); }
+        self::assertSame($actor->getPassword(),$this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?',[$actor->id]));
+        $worker=$this->maintenance->quoteIdentifier($this->roles['worker']);
+        $this->maintenance->executeStatement('GRANT EXECUTE ON FUNCTION '.$signature.' TO '.$worker);
+        $workerPdo=$this->login('worker')->getNativeConnection();
+        self::assertInstanceOf(\PDO::class,$workerPdo);
+        try {
+            $statement=$workerPdo->prepare('SELECT public.wcp_candidate_user_password_change(?::uuid,?::text,?::text,?::text,?::uuid,?::text,NULL,NULL)');
+            $statement->execute([$actor->id,$actor->username,$actor->getPassword(),$hash,$selector,$sid]);
+            self::fail('Worker connection used the password operation.');
+        } catch (\PDOException $error) { self::assertSame('42501',$error->getCode()); }
+        self::assertSame($actor->getPassword(),$this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?',[$actor->id]));
+    }
+
+    public function testUntrustedRoutineCodeSettingsAndPublicAccessBlockProvisioning(): void
+    {
+        $signature=\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::signature('user');
+        foreach (['SECURITY INVOKER',"SET search_path TO public",'SET lock_timeout TO \'0\''] as $alter) {
+            $this->maintenance->executeStatement('ALTER FUNCTION '.$signature.' '.$alter);
+            $this->assertRefused(fn()=>$this->provider->plan());
+            foreach(\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::fixtureDrops($this->maintenance) as $sql)$this->maintenance->executeStatement($sql);
+            foreach(\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::statements($this->maintenance) as $sql)$this->maintenance->executeStatement($sql);
+        }
+        $definitions=\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::statements($this->maintenance);
+        $tampered=str_replace(\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::body('user'), "\nBEGIN RETURN true; END;\n", $definitions[0]);
+        $this->maintenance->executeStatement(str_replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',$tampered));
+        $this->assertRefused(fn()=>$this->provider->plan());
+        foreach(\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::fixtureDrops($this->maintenance) as $sql)$this->maintenance->executeStatement($sql);
+        foreach(\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::statements($this->maintenance) as $sql)$this->maintenance->executeStatement($sql);
+        $this->maintenance->executeStatement('GRANT EXECUTE ON FUNCTION '.$signature.' TO PUBLIC');
+        try { $this->assertRefused(fn()=>$this->provider->provision($this->passwords)); self::assertSame(0,$this->roleCount()); }
+        finally { $this->maintenance->executeStatement('REVOKE ALL ON FUNCTION '.$signature.' FROM PUBLIC'); }
+        $this->maintenance->executeStatement("CREATE FUNCTION public.wcp_candidate_user_password_change() RETURNS boolean LANGUAGE SQL AS 'SELECT true'");
+        try { $this->assertRefused(fn()=>$this->provider->plan()); }
+        finally { $this->maintenance->executeStatement('DROP FUNCTION public.wcp_candidate_user_password_change()'); }
+    }
+
+    private function retirePasswordExecute(): void
+    {
+        foreach(['user','admin'] as $surface){
+            $this->maintenance->executeStatement('REVOKE ALL ON FUNCTION '.\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::signature($surface).' FROM '.$this->maintenance->quoteIdentifier($this->roles[$surface]));
+        }
+    }
+
+    public function testExistingRoleCapabilityUpgradeIsExplicitAtomicAndIdempotent(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->retirePasswordExecute();
+        $before=$this->maintenance->fetchAllAssociative("SELECT oid,rolname,rolpassword FROM pg_catalog.pg_authid WHERE rolname IN (?,?,?) ORDER BY rolname",array_values($this->roles));
+        self::assertFalse($this->provider->passwordChangePlan()['applied']);
+        self::assertSame(['user'=>false,'admin'=>false,'worker'=>false],$this->provider->passwordChangePlan()['password_changes']);
+        $tester=new CommandTester(new \Wcp360\Core\Module\Setup\UI\Console\DatabaseRolesCommand($this->provider,new RuntimeContext('setup',true,'test','localhost'),true));
+        self::assertSame(0,$tester->execute(['--password-changes'=>true]));
+        self::assertSame('planned',json_decode($tester->getDisplay(),true,512,JSON_THROW_ON_ERROR)['status']);
+        self::assertSame(0,$tester->execute(['--password-changes'=>true,'--apply'=>true]));
+        self::assertSame('enabled',json_decode($tester->getDisplay(),true,512,JSON_THROW_ON_ERROR)['status']);
+        self::assertFalse($this->provider->enablePasswordChanges()['changed']);
+        self::assertSame(['user'=>true,'admin'=>true,'worker'=>false],$this->provider->passwordChangePlan()['password_changes']);
+        self::assertSame(1,(int)$this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.database.password_changes.enabled'"));
+        self::assertSame($before,$this->maintenance->fetchAllAssociative("SELECT oid,rolname,rolpassword FROM pg_catalog.pg_authid WHERE rolname IN (?,?,?) ORDER BY rolname",array_values($this->roles)));
+        foreach(['user','admin','worker'] as $surface){
+            self::assertSame($this->roles[$surface],$this->login($surface)->fetchOne('SELECT current_user'));
+        }
+    }
+
+    public function testExistingRoleUpgradeRejectsDriftAndRollsBackGrantsOnAuditFailure(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->retirePasswordExecute();
+        $quoted=$this->maintenance->quoteIdentifier($this->roles['user']);
+        $this->maintenance->executeStatement('ALTER ROLE '.$quoted.' CREATEROLE');
+        $this->assertRefused(fn()=>$this->provider->enablePasswordChanges());
+        $this->maintenance->executeStatement('ALTER ROLE '.$quoted.' NOCREATEROLE');
+        $this->maintenance->executeStatement("ALTER TABLE public.wcp_candidate_audit ADD CONSTRAINT reject_password_capability CHECK (kind <> 'candidate.database.password_changes.enabled')");
+        $this->assertRefused(fn()=>$this->provider->enablePasswordChanges());
+        foreach(['user','admin'] as $surface){
+            self::assertFalse((bool)$this->maintenance->fetchOne("SELECT pg_catalog.has_function_privilege(?,pg_catalog.to_regprocedure(?),'EXECUTE')",[$this->roles[$surface],\Wcp360\Core\Module\IdentityAccess\Infrastructure\PasswordChangeSchema::signature($surface)]));
+        }
+        self::assertSame(3,$this->roleCount());
+    }
+
+    public function testRuntimeDatabaseLoginsCannotMasqueradeAsRecoveryMaintenance(): void
+    {
+        $this->provider->provision($this->passwords);
+        foreach (['user','admin','worker'] as $context) {
+            $store = new WorkbenchStore($this->login($context));
+            $recovery = new \Wcp360\Core\Module\Setup\Application\RecoverAccountPassword(
+                $store, new \Wcp360\Core\Module\IdentityAccess\Application\CandidateSessions($store),
+                self::getContainer()->get(\Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class),
+                new RuntimeContext('setup', true, 'test', 'localhost'), true);
+            $setup = new RuntimeContext('setup', true, 'test', 'localhost');
+            $issuer = new \Wcp360\Core\Module\Setup\Application\IssuePasswordRecoveryCode($store,
+                new \Wcp360\Core\Module\Setup\Infrastructure\CandidateAccountMaintenance($store, $setup),
+                $setup, 'shared', new \Wcp360\Core\Tests\Fixtures\RecoveryKeysFixture(str_repeat('c',64)), true);
+            foreach ([fn() => $recovery->plan('alice', 'user'),
+                fn() => $recovery->recover($this->fixture['users']['alice'], 'alice', 'user', 'synthetic-operator-recovery-password'),
+                fn() => $issuer->issue($this->fixture['users']['alice'], 'alice', 'user')] as $call) {
+                try { $call(); self::fail('Runtime database login performed maintenance recovery.'); }
+                catch (\RuntimeException $error) {
+                    self::assertContains($error->getMessage(), [\Wcp360\Core\Module\Setup\Application\RecoverAccountPassword::REFUSED, 'Recovery code issuance refused.']);
+                    self::assertNull($error->getPrevious());
+                }
+            }
+        }
+        self::assertTrue(password_verify(WorkbenchFixture::PASSWORD, $this->maintenance->fetchOne('SELECT password_hash FROM wcp_candidate_users WHERE id=?', [$this->fixture['users']['alice']])));
+        self::assertSame(0, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.account.password_recovered'"));
+    }
+
+    public function testActualPasswordFormsWorkWithSeparateDatabaseRoles(): void
+    {
+        $this->provider->provision($this->passwords);
+        foreach(['user'=>'alice','admin'=>'admin'] as $surface=>$name){
+            $browser=$this->browser($surface);
+            $crawler=$browser->request('GET','http://'.$surface.'.localhost/login');
+            $browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>$name,'_password'=>WorkbenchFixture::PASSWORD]));
+            self::assertResponseRedirects('/');
+            $browser->followRedirect();
+            $crawler=$browser->request('GET','http://'.$surface.'.localhost/account/password');
+            self::assertResponseIsSuccessful();
+            $next='actual-isolated-password-form-2026';
+            $browser->submit($crawler->selectButton('Changer le mot de passe et me déconnecter')->form([
+                'current_password'=>WorkbenchFixture::PASSWORD,'new_password'=>$next,'repeat_password'=>$next,
+            ]));
+            self::assertResponseRedirects('/login',303);
+            $crawler=$browser->followRedirect();
+            $browser->submit($crawler->selectButton('Se connecter')->form(['_username'=>$name,'_password'=>$next]));
+            self::assertResponseRedirects('/');
+            $browser->followRedirect();
+            self::assertResponseIsSuccessful();
+            self::ensureKernelShutdown();
+        }
+    }
+
+    private function provider(Connection $db): CandidateDatabaseRoles
+    {
+        return new CandidateDatabaseRoles($db, new RuntimeContext('setup', true, 'test', 'localhost'), true);
+    }
+
+    private function roleCount(): int
+    {
+        return (int) $this->maintenance->fetchOne('SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN (?,?,?)', array_values($this->roles));
+    }
+
+    private function login(string $context, ?string $password = null, ?AbstractLogger $logger = null): Connection
+    {
+        $configuration = new Configuration();
+        $middlewares = [new CandidateDatabaseMiddleware('session-isolated', $context)];
+        if ($logger !== null) $middlewares[] = new \Doctrine\DBAL\Logging\Middleware($logger);
+        $configuration->setMiddlewares($middlewares);
+        $params = $this->maintenance->getParams();
+        $params['user'] = $this->roles[$context];
+        $params['password'] = $password ?? $this->passwords[$context];
+        $connection = DriverManager::getConnection($params, $configuration);
+        $this->connections[] = $connection;
+        return $connection;
+    }
+
+    private function assertRefused(\Closure $operation): void
+    {
+        try {
+            $operation();
+            self::fail('Unsafe or conflicting provisioning was accepted.');
+        } catch (\RuntimeException $error) {
+            // Driver authentication refusal uses the existing connection gate's fixed message.
+            self::assertContains($error->getMessage(), [CandidateDatabaseRoles::REJECTED, \Wcp360\Core\Shared\Security\CandidateDatabaseUrl::REJECTED]);
+            self::assertNull($error->getPrevious());
+            foreach ($this->passwords as $password) { self::assertStringNotContainsString($password, (string) $error); }
+        }
+    }
+
+    private function assertNoSecrets(array $value): void
+    {
+        $output = json_encode($value, JSON_THROW_ON_ERROR);
+        self::assertStringNotContainsString('SCRAM-SHA-256$', $output);
+        foreach ($this->passwords as $password) { self::assertStringNotContainsString($password, $output); }
+    }
+
+    private function browser(string $context): KernelBrowser
+    {
+        $this->context($context);
+        $browser = self::createClient([], ['HTTP_HOST'=>$context.'.localhost', 'HTTP_ORIGIN'=>'http://'.$context.'.localhost']);
+        $browser->disableReboot();
+        return $browser;
+    }
+
+    private function context(string $context): void
+    {
+        self::ensureKernelShutdown();
+        $this->set('WCP_CONTEXT', $context);
+        $this->set('WCP_PUBLIC_HOST', in_array($context, ['user','admin'], true) ? $context.'.localhost' : 'localhost');
+        $this->set('WCP_DATABASE_MODE', $context === 'setup' ? 'shared' : 'session-isolated');
+        foreach (CandidateDatabasePolicy::CONTEXTS as $surface) {
+            $this->set('WCP_DATABASE_'.strtoupper($surface).'_URL', null);
+        }
+        if ($context !== 'setup') {
+            $params = $this->maintenance->getParams();
+            $url = 'postgresql://'.$this->roles[$context].':'.$this->passwords[$context].'@'.$params['host'].':'.($params['port']??5432).'/wcp360_test?serverVersion=17&charset=utf8';
+            $this->set('WCP_DATABASE_'.strtoupper($context).'_URL', $url);
+        }
+    }
+
+    private function set(string $name, ?string $value): void
+    {
+        if (!array_key_exists($name, $this->saved)) { $this->saved[$name]=[$_SERVER[$name]??null,$_ENV[$name]??null]; }
+        if ($value === null) { unset($_SERVER[$name],$_ENV[$name]); } else { $_SERVER[$name]=$_ENV[$name]=$value; }
+    }
+}

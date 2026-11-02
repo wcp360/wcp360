@@ -1,0 +1,33 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.varnish-cache-pro",
+    "kind":  "plugin",
+    "label":  "Varnish-compatible managed cache connector",
+    "category":  "performance-cache",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "domains.cdn-edge"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare an optional reviewed external HTTP-cache profile with explicit application safety and measured performance evidence.",
+    "core_boundary":  "Native web routing, compression and access control stay free Core. The target Nginx-to-Apache all-traffic/.htaccess profile keeps direct-file and response caching disabled; this proposal does not change that. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Select and qualify an admitted cache distribution/API profile and Core binding; do not expose a raw administration socket, arbitrary VCL or backend URL to the plugin.",
+                       "Enable cache handoff only under a separately admitted profile proving protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge correctness; otherwise bypass caching entirely.",
+                       "Qualify content encoding, Vary/ETag, freshness, invalidation and rollback independently with reproducible application measurements; compression is not public cache permission and no universal speedup is promised.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

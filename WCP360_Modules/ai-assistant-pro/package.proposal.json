@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.ai-assistant-pro",
+    "kind":  "module",
+    "label":  "AI Assistant Pro",
+    "category":  "automation",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability",
+                        "ExtensionManagement"
+                    ],
+    "catalogue_keys":  [
+                           "automation.ai-readonly",
+                           "automation.ai-missions",
+                           "automation.chatops"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Optional evidence-linked AI assistance for authorized diagnostics, followed only by reviewed action proposals where underlying operations are qualified. Model/provider connectors and MCP transports remain separately admitted integrations.",
+    "core_boundary":  "Core stays usable without AI, external model access or premium entitlement. The assistant has no independent permissions, root shell, unrestricted tool registry or hidden execution path; generated text and imported instructions never become execution authority.",
+    "acceptance":  [
+                       "Begin with read-only scoped evidence, minimize/redact prompts and document provider retention and data-export choices.",
+                       "Defend against instructions embedded in logs, files, applications and provider responses; identify evidence and uncertainty in generated output.",
+                       "Bind any human approval to exact typed actions, targets and resource revisions, then recheck current permissions at execution.",
+                       "Bound model/tool cost, concurrency, recursion, outbound destinations and retained data; test provider failure and cancellation.",
+                       "Disabling the assistant or connector must leave hosting, local diagnostics, audit and recovery unchanged and accessible."
+                   ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.loki-log-shipping-pro",
+  "kind": "plugin",
+  "label": "Loki log-shipping connector",
+  "category": "observability",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "IdentityAccess",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "observe.loki"
+  ],
+  "dependencies": [],
+  "summary": "Prepare bounded central log export with explicit source ownership, label policy and retention expectations.",
+  "core_boundary": "Local log access and mandatory audit cannot depend on the optional shipping destination or its retention policy. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Admit log sources and readers; prohibit secret files, mailbox contents and unrestricted customer-file collection.",
+    "Bound labels, line sizes, queue storage and retries while preserving observable loss/backpressure state.",
+    "Test tenant isolation, credential rotation and destination failure without deleting local required evidence.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

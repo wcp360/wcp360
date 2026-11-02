@@ -1,0 +1,55 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% import 'components/navigation/icons.html.twig' as ui %}
+{% set page_title = 'Tableau de bord' %}
+{% block content %}
+<div class="wcp-page-head page-heading">
+    <div><p class="wcp-page-eyebrow">{{ context == 'admin' ? 'ROOT — ADMINISTRATION DU SERVEUR' : 'VOTRE ESPACE DE TRAVAIL' }}</p><h1 class="wcp-page-heading">Tableau de bord</h1><p class="wcp-page-sub">{{ context == 'admin' ? 'Votre serveur, ses hébergements et ses services, au même endroit.' : 'Préparez vos hébergements et gardez le fil de vos opérations.' }}</p></div>
+    <div class="wcp-page-actions">{% if context == 'user' and tenants %}<a class="button" href="#hosting">{{ ui.icon('plus') }} Préparer un hébergement</a>{% elseif context == 'admin' %}<a class="button secondary" href="{{ path('wcp_server') }}">{{ ui.icon('server') }} Vue du serveur</a>{% else %}<a class="button secondary" href="{{ path('wcp_account_sessions') }}">{{ ui.icon('sessions') }} Mes sessions</a>{% endif %}</div>
+</div>
+{% if context == 'admin' %}
+<div class="wcp-core-admin-grid">
+    <section id="runtime" class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Serveur d’application par défaut</h2><p class="wcp-panel-sub">Configuration des nouveaux plans d’hébergement</p></div><span class="wcp-stat-icon">{{ ui.icon('server') }}</span></div><div class="wcp-panel-body">
+        <p><a href="{{ path('wcp_runtime_settings') }}">Ouvrir les paramètres globaux</a></p>
+        <p class="muted">Ce réglage concerne les nouveaux plans des sites hébergés. Les sites existants et le runtime du panneau conservent leur configuration.</p>
+        <form method="post" action="{{ path('wcp_application_server') }}"><input type="hidden" name="_token" value="{{ csrf_token('application-server') }}"><input type="hidden" name="revision" value="{{ runtime_settings.revision }}">{% include 'components/forms/application-server.html.twig' with {field_id: 'default-application-server', allow_inherit: false, selected: runtime_settings.application_server} %}<button class="button" type="submit">Enregistrer le défaut</button></form>
+    </div></section>
+    <section id="plugins" class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Extensions détachées</h2><p class="wcp-panel-sub">Des capacités supplémentaires, un Core indépendant</p></div><span class="wcp-stat-icon">{{ ui.icon('package') }}</span></div><div class="wcp-panel-body">
+        <p class="muted">Le paquet de référence traite uniquement un résumé explicitement fourni. Son code ne s’exécute pas dans le Core.</p>
+        {% for plugin in plugins %}<div class="plugin-row"><div><strong>{{ plugin.id }}</strong><p>{{ plugin.version }} · {% include 'components/feedback/status.html.twig' with {state: plugin.state} only %}</p></div><div class="actions">{% for action in plugin.state == 'ENABLED' ? ['disable'] : ['enable', 'uninstall'] %}<form method="post" action="{{ path('wcp_plugin', {action: action}) }}"><input type="hidden" name="_token" value="{{ csrf_token('plugin-' ~ action) }}"><button class="button secondary" type="submit">{{ {enable: 'Activer', disable: 'Désactiver', uninstall: 'Désinstaller'}[action] }}</button></form>{% endfor %}</div></div>
+        {% else %}<div class="wcp-core-empty">{{ ui.icon('package') }}<h3>Un Core, déjà autonome.</h3><p>Aucune extension installée. Le Core reste opérationnel.</p><form method="post" action="{{ path('wcp_plugin', {action: 'install'}) }}"><input type="hidden" name="_token" value="{{ csrf_token('plugin-install') }}"><button class="button secondary" type="submit">Installer le rapport de référence</button></form></div>{% endfor %}
+    </div></section>
+</div>
+{% else %}
+{% set completed = jobs|filter(job => job.state == 'SUCCEEDED')|length %}
+{% set pending = jobs|filter(job => job.state in ['QUEUED', 'RUNNING'])|length %}
+<div class="wcp-health-strip" aria-label="Synthèse de mon espace">
+    <div class="wcp-health-cell"><div class="wcp-health-label">Mon espace</div><div class="wcp-health-value">{{ tenants|length }} espace{{ tenants|length > 1 ? 's' : '' }} accessible{{ tenants|length > 1 ? 's' : '' }}</div><div class="wcp-health-meta">Vos autorisations courantes</div></div>
+    <div class="wcp-health-cell"><div class="wcp-health-label">Plans affichés</div><div class="wcp-health-value">{{ jobs|length }}</div><div class="wcp-health-meta">Les 100 tâches les plus récentes</div></div>
+    <div class="wcp-health-cell"><div class="wcp-health-label">Terminés</div><div class="wcp-health-value wcp-core-positive">{{ completed }}</div><div class="wcp-health-meta">Plans générés avec succès</div></div>
+    <div class="wcp-health-cell"><div class="wcp-health-label">En cours</div><div class="wcp-health-value">{{ pending }}</div><div class="wcp-health-meta">En attente ou en traitement</div></div>
+    <div class="wcp-health-cell"><div class="wcp-health-label">Mode d’exécution</div><div class="wcp-health-value">Plan uniquement</div><div class="wcp-health-meta">Aucune activation automatique</div></div>
+</div>
+{% if tenants %}
+<div class="wcp-grid-2 wcp-core-hosting-grid">
+    <section id="jobs" class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Mes plans d’hébergement</h2><p class="wcp-panel-sub">Domaines de test et dernières opérations</p></div><span class="wcp-core-count">{{ jobs|length }}</span></div>
+        <div class="table-scroll"><table><caption class="sr-only">Tâches du tenant sélectionné</caption><thead><tr><th scope="col">Domaine</th><th scope="col">Serveur</th><th scope="col">État</th><th scope="col"><span class="sr-only">Détail</span></th></tr></thead><tbody>
+        {% for job in jobs %}<tr><td><div class="wcp-core-resource"><span class="wcp-core-resource-icon">{{ ui.icon('globe') }}</span><div><strong>{{ job.hostname }}</strong><small>Plan de configuration</small></div></div></td><td><span class="wcp-runtime-tag">{{ job.application_server == 'php_fpm' ? 'PHP-FPM' : 'FrankenPHP Worker' }}</span></td><td>{% include 'components/feedback/status.html.twig' with {state: job.state} only %}</td><td><a class="wcp-core-detail" href="{{ path('wcp_job', {id: job.id}) }}" aria-label="Consulter {{ job.hostname }}">Consulter {{ ui.icon('arrow') }}</a></td></tr>
+        {% else %}<tr><td colspan="4"><div class="wcp-core-empty">{{ ui.icon('globe') }}<h3>Votre premier hébergement commence ici.</h3><p>Aucune tâche. Préparez votre premier hébergement.</p><a class="button secondary" href="#hosting">Créer mon premier plan {{ ui.icon('arrow') }}</a></div></td></tr>{% endfor %}
+        </tbody></table></div>
+        <div class="wcp-core-panel-foot">{{ ui.icon('shield') }} Chaque opération conserve son état et son résultat. <a href="{{ path('wcp_jobs',{tenant:app.request.query.get('tenant')|default(tenants[0].id)}) }}">Voir toutes les tâches</a> <a href="{{ path('wcp_sites',{tenant:tenant}) }}">Voir mes hébergements</a></div>
+    </section>
+    <section id="hosting" class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Préparer un hébergement</h2><p class="wcp-panel-sub">Un nouveau projet, une configuration adaptée</p></div><span class="wcp-stat-icon">{{ ui.icon('plus') }}</span></div><div class="wcp-panel-body">
+        <form method="post" action="{{ path('wcp_plan') }}" data-controller="form-guard" data-action="submit->form-guard#submit"><input type="hidden" name="_token" value="{{ csrf_token('hosting-plan') }}"><input type="hidden" name="idempotency_key" value="{{ idempotency_key }}">
+        <label for="tenant">Espace</label><select id="tenant" name="tenant_id">{% for item in tenants %}<option value="{{ item.id }}"{% if item.id == tenant %} selected{% endif %}>{{ item.name }}</option>{% endfor %}</select>
+        <label for="hostname">Nom de domaine</label><input id="hostname" name="hostname" required maxlength="253" pattern="[a-z0-9.-]+\.test" placeholder="mon-site.test" autocomplete="off"><p class="field-help">Domaine ASCII en minuscules, se terminant par .test.</p>
+        {% include 'components/forms/application-server.html.twig' with {field_id: 'site-application-server', allow_inherit: true, selected: 'inherit'} %}
+        <label class="checkbox-row"><input type="checkbox" name="worker_acknowledged" value="1"{% if not worker_plans_enabled %} disabled{% endif %}><span>Je confirme que cette application est compatible avec le mode worker et réinitialise son état entre les requêtes.</span></label>
+        <p class="field-help">Confirmation obligatoire si le mode worker est sélectionné ou hérité. Un plan ne déploie ni service ni application.</p>
+        <details><summary>Comparer les stacks web</summary>{% include 'components/forms/web-stack-options.html.twig' %}</details>
+        <button class="button wcp-core-submit" type="submit" data-form-guard-target="button">{{ ui.icon('plus') }} Générer le plan</button><p class="field-help" role="status" data-form-guard-target="status"></p>
+        </form>
+    </div></section>
+</div>
+{% else %}<section class="wcp-panel wcp-core-empty">{{ ui.icon('shield') }}<h2>Aucun espace autorisé</h2><p>Demandez une affectation à l’administrateur local.</p></section>{% endif %}
+{% endif %}
+{% endblock %}

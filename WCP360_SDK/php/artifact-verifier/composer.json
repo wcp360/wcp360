@@ -1,0 +1,9 @@
+{
+  "name": "wcp360/artifact-verifier-candidate",
+  "description": "Offline admission of signed ZIP artifacts; no updater or installer",
+  "type": "library",
+  "version": "0.1.0",
+  "require": {"php": "^8.3", "ext-json": "*", "ext-sodium": "*", "ext-zip": "*"},
+  "autoload": {"psr-4": {"Wcp360\\Sdk\\Artifacts\\": "src/"}},
+  "scripts": {"test": "@php tests/run.php"}
+}

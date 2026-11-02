@@ -1,0 +1,34 @@
+# Fixed candidate identities and paths. Disposable Debian 13 VM only.
+[Unit]
+Description=WCP360 isolated candidate broker and hosted process supervisor
+Requires=wcp-candidate-vm-arm.service
+After=wcp-candidate-vm-arm.service
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=notify
+NotifyAccess=main
+# A system service defaults to root; the broker verifies euid == 0.
+# Avoid redundant User=root: systemd 257 can drop CAP_SETUID during seccomp setup.
+Environment=WCP_ISOLATED_TEST_VM=1 WCP_ALLOW_CANDIDATE_RECOVERY=1
+ExecStart=/usr/local/libexec/wcp360/wcp-candidate-node broker --agent-uid 31002 --worker-uid 31003 --ipc-gid 31004
+Restart=on-failure
+RestartSec=2
+TimeoutStartSec=90
+TimeoutStopSec=15
+KillMode=control-group
+UMask=0022
+NoNewPrivileges=yes
+ProtectSystem=yes
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+TasksMax=128
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

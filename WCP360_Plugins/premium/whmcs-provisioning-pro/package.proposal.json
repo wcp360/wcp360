@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.whmcs-provisioning-pro",
+  "kind": "plugin",
+  "label": "WHMCS provisioning connector",
+  "category": "billing-business",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Tenancy",
+    "Setup",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "commerce.whmcs"
+  ],
+  "dependencies": [],
+  "summary": "Prepare an optional WHMCS service mapping for reviewed account provisioning and lifecycle reconciliation.",
+  "core_boundary": "The connector delegates only admitted Core use cases; baseline account administration and host control remain free Core features. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin a WHMCS instance, integration revision and mapping between remote services, local tenants and permitted products.",
+    "Require authenticated, scoped requests with idempotent reconciliation for create, suspend, resume and cancellation proposals.",
+    "Do not infer permanent purge from a remote cancellation event; preserve retained data and provide an audit trail for operator decisions.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

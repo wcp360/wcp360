@@ -1,0 +1,40 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.observability-pro",
+    "kind":  "module",
+    "label":  "Observability Pro",
+    "category":  "observability",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "Platform",
+                        "Tenancy",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "observe.prometheus",
+                           "observe.opentelemetry",
+                           "observe.grafana",
+                           "observe.synthetics",
+                           "notify.sms",
+                           "notify.team-messaging"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry and bounded HTTP/HTTPS, TCP, DNS and ICMP observations where admitted. Source/time, freshness, probe vantage point and provider limits remain visible; basic local monitoring and notification channels are free Core responsibilities.",
+    "core_boundary":  "Core retains required metrics/history, ordinary HTTP/TCP/DNS/ICMP checks where admitted, local alerts/incidents, diagnostics and essential notification routing. This module adds comparative objectives, richer visualization and advanced multi-vantage campaigns; Telegram/SMS/email transport connectors do not replace Core notification ownership or make premium necessary for basic alerts.",
+    "acceptance":  [
+                       "Distinguish local measurements, external probes, inferred objectives and stale/absent samples; record time, source, freshness and vantage point without calling missing telemetry healthy.",
+                       "Qualify HTTP/HTTPS methods/redirects/TLS/body bounds, TCP connect behavior, DNS query/resolver limits and ICMP capability/privilege handling independently; unsupported protocols remain unavailable.",
+                       "Bind every probe to an authorized asset or explicitly admitted target. Bound DNS resolution, redirects, destination ranges, rate, concurrency, packet/body size, duration and retries; block metadata/control-plane or unintended internal targets without creating a network scanner.",
+                       "Enforce tenant scope on series, traces, labels, probes and dashboard queries before rendering/export; redact credentials, tokens, cookies and response secrets.",
+                       "Bound sample cardinality, retention, aggregation cost, outbound buffers and campaign resource use; protect other tenants and Core local observations from probe exhaustion.",
+                       "Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability or immediate event propagation.",
+                       "Emit scoped events through Core-owned notification policy for separately admitted Telegram, SMS, email or other transports; basic alerts remain free, and queued/sent/delivered/acknowledged states require distinct evidence.",
+                       "Prove local Core monitoring, ordinary alert routing and diagnostic fallback remain usable during sink, channel, module or provider outages."
+                   ]
+}

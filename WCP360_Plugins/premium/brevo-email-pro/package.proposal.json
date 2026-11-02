@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.brevo-email-pro",
+    "kind":  "plugin",
+    "label":  "Brevo transactional email connector",
+    "category":  "collaboration-support",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Mail",
+                        "Observability",
+                        "Operations",
+                        "IdentityAccess"
+                    ],
+    "catalogue_keys":  [
+                           "mail.smtp-relays"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare an optional Brevo transactional sender/relay profile with scoped delivery feedback and deliberate route changes.",
+    "core_boundary":  "Local email, baseline alert delivery and Core mail administration stay free. The connector does not export mailboxes, route arbitrary customer content or silently replace a working local recovery channel. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify an admitted API or SMTP profile, verified sender/domain ownership, scoped credentials, consent and bounded recipient/data policies.",
+                       "Authenticate and bind any delivery feedback under a reviewed webhook profile; distinguish request acceptance, delivery, bounce and suppression without guaranteeing deliverability.",
+                       "Exercise provider failure, duplicates, redaction and credential rotation; removal requires an explicit safe route transition and preserved local alerts, not automatic fallback that resends private data.",
+                       "Declare observation-only, import or externally managed ownership before any integration request. Refuse competing writers for Core-owned resources; ownership handoff requires an authorized inventory, admission review and recovery plan.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

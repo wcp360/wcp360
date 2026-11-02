@@ -1,0 +1,28 @@
+{
+  "version": "156.0.8078.4",
+  "source": "https://github.com/chromium/chromium/tree/156.0.8078.4",
+  "components": {
+    "CREDENTIALS": "sandbox/linux/services/credentials.cc",
+    "NAMESPACE_SANDBOX": "sandbox/linux/services/namespace_sandbox.cc",
+    "ZYGOTE_HOST": "content/browser/zygote_host/zygote_host_impl_linux.cc",
+    "SANDBOX_BPF": "sandbox/linux/seccomp-bpf/sandbox_bpf.cc",
+    "SANDBOX_LINUX": "sandbox/policy/linux/sandbox_linux.cc",
+    "THREAD_HELPERS": "sandbox/linux/services/thread_helpers.cc",
+    "SUID_HOST": "sandbox/linux/suid/client/setuid_sandbox_host.cc",
+    "ZYGOTE_MAIN": "content/zygote/zygote_main_linux.cc",
+    "PLATFORM_THREAD": "base/threading/platform_thread_posix.cc",
+    "PROCESS_LAUNCH": "base/process/launch_posix.cc",
+    "SHARED_MEMORY": "base/memory/platform_shared_memory_region_posix.cc",
+    "BROWSER_MAIN_LINUX": "chrome/browser/chrome_browser_main_linux.cc",
+    "NAMESPACE_UTILS": "sandbox/linux/services/namespace_utils.cc"
+  },
+  "raw_checks": {
+    "RAW_CHROOT_FDINFO": "sys_chroot(\"/proc/self/fdinfo/\") == 0",
+    "RAW_CHDIR_ROOT": "chdir(\"/\") == 0",
+    "RAW_DENY_SETGROUPS": "NamespaceUtils::DenySetgroups()",
+    "RAW_WRITE_UID_MAP": "NamespaceUtils::WriteToIdMapFile(\"/proc/self/uid_map\", uid_)",
+    "RAW_WRITE_GID_MAP": "NamespaceUtils::WriteToIdMapFile(\"/proc/self/gid_map\", gid_)",
+    "RAW_CLOSE_ID_MAP": "IGNORE_EINTR(close(fd)) == 0"
+  },
+  "raw_check_format_source": "base/check.h (RAW_CHECK uses only a stringified condition, without source location)"
+}

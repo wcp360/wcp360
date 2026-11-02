@@ -1,0 +1,162 @@
+# WCP360 premium business-module catalogue
+
+<!-- Module inventory rows are generated from CATALOG.json. Preserve the bounded requested-area navigation block when regenerating these rows and package exports. -->
+
+**44 design proposals across 16 categories. All are PRO, non-installable and source_model: undecided.** No package implementation, provider admission, pricing or premium license is supplied.
+
+This catalogue adds optional advanced workflows. All 233 essential capabilities and the seven Core engine adapters remain in the free Core scope. PRO rights never replace package trust, compatibility or current authorization. See [boundaries and authoring](README.md), the [machine catalogue](CATALOG.json), [planning schema](schemas/package-proposal.schema.json), [149-entry source](../PLUGIN_CATALOG.md) and [editions strategy](../documentation/development/EDITIONS-AND-PREMIUM.md).
+
+<!-- BEGIN REQUESTED-AREA NAVIGATION: preserve when regenerating module inventory rows. -->
+## Requested hosting areas and related integrations
+
+This navigation table links the eleven requested areas to existing module proposals and provider records. The **44 module definitions** remain in [CATALOG.json](CATALOG.json); the **97 connector definitions** remain in the [premium connector catalogue](../WCP360_Plugins/premium/CATALOG.json). No extra module is created by a navigation row.
+
+| Requested area | Business-module proposals | Related premium connector proposals |
+| :--- | :--- | :--- |
+| 1. Multi-server and cluster management | [Multi-server Hosting](multi-server-hosting-pro/README.md), [High Availability](high-availability-pro/README.md) | [Enhance](../WCP360_Plugins/premium/enhance-interop-pro/README.md), [CSF/lfd — ClusterCSF request](../WCP360_Plugins/premium/csf-lfd-policy-pro/README.md) |
+| 2. Docker and PaaS orchestration | [Docker Management](docker-management-pro/README.md), [Deployment Orchestration](deployment-orchestration-pro/README.md), [Kubernetes Management](kubernetes-management-pro/README.md) | [Portainer](../WCP360_Plugins/premium/portainer-management-pro/README.md), [Coolify](../WCP360_Plugins/premium/coolify-applications-pro/README.md), [Dokku](../WCP360_Plugins/premium/dokku-applications-pro/README.md) |
+| 3. Storage and replication | [Storage Orchestration](storage-orchestration-pro/README.md), [Remote Backup](remote-backup-pro/README.md), [Disaster Recovery](disaster-recovery-pro/README.md) | [GlusterFS](../WCP360_Plugins/premium/glusterfs-storage-pro/README.md), [CephFS](../WCP360_Plugins/premium/cephfs-storage-pro/README.md), [Ceph RBD](../WCP360_Plugins/premium/ceph-rbd-storage-pro/README.md), [Ceph RGW](../WCP360_Plugins/premium/ceph-rgw-pro/README.md), [MinIO](../WCP360_Plugins/premium/minio-storage-pro/README.md), [Nextcloud WebDAV](../WCP360_Plugins/premium/nextcloud-webdav-pro/README.md) |
+| 4. CDN, reverse proxy and edge caching | [CDN Management](cdn-management-pro/README.md), [Network Traffic](network-traffic-pro/README.md), [Performance Booster](performance-booster-pro/README.md) | [Cloudflare CDN](../WCP360_Plugins/premium/cloudflare-cdn-pro/README.md), [Traefik](../WCP360_Plugins/premium/traefik-routing-pro/README.md), [Nginx Proxy Manager](../WCP360_Plugins/premium/nginx-proxy-manager-pro/README.md), [Varnish](../WCP360_Plugins/premium/varnish-cache-pro/README.md) |
+| 5. Collaborative defense and availability | [Cybersecurity Posture](security-posture-pro/README.md), [Threat Response](threat-response-pro/README.md), [High Availability](high-availability-pro/README.md) | [BitNinja](../WCP360_Plugins/premium/bitninja-defense-pro/README.md), [Imunify360](../WCP360_Plugins/premium/imunify360-defense-pro/README.md), [CrowdSec](../WCP360_Plugins/premium/crowdsec-defense-pro/README.md) |
+| 6. Reseller packages and quotas | [Core templates, assignment, quotas and overrides remain free](../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md); [Agency Workspace](agency-workspace-pro/README.md) and [Billing Orchestration](billing-orchestration-pro/README.md) add advanced portfolio workflows | [WHMCS](../WCP360_Plugins/premium/whmcs-provisioning-pro/README.md), [Blesta](../WCP360_Plugins/premium/blesta-provisioning-pro/README.md), [FOSSBilling](../WCP360_Plugins/premium/fossbilling-sync-pro/README.md) |
+| 7. Firewall, WAF, DDoS and file integrity | [Cybersecurity Posture](security-posture-pro/README.md), [DDoS Defense](ddos-defense-pro/README.md), [Malware Investigation](malware-investigation-pro/README.md) | [ModSecurity/CRS](../WCP360_Plugins/premium/modsecurity-crs-pro/README.md), [Coraza](../WCP360_Plugins/premium/coraza-waf-pro/README.md), [upstream DDoS scrubbing](../WCP360_Plugins/premium/upstream-ddos-scrubbing-pro/README.md) |
+| 8. Git delivery and App Install | [Git Delivery](git-delivery-pro/README.md), [App Install](app-install-pro/README.md), [WordPress Management](wordpress-management-pro/README.md) | [GitHub](../WCP360_Plugins/premium/github-delivery-pro/README.md), [GitLab](../WCP360_Plugins/premium/gitlab-delivery-pro/README.md); [application recipes](../WCP360_App_Deploy/README.md) remain individually qualified inputs |
+| 9. Observability, incidents and alerts | [Observability](observability-pro/README.md), [Log Analytics](log-analytics-pro/README.md), [Incident Operations](incident-operations-pro/README.md) | [Prometheus](../WCP360_Plugins/premium/prometheus-federation-pro/README.md), [Grafana](../WCP360_Plugins/premium/grafana-cloud-pro/README.md), [Discord](../WCP360_Plugins/premium/discord-notifications-pro/README.md), [Telegram](../WCP360_Plugins/premium/telegram-notifications-pro/README.md), [Twilio SMS](../WCP360_Plugins/premium/twilio-sms-pro/README.md), [Brevo email](../WCP360_Plugins/premium/brevo-email-pro/README.md) |
+| 10. Database-as-a-Service and backup | [Database Operations / DBaaS](database-operations-pro/README.md), [Database Performance](database-performance-pro/README.md), [Remote Backup](remote-backup-pro/README.md) | [MySQL/MariaDB](../WCP360_Plugins/premium/external-mysql-mariadb-pro/README.md), [Galera](../WCP360_Plugins/premium/galera-cluster-pro/README.md), [Redis](../WCP360_Plugins/premium/redis-service-pro/README.md), [MongoDB](../WCP360_Plugins/premium/mongodb-service-pro/README.md), [S3](../WCP360_Plugins/premium/aws-s3-backup-pro/README.md), [Google Cloud Storage](../WCP360_Plugins/premium/google-cloud-storage-backup-pro/README.md), [SFTP](../WCP360_Plugins/premium/remote-sftp-backup-pro/README.md), [Backblaze B2](../WCP360_Plugins/premium/backblaze-b2-backup-pro/README.md) |
+| 11. DNS and certificate automation | [DNS/TLS Orchestration](dns-tls-orchestration-pro/README.md) for advanced provider/node campaigns; ordinary DNS, ACME and wildcard lifecycle remain free Core scope | [PowerDNS](../WCP360_Plugins/premium/powerdns-remote-pro/README.md), [Cloudflare DNS](../WCP360_Plugins/premium/cloudflare-dns-pro/README.md), [external ACME issuer](../WCP360_Plugins/premium/external-acme-authority-pro/README.md) |
+
+The [eleven-area platform register](../documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) records exact Core boundaries and provider distinctions. All linked packages remain design proposals. Essential security, caching/compression, DNS/TLS, notifications and recovery remain Core duties; optional controllers and acceleration profiles require their own admission and qualification.
+
+For VPS/VM, AI and the remaining module families, continue through the inventory below. [Open the combined premium catalogue](../PREMIUM_CATALOG.md) for both complete inventories.
+<!-- END REQUESTED-AREA NAVIGATION -->
+
+<!-- BEGIN GENERATED MODULE INVENTORY -->
+## applications
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [AppInstall Pro](app-install-pro/README.md)<br><code>module.app-install-pro</code> | A curated application store with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. | Hosting, Data, Files, Operations, BackupRestore, Tenancy | `apps.installer`, `apps.cms-recipes`, `apps.business-recipes`, `apps.verified-updates` |
+| [WordPress Management Pro](wordpress-management-pro/README.md)<br><code>module.wordpress-management-pro</code> | Advanced WordPress portfolio management covering instance discovery, core/plugin/theme inventory, compatible update campaigns, maintenance windows, hardening recommendations and source-attributed vulnerability tracking. | Hosting, Data, Files, Operations, BackupRestore | `apps.wordpress-toolkit`, `apps.verified-updates`, `security.advisories` |
+| [Staging Workflows Pro](staging-workflows-pro/README.md)<br><code>module.staging-workflows-pro</code> | Managed staging environments with controlled file/database cloning, URL remapping, sanitization, isolated credentials, comparison and selective promotion. | Hosting, Data, Files, Operations, BackupRestore, Tenancy | `apps.staging-clones`, `delivery.previews`, `data.anonymization` |
+| [Application Fleet Pro](application-fleet-pro/README.md)<br><code>module.application-fleet-pro</code> | Cross-application portfolio views with version/dependency drift, qualified campaign targeting, bounded rollout batches and per-instance reporting. | Hosting, Tenancy, Operations, Observability | `apps.fleet-management`, `apps.verified-updates`, `workspace.dashboards` |
+| [Application Testing Pro](application-testing-pro/README.md)<br><code>module.application-testing-pro</code> | Advanced customer-application test campaigns using isolated preview environments, version matrices, synthetic user journeys and comparison before promotion. | Hosting, Data, Files, Operations, BackupRestore, Observability | `apps.verified-updates`, `delivery.previews`, `backup.restore-tests`, `observe.synthetics` |
+
+## delivery
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Git Delivery Pro](git-delivery-pro/README.md)<br><code>module.git-delivery-pro</code> | Repository-driven CI/CD with versioned branch/tag policy, isolated builds, immutable artifacts, environment binding and deployment history. | Hosting, Files, Operations, IdentityAccess | `delivery.git`, `delivery.pipelines`, `delivery.runners`, `delivery.dependency-analysis` |
+| [Deployment Orchestration Pro](deployment-orchestration-pro/README.md)<br><code>module.deployment-orchestration-pro</code> | Advanced release orchestration with stage gates, canary or rolling strategies, traffic checks, drain coordination and supported recovery plans. | Hosting, Operations, Platform, BackupRestore, Observability | `delivery.pipelines`, `compute.rolling-operations`, `network.service-ha` |
+
+## data
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Database Operations & DBaaS Pro](database-operations-pro/README.md)<br><code>module.database-operations-pro</code> | Advanced database-service portfolio and topology workflows for separately qualified MySQL, MariaDB, PostgreSQL, customer Redis, MongoDB and Galera capabilities. | Data, Operations, BackupRestore, Platform | `data.replication`, `data.postgres-extensions`, `data.external-databases`, `runtime.redis`, `backup.restore-tests` |
+| [Database Performance Pro](database-performance-pro/README.md)<br><code>module.database-performance-pro</code> | Longitudinal database workload analysis with redacted query fingerprints, execution-plan comparison, capacity trends and explainable tuning proposals. | Data, Observability, Operations | `data.sql-analysis`, `data.anonymization`, `observe.grafana` |
+
+## mail
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Mail Operations Pro](mail-operations-pro/README.md)<br><code>module.mail-operations-pro</code> | Advanced mail portfolio workflows for provider-assisted mailbox moves, coordinated domain cutovers, optional collaboration-suite integration and large-group policy campaigns. | Mail, Hosting, Transfers, Operations, BackupRestore | `mail.mailbox-migration`, `mail.mailing-lists`, `mail.sogo` |
+| [Mail Deliverability Pro](mail-deliverability-pro/README.md)<br><code>module.mail-deliverability-pro</code> | Advanced multi-domain deliverability reporting with DMARC aggregate analysis, qualified relay comparisons, reputation evidence and reviewed BIMI-related readiness checks. | Mail, Hosting, Observability, Operations | `mail.dmarc`, `mail.bimi`, `mail.smtp-relays`, `mail.mailguard` |
+
+## recovery
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Remote Backup Pro](remote-backup-pro/README.md)<br><code>module.remote-backup-pro</code> | Remote backup policy orchestration across qualified destinations and engines, with scoped repository bindings, encryption-key references, transfer receipts, retention review and verified restore references. | BackupRestore, Operations, Files, IdentityAccess | `backup.sftp`, `backup.s3`, `backup.nfs-destination`, `backup.restic`, `backup.borg`, `backup.immutable` |
+| [Disaster Recovery Pro](disaster-recovery-pro/README.md)<br><code>module.disaster-recovery-pro</code> | Advanced multi-resource recovery plans, dependency ordering, isolated exercises and measured recovery objectives. | BackupRestore, Transfers, Operations, Platform, Hosting, Data, Mail | `backup.disaster-recovery`, `backup.restore-tests`, `compute.node-groups` |
+
+## security
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Cybersecurity Posture Pro](security-posture-pro/README.md)<br><code>module.security-posture-pro</code> | Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, advisories, configuration drift and selected protection integrations. | Platform, IdentityAccess, Observability, Operations | `security.advisories`, `security.waf`, `security.file-integrity` |
+| [Threat Response Pro](threat-response-pro/README.md)<br><code>module.threat-response-pro</code> | Advanced response playbooks that correlate selected security signals and propose scoped containment sequences. | IdentityAccess, Platform, Observability, Operations, Hosting | `security.siem`, `security.crowdsec`, `security.threat-intel`, `automation.event-rules` |
+| [Malware Investigation Pro](malware-investigation-pro/README.md)<br><code>module.malware-investigation-pro</code> | Advanced investigation cases combining scoped scanner findings, file-change evidence, comparison and reviewed quarantine proposals. | Files, Hosting, Observability, Operations, BackupRestore | `security.clamav`, `security.maldet`, `security.forensics`, `security.file-integrity` |
+| [DDoS Defense Pro](ddos-defense-pro/README.md)<br><code>module.ddos-defense-pro</code> | Advanced DDoS observation and response coordination across qualified upstream scrubbing/edge providers and admitted local L7 controls. | Platform, Hosting, IdentityAccess, Operations, Observability | `security.crowdsec`, `security.waf`, `security.threat-intel`, `domains.cdn-edge`, `network.haproxy`, `network.service-ha` |
+
+## observability
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Observability Pro](observability-pro/README.md)<br><code>module.observability-pro</code> | Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry and bounded HTTP/HTTPS, TCP, DNS and ICMP observations where admitted. | Observability, Platform, Tenancy, Operations | `observe.prometheus`, `observe.opentelemetry`, `observe.grafana`, `observe.synthetics`, `notify.sms`, `notify.team-messaging` |
+| [Log Analytics Pro](log-analytics-pro/README.md)<br><code>module.log-analytics-pro</code> | Advanced authorized log exploration with correlation, saved investigations, bounded aggregation and export cases. | Observability, IdentityAccess, Operations | `observe.loki`, `observe.syslog`, `security.siem`, `governance.audit-archive` |
+| [Incident Operations Pro](incident-operations-pro/README.md)<br><code>module.incident-operations-pro</code> | Advanced incident cases, response coordination, on-call workflow integration and reviewed public-status drafting. | Observability, Operations, IdentityAccess | `notify.oncall`, `notify.team-messaging`, `support.status-page`, `support.reports` |
+
+## identity
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Enterprise Identity Pro](enterprise-identity-pro/README.md)<br><code>module.enterprise-identity-pro</code> | Advanced federation and provisioning orchestration with reviewed organizational mappings, synchronization plans and identity-source change tracking. | IdentityAccess, Tenancy, Operations, ExtensionManagement | `identity.oidc`, `identity.saml`, `identity.ldap`, `identity.scim` |
+| [Privileged Access Pro](privileged-access-pro/README.md)<br><code>module.privileged-access-pro</code> | Advanced just-in-time access requests, reviewed delegation windows and evidence around explicitly approved administrative sessions or secret consumers. | IdentityAccess, Operations, Observability, Platform | `identity.vaults-kms`, `workspace.web-terminal`, `automation.playbooks` |
+
+## commercial
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Agency Workspace Pro](agency-workspace-pro/README.md)<br><code>module.agency-workspace-pro</code> | Advanced agency and reseller portfolio workspaces with scoped branding, cross-account productivity views, reviewed client handoffs and optional support-system integration. | Tenancy, IdentityAccess, Hosting, Observability | `workspace.white-label`, `workspace.dashboards`, `support.helpdesk` |
+| [Billing Orchestration Pro](billing-orchestration-pro/README.md)<br><code>module.billing-orchestration-pro</code> | Advanced commercial reconciliation between measured usage, external customer/product mappings and reviewed provisioning requests. | Tenancy, Operations, IdentityAccess, Observability | `commerce.usage`, `commerce.whmcs`, `commerce.blesta`, `commerce.fossbilling`, `commerce.hostbill` |
+| [Capacity Planning Pro](capacity-planning-pro/README.md)<br><code>module.capacity-planning-pro</code> | Advanced capacity forecasting, scenario comparison and explained placement recommendations from qualified usage observations. | Tenancy, Platform, Observability, Operations | `commerce.usage`, `compute.node-groups`, `automation.energy`, `hardware.sensors` |
+
+## governance
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Compliance Evidence Pro](compliance-evidence-pro/README.md)<br><code>module.compliance-evidence-pro</code> | Advanced evidence cases, control mappings, review assignments and reproducible exports for internal or external assessments. | Observability, IdentityAccess, Platform, Operations | `governance.audit-archive`, `support.reports`, `security.advisories` |
+| [Data Governance Pro](data-governance-pro/README.md)<br><code>module.data-governance-pro</code> | Advanced multi-resource privacy-request cases with discovery scope, approvals, redacted exports, retention holds and coordinated deletion proposals. | IdentityAccess, Tenancy, Files, Data, Mail, Observability, Operations | `governance.data-requests`, `governance.erasure`, `governance.retention-holds`, `governance.residency` |
+
+## infrastructure
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Storage Orchestration Pro](storage-orchestration-pro/README.md)<br><code>module.storage-orchestration-pro</code> | Advanced storage lifecycle orchestration across separately qualified local, GlusterFS and Ceph block/file/object providers: tiers, pools, volumes, capacity, key references, snapshots, replication and controlled migration. | Platform, Files, Tenancy, BackupRestore, Operations | `storage.zfs`, `storage.ceph`, `storage.glusterfs`, `storage.object-storage`, `storage.raid-lvm`, `storage.nfs`, `storage.smb` |
+| [High Availability Pro](high-availability-pro/README.md)<br><code>module.high-availability-pro</code> | Advanced service-continuity coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows on already admitted nodes/providers. | Platform, Hosting, Data, Operations, Observability, BackupRestore | `network.vrrp-vip`, `network.service-ha`, `compute.node-groups`, `compute.rolling-operations` |
+| [Multi-server Hosting Pro](multi-server-hosting-pro/README.md)<br><code>module.multi-server-hosting-pro</code> | Advanced hosting orchestration across admitted servers and separately qualified Web, database, mail, authoritative DNS or mixed node roles: enrollment/trust, placement, scoped routing, capacity groups, maintenance/drain waves and fleet care. | Platform, Hosting, Tenancy, IdentityAccess, Operations, Observability, BackupRestore, Data, Mail, Transfers | `compute.node-groups`, `compute.rolling-operations`, `runtime.workers`, `network.service-ha`, `automation.playbooks` |
+| [Docker Management Pro](docker-management-pro/README.md)<br><code>module.docker-management-pro</code> | Advanced Docker/OCI and admitted Compose workload orchestration: reviewed images/build provenance, application groups, networks, ports, volumes, secrets, effective budgets, health/logs, coordinated updates and restore. | Platform, Hosting, Tenancy, Files, Data, Operations, Observability, BackupRestore | `compute.containers`, `compute.images`, `compute.rolling-operations`, `backup.restore-tests` |
+| [Kubernetes Management Pro](kubernetes-management-pro/README.md)<br><code>module.kubernetes-management-pro</code> | Advanced Kubernetes and multi-cluster application orchestration: admitted cluster contexts, namespaces/RBAC, workloads, services/ingress/TLS, persistent volumes, quotas, observations, controlled upgrades and restore. | Platform, Hosting, IdentityAccess, Tenancy, Operations, Observability, Files, Data, BackupRestore | `compute.kubernetes`, `compute.images`, `compute.node-groups`, `compute.rolling-operations`, `network.service-ha` |
+| [VPS / VM Management Pro](vps-vm-management-pro/README.md)<br><code>module.vps-vm-management-pro</code> | Advanced VPS and virtual-machine lifecycle orchestration across qualified hypervisors/providers: reviewed templates and cloud-init inputs, guest identities, virtual disks, IP/vNIC policy, effective quotas, snapshots, backups, maintenance and explicitly supported migrations. | Platform, Tenancy, IdentityAccess, Hosting, Files, Operations, Observability, BackupRestore | `compute.proxmox`, `compute.libvirt`, `compute.lxc`, `compute.images`, `network.interfaces`, `storage.raid-lvm` |
+
+## networking
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Network Traffic Pro](network-traffic-pro/README.md)<br><code>module.network-traffic-pro</code> | Advanced load-balancer, global-routing, ingress and overlay-network orchestration with reviewed listeners/upstreams, measured checks and staged changes across qualified HAProxy, Traefik, Nginx Proxy Manager or other providers. | Platform, Hosting, Operations, Observability | `network.haproxy`, `network.traefik`, `domains.global-routing`, `domains.cdn-edge`, `network.wireguard` |
+| [CDN Management Pro](cdn-management-pro/README.md)<br><code>module.cdn-management-pro</code> | Advanced multi-site CDN/edge orchestration with separately qualified Cloudflare or other provider delivery profiles, origin/DNS binding, cache rules, purge campaigns and TLS review. | Hosting, Platform, IdentityAccess, Operations, Observability | `domains.cdn-edge`, `domains.global-routing`, `domains.cloudflare`, `domains.dns-providers`, `observe.synthetics` |
+| [DNS & TLS Orchestration Pro](dns-tls-orchestration-pro/README.md)<br><code>module.dns-tls-orchestration-pro</code> | Advanced DNS/TLS portfolio campaigns across qualified providers and admitted nodes: reviewed imports/reconciliation, coordinated changes, staged DNS propagation and certificate rollout, expiry/drift evidence and service-specific recovery. | Hosting, Platform, IdentityAccess, Tenancy, Operations, Observability | `domains.cloudflare`, `domains.route53`, `domains.dns-providers`, `domains.dns01`, `domains.acme-authorities`, `domains.domain-monitoring`, `domains.global-routing` |
+
+## automation
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Infrastructure Automation Pro](infrastructure-automation-pro/README.md)<br><code>module.infrastructure-automation-pro</code> | Advanced versioned playbooks, reusable workflow parameters and reviewed bulk infrastructure plans. | Operations, Platform, IdentityAccess, Observability | `automation.playbooks`, `automation.event-rules`, `automation.terraform-opentofu`, `automation.ansible` |
+| [Diagnostic Toolbox Pro](diagnostic-toolbox-pro/README.md)<br><code>module.diagnostic-toolbox-pro</code> | Advanced guided diagnostic cases combining named bounded checks, evidence comparison and reviewed repair proposals across service owners. | Observability, Platform, Hosting, Data, Mail, Operations | `automation.playbooks`, `support.reports`, `security.forensics`, `observe.synthetics` |
+| [AI Assistant Pro](ai-assistant-pro/README.md)<br><code>module.ai-assistant-pro</code> | Optional evidence-linked AI assistance for authorized diagnostics, followed only by reviewed action proposals where underlying operations are qualified. | Platform, IdentityAccess, Operations, Observability, ExtensionManagement | `automation.ai-readonly`, `automation.ai-missions`, `automation.chatops` |
+| [API Automation Pro](api-automation-pro/README.md)<br><code>module.api-automation-pro</code> | Advanced workflow composition over existing public API/events, with reusable scoped parameters, delivery traces and approved cross-resource automations. | Operations, IdentityAccess, Platform, Observability | `automation.event-rules`, `automation.playbooks`, `automation.chatops` |
+
+## workspace
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Developer Productivity Pro](developer-productivity-pro/README.md)<br><code>module.developer-productivity-pro</code> | Advanced project workspaces with scoped shortcuts, dependency reports, environment comparisons and qualified optional development sessions. | Hosting, Files, IdentityAccess, Operations, Observability | `workspace.dashboards`, `delivery.dependency-analysis`, `delivery.previews`, `workspace.web-terminal` |
+| [Collaboration Approvals Pro](collaboration-approvals-pro/README.md)<br><code>module.collaboration-approvals-pro</code> | Advanced team review queues, separation-of-duties proposals, change annotations and approval evidence for optional operational workflows. | IdentityAccess, Operations, Tenancy, Observability | `automation.playbooks`, `support.reports`, `workspace.dashboards` |
+
+## transfers
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Portfolio Migration Pro](portfolio-migration-pro/README.md)<br><code>module.portfolio-migration-pro</code> | Advanced coordinated migrations for many accounts or application portfolios, with provider-specific import plans, staged synchronization, dependency waves and cutover rehearsals. | Transfers, Tenancy, Hosting, Files, Data, Mail, Operations, BackupRestore | `apps.fleet-management`, `mail.mailbox-migration`, `backup.transfers`, `automation.playbooks` |
+
+## performance
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Performance Booster Pro](performance-booster-pro/README.md)<br><code>module.performance-booster-pro</code> | Advanced application-aware performance profiles coordinating compatible caches, compression, static/edge delivery, runtime budgets and measured tuning proposals. | Hosting, Platform, Data, Tenancy, Operations, Observability, BackupRestore | `runtime.redis`, `runtime.memcached`, `domains.cdn-edge`, `data.sql-analysis`, `observe.synthetics` |
+
+<!-- END GENERATED MODULE INVENTORY -->
+
+## Reading a package
+
+Each linked folder contains its exact planning proposal and package-specific acceptance document. Empty dependency lists mean no inter-package requirement has been selected; implemented Core contracts and admitted providers are still prerequisites. Package terms remain undecided, including any compatibility and upstream licensing review. The 410 App Deploy references are editorial input, not an installation guarantee.

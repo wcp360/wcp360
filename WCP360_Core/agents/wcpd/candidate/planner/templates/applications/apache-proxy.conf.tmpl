@@ -1,0 +1,10 @@
+# Inert HTTP proxy. Local .htaccess is NOT interpreted by this recipe.
+Listen 127.0.0.1:8082
+<VirtualHost 127.0.0.1:8082>
+    ServerName {{.Host}}
+    ProxyRequests Off
+    ProxyPreserveHost On
+    LimitRequestBody 16777216
+    ProxyPass "/" "unix:/run/wcp360-applications/{{.ID}}/http.sock|http://{{.Host}}/" connectiontimeout=3 timeout=60
+    ProxyPassReverse "/" "http://{{.Host}}/"
+</VirtualHost>

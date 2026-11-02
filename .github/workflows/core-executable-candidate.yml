@@ -1,0 +1,219 @@
+name: Core executable candidate
+on:
+  pull_request:
+    paths: ['WCP360_Core/**', 'WCP360_SDK/**', 'WCP360_Plugins/wcp360-reference-report/**', 'WCP360_Build/**', '.dockerignore', '.github/workflows/core-executable-candidate.yml']
+  push:
+    branches: ['main']
+permissions:
+  contents: read
+concurrency:
+  group: core-candidate-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  platform-matrix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      targets: ${{ steps.targets.outputs.matrix }}
+      php_version: ${{ steps.targets.outputs.php_version }}
+      php_sha256: ${{ steps.targets.outputs.php_sha256 }}
+      postgresql_image: ${{ steps.targets.outputs.postgresql_image }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Read the shared target platform catalogue
+        id: targets
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          data = json.loads(Path('WCP360_Core/config/platforms/targets.json').read_text())
+          assert data['schema'] == 'wcp360.target-platforms/1'
+          targets = data['targets']
+          assert len(targets) == 5 and len({p['id'] for p in targets}) == 5
+          matrix = []
+          for profile in targets:
+              assert re.fullmatch(r'debian-(12|13)|ubuntu-(22|24|26)\.04', profile['id'])
+              assert re.fullmatch(r'debian:(12|13)-slim|ubuntu:(22|24|26)\.04', profile['image'])
+              assert profile['architecture'] == 'amd64'
+              matrix.append({'id': profile['id'], 'image': profile['image']})
+          providers = json.loads(Path('WCP360_Core/config/platforms/runtime-providers.json').read_text())
+          assert set(providers) == {'schema', 'php', 'postgresql'}
+          assert providers['schema'] == 'wcp360.candidate-runtime-providers/1'
+          php = providers['php']
+          assert set(php) == {'version', 'series', 'source_url', 'sha256', 'prefix', 'status'}
+          assert re.fullmatch(r'8\.4\.(0|[1-9][0-9]{0,2})', php['version'])
+          assert php['series'] == '8.4' and re.fullmatch(r'[0-9a-f]{64}', php['sha256'])
+          assert php['source_url'] == 'https://www.php.net/distributions/php-' + php['version'] + '.tar.xz'
+          assert php['prefix'] == '/opt/wcp360/runtime/php/8.4' and php['status'] == 'development-source-build'
+          assert providers['postgresql'] == {'major': 17, 'image': 'postgres:17-trixie', 'mode': 'isolated-verification-service'}
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('matrix=' + json.dumps({'include': matrix}, separators=(',', ':')), file=output)
+              print('php_version=' + php['version'], file=output)
+              print('php_sha256=' + php['sha256'], file=output)
+              print('postgresql_image=' + providers['postgresql']['image'], file=output)
+          PY
+  platform-packages:
+    needs: platform-matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.platform-matrix.outputs.targets) }}
+    env:
+      WCP_TARGET_PROFILE: ${{ matrix.id }}
+      WCP_BASE_IMAGE: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build native distribution package probe
+        run: |
+          bash -n WCP360_Build/verification/candidate-platform-smoke.sh
+          bash -n WCP360_Build/verification/candidate-linux-smoke.sh
+          docker pull "$WCP_BASE_IMAGE"
+          base_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' "$WCP_BASE_IMAGE")"
+          printf 'Target %s; resolved base image %s\n' "$WCP_TARGET_PROFILE" "$base_ref"
+          docker build --build-arg "BASE_IMAGE=$base_ref" -f WCP360_Build/environments/platform-smoke/Dockerfile -t wcp360-platform-probe .
+      - name: Verify identity, runtime refusal and isolated native Nginx/PHP-FPM
+        run: docker run --rm --network none --user 0:0 --pids-limit 128 --memory 512m --security-opt no-new-privileges -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_TARGET_PROFILE wcp360-platform-probe
+  platform-core:
+    needs: platform-matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix: ${{ fromJSON(needs.platform-matrix.outputs.targets) }}
+    env:
+      WCP_TARGET_PROFILE: ${{ matrix.id }}
+      WCP_BASE_IMAGE: ${{ matrix.image }}
+      WCP_PHP_VERSION: ${{ needs.platform-matrix.outputs.php_version }}
+      WCP_PHP_SHA256: ${{ needs.platform-matrix.outputs.php_sha256 }}
+      WCP_POSTGRESQL_IMAGE: ${{ needs.platform-matrix.outputs.postgresql_image }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build PHP 8.4 against the selected operating system libraries
+        run: |
+          bash -n WCP360_Build/verification/candidate-platform-core.sh
+          bash -n WCP360_Core/installer/recipes/candidate-install.sh
+          docker pull "$WCP_BASE_IMAGE"
+          base_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' "$WCP_BASE_IMAGE")"
+          printf 'Core target %s; resolved base image %s; PHP %s\n' "$WCP_TARGET_PROFILE" "$base_ref" "$WCP_PHP_VERSION"
+          docker build --build-arg "BASE_IMAGE=$base_ref" --build-arg "PHP_VERSION=$WCP_PHP_VERSION" --build-arg "PHP_SHA256=$WCP_PHP_SHA256" -f WCP360_Build/environments/platform-core/Dockerfile -t wcp360-platform-core .
+      - name: Start real PostgreSQL 17 with separate disposable databases
+        run: |
+          docker pull "$WCP_POSTGRESQL_IMAGE"
+          pg_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' "$WCP_POSTGRESQL_IMAGE")"
+          printf 'Resolved PostgreSQL image %s\n' "$pg_ref"
+          docker network create wcp-platform-core
+          docker run -d --name wcp-platform-db --network wcp-platform-core -e POSTGRES_PASSWORD=ci-only-platform-password -e POSTGRES_DB=wcp360_test "$pg_ref"
+          ready=0
+          # The entrypoint's temporary initialization server is Unix-socket-only.
+          for attempt in {1..60}; do
+            if docker exec wcp-platform-db pg_isready -h 127.0.0.1 -U postgres -d wcp360_test; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          docker exec wcp-platform-db createdb -U postgres wcp360_workbench
+          docker exec wcp-platform-db createdb -U postgres wcp360_restore_test
+      - name: Prepare checkout and exercise Core through non-root Nginx and PHP-FPM
+        run: |
+          docker run --name wcp-platform-app --network wcp-platform-core --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-platform-secret -e WCP_TARGET_PROFILE -e DATABASE_URL='postgresql://postgres:ci-only-platform-password@wcp-platform-db:5432/wcp360_workbench?serverVersion=17&charset=utf8' -e WCP_TEST_DATABASE_URL='postgresql://postgres:ci-only-platform-password@wcp-platform-db:5432/wcp360_test?serverVersion=17&charset=utf8' wcp360-platform-core
+      - name: Verify hosted PHP isolation with the source-built runtime
+        run: docker run --rm --network none --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 --entrypoint bash wcp360-platform-core /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
+      - name: Restore the enrolled Core database and compare logical state
+        run: |
+          set -euo pipefail
+          umask 077
+          restore_dir="$(mktemp -d /tmp/wcp360-platform-restore.XXXXXX)"
+          cleanup() { case "$restore_dir" in /tmp/wcp360-platform-restore.*) rm -rf -- "$restore_dir" ;; esac; }
+          trap cleanup EXIT
+          docker exec wcp-platform-db pg_dump -U postgres -d wcp360_workbench --format=custom --no-owner --no-acl > "$restore_dir/core.dump"
+          sha256sum "$restore_dir/core.dump"
+          docker exec -i wcp-platform-db pg_restore -U postgres -d wcp360_restore_test --no-owner --no-acl --single-transaction --exit-on-error < "$restore_dir/core.dump"
+          docker cp wcp-platform-app:/opt/wcp360/WCP360_Core/var/platform-core-snapshot.json "$restore_dir/expected.json"
+          docker run --rm --network wcp-platform-core --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-platform-secret -e WCP_TARGET_PROFILE -e DATABASE_URL='postgresql://postgres:ci-only-platform-password@wcp-platform-db:5432/wcp360_restore_test?serverVersion=17&charset=utf8' --entrypoint php wcp360-platform-core /opt/wcp360/WCP360_Build/verification/candidate-platform-core-fixture.php snapshot > "$restore_dir/restored.json"
+          cmp "$restore_dir/expected.json" "$restore_dir/restored.json"
+          printf 'PASS: %s PostgreSQL 17 logical database restore\n' "$WCP_TARGET_PROFILE"
+      - name: Cleanup disposable runtime and databases
+        if: always()
+        run: |
+          docker rm -f wcp-platform-app wcp-platform-db || true
+          docker network rm wcp-platform-core || true
+  debian-postgresql:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate candidate shell harnesses
+        run: for script in WCP360_Build/verification/candidate-{debian-vm,vm-guest,provisioning-smoke,systemd-smoke,systemd-preflight,platform-smoke,linux-smoke}.sh; do bash -n "$script"; done
+      - name: Build tested Debian 13 / PHP 8.4 / Go candidate
+        run: docker build -f WCP360_Build/environments/core-candidate/Dockerfile -t wcp360-candidate .
+      - name: Start isolated PostgreSQL 17
+        run: |
+          docker network create wcp-candidate
+          docker run -d --name wcp-candidate-db --network wcp-candidate -e POSTGRES_PASSWORD=ci-only-ephemeral-password -e POSTGRES_DB=wcp360_test postgres:17-trixie
+          # Wait for the final TCP server, rather than the temporary bootstrap socket.
+          for attempt in {1..60}; do
+            if docker exec wcp-candidate-db pg_isready -h 127.0.0.1 -U postgres -d wcp360_test; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Application tests against real PostgreSQL
+        run: |
+          docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e WCP_TEST_DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' --entrypoint bash wcp360-candidate -c 'cd /opt/wcp360/WCP360_Core && php installer/preflight/candidate.php --target --dependencies && php bin/console doctrine:migrations:migrate --no-interaction && composer validate --strict && composer check-platform-reqs && composer audit --locked && php bin/console lint:container && php bin/console lint:yaml config && php bin/console lint:twig templates && composer analyse && composer test:analysis && php vendor/phpunit/phpunit/phpunit --colors=never --testdox'
+      - name: Real Nginx / PHP-FPM isolated hosting probe
+        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 -e WCP_PLANNER=/usr/local/libexec/wcp360/wcp-plan --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-linux-smoke.sh
+      - name: Symfony to isolated Go agents and two PHP-FPM sites
+        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 --entrypoint bash wcp360-candidate /opt/wcp360/WCP360_Build/verification/candidate-provisioning-smoke.sh
+      - name: Backup, upgrade and empty-database restore rehearsal
+        run: |
+          docker exec wcp-candidate-db createdb -U postgres wcp360_restore_test
+          docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --network wcp-candidate -e APP_SECRET=ci-only-candidate-secret -e DATABASE_URL='postgresql://postgres:ci-only-ephemeral-password@wcp-candidate-db:5432/wcp360_test?serverVersion=17&charset=utf8' -e PGHOST=wcp-candidate-db -e PGUSER=postgres -e PGPASSWORD=ci-only-ephemeral-password -e PGDATABASE=wcp360_test --entrypoint bash wcp360-candidate -ec 'cd /opt/wcp360/WCP360_Core; backup_file="$(bash installer/recovery/candidate-backup.sh)"; bash installer/upgrades/candidate-upgrade.sh "$backup_file"; PGDATABASE=wcp360_restore_test bash installer/recovery/candidate-restore-test.sh "$backup_file"'
+      - name: Install QEMU tools on disposable runner
+        timeout-minutes: 8
+        run: |
+          apt_options=(-o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o DPkg::Lock::Timeout=60)
+          sudo apt-get "${apt_options[@]}" update
+          sudo apt-get "${apt_options[@]}" install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
+      - name: Clean Debian 13 VM with systemd recovery and actual reboot
+        timeout-minutes: 35
+        env:
+          WCP_DISPOSABLE_VM_HARNESS: '1'
+        run: bash WCP360_Build/verification/candidate-debian-vm.sh
+      - name: Cleanup disposable containers
+        if: always()
+        run: |
+          docker rm -f wcp-candidate-db || true
+          docker network rm wcp-candidate || true
+  frankenphp-worker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build immutable FrankenPHP / PHP 8.4 ZTS verification image
+        run: docker build -f WCP360_Build/environments/core-candidate/FrankenPHP.Dockerfile -t wcp360-worker-probe .
+      - name: Real Nginx / FrankenPHP worker isolation probe
+        run: docker run --rm --user 0:0 -e WCP_ISOLATED_TEST_CONTAINER=1 wcp360-worker-probe
+  browser-panther:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build real Chromium browser verification image
+        run: docker build -f WCP360_Build/environments/core-candidate/Browser.Dockerfile -t wcp360-browser-probe .
+      - name: Panther real-browser journey with JavaScript
+        run: docker run --rm --tmpfs /opt/wcp360/WCP360_Core/var:rw,mode=1777 --cap-drop ALL --security-opt no-new-privileges -e APP_SECRET=browser-test-only-secret --entrypoint bash wcp360-browser-probe /opt/wcp360/candidate-browser-smoke.sh

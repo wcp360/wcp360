@@ -2,6 +2,8 @@
 
 Each module has one owner and one [module README](../../NAVIGATION.md). These are source organization boundaries inside the Core, independent of detached optional plugins.
 
+Start with the [working guide](../../WORKING-GUIDE.md) to choose work and [STATUS](../../STATUS.md) to check current delivery boundaries. [NAVIGATION](../../NAVIGATION.md) locates source, [STRUCTURE](../../STRUCTURE.md) maps owners, [CAPABILITY-MAP](../../CAPABILITY-MAP.md) retains the 233 capability statuses and [ROADMAP](../../ROADMAP.md) orders implementation and acceptance.
+
 | Module | Change this area when working on |
 | :--- | :--- |
 | [IdentityAccess](IdentityAccess/README.md) | Identity, roles, session and recovery behavior. |
@@ -17,6 +19,23 @@ Each module has one owner and one [module README](../../NAVIGATION.md). These ar
 | [Platform](Platform/README.md) | Node/service settings, approved agent integration and infrastructure policy. |
 | [ExtensionManagement](ExtensionManagement/README.md) | Plugin installation, activation, disablement, upgrade and removal. |
 | [Setup](Setup/README.md) | Wizard steps, setup validation and interrupted-install recovery. |
+
+## Prepared growth areas
+
+The [Core structure](../../STRUCTURE.md) keeps these thirteen owners and provides named design reservations:
+
+| Concern | Design owner/location |
+| :--- | :--- |
+| Local licenses and commercial rights | [Tenancy/design/licensing](Tenancy/design/licensing/README.md) |
+| Free/premium package admission and lifecycle | [ExtensionManagement/design/packages](ExtensionManagement/design/packages/README.md) |
+| Hosted PHP, native and container applications | [Hosting/design/applications](Hosting/design/applications/README.md) |
+| Docker/OCI runtime providers | [Platform/design/containers](Platform/design/containers/README.md) |
+| Capacity and future node topology | [Platform/design/scalability](Platform/design/scalability/README.md) |
+| Durable distributed execution | [Operations/design/distributed-execution](Operations/design/distributed-execution/README.md) |
+| Toolbox diagnostics and repair boundaries | [Observability/design/toolbox](Observability/design/toolbox/README.md) |
+| Optional AI/model/assistant/MCP integration | [Platform/design/ai-mcp](Platform/design/ai-mcp/README.md), with Operations, IdentityAccess and ExtensionManagement |
+
+These design/ folders contain planning READMEs, not executable modules or accepted canonical contracts. Create their Domain/Application/Infrastructure/UI implementations when reviewed source exists. Technologies, commercial editions and transports do not create duplicate business owners. CLI locations and current commands are indexed in [bin/COMMANDS.md](../../bin/COMMANDS.md).
 
 ## Layout inside an implemented module
 

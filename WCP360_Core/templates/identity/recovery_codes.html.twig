@@ -1,0 +1,14 @@
+{% extends 'layouts/auth.html.twig' %}
+{% set page_title = 'Codes de secours' %}
+{% block content %}
+<p class="auth-eyebrow">VOTRE ACCÈS DE SECOURS</p>
+<h1>Conservez vos codes de secours</h1>
+<p class="auth-lead">{% if renewed|default(false) %}Vos anciens codes sont invalidés et vos sessions sont fermées. Votre authentificateur reste actif.{% else %}Votre authentificateur est activé.{% endif %} Ces codes sont affichés une seule fois ; conservez-les hors du serveur. Chaque code remplace un second facteur pour une seule connexion, avec votre mot de passe.</p>
+<ul id="recovery-codes">{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul>
+<p class="field-help">Après perte de l’authentificateur, connectez-vous avec un code inutilisé, puis ouvrez « Sécurité du compte » pour désactiver le facteur, puis en enregistrer un nouveau si vous le souhaitez.</p>
+{% if renewed|default(false) %}
+<a class="button auth-submit" href="{{ path('wcp_login') }}">Me reconnecter <span aria-hidden="true">→</span></a>
+{% else %}
+<a class="button auth-submit" href="/">Ouvrir le panneau <span aria-hidden="true">→</span></a>
+{% endif %}
+{% endblock %}

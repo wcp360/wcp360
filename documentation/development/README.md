@@ -1,15 +1,23 @@
 # WCP360 development strategy
 
-**Decision scope:** repository organization and target development method, October 31, 2026. The folders created with this strategy contain documentation scaffolds. The Symfony bootstrap, SDK, plugin host, wizard and production installer still need implementation and verification. The [baseline manifest](../manifests/WCP360-BM-0001.md) and owner specifications retain authority; no runtime gate or independent review is silently granted.
+**Decision scope:** repository organization and target development method selected October 31, 2026; navigation synchronized November 2, 2026. The layout combines the executable Symfony/Go development candidate with documented reservations. Read the [Core working guide](../../WCP360_Core/WORKING-GUIDE.md) to resume work and [Core status](../../WCP360_Core/STATUS.md) for the exact verified checkpoint, its evidence and current limits. Complete hosting, production installation and release qualification remain separate acceptance work. The [baseline manifest](../manifests/WCP360-BM-0001.md) and owner specifications retain authority; no runtime gate or independent review is silently granted.
 
 Build one autonomous hosting Core, develop detached plugins against a versioned SDK, and publish each product only from qualified source and evidence. A complete Core must operate with zero optional plugins.
+
+The [Community/PRO strategy](EDITIONS-AND-PREMIUM.md) owns edition boundaries, premium lifecycle and the path from a proposal to a qualified package. [Core licensing](../../WCP360_Core/LICENSING.md) records the AGPL-3.0-only grant. The new catalogues are preparation; they add no live package admission, entitlement protocol or app deployment.
+
+The [infrastructure coverage register](INFRASTRUCTURE-PREMIUM-COVERAGE.md) maps multi-server hosting, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS to Core owners, optional packages and qualification gates.
+
+Use the [eleven-area platform register](PLATFORM-INTEGRATIONS-COVERAGE.md) for named tool/provider mappings and the [Core reseller guide](../../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md) for templates, plan versions, quotas, assignment and safe exceptions. Both are design preparation, with no runtime or completion credit.
 
 ## Repository responsibilities
 
 | Location | Responsibility |
 | :--- | :--- |
 | [WCP360_Core](../../WCP360_Core/README.md) | Symfony application, built-in hosting domains, reusable UI/services, extension manager, installer source, Go agents and integrated tests. |
-| [WCP360_Plugins](../../WCP360_Plugins/README.md) | One independently versioned/tested package per plugin. Current packages keep their names and source bytes. |
+| [WCP360_App_Deploy](../../WCP360_App_Deploy/README.md) | Public editorial catalogue and independently authored application recipes; Core owns instances, authority, jobs, providers and recovery. The candidate bridge reads metadata only. |
+| [WCP360_Modules](../../WCP360_Modules/README.md) | Independently developed PRO business packages; planning catalogue, package proposals and acceptance criteria. Internal Core domains remain in Core. |
+| [WCP360_Plugins](../../WCP360_Plugins/README.md) | One independently versioned/tested package per plugin; [premium connector proposals](../../WCP360_Plugins/premium/README.md) are separate from existing packages, whose names and source bytes are preserved. |
 | [WCP360_SDK](../../WCP360_SDK/README.md) | Public PHP client/contracts and synthetic testing support for integrations; no Core internals or privileged broker client. |
 | [WCP360_Build](../../WCP360_Build/README.md) | Build environments, package assembly and qualification/publication procedures. Generated output goes under ignored `build/`. |
 | [WCP360_Releases](../../WCP360_Releases/README.md) | Records for qualified releases and their immutable artifact references. No qualified version currently exists. |
@@ -75,12 +83,12 @@ Work in dependency order with a usable, tested result at each step. These work p
 
 | Step | Deliverable | Evidence before advancing |
 | :--- | :--- | :--- |
-| 1. Foundation | Reconcile the existing inert daemon and test candidates; bootstrap the approved Symfony/toolchain layout. | Current paths/toolchains, executed checks and applicable exact-SHA reviews. |
+| 1. Foundation | Preserve the verified Symfony/Go candidate and complete its production identity, permission and operation integration. Historical inert sources retain their own scope. | Current paths/toolchains, exact-source checks and applicable owner decisions/reviews; the candidate does not close production M1/M2. |
 | 2. Autonomous Core | Local identity, tenant isolation, permissions, jobs/audit, built-in hosting adapters, health and recovery. | Baseline hosting workflow operates with no optional plugin or vendor-service dependency. |
 | 3. Extension seam | Versioned API/SDK, package identity, compatibility, capabilities, data ownership and lifecycle registry. | Contract tests; denied cross-tenant/unknown operations; no private Core imports. |
 | 4. Plugin host | Admission, supervision, lifecycle, drain/recovery, menu registry and isolated UI contributions. | Install/enable/crash/disable/update/uninstall scenarios preserve Core and hosted workloads. |
 | 5. Reference plugin | One small optional integration developed in isolation, then tested against Core. | Standalone tests plus compatibility and lifecycle integration evidence. |
-| 6. Install and setup | CLI installation, restricted wizard, upgrade and recovery using assembled artifacts. | Fresh Debian installation, interrupted setup/resume, wrong-origin/session negatives and restore rehearsal. |
+| 6. Install and setup | CLI installation, restricted wizard, upgrade and recovery using assembled artifacts. | Fresh installations on the selected Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS targets, interrupted setup/resume, wrong-origin/session negatives and restore rehearsal. |
 | 7. Product qualification | Complete the selected functional release scope and dependency/security/recovery checks. | Trace the applicable requirements from the existing 233-capability inventory to executed evidence. |
 | 8. Release | Publish the exact qualified revision and immutable artifacts. | Release checklist, supported-target results, provenance, recovery instructions and required signoffs. |
 
@@ -92,7 +100,7 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - Insights remains a UI/metadata prototype. Its version and crypto declarations do not prove a production transport or lifecycle.
 - The two package manifest shapes are not silently unified. Define and ratify one production manifest contract, then provide explicit migration/validation for existing packages.
 - Existing #108/#114/#110/#109 candidates keep their SHA-bound reviews. This scaffold does not copy or merge them into the target folders.
-- Feature branches can use `feature/core-<topic>`, `plugin/<id>/<topic>`, `sdk/<topic>` and `release/<version>`. Keep PRs bounded; integrate only applicable tests, owner decisions and genuine independent review.
+- Current Core development uses the single existing `implementation/core-executable-foundation-20261031` branch and draft PR #116. Do not create a new Core branch for routine continuation. The [working guide](../../WCP360_Core/WORKING-GUIDE.md) records the update workflow; independent SDK/plugin/release branch decisions require their own task scope. Keep changes bounded and preserve unrelated working-tree edits.
 - Core, SDK and plugins have independent versions and compatibility matrices. A plugin update does not require a new Core release when the approved compatibility contract remains satisfied.
 
 ## Detailed implementation guides
@@ -100,7 +108,12 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - [Core engine and reusable services](CORE-ENGINE.md)
 - [Plugin lifecycle and failure containment](PLUGIN-LIFECYCLE.md)
 - [Installer, wizard, builds and release acceptance](DELIVERY-AND-RELEASES.md)
+- [Tests and static analysis](TESTING.md)
+- [Target operating systems, native packages and qualification boundaries](SUPPORTED-PLATFORMS.md)
+- [Five-platform PHP 8.4 Core runtime and PostgreSQL 17 verification](CORE-RUNTIME-MATRIX.md)
+- [Engineering quality and security toolchain](QUALITY-SECURITY-STACK.md)
+- [Security test and release evidence matrix](SECURITY-TEST-MATRIX.md)
 - [Repository directory guide](../REPOSITORY-STRUCTURE.md)
 - [Functional inventory](../../README.md) and [149-entry extension catalogue](../../PLUGIN_CATALOG.md)
 
-The production goal is a complete Core and detachable ecosystem. This organizational publication provides the implementation map and acceptance work; it does not assert that those engines already run.
+The production goal is a complete Core and detachable ecosystem. This implementation map distinguishes the selected executable candidate paths from the remaining functional, host-installation and qualification work; a source directory or configured check does not establish completion.

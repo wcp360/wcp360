@@ -16,7 +16,7 @@
     ['quotas', 'data_usage', 'Quotas']
   ];
   let active = sections.some(item => item[0] === location.hash.slice(1)) ? location.hash.slice(1) : 'users';
-  let returnFocus = null;
+  let drawerOverlay;
 
   const chip = (label, tone = '') => `<span class="iam-chip ${tone}">${label}</span>`;
   const button = (kind, label, primary = false, icon = 'add') => `<button type="button" class="wcp-action-btn ${primary ? 'primary' : ''}" data-iam-action="${kind}"><span class="material-symbols-rounded">${icon}</span>${label}</button>`;
@@ -146,29 +146,22 @@
   }
 
   function ensureDrawer() {
-    if (qs('#iamDrawer')) return;
+    if (qs('#iamDrawer')) {drawerOverlay ||= WCPUI.Overlay.attach({panel:qs('#iamDrawer'),backdrop:qs('.iam-drawer-backdrop'),source:'identity-access'});return;}
     document.body.insertAdjacentHTML('beforeend', '<button class="iam-drawer-backdrop" type="button" data-iam-close aria-label="Close dialog"></button><aside id="iamDrawer" class="iam-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="iamDrawerTitle"><div class="iam-drawer-head"><div><div id="iamDrawerTitle" class="iam-drawer-title"></div><div class="iam-drawer-sub"></div></div><button type="button" class="wcp-close-btn" data-iam-close aria-label="Close"><span class="material-symbols-rounded">close</span></button></div><div class="iam-drawer-body"></div></aside>');
+    drawerOverlay=WCPUI.Overlay.attach({panel:qs('#iamDrawer'),backdrop:qs('.iam-drawer-backdrop'),source:'identity-access'});
   }
 
   function openDrawer(kind, trigger) {
     const config = forms[kind] || forms.trace;
     const drawer = qs('#iamDrawer');
-    returnFocus = trigger || document.activeElement;
     qs('.iam-drawer-title', drawer).textContent = config.title;
     qs('.iam-drawer-sub', drawer).textContent = config.sub;
     qs('.iam-drawer-body', drawer).innerHTML = '<div class="iam-success" role="status">Saved. The change was added to the audit trail.</div><form class="iam-form" data-iam-form="' + kind + '">' + config.body() + '<div class="iam-form-actions"><button type="button" class="wcp-action-btn" data-iam-close>' + (config.submit ? 'Cancel' : 'Done') + '</button>' + (config.submit ? '<button type="submit" class="wcp-action-btn primary">' + config.submit + '</button>' : '') + '</div></form>';
-    drawer.classList.add('open');
-    drawer.setAttribute('aria-hidden', 'false');
-    qs('.iam-drawer-backdrop')?.classList.add('open');
-    setTimeout(() => qs('input,select,textarea,button', drawer)?.focus(), 20);
+    drawerOverlay.open(trigger || document.activeElement);
   }
 
   function closeDrawer() {
-    const drawer = qs('#iamDrawer');
-    drawer?.classList.remove('open');
-    drawer?.setAttribute('aria-hidden', 'true');
-    qs('.iam-drawer-backdrop')?.classList.remove('open');
-    returnFocus?.focus?.();
+    drawerOverlay?.close();
   }
 
   function filterUsers() {
@@ -236,7 +229,6 @@
     qsa('input,select,textarea,button', form).forEach(control => { control.disabled = true; });
     setTimeout(closeDrawer, 900);
   });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape' && qs('#iamDrawer.open')) closeDrawer(); });
   window.addEventListener('hashchange', () => {
     const target = location.hash.slice(1);
     if (views[target]) setTab(target, false);

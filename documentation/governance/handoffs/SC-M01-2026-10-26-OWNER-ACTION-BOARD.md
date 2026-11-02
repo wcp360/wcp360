@@ -1,5 +1,12 @@
 # WCP360 — SC-M01 Owner Action Board
 
+> Historical integration note (2026-11-02): this dated branch document is retained
+> as development-source evidence. Its original decisions, pending states, path
+> literals and execution claims describe the recorded snapshot; they do not
+> override the current Core implementation or grant owner approval, independent
+> E3 review, a CODE-BASELINE, deployment or production qualification. See the
+> [tooling integration guide](../maintenance/BRANCH-TOOLING-INTEGRATION-2026-11-02.md)
+> for current paths and separate current/historical CI scopes.
 Date: 2026-10-26
 Status: COORDINATION ONLY — NON-CANONICAL
 Gate: #13; audit: #41

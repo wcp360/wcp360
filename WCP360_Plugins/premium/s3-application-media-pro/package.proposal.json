@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.s3-application-media-pro",
+  "kind": "plugin",
+  "label": "Application object-storage connector",
+  "category": "backup-object-storage",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Files",
+    "Data",
+    "Transfers"
+  ],
+  "catalogue_keys": [
+    "storage.object-storage"
+  ],
+  "dependencies": [],
+  "summary": "Prepare application-owned media/object references and controlled migration to a qualified remote object store.",
+  "core_boundary": "Core Files and application ownership remain available locally; an optional remote media integration cannot become a second file authority. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify one application/provider profile including object naming, URL access policy and writable scope.",
+    "Migrate synthetic uploads with integrity checks, resumable progress and an explicit retained-source decision.",
+    "Test private media visibility, failed cutover and restoration without exposing object-store credentials.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

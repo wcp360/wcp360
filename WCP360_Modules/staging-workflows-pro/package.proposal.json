@@ -1,0 +1,36 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.staging-workflows-pro",
+    "kind":  "module",
+    "label":  "Staging Workflows Pro",
+    "category":  "applications",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Data",
+                        "Files",
+                        "Operations",
+                        "BackupRestore",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "apps.staging-clones",
+                           "delivery.previews",
+                           "data.anonymization"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Managed staging environments with controlled file/database cloning, URL remapping, sanitization, isolated credentials, comparison and selective promotion. Expiration and cleanup are tracked per environment rather than silently removing customer data.",
+    "core_boundary":  "Core continues to own sites, ordinary resource operations, account quotas and backup/restore. Staging adds an optional coordinated workflow; it must not provide a second file/database authority or make a staging clone a production identity.",
+    "acceptance":  [
+                       "Create staging under explicit destination ownership and quota checks using an immutable source/recovery-point reference.",
+                       "Verify data anonymization, separate secrets, suppressed outbound mail and indexing restrictions before granting staging access.",
+                       "Show file/database/configuration differences and irreversible migration implications before a scoped promotion.",
+                       "Exercise concurrent source changes, failed promotion and cleanup; keep incomplete outcomes explicit and retain agreed recovery material.",
+                       "Prove that disabling staging leaves production and retained staging resources accessible through their Core owners."
+                   ]
+}

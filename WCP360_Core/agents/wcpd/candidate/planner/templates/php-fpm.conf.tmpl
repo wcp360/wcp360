@@ -1,0 +1,22 @@
+; Inert candidate plan. The Linux identity must be provisioned and verified independently.
+[wcp_{{.ID}}]
+user = {{.User}}
+group = {{.User}}
+listen = /run/wcp360-candidate/{{.ID}}.sock
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0600
+pm = ondemand
+pm.max_children = 4
+pm.process_idle_timeout = 10s
+clear_env = yes
+catch_workers_output = yes
+security.limit_extensions = .php
+php_admin_flag[allow_url_include] = off
+php_admin_flag[expose_php] = off
+php_admin_value[session.cookie_httponly] = 1
+php_admin_value[session.cookie_samesite] = Strict
+php_admin_value[upload_tmp_dir] = /srv/wcp360-candidate/vhosts/{{.ID}}/tmp
+php_admin_value[sys_temp_dir] = /srv/wcp360-candidate/vhosts/{{.ID}}/tmp
+php_admin_value[session.save_path] = /srv/wcp360-candidate/vhosts/{{.ID}}/tmp/sessions
+php_admin_flag[opcache.validate_permission] = on

@@ -1,6 +1,6 @@
 # Domain and unit tests
 
-**Status: test source location reserved; no executable test or passing result is supplied by this README.**
+**Status: executable PHPUnit tests cover runtime contexts, principal/session policy, disposable-execution guards and packaged bootstrap behavior. Results depend on the exact revision and environment; this README does not certify a production release.**
 
 Pure domain invariants, application use cases with explicit adapters, resource bounds and configuration rendering.
 

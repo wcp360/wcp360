@@ -7,10 +7,10 @@ This directory owns framework/library configuration, service-container wiring, r
 | [packages](packages/README.md) | Symfony and installed library settings; environment-specific settings when implemented |
 | [routes](routes/README.md) | Reviewed HTTP routing and controller imports |
 | [contexts](contexts/README.md) | Document ADMIN, USER and worker identities, sessions, connections and allowed imports |
-| Future services.yaml or services.php | Explicit service discovery/wiring, including domain-namespaced Console classes |
-| Future bundles.php | Reviewed first-party framework bundles; detached plugins do not register arbitrary Core bundles |
+| [services.yaml](services.yaml) | Implemented service discovery/wiring, context bindings and candidate database middleware |
+| [bundles.php](bundles.php) | Installed framework bundle registration; detached plugins do not register arbitrary Core bundles |
 
-These are documented reservations. The actual approved Symfony bootstrap must supply and validate its configuration files; README directories are not executable Symfony configuration. contexts/ is a WCP360 documentation boundary and is not automatically loaded by Symfony.
+The executable candidate supplies Symfony bootstrap, service and package configuration. README-only reservations remain unfinished. `contexts/` documents WCP360 runtime boundaries and is not automatically loaded by Symfony. The implemented [candidate database profiles](contexts/DATABASE-PROFILES.md) are wired explicitly through Doctrine configuration and services.
 
 Use typed validated settings and per-identity secret references. Keep global platform policy in the Platform domain and resource-specific policy in its owning module. Do not use one production .env or universal credential set across ADMIN, USER, workers and agents.
 

@@ -1,0 +1,9 @@
+{
+  "name": "wcp360/pairing-client-candidate",
+  "description": "Candidate vendor pairing client, isolated from Core startup and hosting authorization",
+  "type": "library",
+  "license": "proprietary",
+  "require": {"php": "^8.3", "ext-json": "*", "ext-sodium": "*"},
+  "suggest": {"ext-curl": "Required for the bounded HTTP transport"},
+  "autoload": {"psr-4": {"Wcp360\\Sdk\\Pairing\\": "src/"}}
+}

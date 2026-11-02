@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.splunk-siem-pro",
+  "kind": "plugin",
+  "label": "Splunk SIEM export connector",
+  "category": "observability",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "IdentityAccess",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "security.siem",
+    "observe.syslog"
+  ],
+  "dependencies": [],
+  "summary": "Prepare an optional security-event export destination with scoped payloads and delivery evidence.",
+  "core_boundary": "Core audit integrity, access controls and local investigation remain independent of external SIEM delivery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Define allowed event categories, tenant scope and redaction before any payload is sent.",
+    "Qualify delivery identity, acknowledgement semantics and bounded buffering without claiming exactly-once delivery.",
+    "Test rejected events, destination outage and replay while retaining local mandatory audit evidence.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

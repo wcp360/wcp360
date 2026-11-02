@@ -1,0 +1,26 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% import 'components/navigation/icons.html.twig' as ui %}
+{% set page_title = 'Paramètres globaux' %}
+{% set runtime_settings = report.settings %}
+{% set worker_plans_enabled = report.capabilities.frankenphp_worker_plans %}
+{% block content %}
+<div class="wcp-page-head page-heading"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1 class="wcp-page-heading">Paramètres globaux</h1><p class="wcp-page-sub">Choisissez le serveur d’application proposé aux nouveaux hébergements.</p></div><div class="wcp-page-actions"><a class="button secondary" href="{{ path('wcp_runtime_settings') }}">{{ ui.icon('clock') }} Actualiser</a></div></div>
+{% if conflict %}<div class="notice" role="alert" data-runtime-conflict><strong>Ce réglage a été modifié depuis l’ouverture du formulaire.</strong> Votre modification n’a pas été appliquée. La valeur courante est affichée ci-dessous. Vérifiez votre choix avant de confirmer à nouveau.</div>{% endif %}
+{% for message in app.flashes('runtime_settings') %}<p class="notice" role="status" data-runtime-saved>{{ message }}</p>{% endfor %}
+<section class="wcp-panel"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title">Serveur d’application par défaut</h2><p class="wcp-panel-sub">Configuration des nouveaux plans d’hébergement</p></div><span class="wcp-stat-icon">{{ ui.icon('server') }}</span></div><div class="wcp-panel-body">
+    <p>Valeur courante : <strong data-runtime-current>{{ runtime_settings.application_server == 'php_fpm' ? 'PHP-FPM' : 'FrankenPHP Worker' }}</strong>. Révision <span data-runtime-revision>{{ runtime_settings.revision }}</span>.</p>
+    <p class="muted">Ce choix concerne les nouveaux plans qui héritent du défaut global. Chaque nouveau site peut choisir son propre mode. Les sites existants et le runtime du panneau conservent leur configuration.</p>
+    {% if not worker_plans_enabled %}<p class="notice" data-runtime-worker-unavailable>La préparation de plans FrankenPHP Worker est désactivée sur cette instance.{% if runtime_settings.application_server == 'frankenphp_worker' %} Sélectionnez PHP-FPM pour permettre à nouveau la création de plans qui héritent du défaut global.{% endif %}</p>{% endif %}
+    <form action="{{ path('wcp_application_server', {view:'settings'}) }}" method="post" data-controller="form-guard" data-action="submit->form-guard#submit">
+        <input type="hidden" name="_token" value="{{ csrf_token('application-server') }}"><input type="hidden" name="revision" value="{{ runtime_settings.revision }}">
+        {% include 'components/forms/application-server.html.twig' with {field_id:'settings-application-server', allow_inherit:false, selected:runtime_settings.application_server} %}
+        <button class="button" type="submit" data-form-guard-target="button">Enregistrer le défaut</button><p class="field-help" role="status" data-form-guard-target="status"></p>
+    </form>
+</div></section>
+<section class="wcp-panel"><div class="wcp-panel-head"><h2 class="wcp-panel-title">Choisir une stack web</h2></div>{% include 'components/forms/web-stack-options.html.twig' %}</section>
+<p class="field-help">Chaque application Worker doit réinitialiser son état entre les requêtes et accepter un recyclage borné. La confirmation de compatibilité reste obligatoire pour chaque nouveau plan Worker.</p>
+<p class="field-help">La disponibilité de préparation des plans ne prouve pas qu’un service est installé ou prêt à servir un site. Enregistrer ce défaut ne lance aucune installation ni aucun redémarrage.</p>
+{% include 'components/forms/modern-preview.html.twig' %}
+{% include 'components/forms/application-preview.html.twig' %}
+<p><a href="{{ path('wcp_audit', {kind:'candidate.runtime.default.changed'}) }}">Consulter les changements dans le journal d’audit</a></p>
+{% endblock %}

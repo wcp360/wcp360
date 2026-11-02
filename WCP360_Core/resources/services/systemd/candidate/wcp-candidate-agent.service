@@ -1,0 +1,42 @@
+# Candidate transport only; never runs as root.
+[Unit]
+Description=WCP360 isolated candidate unprivileged agent
+Requires=wcp-candidate-vm-arm.service
+Wants=wcp-candidate-broker.service
+After=wcp-candidate-vm-arm.service wcp-candidate-broker.service
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=wcp-agent-test
+Group=wcp-agent-test
+SupplementaryGroups=wcp-ipc-test
+Environment=WCP_ISOLATED_TEST_VM=1
+ExecStart=/usr/local/libexec/wcp360/wcp-candidate-node agent --agent-uid 31002 --worker-uid 31003 --ipc-gid 31004
+Restart=on-failure
+RestartSec=2
+TimeoutStartSec=90
+TimeoutStopSec=15
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ReadWritePaths=/run/wcp360-provision-candidate/public
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictSUIDSGID=yes
+LockPersonality=yes
+TasksMax=64
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

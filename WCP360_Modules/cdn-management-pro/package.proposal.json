@@ -1,0 +1,43 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.cdn-management-pro",
+    "kind":  "module",
+    "label":  "CDN Management Pro",
+    "category":  "networking",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "domains.cdn-edge",
+                           "domains.global-routing",
+                           "domains.cloudflare",
+                           "domains.dns-providers",
+                           "observe.synthetics"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced multi-site CDN/edge orchestration with separately qualified Cloudflare or other provider delivery profiles, origin/DNS binding, cache rules, purge campaigns and TLS review. Provider plans, API permissions, origin-authentication features, cache limits, propagation and cost constraints remain explicit; an account connection never proves every capability.",
+    "core_boundary":  "Core domain/DNS/TLS authority, ordinary caching/compression, origin security and essential hosting remain free. The current Nginx -\u003e Apache -\u003e FPM target routes all content, including static files, through Apache with edge direct-file/response-cache off by default. This module adds advanced CDN policy coordination only; no protected/private response may move to an edge cache without explicitly admitted, versioned semantics, and no proprietary edge service becomes necessary for Core hosting or recovery.",
+    "acceptance":  [
+                       "Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before an edge change.",
+                       "Qualify exact provider/API/version/plan limits and separately admitted features, including Cloudflare proxy/cache rules, certificate modes, origin authentication, purge scope/rate and request/body limits; do not promise all plans or features.",
+                       "Require validated origin TLS, hostname/SNI/certificate checks and any admitted origin authentication; visitor-edge encryption alone or an encryption-only origin mode is not verified origin identity. Review direct-origin exposure and management recovery separately.",
+                       "Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for authenticated users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods.",
+                       "Preserve all-request Apache authorization in the current Nginx -\u003e Apache -\u003e FPM target: edge-cache/direct-file stays off by default, including CSS/assets protected by nested .htaccess or directory rules.",
+                       "Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content checks before any CDN cache policy or authority handoff; connectivity or compression is not permission for public caching.",
+                       "Qualify compression negotiation, variant separation, double-compression prevention, budgets and rollback. Secret-bearing dynamic compression needs its own risk/correctness decision and stays bypassed when unqualified.",
+                       "Bound scoped purge/invalidation using provider receipts, replay control and measured propagation uncertainty; provider acceptance is not immediate global completion.",
+                       "Constrain rewrites, redirects, upstream destinations and edge-worker features to admitted capabilities and reviewed code; ingress Traefik/Nginx Proxy Manager workflows remain under Network Traffic rather than creating a competing CDN owner.",
+                       "Measure correctness, origin/offload behavior, stale responses, error rates and costs per profile; activation alone proves neither speed nor protection.",
+                       "Exercise provider outage, credentials revocation/rotation and DNS/certificate changes with an explicit exit route; disabling orchestration preserves delivery and independent free Core DNS/TLS/origin control."
+                   ]
+}

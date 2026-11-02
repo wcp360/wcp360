@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.datadog-telemetry-pro",
+  "kind": "plugin",
+  "label": "Datadog telemetry connector",
+  "category": "observability",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "IdentityAccess",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "observe.opentelemetry",
+    "observe.synthetics"
+  ],
+  "dependencies": [],
+  "summary": "Prepare optional external telemetry and synthetic-result mappings under explicit sharing policy.",
+  "core_boundary": "The connector adds a provider-specific export/view and never substitutes remote availability for local service health. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify selected APIs and telemetry modes rather than assuming every provider feature is supported.",
+    "Constrain admitted destinations, monitored targets, labels and data categories to current authority.",
+    "Exercise duplicate results, rate limits, secret redaction and provider outage with truthful stale status.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.microsoft-teams-pro",
+  "kind": "plugin",
+  "label": "Microsoft Teams notification connector",
+  "category": "collaboration-support",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "notify.team-messaging"
+  ],
+  "dependencies": [],
+  "summary": "Prepare organization-scoped Microsoft Teams notifications with explicit channel and data-disclosure policies.",
+  "core_boundary": "This proposal exports selected events only; channel permissions do not grant Core operations or unrestricted diagnostics. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify one admitted tenant and delivery profile with explicit destination ownership and credential rotation.",
+    "Redact secrets and private tenant payloads, then test channel mapping against cross-tenant disclosure.",
+    "Bound delivery, backoff and retention; expose delivery failures locally without blocking essential Core workflows.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

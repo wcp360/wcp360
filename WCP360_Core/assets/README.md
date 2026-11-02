@@ -1,17 +1,21 @@
-# Frontend source map
+# Core frontend sources
 
-**Status: frontend source locations documented; the Symfony frontend and its build/bootstrap are not implemented by these README files.**
+The executable WCP360 Core uses Symfony/Twig, AssetMapper, Turbo and focused Stimulus controllers.
 
 | Source | Responsibility |
 | :--- | :--- |
-| [controllers](controllers/README.md) | Focused first-party Stimulus interaction controllers |
-| [styles](styles/README.md) | Design tokens, component/layout rules, themes and responsive styles |
-| [images](images/README.md) | Approved first-party source image assets |
+| [controllers](controllers/) | Form submission state, appearance, responsive navigation and page search |
+| [styles](styles/) | Shared WCP360 prototype styles and Core-specific component adapters |
+| [images](images/) | First-party image assets |
+| [app.js](app.js) | Turbo/Stimulus entry point and explicit controller registration |
+| [Twig templates](../templates/) | Server-rendered pages, authorized navigation, forms and shared components |
 
-Use the selected Symfony UX/AssetMapper and CSS pipeline when the actual bootstrap is accepted. Twig markup is owned by [templates](../templates/README.md); the owning module supplies authorized data and operations. JavaScript never replaces server-side policy or Linux validation.
+The visual reference is the canonical shell and entry pages in WCP360_Prototype/. The Core carries snapshots of reference-ui.css, auth.css and readable-type.css; styles/app.css adapts the implemented Core forms and data to those tokens. Update these snapshots deliberately with the corresponding prototype changes and verify light/dark, responsive layout, focus and form journeys.
 
-Registration, imports, asset names and prepared output are supplied and tested with real implementation. Add Node tooling only for a selected build/test need; node_modules, compiled caches and generated asset output do not become repository source. Production exposes only the approved built assets through [public](../public/README.md).
+All runtime links use Symfony routes. The Core renders its actual authorized database state. Prototype simulation scripts and browser-side account/resource stores are not runtime dependencies. Only the non-sensitive appearance preference is stored in localStorage; authentication, MFA and permissions remain server-owned.
 
-- [Dependency ownership](../DEPENDENCIES.md)
-- [Browser/accessibility verification](../tests/Browser/README.md)
-- [Source navigation](../NAVIGATION.md)
+Icons are first-party inline SVG. Styles and scripts are served locally under the existing Content Security Policy; no external font, icon CDN or new JavaScript package is required.
+
+Rebuild generated assets with php bin/console asset-map:compile after changes. Then refresh the appropriate candidate context cache and reload the browser. Generated public/assets/, dependencies and runtime state stay outside versioned source.
+
+Relevant checks are Twig/container lint, the application suite, and real-browser navigation, appearance, responsive, Turbo/Stimulus and authentication journeys. See [browser tests](../tests/Browser/README.md).

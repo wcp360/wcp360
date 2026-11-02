@@ -2,7 +2,7 @@
 
 **PHP/Symfony control plane · Isolated hosting workloads · Bounded system operations**
 
-This document explains the target structure of WCP360, how components collaborate, and which boundaries implementations must preserve. It is intended for contributors, operators, reviewers, and extension developers.
+This document explains the executable Core candidate, the target WCP360 architecture and the boundaries implementations must preserve. It is intended for contributors, operators, reviewers and extension developers. For current entry points and evidence, start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md).
 
 > **Document status:** non-normative architecture overview. The [baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and approved owner contracts remain authoritative. Architecture diagrams describe the target; they are not evidence of a deployed or production-qualified system.
 
@@ -13,6 +13,7 @@ This document explains the target structure of WCP360, how components collaborat
 - [Architectural principles](#architectural-principles)
 - [System overview](#system-overview)
 - [Technology responsibilities](#technology-responsibilities)
+- [Hosted application-server selection](#hosted-application-server-selection)
 - [Core structure](#core-structure)
 - [Operation flows](#operation-flows)
 - [Data and tenancy](#data-and-tenancy)
@@ -72,16 +73,21 @@ flowchart TB
     AGENT -->|"Authenticated bounded IPC-B"| BROKER["Go wcp-privd<br/>Minimal root broker"]
     BROKER --> HOST["Registered Linux and service operations"]
 
-    EDGE --> HOSTED["Hosted applications<br/>Separate identities and runtime pools"]
+    VISITOR["Hosted-site visitors"] --> EDGE
+    EDGE -->|"Target general hosting: all content"| APACHE["Private Apache MPM event"]
+    APACHE --> HOSTED["Hosted PHP applications<br/>Separate PHP-FPM identities and pools"]
+    EDGE -->|"Separately qualified alternatives"| ALTERNATIVES["Direct FPM / FrankenPHP / registered HTTP backend"]
     EXT["Isolated extensions"] -->|"Scoped Core APIs and jobs"| CORE
     EXT -->|"Approved destinations"| PROVIDERS["External providers"]
 ```
 
 The shared-library node represents code reuse, not a third shared web runtime. ADMIN and USER instantiate approved services inside their separate security contexts. Rendered Twig responses and authorized Turbo updates return through the requesting origin.
 
-The outbox/delivery path represents durable publication to configured workers; it does not imply that every Messenger handler runs asynchronously. Customer applications and databases do not share panel credentials or PHP-FPM identities.
+This diagram describes target responsibilities. The current candidate uses explicit DBAL queries and a database job queue; it has no installed Messenger/outbox transport integration. Customer applications and databases must not share panel credentials or PHP-FPM identities. The Apache route is an inert preview today, with no changed installation default or live deployment authority.
 
 ## Technology responsibilities
+
+The executable candidate locks PHP `~8.4.0` and Symfony 7.4. It implements Twig, Turbo, Stimulus, AssetMapper, WCP360 CSS, DBAL persistence/migrations and bounded database jobs. ORM is installed without candidate entity mappings; Messenger, its Redis/Doctrine transports, Symfony Form, UX Twig/Live Components, Chart.js and TailwindBundle are not in the current lock. The table below records **target responsibilities**, rather than package-installation or acceptance claims. See [dependency ownership](WCP360_Core/DEPENDENCIES.md) and [status](WCP360_Core/STATUS.md).
 
 | Component | Target responsibility |
 | :--- | :--- |
@@ -96,15 +102,48 @@ The outbox/delivery path represents durable publication to configured workers; i
 | Go `wcpd` | Non-root control-request validation, approved adapter coordination, observation, and reconciliation. |
 | Go `wcp-privd` | Minimal root broker for registered, typed, bounded system primitives. |
 | Python | Specialized diagnostics and automation under approved non-root identities, inputs, dependencies, and resource budgets. |
-| Nginx | HTTPS termination and routing for configured panel origins and hosted applications. |
-| PHP-FPM | Separate panel runtime pools and account-isolated hosted PHP application pools. |
-| Debian 13 / amd64 | Initial target operating-system and architecture boundary defined by the baseline. |
+| Nginx | Panel edge and hosting ingress; the target general-purpose profile forwards all site content to private Apache. |
+| Apache MPM event | Target private backend for controlled native per-directory rules before isolated PHP-FPM; module/provider and HTTP acceptance remain open. |
+| PHP-FPM | Current candidate default; separate panel pools and account-isolated hosted application pools. |
+| Caddy / FrankenPHP | Alternative per-request classic runtimes or explicitly compatible Worker mode. Direct and proxied topologies need separate listener, identity, lifecycle and application qualification. |
+| Debian 13 / amd64 baseline | The existing canonical build/qualification boundary remains version-bound to its approved baseline. |
+| Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS | Declared amd64 development targets, identified by the shared platform catalogue with per-distribution native package probes. Target recognition, native package probes and full installation qualification are separate results. |
 
 These are target selections. Exact framework/package revisions, build inputs, runtime extensions, and compatibility matrices belong to each qualified component release. The current inert daemon has its own narrowly approved toolchain.
 
+## Hosted application-server selection
+
+The **current candidate default is Classic Nginx → PHP-FPM**. Existing `php_fpm` / Classic revision-1 assignments and plan/1 keep that meaning. Existing `frankenphp_worker` / Advanced assignments retain their Nginx-edge Worker topology and plan/2. The separate Modern plan/3 is a standalone Worker preview. The global default affects new inheriting plans; there is no live stack-switch API or immutable per-job migration contract to infer.
+
+The adopted default for **future qualified general-purpose installations** is **Nginx → Apache MPM event → PHP-FPM**, with all site requests, including static files, passing Apache. Direct static serving and dynamic page caching stay off for this profile. The seventh application recipe implements an **inert preview**, not durable selection, installation, provider admission or activation.
+
+The [application-preview family](WCP360_Core/src/Module/Hosting/APPLICATION-PROFILES.md) has seven recipes and three routing behaviors: ordinary PHP, front controller and WordPress. The six original recipes retain `wcp360.candidate.application-plan/1`; only `nginx_apache_php_fpm` uses `application-plan/2`. That document contains Nginx, Apache, FPM and managed .htaccess text. Its fixed loopback ports 8082/8083 are unreserved. Optional native checks distinguish Nginx grammar, Caddy adaptation and unavailable/unexecuted Apache/FPM/HTTP stages, with exact artifact hashes.
+
+Ordinary applications use request-scoped FPM or FrankenPHP classic where their preview exists. Worker remains explicitly opted in, with an application-compatible bootstrap, state cleanup, bounded recycling and separate process/identity. Worker threads do not establish tenant isolation. The hosted-site selector does not convert the Core's request-scoped ADMIN/USER runtime into Worker mode.
+
+Follow the [web-server strategy](WCP360_Core/src/Module/Hosting/WEB-SERVER-STRATEGY.md) and [roadmap](WCP360_Core/src/Module/Hosting/WEB-SERVER-ROADMAP.md) for native provider, listener/TLS, drain, migration, health and recovery prerequisites. The [platform matrix](documentation/development/SUPPORTED-PLATFORMS.md) distinguishes five-target userspace application verification from the Debian 13 privileged VM/reboot profile. Neither qualifies all seven recipes or native Worker installation across those targets.
+
 ## Core structure
 
-Source responsibilities are now mapped in the [development strategy](documentation/development/README.md): the Symfony application and separate Go agents live under WCP360_Core, detached packages under WCP360_Plugins, public integration code under WCP360_SDK, build procedures under WCP360_Build and qualified version records under WCP360_Releases. These locations currently contain documentation scaffolds; existing candidate branches are not merged by this organization. See the [lifecycle guide](documentation/development/PLUGIN-LIFECYCLE.md) and [installation/release acceptance](documentation/development/DELIVERY-AND-RELEASES.md).
+The executable Symfony candidate and separate Go sources live under WCP360_Core. Optional business packages belong under [WCP360_Modules](WCP360_Modules/README.md), provider connectors under [WCP360_Plugins](WCP360_Plugins/README.md) and public integration libraries under WCP360_SDK, candidate build/verification inputs under WCP360_Build and future qualified version records under WCP360_Releases. [WCP360_App_Deploy](WCP360_App_Deploy/README.md) owns editorial application data and draft recipe authoring. Current implementation and documentation reservations are distinguished in the [working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md) and [Core structure](WCP360_Core/STRUCTURE.md). No directory organization merges a historical branch or qualifies a runtime.
+
+The current presentation uses module-owned HTTP/Console adapters and shared Twig fragments:
+
+```text
+WCP360_Core/
+├── src/Module/<Domain>/{Domain,Application,Infrastructure,UI}/
+├── src/Shared/
+├── config/                         # Symfony wiring and runtime contexts
+├── templates/
+│   ├── admin/ · user/ · setup/
+│   ├── hosting/ · identity/ · platform/ · operations/ · observability/
+│   └── layouts/ · components/ · errors/
+├── assets/                         # Stimulus and WCP360 CSS
+├── agents/                         # Separate Go sources
+└── installer/                      # Checkout, maintenance and recovery
+```
+
+A Twig include is not an implemented UX Twig Component or Live Component. The reusable form/component library is still incomplete. There is no separate root `presentation/` application; use [Core navigation](WCP360_Core/NAVIGATION.md) to locate actual files.
 
 ### Domain modules and shared foundations
 
@@ -280,6 +319,28 @@ Python diagnostics are separate non-root workloads. They cannot become an altern
 
 Detached extension code is not imported into Core as an arbitrary Symfony bundle. A manifest declares compatibility, permissions, contributions, data, jobs, network needs, and lifecycle; it does not grant authority or permit direct Core-table writes.
 
+### Application recipes, commercial rights and optional integrations
+
+The [Core application catalogue bridge](WCP360_Core/src/Module/Hosting/APPLICATION-CATALOGUE.md) reads fixed local CSV metadata for 410 editorial references, 70 categories, 17 natures and 16 proposed profiles. These are separate from the 149-entry extension design inventory. Read-only worker/setup inspection keeps installation/deployment false; an absent optional workspace does not prevent Core boot. Draft WordPress/Discourse descriptors do not establish a production recipe schema, trusted release or executable lifecycle.
+
+Hosting owns application instances/ingress, Platform providers, Operations jobs, Files/Data stored resources and BackupRestore recovery. Recipe contribution is not free-form execution, arbitrary Compose or permission to alter the Core dependency graph. Generic install/configure/update/uninstall and observed recovery remain work.
+
+Premium is a commercial attribute, with [local rights owned by Tenancy](WCP360_Core/src/Module/Tenancy/design/licensing/README.md) and [package lifecycle owned by ExtensionManagement](WCP360_Core/src/Module/ExtensionManagement/design/packages/README.md). Entitlements, actor permissions, package signature and installation readiness are separate decisions. No licensing client/protocol, price, trial duration or timed grace configuration is implemented. Target entitlement and degraded-operation policies are defined in the [edition strategy](documentation/development/EDITIONS-AND-PREMIUM.md). Essential Core hosting, local administration/security and recovery continue with zero plugins and during vendor or trial/subscription outages; expiry does not authorize deleting data or silently stopping workloads.
+
+[Docker providers](WCP360_Core/src/Module/Platform/design/containers/README.md) and [AI/models/agents/MCP](WCP360_Core/src/Module/Platform/design/ai-mcp/README.md) remain design preparation. Development containers and Docker unit observations are not tenant workload management. No Core assistant/model provider/MCP endpoint or tenant/PHP/plugin Docker socket is enabled. Future adapters reuse owned operations, current authority, resource bounds, redaction and explicit sharing.
+
+### Community, PRO and source licensing
+
+The original Core source is [AGPL-3.0-only](WCP360_Core/LICENSING.md). Its 13 internal owners, 233 essential capability requirements and seven engine-adapter designs remain open source. PRO is an optional distribution of qualified external packages and services using that same Core; it creates no additional ROOT or tenant authority.
+
+The [edition strategy](documentation/development/EDITIONS-AND-PREMIUM.md) links the [business-module catalogue](WCP360_Modules/CATALOG.md) and [premium connector catalogue](WCP360_Plugins/premium/CATALOG.md). These are non-installable planning proposals, with source models undecided. Neither a folder nor a detached API proves that a package is an independent work for AGPL purposes; package and SDK licensing require compatibility assessment before distribution.
+
+PRO targets full access to qualified App Install recipes. Core application instances, jobs, providers, ingress, data and recovery remain Core-owned. New premium workflows must check current rights and authority separately while preserving running workloads and essential recovery during expiry, outage, disablement or removal. No production entitlement engine or generic package/app installer is enabled by this design.
+
+The [infrastructure coverage register](documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) makes multi-server hosting, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS explicit. Advanced workflows and provider-specific connectors remain separate; essential Core providers, caching/compression, security, ownership and recovery stay open source. Node roles, partition/fencing, tenant isolation, hypervisor/guest separation, protected-content caching and upstream mitigation require independent acceptance before availability is claimed.
+
+The [eleven-area platform register](documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) extends this map with independent control-plane interop, distributed storage, collaborative defense, reseller packages, Git/App Install, observability, DBaaS and DNS/TLS automation. [Reseller plans and quota enforcement](WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md) remain Core design work; external controllers start with observation/import/migration and cannot concurrently own WCP-managed routes, workloads or secrets.
+
 ### Admission and execution
 
 An installable extension needs an identifiable publisher, artifact digest, verified trust evidence, compatibility/dependency checks, reviewed capability set, owned-data migration strategy, health checks, resource budget, and recovery/removal plan.
@@ -292,7 +353,7 @@ At runtime it uses a dedicated identity, restricted resources and network access
 | Update | Review permission differences, compatibility, migrations, and rollback limitations. |
 | Disable | Reject new work, withdraw routes/subscriptions, drain or checkpoint active jobs, and preserve owned data. |
 | Quarantine | Stop execution/access, block outbound connections as required, and retain diagnostic evidence. |
-| Uninstall | Check jobs/dependencies, revoke credentials, and explicitly retain, export, or delete owned data. |
+| Uninstall | Check jobs/dependencies, revoke credentials and retain data by default; purge is a separate authorized operation with its own scope and recovery boundary. |
 | Replace an in-use provider/engine | Plan service-specific migration and recovery; verify live resource dependencies before withdrawal. |
 
 The [plugin catalog](https://github.com/yyogas/wcp360/blob/main/PLUGIN_CATALOG.md) records the 149-entry design inventory, family contracts, local package profiles, and ownership/reuse rules. A catalog record is not an installable release.
@@ -303,7 +364,7 @@ WCP360 Internal is a private vendor control plane deployed separately from custo
 
 | Private service | Customer-side boundary |
 | :--- | :--- |
-| License/entitlement authority | A constrained verification client with approved caching/grace behavior; licensing cannot remove Core login, export, local recovery, or existing workload service. |
+| License/entitlement authority | A future constrained local client; offline/cache/grace policy requires separate acceptance. Licensing cannot remove essential Core login, export, local recovery or existing workload service. |
 | Catalog and update origin | Verification clients for approved metadata and artifacts; current hosting continues during discovery/download outages. |
 | Consented diagnostic service | An optional customer-controlled connector with selected evidence categories, redaction, retention, and explicit sharing. |
 | Build and release services | Separate controlled distribution lanes; a detached extension build cannot silently become a Core release. |
@@ -314,7 +375,9 @@ Vendor data collection does not create general remote administration. The Insigh
 
 ### Initial target
 
-The initial platform boundary is Debian 13 on amd64. A single managed node contains isolated panel runtimes, control-plane persistence, workers, agents, and enabled hosting services. External providers and vendor services remain separate dependencies with explicit failure behavior.
+The product targets Debian 12 and 13, plus Ubuntu 22.04, 24.04 and 26.04 LTS on amd64. The source-runtime matrix verifies the PHP 8.4 Core candidate against PostgreSQL 17 in all five userspaces; native installation/provider acceptance is separate. The canonical baseline and privileged systemd/recovery/reboot VM candidate remain scoped to Debian 13. The target single node contains isolated panel runtimes, persistence, workers, agents and admitted hosting services. Vendor/external services remain separate dependencies with explicit outage behavior.
+
+The Core requires PHP 8.4 and PostgreSQL 17 regardless of the host distribution defaults. Native package probes do not substitute another PHP version into the Core. Distribution-specific runtime sourcing, package ownership, service paths, systemd behavior and complete installation/recovery evidence belong to the [platform adapter qualification](documentation/development/SUPPORTED-PLATFORMS.md).
 
 This is a target deployment model, not an available installer or a qualified minimum hardware configuration. Multi-node control, clustering, HA, virtualization, and advanced storage require their own validated adapters and operating procedures.
 
@@ -340,7 +403,7 @@ This is a target deployment model, not an available installer or a qualified min
 | `/var/cache/wcp360` | Reconstructable caches. |
 | Managed hosting storage | Registry-derived account/resource roots and storage dependencies, separate from panel execution and secret locations. |
 
-Release builds prepare dependencies, assets, and caches from pinned inputs. Deployment validates compatibility and migrations, stages a verified release, checks health, and follows the declared recovery procedure. Production web requests do not run `git pull`, `composer update`, dependency downloads, or improvised builds.
+Release builds must prepare dependencies, assets and caches from pinned inputs, then validate compatibility/migrations, observed health and declared recovery. [WCP360_Releases](WCP360_Releases/README.md) currently contains no qualified version or latest/stable pointer; earlier guarded installer templates remain in Core scaffolds. Production requests must not run `git pull`, `composer update`, dependency downloads or improvised builds.
 
 Configuration changes follow their operation-specific plan: prepare controlled output, validate, bind to the expected resource revision, apply safely, reload only the approved service, verify observed health, and persist the outcome. Package rollback cannot silently reverse an irreversible data migration.
 
@@ -361,19 +424,24 @@ PHP OPcache, prepared Symfony/Twig assets, query discipline, and worker isolatio
 
 ## Implementation status
 
-The current manifest records **SC-M01 limited to the inert daemon foundation**, **SC-M02 not authorized**, and **CODE-BASELINE = NONE**. Candidate branches and prototypes must be evaluated separately from the target architecture.
+The baseline manifest retains **SC-M01 limited to the inert daemon foundation**, **SC-M02 not authorized** and **CODE-BASELINE = NONE** within its canonical scope. The executable Core candidate and its current product decisions are recorded separately; neither source publication nor this overview promotes a production baseline.
 
 | Area | Current interpretation |
 | :--- | :--- |
-| `main` | Reference documentation, specifications, governance, catalogs, and explicitly published artifacts. |
-| Symfony/Twig Core | Selected target; the complete framework integration, business domains, persistence, and hosting execution are not established by this overview. |
-| `source/full-platform-candidate` | Candidate PHP kernel, static interface, and daemon sources; source presence is not Core integration or production qualification. |
-| `source/sc-m01-inert-daemon` | Inert Go CLI foundation; it does not activate IPC, a privileged broker, database access, or hosting effects. |
-| `extensions/file-manager-v0.3.0-import` | Standalone File Manager development package; Core integration remains blocked pending contracts and an adapter. |
-| File Manager storage | Private single-owner storage exclusively modified by that module; unsuitable as a hostile multi-tenant home backend concurrently writable through SSH, FTP, PHP, or cron. |
-| Design workspace and Insights Connector | Prototypes and simulated interactions; production transport, authorization, cryptography, and lifecycle still require implementation evidence. |
+| Current Core branch | `implementation/core-executable-foundation-20261031`, [draft PR #116](https://github.com/yyogas/wcp360/pull/116): PHP 8.4 / Symfony 7.4 candidate, Twig/UX navigation, DBAL/migrations, bounded database jobs, Go previews/isolated candidates and ROOT observations. General production integration remains open. |
+| Current entry points and evidence | [Working guide](WCP360_Core/WORKING-GUIDE.md) and [status](WCP360_Core/STATUS.md); exact source/environment outcomes remain separate from implemented test definitions. |
+| Application target | Seven inert previews and read-only AppDeploy metadata; no general installer, live application migration or tenant Docker provider. |
+| `main` | Reference publication with its own actual file/commit scope; the current candidate branch is not implicitly merged or released. |
+| Historical SOURCE branches | `source/full-platform-candidate` and `source/sc-m01-inert-daemon` retain their dated kernel/inert-foundation scope and review evidence. They are not the current Symfony implementation. |
+| Extensions | Fixed reference-plugin lifecycle plus separate File Manager/Insights development sources/prototypes; general publisher admission, licensing, supervision and production integration remain open. |
+| File Manager storage | Its standalone private single-owner mode is unsuitable for a hostile multi-tenant home concurrently modified through SSH, FTP, PHP or cron. |
+| Production qualification | None declared. Complete native installation, providers, identity/permissions, data/recovery, security acceptance and independent release review remain required. |
 
-The local workspace layout differs from the GitHub repository. A clone of `main` does not by itself provide a complete running panel.
+The current product decision makes administrator MFA optional per account and off by default. Once enabled, its factor must complete; sensitive writes require fresh password proof when MFA is off or fresh completed MFA when on. Login uses Core usernames/passwords, not contact-email aliases or automatically linked Linux root credentials. ROOT is the server-administration panel scope; PHP remains non-root.
+
+[IdentityAccess](WCP360_Core/src/Module/IdentityAccess/README.md) explicitly records the unresolved M1 integration difference from the canonical security baseline's mandatory ADMIN MFA. This overview documents that decision; it changes no baseline or production acceptance.
+
+The November 2, 2026 inventory records 15 branches. The earlier 14-branch reconciliation is a historical October 31 snapshot; its dispositions are not current remote PR states. Current work stays on the existing Core branch, with orientation in the [GitHub README](README_GITHUB.md#github-branches). Local workspace files and a clone of `main` must not be treated as an assembled complete panel.
 
 ## Verification expectations
 
@@ -401,4 +469,4 @@ Evidence identifies the source revision or artifact, environment, procedure, res
 | [Security policy](https://github.com/yyogas/wcp360/blob/main/SECURITY.md) | Private vulnerability reporting, review context, and required security boundaries. |
 | [Security Baseline](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) and [Permission Registry](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Canonical security rules, permission namespaces, and operation bindings. |
 | [Plugin catalog](https://github.com/yyogas/wcp360/blob/main/PLUGIN_CATALOG.md) | Optional workflows, providers, engine adapters, and local package evidence. |
-| [Contributing](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md) and [review policy](https://github.com/yyogas/wcp360/blob/main/documentation/governance/REVIEW-MERGE-POLICY.md) | Contribution process, evidence, ownership, and independent review requirements. |
+| [Contributing](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md) and [review policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md) | Contribution process, evidence, ownership, and independent review requirements. |

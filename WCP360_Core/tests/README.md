@@ -1,6 +1,6 @@
 # Core verification locations
 
-**Status: suite directories are prepared with navigation documents. No executable Core test suite or passing result is supplied by this scaffold.** Add actual tests and bootstrap with the reviewed implementation.
+**Status: the development candidate includes executable PHPUnit unit, integration/functional and plugin-lifecycle suites, plus a separate Panther browser suite. Contract, Security and Installer remain organizational locations; security and installer checks also live in implemented suites and the disposable Linux/VM harnesses. A directory is not evidence of a passing test.**
 
 | Test source | Purpose |
 | :--- | :--- |
@@ -12,6 +12,43 @@
 | [Installer](Installer/README.md) | Fresh install, rejected preconditions, interrupted/resumed setup, repair, qualified upgrades and recovery rehearsal. |
 | [Browser](Browser/README.md) | Twig/UX workflows, native form behavior, keyboard focus, responsive layout and visible error/loading/empty states. |
 | [Fixtures](Fixtures/README.md) | Shared deterministic settings, input/output examples, fake tenant/resource identities and expected rendered configuration. |
+
+Run `composer check` from Core for Symfony-aware PHPStan, analyzer regressions, PHPUnit and framework lints. Run `composer test:browser` in the documented Chromium/WebDriver environment. See the [testing guide](../../documentation/development/TESTING.md) for commands, scopes, fixture safeguards and Linux/VM evidence. The deliberate-error PHPStan fixtures live in `tools/phpstan/fixtures`, outside application test discovery.
+
+## ROOT service observations
+
+[ServiceObservationSnapshotTest](Unit/ServiceObservationSnapshotTest.php) defines strict bounded property parsing, alias coalescing and malformed-output refusal. [ServiceOverviewTest](Integration/ServiceOverviewTest.php) checks authorization/revocation, explicit uncertainty and read-only reporting. [SystemdServiceObservationTest](Integration/SystemdServiceObservationTest.php) checks the fixed adapter contract without accepting runtime selectors. [ServiceJourneyTest](Integration/ServiceJourneyTest.php) covers browser/API roles, enabled MFA, query/method refusals, safe failures and HEAD/no-store behavior. Synthetic data and unavailable-manager cases do not qualify successful observation on a native systemd host. Local executable checks remain stopped; exact-source CI outcomes are recorded in draft PR #116.
+
+## Versioned target web-stack preview
+
+The seventh [application topology](../src/Module/Hosting/APPLICATION-PROFILES.md#nginx-to-apache-target-preview) is checked through Go renderer/CLI compatibility definitions, [strict document decoding](Unit/ApplicationPlanDocumentTest.php), [authorized preview services](Integration/ApplicationPlanPreviewTest.php), [ROOT browser/API journeys](Integration/ApplicationPreviewJourneyTest.php) and the [native Nginx artifact matrix](Integration/NginxSyntaxProbeTest.php). Historical recipe documents remain version 1; the Nginx/Apache/FPM target requires version 2. These tests distinguish generated configuration and partial grammar coverage from missing Apache/event/FPM/HTTP qualification. Execution outcomes must identify the exact CI source; local executable checks remain stopped.
+
+## Candidate application catalogue
+
+[Query tests](Unit/ApplicationCatalogueQueryTest.php), [console tests](Unit/ApplicationCatalogueCommandTest.php), [CSV reader tests](Integration/CsvApplicationCatalogueSourceTest.php) and [container wiring tests](Integration/ApplicationCatalogueWiringTest.php) cover the [read-only catalogue bridge](../src/Module/Hosting/APPLICATION-CATALOGUE.md). They exercise bounded input, strict CSV parsing, normalized-name collisions, generic failure results, worker/setup-only access, raw JSON and optional workspace discovery. The shared [synthetic fixture](Fixtures/ApplicationCatalogueFixture.php) contains no application packages or credentials. Test definitions do not qualify application installation or replace exact-revision CI results; no local PHP execution is required for this change.
+
+## Real-browser journeys
+
+[AdministratorIdentityJourneyTest](Browser/AdministratorIdentityJourneyTest.php) exercises actual password-only login, voluntary MFA activation, one-time recovery-code display, identity reconfirmation, replay refusal, global own-session revocation, MFA disablement and logout through Turbo. [HostingJourneyTest](Browser/HostingJourneyTest.php) covers USER login, the runtime selector, themes/navigation and idempotent plan submission. Both use synthetic fixtures; browser and database execution results must be recorded for their exact source. Browser execution requires the documented Chrome/WebDriver environment.
+
+## Candidate identity and authorization regressions
+
+| Executable source | Bounded verification scope |
+| :--- | :--- |
+| [CandidateMfaTest](Integration/CandidateMfaTest.php) | Encrypted factor storage, replay and attempt windows, single-use backup codes and factor revisions. |
+| [MfaJourneyTest](Integration/MfaJourneyTest.php) | Password-only access by default, voluntary enrollment/cancellation, enabled-MFA role denial, shared confirmation budgets, fresh password/MFA reconfirmation, Origin/CSRF, rotation, recovery/disablement, enabled-factor key-loss/replay and revoked-pending refusal. |
+| [CandidateAuthorizationTest](Integration/CandidateAuthorizationTest.php) | Exact single-permission/current-USER checks, shared visibility/execution, cross-tenant refusal, idempotent audited blocks, membership regrant, queued-worker rechecks, bounded listing and audit-failure rollback. |
+| [PermissionAdministrationTest](Integration/PermissionAdministrationTest.php) | Completed/recent administrator authentication (password or enabled MFA), Origin and target-bound CSRF for access changes; existing user-session/API denial; worker rejection after a block; unblocking without restoring deleted membership. |
+| [CandidateAccessCommandTest](Integration/CandidateAccessCommandTest.php) | Read-only worker/setup CLI decisions, unknown-permission refusal, JSON output and exit status; HTTP runtime contexts cannot use the command. |
+| [CandidateSessionsTest](Integration/CandidateSessionsTest.php) | Exact owner/context/cookie bindings, idle and absolute expiry, MFA strength upgrades, durable confirmation budgets, bounded inventory, monotonic concurrent timestamps and atomic audit rollback. |
+| [SessionJourneyTest](Integration/SessionJourneyTest.php) | Own-account session inventory and single/all revocation; exact Origin, target-bound CSRF and current password; durable logout, legacy-cookie refusal, pending/fresh administrator MFA, mutation/MFA rechecks and kernel-restart persistence. |
+| [Role policy](Unit/CandidateDatabasePolicyTest.php), [SCRAM vectors](Unit/PostgresScramTest.php), [maintenance CLI](Integration/CandidateDatabaseRolesCommandTest.php) and [PostgreSQL role creation](Integration/CandidateDatabaseRolesTest.php) | Fresh role creation, exact effective table/column grants, constant-zero locking, no existing-role adoption, audit rollback, conflict/refusal/redaction and real USER/ADMIN-MFA/worker journeys. |
+| [Database URL selection](Unit/CandidateDatabaseUrlTest.php), [middleware](Unit/CandidateDatabaseMiddlewareTest.php) and [Symfony configuration](Integration/CandidateDatabaseConfigurationTest.php) | Context-only secret resolution, no fallback, invalid-profile/URL refusal, exception redaction and actual container wiring. |
+| [PostgreSQL session grants](Integration/CandidatePostgresGrantsTest.php) | Real separate login roles, session lifecycle, opposite-surface SELECT/INSERT/UPDATE/DELETE refusal, worker denial and rejection of elevated, inherited, schema-creating, cross-granted or incomplete credentials. Runs only against the explicitly configured disposable PostgreSQL test database; skipped on local SQLite. |
+| [RuntimeIdentity unit regressions](Unit/RuntimeIdentityTest.php) | Synthetic canonical identity matches; saved/filesystem UID/GID, group, capability and mapping refusals; malformed/duplicate/truncated/oversized kernel observations. |
+| [RuntimeIdentity standalone/live tests](Integration/RuntimeIdentityTest.php) | Fixed-profile CLI with no app bootstrap, secret redaction, invalid arguments and real Linux calling-thread/NSS observations. Linux-only cases execute in CI; positive synthetic cases do not establish real deployment of the canonical accounts. |
+
+Access checks depend on [Version20261101000200](../migrations/Version20261101000200.php); durable session admission depends on [Version20261101000300](../migrations/Version20261101000300.php). Existing cookies require a new login after the session migration. The new registries hold metadata and SHA-256 bindings, not the native Symfony session payload. These suites verify candidate surfaces; they do not qualify the 82 canonical permissions, general in-flight revocation fencing, production database grants or Unix identities. Full current-source CI for the session slice must be executed and recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Earlier workflow totals remain evidence for their own source revisions.
 
 Organize implemented test files by the same domain/service names as the source. Framework configuration, deterministic inputs and the accepted contract/requirement must accompany the implementation. Keep the shared synthetic fixture source in Fixtures instead of copying test data across suite directories.
 

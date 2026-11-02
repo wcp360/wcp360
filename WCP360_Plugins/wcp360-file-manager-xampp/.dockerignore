@@ -1,0 +1,7 @@
+vendor
+standalone/var
+.git
+**/__pycache__
+**/node_modules
+.phpunit.cache
+docs/validation

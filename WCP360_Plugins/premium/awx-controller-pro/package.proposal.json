@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.awx-controller-pro",
+    "kind":  "plugin",
+    "label":  "AWX multi-server workflow connector",
+    "category":  "multi-server-automation",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "automation.ansible",
+                           "compute.node-groups",
+                           "compute.rolling-operations"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare selected AWX controller inventory and reviewed job-template references for explicitly authorized multi-server workflows.",
+    "core_boundary":  "Core owns hosting admission, local execution, leases and recovery. The plugin gains no SSH root channel, arbitrary playbook/extra-vars execution or direct privileged broker access. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify one controller/API profile with admitted organization, inventory, credential references and immutable reviewed job-template inputs; do not accept arbitrary playbooks or target expressions.",
+                       "Bind targets to current node/tenant authority and require approval for provider-side effects; WCP host mutations still require admitted Core use cases rather than controller credentials.",
+                       "Exercise staged concurrency, cancellation, stale inventory, partial node completion and lost acknowledgements; preserve workload service and reconcile observed state before retry.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}
