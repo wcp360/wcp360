@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Wcp360\Core\Module\Hosting\Domain\CandidateHostname;
 use Wcp360\Core\Module\Hosting\Domain\ApplicationPlanDocument;
+use Wcp360\Core\Module\Hosting\Domain\ApplicationSyntaxReport;
 use Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Shared\Platform\ApplicationRecipeCatalogue;
@@ -15,7 +16,7 @@ use Wcp360\Core\Shared\Platform\ApplicationRecipeCatalogue;
 /** Inert Application-specific plans, separate from generic durable site engines. */
 final readonly class PreviewApplicationPlan
 {
-    public function __construct(private CandidateAuthorization $authorization, private ApplicationPlanRenderer $renderer) {}
+    public function __construct(private CandidateAuthorization $authorization, private ApplicationPlanRenderer $renderer, private ApplicationPlanSyntax $syntax) {}
 
     /** @return array<string,mixed> */
     public function recipes(string $actor): array
@@ -27,7 +28,7 @@ final readonly class PreviewApplicationPlan
     }
 
     /** @return array<string,mixed> */
-    public function preview(string $actor, string $host, string $recipe, string $application = 'php', bool $requireHtaccess = false): array
+    public function preview(string $actor, string $host, string $recipe, string $application = 'php', bool $requireHtaccess = false, bool $checkSyntax = false): array
     {
         $this->authorization->requireAdmin($actor);
         if (!CandidateHostname::valid($host)) {
@@ -45,6 +46,7 @@ final readonly class PreviewApplicationPlan
         $site = WorkbenchStore::id();
         try {
             $document = ApplicationPlanDocument::fromArray($this->renderer->renderApplication($site, $host, $recipe, $application), $recipe, $application);
+            $checks = ApplicationSyntaxReport::build($document, $checkSyntax, $checkSyntax ? $this->syntax->check($document) : []);
         } catch (\Throwable) {
             throw new ServiceUnavailableHttpException(null, 'Application preview is unavailable. No installation was dispatched.');
         }
@@ -55,6 +57,6 @@ final readonly class PreviewApplicationPlan
             'host_changes' => false, 'persisted' => false, 'deployment_available' => false,
             'performance_measured' => false, 'worker_mode' => false, 'dynamic_page_cache' => 'disabled',
             'listener_allocation' => 'not_reserved', 'preview_site_id' => $site, 'hostname' => $host,
-            'files' => $document->files()];
+            'files' => $document->files(), 'syntax_checks' => $checks];
     }
 }

@@ -32,8 +32,8 @@ final class ApplicationPlanPreviewController extends AbstractController
         if (!is_string($fields['_token'] ?? null)) throw $this->createAccessDeniedException('Origin and CSRF required.');
         $this->boundary->csrf($request, 'application-plan-preview', $fields['_token']);
         unset($fields['_token']);
-        [$host, $recipe, $application, $requireHtaccess] = $this->input($fields);
-        $report = $this->preview->preview($actor->id, $host, $recipe, $application, $requireHtaccess);
+        [$host, $recipe, $application, $requireHtaccess, $checkSyntax] = $this->input($fields);
+        $report = $this->preview->preview($actor->id, $host, $recipe, $application, $requireHtaccess, $checkSyntax);
         return $this->render('hosting/application_preview.html.twig', ['context' => 'admin', 'report' => $report,
             'application_recipes' => $this->preview->recipes($actor->id)['recipes'],
             'application_profiles' => \Wcp360\Core\Shared\Platform\ApplicationRecipeCatalogue::profiles()]);
@@ -47,22 +47,23 @@ final class ApplicationPlanPreviewController extends AbstractController
         if ($request->getContentTypeFormat() !== 'json' || strlen($request->getContent()) > 4096) {
             throw new BadRequestHttpException('A bounded JSON body is required.');
         }
-        [$host, $recipe, $application, $requireHtaccess] = $this->input($request->toArray());
-        return $this->json($this->preview->preview($actor->id, $host, $recipe, $application, $requireHtaccess));
+        [$host, $recipe, $application, $requireHtaccess, $checkSyntax] = $this->input($request->toArray());
+        return $this->json($this->preview->preview($actor->id, $host, $recipe, $application, $requireHtaccess, $checkSyntax));
     }
 
     /** @param array<array-key,mixed> $fields
-     * @return array{string,string,string,bool}
+     * @return array{string,string,string,bool,bool}
      */
     private function input(array $fields): array
     {
         $htaccess = array_key_exists('require_htaccess', $fields) ? $fields['require_htaccess'] : false;
+        $syntax = array_key_exists('check_syntax', $fields) ? $fields['check_syntax'] : false;
         $application = array_key_exists('application', $fields) ? $fields['application'] : 'php';
-        if (array_diff(array_keys($fields), ['hostname','recipe','application','require_htaccess']) !== []
+        if (array_diff(array_keys($fields), ['hostname','recipe','application','require_htaccess','check_syntax']) !== []
             || !is_string($fields['hostname'] ?? null) || !is_string($fields['recipe'] ?? null)
-            || !is_string($application) || !in_array($htaccess, [true,false,'1','0'], true)) {
+            || !is_string($application) || !in_array($htaccess, [true,false,'1','0'], true) || !in_array($syntax, [true,false,'1','0'], true)) {
             throw new BadRequestHttpException('Invalid Application preview input.');
         }
-        return [$fields['hostname'], $fields['recipe'], $application, in_array($htaccess, [true,'1'], true)];
+        return [$fields['hostname'], $fields['recipe'], $application, in_array($htaccess, [true,'1'], true), in_array($syntax, [true,'1'], true)];
     }
 }

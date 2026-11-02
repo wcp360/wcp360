@@ -430,9 +430,12 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $db = $this->login('admin');
         $service = new \Wcp360\Core\Module\Hosting\Application\PreviewApplicationPlan(
             new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
-            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class));
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\NativeApplicationPlanSyntax::class));
         foreach ($service->recipes($this->fixture['users']['admin'])['recipes'] as $recipe) {
-            $result = $service->preview($this->fixture['users']['admin'], 'restricted-app.test', $recipe['id'], 'front_controller');
+            $result = $service->preview($this->fixture['users']['admin'], 'restricted-app.test', $recipe['id'], 'front_controller', false, true);
+            self::assertTrue($result['syntax_checks']['requested']);
+            self::assertFalse($result['syntax_checks']['coverage_complete']);
             self::assertSame($recipe['artifacts'], array_keys($result['files']));
             self::assertFalse($result['persisted']);
         }

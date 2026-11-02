@@ -100,7 +100,7 @@ The WCP360 page has labeled filters, preparation-status feedback, an empty resul
 
 ## Reusable PHP application profiles
 
-The [application-profile engine](APPLICATION-PROFILES.md) renders six web/PHP combinations for traditional PHP, front controllers and a WordPress reference. It separates application behavior, server topology and runtime mode; WordPress is not a special Core architecture. ROOT browser/API previews use a shared boundary with Modern while preserving separate CSRF intents. This inert family has its own strict envelope; original site/profile/plan contracts remain unchanged. Live installation, native recipe validation, application compatibility and comparative performance require separate evidence.
+The [application-profile engine](APPLICATION-PROFILES.md) renders six web/PHP combinations for traditional PHP, front controllers and a WordPress reference. It separates application behavior, server topology and runtime mode; WordPress is not a special Core architecture. ROOT browser/API previews use a shared boundary with Modern while preserving separate CSRF intents. This inert family has its own strict envelope; original site/profile/plan contracts remain unchanged. Optional native syntax checks are now available: bounded non-root Nginx tests, Caddy/FrankenPHP adaptation when their fixed providers exist and explicit unavailable/not-run stages with exact artifact hashes. Default previews do not invoke a parser. Live installation, complete native recipe validation, application compatibility and comparative performance still require separate evidence.
 
 ## Remaining scope
 

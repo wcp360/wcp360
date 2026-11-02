@@ -128,13 +128,13 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
     {
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseStatusCodeSame(401);
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm'], 'forged');
+        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','check_syntax'=>true], 'forged');
         self::assertResponseStatusCodeSame(401);
         $this->bootBrowser('user');
         $this->login('alice');
         $this->browser->request('GET', $this->url('/workbench/v1/application/recipes'));
         self::assertResponseStatusCodeSame(403);
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm'], 'forged');
+        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','check_syntax'=>true], 'forged');
         self::assertResponseStatusCodeSame(403);
     }
 
@@ -150,6 +150,7 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
             array_replace($valid,['require_htaccess'=>true]), array_replace($valid,['require_htaccess'=>1]),
             $valid+['site_id'=>$this->fixture['tenants']['alice']], $valid+['actor'=>$this->fixture['users']['admin']],
             $valid+['path'=>'/private-application-input'], $valid+['port'=>443], $valid+['apply'=>true],
+            $valid+['check_syntax'=>true,'config'=>'server { }'], $valid+['check_syntax'=>true,'binary'=>'/bin/sh'],
         ] as $fields) {
             $this->api($fields, $token);
             self::assertResponseStatusCodeSame(400);
@@ -200,6 +201,63 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         self::assertResponseIsSuccessful();
     }
 
+
+    public function testOptedInBrowserAndApiChecksRemainPrivatePartialAndDoNotChangeState(): void
+    {
+        $this->login();
+        $token = $this->token();
+        $before = $this->state();
+        $fields = ['hostname'=>'checked.test','recipe'=>'nginx_php_fpm','application'=>'wordpress'];
+        $this->api($fields, $token);
+        self::assertResponseIsSuccessful();
+        self::assertFalse($this->data()['syntax_checks']['requested']);
+        self::assertSame(['not_run','not_run'], array_column($this->data()['syntax_checks']['checks'], 'status'));
+        $this->api($fields+['check_syntax'=>true], $token);
+        self::assertResponseIsSuccessful();
+        $data = $this->data();
+        self::assertTrue($data['syntax_checks']['requested']);
+        foreach (['coverage_complete','activation_authorized','runtime_validated'] as $flag) self::assertFalse($data['syntax_checks'][$flag]);
+        $nginx = self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\NativeSyntaxTools::class)->binary('nginx');
+        self::assertSame([$nginx === null ? 'not_configured' : 'passed', 'not_run'], array_column($data['syntax_checks']['checks'], 'status'));
+        foreach ($data['syntax_checks']['checks'] as $check) self::assertSame(hash('sha256', $data['files'][$check['artifact']]['content']), $check['sha256']);
+        self::assertTrue($this->browser->getResponse()->headers->hasCacheControlDirective('no-store'));
+
+        $this->browser->request('POST', $this->url(self::FORM), ['_token'=>$token,'hostname'=>'checked.test',
+            'recipe'=>'apache_php_fpm','application'=>'wordpress','check_syntax'=>'1']);
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('[data-application-syntax]');
+        self::assertSelectorCount(3, '[data-syntax-artifact]');
+        self::assertSelectorExists('[data-syntax-artifact="apache"][data-syntax-status="not_configured"]');
+        self::assertSelectorExists('[data-syntax-artifact="php_fpm"][data-syntax-status="not_run"]');
+        self::assertSelectorExists('[data-syntax-artifact="htaccess"][data-syntax-status="not_run"]');
+        self::assertSame($before, $this->state());
+    }
+
+    public function testNativeCheckOptInRejectsAmbiguousTypesAndCannotBypassOriginOrFreshProof(): void
+    {
+        $this->login();
+        $token = $this->token();
+        $before = $this->state();
+        $fields = ['hostname'=>'checked.test','recipe'=>'nginx_php_fpm'];
+        foreach ([null, 1, 0, [], 'true'] as $value) {
+            $this->api($fields+['check_syntax'=>$value], $token);
+            self::assertResponseStatusCodeSame(400);
+        }
+        $this->api($fields+['check_syntax'=>true], $token, ['HTTP_ORIGIN'=>'http://foreign.localhost']);
+        self::assertResponseStatusCodeSame(403);
+        $this->api($fields+['check_syntax'=>true], 'forged');
+        self::assertResponseStatusCodeSame(403);
+        $session = $this->browser->getRequest()->getSession();
+        $proof = $session->get('_wcp_password_proof');
+        self::assertIsArray($proof);
+        $proof['at'] = time()-301;
+        $session->set('_wcp_password_proof', $proof);
+        $session->save();
+        $this->api($fields+['check_syntax'=>true], $token);
+        self::assertResponseStatusCodeSame(403);
+        self::assertSame($before, $this->state());
+    }
+
     public function testEnabledMfaStillRequiresCompletionForApplicationPreviews(): void
     {
         $mfa = self::getContainer()->get(CandidateMfa::class);
@@ -207,13 +265,13 @@ final class ApplicationPreviewJourneyTest extends WebTestCase
         $result = $mfa->check($this->fixture['users']['admin'], TOTP::createFromSecret($setup['secret'])->now());
         self::assertNotNull($result);
         $this->login();
-        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm'], 'pending');
+        $this->api(['hostname'=>'app.test','recipe'=>'nginx_php_fpm','check_syntax'=>true], 'pending');
         self::assertResponseStatusCodeSame(403);
         $crawler = $this->browser->request('GET', $this->url('/mfa'));
         $this->browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code'=>$result['recovery_codes'][0]]));
         self::assertResponseRedirects('/');
         $token = $this->token();
-        $this->api(['hostname'=>'app.test','recipe'=>'caddy_frankenphp','application'=>'wordpress'], $token);
+        $this->api(['hostname'=>'app.test','recipe'=>'caddy_frankenphp','application'=>'wordpress','check_syntax'=>true], $token);
         self::assertResponseIsSuccessful();
     }
 }

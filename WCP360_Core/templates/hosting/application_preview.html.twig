@@ -6,6 +6,12 @@
 <p>Identifiant synthétique : <code data-application-id>{{ report.preview_site_id }}</code>. Le moteur ne sélectionne aucun hébergement existant.</p>
 <p data-application-htaccess>{% if report.htaccess_supported %}.htaccess natif limité aux directives de réécriture prévues par cette recette.{% else %}Cette recette n’interprète pas .htaccess. Les règles applicatives sont gérées par sa configuration serveur.{% endif %}</p>
 <p>Mode Worker désactivé. Cache de pages dynamiques désactivé : les réponses privées, sessions et paniers ne doivent pas être mis en cache sans politique applicative vérifiée. Les performances et la compatibilité réelle de chaque application restent à qualifier.</p>
+{% set syntax_status = {'passed': 'Réussi', 'failed': 'Échec du contrôle', 'not_configured': 'Non configuré', 'not_run': 'Non exécuté'} %}
+{% set syntax_stage = {'configuration_test': 'Syntaxe de configuration', 'caddyfile_adaptation': 'Adaptation Caddyfile vers JSON', 'synthetic_pool_identity': 'Pool synthétique sans identité installée', 'request_rewrite_execution': 'Réécritures HTTP réelles', 'unit_verification': 'Unité de supervision'} %}
+<section class="wcp-panel" data-application-syntax><div class="wcp-panel-head"><h2 class="wcp-panel-title">Contrôles de configuration</h2></div><div class="wcp-panel-body">
+<p>{% if report.syntax_checks.requested %}Contrôles demandés sur les outils locaux disponibles.{% else %}Contrôles facultatifs non demandés.{% endif %} La couverture reste partielle ; ce résultat n’autorise aucune activation et ne valide pas l’exécution de l’application.</p>
+<div class="table-scroll"><table><caption>Résultats syntaxiques des fichiers générés</caption><thead><tr><th scope="col">Fichier</th><th scope="col">Contrôle</th><th scope="col">État</th></tr></thead><tbody>{% for check in report.syntax_checks.checks %}<tr data-syntax-artifact="{{ check.artifact }}" data-syntax-status="{{ check.status }}"><td><code>{{ report.files[check.artifact].name }}</code><br><small>SHA-256 : <code>{{ check.sha256 }}</code></small></td><td>{{ syntax_stage[check.stage] }}</td><td>{{ syntax_status[check.status] }}</td></tr>{% endfor %}</tbody></table></div>
+</div></section>
 {% for key,file in report.files %}<section class="wcp-panel" data-application-artifact="{{ key }}"><div class="wcp-panel-head"><h2 class="wcp-panel-title">{{ file.name }}</h2></div><div class="wcp-panel-body"><pre><code>{{ file.content }}</code></pre></div></section>{% endfor %}
 {% include 'components/forms/application-preview.html.twig' %}
 {% endblock %}

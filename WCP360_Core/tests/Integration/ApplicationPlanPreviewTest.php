@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Wcp360\Core\Tests\Integration;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Symfony\Component\Process\Process;
 use Wcp360\Core\Module\Hosting\Application\ApplicationPlanRenderer;
 use Wcp360\Core\Module\Hosting\Application\PreviewApplicationPlan;
 use Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer;
@@ -32,7 +30,7 @@ final class ApplicationPlanPreviewTest extends KernelTestCase
 
     private function service(ApplicationPlanRenderer $renderer): PreviewApplicationPlan
     {
-        return new PreviewApplicationPlan(new CandidateAuthorization($this->store->db), $renderer);
+        return new PreviewApplicationPlan(new CandidateAuthorization($this->store->db), $renderer, self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\NativeApplicationPlanSyntax::class));
     }
 
     private function state(): array
@@ -122,31 +120,4 @@ final class ApplicationPlanPreviewTest extends KernelTestCase
         $this->service($renderer)->preview($actor, 'app.test', 'nginx_php_fpm');
     }
 
-    public static function nginxRecipes(): iterable
-    {
-        foreach (['nginx_php_fpm','nginx_frankenphp'] as $recipe) {
-            foreach (['php','front_controller','wordpress'] as $application) yield $recipe.'/'.$application => [$recipe,$application];
-        }
-    }
-
-    #[DataProvider('nginxRecipes')]
-    public function testGeneratedNginxConfigurationParsesInDisposableLinuxCi(string $recipe, string $application): void
-    {
-        if (PHP_OS_FAMILY !== 'Linux' || !is_file('/usr/sbin/nginx')) self::markTestSkipped('Native Nginx syntax verification needs the Linux CI image.');
-        $dir = sys_get_temp_dir().'/wcp-application-nginx-'.bin2hex(random_bytes(8));
-        mkdir($dir, 0700);
-        try {
-            $plan = self::getContainer()->get(GoPlanRenderer::class)->renderApplication(WorkbenchStore::id(), 'syntax.test', $recipe, $application);
-            file_put_contents($dir.'/site.conf', $plan['nginx']);
-            $http = "access_log off; client_body_temp_path $dir/body; proxy_temp_path $dir/proxy; fastcgi_temp_path $dir/fastcgi; uwsgi_temp_path $dir/uwsgi; scgi_temp_path $dir/scgi; include $dir/site.conf;";
-            file_put_contents($dir.'/nginx.conf', "pid $dir/nginx.pid; error_log stderr; events { worker_connections 8; } http { $http }");
-            $process = new Process(['/usr/sbin/nginx','-t','-p',$dir.'/','-c',$dir.'/nginx.conf'], timeout: 5);
-            $process->run();
-            self::assertSame(0, $process->getExitCode(), $process->getErrorOutput());
-        } finally {
-            foreach (['site.conf','nginx.conf','nginx.pid'] as $name) if (is_file($dir.'/'.$name)) unlink($dir.'/'.$name);
-            foreach (['body','proxy','fastcgi','uwsgi','scgi'] as $name) if (is_dir($dir.'/'.$name)) rmdir($dir.'/'.$name);
-            rmdir($dir);
-        }
-    }
 }
