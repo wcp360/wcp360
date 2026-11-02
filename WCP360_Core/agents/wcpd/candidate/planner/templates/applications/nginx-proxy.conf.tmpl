@@ -1,0 +1,19 @@
+# Inert classic-PHP proxy recipe, not a persistent application worker.
+server {
+    listen 127.0.0.1:8082;
+    server_name {{.Host}};
+    client_max_body_size 16m;
+    location ~ (^|/)\. { return 403; }
+    location ~* (?:^|/)(?:wp-config\.php(?:[.~_-].*)?|composer\.(?:json|lock)|.*\.(?:bak|sql|sqlite|ini|log|conf))$ { return 403; }
+    location ~* ^/wp-content/uploads/.*\.(?:php[0-9]?|phtml|phar)(?:/|$) { return 403; }
+    location / {
+        proxy_pass http://unix:/run/wcp360-applications/{{.ID}}/http.sock:;
+        proxy_set_header Host {{.Host}};
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Forwarded "";
+        proxy_connect_timeout 3s;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
+    }
+}

@@ -9,7 +9,7 @@
 {% if admin %}
     {% set workspace = workspace|merge([
         {label: 'Vue du serveur', href: path('wcp_server'), icon: 'server', active: route == 'wcp_server'},
-        {label: 'Paramètres globaux', href: path('wcp_runtime_settings'), icon: 'server', active: route in ['wcp_runtime_settings','wcp_application_server','wcp_modern_preview']},
+        {label: 'Paramètres globaux', href: path('wcp_runtime_settings'), icon: 'server', active: route in ['wcp_runtime_settings','wcp_application_server','wcp_modern_preview','wcp_application_preview']},
         {label: 'Extensions', href: path('wcp_dashboard') ~ '#plugins', icon: 'package', active: false},
         {label: 'Comptes d’hébergement', href: path('wcp_users'), icon: 'users', active: route == 'wcp_users'},
         {label: 'Accès des utilisateurs', href: path('wcp_access_permissions'), icon: 'users', active: route == 'wcp_access_permissions'},

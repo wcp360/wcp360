@@ -424,6 +424,25 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testApplicationRecipePreviewsNeedOnlyExistingRootIdentityReadGrants(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $service = new \Wcp360\Core\Module\Hosting\Application\PreviewApplicationPlan(
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class));
+        foreach ($service->recipes($this->fixture['users']['admin'])['recipes'] as $recipe) {
+            $result = $service->preview($this->fixture['users']['admin'], 'restricted-app.test', $recipe['id'], 'front_controller');
+            self::assertSame($recipe['artifacts'], array_keys($result['files']));
+            self::assertFalse($result['persisted']);
+        }
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT COUNT(*) FROM wcp_candidate_sites'));
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT COUNT(*) FROM wcp_candidate_jobs'));
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_sites'); self::fail('Recipe preview granted ROOT site access.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+    }
+
     public function testPersistedSiteProfilesUseExistingUserWorkerGrantsWithoutGivingAdminSiteAccess(): void
     {
         $this->provider->provision($this->passwords);

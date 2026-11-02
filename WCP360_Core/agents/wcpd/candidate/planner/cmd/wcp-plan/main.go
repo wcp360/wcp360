@@ -26,7 +26,7 @@ func run(input io.Reader, output io.Writer) int {
 			return 2
 		}
 		key, ok := token.(string)
-		if !ok || (key != "site_id" && key != "hostname" && key != "application_server" && key != "worker_acknowledged" && key != "web_stack") {
+		if !ok || (key != "site_id" && key != "hostname" && key != "application_server" && key != "worker_acknowledged" && key != "web_stack" && key != "application" && key != "recipe") {
 			return 2
 		}
 		if _, exists := fields[key]; exists {
@@ -62,7 +62,20 @@ func run(input io.Reader, output io.Writer) int {
 		}
 	}
 	var plan any
-	if value, ok := fields["web_stack"]; ok {
+	if value, ok := fields["application"]; ok {
+		for _, forbidden := range []string{"application_server", "web_stack", "worker_acknowledged"} {
+			if _, conflicting := fields[forbidden]; conflicting {
+				return 2
+			}
+		}
+		var application, recipe string
+		if json.Unmarshal(value, &application) != nil || (application != "php" && application != "front_controller" && application != "wordpress") || json.Unmarshal(fields["recipe"], &recipe) != nil {
+			return 2
+		}
+		plan, e = planner.RenderApplication(r, recipe, application)
+	} else if _, orphan := fields["recipe"]; orphan {
+		return 2
+	} else if value, ok := fields["web_stack"]; ok {
 		if _, conflicting := fields["application_server"]; conflicting {
 			return 2
 		}

@@ -6,11 +6,13 @@ namespace Wcp360\Core\Module\Hosting\Infrastructure;
 
 use Symfony\Component\Process\Process;
 use Wcp360\Core\Module\Hosting\Application\ModernPlanRenderer;
+use Wcp360\Core\Module\Hosting\Application\ApplicationPlanRenderer;
 use Wcp360\Core\Module\Hosting\Domain\ApplicationServer;
 use Wcp360\Core\Module\Hosting\Domain\ModernPlanDocument;
 use Wcp360\Core\Module\Hosting\Domain\PreparedPlanDocument;
+use Wcp360\Core\Module\Hosting\Domain\ApplicationPlanDocument;
 
-final readonly class GoPlanRenderer implements ModernPlanRenderer
+final readonly class GoPlanRenderer implements ModernPlanRenderer, ApplicationPlanRenderer
 {
     public function __construct(private string $binary) {}
 
@@ -30,6 +32,13 @@ final readonly class GoPlanRenderer implements ModernPlanRenderer
     {
         return ModernPlanDocument::decode($this->execute(['site_id' => $siteId, 'hostname' => $host,
             'web_stack' => 'modern', 'worker_acknowledged' => $acknowledged]))->fields();
+    }
+
+    /** @return array<string,string> */
+    public function renderApplication(string $siteId, string $host, string $recipe, string $application): array
+    {
+        return ApplicationPlanDocument::decode($this->execute(['site_id' => $siteId, 'hostname' => $host,
+            'application' => $application, 'recipe' => $recipe]), $recipe, $application)->fields();
     }
 
     /** @param array<string,string|bool> $input */

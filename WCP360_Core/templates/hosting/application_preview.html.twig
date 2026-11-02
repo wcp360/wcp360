@@ -1,0 +1,11 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Configuration d’application PHP' %}
+{% block content %}
+<div class="wcp-page-head page-heading"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1 class="wcp-page-heading">Configuration d’application PHP</h1><p class="wcp-page-sub">{{ report.application }} · {{ report.web_server }} · {{ report.application_server }} · {{ report.hostname }}</p></div><a class="button secondary" href="{{ path('wcp_runtime_settings') }}">Paramètres globaux</a></div>
+<p class="notice" role="status" data-application-scope>Configuration de démonstration HTTP local uniquement. Aucun site, compte, service ou fichier installé ; aucun port réservé.</p>
+<p>Identifiant synthétique : <code data-application-id>{{ report.preview_site_id }}</code>. Le moteur ne sélectionne aucun hébergement existant.</p>
+<p data-application-htaccess>{% if report.htaccess_supported %}.htaccess natif limité aux directives de réécriture prévues par cette recette.{% else %}Cette recette n’interprète pas .htaccess. Les règles applicatives sont gérées par sa configuration serveur.{% endif %}</p>
+<p>Mode Worker désactivé. Cache de pages dynamiques désactivé : les réponses privées, sessions et paniers ne doivent pas être mis en cache sans politique applicative vérifiée. Les performances et la compatibilité réelle de chaque application restent à qualifier.</p>
+{% for key,file in report.files %}<section class="wcp-panel" data-application-artifact="{{ key }}"><div class="wcp-panel-head"><h2 class="wcp-panel-title">{{ file.name }}</h2></div><div class="wcp-panel-body"><pre><code>{{ file.content }}</code></pre></div></section>{% endfor %}
+{% include 'components/forms/application-preview.html.twig' %}
+{% endblock %}

@@ -127,7 +127,9 @@ final class RuntimeSettingsController extends AbstractController
     {
         return $this->render('platform/settings.html.twig', ['context' => 'admin',
             'report' => $this->settings->inspect($actor), 'conflict' => $conflict,
-            'web_stacks' => $this->settings->webStacks($actor)],
+            'web_stacks' => $this->settings->webStacks($actor),
+            'application_recipes' => \Wcp360\Core\Shared\Platform\ApplicationRecipeCatalogue::report()['recipes'],
+            'application_profiles' => \Wcp360\Core\Shared\Platform\ApplicationRecipeCatalogue::profiles()],
             new Response(status: $conflict ? 409 : 200));
     }
 }

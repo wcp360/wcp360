@@ -1,0 +1,12 @@
+<section class="wcp-panel"><div class="wcp-panel-head"><h2 class="wcp-panel-title">Profils d’applications PHP — six combinaisons</h2></div><div class="wcp-panel-body">
+<p>Préparez une configuration adaptée aux scripts PHP classiques, aux applications à contrôleur frontal ou au cas WordPress. FrankenPHP utilise ici son mode classique, sans worker persistant.</p>
+<form method="post" action="{{ path('wcp_application_preview') }}" data-turbo-frame="_top" data-controller="form-guard" data-action="submit->form-guard#submit">
+<input type="hidden" name="_token" value="{{ csrf_token('application-plan-preview') }}">
+<label for="application-profile">Profil applicatif</label><select id="application-profile" name="application">{% for profile in application_profiles %}<option value="{{ profile.id }}">{{ profile.label }}</option>{% endfor %}</select>
+<label for="application-recipe">Serveur web et moteur PHP</label><select id="application-recipe" name="recipe">{% for recipe in application_recipes %}<option value="{{ recipe.id }}">{{ recipe.label }}{% if recipe.htaccess_supported %} — .htaccess natif encadré{% endif %}</option>{% endfor %}</select>
+<label for="application-hostname">Domaine de démonstration</label><input id="application-hostname" name="hostname" required maxlength="253" pattern="[a-z0-9.-]+\.test" placeholder="application-preview.test" autocomplete="off">
+<label class="checkbox-row"><input type="checkbox" name="require_htaccess" value="1"><span>Exiger un .htaccess natif (Apache avec PHP-FPM uniquement dans ces recettes).</span></label>
+<button class="button secondary" type="submit" data-form-guard-target="button">Prévisualiser la configuration</button><p class="field-help" role="status" data-form-guard-target="status"></p>
+</form>
+<p class="field-help">Ces aperçus n’installent aucune application, base de données ni service. Les ports locaux ne sont pas réservés et les performances ne sont pas encore mesurées. Les modules PHP, dépendances et répertoires accessibles en écriture devront être validés pour chaque application.</p>
+</div></section>

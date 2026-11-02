@@ -98,6 +98,10 @@ The WCP360 page has labeled filters, preparation-status feedback, an empty resul
 
 [Query definitions](../../../tests/Unit/SiteListQueryTest.php), [service definitions](../../../tests/Integration/ListPreparedSitesTest.php), [HTTP journeys](../../../tests/Integration/SiteListJourneyTest.php) and [restricted PostgreSQL-role definitions](../../../tests/Integration/CandidateDatabaseRolesTest.php) cover page traversal beyond 100 rows, insertions, filters/projection, foreign pivots, revocation/inactivity, empty scope, escaping, stored Worker visibility, SQLite, read-only behavior and ADMIN refusal. Existing job-query/browser cases cover shared-component compatibility. Execution evidence belongs to exact-source CI in draft PR #116. This read surface does not implement real-domain admission, DNS inventory, site lifecycle, quotas or production qualification.
 
+## Reusable PHP application profiles
+
+The [application-profile engine](APPLICATION-PROFILES.md) renders six web/PHP combinations for traditional PHP, front controllers and a WordPress reference. It separates application behavior, server topology and runtime mode; WordPress is not a special Core architecture. ROOT browser/API previews use a shared boundary with Modern while preserving separate CSRF intents. This inert family has its own strict envelope; original site/profile/plan contracts remain unchanged. Live installation, native recipe validation, application compatibility and comparative performance require separate evidence.
+
 ## Remaining scope
 
 Production account/site lifecycle, real-domain admission, authoritative DNS, ACME/TLS, runtime/version administration, quotas and full change/recovery workflows remain to be implemented and qualified. The worker plan selector is not a general production FrankenPHP installer or activation service.

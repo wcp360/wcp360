@@ -52,6 +52,12 @@ PHP invokes only the configured executable with an argv array, a scrubbed inheri
 
 Preview writes no jobs, sites, defaults, activations or business audit. It does not change enums, durable selectors, queue processing or stored-plan exports. Modern remains unavailable in the durable hosting catalogue and global/site default selectors. Driver preview implementation does not establish service activation, multi-site isolation, installation admission or production qualification.
 
+## Application-profile recipes
+
+[RenderApplication](application.go) generates a separate `wcp360.candidate.application-plan/1` family. Input adds `application` (php, front_controller or wordpress) and one of six Nginx/Apache/Caddy × PHP-FPM/FrankenPHP-classic recipe IDs. These selectors conflict with application_server, web_stack and worker_acknowledged; recipe without application is refused. The ordered output has schema/application/recipe/web_server/application_server followed by only that recipe's artifacts. Existing plan/1–3 paths and shapes remain unchanged.
+
+The [profile guide](../../../../src/Module/Hosting/APPLICATION-PROFILES.md) defines routing, ownership, native .htaccess boundaries and qualification. WordPress is a reference application. No persistent worker is implied. All profiles are inert, loopback-only and unreserved; no application, database, package, config or service is installed. Page caching stays disabled. The CLI never accepts caller-chosen paths, ports, executables or deployment flags. Source/template tests do not establish live Apache/Caddy/FrankenPHP/application correctness or performance.
+
 ## Verification
 
 [Driver definitions](modern_test.go) and [CLI definitions](cmd/wcp-plan/main_modern_test.go) cover Modern markers/artifacts, acknowledgment, selector conflicts, malformed input, byte limits, injection, non-root isolation bounds and original output compatibility. Existing planner definitions continue to cover Classic and Advanced.

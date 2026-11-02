@@ -1,0 +1,10 @@
+# Generated fixed recipe; not arbitrary tenant configuration.
+{{if .Front}}RewriteEngine On
+RewriteBase /
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteRule ^index[.]php$ - [END]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.php [END]
+{{else}}# Traditional PHP: existing files and directory indexes only.
+{{end}}

@@ -1,0 +1,44 @@
+# Inert per-request PHP recipe; deliberately no persistent worker.
+{
+    admin off
+    auto_https off
+    frankenphp {
+        num_threads 2
+        max_threads 8
+        max_requests 500
+        php_ini {
+            memory_limit 256M
+            expose_php Off
+            opcache.enable 1
+            opcache.validate_timestamps 1
+        }
+    }
+}
+http://{{.Host}}:{{if .Backend}}8083{{else}}8082{{end}} {
+    bind {{if .Backend}}unix//run/wcp360-applications/{{.ID}}/http.sock|0660{{else}}127.0.0.1{{end}}
+    root * {{.Root}}
+    route {
+        @private path_regexp private (?i)(^|/)\.|(^|/)(wp-config\.php([^/]*$)|composer\.(json|lock)$)|\.(bak|sql|sqlite|ini|log|conf)$
+        respond @private 403
+        @unsupportedPhp {
+            path_regexp source (?i)\.(php[0-9]*|phtml|phar)(/|$)
+            not path_regexp executable \.php(/|$)
+        }
+        respond @unsupportedPhp 403
+        @uploadedPhp path_regexp uploadedPhp (?i)^/wp-content/uploads/.*\.(php[0-9]?|phtml|phar)(/|$)
+        respond @uploadedPhp 403
+        @directory {
+            file {path}/index.php
+            not path */
+        }
+        redir @directory {path}/?{query} 308
+        @entry file {
+            try_files {path} {path}/index.php{{if .Front}} index.php{{end}}
+            split_path .php
+        }
+        rewrite @entry {http.matchers.file.relative}
+        @php path *.php
+        php @php
+        file_server
+    }
+}

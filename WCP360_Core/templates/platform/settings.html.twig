@@ -21,5 +21,6 @@
 <p class="field-help">Chaque application Worker doit réinitialiser son état entre les requêtes et accepter un recyclage borné. La confirmation de compatibilité reste obligatoire pour chaque nouveau plan Worker.</p>
 <p class="field-help">La disponibilité de préparation des plans ne prouve pas qu’un service est installé ou prêt à servir un site. Enregistrer ce défaut ne lance aucune installation ni aucun redémarrage.</p>
 {% include 'components/forms/modern-preview.html.twig' %}
+{% include 'components/forms/application-preview.html.twig' %}
 <p><a href="{{ path('wcp_audit', {kind:'candidate.runtime.default.changed'}) }}">Consulter les changements dans le journal d’audit</a></p>
 {% endblock %}

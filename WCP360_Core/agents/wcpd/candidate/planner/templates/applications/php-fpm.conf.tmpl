@@ -1,0 +1,27 @@
+; Inert per-site PHP pool; identities and socket ownership need separate admission.
+[wcp_application_{{.ID}}]
+user = {{.User}}
+group = {{.User}}
+listen = /run/wcp360-applications/{{.ID}}/php.sock
+listen.owner = {{.FrontUser}}
+listen.group = {{.FrontUser}}
+listen.mode = 0600
+pm = ondemand
+pm.max_children = 4
+pm.process_idle_timeout = 10s
+pm.max_requests = 500
+request_terminate_timeout = 60s
+clear_env = yes
+security.limit_extensions = .php
+catch_workers_output = yes
+php_admin_flag[allow_url_include] = off
+php_admin_flag[expose_php] = off
+php_admin_flag[opcache.enable] = on
+php_admin_flag[opcache.validate_permission] = on
+php_admin_value[opcache.validate_timestamps] = 1
+php_admin_value[memory_limit] = 256M
+php_admin_value[session.cookie_httponly] = 1
+php_admin_value[session.cookie_samesite] = Lax
+php_admin_value[upload_tmp_dir] = {{.Root}}/../tmp
+php_admin_value[sys_temp_dir] = {{.Root}}/../tmp
+php_admin_value[session.save_path] = {{.Root}}/../tmp/sessions

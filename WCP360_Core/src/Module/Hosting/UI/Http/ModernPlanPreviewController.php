@@ -11,20 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Wcp360\Core\Module\Hosting\Application\PreviewModernHostingPlan;
-use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
+use Wcp360\Core\Shared\Http\RootPlanPreviewRequest;
 
 final class ModernPlanPreviewController extends AbstractController
 {
-    public function __construct(private readonly PreviewModernHostingPlan $preview) {}
+    public function __construct(private readonly PreviewModernHostingPlan $preview, private readonly RootPlanPreviewRequest $boundary) {}
 
     #[Route('/workbench/settings/modern-preview', name: 'wcp_modern_preview', methods: ['POST'])]
     public function browser(Request $request): Response
     {
-        $actor = $this->administrator();
-        $this->query($request);
+        $actor = $this->boundary->actor($request);
         $fields = $request->request->all();
         if (!is_string($fields['_token'] ?? null)) throw $this->createAccessDeniedException('Origin and CSRF required.');
-        $this->csrf($request, $fields['_token']);
+        $this->boundary->csrf($request, 'modern-plan-preview', $fields['_token']);
         unset($fields['_token']);
         [$host, $acknowledged] = $this->input($fields);
         $report = $this->preview->preview($actor->id, $host, $acknowledged);
@@ -36,36 +35,14 @@ final class ModernPlanPreviewController extends AbstractController
     #[Route('/workbench/v1/web-stacks/modern-preview', name: 'wcp_api_modern_preview', methods: ['POST'])]
     public function api(Request $request): JsonResponse
     {
-        $actor = $this->administrator();
-        $this->query($request);
-        $this->csrf($request, $request->headers->get('X-CSRF-Token'));
+        $actor = $this->boundary->actor($request);
+        $this->boundary->csrf($request, 'modern-plan-preview', $request->headers->get('X-CSRF-Token'));
         if ($request->getContentTypeFormat() !== 'json' || strlen($request->getContent()) > 4096) {
             throw new BadRequestHttpException('A bounded JSON body is required.');
         }
         [$host, $acknowledged] = $this->input($request->toArray());
 
         return $this->json($this->preview->preview($actor->id, $host, $acknowledged));
-    }
-
-    private function administrator(): Principal
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $actor = $this->getUser();
-        if (!$actor instanceof Principal || $actor->context !== 'admin') throw $this->createAccessDeniedException();
-        return $actor;
-    }
-
-    private function query(Request $request): void
-    {
-        if ($request->query->count() !== 0) throw new BadRequestHttpException('Modern preview has no query parameters.');
-    }
-
-    private function csrf(Request $request, ?string $token): void
-    {
-        if ($request->headers->get('Origin') !== $request->getSchemeAndHttpHost()
-            || !$this->isCsrfTokenValid('modern-plan-preview', $token)) {
-            throw $this->createAccessDeniedException('Origin and CSRF required.');
-        }
     }
 
     /** @param array<array-key,mixed> $fields

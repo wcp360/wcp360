@@ -1,0 +1,24 @@
+# Inert HTTP loopback recipe. No automatic HTTPS, admin API or cache module.
+{
+    admin off
+    auto_https off
+}
+http://{{.Host}}:8082 {
+    bind 127.0.0.1
+    root * {{.Root}}
+    route {
+        @private path_regexp private (?i)(^|/)\.|(^|/)(wp-config\.php([^/]*$)|composer\.(json|lock)$)|\.(bak|sql|sqlite|ini|log|conf)$
+        respond @private 403
+        @unsupportedPhp {
+            path_regexp source (?i)\.(php[0-9]*|phtml|phar)(/|$)
+            not path_regexp executable \.php(/|$)
+        }
+        respond @unsupportedPhp 403
+        @uploadedPhp path_regexp uploadedPhp (?i)^/wp-content/uploads/.*\.(php[0-9]?|phtml|phar)(/|$)
+        respond @uploadedPhp 403
+        php_fastcgi unix//run/wcp360-applications/{{.ID}}/php.sock {
+            try_files {path} {path}/index.php {{if .Front}}index.php{{else}}=404{{end}}
+        }
+        file_server
+    }
+}
