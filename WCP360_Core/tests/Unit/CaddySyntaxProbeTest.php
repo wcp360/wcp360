@@ -113,17 +113,17 @@ final class CaddySyntaxProbeTest extends TestCase
     public function testBoundedAdaptedDocumentIsAcceptedAtTheExactOutputLimit(): void
     {
         $tools = $this->createMock(NativeSyntaxTools::class);
-        $tools->method('binary')->willReturn('/usr/bin/caddy');
+        $tools->expects(self::once())->method('binary')->with('caddy')->willReturn('/usr/bin/caddy');
         $runner = $this->createMock(SyntaxProcessRunner::class);
         $output = self::ADAPTED.str_repeat(' ', 262144 - strlen(self::ADAPTED));
-        $runner->method('run')->willReturn(new SyntaxProcessResult('passed', $output));
+        $runner->expects(self::once())->method('run')->willReturn(new SyntaxProcessResult('passed', $output));
         self::assertSame('passed', (new CaddySyntaxProbe($runner, $tools))->check(self::CONFIG, false));
     }
 
     public function testSourceIsAcceptedAtTheExactInputLimitWithoutRewriting(): void
     {
         $tools = $this->createMock(NativeSyntaxTools::class);
-        $tools->method('binary')->willReturn('/usr/bin/caddy');
+        $tools->expects(self::once())->method('binary')->with('caddy')->willReturn('/usr/bin/caddy');
         $runner = $this->createMock(SyntaxProcessRunner::class);
         $content = self::CONFIG.str_repeat(' ', 65536 - strlen(self::CONFIG));
         $captured = null;
