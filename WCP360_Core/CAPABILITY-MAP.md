@@ -165,7 +165,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Site provisioning | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Synthetic .test plans and guarded disposable hosting activation. | [M5](ROADMAP.md#m5) |
 | Document roots | [Hosting](src/Module/Hosting/README.md) | [Files](src/Module/Files/README.md) | Partial — Fixed candidate tenant paths; general document-root lifecycle absent. | [M5](ROADMAP.md#m5) |
 | Static and PHP sites | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Embedded PHP demo and isolated HTTP probes; arbitrary apps absent. | [M5](ROADMAP.md#m5) |
-| Nginx configuration | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed Go templates and disposable Nginx/FPM execution. | [M5](ROADMAP.md#m5) |
+| Nginx configuration | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed Go templates, bounded authorized plan preview/downloads and disposable Nginx/FPM execution; general configuration lifecycle unfinished. | [M5](ROADMAP.md#m5) |
 | Web subdomains and aliases | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
 | Redirects | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M5](ROADMAP.md#m5) |
 | Reverse proxy | [Hosting](src/Module/Hosting/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed FastCGI/Worker upstreams; general proxy administration absent. | [M5](ROADMAP.md#m5) |

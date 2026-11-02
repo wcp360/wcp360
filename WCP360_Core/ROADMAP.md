@@ -228,6 +228,14 @@ Claims/recovery use PostgreSQL row locks with SKIP LOCKED; transitions and audit
 
 Resource inventory remains Partial; general resource/domain/DNS lifecycle and production integration remain unfinished. M1/M4/M5 stay open; approximately 20% overall and 5 Demonstrated / 71 Partial / 157 Planned are unchanged.
 
+### Prepared-plan file inspection and bounded downloads
+
+[PreparedPlanDocument](src/Module/Hosting/Domain/PreparedPlanDocument.php) now centralizes the existing FPM/Worker document shape for both Go rendering and stored-plan inspection, with UTF-8/control/content/envelope bounds. [PreparedPlanFiles](src/Module/Hosting/Application/PreparedPlanFiles.php) rechecks current tenant authority and exposes only fixed artifacts from successful plans. The task detail shows escaped individual configuration previews and native attachment links; corrupt successful output is unavailable rather than displayed as raw JSON.
+
+The download route accepts only nginx/php-fpm/caddy/systemd artifacts, uses fixed ASCII filenames and bounded in-memory text/plain responses with attachment/no-store/nosniff headers. No server file is read/written, no activation is dispatched and no syntax/trust/production qualification is inferred. Existing activation gates remain separate. [Document](tests/Unit/PreparedPlanDocumentTest.php), [service](tests/Integration/PreparedPlanFilesTest.php), [HTTP](tests/Integration/PlanDownloadJourneyTest.php) and [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) definitions cover this slice; source-bound execution belongs to draft PR #116. Local executable tests remain stopped.
+
+M1/M5 stay open, approximately 20% overall and capability counts unchanged. General file management, configuration editing/apply, signing and hosted-service lifecycle remain unfinished.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

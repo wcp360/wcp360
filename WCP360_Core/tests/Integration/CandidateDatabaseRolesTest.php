@@ -547,6 +547,26 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $service->page($this->fixture['users']['alice'], $query);
     }
 
+    public function testPreparedPlanExportsNeedOnlyExistingUserReadGrants(): void
+    {
+        $store = new WorkbenchStore($this->maintenance);
+        $policy = self::getContainer()->get(\Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy::class);
+        $job = (new \Wcp360\Core\Module\Hosting\Application\SubmitHostingPlan($store, $policy,
+            new \Wcp360\Core\Module\Platform\Application\ApplicationServerSettings($store, $policy)))->submit(
+                $this->fixture['users']['alice'], ['tenant_id' => $this->fixture['tenants']['alice'],
+                'hostname' => 'isolated-export.test', 'idempotency_key' => 'isolated-export-key-2026'])['job_id'];
+        (new \Wcp360\Core\Module\Operations\Application\RunHostingPlan($store,
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class), $policy))->runOne();
+        $this->provider->provision($this->passwords);
+        $db = $this->login('user');
+        $files = new \Wcp360\Core\Module\Hosting\Application\PreparedPlanFiles(new WorkbenchStore($db));
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        self::assertStringContainsString('server_name isolated-export.test;', $files->download($this->fixture['users']['alice'], $job, 'nginx')['content']);
+        self::assertSame($this->roles['user'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_activations'));
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

@@ -23,12 +23,6 @@ final readonly class GoPlanRenderer
             $output.=$data;
         });
         if(!$process->isSuccessful()) throw new \RuntimeException('Planner failed. No system effect was dispatched.');
-        $plan=json_decode($output,true,16,JSON_THROW_ON_ERROR);
-        $expected=$server===ApplicationServer::PhpFpm?['schema','nginx','php_fpm']:['schema','nginx','application_server','caddy','systemd_unit'];
-        $schema=$server===ApplicationServer::PhpFpm?'wcp360.candidate.plan/1':'wcp360.candidate.plan/2';
-        if(!is_array($plan)||array_keys($plan)!==$expected||$plan['schema']!==$schema)throw new \RuntimeException('Planner output rejected.');
-        foreach($plan as $value)if(!is_string($value)||$value==='')throw new \RuntimeException('Empty or non-string plan field.');
-        if($server===ApplicationServer::FrankenPhpWorker&&$plan['application_server']!==$server->value)throw new \RuntimeException('Wrong planner runtime.');
-        return $plan;
+        return \Wcp360\Core\Module\Hosting\Domain\PreparedPlanDocument::decode($output,$server)->fields();
     }
 }

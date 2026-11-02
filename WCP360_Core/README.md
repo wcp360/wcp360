@@ -56,6 +56,8 @@ The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) u
 
 [Prepared-site inventory](src/Module/Hosting/README.md#prepared-site-inventory) is available at `/workbench/sites` and `/workbench/v1/sites`: tenant-scoped domain search, preparation/runtime filters, deterministic A–Z order, cursor pages and links to task history. It reuses shared list validation and pagination with the task inventory. A prepared plan does not assert deployed-service health; complete hosting/domain lifecycle remains unfinished.
 
+[Prepared-plan files](src/Module/Hosting/README.md#prepared-plan-file-inspection-and-downloads) can now be previewed and downloaded individually from a successful task: Nginx/PHP-FPM or Nginx/Caddy/systemd for Worker plans. The renderer and export path share one bounded document validator; attachments require current tenant access and never read/write server files or apply configuration. Corrupt or unfinished output cannot be exported.
+
 ## Source layout
 
 ```text

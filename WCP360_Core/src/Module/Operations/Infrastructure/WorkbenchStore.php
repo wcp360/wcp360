@@ -50,6 +50,7 @@ final readonly class WorkbenchStore
     /** @return array<string, mixed> */
     public function job(string $actor,string $id): array
     {
+        if (strlen($id) !== 36 || !Uuid::isValid($id)) throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         $row=$this->db->fetchAssociative('SELECT j.*,s.application_server FROM wcp_candidate_jobs j JOIN wcp_candidate_sites s ON s.id=j.site_id AND s.tenant_id=j.tenant_id WHERE j.id=?',[$id]);
         if (!$row) throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         $this->requirePermission($actor,$row['tenant_id']);
