@@ -16,7 +16,7 @@ final readonly class CandidatePermissionAdministration
 
     public function __construct(private WorkbenchStore $store) {}
 
-    /** @return array{items:list<array{user_id:string,email:string,active:bool,tenant_id:string,tenant_name:string,denied:bool}>,page:int,has_next:bool,selected_user:array{id:string,username:string}|null} */
+    /** @return array{items:list<array{user_id:string,email:string,active:bool,tenant_id:string,tenant_name:string,denied:bool}>,page:int,has_next:bool,selected_user?:array{id:string,username:string}} */
     public function listing(string $admin, int $page = 1, ?string $user = null): array
     {
         $this->store->requireAdmin($admin);
@@ -54,7 +54,9 @@ final readonly class CandidatePermissionAdministration
         ], $rows);
         $this->store->requireAdmin($admin);
 
-        return ['items' => $items, 'page' => $page, 'has_next' => $hasNext, 'selected_user' => $selected];
+        $report = ['items' => $items, 'page' => $page, 'has_next' => $hasNext];
+
+        return $selected === null ? $report : $report + ['selected_user' => $selected];
     }
 
     /** Removing a block does not create or restore a membership. */

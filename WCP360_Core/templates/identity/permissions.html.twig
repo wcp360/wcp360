@@ -1,8 +1,9 @@
 {% extends 'layouts/workbench.html.twig' %}
 {% block content %}
-{% set selection = report.selected_user ? {user:report.selected_user.id} : {} %}
+{% set selected_user = report.selected_user|default(null) %}
+{% set selection = selected_user ? {user:selected_user.id} : {} %}
 <h1>Accès des utilisateurs</h1>
-{% if report.selected_user %}<p data-selected-hosting-user="{{ report.selected_user.id }}">Compte sélectionné : <strong>{{ report.selected_user.username }}</strong></p><p><a href="{{ path('wcp_users') }}">Retour aux comptes d’hébergement</a> · <a href="{{ path('wcp_access_permissions') }}">Afficher tous les accès</a></p>{% endif %}
+{% if selected_user %}<p data-selected-hosting-user="{{ selected_user.id }}">Compte sélectionné : <strong>{{ selected_user.username }}</strong></p><p><a href="{{ path('wcp_users') }}">Retour aux comptes d’hébergement</a> · <a href="{{ path('wcp_access_permissions') }}">Afficher tous les accès</a></p>{% endif %}
 <p>Gérez les blocages des plans d’hébergement par utilisateur et tenant. Chaque décision est relue lors de la soumission et de l’exécution des tâches.</p>
 <p>Lever un blocage conserve les droits existants. Cette page ne crée aucune appartenance et n’attribue aucune permission supplémentaire.</p>
 <p>Un blocage n’annule pas une opération déjà transmise au système.</p>
@@ -11,7 +12,7 @@
 <div class="table-scroll"><table><caption class="sr-only">Accès aux plans d’hébergement par utilisateur et tenant</caption><thead><tr><th scope="col">Utilisateur</th><th scope="col">Tenant</th><th scope="col">Accès aux plans</th><th scope="col">Action</th></tr></thead><tbody>
 {% for entry in report.items %}
 <tr data-user-id="{{ entry.user_id }}" data-tenant-id="{{ entry.tenant_id }}"><td>{{ entry.email }}</td><td>{{ entry.tenant_name }}</td><td>{% if not entry.active %}Compte inactif{% elseif entry.denied %}Bloqué{% else %}Autorisé{% endif %}</td><td>
-<form action="{{ path('wcp_access_denial', {actor: entry.user_id, tenant: entry.tenant_id}|merge(report.selected_user ? {view:'user'} : {})) }}" method="post" data-turbo-frame="_top">
+<form action="{{ path('wcp_access_denial', {actor: entry.user_id, tenant: entry.tenant_id}|merge(selected_user ? {view:'user'} : {})) }}" method="post" data-turbo-frame="_top">
 <input type="hidden" name="_token" value="{{ csrf_token('candidate_access_denial_' ~ entry.user_id ~ '_' ~ entry.tenant_id) }}">
 <input type="hidden" name="denied" value="{{ entry.denied ? '0' : '1' }}">
 <button class="button secondary" type="submit">{{ entry.denied ? 'Lever le blocage' : 'Bloquer' }}</button>
