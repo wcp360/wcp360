@@ -1,3 +1,10 @@
+> **CI Linux candidate :** voir [docs/CI-ENVIRONMENT.md](docs/CI-ENVIRONMENT.md). Les résultats du ZIP restent historiques ; seuls les nouveaux runs liés au SHA testé constituent des preuves actuelles. Aucun choix de cette CI ne valide F01 ou une intégration multitenant.
+
+> **Import GitHub des sources 0.3.0 alpha.** Ce dossier ne contient pas `vendor/`. Depuis ce dossier, exécuter `composer install --no-dev --prefer-dist` avant le lancement XAMPP. Les instructions sans Composer ci-dessous concernent uniquement le ZIP original avec dépendances. Voir `PUBLICATION-GITHUB.md`.
+
+> **Rapprochement de branche du 2 novembre 2026 :** le dernier checkpoint propriétaire conservé indique une revalidation finale **0/4** et une revue indépendante **E3 manquante**. Les résultats antérieurs ne qualifient pas ce nouvel assemblage, une intégration Core/multitenant ou une release de production ; les réserves doivent être vérifiées sur le SHA effectivement intégré.
+
+
 # WCP360 File Manager — 0.3.0 alpha Pro
 
 Gestion quotidienne et outils avancés dans le bouton Options. Application autonome et paquet Symfony ; PHP 8.2+ pour le test local, PHP 8.4 cible WCP360. Dépendances de fonctionnement incluses. Intégration daemon WCP360 non active.
