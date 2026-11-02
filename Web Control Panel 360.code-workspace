@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../WCP360_Quality"
+		},
+		{
+			"path": "../WCP360_Registry_Data"
+		}
+	],
+	"settings": {}
+}

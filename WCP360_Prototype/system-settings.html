@@ -1,1 +1,79 @@
-<!doctype html><html lang="en" data-theme="system"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>System Settings — WCP360 ROOT</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><link rel="stylesheet" href="assets/reference-ui.css"><link rel="stylesheet" href="assets/root-control.css"><link rel="stylesheet" href="assets/system-settings.css"></head><body data-root-service="settings"><div class="wcp-dashboard-container"><aside class="wcp-dashboard-sidebar"><div class="wcp-dashboard-brand"><button class="wcp-menu-btn" data-wcp-sidebar-toggle aria-label="Toggle navigation"><span class="material-symbols-rounded">menu</span></button><div class="wcp-brandmark">360</div><div class="wcp-brandtext">WCP<span>360</span></div></div><nav class="wcp-nav"></nav><div class="wcp-sidebar-footer"><div class="wcp-sidebar-status"></div></div></aside><div class="wcp-sidebar-overlay"></div><main class="wcp-dashboard-main"><header class="wcp-dashboard-header"><div class="wcp-header-left"><button class="wcp-menu-btn wcp-mobile-menu" data-wcp-sidebar-toggle aria-label="Open navigation"><span class="material-symbols-rounded">menu</span></button><h1 class="wcp-page-title">System Settings</h1></div><div class="wcp-header-actions"><span class="wcp-status warning">ROOT</span><button class="wcp-icon-btn" aria-label="Open Job Center"><span class="material-symbols-rounded">pending_actions</span></button><div class="wcp-avatar" aria-label="ROOT operator">YG</div></div></header><div class="wcp-dashboard-content"><div class="wcp-content-inner" id="systemSettingsCenter"></div></div></main></div><div id="wcpToastStack" class="wcp-toast-stack"></div><script src="assets/foundation.js"></script><script src="assets/reference-ui.js"></script><script src="assets/system-settings.js"></script></body></html>
+<!doctype html>
+<html lang="fr" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Centre de configuration WCP360 : 24 rubriques pour le serveur, l’hébergement, les fournisseurs, le stockage, la protection et les politiques avancées.">
+  <title>Paramètres système — WCP360 ROOT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="assets/foundation.css">
+  <link rel="stylesheet" href="assets/reference-ui.css">
+  <link rel="stylesheet" href="assets/system-settings.css">
+</head>
+<body data-root-service="settings" data-product-scope="root">
+  <a class="ss-skip-link" href="#systemSettingsCenter">Aller aux paramètres système</a>
+  <div class="wcp-dashboard-container">
+    <aside class="wcp-dashboard-sidebar" aria-label="Navigation WCP360 ROOT">
+      <div class="wcp-dashboard-brand">
+        <button type="button" class="wcp-menu-btn" data-wcp-sidebar-toggle aria-label="Réduire la navigation">
+          <span class="material-symbols-rounded" aria-hidden="true">menu</span>
+        </button>
+        <div class="wcp-brandmark" aria-hidden="true">360</div>
+        <div class="wcp-brandtext">WCP<span>360</span></div>
+      </div>
+      <nav class="wcp-nav" aria-label="Outils de la plateforme"></nav>
+      <div class="wcp-sidebar-footer"><div class="wcp-sidebar-status"></div></div>
+    </aside>
+    <div class="wcp-sidebar-overlay"></div>
+    <main class="wcp-dashboard-main">
+      <header class="wcp-dashboard-header">
+        <div class="wcp-header-left">
+          <button type="button" class="wcp-menu-btn wcp-mobile-menu" data-wcp-sidebar-toggle aria-label="Ouvrir la navigation">
+            <span class="material-symbols-rounded" aria-hidden="true">menu</span>
+          </button>
+          <h1 class="wcp-page-title">Paramètres système</h1>
+        </div>
+        <div class="wcp-header-actions">
+          <span class="wcp-status warning">ROOT</span>
+          <div class="wcp-theme-toggle" role="group" aria-label="Thème de l’interface">
+            <button type="button" class="wcp-theme-option ss-theme-btn" data-wcp-theme="light">Clair</button>
+            <button type="button" class="wcp-theme-option ss-theme-btn" data-wcp-theme="dark">Sombre</button>
+          </div>
+          <button type="button" class="wcp-icon-btn" data-runtime-jobs aria-label="Ouvrir le centre des tâches" aria-expanded="false">
+            <span class="material-symbols-rounded" aria-hidden="true">pending_actions</span>
+          </button>
+          <button type="button" class="wcp-avatar ss-profile-button" data-toggle-profile aria-label="Ouvrir le profil de l’opérateur ROOT">YG</button>
+        </div>
+      </header>
+      <div class="wcp-dashboard-content">
+        <div class="wcp-content-inner" id="systemSettingsCenter" tabindex="-1">
+          <div class="ss-page">
+            <section class="ss-empty" role="status" aria-live="polite">
+              <span class="material-symbols-rounded" aria-hidden="true">tune</span>
+              <h2>Configuration de la plateforme</h2>
+              <p>L’interface de configuration nécessite JavaScript. Si elle ne s’affiche pas, vérifiez son activation puis rechargez la page.</p>
+            </section>
+            <noscript>
+              <div class="ss-callout" data-tone="warning">
+                <div>
+                  <strong>JavaScript est nécessaire pour modifier les paramètres.</strong>
+                  <p>Activez JavaScript puis rechargez la page. Vous pouvez également consulter le <a href="canonical-admin-dashboard.html">tableau de bord ROOT</a>.</p>
+                </div>
+              </div>
+            </noscript>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div id="wcpToastStack" class="wcp-toast-stack"></div>
+  <script src="assets/foundation.js"></script>
+  <script src="assets/reference-ui.js"></script>
+  <script src="assets/settings-model.js"></script>
+  <script src="assets/settings-store.js"></script>
+  <script src="assets/system-settings.js"></script>
+</body>
+</html>

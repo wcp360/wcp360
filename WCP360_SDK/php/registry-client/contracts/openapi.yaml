@@ -1,0 +1,653 @@
+openapi: 3.1.0
+info:
+  title: 'WCP360 vendor Registry — candidate, not the Core API'
+  version: 0.1.0
+  description: 'Read-only editorial metadata. No artifacts, entitlement checks, installer, telemetry or Core permissions. Unknown query keys are rejected. All success responses expose contract_status=candidate.'
+servers:
+  -
+    url: /api/v1/wcp360-registry
+    description: 'Append to the Grav installation base path (e.g. /grav locally)'
+paths:
+  /status:
+    get:
+      operationId: status
+      security: {  }
+      parameters:
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/StatusEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  /catalog/plugins:
+    get:
+      operationId: plugins
+      security: {  }
+      parameters:
+        -
+          name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100000
+            default: 1
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 160
+        -
+          name: pricing
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - free
+              - paid
+              - trial
+              - freemium
+              - opensource
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/PackagesEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  /catalog/modules:
+    get:
+      operationId: modules
+      security: {  }
+      parameters:
+        -
+          name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100000
+            default: 1
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 160
+        -
+          name: pricing
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - free
+              - paid
+              - trial
+              - freemium
+              - opensource
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/PackagesEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  /catalog/apps:
+    get:
+      operationId: apps
+      security: {  }
+      parameters:
+        -
+          name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100000
+            default: 1
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 160
+        -
+          name: pricing
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - free
+              - paid
+              - trial
+              - freemium
+              - opensource
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/PackagesEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  '/packages/{type}/{slug}':
+    get:
+      operationId: package
+      security: {  }
+      parameters:
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - plugin
+              - module
+              - app
+              - core
+        -
+          name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 80
+            pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/PackageEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  '/packages/{type}/{slug}/versions':
+    get:
+      operationId: versions
+      security: {  }
+      parameters:
+        -
+          name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100000
+            default: 1
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - plugin
+              - module
+              - app
+              - core
+        -
+          name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 80
+            pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        -
+          name: channel
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - stable
+              - beta
+              - nightly
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ReleasesEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  /releases:
+    get:
+      operationId: releases
+      security: {  }
+      parameters:
+        -
+          name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100000
+            default: 1
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: channel
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - stable
+              - beta
+              - nightly
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ReleasesEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'
+  /updates:
+    get:
+      operationId: updates
+      security: {  }
+      parameters:
+        -
+          name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 1024
+        -
+          name: channel
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - stable
+              - beta
+              - nightly
+            default: stable
+        -
+          name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - plugin
+              - module
+              - app
+              - core
+        -
+          name: slug
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 80
+            pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        -
+          name: current_version
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 96
+            pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$'
+        -
+          name: core_version
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 96
+            pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$'
+        -
+          name: php_version
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 96
+            pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$'
+        -
+          name: api_version
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 96
+            pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$'
+        -
+          name: sdk_version
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 96
+            pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$'
+        -
+          name: os
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - debian-12
+              - debian-13
+              - ubuntu-22.04
+              - ubuntu-24.04
+              - ubuntu-26.04
+        -
+          name: architecture
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - amd64
+              - arm64
+      responses:
+        200:
+          description: 'Public metadata; installation and distribution unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/UpdateEnvelope'
+        304:
+          description: 'ETag unchanged; empty body'
+        404:
+          description: 'Public package not found'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        422:
+          description: 'Unknown, nested, oversized or invalid query'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        503:
+          description: 'Invalid or unavailable public metadata'
+          content:
+            application/json:
+              schema:
+                $ref: './response.schema.json#/$defs/ErrorEnvelope'
+        429:
+          description: 'Native API rate limit; native error envelope may differ'

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WCP360 DSSE staging envelope candidate 0.1.0",
+  "type": "object", "required": ["payloadType", "payload", "signatures"],
+  "properties": {
+    "payloadType": {"const": "application/vnd.wcp360.artifact-staging.v1+json"},
+    "payload": {"type": "string", "minLength": 1, "maxLength": 21848},
+    "signatures": {
+      "type": "array", "minItems": 1, "maxItems": 1,
+      "items": {
+        "type": "object", "required": ["keyid", "sig"],
+        "properties": {
+          "keyid": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "sig": {"type": "string", "minLength": 86, "maxLength": 88}
+        }
+      }
+    }
+  },
+  "$comment": "DSSE 1.0.2 Ed25519 profile, exactly one signature. Runtime checks strict standard or URL-safe base64 (padded or unpadded), 64-byte signature, decoded payload up to 16 KiB and envelope up to 32 KiB, rejecting duplicate JSON keys. Unrecognized envelope/signature fields are ignored and never trusted."
+}

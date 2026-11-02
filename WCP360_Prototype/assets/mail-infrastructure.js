@@ -40,18 +40,26 @@
   };
   const read = (key) => { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (error) { return {}; } };
   const stored = read(infraKey);
-  const state = {
-    profiles: Array.isArray(stored.profiles) ? stored.profiles : defaults.profiles,
-    queue: Array.isArray(stored.queue) ? stored.queue : defaults.queue
+  let state = {
+    profiles: Array.isArray(stored.profiles) ? stored.profiles.filter(item=>item&&typeof item.id==='string'&&typeof item.name==='string') : defaults.profiles,
+    queue: Array.isArray(stored.queue) ? stored.queue.filter(item=>item&&typeof item.id==='string'&&typeof item.sender==='string') : defaults.queue,
+    nodeDrafts:Array.isArray(stored.nodeDrafts)?stored.nodeDrafts.filter(item=>item&&typeof item.name==='string'):[],
+    policyDrafts:stored.policyDrafts&&typeof stored.policyDrafts==='object'?stored.policyDrafts:{},
+    requests:Array.isArray(stored.requests)?stored.requests.filter(item=>item&&typeof item.kind==='string'):[]
   };
   const storedWebmail = read(webmailKey);
   let webmail = {
     ...webmailDefaults,
     ...storedWebmail,
-    clients: webmailDefaults.clients.map(client => ({ ...client, ...(Array.isArray(storedWebmail.clients) ? storedWebmail.clients.find(item => item.id === client.id) : {}) }))
+    clients: webmailDefaults.clients.map(client => ({ ...client, ...(Array.isArray(storedWebmail.clients) ? storedWebmail.clients.find(item => item&&item.id === client.id) : {}) }))
   };
-  const saveInfra = () => { try { localStorage.setItem(infraKey, JSON.stringify(state)); } catch (error) {} };
-  const saveWebmail = () => { try { localStorage.setItem(webmailKey, JSON.stringify(webmail)); } catch (error) {} };
+  webmail.plans=Array.isArray(webmail.plans)?webmail.plans:webmailDefaults.plans;
+  let persistedInfra=JSON.parse(JSON.stringify(state)),persistedWebmail=JSON.parse(JSON.stringify(webmail));
+  const storageError=target=>{const feedback=target==='webmail'?qs('.root-feedback'):qs('.mic-drawer-body .mic-feedback');if(feedback){feedback.textContent='Local storage is unavailable. No change was saved and no operation was queued.';feedback.classList.add('show','error');}};
+  const saveInfra=()=>{try{localStorage.setItem(infraKey,JSON.stringify(state));persistedInfra=JSON.parse(JSON.stringify(state));return true}catch(error){state=JSON.parse(JSON.stringify(persistedInfra));storageError();return false}};
+  const saveWebmail=()=>{try{localStorage.setItem(webmailKey,JSON.stringify(webmail));persistedWebmail=JSON.parse(JSON.stringify(webmail));return true}catch(error){webmail=JSON.parse(JSON.stringify(persistedWebmail));storageError('webmail');return false}};
+  webmail.plans=Array.isArray(webmail.plans)?webmail.plans:webmailDefaults.plans;
+  let queueFilter={query:'',status:'All states',response:'',range:'Last 24 hours'};
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
   let active = tabs.some(tab => tab[0] === location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
   let returnFocus = null;
@@ -63,7 +71,7 @@
   const config = (label, value, copy) => `<article class="mic-config"><span>${label}</span><strong>${value}</strong><small>${copy}</small></article>`;
   const listRow = (icon, title, copy, status, tone = '') => `<div class="mic-list-row"><span class="material-symbols-rounded">${icon}</span><div><strong>${title}</strong><small>${copy}</small></div>${chip(status, tone)}</div>`;
   const note = (icon, title, copy) => `<div class="mic-note"><span class="material-symbols-rounded">${icon}</span><div><strong>${title}</strong><p>${copy}</p></div></div>`;
-  const profileCard = profile => `<article class="mic-card" data-mail-profile="${profile.id}"><div class="mic-card-head"><span class="mic-card-icon"><span class="material-symbols-rounded">dns</span></span>${chip(profile.status, profile.status === 'Published' ? 'success' : 'warning')}</div><h4>${escapeHtml(profile.name)}</h4><p>${escapeHtml(profile.smtp)} · ${escapeHtml(profile.imap)} · ${escapeHtml(profile.security)}</p>${kv([['Nodes', profile.nodes], ['Revision', profile.revision], ['Config drift', profile.status === 'Canary' ? '1 canary override' : 'None']])}<footer><span>Signed profile</span><button class="wcp-action-btn" data-mail-action="edit-profile">Edit</button></footer></article>`;
+  const profileCard = profile => `<article class="mic-card" data-mail-profile="${escapeHtml(profile.id)}"><div class="mic-card-head"><span class="mic-card-icon"><span class="material-symbols-rounded">dns</span></span>${chip(profile.status, profile.status === 'Published' ? 'success' : 'warning')}</div><h4>${escapeHtml(profile.name)}</h4><p>${escapeHtml(profile.smtp)} · ${escapeHtml(profile.imap)} · ${escapeHtml(profile.security)}</p>${kv([['Nodes', profile.nodes], ['Revision', profile.revision], ['Config drift', profile.status === 'Canary' ? '1 canary override' : 'None']])}<footer><span>Signed profile</span><button class="wcp-action-btn" data-mail-action="edit-profile" data-profile-id="${escapeHtml(profile.id)}">Edit</button></footer></article>`;
 
   const views = {
     overview: () => `<div class="mic-section" data-mail-view="overview"><div class="mic-section-head"><div><h3>Mail delivery control plane</h3><p>Operate SMTP, IMAP, mailbox storage, antispam, authentication, reputation, external webmail and durable queues from one authoritative ROOT surface.</p></div><div class="mic-actions">${action('health-check','Run health checks',false,'health_and_safety')}${action('create-profile','Create mail profile',true,'add_box')}</div></div>
@@ -121,7 +129,7 @@
 
     queue: () => `<div class="mic-section" data-mail-view="queue"><div class="mic-section-head"><div><h3>Durable mail queue and delivery diagnostics</h3><p>Search, retry, freeze, thaw or remove messages with recipient-domain context, account ownership, SMTP evidence and guarded destructive operations.</p></div><div class="mic-actions">${action('run-queue','Run queue')}${action('queue-search','Advanced search',true,'manage_search')}</div></div>
       <div class="mic-toolbar"><label class="mic-search"><span class="material-symbols-rounded">search</span><input type="search" data-queue-search placeholder="Message ID, sender, recipient, node or reason" aria-label="Search mail queue"></label><select data-queue-status aria-label="Filter queue status"><option value="all">All states</option><option>Queued</option><option>Deferred</option><option>Frozen</option></select></div>
-      <section class="wcp-panel">${panelHead('Queued messages',`${state.queue.length} messages shown · message bodies are never exposed`)}<div class="mic-table-wrap"><table class="mic-table"><thead><tr><th>Message</th><th>Sender</th><th>Recipient domain</th><th>Age / node</th><th>Last result</th><th>State</th><th></th></tr></thead><tbody>${state.queue.map(item => `<tr data-mail-queue="${item.id}" data-search="${escapeHtml(Object.values(item).join(' ').toLowerCase())}" data-status="${item.status}"><td><strong>${item.id}</strong><small>Account-attributed envelope</small></td><td>${item.sender}</td><td>${item.recipient}</td><td>${item.age}<small>${item.node}</small></td><td>${item.reason}</td><td>${chip(item.status,item.status === 'Queued' ? 'processing' : 'warning')}</td><td><div class="mic-actions"><button class="wcp-action-btn" data-mail-action="retry-message" data-message="${item.id}">Retry</button><button class="wcp-action-btn" data-mail-action="remove-message" data-message="${item.id}">Remove</button></div></td></tr>`).join('')}</tbody></table></div></section><div class="mic-feedback" data-queue-feedback role="status"></div>
+      <section class="wcp-panel">${panelHead('Queued messages',`${state.queue.length} messages shown · message bodies are never exposed`)}<div class="mic-table-wrap"><table class="mic-table"><thead><tr><th>Message</th><th>Sender</th><th>Recipient domain</th><th>Age / node</th><th>Last result</th><th>State</th><th></th></tr></thead><tbody>${state.queue.map(item => `<tr data-mail-queue="${escapeHtml(item.id)}" data-search="${escapeHtml(Object.values(item).join(' ').toLowerCase())}" data-status="${escapeHtml(item.status)}"><td><strong>${escapeHtml(item.id)}</strong><small>Account-attributed envelope</small></td><td>${escapeHtml(item.sender)}</td><td>${escapeHtml(item.recipient)}</td><td>${escapeHtml(item.age)}<small>${escapeHtml(item.node)}</small></td><td>${escapeHtml(item.reason)}</td><td>${chip(item.status,item.status === 'Queued' ? 'processing' : 'warning')}</td><td><div class="mic-actions"><button class="wcp-action-btn" data-mail-action="retry-message" data-message="${escapeHtml(item.id)}">Retry</button><button class="wcp-action-btn" data-mail-action="remove-message" data-message="${escapeHtml(item.id)}">Remove</button></div></td></tr>`).join('')}</tbody></table></div></section><div class="mic-feedback" data-queue-feedback role="status"></div>
       ${note('policy','Destructive queue operations are scoped','Removal requires typing the exact message ID. Bulk removal additionally requires impact preview, approval policy and an immutable evidence record.')}
     </div>`,
 
@@ -132,7 +140,7 @@
   };
 
   const host = qs('#mailInfrastructure');
-  host.innerHTML = `<div class="mic-root"><section class="mic-hero"><div><div class="mic-eyebrow">WCP360 / ROOT / Web &amp; Data</div><h2>Mail Infrastructure Center</h2><p>Authoritative governance of SMTP, IMAP, filtering, authentication, reputation, external webmail, delivery queues and evidence.</p></div><div class="mic-hero-actions">${action('health-check','Health checks')}${action('create-profile','Create profile',true,'add_box')}</div></section>
+  host.innerHTML = `<div class="mic-root"><section class="mic-hero"><div><div class="mic-eyebrow">WCP360 / ROOT / Web &amp; Data</div><h2>Mail Infrastructure Center</h2><p>Local prototype: health data and operations are simulated. Draft requests retain your inputs without executing infrastructure commands.</p><p>Authoritative governance of SMTP, IMAP, filtering, authentication, reputation, external webmail, delivery queues and evidence.</p></div><div class="mic-hero-actions">${action('health-check','Health checks')}${action('create-profile','Create profile',true,'add_box')}</div></section>
     <section class="mic-metrics"><article class="mic-metric"><span>Mail nodes</span><strong>5 / 5</strong><small>Three active · one relay · one standby</small></article><article class="mic-metric"><span>Delivery success</span><strong>99.42%</strong><small>Last 24 hours · 842k messages</small></article><article class="mic-metric"><span>Queue depth</span><strong>1,842</strong><small>126 deferred · 7 frozen</small></article><article class="mic-metric"><span>Reputation</span><strong>98 / 100</strong><small>No active blocklist listing</small></article></section>
     <section class="mic-boundary"><div><span>ROOT authority</span><strong>Nodes, transports, security and providers</strong></div><span class="material-symbols-rounded">arrow_forward</span><div><span>RESELLER delegation</span><strong>Narrow features, quotas and mailbox packages</strong></div><span class="material-symbols-rounded">arrow_forward</span><div><span>USER workspace</span><strong>Owned mailboxes, routes and webmail launch</strong></div></section>
     <div class="mic-tabs" role="tablist" aria-label="Mail infrastructure views">${tabs.map(tab => `<button type="button" class="mic-tab" role="tab" data-mail-tab="${tab[0]}" aria-selected="false"><span class="material-symbols-rounded">${tab[1]}</span>${tab[2]}</button>`).join('')}</div><div class="mic-view" tabindex="-1"></div></div>
@@ -142,6 +150,7 @@
     qsa('[data-mail-tab]').forEach(button => { const selected = button.dataset.mailTab === active; button.classList.toggle('active', selected); button.setAttribute('aria-selected', String(selected)); });
     qs('.mic-view').innerHTML = views[active]();
     if (focus) qs('.mic-view').focus();
+    const requests=state.requests.filter(request=>request.view===active);if(requests.length)qs('.mic-view').insertAdjacentHTML('beforeend','<section class="wcp-panel"><div class="wcp-panel-head"><div><strong>Local demonstration requests</strong><p>No infrastructure command or health verification was performed.</p></div></div><div class="mic-list">'+requests.map(request=>'<article class="mic-list-row"><div><strong>'+escapeHtml(request.kind)+' · '+escapeHtml(request.target)+'</strong><small>'+Object.entries(request.inputs).map(([key,value])=>escapeHtml(key)+': '+escapeHtml(value)).join(' · ')+'</small></div></article>').join('')+'</div></section>');
     bindView();
   };
   const setTab = (name, focus = true) => {
@@ -151,15 +160,18 @@
     renderView(focus);
   };
   const field = (label, control) => `<label class="mic-field"><span>${label}</span>${control}</label>`;
-  const formShell = (kind, body, submit = 'Create job', dangerous = false) => `<form class="mic-form ${dangerous ? 'mic-danger' : ''}" data-mail-form="${kind}">${body}<div class="mic-feedback" role="status">Validated. The operation was added to Job Center.</div><div class="mic-form-actions"><button type="button" class="wcp-action-btn" data-mail-close>Cancel</button><button type="submit" class="wcp-action-btn ${dangerous ? '' : 'primary'}" data-mail-submit>${submit}</button></div></form>`;
+  const formShell = (kind, body, submit = 'Create job', dangerous = false) => `<form class="mic-form ${dangerous ? 'mic-danger' : ''}" data-mail-form="${kind}">${body}<div class="mic-feedback" role="status">Local request saved. Infrastructure execution is simulated.</div><div class="mic-form-actions"><button type="button" class="wcp-action-btn" data-mail-close>Cancel</button><button type="submit" class="wcp-action-btn ${dangerous ? '' : 'primary'}" data-mail-submit>${submit}</button></div></form>`;
+  const modal=WCPUI.Overlay.attach({panel:qs('#mailDrawer'),backdrop:qs('.mic-drawer-backdrop'),source:'mail-infrastructure'});
   const openDrawer = (kind, trigger, messageId = '') => {
     returnFocus = trigger || document.activeElement;
     const drawer = qs('#mailDrawer'), body = qs('.mic-drawer-body', drawer), title = qs('#mailDrawerTitle', drawer), subtitle = qs('[data-mail-drawer-sub]', drawer);
     let content = '';
-    if (kind === 'create-profile') {
-      title.textContent = 'Create mail service profile'; subtitle.textContent = 'Versioned SMTP, IMAP and security configuration';
-      content = formShell('create-profile', field('Profile name','<input name="name" required value="Regional Mail" autocomplete="off">') + '<div class="mic-form-grid">' + field('SMTP transport','<select name="smtp"><option>Postfix</option><option>Postfix relay</option><option>Exim compatibility</option></select>') + field('IMAP service','<select name="imap"><option>Dovecot</option><option>Disabled</option></select>') + '</div>' + field('Security stack','<select name="security"><option>Rspamd + ClamAV</option><option>Rspamd</option><option>Inherited filtering</option></select>') + field('Rollout','<select name="rollout"><option>Draft only</option><option>Canary then staged</option><option>Maintenance window</option></select>'), 'Create profile');
-    } else if (kind === 'remove-message') {
+    if (kind === 'create-profile'||kind==='edit-profile') {
+      const item=state.profiles.find(profile=>profile.id===trigger?.dataset.profileId);title.textContent=item?'Edit '+item.name:'Create mail service profile';subtitle.textContent='Local profile draft; no service deployment';
+      content = formShell(item?'edit-profile':'create-profile', field('Profile name','<input name="name" required value="Regional Mail" autocomplete="off">') + '<div class="mic-form-grid">' + field('SMTP transport','<select name="smtp"><option>Postfix</option><option>Postfix relay</option><option>Exim compatibility</option></select>') + field('IMAP service','<select name="imap"><option>Dovecot</option><option>Disabled</option></select>') + '</div>' + field('Security stack','<select name="security"><option>Rspamd + ClamAV</option><option>Rspamd</option><option>Inherited filtering</option></select>') + field('Rollout','<select name="rollout"><option>Draft only</option><option>Canary then staged</option><option>Maintenance window</option></select>'), 'Save local profile');
+      if(item)content=content.replace('data-mail-form="edit-profile"','data-mail-form="edit-profile" data-profile-id="'+escapeHtml(item.id)+'"');
+    }else if(kind==='add-node'){title.textContent='Prepare mail node enrollment';subtitle.textContent='Local request; no node is contacted';content=formShell('add-node',field('Node hostname','<input name="name" required>')+field('Region','<input name="region" required>')+field('Service address','<input name="address" required>')+field('Profile','<select name="profile">'+state.profiles.map(profile=>'<option value="'+escapeHtml(profile.id)+'">'+escapeHtml(profile.name)+'</option>').join('')+'</select>'),'Save local enrollment');
+    } else if(kind==='remove-message') {
       title.textContent = 'Remove queued message'; subtitle.textContent = 'Destructive envelope operation with immutable evidence';
       content = formShell('remove-message', `<input type="hidden" name="message" value="${escapeHtml(messageId)}">` + note('warning','Delivery cannot resume after removal','Message content is discarded from the active queue. Envelope metadata and the administrative decision remain in audit evidence.') + field(`Type ${escapeHtml(messageId)} to confirm`, `<input name="confirmation" required autocomplete="off" data-mail-confirm data-expected="${escapeHtml(messageId)}">`), 'Remove message', true);
     } else if (kind === 'queue-search') {
@@ -170,16 +182,19 @@
       content = formShell('edit-policy', field('Policy family', `<select name="family"><option>${active.toUpperCase()} baseline</option><option>Production Mail profile</option><option>Transactional Relay profile</option></select>`) + '<div class="mic-form-grid">' + field('Target','<select name="target"><option>Canary node</option><option>All compatible nodes</option><option>Selected profile only</option></select>') + field('Activation','<select name="activation"><option>Validate and save draft</option><option>Canary then staged rollout</option><option>Maintenance window</option></select>') + '</div>' + field('Change reason','<textarea name="reason" required>Reviewed mail platform policy update.</textarea>') + '<label class="mic-confirm"><input type="checkbox" required><span><strong>Run syntax, delivery and recovery checks</strong><br>Failed health gates stop publication and retain the previous revision.</span></label>', 'Validate policy');
     }
     body.innerHTML = content;
+    if(kind==='edit-profile'){const item=state.profiles.find(profile=>profile.id===trigger?.dataset.profileId);if(item)for(const key of ['name','smtp','imap','security']){const input=body.querySelector('[name="'+key+'"]');if(input)input.value=item[key];}}
+    if(kind==='edit-policy'){const draft=state.policyDrafts[active];if(draft)for(const [name,value] of Object.entries(draft)){const input=body.querySelector('[name="'+name+'"]');if(input)input.value=value;}}
+    if(kind==='queue-search')for(const [name,value] of Object.entries(queueFilter)){const input=body.querySelector('[name="'+name+'"]');if(input)input.value=value;}
     const submit = qs('[data-mail-submit]', body);
     const confirmation = qs('[data-mail-confirm]', body);
     if (confirmation && submit) {
       submit.disabled = true;
       confirmation.addEventListener('input', () => { submit.disabled = confirmation.value === confirmation.dataset.expected ? false : true; });
     }
-    drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); qs('.mic-drawer-backdrop').classList.add('open'); document.body.style.overflow = 'hidden'; qs('input,select,textarea', drawer)?.focus();
+    modal.open(returnFocus);
   };
-  const closeDrawer = () => { const drawer = qs('#mailDrawer'); drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); qs('.mic-drawer-backdrop').classList.remove('open'); document.body.style.overflow = ''; returnFocus?.focus?.(); };
-  const emit = (name, kind, risk = 'medium') => document.dispatchEvent(new CustomEvent('wcp:operation', { detail: { name, kind, risk, scope:'root', actor:'Yann · ROOT' } }));
+  const closeDrawer = () => modal.close();
+  const emit = (name, kind, risk = 'medium') => document.dispatchEvent(new CustomEvent('wcp:operation', { detail: { name, kind, risk, scope:'root', actor:'Yann · ROOT',demo:true } }));
   const collectWebmail = () => {
     const clients = webmail.clients.map(client => {
       const card = qs(`[data-provider="${client.id}"]`);
@@ -194,16 +209,16 @@
     let error = '';
     if (next.globalEnabled && !next.clients.some(client => client.enabled)) error = 'Enable at least one provider before publishing browser webmail access.';
     else if (next.globalEnabled && (!selected || !selected.enabled)) error = 'The default webmail provider must be enabled.';
-    else if (next.enforceTls && next.clients.some(client => client.enabled && !client.endpoint.startsWith('https://'))) error = 'Every enabled provider must use an HTTPS endpoint.';
+    else if (next.clients.some(client=>{if(!client.enabled)return false;try{const url=new URL(client.endpoint);return !['https:','http:'].includes(url.protocol)||(next.enforceTls&&url.protocol!=='https:')||!url.hostname||Boolean(url.username||url.password);}catch{return true;}})) error = 'Every enabled provider must use a valid HTTP(S) endpoint without credentials; HTTPS is required when enforced.';
     else if (next.globalEnabled && !next.plans.length) error = 'Select at least one hosting plan with webmail access.';
     if (error) { feedback.textContent = error; feedback.classList.add('show','error'); return; }
-    webmail = next; saveWebmail(); feedback.textContent = 'Webmail service policy validated. Deployment added to Job Center.'; feedback.classList.remove('error'); feedback.classList.add('show'); emit('Deploy webmail service policy','webmail-services','medium');
+    webmail = next; if(!saveWebmail())return; feedback.textContent = 'Webmail policy saved locally. Deployment is simulated; no external service was changed.'; feedback.classList.remove('error'); feedback.classList.add('show'); emit('Deploy webmail service policy','webmail-services','medium');
   };
   const filterQueue = () => {
     const text = (qs('[data-queue-search]')?.value || '').trim().toLowerCase(), status = qs('[data-queue-status]')?.value || 'all';
-    qsa('[data-mail-queue]').forEach(row => { row.hidden = Boolean((text && !row.dataset.search.includes(text)) || (status !== 'all' && row.dataset.status !== status)); });
+    let visible=0;qsa('[data-mail-queue]').forEach(row=>{const item=state.queue.find(entry=>entry.id===row.dataset.mailQueue);const age=String(item?.age||'').match(/^(\d+)\s*([mhd])$/i),hours=age?Number(age[1])*({m:1/60,h:1,d:24}[age[2].toLowerCase()]):0,maxHours=queueFilter.range==='Last 30 days'?720:queueFilter.range==='Last 7 days'?168:24;row.hidden=Boolean((text&&!row.dataset.search.includes(text))||(status!=='all'&&row.dataset.status!==status)||(queueFilter.response&&!String(item?.reason||'').toLowerCase().includes(queueFilter.response.toLowerCase()))||hours>maxHours);if(!row.hidden)visible++;});const feedback=qs('[data-queue-feedback]');if(feedback){feedback.textContent=visible+' local queue result(s).';feedback.classList.add('show');}
   };
-  const bindView = () => { qs('[data-queue-search]')?.addEventListener('input',filterQueue); qs('[data-queue-status]')?.addEventListener('change',filterQueue); };
+  const bindView=()=>{const search=qs('[data-queue-search]'),status=qs('[data-queue-status]');if(search){search.value=queueFilter.query;search.addEventListener('input',()=>{queueFilter.query=search.value;filterQueue();});}if(status){status.value=queueFilter.status==='All states'?'all':queueFilter.status;status.addEventListener('change',()=>{queueFilter.status=status.value==='all'?'All states':status.value;filterQueue();});filterQueue();}};
 
   qs('.mic-tabs').addEventListener('click', event => { const tab = event.target.closest('[data-mail-tab]'); if (tab) setTab(tab.dataset.mailTab); });
   host.addEventListener('click', event => {
@@ -211,7 +226,7 @@
     const trigger = event.target.closest('[data-mail-action]');
     if (!trigger) return;
     const kind = trigger.dataset.mailAction;
-    if (['create-profile','edit-profile','add-node','edit-smtp','edit-imap','edit-security'].includes(kind)) { openDrawer(kind === 'create-profile' ? kind : 'edit-policy', trigger); return; }
+    if (['create-profile','edit-profile','add-node','edit-smtp','edit-imap','edit-security'].includes(kind)) { openDrawer(['create-profile','edit-profile','add-node'].includes(kind)?kind:'edit-policy', trigger); return; }
     if (kind === 'remove-message') { openDrawer(kind,trigger,trigger.dataset.message); return; }
     if (kind === 'queue-search') { openDrawer(kind,trigger); return; }
     const operations = {
@@ -228,26 +243,32 @@
     if (operations[kind]) emit(...operations[kind]);
   });
   document.addEventListener('click', event => { if (event.target.closest('[data-mail-close]')) closeDrawer(); });
-  document.addEventListener('submit', event => {
-    const form = event.target.closest('[data-mail-form]');
-    if (!form) return;
-    event.preventDefault();
-    if (!form.reportValidity()) return;
-    if (form.dataset.mailForm === 'create-profile') {
-      const name = form.elements.name.value.trim();
-      state.profiles.push({ id: `mail-profile-${Date.now()}`, name, smtp:form.elements.smtp.value, imap:form.elements.imap.value, security:form.elements.security.value, nodes:0, revision:'v1', status:'Draft' });
-      saveInfra(); emit(`Create mail service profile ${name}`,'mail-profile-create','medium');
-    } else if (form.dataset.mailForm === 'remove-message') {
-      const message = form.elements.message.value;
-      if (form.elements.confirmation.value !== message) return;
-      state.queue = state.queue.filter(item => item.id !== message);
-      saveInfra(); emit(`Remove queued message ${message}`,'mail-queue-remove','high');
-    } else if (form.dataset.mailForm === 'queue-search') emit('Run advanced mail queue search','mail-queue-search','low');
-    else emit('Publish mail platform policy revision','mail-policy-publish','high');
-    qs('.mic-feedback',form)?.classList.add('show');
-    setTimeout(() => { closeDrawer(); renderView(); }, 350);
+  document.addEventListener('submit',event=>{
+    const form=event.target.closest('[data-mail-form]');if(!form)return;event.preventDefault();if(!form.reportValidity())return;
+    const data=new FormData(form),kind=form.dataset.mailForm,inputs=Object.fromEntries(data.entries());
+    const error=message=>{const feedback=qs('.mic-feedback',form);feedback.textContent=message;feedback.classList.add('show','error');};
+    if(kind==='queue-search'){queueFilter={query:String(data.get('query')||'').trim(),status:String(data.get('status')||'All states'),range:String(data.get('range')||'Last 24 hours'),response:String(data.get('response')||'').trim()};closeDrawer();setTab('queue');return;}
+    let name='';
+    if(kind==='create-profile'||kind==='edit-profile'){
+      name=String(data.get('name')||'').trim();const id=form.dataset.profileId,item=state.profiles.find(profile=>profile.id===id);
+      if(!name||state.profiles.some(profile=>profile.id!==id&&profile.name.toLowerCase()===name.toLowerCase())){error('Enter a unique, non-empty profile name.');return;}
+      if(kind==='edit-profile'&&!item){error('This profile no longer exists.');return;}
+      const values={name,smtp:data.get('smtp'),imap:data.get('imap'),security:data.get('security'),rollout:data.get('rollout'),status:'Local draft'};
+      if(item){Object.assign(item,values);item.localRevision=Number(item.localRevision||0)+1;}else state.profiles.push({id:'mail-profile-'+Date.now()+'-'+state.profiles.length,...values,nodes:0,revision:'local v1'});
+    }else if(kind==='add-node'){
+      name=String(data.get('name')||'').trim().toLowerCase();const address=String(data.get('address')||'').trim();
+      if(!/^(?=.{1,253}$)[a-z0-9]+(?:[-.][a-z0-9]+)*$/.test(name)||!String(data.get('region')||'').trim()||!address){error('Enter a valid hostname, region and service address.');return;}
+      if(['mail-par-01','mail-par-02','mail-ams-01','relay-par-01','mail-fra-01'].includes(name)||state.nodeDrafts.some(item=>item.name===name)){error('This mail node already exists or has a local enrollment request.');return;}
+      if(!state.profiles.some(item=>item.id===data.get('profile'))){error('Select an existing mail profile.');return;}
+      state.nodeDrafts.push({name,region:String(data.get('region')).trim(),address,profile:data.get('profile'),status:'Local enrollment draft'});
+    }else if(kind==='remove-message'){
+      const message=String(data.get('message')||'');if(!state.queue.some(item=>item.id===message)||data.get('confirmation')!==message){error('Confirm an existing message ID exactly.');return;}state.queue=state.queue.filter(item=>item.id!==message);name=message;
+    }else if(kind==='edit-policy'){state.policyDrafts[active]={...inputs};name=active;}
+    else return;
+    state.requests.unshift({kind,view:active,target:form.dataset.profileId||name,inputs,createdAt:Date.now(),demo:true});state.requests=state.requests.slice(0,30);
+    if(!saveInfra())return;emit('Save local mail '+kind+' '+name,'mail-local-request',kind==='remove-message'?'high':'medium');closeDrawer();renderView();
   });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && qs('#mailDrawer.open')) closeDrawer(); });
   window.addEventListener('hashchange', () => { const name = location.hash.slice(1); if (views[name]) { active = name; renderView(); } });
-  renderView(); saveInfra(); saveWebmail();
+  renderView();
 })();

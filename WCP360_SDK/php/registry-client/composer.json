@@ -1,0 +1,10 @@
+{
+  "name": "wcp360/registry-client-candidate",
+  "description": "Read-only candidate client for the WCP360 vendor Registry; no Core integration or installer",
+  "type": "library",
+  "version": "0.1.0",
+  "require": {"php": "^8.3", "ext-json": "*"},
+  "suggest": {"ext-curl": "Required by CurlTransport"},
+  "autoload": {"psr-4": {"Wcp360\\Sdk\\Registry\\": "src/"}},
+  "scripts": {"test": "@php tests/run.php"}
+}

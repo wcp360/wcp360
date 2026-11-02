@@ -663,7 +663,7 @@ Use two distinct fields in the future registry: **documentation maturity** and *
 - [Published specifications](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/README.md) and [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts).
 - [Repository documentation](https://github.com/yyogas/wcp360/blob/main/documentation/README.md).
 - [Design System reference branch](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown/design-system).
-- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/main/documentation/governance/REVIEW-MERGE-POLICY.md).
+- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md).
 
 Imported design references (non-normative):
 

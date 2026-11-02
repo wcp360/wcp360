@@ -178,6 +178,6 @@ documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IM
 
 - [Permission Registry](documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): approved permissions and namespace rules.
 - [Security Baseline](documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): required boundaries, protocol constraints, and negative test expectations.
-- [Review and merge evidence policy](documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
+- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
 
 This policy summarizes existing requirements and defines reporting guidance. It does not amend canonical contracts, authorize implementation or release, certify compliance, or close audit findings. Conflicting requirements must be resolved by the responsible owner.

@@ -1125,110 +1125,41 @@ async function inspectPlatformSoftware(cdp) {
 }
 
 async function inspectSystemSettings(cdp) {
-  const expression = `(() => {
-    if (document.body.dataset.rootService !== 'settings') return null;
-    const jobsBefore = window.WCPRuntime?.getState().jobs.length || 0;
-    const result = {
-      metrics: document.querySelectorAll('.sys-metrics article').length,
-      categories: document.querySelectorAll('[data-sys-tab]').length,
-      fieldsByCategory: {},
-      search: false,
-      dirty: false,
-      published: false,
-      providers: 0,
-      providerTest: false,
-      providerDrawer: false,
-      providerAdded: false,
-      behaviors: 0,
-      isolationModes: 0,
-      diffs: 0,
-      validation: false,
-      versions: 0,
-      rollbackGate: false,
-      rollback: false,
-      accessJob: false,
-      backupJob: false,
-      alertJob: false,
-      advancedJobs: false,
-      serverEmailRoutes: false,
-      wizardLink: document.querySelector('a[href="setup-wizard.html"]') !== null,
-      persisted: false,
-      runtimeJobs: false
-    };
-    const search = document.querySelector('[data-sys-search]');
-    if (search) {
-      search.value = 'quota'; search.dispatchEvent(new Event('input', { bubbles: true }));
-      result.search = [...document.querySelectorAll('[data-sys-tab]')].filter(button => !button.hidden).some(button => button.dataset.sysTab === 'resources');
-      search.value = ''; search.dispatchEvent(new Event('input', { bubbles: true }));
+  const scenario = () => {
+    if (document.body.dataset.rootService !== 'settings' || !window.WCPSystemSettings) return null;
+    const state = () => window.WCPSystemSettings.getState();
+    const key = 'wcp360-system-settings-v1', original = localStorage.getItem(key), before = state();
+    const result = {metrics:document.querySelectorAll('.ss-overview-card').length, categories:document.querySelectorAll('[data-ss-nav] [data-ss-section]').length, fields:0, search:false, dirty:false, draftOnly:false, review:false, requiredReason:false, published:false, persisted:false, versions:false, ownerLinks:false, wizardLink:!!document.querySelector('a[href="setup-wizard.html"]')};
+    for (const section of window.WCPSettingsModel.sections) {
+      window.WCPSystemSettings.navigate(section.id);
+      result.fields += document.querySelectorAll('[data-ss-path]').length;
     }
-    const categories = ['server','network','access','resources','runtimes','databases','mail','providers','backups','security','behavior','branding','operations','livepatch','ipam','forensics','storage','whitelabel','aiops','edge','sustainability','observability','zerotrust'];
-    categories.forEach(name => {
-      document.querySelector('[data-sys-tab="' + name + '"]')?.click();
-      result.fieldsByCategory[name] = document.querySelectorAll('[data-sys-path]').length;
-      if (name === 'server') result.serverEmailRoutes = ['identity.rootEmail','identity.securityEmail','identity.backupEmail','identity.abuseEmail','identity.postmasterEmail','branding.senderEmail'].every(path => document.querySelector('[data-sys-path="' + path + '"]')) && document.querySelector('a[href="notification-routing.html"]') !== null;
-    });
-    document.querySelector('[data-sys-tab="access"]')?.click();
-    const jobsAccess = window.WCPRuntime?.getState().jobs.length || 0;
-    document.querySelector('[data-sys-rotate-session]')?.click();
-    result.accessJob = (window.WCPRuntime?.getState().jobs.length || 0) === jobsAccess + 1;
-    document.querySelector('[data-sys-tab="resources"]')?.click();
-    const cpu = document.querySelector('[data-sys-path="resource.cpu"]');
-    if (cpu) { cpu.value = '3'; cpu.dispatchEvent(new Event('change', { bubbles: true })); }
-    result.dirty = document.querySelector('.sys-dirty.changed') !== null;
-    document.querySelector('[data-sys-tab="providers"]')?.click();
-    result.providers = document.querySelectorAll('[data-sys-provider]').length;
-    document.querySelector('[data-sys-test-all]')?.click();
-    result.providerTest = document.querySelector('.sys-feedback.show')?.textContent.includes('succeeded') || false;
-    document.querySelector('[data-sys-add-provider]')?.click();
-    result.providerDrawer = document.querySelector('.sys-drawer.open[aria-hidden="false"]') !== null;
-    const providerName = document.querySelector('.sys-drawer-form [name="name"]'); if (providerName) providerName.value = 'Audit SFTP vault';
-    const providerType = document.querySelector('.sys-drawer-form [name="type"]'); if (providerType) providerType.value = 'Backup';
-    const providerEndpoint = document.querySelector('.sys-drawer-form [name="endpoint"]'); if (providerEndpoint) providerEndpoint.value = 'sftp://audit.example.net/backups';
-    document.querySelector('.sys-drawer-form')?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    result.providerAdded = [...document.querySelectorAll('[data-sys-provider]')].some(card => card.textContent.includes('Audit SFTP vault'));
-    document.querySelector('[data-sys-tab="backups"]')?.click();
-    const jobsBackup = window.WCPRuntime?.getState().jobs.length || 0;
-    document.querySelector('[data-sys-backup-drill]')?.click();
-    result.backupJob = (window.WCPRuntime?.getState().jobs.length || 0) === jobsBackup + 1;
-    document.querySelector('[data-sys-tab="branding"]')?.click();
-    const jobsAlert = window.WCPRuntime?.getState().jobs.length || 0;
-    document.querySelector('[data-sys-test-alert]')?.click();
-    result.alertJob = (window.WCPRuntime?.getState().jobs.length || 0) === jobsAlert + 1;
-    const advanced = ['livepatch','ipam','forensics','storage','whitelabel','aiops','edge','sustainability','observability','zerotrust'];
-    const advancedBefore = window.WCPRuntime?.getState().jobs.length || 0;
-    advanced.forEach(name => {
-      document.querySelector('[data-sys-tab="' + name + '"]')?.click();
-      document.querySelector('[data-sys-op]')?.click();
-    });
-    result.advancedJobs = (window.WCPRuntime?.getState().jobs.length || 0) === advancedBefore + advanced.length;
-    document.querySelector('[data-sys-tab="changes"]')?.click();
-    result.diffs = document.querySelectorAll('.sys-diff-row').length;
-    result.validation = document.querySelector('.sys-change-summary')?.textContent.includes('Schema validation passed') || false;
-    document.querySelector('[data-sys-publish]')?.click();
-    result.published = document.querySelector('.sys-feedback.show')?.textContent.includes('Job Center') || false;
-    document.querySelector('[data-sys-tab="changes"]')?.click();
-    result.versions = document.querySelectorAll('[data-sys-version]').length;
-    document.querySelector('[data-sys-tab="behavior"]')?.click();
-    result.behaviors = document.querySelectorAll('.sys-behavior').length;
-    result.isolationModes = document.querySelectorAll('.sys-choice').length;
-    document.querySelector('[data-sys-tab="changes"]')?.click();
-    document.querySelector('[data-sys-rollback]')?.click();
-    const confirm = document.querySelector('[data-sys-confirm]');
-    const submit = document.querySelector('[data-sys-danger-submit]');
-    const disabledBefore = Boolean(submit?.disabled);
-    if (confirm) { confirm.value = confirm.dataset.sysConfirm; confirm.dispatchEvent(new Event('input', { bubbles: true })); }
-    result.rollbackGate = disabledBefore && submit?.disabled === false;
-    document.querySelector('.sys-drawer-form')?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    result.rollback = Boolean(document.querySelector('.sys-feedback.show')?.textContent.includes('restoration') && document.querySelector('.sys-feedback.show')?.textContent.includes('Job Center'));
-    try {
-      const saved = JSON.parse(localStorage.getItem('wcp360-system-settings-v1'));
-      result.persisted = saved?.resource?.cpu === 3 && saved?.providers?.some(item => item.name === 'Audit SFTP vault') && saved?.identity?.hostname === 'wcp-admin.example.com' && saved?.livePatch?.kernelEnabled === true && saved?.zeroTrust?.jitEnabled === true && saved?.secrets?.secretScanning === true && saved?.version >= 3;
-    } catch (error) {}
-    result.runtimeJobs = (window.WCPRuntime?.getState().jobs.length || 0) === jobsBefore + 16;
-    document.querySelector('[data-sys-tab="server"]')?.click();
+    result.ownerLinks = document.querySelectorAll('.ss-owner-link').length > 0;
+    const search = document.querySelector('[data-ss-search]');
+    search.value = 'memoire'; search.dispatchEvent(new Event('input', {bubbles:true}));
+    result.search = !!document.querySelector('[data-ss-path="resource.ram"]');
+    window.WCPSystemSettings.navigate('resources');
+    const cpu = document.querySelector('[data-ss-path="resource.cpu"]');
+    const next = before.draft.resource.cpu === 64 ? 63 : before.draft.resource.cpu + 1;
+    cpu.value = String(next); cpu.dispatchEvent(new Event('input', {bubbles:true}));
+    result.dirty = state().dirty && document.querySelector('[data-ss-savebar]').dataset.dirty === 'true';
+    result.draftOnly = localStorage.getItem(key) === original;
+    document.querySelector('[data-ss-action="review"]').click();
+    const dialog = document.querySelector('dialog.ss-review-dialog[open]');
+    result.review = !!dialog && dialog.querySelectorAll('.ss-diff').length === state().changes.length;
+    if (dialog) {
+      const form = dialog.querySelector('form');
+      result.requiredReason = !form.checkValidity() && localStorage.getItem(key) === original;
+      form.elements.reason.value = 'Audit du nouveau centre des paramètres';
+      if (form.elements.acknowledged) form.elements.acknowledged.checked = true;
+      form.dispatchEvent(new Event('submit', {bubbles:true,cancelable:true}));
+      result.published = state().version === before.version + 1 && !state().dirty;
+      try { const saved = JSON.parse(localStorage.getItem(key)); result.persisted = saved.resource.cpu === next && saved.schemaVersion === window.WCPSettingsModel.schemaVersion; result.versions = saved.settingsHistory.length >= 2; } catch {}
+    }
+    window.WCPSystemSettings.navigate('server');
     return result;
-  })()`;
-  const result = await cdp.send('Runtime.evaluate', { expression, returnByValue: true });
+  };
+  const result = await cdp.send('Runtime.evaluate', {expression:'(' + scenario.toString() + ')()', returnByValue:true});
   return result.result.value;
 }
 
@@ -1568,9 +1499,7 @@ try {
         const setupWizard = await inspectSetupWizard(cdp);
         if (setupWizard && (setupWizard.expertSteps !== 10 || setupWizard.quickSteps !== 4 || !setupWizard.preflight || !setupWizard.expertComplete || !setupWizard.quickComplete || !setupWizard.persisted || !setupWizard.runtimeJobs || !setupWizard.reset || setupWizard.tinyText.length)) findings.push({ severity: 'error', page, mode: mode.name, rule: 'initial-setup-workflow', detail: setupWizard });
         const systemSettings = await inspectSystemSettings(cdp);
-        const systemCategoryMinimums = { server: 10, network: 14, access: 14, resources: 17, runtimes: 19, databases: 17, mail: 20, providers: 14, backups: 23, security: 37, behavior: 17, branding: 16, operations: 13, livepatch: 14, ipam: 16, forensics: 15, storage: 20, whitelabel: 17, aiops: 15, edge: 16, sustainability: 14, observability: 17, zerotrust: 18 };
-        const systemFieldsComplete = systemSettings && Object.entries(systemCategoryMinimums).every(([name, minimum]) => Number(systemSettings.fieldsByCategory?.[name] || 0) >= minimum);
-        if (systemSettings && (systemSettings.metrics !== 4 || systemSettings.categories !== 24 || !systemFieldsComplete || !systemSettings.search || !systemSettings.serverEmailRoutes || !systemSettings.dirty || !systemSettings.published || systemSettings.providers < 4 || !systemSettings.providerTest || !systemSettings.providerDrawer || !systemSettings.providerAdded || systemSettings.behaviors !== 8 || systemSettings.isolationModes !== 3 || systemSettings.diffs < 2 || !systemSettings.validation || systemSettings.versions < 3 || !systemSettings.rollbackGate || !systemSettings.rollback || !systemSettings.accessJob || !systemSettings.backupJob || !systemSettings.alertJob || !systemSettings.advancedJobs || !systemSettings.wizardLink || !systemSettings.persisted || !systemSettings.runtimeJobs)) findings.push({ severity: 'error', page, mode: mode.name, rule: 'system-settings-workflow', detail: systemSettings });
+        if (page === 'system-settings.html' && (!systemSettings || systemSettings.metrics !== 4 || systemSettings.categories !== 26 || systemSettings.fields !== 248 || !systemSettings.search || !systemSettings.dirty || !systemSettings.draftOnly || !systemSettings.review || !systemSettings.requiredReason || !systemSettings.published || !systemSettings.persisted || !systemSettings.versions || !systemSettings.ownerLinks || !systemSettings.wizardLink)) findings.push({severity:'error',page,mode:mode.name,rule:'system-settings-workflow',detail:systemSettings});
         const rootLicense = await inspectRootLicense(cdp);
         if (rootLicense && (rootLicense.metrics !== 4 || rootLicense.tabs !== 5 || rootLicense.lifecycleStates !== 4 || !rootLicense.drawer || !rootLicense.workflow || !rootLicense.activated || !rootLicense.runtimeJob || rootLicense.entitlements !== 8 || rootLicense.activationActions < 4 || rootLicense.auditEvents < 5 || !rootLicense.simulated || !rootLicense.persisted)) findings.push({ severity: 'error', page, mode: mode.name, rule: 'root-license-workflow', detail: rootLicense });
         const userService = await inspectUserService(cdp);
@@ -1578,7 +1507,7 @@ try {
         const userWorkspace = await inspectUserWorkspace(cdp);
         if (userWorkspace && (userWorkspace.metrics !== 4 || userWorkspace.tabs !== 5 || userWorkspace.items < (userWorkspace.workspace === 'databases' ? 3 : 4) || !userWorkspace.drawer || !userWorkspace.workflow || !userWorkspace.created || !userWorkspace.runtimeJob || (userWorkspace.workspace === 'websites' && (!userWorkspace.rootSeparation || userWorkspace.runtimeCards < 4 || userWorkspace.domains < 4 || userWorkspace.access < 3 || userWorkspace.policies < 6 || !userWorkspace.deleteDrawer || !userWorkspace.deleteGate || !userWorkspace.deleted)) || (userWorkspace.workspace === 'files' && (!userWorkspace.accessView || !userWorkspace.deleteDrawer || !userWorkspace.deleteGate || !userWorkspace.deleted)) || (userWorkspace.workspace === 'mail' && (userWorkspace.webmailClients < 2 || userWorkspace.securityCards !== 3)) || (userWorkspace.workspace === 'databases' && (userWorkspace.users < 3 || userWorkspace.remoteHosts < 2 || userWorkspace.tools < 2 || !userWorkspace.toolShortcut || !userWorkspace.rootGovernance || userWorkspace.connectionsVisible || userWorkspace.capacityControls)))) findings.push({ severity: 'error', page, mode: mode.name, rule: 'user-workspace-workflow', detail: userWorkspace });
         const auth = await inspectAuth(cdp, page);
-        if (auth && ((auth.page === 'login' && (auth.portals !== 2 || auth.selected !== 1 || !auth.root)) || (auth.page === 'mfa' && (!auth.context.includes('WCP360 ROOT') || !auth.action.includes('canonical-admin-dashboard.html'))))) findings.push({ severity: 'error', page, mode: mode.name, rule: 'auth-product-routing', detail: auth });
+        if (auth && ((auth.page === 'login' && (auth.portals !== 3 || auth.selected !== 1 || !auth.root)) || (auth.page === 'mfa' && (!auth.context.includes('WCP360 ROOT') || !auth.action.includes('canonical-admin-dashboard.html'))))) findings.push({ severity: 'error', page, mode: mode.name, rule: 'auth-product-routing', detail: auth });
       }
     }
   }

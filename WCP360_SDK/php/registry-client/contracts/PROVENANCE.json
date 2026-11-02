@@ -1,0 +1,12 @@
+{
+    "contract":  "wcp360-vendor-registry",
+    "version":  "0.1.0",
+    "status":  "candidate",
+    "authority":  "Vendor Registry plugin; does not amend or ratify Core contracts",
+    "source":  "Grav user/plugins/wcp360-registry/contracts/0.1.0",
+    "synchronized_on":  "2026-11-01",
+    "sha256":  {
+                   "openapi.yaml":  "2206A8E1BF50CFBA92DFFD1FEB47D07FAED378128CFDEF603A05092B10A8A930",
+                   "response.schema.json":  "DF451686217610FE936DC741B45FDEA25D3705BD430FC5ACD3954BEF8E66F5F9"
+               }
+}
