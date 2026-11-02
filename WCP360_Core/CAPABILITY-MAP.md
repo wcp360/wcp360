@@ -135,7 +135,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Account creation | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — CLI enrollment creates distinct account and tenant identities. | [M4](ROADMAP.md#m4) |
 | Onboarding | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Interactive enrollment only; full customer onboarding absent. | [M4](ROADMAP.md#m4) |
 | Customer profile | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
-| Resource inventory | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Candidate tenant/site/job views; general resource inventory absent. | [M4](ROADMAP.md#m4) |
+| Resource inventory | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Tenant-scoped prepared-site and job inventories with filters/cursors and shared list UI; general resource lifecycle/inventory absent. | [M4](ROADMAP.md#m4) |
 | Targeted suspension | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
 | Reactivation | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |
 | Closure and deletion | [Tenancy](src/Module/Tenancy/README.md) | [Operations](src/Module/Operations/README.md) | Planned | [M4](ROADMAP.md#m4) |

@@ -22,11 +22,7 @@
 {% else %}<tr><td colspan="5"><div class="wcp-core-empty"><h2>Aucune tâche pour ces filtres</h2><p>Modifiez votre recherche ou préparez un hébergement depuis le tableau de bord.</p></div></td></tr>{% endfor %}
 </tbody></table></div>
 <div class="wcp-panel-body"><p role="status">{{ page.items|length }} tâche{{ page.items|length != 1 ? 's' : '' }} affichée{{ page.items|length != 1 ? 's' : '' }}</p>
-<nav class="actions" aria-label="Pagination des tâches">
-{% if page.pagination.previous %}<a class="button secondary" rel="prev" href="{{ path('wcp_jobs',filters|merge({before:page.pagination.previous})) }}">Plus récentes</a>{% endif %}
-<a class="button secondary" href="{{ path('wcp_jobs',filters) }}">Premiers résultats</a>
-{% if page.pagination.next %}<a class="button secondary" rel="next" href="{{ path('wcp_jobs',filters|merge({after:page.pagination.next})) }}">Plus anciennes</a>{% endif %}
-</nav></div>
+{% include 'components/data/cursor-pagination.html.twig' with {pagination:page.pagination,filters:filters,list_route:'wcp_jobs',pagination_label:'Pagination des tâches',previous_label:'Plus récentes',next_label:'Plus anciennes'} only %}</div>
 {% else %}
 <div class="wcp-panel-body"><h2>Aucun espace accessible</h2><p>Les tâches apparaîtront lorsqu’un espace d’hébergement vous sera accessible.</p></div>
 {% endif %}

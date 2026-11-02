@@ -14,7 +14,7 @@
     ]) %}
 {% else %}
     {% set workspace = workspace|merge([
-        {label: 'Hébergements', href: path('wcp_dashboard') ~ '#hosting', icon: 'globe', active: false},
+        {label: 'Hébergements', href: path('wcp_sites'), icon: 'globe', active: route == 'wcp_sites'},
         {label: 'Tâches', href: path('wcp_jobs'), icon: 'clock', active: route in ['wcp_job','wcp_jobs']}
     ]) %}
 {% endif %}

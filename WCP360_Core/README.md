@@ -54,6 +54,8 @@ The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) u
 
 [Atomic plan transitions](src/Module/Operations/README.md#atomic-plan-transitions-and-bounded-recovery) now separate queue persistence from Go rendering, reject uncommitted caller transactions and prevent stale completion from overwriting an uncertain outcome. Interruption maintenance handles at most 100 plans per call, counting only actual changes; stop rendering workers first. A revocation observed at publication discards the result and records failure. General leases, retries and production fencing remain unfinished.
 
+[Prepared-site inventory](src/Module/Hosting/README.md#prepared-site-inventory) is available at `/workbench/sites` and `/workbench/v1/sites`: tenant-scoped domain search, preparation/runtime filters, deterministic A–Z order, cursor pages and links to task history. It reuses shared list validation and pagination with the task inventory. A prepared plan does not assert deployed-service health; complete hosting/domain lifecycle remains unfinished.
+
 ## Source layout
 
 ```text

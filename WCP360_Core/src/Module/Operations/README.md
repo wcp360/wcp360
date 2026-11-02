@@ -45,7 +45,7 @@ The authorized task detail shows the creation reference separately from the curr
 
 ## Filtered hosting-job inventory
 
-[JobListQuery](Domain/JobListQuery.php) validates the existing tenant scope, five supported job states, an ASCII hostname fragment and page sizes of 25, 50 or 100. Unknown fields, arrays, oversized input, SQL wildcard characters, invalid UUIDs and simultaneous before/after cursors fail before querying job data.
+[JobListQuery](Domain/JobListQuery.php) reuses [shared tenant-page bounds](../../Shared/Http/TenantPageQuery.php) with the [prepared-site inventory](../Hosting/README.md#prepared-site-inventory); both browser views reuse one [cursor-navigation component](../../../templates/components/data/cursor-pagination.html.twig). It validates the existing tenant scope, five supported job states, an ASCII hostname fragment and page sizes of 25, 50 or 100. Unknown fields, arrays, oversized input, SQL wildcard characters, invalid UUIDs and simultaneous before/after cursors fail before querying job data.
 
 [ListHostingJobs](Application/ListHostingJobs.php) provides a bounded read projection and bidirectional cursor navigation ordered by creation time and UUID. Each pivot, page and boundary query joins the existing IdentityAccess tenant-scope rule: active USER identity, exact membership and no explicit block. The service rechecks current authority before returning. Cursors select an authorized result position; they never grant access. A missing, foreign or no-longer-matching pivot has the same safe refusal. Filter changes restart at the first page. Reads do not change jobs or append business audit records.
 

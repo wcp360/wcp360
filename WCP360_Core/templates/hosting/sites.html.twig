@@ -1,0 +1,35 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Mes hébergements' %}
+{% set states = {PLAN_QUEUED:'En préparation',PLAN_READY:'Plan prêt',PLAN_FAILED:'Préparation échouée'} %}
+{% set feedback_states = {PLAN_QUEUED:'QUEUED',PLAN_READY:'SUCCEEDED',PLAN_FAILED:'FAILED'} %}
+{% block content %}
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">HÉBERGEMENT WEB</p><h1>Mes hébergements</h1><p class="wcp-page-sub">Retrouvez vos domaines et la préparation de leur configuration.</p></div></div>
+<section class="wcp-panel">
+{% if tenants %}
+<div class="wcp-panel-body">
+<form action="{{ path('wcp_sites') }}" method="get" aria-label="Filtrer les hébergements">
+<div class="wcp-grid-2">
+<div><label for="sites-tenant">Espace d’hébergement</label><select id="sites-tenant" name="tenant">{% for tenant in tenants %}<option value="{{ tenant.id }}"{% if tenant.id == filters.tenant %} selected{% endif %}>{{ tenant.name }}</option>{% endfor %}</select></div>
+<div><label for="sites-search">Domaine</label><input id="sites-search" name="q" type="search" value="{{ filters.q }}" maxlength="253" placeholder="exemple.test"><p class="field-help">Tout ou partie du domaine, sans caractère générique.</p></div>
+<div><label for="sites-state">Préparation</label><select id="sites-state" name="state"><option value="">Tous les états</option>{% for value,label in states %}<option value="{{ value }}"{% if value == filters.state %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+<div><label for="sites-server">Moteur PHP</label><select id="sites-server" name="server"><option value="">Tous les moteurs</option><option value="php_fpm"{% if filters.server == 'php_fpm' %} selected{% endif %}>PHP-FPM</option><option value="frankenphp_worker"{% if filters.server == 'frankenphp_worker' %} selected{% endif %}>FrankenPHP Worker</option></select></div>
+<div><label for="sites-limit">Résultats affichés</label><select id="sites-limit" name="limit">{% for size in [25,50,100] %}<option value="{{ size }}"{% if size == filters.limit %} selected{% endif %}>{{ size }}</option>{% endfor %}</select></div>
+</div>
+<div class="actions"><button class="button" type="submit">Filtrer</button><a class="button secondary" href="{{ path('wcp_sites',{tenant:filters.tenant}) }}">Réinitialiser les filtres</a><a class="button secondary" href="{{ path('wcp_dashboard',{tenant:filters.tenant}) }}#hosting">Préparer un hébergement</a></div>
+</form>
+</div>
+<div class="table-scroll"><table><caption>Hébergements préparés de l’espace sélectionné, classés par domaine de A à Z</caption><thead><tr><th scope="col">Domaine</th><th scope="col">Moteur PHP</th><th scope="col">Préparation</th><th scope="col">Révision</th><th scope="col">Activité</th></tr></thead><tbody>
+{% for site in page.items %}
+<tr data-site-id="{{ site.id }}"><td><strong>{{ site.hostname }}</strong></td><td>{{ site.application_server == 'php_fpm' ? 'PHP-FPM' : 'FrankenPHP Worker' }}</td><td>{% include 'components/feedback/status.html.twig' with {state:feedback_states[site.state]|default('UNKNOWN_OUTCOME'),label:states[site.state]|default(site.state)} only %}</td><td>{{ site.revision }}</td><td><a href="{{ path('wcp_jobs',{tenant:filters.tenant,q:site.hostname}) }}" aria-label="Voir les tâches pour {{ site.hostname }}">Voir les tâches</a></td></tr>
+{% else %}<tr><td colspan="5"><div class="wcp-core-empty"><h2>Aucun hébergement pour ces filtres</h2><p>Modifiez votre recherche ou préparez un hébergement.</p></div></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="wcp-panel-body"><p role="status">{{ page.items|length }} hébergement{{ page.items|length != 1 ? 's' : '' }} affiché{{ page.items|length != 1 ? 's' : '' }}</p>
+<p class="field-help">Un plan prêt indique une configuration préparée. La mise en service du site est une étape distincte.</p>
+{% include 'components/data/cursor-pagination.html.twig' with {pagination:page.pagination,filters:filters,list_route:'wcp_sites',pagination_label:'Pagination des hébergements',previous_label:'Précédents',next_label:'Suivants'} only %}
+</div>
+{% else %}
+<div class="wcp-panel-body"><h2>Aucun espace accessible</h2><p>Les hébergements apparaîtront lorsqu’un espace vous sera accessible.</p></div>
+{% endif %}
+</section>
+<a class="button secondary" href="{{ path('wcp_dashboard') }}">Retour au tableau de bord</a>
+{% endblock %}

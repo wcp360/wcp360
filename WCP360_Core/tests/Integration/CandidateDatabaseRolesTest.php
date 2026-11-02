@@ -526,6 +526,27 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertSame($before + 4, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
     }
 
+    public function testPreparedSiteInventoryKeepsExistingRestrictedReadGrants(): void
+    {
+        \Wcp360\Core\Tests\Fixtures\HostingJobsFixture::seed($this->maintenance, $this->fixture, 30);
+        $this->provider->provision($this->passwords);
+        $db = $this->login('user');
+        $service = new \Wcp360\Core\Module\Hosting\Application\ListPreparedSites($db,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db));
+        $query = \Wcp360\Core\Module\Hosting\Domain\SiteListQuery::fromArray(['tenant' => $this->fixture['tenants']['alice']]);
+        self::assertCount(25, $service->page($this->fixture['users']['alice'], $query)['items']);
+        self::assertSame($this->roles['user'], $db->fetchOne('SELECT current_user'));
+        try {
+            $db->executeStatement("UPDATE public.wcp_candidate_sites SET state='PLAN_FAILED' WHERE tenant_id=?", [$this->fixture['tenants']['alice']]);
+            self::fail('Site state write granted to inventory reader.');
+        } catch (\Doctrine\DBAL\Exception\DriverException $error) {
+            self::assertSame('42501', $error->getSQLState());
+        }
+        $this->maintenance->delete('wcp_candidate_memberships', ['user_id' => $this->fixture['users']['alice']]);
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
+        $service->page($this->fixture['users']['alice'], $query);
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

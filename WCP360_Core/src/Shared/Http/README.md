@@ -13,6 +13,10 @@
 | [CandidateApiRequest](CandidateApiRequest.php) | Existing exact `/workbench/v1` namespace selection; Accept, credentials and similar path prefixes cannot select a different transport or surface. |
 | [IdempotencyConflict](IdempotencyConflict.php) | Typed 409 distinction for the existing plan submission, without text-based exception classification. |
 
+## Bounded tenant-list queries
+
+[TenantPageQuery](TenantPageQuery.php) centralizes candidate list field/type/size admission, required canonical tenant UUIDs, 25/50/100-row limits, exclusive before/after UUID cursors and normalized ASCII hostname fragments. Job/site query objects supply their fixed additional fields and validate their own states/runtime values. The helper does not authorize tenants, read resources or build SQL; IdentityAccess and fixed owner repositories retain those decisions. Filter changes exclude cursors through the owning query objects.
+
 ## Request references
 
 Every admitted main HTTP request receives a new server-generated `X-WCP360-Request-Id` response header containing 32 lowercase hexadecimal characters. Client values in that header, `X-Request-Id`, `traceparent`, query/body data and preexisting request attributes never establish the new reference. Request attributes hold the reference; no service property retains it between FrankenPHP worker requests. Subrequests do not replace the main reference.

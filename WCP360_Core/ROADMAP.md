@@ -220,6 +220,14 @@ Claims/recovery use PostgreSQL row locks with SKIP LOCKED; transitions and audit
 
 [Transition definitions](tests/Integration/HostingPlanQueueTest.php), [real overlapping PostgreSQL transactions](tests/Integration/HostingPlanQueueConcurrencyTest.php) and [restricted-role checks](tests/Integration/CandidateDatabaseRolesTest.php) cover the slice. Exact-source outcomes belong to draft PR #116; local executable tests remain stopped. Operators must stop all rendering workers before interruption maintenance; a zero count can still leave locked rows. M1/M2 remain open, approximately 20% overall, with unchanged capability counts.
 
+### Prepared-site inventory and shared list components
+
+[Prepared-site inventory](src/Module/Hosting/Application/ListPreparedSites.php) now provides USER browser/API reads with existing tenant authority, preparation/runtime/hostname filters, bounded bidirectional cursors and deterministic domain ordering. The page links each domain to its filtered task history and reuses the WCP360 layout. It reports prepared configuration, not deployed-service health.
+
+[Shared list bounds](src/Shared/Http/TenantPageQuery.php) now serve both job/site queries, and a [shared pagination component](templates/components/data/cursor-pagination.html.twig) serves both views. Owner filters/projections remain explicit; no arbitrary SQL/query executor, new permission, grant, migration or dependency is added. [Service definitions](tests/Integration/ListPreparedSitesTest.php), [HTTP journeys](tests/Integration/SiteListJourneyTest.php) and [restricted-role checks](tests/Integration/CandidateDatabaseRolesTest.php) cover the new surface; existing job regressions cover compatibility. Exact-source results remain in draft PR #116 and local executable tests stay stopped.
+
+Resource inventory remains Partial; general resource/domain/DNS lifecycle and production integration remain unfinished. M1/M4/M5 stay open; approximately 20% overall and 5 Demonstrated / 71 Partial / 157 Planned are unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.
