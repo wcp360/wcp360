@@ -4,6 +4,8 @@ This directory prepares **44 optional business-module proposals in 16 categories
 
 Read the [module catalogue](CATALOG.md) for the proposed scope and each package's acceptance work. Specific protocol/provider connectors belong in the [premium plugin catalogue](../WCP360_Plugins/premium/README.md); a business module and a connector use the same detached extension mechanism.
 
+The root **[Premium Catalogue](../PREMIUM_CATALOG.md)** is the combined entry point for business modules and provider connectors, with direct links to the latest named integrations.
+
 ## Explicit advanced coverage
 
 | Requested area | Dedicated optional workflow | Retained free Core boundary |

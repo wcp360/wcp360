@@ -14,6 +14,8 @@ Package sources and their existing manifest shapes are preserved. Their director
 
 ## Premium connector proposals
 
+Start with the root **[Premium Catalogue](../PREMIUM_CATALOG.md)** for the combined 44-module / 97-connector overview and direct links to the latest integrations.
+
 The [premium proposal inventory](premium/README.md) contains **97 optional provider/connectors in 19 categories**. Its [JSON catalogue](premium/CATALOG.json) is authoritative; [CATALOG.md](premium/CATALOG.md) is the readable view. Each proposal has a documented Core boundary, exact references to the existing 149-entry catalogue and an acceptance record.
 
 All 97 proposals are `design`, `installable: false` and `source_model: undecided`; no implemented package or production manifest is implied. The separate [premium template](premium/_template/README.md) preserves the existing template above. The [44 business module proposals](../WCP360_Modules/CATALOG.md) describe optional workflows rather than provider connectors.

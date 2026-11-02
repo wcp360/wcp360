@@ -8,6 +8,7 @@
 [![Core license: AGPL-3.0-only](https://img.shields.io/badge/Core%20license-AGPL--3.0--only-1E3A8A?style=flat-square)](WCP360_Core/LICENSE)
 [![Modular architecture](https://img.shields.io/badge/Architecture-Modular-4263EB?style=flat-square)](#modular-and-extensible-design)
 [![Plugin catalog: 149 entries](https://img.shields.io/badge/Plugins-149%20catalog%20entries-7C3AED?style=flat-square)](PLUGIN_CATALOG.md)
+[![Premium catalog: 141 planning proposals](https://img.shields.io/badge/Premium-141%20planning%20proposals-DB2777?style=flat-square)](PREMIUM_CATALOG.md)
 [![Security design: least privilege](https://img.shields.io/badge/Security%20design-Least%20privilege-0F766E?style=flat-square)](#security-architecture)
 
 [![Target frontend: PHP 8.4 and Symfony](https://img.shields.io/badge/Frontend-PHP%208.4%20%2F%20Symfony-1F2937?style=flat-square&logo=symfony&logoColor=white)](#frontend-architecture)
@@ -28,7 +29,7 @@
 [![Target hosting stack: Nginx, Apache event and PHP-FPM](https://img.shields.io/badge/Target%20hosting-Nginx%20%2B%20Apache%20event%20%2B%20PHP--FPM-009639?style=flat-square)](#hosted-php-application-servers)
 [![Target PHP runtimes: PHP-FPM and FrankenPHP classic or Worker](https://img.shields.io/badge/PHP-PHP--FPM%20%2F%20FrankenPHP-777BB4?style=flat-square&logo=php&logoColor=white)](#hosted-php-application-servers)
 
-[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Releases/README.md) · [Get started](#explore-and-get-started)
+[Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Premium catalog](PREMIUM_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Releases/README.md) · [Get started](#explore-and-get-started)
 
 </div>
 
@@ -134,6 +135,8 @@ Its design addresses five needs:
 - Private WCP360 Internal services are not installable plugins for customer servers.
 
 ## Community and PRO editions
+
+**[Open the premium catalogue](PREMIUM_CATALOG.md)** for all 44 business-module proposals, 97 connector proposals and direct links to the newly added integrations.
 
 **WCP360 Core is open source under [AGPL-3.0-only](WCP360_Core/LICENSE).** Its essential hosting, local administration, permissions, security, backup/recovery and extension infrastructure remain autonomous. PRO adds optional qualified business packages and provider connectors, developed outside the Core. It uses the same Core rather than a separate proprietary Core fork.
 
