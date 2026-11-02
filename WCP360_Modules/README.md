@@ -38,7 +38,7 @@ All are proposals, not working management products. Named products and protocols
 | [Planning schema](schemas/package-proposal.schema.json) | Closed proposal structure for module and plugin records; passing it grants no runtime authority. |
 | [Authoring template](_template/README.md) | Future detached source layout, data/identity boundaries and implementation preparation. |
 
-Update CATALOG.json first, then regenerate its Markdown view and identical per-package records/documents. Keep their IDs and fields synchronized. Categories are metadata, not extra package-directory levels. Paths derive from module.<slug> as WCP360_Modules/<slug>/.
+Update CATALOG.json first, then regenerate its Markdown inventory rows and identical per-package records/documents. Regenerate the bounded GENERATED MODULE INVENTORY region. Preserve the bounded requested-area navigation block in CATALOG.md; it links existing records and does not define additional modules or duplicate the JSON authority. Keep their IDs and fields synchronized. Categories are metadata, not extra package-directory levels. Paths derive from module.<slug> as WCP360_Modules/<slug>/.
 
 The source reference is the unchanged [149-entry design catalogue](../PLUGIN_CATALOG.md). Its keys are documentary references, not package IDs, approvals, grants or compatibility results. The seven engine.* Core adapters are not premium packages and are not targeted by these proposals. The [410 App Deploy editorial references](../WCP360_App_Deploy/README.md) are a separate inventory, not 410 qualified recipes.
 

@@ -1,11 +1,36 @@
 # WCP360 premium business-module catalogue
 
-<!-- Generated from CATALOG.json. Update the authoritative JSON and regenerate this view and package exports. -->
+<!-- Module inventory rows are generated from CATALOG.json. Preserve the bounded requested-area navigation block when regenerating these rows and package exports. -->
 
 **44 design proposals across 16 categories. All are PRO, non-installable and source_model: undecided.** No package implementation, provider admission, pricing or premium license is supplied.
 
 This catalogue adds optional advanced workflows. All 233 essential capabilities and the seven Core engine adapters remain in the free Core scope. PRO rights never replace package trust, compatibility or current authorization. See [boundaries and authoring](README.md), the [machine catalogue](CATALOG.json), [planning schema](schemas/package-proposal.schema.json), [149-entry source](../PLUGIN_CATALOG.md) and [editions strategy](../documentation/development/EDITIONS-AND-PREMIUM.md).
 
+<!-- BEGIN REQUESTED-AREA NAVIGATION: preserve when regenerating module inventory rows. -->
+## Requested hosting areas and related integrations
+
+This navigation table links the eleven requested areas to existing module proposals and provider records. The **44 module definitions** remain in [CATALOG.json](CATALOG.json); the **97 connector definitions** remain in the [premium connector catalogue](../WCP360_Plugins/premium/CATALOG.json). No extra module is created by a navigation row.
+
+| Requested area | Business-module proposals | Related premium connector proposals |
+| :--- | :--- | :--- |
+| 1. Multi-server and cluster management | [Multi-server Hosting](multi-server-hosting-pro/README.md), [High Availability](high-availability-pro/README.md) | [Enhance](../WCP360_Plugins/premium/enhance-interop-pro/README.md), [CSF/lfd — ClusterCSF request](../WCP360_Plugins/premium/csf-lfd-policy-pro/README.md) |
+| 2. Docker and PaaS orchestration | [Docker Management](docker-management-pro/README.md), [Deployment Orchestration](deployment-orchestration-pro/README.md), [Kubernetes Management](kubernetes-management-pro/README.md) | [Portainer](../WCP360_Plugins/premium/portainer-management-pro/README.md), [Coolify](../WCP360_Plugins/premium/coolify-applications-pro/README.md), [Dokku](../WCP360_Plugins/premium/dokku-applications-pro/README.md) |
+| 3. Storage and replication | [Storage Orchestration](storage-orchestration-pro/README.md), [Remote Backup](remote-backup-pro/README.md), [Disaster Recovery](disaster-recovery-pro/README.md) | [GlusterFS](../WCP360_Plugins/premium/glusterfs-storage-pro/README.md), [CephFS](../WCP360_Plugins/premium/cephfs-storage-pro/README.md), [Ceph RBD](../WCP360_Plugins/premium/ceph-rbd-storage-pro/README.md), [Ceph RGW](../WCP360_Plugins/premium/ceph-rgw-pro/README.md), [MinIO](../WCP360_Plugins/premium/minio-storage-pro/README.md), [Nextcloud WebDAV](../WCP360_Plugins/premium/nextcloud-webdav-pro/README.md) |
+| 4. CDN, reverse proxy and edge caching | [CDN Management](cdn-management-pro/README.md), [Network Traffic](network-traffic-pro/README.md), [Performance Booster](performance-booster-pro/README.md) | [Cloudflare CDN](../WCP360_Plugins/premium/cloudflare-cdn-pro/README.md), [Traefik](../WCP360_Plugins/premium/traefik-routing-pro/README.md), [Nginx Proxy Manager](../WCP360_Plugins/premium/nginx-proxy-manager-pro/README.md), [Varnish](../WCP360_Plugins/premium/varnish-cache-pro/README.md) |
+| 5. Collaborative defense and availability | [Cybersecurity Posture](security-posture-pro/README.md), [Threat Response](threat-response-pro/README.md), [High Availability](high-availability-pro/README.md) | [BitNinja](../WCP360_Plugins/premium/bitninja-defense-pro/README.md), [Imunify360](../WCP360_Plugins/premium/imunify360-defense-pro/README.md), [CrowdSec](../WCP360_Plugins/premium/crowdsec-defense-pro/README.md) |
+| 6. Reseller packages and quotas | [Core templates, assignment, quotas and overrides remain free](../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md); [Agency Workspace](agency-workspace-pro/README.md) and [Billing Orchestration](billing-orchestration-pro/README.md) add advanced portfolio workflows | [WHMCS](../WCP360_Plugins/premium/whmcs-provisioning-pro/README.md), [Blesta](../WCP360_Plugins/premium/blesta-provisioning-pro/README.md), [FOSSBilling](../WCP360_Plugins/premium/fossbilling-sync-pro/README.md) |
+| 7. Firewall, WAF, DDoS and file integrity | [Cybersecurity Posture](security-posture-pro/README.md), [DDoS Defense](ddos-defense-pro/README.md), [Malware Investigation](malware-investigation-pro/README.md) | [ModSecurity/CRS](../WCP360_Plugins/premium/modsecurity-crs-pro/README.md), [Coraza](../WCP360_Plugins/premium/coraza-waf-pro/README.md), [upstream DDoS scrubbing](../WCP360_Plugins/premium/upstream-ddos-scrubbing-pro/README.md) |
+| 8. Git delivery and App Install | [Git Delivery](git-delivery-pro/README.md), [App Install](app-install-pro/README.md), [WordPress Management](wordpress-management-pro/README.md) | [GitHub](../WCP360_Plugins/premium/github-delivery-pro/README.md), [GitLab](../WCP360_Plugins/premium/gitlab-delivery-pro/README.md); [application recipes](../WCP360_App_Deploy/README.md) remain individually qualified inputs |
+| 9. Observability, incidents and alerts | [Observability](observability-pro/README.md), [Log Analytics](log-analytics-pro/README.md), [Incident Operations](incident-operations-pro/README.md) | [Prometheus](../WCP360_Plugins/premium/prometheus-federation-pro/README.md), [Grafana](../WCP360_Plugins/premium/grafana-cloud-pro/README.md), [Discord](../WCP360_Plugins/premium/discord-notifications-pro/README.md), [Telegram](../WCP360_Plugins/premium/telegram-notifications-pro/README.md), [Twilio SMS](../WCP360_Plugins/premium/twilio-sms-pro/README.md), [Brevo email](../WCP360_Plugins/premium/brevo-email-pro/README.md) |
+| 10. Database-as-a-Service and backup | [Database Operations / DBaaS](database-operations-pro/README.md), [Database Performance](database-performance-pro/README.md), [Remote Backup](remote-backup-pro/README.md) | [MySQL/MariaDB](../WCP360_Plugins/premium/external-mysql-mariadb-pro/README.md), [Galera](../WCP360_Plugins/premium/galera-cluster-pro/README.md), [Redis](../WCP360_Plugins/premium/redis-service-pro/README.md), [MongoDB](../WCP360_Plugins/premium/mongodb-service-pro/README.md), [S3](../WCP360_Plugins/premium/aws-s3-backup-pro/README.md), [Google Cloud Storage](../WCP360_Plugins/premium/google-cloud-storage-backup-pro/README.md), [SFTP](../WCP360_Plugins/premium/remote-sftp-backup-pro/README.md), [Backblaze B2](../WCP360_Plugins/premium/backblaze-b2-backup-pro/README.md) |
+| 11. DNS and certificate automation | [DNS/TLS Orchestration](dns-tls-orchestration-pro/README.md) for advanced provider/node campaigns; ordinary DNS, ACME and wildcard lifecycle remain free Core scope | [PowerDNS](../WCP360_Plugins/premium/powerdns-remote-pro/README.md), [Cloudflare DNS](../WCP360_Plugins/premium/cloudflare-dns-pro/README.md), [external ACME issuer](../WCP360_Plugins/premium/external-acme-authority-pro/README.md) |
+
+The [eleven-area platform register](../documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) records exact Core boundaries and provider distinctions. All linked packages remain design proposals. Essential security, caching/compression, DNS/TLS, notifications and recovery remain Core duties; optional controllers and acceleration profiles require their own admission and qualification.
+
+For VPS/VM, AI and the remaining module families, continue through the inventory below. [Open the combined premium catalogue](../PREMIUM_CATALOG.md) for both complete inventories.
+<!-- END REQUESTED-AREA NAVIGATION -->
+
+<!-- BEGIN GENERATED MODULE INVENTORY -->
 ## applications
 
 | Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
@@ -129,6 +154,8 @@ This catalogue adds optional advanced workflows. All 233 essential capabilities 
 | Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
 | :--- | :--- | :--- | :--- |
 | [Performance Booster Pro](performance-booster-pro/README.md)<br><code>module.performance-booster-pro</code> | Advanced application-aware performance profiles coordinating compatible caches, compression, static/edge delivery, runtime budgets and measured tuning proposals. | Hosting, Platform, Data, Tenancy, Operations, Observability, BackupRestore | `runtime.redis`, `runtime.memcached`, `domains.cdn-edge`, `data.sql-analysis`, `observe.synthetics` |
+
+<!-- END GENERATED MODULE INVENTORY -->
 
 ## Reading a package
 
