@@ -539,6 +539,12 @@ Cross-domain security, monitoring, UI and recovery tests are developed with each
 
 The immediate work remains M1 foundations and their acceptance evidence. Installer/wizard preparation can continue where independent; privileged activation depends on the necessary M1/M2 interfaces and tests. This roadmap is not permission to bypass those prerequisites.
 
+## Modular structure and growth preparation
+
+The [Core structure index](STRUCTURE.md) records the inspection of src/Module, CLI and resource coverage. Existing owners now have design anchors for local commercial rights, package admission, native/container applications, node capacity, durable execution, Toolbox and optional AI/MCP. The [resource index](resources/README.md) and [service index](resources/services/README.md) distinguish documented reservations from actual source/providers.
+
+These documents organize future work within M1/M2/M4/M5/M6/M7/M9/M10; they introduce no new public protocol, installed engine, commercial condition, capability status or percentage increase. CLI/HTTP/MCP adapters must use the same current-authority/resource operations, and essential hosting/recovery stays independent of optional plugins and vendor availability.
+
 ## Keeping progress honest
 
 - Update the [single capability register](CAPABILITY-MAP.md), affected module README and this snapshot together; retain source/test links and distinguish a helper/probe from a product workflow.
@@ -547,4 +553,4 @@ The immediate work remains M1 foundations and their acceptance evidence. Install
 - Keep current writes under `WCP360_Core` and continue on the existing branch. Build, SDK and release owners may supply required external contracts/evidence; their directories are outside the current editing scope.
 - Do not infer a calendar delivery date from 20%. Schedule estimates require an agreed initial release scope, team capacity and measured delivery rates from representative completed slices.
 
-Related sources: [Core overview](README.md), [navigation](NAVIGATION.md), [capability status register](CAPABILITY-MAP.md), [installer](installer/README.md), [production acceptance guide](../documentation/development/CORE-ENGINE.md), [release qualification](../documentation/development/DELIVERY-AND-RELEASES.md).
+Related sources: [Core overview](README.md), [navigation](NAVIGATION.md), [capability status register](CAPABILITY-MAP.md), [installer](installer/README.md), [resources roadmap](resources/ROADMAP.md), [service-resource register](resources/services/ROADMAP.md), [production acceptance guide](../documentation/development/CORE-ENGINE.md), [release qualification](../documentation/development/DELIVERY-AND-RELEASES.md).

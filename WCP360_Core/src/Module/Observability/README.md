@@ -1,5 +1,7 @@
 # Observability
 
+The [Toolbox design](design/toolbox/README.md) prepares named bounded diagnostics and keeps repairs with their resource owners. [Diagnostic resource profiles](../../../resources/toolbox/README.md), [observability resources](../../../resources/observability/README.md) and the [Core structure](../../../STRUCTURE.md) distinguish product diagnostics from developer tools. These planning locations enable no new tool or endpoint.
+
 **Status: executable candidate administrator audit metadata query and browser/API presentation. Production audit policy, retention, logs, metrics, incidents and alert delivery remain unfinished.**
 
 ## Candidate audit inspection

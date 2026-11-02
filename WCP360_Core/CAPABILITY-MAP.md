@@ -54,27 +54,27 @@ The README domains describe capabilities; Core modules describe cohesive ownersh
 
 | README domain | Capabilities | Primary owner(s) within the domain |
 | :--- | :--- | :--- |
-| [Authentication and access protection](../README.md#authentication-and-access-protection) | 10 | [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| [Permissions, delegation, and account separation](../README.md#permissions-delegation-and-account-separation) | 10 | [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| [Customers, resellers, and account lifecycle](../README.md#customers-resellers-and-account-lifecycle) | 10 | [Tenancy](src/Module/Tenancy/README.md) |
-| [Hosting plans, quotas, and usage metering](../README.md#hosting-plans-quotas-and-usage-metering) | 10 | [Tenancy](src/Module/Tenancy/README.md), [Observability](src/Module/Observability/README.md) |
-| [Websites, virtual hosts, and HTTP routing](../README.md#websites-virtual-hosts-and-http-routing) | 12 | [Hosting](src/Module/Hosting/README.md), [Observability](src/Module/Observability/README.md) |
-| [Domains, authoritative DNS, and resolution](../README.md#domains-authoritative-dns-and-resolution) | 13 | [Hosting](src/Module/Hosting/README.md) |
-| [Certificates, ACME, and TLS policies](../README.md#certificates-acme-and-tls-policies) | 10 | [Hosting](src/Module/Hosting/README.md) |
-| [PHP, PHP-FPM, and site dependencies](../README.md#php-php-fpm-and-site-dependencies) | 11 | [Hosting](src/Module/Hosting/README.md) |
-| [Databases and engine access](../README.md#databases-and-engine-access) | 13 | [Data](src/Module/Data/README.md), [BackupRestore](src/Module/BackupRestore/README.md) |
-| [Mail services and deliverability](../README.md#mail-services-and-deliverability) | 18 | [Mail](src/Module/Mail/README.md) |
-| [File management and web transfers](../README.md#file-management-and-web-transfers) | 13 | [Files](src/Module/Files/README.md) |
-| [SSH, SFTP, and technical access](../README.md#ssh-sftp-and-technical-access) | 9 | [Platform](src/Module/Platform/README.md), [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md), [Observability](src/Module/Observability/README.md) |
-| [Local backups, restoration, and retention](../README.md#local-backups-restoration-and-retention) | 12 | [BackupRestore](src/Module/BackupRestore/README.md) |
-| [Migration and transfers between instances](../README.md#migration-and-transfers-between-instances) | 10 | [Transfers](src/Module/Transfers/README.md) |
-| [System, services, packages, and local storage](../README.md#system-services-packages-and-local-storage) | 12 | [Platform](src/Module/Platform/README.md), [Operations](src/Module/Operations/README.md), [Observability](src/Module/Observability/README.md) |
-| [Networking, IP addresses, and firewall](../README.md#networking-ip-addresses-and-firewall) | 10 | [Platform](src/Module/Platform/README.md) |
-| [Security, secrets, and baseline compliance](../README.md#security-secrets-and-baseline-compliance) | 10 | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md), [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| [Metrics, alerts, incidents, and diagnostics](../README.md#metrics-alerts-incidents-and-diagnostics) | 10 | [Observability](src/Module/Observability/README.md) |
-| [Jobs, reconciliation, and long-running operations](../README.md#jobs-reconciliation-and-long-running-operations) | 10 | [Operations](src/Module/Operations/README.md) |
-| [Configuration, APIs, and application exchanges](../README.md#configuration-apis-and-application-exchanges) | 10 | [Platform](src/Module/Platform/README.md), [Operations](src/Module/Operations/README.md), [IdentityAccess](src/Module/IdentityAccess/README.md) |
-| [Installation, updates, and panel autonomy](../README.md#installation-updates-and-panel-autonomy) | 10 | [Setup](src/Module/Setup/README.md), [Tenancy](src/Module/Tenancy/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
+| [Authentication and access protection](#authentication-and-access-protection) | 10 | [IdentityAccess](src/Module/IdentityAccess/README.md) |
+| [Permissions, delegation, and account separation](#permissions-delegation-and-account-separation) | 10 | [IdentityAccess](src/Module/IdentityAccess/README.md) |
+| [Customers, resellers, and account lifecycle](#customers-resellers-and-account-lifecycle) | 10 | [Tenancy](src/Module/Tenancy/README.md) |
+| [Hosting plans, quotas, and usage metering](#hosting-plans-quotas-and-usage-metering) | 10 | [Tenancy](src/Module/Tenancy/README.md), [Observability](src/Module/Observability/README.md) |
+| [Websites, virtual hosts, and HTTP routing](#websites-virtual-hosts-and-http-routing) | 12 | [Hosting](src/Module/Hosting/README.md), [Observability](src/Module/Observability/README.md) |
+| [Domains, authoritative DNS, and resolution](#domains-authoritative-dns-and-resolution) | 13 | [Hosting](src/Module/Hosting/README.md) |
+| [Certificates, ACME, and TLS policies](#certificates-acme-and-tls-policies) | 10 | [Hosting](src/Module/Hosting/README.md) |
+| [PHP, PHP-FPM, and site dependencies](#php-php-fpm-and-site-dependencies) | 11 | [Hosting](src/Module/Hosting/README.md) |
+| [Databases and engine access](#databases-and-engine-access) | 13 | [Data](src/Module/Data/README.md), [BackupRestore](src/Module/BackupRestore/README.md) |
+| [Mail services and deliverability](#mail-services-and-deliverability) | 18 | [Mail](src/Module/Mail/README.md) |
+| [File management and web transfers](#file-management-and-web-transfers) | 13 | [Files](src/Module/Files/README.md) |
+| [SSH, SFTP, and technical access](#ssh-sftp-and-technical-access) | 9 | [Platform](src/Module/Platform/README.md), [IdentityAccess](src/Module/IdentityAccess/README.md), [Tenancy](src/Module/Tenancy/README.md), [Observability](src/Module/Observability/README.md) |
+| [Local backups, restoration, and retention](#local-backups-restoration-and-retention) | 12 | [BackupRestore](src/Module/BackupRestore/README.md) |
+| [Migration and transfers between instances](#migration-and-transfers-between-instances) | 10 | [Transfers](src/Module/Transfers/README.md) |
+| [System, services, packages, and local storage](#system-services-packages-and-local-storage) | 12 | [Platform](src/Module/Platform/README.md), [Operations](src/Module/Operations/README.md), [Observability](src/Module/Observability/README.md) |
+| [Networking, IP addresses, and firewall](#networking-ip-addresses-and-firewall) | 10 | [Platform](src/Module/Platform/README.md) |
+| [Security, secrets, and baseline compliance](#security-secrets-and-baseline-compliance) | 10 | [Observability](src/Module/Observability/README.md), [Platform](src/Module/Platform/README.md), [IdentityAccess](src/Module/IdentityAccess/README.md) |
+| [Metrics, alerts, incidents, and diagnostics](#metrics-alerts-incidents-and-diagnostics) | 10 | [Observability](src/Module/Observability/README.md) |
+| [Jobs, reconciliation, and long-running operations](#jobs-reconciliation-and-long-running-operations) | 10 | [Operations](src/Module/Operations/README.md) |
+| [Configuration, APIs, and application exchanges](#configuration-apis-and-application-exchanges) | 10 | [Platform](src/Module/Platform/README.md), [Operations](src/Module/Operations/README.md), [IdentityAccess](src/Module/IdentityAccess/README.md) |
+| [Installation, updates, and panel autonomy](#installation-updates-and-panel-autonomy) | 10 | [Setup](src/Module/Setup/README.md), [Tenancy](src/Module/Tenancy/README.md), [ExtensionManagement](src/Module/ExtensionManagement/README.md) |
 | **Total** | **233** | **13 Core modules** |
 
 ## Shared service locations

@@ -12,6 +12,14 @@
 
 Baseline local recovery must not depend on an optional vendor service. Keep archives, encryption keys and remote credentials out of Git.
 
+## Application and provider recovery
+
+Coordinate consistent filesystem/database/mail/application snapshots with their owners, including [Docker/OCI workloads](../docker/README.md) and their persistent volumes. A file copy is not automatically an application-consistent backup. Record source versions, required configuration/plugin references, encryption-key references and the recovery point.
+
+Define local/remote destinations, authorization, retention, credential rotation, integrity checks and bounded resource use. Test restoration on a fresh disposable target and compare application state, uploads and ownership. Schema/data compatibility governs recovery; reverting a binary/image alone cannot undo an irreversible migration. Preserve uncertain outcomes explicitly.
+
+Neither archives, real encryption keys nor remote credentials belong here. Tool choice remains open; this reservation selects no backup vendor. See the [observability register](../../observability/README.md), [applications](../../applications/README.md) and [Core structure](../../../STRUCTURE.md).
+
 When implemented, keep package/version-specific templates and profiles here. Add templates/ or profiles/ only with actual reviewed source. Test fixtures have a single home under tests/Fixtures; application validation stays in the owning domain. A candidate settings renderer is not the production validator for the Linux service.
 
 Paths above are conventional examples, not a deployment allowlist. Resolve the installed package, version, instance, ownership and approved WCP-managed include before applying. Follow the [shared configuration lifecycle](../README.md#configuration-change-lifecycle) and [source/runtime boundary](../../README.md).

@@ -10,10 +10,17 @@ For request references, safe API error envelopes and branded error pages, start 
 
 | I need to change… | Start here | Then follow |
 | :--- | :--- | :--- |
+| Core folders, extension boundaries and growth preparation | [Structure and gap index](STRUCTURE.md) | Existing 13 owners, 24 service families, documented design/resource reservations and ordered implementation |
+| License client, commercial rights and premium packages | [Tenancy licensing](src/Module/Tenancy/design/licensing/README.md) | [Package admission](src/Module/ExtensionManagement/design/packages/README.md); current IAM permission remains separate |
+| Docker/OCI, container networks and volumes | [Platform containers](src/Module/Platform/design/containers/README.md) | [Hosted applications](src/Module/Hosting/design/applications/README.md), [Docker resources](resources/services/docker/README.md) and durable operations |
+| Optional AI providers, models, assistant missions or MCP | [AI/MCP integration design](src/Module/Platform/design/ai-mcp/README.md) | [AI resources](resources/ai/README.md); isolated contributions reuse current permissions and owning use cases |
+| Capacity growth, more workers or future nodes | [Platform scalability](src/Module/Platform/design/scalability/README.md) | [Durable execution](src/Module/Operations/design/distributed-execution/README.md); leases/fencing and remote authority remain to implement |
+| Product Toolbox and diagnostic profiles | [Toolbox design](src/Module/Observability/design/toolbox/README.md) | [Resource catalogue](resources/toolbox/README.md), diagnostics/ and owning modules; tools/ is developer tooling |
 | Current completion estimate, delivered paths and remaining Core work | [Core roadmap](ROADMAP.md) | Weighted maturity, ordered milestones, acceptance criteria and the [233-capability delivery register](CAPABILITY-MAP.md#delivery-snapshot) |
+| Linux-service templates, missing resource families and apply order | [Resources roadmap](resources/ROADMAP.md) | [Per-service register](resources/services/ROADMAP.md) and [service index](resources/services/README.md) |
 | A business function or validation rule | [Module index](src/Module/README.md) | Owning module's Domain/ or Application/ |
 | A function reused across several domains | [Shared foundations](src/Shared/README.md) | Shared Http/Security primitives where applicable; keep domain-specific policy in its module |
-| A panel CLI command | [Command guide](bin/README.md) | src/Module/<Domain>/UI/Console/ calling the same application use case as HTTP |
+| A panel CLI command | [Command guide](bin/README.md) and [actual command inventory](bin/COMMANDS.md) | src/Module/<Domain>/UI/Console/ calling the same application use case as HTTP |
 | A worker/job handler | [Operations](src/Module/Operations/README.md) and the affected domain | Shared lifecycle in Operations; resource decisions in the owning module |
 | An API controller or form | [Module layout](src/Module/README.md) | UI/Http/ or UI/Form/; authorization and invariants stay server-side |
 | Symfony packages, service wiring or routes | [Application configuration](config/README.md) | config/packages/, config/routes/ and reviewed service imports |

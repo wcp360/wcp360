@@ -15,6 +15,8 @@ The registry accepts one fixed development manifest/API/version and compares its
 
 Arbitrary package installation, signature/trust verification, compatibility and dependency resolution, scoped capability grants, process supervision, health/quarantine, upgrades and rollback remain to be implemented and qualified. The reference lifecycle proves a narrow integration boundary, not support for the complete extension catalog.
 
+The [package and premium design reservation](design/packages/README.md) prepares the general lifecycle without expanding the fixed candidate registry. Commercial entitlement policy remains owned by Tenancy. See the [Core structure](../../../STRUCTURE.md) and [extension resource index](../../../resources/extensions/README.md).
+
 Use the common [module layout](../README.md) for Domain, Application, Infrastructure and UI code. Detached plugin code and dependencies are not loaded into the Core container, Twig paths or Composer graph.
 
 - [Core roadmap and completion estimate](../../../ROADMAP.md)

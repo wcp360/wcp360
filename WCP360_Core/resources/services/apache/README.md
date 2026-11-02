@@ -1,6 +1,6 @@
 # Apache HTTP Server resources
 
-**Status: source reservation. No deployable configuration or service integration is implemented here.**
+**Status: documentation reservation with external candidate templates. No production configuration or native provider is implemented in this directory.**
 
 | Responsibility | Location or rule |
 | :--- | :--- |
@@ -11,6 +11,8 @@
 | Verification | Renderer/escaping tests in tests/Unit; synthetic fixtures in tests/Fixtures; service syntax, failed-apply and observed-health checks in tests/Integration on a disposable target. |
 
 The [adopted web-server strategy](../../../src/Module/Hosting/WEB-SERVER-STRATEGY.md) targets Apache event as a private compatibility backend between Nginx and PHP-FPM for new general-purpose installations. Apache/FPM also remains a dedicated alternative. This directory is still a source reservation; no native provider or changed installation requirement is implemented here. Follow the [web-server roadmap](../../../src/Module/Hosting/WEB-SERVER-ROADMAP.md) and prevent listener/TLS ownership conflicts.
+
+Existing [application preview templates](../../../agents/wcpd/candidate/planner/templates/applications) provide Apache/FPM and Apache-to-FrankenPHP HTTP proxy text. They stay with the Go renderer and do not implement the new Nginx/Apache/FPM default. Proxying HTTP alone does not provide native .htaccess processing. Do not copy these candidate sources here.
 
 When implemented, keep package/version-specific templates and profiles here. Add templates/ or profiles/ only with actual reviewed source. Test fixtures have a single home under tests/Fixtures; application validation stays in the owning domain. A candidate settings renderer is not the production validator for the Linux service.
 

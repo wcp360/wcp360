@@ -6,6 +6,8 @@ Durable jobs, idempotency, outbox/event delivery, scoped webhook orchestration, 
 
 Start here when changing: **Shared job scheduling, progress, retry and recovery mechanics.**
 
+The [distributed-execution design](design/distributed-execution/README.md) prepares the shared operation contracts, ports, leases/fencing, admission budgets and recovery needed by containers, optional automation and future nodes. It preserves the bounded queue below and marks unimplemented mechanics explicitly. See [Core structure](../../../STRUCTURE.md) and the [CLI inventory](../../../bin/COMMANDS.md).
+
 | Implemented candidate source | Responsibility |
 | :--- | :--- |
 | [Application/ListHostingJobs.php](Application/ListHostingJobs.php) | Current-tenant read scope, bounded projection and stable bidirectional job cursors. |

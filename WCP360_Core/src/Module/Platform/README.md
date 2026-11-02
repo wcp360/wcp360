@@ -6,6 +6,8 @@ Node inventory, global platform settings, selected service/network adapters and 
 
 Start here when changing: **Node/service settings, approved agent integration and infrastructure policy.**
 
+Preparation for growth is documented in [container providers](design/containers/README.md), [capacity/node topology](design/scalability/README.md) and [optional AI/MCP integrations](design/ai-mcp/README.md). These are design reservations; they add no installed provider, remote agent, public endpoint or new authority. The [Core structure](../../../STRUCTURE.md) maps the collaborating resource owners.
+
 ## Implemented candidate paths
 
 | Concern | Actual source and scope |

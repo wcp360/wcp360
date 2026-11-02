@@ -6,6 +6,8 @@ Sites, domains, TLS, web-engine selection and hosted language-runtime assignment
 
 Start here when changing: **Website creation, virtual hosts, certificates and PHP pool settings.**
 
+The [application lifecycle design](design/applications/README.md) prepares PHP, native HTTP and container applications under one owner, with provider, data, ingress and recovery boundaries. [Application resources](../../../resources/applications/README.md) and the [Core structure](../../../STRUCTURE.md) show the planned locations; they do not install applications.
+
 ## Implemented candidate paths
 
 | Concern | Actual source and scope |
