@@ -1,0 +1,18 @@
+#!/bin/sh
+# Opt-in repository maintenance hook. No installation or Git configuration writes.
+set -eu
+command -v python3 >/dev/null 2>&1 || {
+    printf '%s\n' 'WCP360: PYTHON_UNAVAILABLE' >&2; exit 2;
+}
+root=$(git rev-parse --show-toplevel 2>/dev/null) || {
+    printf '%s\n' 'WCP360: REPOSITORY_UNAVAILABLE' >&2; exit 2;
+}
+checker="$root/tools/repository/check_repository_secrets.py"
+[ -f "$checker" ] && [ ! -L "$checker" ] || {
+    printf '%s\n' 'WCP360: CHECKER_UNAVAILABLE' >&2; exit 2;
+}
+# Git may supply an alternate index for partial/path-limited commits.
+if [ -n "${GIT_INDEX_FILE:-}" ]; then
+    exec python3 -I "$checker" --repo "$root" --staged --index-file "$GIT_INDEX_FILE"
+fi
+exec python3 -I "$checker" --repo "$root" --staged
