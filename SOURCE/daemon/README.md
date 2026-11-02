@@ -6,6 +6,7 @@ This first SC-M01 executable prints help, version or an inert-state report, then
 ./out/sc-m01/daemon/wcpd --help
 ./out/sc-m01/daemon/wcpd --version
 ./out/sc-m01/daemon/wcpd --check
+./out/sc-m01/daemon/wcpd --contracts
 ```
 
 Exit codes: 0 for a successful local command, 2 for unsupported arguments, 1 for output failure. A successful check is not daemon health/readiness or authorization for future operations. Unsupported input is not echoed.
@@ -57,6 +58,14 @@ Linked scanner versions and h1 checksums must exactly match tools/govulncheck.mo
 
 ## CLI process contract verification
 
-The `daemon-smoke` gate runs `tools/check-cli.sh` against the actual compiled executable. Its 21 process cases check all five successful invocations, nine rejected argument forms and seven output-failure paths. Exact stdout/stderr bytes and process exit codes are checked; synthetic credential/path arguments must never appear in the response. Debian's `/dev/full`, first verified to reject writes, supplies deterministic stdout/stderr failures. Per-case results are retained in `out/sc-m01/daemon/cli-process.tsv` and the CI artifact.
+The `daemon-smoke` gate runs `tools/check-cli.sh` against the actual compiled executable. Its 23 process cases check all six successful invocations, nine rejected argument forms and eight output-failure paths. Exact stdout/stderr bytes and process exit codes are checked; synthetic credential/path arguments must never appear in the response. Debian's `/dev/full`, first verified to reject writes, supplies deterministic stdout/stderr failures. Per-case results are retained in `out/sc-m01/daemon/cli-process.tsv` and the CI artifact.
 
 The seventh negative fixture removes `os.Exit` in a disposable main wrapper. Unit tests of `cli.Run` still pass, but `daemon-smoke` must fail on the executable's incorrect exit code. This verifies the process boundary beyond unit coverage of the CLI function. These are inert CLI checks, not API/IPC, session, privileged-operation or full-product QA acceptance. No runtime Go source or canonical contract is changed by this test extension. Prior PR #108 owner assessments remain bound to their original SHA; this follow-up needs its own applicable review and independent E3 before merge.
+
+## Retained candidate integration
+
+This directory is the standalone historical candidate described in [SOURCE/README.md](../README.md). The active application is [WCP360_Core](../../WCP360_Core/README.md); retaining this module does not connect it to Core or authorize host effects. The pure policies and embedded catalogue from the domain-foundation candidate are retained without a listener or privileged adapter.
+
+The finite --contracts command reports only the embedded catalogue counts: 82 permissions, 86 API contracts, 47 IPC operations and 23 error codes. It accepts no file, URL, credential or operation selector. The generator resolves the three original input paths to their reviewed documentation/specifications/ locations while preserving generated provenance and original blob hashes. The two pure-policy tests read the relocated Security Baseline and DB Model with the same original pins. Negative fixtures copy only those two existing inputs into disposable test trees; no second repository authority is created.
+
+The pinned Debian linux/amd64 builder is evidence for this retained candidate only. It is not qualification of all five target operating systems or of the active Core. The integrated revision must obtain its own remote CI results; no local runtime checks were executed for this reconciliation.

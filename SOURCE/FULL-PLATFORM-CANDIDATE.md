@@ -1,8 +1,8 @@
 # WCP360 — full platform implementation candidate
 
-This branch is the broad implementation workbench requested by the project owner.
+This record describes the historical broad implementation workbench requested by the project owner. The source is now retained as an isolated candidate under SOURCE; the active application is [WCP360_Core](../WCP360_Core/README.md). See the [reconciliation and provenance guide](README.md). Retention does not activate these ports, promote a production baseline or change licensing.
 
-## Authority boundary
+## Historical authority boundary
 
 - Base commit: PR #108 exact candidate `71deefa2976a7005983d410907dc2050287be05f`.
 - PR #108 itself remains unchanged and retains its separate independent-E3 merge requirement.

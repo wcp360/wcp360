@@ -85,6 +85,20 @@ class HistoricalInputTests(unittest.TestCase):
             with self.subTest(path=path), self.assertRaises(FixtureError):
                 safe_file(self.repo, path)
 
+    def test_non_object_manifest_refused_in_both_modes_before_git_or_output(self):
+        manifest = self.repo / "documentation" / MANIFEST
+        output = self.root / "never-created"
+        for value in ([], None, "not-an-object", 1, True):
+            with self.subTest(value=value):
+                manifest.write_text(json.dumps(value), encoding="utf-8")
+                with patch("sc_m01_historical_inputs.subprocess.run") as run:
+                    with self.assertRaisesRegex(FixtureError, "INVALID_MANIFEST_OBJECT"):
+                        current_report(self.repo)
+                    with self.assertRaisesRegex(FixtureError, "INVALID_MANIFEST_OBJECT"):
+                        export(self.repo, output)
+                    run.assert_not_called()
+                self.assertFalse(output.exists())
+
     def test_nested_symlink_refused(self):
         (self.repo / "alias").symlink_to(self.root, target_is_directory=True)
         with self.assertRaisesRegex(FixtureError, "SYMLINKED_FIXTURE_PATH"):

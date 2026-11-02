@@ -88,6 +88,8 @@ def read_current(root: Path, relative: str) -> bytes:
 
 def current_report(repo: Path) -> dict:
     manifest = json.loads(read_current(repo, "documentation/" + MANIFEST))
+    if not isinstance(manifest, dict):
+        raise FixtureError("INVALID_MANIFEST_OBJECT")
     report = inspect(repo, manifest, input_layout="documentation")
     rows = {row["id"]: row for row in report["artifacts"]}
     if any(rows[name]["status"] != "PIN_MATCH" for name in CURRENT_IDS):
@@ -111,6 +113,8 @@ def export(repo: Path, output: Path) -> dict:
         raise FixtureError("OUTPUT_PARENT_UNAVAILABLE")
     manifest_bytes = read_current(repo, "documentation/" + MANIFEST)
     manifest = json.loads(manifest_bytes)
+    if not isinstance(manifest, dict):
+        raise FixtureError("INVALID_MANIFEST_OBJECT")
     artifacts = check_manifest(manifest)
     if manifest.get("source_main_sha") != CANONICAL_COMMIT:
         raise FixtureError("HISTORICAL_SOURCE_COMMIT_DRIFT")

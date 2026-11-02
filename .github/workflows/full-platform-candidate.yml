@@ -3,15 +3,17 @@ name: Full platform candidate verification
 on:
   push:
     branches:
+      - main
+      - implementation/core-executable-foundation-20261031
       - source/full-platform-candidate
     paths:
-      - 'SOURCE/platform/**'
-      - 'SOURCE/ui/**'
+      - 'SOURCE/**'
+      - 'documentation/specifications/**'
       - '.github/workflows/full-platform-candidate.yml'
   pull_request:
     paths:
-      - 'SOURCE/platform/**'
-      - 'SOURCE/ui/**'
+      - 'SOURCE/**'
+      - 'documentation/specifications/**'
       - '.github/workflows/full-platform-candidate.yml'
 
 permissions:

@@ -1,0 +1,180 @@
+{
+    "schema":  "wcp360.branch-integration/1",
+    "date":  "2026-11-02",
+    "initial_main":  "7eddd41a4ef62dd6a3c737481b304f67bca4f5ba",
+    "initial_candidate":  "c94bd41e849c91450bcbff2f549727e52114e3b8",
+    "branches":  [
+                     {
+                         "name":  "audit/closure-matrix-refresh-2026-10-03",
+                         "sha":  "1fdbe4994f54ddc7682fba03a8b0c37038608b45",
+                         "disposition":  "Already an ancestor of main; no duplicate import."
+                     },
+                     {
+                         "name":  "design-system/import-v2.5.3.36.4-markdown",
+                         "sha":  "5ff41780a5b72f9b7d4153debd7dc5449c688cae",
+                         "disposition":  "Already an ancestor of main; no duplicate import."
+                     },
+                     {
+                         "name":  "extensions/file-manager-v0.3.0-import",
+                         "sha":  "899e0020a3421ac2231dee689f173cc2dd3e6631",
+                         "disposition":  "File Manager sources/CI reconciled at the existing WCP360_Plugins path."
+                     },
+                     {
+                         "name":  "implementation/core-executable-foundation-20261031",
+                         "sha":  "c94bd41e849c91450bcbff2f549727e52114e3b8",
+                         "disposition":  "Current Symfony Core, SDK, premium catalogues, prototype and local workspace."
+                     },
+                     {
+                         "name":  "integration/sc-m01-owner-readiness-20261026",
+                         "sha":  "b1ae801dbc82f0972ab94a9caf0156b86b0b82f1",
+                         "disposition":  "Historical bundle reconciled with narrower successors; current decisions retained."
+                     },
+                     {
+                         "name":  "main",
+                         "sha":  "7eddd41a4ef62dd6a3c737481b304f67bca4f5ba",
+                         "disposition":  "Integration target; existing main history retained."
+                     },
+                     {
+                         "name":  "maintenance/sc-m01-repository-guardrails",
+                         "sha":  "fb2a95620f3547007a17bad9b82e18004a413bc8",
+                         "disposition":  "Repository guardrails retained and adapted to the current tree."
+                     },
+                     {
+                         "name":  "research/sc-m01-control-protocol-options-20261026",
+                         "sha":  "44c85eebcd297dd00ca8afe55f84b26a6df919ce",
+                         "disposition":  "Inert architecture labs retained separately; current contract locators repaired."
+                     },
+                     {
+                         "name":  "research/sc-m01-ipcb-go-framing-20261027",
+                         "sha":  "c5ef94c875fe16e9b7874541a363d9c783d50f55",
+                         "disposition":  "Inert architecture labs retained separately; current contract locators repaired."
+                     },
+                     {
+                         "name":  "source/full-platform-candidate",
+                         "sha":  "284daabc8d57a65d3ad11e326baee32898e64254",
+                         "disposition":  "Standalone SOURCE workbench; compatible daemon/domain additions combined."
+                     },
+                     {
+                         "name":  "source/sc-m01-domain-foundation",
+                         "sha":  "31fd3fe4d9203d9e5dbc2b43843c6c9ec74f2940",
+                         "disposition":  "Standalone SOURCE workbench; compatible daemon/domain additions combined."
+                     },
+                     {
+                         "name":  "source/sc-m01-inert-daemon",
+                         "sha":  "71deefa2976a7005983d410907dc2050287be05f",
+                         "disposition":  "Standalone SOURCE workbench; compatible daemon/domain additions combined."
+                     },
+                     {
+                         "name":  "test/sc-m01-cli-process-contract",
+                         "sha":  "462792110330f00b2a1911dd03175e8257379b3a",
+                         "disposition":  "Daemon process-contract tests retained with the combined CLI."
+                     },
+                     {
+                         "name":  "tooling/sc-m01-contract-traceability-20261026",
+                         "sha":  "a1c7a2743c300f1cc426485267af1be66dcdac3d",
+                         "disposition":  "Governance verification/traceability tools retained with explicit historical/current scopes."
+                     },
+                     {
+                         "name":  "tooling/sc-m01-preflight-checks-20261026",
+                         "sha":  "547669eee40dd2b866282f5e2fd5d6941c9a6d47",
+                         "disposition":  "Governance verification/traceability tools retained with explicit historical/current scopes."
+                     }
+                 ],
+    "open_prs":  [
+                     {
+                         "number":  116,
+                         "head":  "implementation/core-executable-foundation-20261031",
+                         "sha":  "c94bd41e849c91450bcbff2f549727e52114e3b8",
+                         "base":  "main",
+                         "draft":  true
+                     },
+                     {
+                         "number":  114,
+                         "head":  "test/sc-m01-cli-process-contract",
+                         "sha":  "462792110330f00b2a1911dd03175e8257379b3a",
+                         "base":  "source/sc-m01-inert-daemon",
+                         "draft":  false
+                     },
+                     {
+                         "number":  113,
+                         "head":  "extensions/file-manager-v0.3.0-import",
+                         "sha":  "899e0020a3421ac2231dee689f173cc2dd3e6631",
+                         "base":  "main",
+                         "draft":  true
+                     },
+                     {
+                         "number":  110,
+                         "head":  "source/sc-m01-domain-foundation",
+                         "sha":  "31fd3fe4d9203d9e5dbc2b43843c6c9ec74f2940",
+                         "base":  "source/sc-m01-inert-daemon",
+                         "draft":  true
+                     },
+                     {
+                         "number":  109,
+                         "head":  "source/full-platform-candidate",
+                         "sha":  "284daabc8d57a65d3ad11e326baee32898e64254",
+                         "base":  "main",
+                         "draft":  true
+                     },
+                     {
+                         "number":  108,
+                         "head":  "source/sc-m01-inert-daemon",
+                         "sha":  "71deefa2976a7005983d410907dc2050287be05f",
+                         "base":  "main",
+                         "draft":  false
+                     },
+                     {
+                         "number":  94,
+                         "head":  "research/sc-m01-ipcb-go-framing-20261027",
+                         "sha":  "c5ef94c875fe16e9b7874541a363d9c783d50f55",
+                         "base":  "main",
+                         "draft":  false
+                     },
+                     {
+                         "number":  88,
+                         "head":  "research/sc-m01-control-protocol-options-20261026",
+                         "sha":  "44c85eebcd297dd00ca8afe55f84b26a6df919ce",
+                         "base":  "main",
+                         "draft":  false
+                     },
+                     {
+                         "number":  87,
+                         "head":  "tooling/sc-m01-contract-traceability-20261026",
+                         "sha":  "a1c7a2743c300f1cc426485267af1be66dcdac3d",
+                         "base":  "main",
+                         "draft":  false
+                     },
+                     {
+                         "number":  86,
+                         "head":  "tooling/sc-m01-preflight-checks-20261026",
+                         "sha":  "547669eee40dd2b866282f5e2fd5d6941c9a6d47",
+                         "base":  "main",
+                         "draft":  true
+                     },
+                     {
+                         "number":  42,
+                         "head":  "maintenance/sc-m01-repository-guardrails",
+                         "sha":  "fb2a95620f3547007a17bad9b82e18004a413bc8",
+                         "base":  "main",
+                         "draft":  false
+                     }
+                 ],
+    "publication_class":  "development-candidate source consolidation",
+    "local_runtime_tests":  "not_run: user instruction",
+    "independent_E3":  "not_established",
+    "production_qualification":  "not_established",
+    "status":  "LOCAL_INTEGRATION_COMPLETE_MAIN_PENDING",
+    "integration_source":  "edcfe4a1b752333b3b6744f4d9df7554d792c4c5",
+    "merge_commits":  [
+                          "f4c16b096565555b310bfd32e43b7aba4d975a43",
+                          "e90bc22a542ccb064f8d3dce13a20869a15b1868",
+                          "b0966e924710eddcdfc6d45e2dc056489c3e2af4",
+                          "78dbc9289c82cac8bd04c9b72634761f4f28e7f6",
+                          "e9d4fd46db6858539da4496695a8275882d874b7",
+                          "c3114eabc192f6c9489fde6eaa425100fef5ef6b",
+                          "959eea15a413fe55c95198031b910b9fe9c915d4",
+                          "64c0bf670acf37b556da70f3b7669b4ce8a7906b",
+                          "37ac60d8009cf9f39d2a218d81655a5690c46117",
+                          "edcfe4a1b752333b3b6744f4d9df7554d792c4c5"
+                      ]
+}

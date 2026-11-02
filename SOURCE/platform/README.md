@@ -19,7 +19,7 @@ Implemented now:
 - no shell, command, sudo, systemctl, arbitrary executable or filesystem primitive;
 - no database connection, HTTP listener, session cookie implementation or IPC listener.
 
-The generated JSON registries in `contracts/` are derived from the exact canonical Markdown exports in `specifications/`. They are implementation inputs, not new authority.
+The generated JSON registries in `contracts/` are derived from the exact canonical Markdown exports in the repository's `documentation/specifications/`. Historical `specifications/` paths and original Git blob fingerprints remain in the derived provenance; `ContractIntegrity` resolves only the five reviewed relocations. These files are implementation inputs, not new authority.
 
 ## Local validation
 

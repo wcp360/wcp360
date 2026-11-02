@@ -1,10 +1,10 @@
 name: SC-M01 inert daemon foundation
 on:
   pull_request:
-    paths: ['SOURCE/**', '.github/workflows/sc-m01-daemon-foundation.yml']
+    paths: ['SOURCE/**', 'documentation/specifications/**', '.github/workflows/sc-m01-daemon-foundation.yml']
   push:
-    branches: ['source/sc-m01-inert-daemon']
-    paths: ['SOURCE/**', '.github/workflows/sc-m01-daemon-foundation.yml']
+    branches: ['main', 'implementation/core-executable-foundation-20261031', 'source/**', 'test/sc-m01-cli-process-contract']
+    paths: ['SOURCE/**', 'documentation/specifications/**', '.github/workflows/sc-m01-daemon-foundation.yml']
 permissions:
   contents: read
 concurrency:
