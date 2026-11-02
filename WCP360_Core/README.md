@@ -53,11 +53,13 @@ The Core uses one [stack catalogue](src/Shared/Platform/WebStackCatalogue.php) a
 | Profile | Intended topology | Current implementation |
 | :--- | :--- | :--- |
 | **Classic — default** | Nginx + PHP-FPM; managed multi-version PHP is the target. | Candidate plans and separately guarded isolated FPM activation. One reviewed PHP series today; complete multi-PHP management remains open. |
-| **Modern** | Standalone Caddy/FrankenPHP Worker, replacing the web server and PHP-FPM. | Planned/unavailable; a dedicated direct driver, listeners, TLS policy and activation remain required. |
+| **Modern** | Standalone Caddy/FrankenPHP Worker, replacing the web server and PHP-FPM. | Separate inert Go driver and ROOT preview implemented for one loopback-only synthetic site. Durable selection, listeners/TLS ownership and activation remain unavailable. |
 | **Legacy / compatibility** | Apache + PHP-FPM for Apache-specific application behavior. | Planned/unavailable. Any future mod_php variant requires its own explicit isolation and qualification decision. |
 | **Advanced mix — optional** | An edge proxy with a separately managed backend. | Existing opt-in Nginx → Caddy/FrankenPHP Worker plans; activation unavailable. Other compositions remain planned. |
 
 FrankenPHP embeds PHP with Caddy and can serve directly; Worker mode requires application-state reset and bounded recycling. HTTP/3 and automatic HTTPS depend on the selected public listeners, networking, TLS ownership and configuration; they are not enabled by catalogue membership. See the official [migration guide](https://frankenphp.dev/docs/migrate/) and [Worker documentation](https://frankenphp.dev/docs/worker/).
+
+The [ROOT Modern preview](src/Module/Hosting/README.md#standalone-modern-preview) prepares a Caddyfile and a systemd unit through the separate plan/3 driver. It requires operator Worker opt-in and compatibility acknowledgement. A new synthetic identifier and fixed, unreserved HTTP loopback port prevent the preview from selecting an existing resource; no site, job, configuration or service is created. Browser and API access retain current ROOT authentication, fresh password/MFA, exact Origin and a dedicated CSRF intent. Modern is still unavailable as a persisted hosting-plan choice.
 
 Existing `frankenphp_worker` sites and plan/2 keep their Nginx-edge meaning. Their current Caddy socket backend disables automatic HTTPS and the admin API. A future standalone Modern profile must not silently reinterpret or migrate those assignments. Changes between stacks need typed persisted profile/revision, versioned Go templates, config diff, capacity/compatibility checks, drain, health verification and recovery. A global default affects only new inheriting plans; the panel's own runtime stays separate.
 

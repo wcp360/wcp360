@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace Wcp360\Core\Module\Hosting\Application;
 
+use Wcp360\Core\Module\Hosting\Domain\CandidateHostname;
 use Wcp360\Core\Module\Operations\Infrastructure\WorkbenchStore;
 use Wcp360\Core\Module\Platform\Application\ApplicationServerSettings;
 use Symfony\Component\Uid\Uuid;
@@ -42,7 +43,7 @@ final readonly class SubmitHostingPlan
         $acknowledged = $ack === true || $ack === '1';
         ['tenant_id' => $tenant, 'hostname' => $host, 'idempotency_key' => $key] = $input;
         if (!Uuid::isValid($tenant) || !preg_match('/^[A-Za-z0-9_-]{16,128}$/D', $key)) throw new BadRequestHttpException('Invalid identity or idempotency key.');
-        if ($host !== strtolower($host) || strlen($host) > 253 || !str_ends_with($host, '.test') || filter_var($host, FILTER_VALIDATE_IP) || !preg_match('/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+test$/D', $host)) {
+        if (!CandidateHostname::valid($host)) {
             throw new BadRequestHttpException('A lowercase ASCII .test hostname is required for the candidate.');
         }
         $this->store->requirePermission($actor, $tenant);

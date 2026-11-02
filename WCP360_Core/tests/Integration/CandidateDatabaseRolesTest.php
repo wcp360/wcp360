@@ -424,6 +424,30 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         }
     }
 
+    public function testModernPreviewUsesOnlyExistingRootIdentityReadsAndCannotReadAudit(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $before = [];
+        foreach (['sites','jobs','activations','audit','runtime_settings'] as $table) {
+            $before[$table] = $this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_'.$table.' ORDER BY id');
+        }
+        $preview = new \Wcp360\Core\Module\Hosting\Application\PreviewModernHostingPlan(
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
+            new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true),
+            self::getContainer()->get(\Wcp360\Core\Module\Hosting\Infrastructure\GoPlanRenderer::class));
+        $report = $preview->preview($this->fixture['users']['admin'], 'restricted-modern.test', true);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame(['caddy','systemd'], array_keys($report['files']));
+        self::assertFalse($report['persisted']);
+        self::assertFalse($report['activation_available']);
+        foreach ($before as $table => $rows) {
+            self::assertSame($rows, $this->maintenance->fetchAllAssociative('SELECT * FROM wcp_candidate_'.$table.' ORDER BY id'));
+        }
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_audit LIMIT 1'); self::fail('Preview broadened audit reads.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+    }
+
     public function testRuntimeSettingsReadAndChangeUseExistingRootGrantsAndCorrelatedAppendOnlyAudit(): void
     {
         $this->provider->provision($this->passwords);

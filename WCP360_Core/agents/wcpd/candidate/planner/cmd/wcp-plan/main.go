@@ -26,7 +26,7 @@ func run(input io.Reader, output io.Writer) int {
 			return 2
 		}
 		key, ok := token.(string)
-		if !ok || (key != "site_id" && key != "hostname" && key != "application_server" && key != "worker_acknowledged") {
+		if !ok || (key != "site_id" && key != "hostname" && key != "application_server" && key != "worker_acknowledged" && key != "web_stack") {
 			return 2
 		}
 		if _, exists := fields[key]; exists {
@@ -61,7 +61,19 @@ func run(input io.Reader, output io.Writer) int {
 			return 2
 		}
 	}
-	plan, e := planner.RenderRuntime(r, mode, acknowledged)
+	var plan any
+	if value, ok := fields["web_stack"]; ok {
+		if _, conflicting := fields["application_server"]; conflicting {
+			return 2
+		}
+		var stack string
+		if json.Unmarshal(value, &stack) != nil || stack != "modern" {
+			return 2
+		}
+		plan, e = planner.RenderModern(r, acknowledged)
+	} else {
+		plan, e = planner.RenderRuntime(r, mode, acknowledged)
+	}
 	if e != nil {
 		return 2
 	}

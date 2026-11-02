@@ -18,11 +18,7 @@ final readonly class PreparedPlanDocument
 
     public static function decode(string $json, ApplicationServer $server): self
     {
-        if (strlen($json) > self::MAX_JSON_BYTES) self::invalid();
-        $fields = json_decode($json, true, 16, JSON_THROW_ON_ERROR);
-        if (!is_array($fields)) self::invalid();
-
-        return self::fromArray($fields, $server);
+        return self::fromArray(PlanDocumentFields::decode($json), $server);
     }
 
     /** @param array<array-key,mixed> $fields */
@@ -30,16 +26,7 @@ final readonly class PreparedPlanDocument
     {
         $fpm = $server === ApplicationServer::PhpFpm;
         $expected = $fpm ? ['schema', 'nginx', 'php_fpm'] : ['schema', 'nginx', 'application_server', 'caddy', 'systemd_unit'];
-        if (array_keys($fields) !== $expected || $fields['schema'] !== ($fpm ? 'wcp360.candidate.plan/1' : 'wcp360.candidate.plan/2')) self::invalid();
-        $checked = [];
-        $bytes = 0;
-        foreach ($fields as $key => $value) {
-            if (!is_string($value) || $value === '' || preg_match('//u', $value) !== 1
-                || preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value) === 1) self::invalid();
-            $bytes += strlen($value);
-            if ($bytes > self::MAX_CONTENT_BYTES) self::invalid();
-            $checked[(string) $key] = $value;
-        }
+        $checked = PlanDocumentFields::check($fields, $expected, $fpm ? 'wcp360.candidate.plan/1' : 'wcp360.candidate.plan/2');
         if (!$fpm && $checked['application_server'] !== $server->value) self::invalid();
 
         return new self($server, $checked);

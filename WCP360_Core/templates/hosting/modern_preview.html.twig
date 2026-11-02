@@ -1,0 +1,9 @@
+{% extends 'layouts/workbench.html.twig' %}
+{% set page_title = 'Aperçu Modern' %}
+{% block content %}
+<div class="wcp-page-head page-heading"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1 class="wcp-page-heading">Aperçu Modern</h1><p class="wcp-page-sub">Caddy/FrankenPHP Worker autonome pour {{ report.hostname }}</p></div><a class="button secondary" href="{{ path('wcp_runtime_settings') }}">Paramètres globaux</a></div>
+<p class="notice" role="status" data-modern-scope>Plan de démonstration uniquement — HTTP local 127.0.0.1:8082, sans réservation du port. Aucun fichier installé, site enregistré ou service démarré.</p>
+<p>Identifiant synthétique du plan : <code data-modern-id>{{ report.preview_site_id }}</code>. Il ne sélectionne aucun compte ou hébergement existant.</p>
+{% for key,file in report.files %}<section class="wcp-panel" data-modern-artifact="{{ key }}"><div class="wcp-panel-head"><h2 class="wcp-panel-title">{{ file.name }}</h2></div><div class="wcp-panel-body"><pre><code>{{ file.content }}</code></pre></div></section>{% endfor %}
+{% include 'components/forms/modern-preview.html.twig' %}
+{% endblock %}
