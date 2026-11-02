@@ -6,6 +6,7 @@ namespace Wcp360\Core\Tests\Integration;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Command\LazyCommand;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Wcp360\Core\Module\Hosting\Application\ApplicationCatalogueSource;
 use Wcp360\Core\Module\Hosting\Infrastructure\CsvApplicationCatalogueSource;
@@ -44,6 +45,7 @@ final class ApplicationCatalogueWiringTest extends KernelTestCase
         self::assertInstanceOf(CsvApplicationCatalogueSource::class, self::getContainer()->get(ApplicationCatalogueSource::class));
         $application = new Application($kernel);
         $command = $application->find('wcp:candidate:apps:catalogue');
+        if ($command instanceof LazyCommand) $command = $command->getCommand();
         self::assertInstanceOf(ApplicationCatalogueCommand::class, $command);
         self::assertSame('wcp:candidate:apps:catalogue', $command->getName());
         // Help uses Symfony's real definition merge without executing the catalogue use case.
