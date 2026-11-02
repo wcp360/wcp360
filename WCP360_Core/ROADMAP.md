@@ -30,7 +30,7 @@ Three different states matter:
 
 The current `CODE-BASELINE` remains `NONE`. This planning snapshot does not promote the candidate or replace the applicable Engineering/Security/QA handoffs.
 
-Folders, README files, service-resource reservations and the capability ownership map receive no functional-completion credit by themselves. In particular, the Data, Mail, Files, BackupRestore, Transfers and Observability module directories currently contain ownership documentation rather than their complete business implementations. Candidate backup/audit/health helpers elsewhere are credited only to their narrow demonstrated scope.
+Folders, README files, service-resource reservations and the capability ownership map receive no functional-completion credit by themselves. In particular, the Data, Mail, Files, BackupRestore and Transfers module directories currently contain ownership documentation rather than their complete business implementations. Candidate backup/audit/health helpers elsewhere are credited only to their narrow demonstrated scope.
 
 ## How the percentage is estimated
 
@@ -50,7 +50,7 @@ Security, failure handling and integration are part of each workstream's unfinis
 | Operations | 8% | 30% | Durable candidate jobs, PostgreSQL claims, idempotency, current-authority rechecks and explicit uncertain outcomes. | General scheduler/outbox, leases/fencing, bounded retries, cancellation, compensation and reconciliation. |
 | BackupRestore | 5% | 15% | Restricted candidate PostgreSQL backup/restore and selected logical-state comparison. | Product backup jobs, file/configuration coverage, encryption, retention, selective restore and independent recovery. |
 | Transfers | 3% | 0% | Ownership location. | Inventory, compatibility, mapping, synchronization, cutover, recovery and supported external formats. |
-| Observability | 4% | 10% | Candidate append-only audit and database health check. | Authorized audit/log queries, metrics/history, alerts, local fallback, incidents and diagnostic bundles. |
+| Observability | 4% | 10% | Candidate append-only audit, bounded current-ADMIN metadata inspection and database health check. | Production audit policy/query integration and retention, log queries, metrics/history, alerts, local fallback, incidents and diagnostic bundles. |
 | Platform and controlled system integration | 5% | 20% | Strict target/runtime discovery, one revisioned setting and guarded agent/broker experiments. | Production node/service/package/storage/network/SSH/firewall adapters and target-specific qualification. |
 | ExtensionManagement | 4% | 20% | Fixed reference-package lifecycle and detached authorized summary; Core survives removal. | General trusted package registry, signatures, dependencies, compatibility, upgrades, supervision and failure containment. |
 | Setup, installer and upgrades | 5% | 30% | Read-only host checks, offline candidate artifact verification, private configuration bootstrap, enrollment and restartable checkout preparation. | Native artifact installation, service setup, restricted graphical wizard, supported upgrades and recovery. |
@@ -235,6 +235,14 @@ Resource inventory remains Partial; general resource/domain/DNS lifecycle and pr
 The download route accepts only nginx/php-fpm/caddy/systemd artifacts, uses fixed ASCII filenames and bounded in-memory text/plain responses with attachment/no-store/nosniff headers. No server file is read/written, no activation is dispatched and no syntax/trust/production qualification is inferred. Existing activation gates remain separate. [Document](tests/Unit/PreparedPlanDocumentTest.php), [service](tests/Integration/PreparedPlanFilesTest.php), [HTTP](tests/Integration/PlanDownloadJourneyTest.php) and [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) definitions cover this slice; source-bound execution belongs to draft PR #116. Local executable tests remain stopped.
 
 M1/M5 stay open, approximately 20% overall and capability counts unchanged. General file management, configuration editing/apply, signing and hosted-service lifecycle remain unfinished.
+
+### Administrator audit metadata inspection
+
+[Observability](src/Module/Observability/README.md) now implements bounded current-ADMIN audit inspection, exact event/actor/tenant/resource/request/date filters, two-way cursor navigation and escaped WCP360 browser/API presentation. A shared cursor transport parser serves audit, job and site queries; the active-administrator predicate is shared with existing authorization. Every page/pivot/boundary read carries current admin scope and admission is rechecked before return. No account/configuration payload or arbitrary log query is exposed.
+
+The default candidate PostgreSQL grants remain unchanged. A separate explicit setup-only `--audit-reads` action can add fixed ADMIN SELECT, with verified role/grant admission, the existing transaction/advisory/time limits, mandatory transition audit and rollback. USER/worker audit reads and audit mutation grants remain refused; existing credentials and role identities are preserved. Missing opt-in is unavailable, never a maintenance-credential fallback. [Query](tests/Unit/AuditListQueryTest.php), [repository](tests/Integration/ListAuditEventsTest.php), [HTTP](tests/Integration/AuditJourneyTest.php), [role](tests/Integration/CandidateDatabaseRolesTest.php) and [command](tests/Integration/CandidateDatabaseRolesCommandTest.php) definitions must be qualified on their own source in draft PR #116. Local executable tests stay stopped.
+
+M1/M2/M9 remain open, approximately 20% overall and capability counts unchanged. Production audit permissions, retention, log access, indexing/large-volume qualification, metrics and alerts remain unfinished.
 
 ## Ordered delivery plan
 

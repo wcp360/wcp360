@@ -44,9 +44,15 @@ final readonly class CandidateAuthorization
             $this->db->executeStatement("UPDATE wcp_candidate_users SET active = active WHERE id = ? AND context = 'admin' AND active = 1", [$actor]);
         }
         $suffix = $lock && $this->db->getDatabasePlatform() instanceof PostgreSQLPlatform ? ' FOR UPDATE' : '';
-        if (!$this->db->fetchOne("SELECT id FROM wcp_candidate_users WHERE id = ? AND context = 'admin' AND active = 1".$suffix, [$actor])) {
+        if (!$this->db->fetchOne($this->adminScopeSql().$suffix, [$actor])) {
             throw new AccessDeniedHttpException('Current admin authority required.');
         }
+    }
+
+    /** Fixed current-administrator scope for internal read repositories; actor remains bound. */
+    public function adminScopeSql(): string
+    {
+        return "SELECT id FROM wcp_candidate_users WHERE id = ? AND context = 'admin' AND active = 1";
     }
 
     /** @return list<array<string, mixed>> */

@@ -373,7 +373,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 | Sensitive-data redaction | [Observability](src/Module/Observability/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Partial — Selected readiness/installer redaction; system-wide coverage absent. | [M9](ROADMAP.md#m9) |
 | Internal keys and certificates | [Platform](src/Module/Platform/README.md) | [IdentityAccess](src/Module/IdentityAccess/README.md) | Planned | [M9](ROADMAP.md#m9) |
 | Request validation | [IdentityAccess](src/Module/IdentityAccess/README.md) | [Platform](src/Module/Platform/README.md), [Observability](src/Module/Observability/README.md) | Partial — Selected CSRF, schema and bounded-input checks. | [M1](ROADMAP.md#m1) |
-| Change auditing | [Observability](src/Module/Observability/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Append-only candidate audit; general audit query/retention absent. | [M2](ROADMAP.md#m2) |
+| Change auditing | [Observability](src/Module/Observability/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Append-only candidate audit and bounded current-ADMIN metadata queries with explicit restricted-role opt-in; production audit policy, general logs and retention absent. | [M2](ROADMAP.md#m2) |
 | Evidence retention | [Observability](src/Module/Observability/README.md) | Owning domain and shared contracts | Partial — Source-bound CI and private journal; product evidence retention absent. | [M9](ROADMAP.md#m9) |
 
 ### Metrics, alerts, incidents, and diagnostics

@@ -13,7 +13,7 @@ use Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabasePolicy;
 use Wcp360\Core\Module\Setup\Infrastructure\CandidateDatabaseRoles;
 use Wcp360\Core\Shared\Security\RuntimeContext;
 
-#[AsCommand(name: 'wcp:candidate:database:roles', description: 'Inspect candidate PostgreSQL roles, create fresh roles or explicitly enable fixed password operations; never production provisioning.')]
+#[AsCommand(name: 'wcp:candidate:database:roles', description: 'Inspect candidate PostgreSQL roles, create fresh roles or explicitly enable fixed password/audit operations; never production provisioning.')]
 final class DatabaseRolesCommand extends Command
 {
     public function __construct(private readonly CandidateDatabaseRoles $roles, private readonly RuntimeContext $runtime, private readonly bool $enabled = false)
@@ -23,21 +23,29 @@ final class DatabaseRolesCommand extends Command
 
     protected function configure(): void
     {
+        $this->addOption('audit-reads', null, InputOption::VALUE_NONE, 'Inspect or explicitly enable fixed ADMIN candidate audit metadata reads on existing verified roles.');
         $this->addOption('password-changes', null, InputOption::VALUE_NONE, 'Inspect or explicitly enable the fixed password operations on existing verified candidate roles.');
-        $this->addOption('apply', null, InputOption::VALUE_NONE, 'Apply the selected candidate role creation or fixed password-operation upgrade in one transaction.');
+        $this->addOption('apply', null, InputOption::VALUE_NONE, 'Apply the selected role creation or fixed capability upgrade in one transaction.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($this->runtime->context !== 'setup' || ($input->getOption('apply') && !$this->enabled)) {
+        if ($this->runtime->context !== 'setup' || ($input->getOption('apply') && !$this->enabled)
+            || ($input->getOption('password-changes') && $input->getOption('audit-reads'))) {
             $this->result($output, ['status' => 'refused']);
             return self::INVALID;
         }
         try {
-            $upgrade = $input->getOption('password-changes');
-            $result = $upgrade
-                ? ($input->getOption('apply') ? $this->roles->enablePasswordChanges() : $this->roles->passwordChangePlan())
-                : ($input->getOption('apply') ? $this->roles->provision($this->passwords()) : $this->roles->plan());
+            $audit = $input->getOption('audit-reads');
+            $upgrade = $input->getOption('password-changes') || $audit;
+            $apply = $input->getOption('apply');
+            if ($audit) {
+                $result = $apply ? $this->roles->enableAuditReads() : $this->roles->auditReadPlan();
+            } elseif ($input->getOption('password-changes')) {
+                $result = $apply ? $this->roles->enablePasswordChanges() : $this->roles->passwordChangePlan();
+            } else {
+                $result = $apply ? $this->roles->provision($this->passwords()) : $this->roles->plan();
+            }
             $this->result($output, ['status' => $result['applied'] ? ($upgrade ? 'enabled' : 'created') : 'planned', 'plan' => $result]);
             return self::SUCCESS;
         } catch (\Throwable $error) {

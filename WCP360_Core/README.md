@@ -58,6 +58,8 @@ The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) u
 
 [Prepared-plan files](src/Module/Hosting/README.md#prepared-plan-file-inspection-and-downloads) can now be previewed and downloaded individually from a successful task: Nginx/PHP-FPM or Nginx/Caddy/systemd for Worker plans. The renderer and export path share one bounded document validator; attachments require current tenant access and never read/write server files or apply configuration. Corrupt or unfinished output cannot be exported.
 
+The [administrator audit journal](src/Module/Observability/README.md) provides bounded event and request-reference inspection in the WCP360 ADMIN interface. Restricted PostgreSQL reads require a separate explicit setup opt-in; default role grants remain unchanged.
+
 ## Source layout
 
 ```text

@@ -567,6 +567,76 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         self::assertSame(0, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_activations'));
     }
 
+    public function testAuditReadUpgradeIsExplicitIdempotentAndKeepsUserWorkerAndWritesRestricted(): void
+    {
+        $this->provider->provision($this->passwords);
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $adminDb = $this->login('admin');
+        $events = new \Wcp360\Core\Module\Observability\Application\ListAuditEvents($adminDb,
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($adminDb));
+        try { $events->page($this->fixture['users']['admin'], \Wcp360\Core\Module\Observability\Domain\AuditListQuery::fromArray([])); self::fail('Insert-only ADMIN read audit.'); }
+        catch (\Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException $error) { self::assertSame(503, $error->getStatusCode()); }
+        $result = $this->provider->enableAuditReads();
+        self::assertTrue($result['audit_reads']);
+        self::assertTrue($result['changed']);
+        self::assertSame(['INSERT','SELECT'], $result['grants']['admin']['audit']);
+        self::assertTrue($this->provider->auditReadPlan()['audit_reads']);
+        self::assertFalse($this->provider->enableAuditReads()['changed']);
+        self::assertSame($before + 1, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertSame(1, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.database.audit_reads.enabled'"));
+        self::assertCount($before + 1, $events->page($this->fixture['users']['admin'], \Wcp360\Core\Module\Observability\Domain\AuditListQuery::fromArray([]))['items']);
+        self::assertSame($this->roles['admin'], $adminDb->fetchOne('SELECT current_user'));
+        foreach (['user','worker'] as $context) {
+            $db = $this->login($context);
+            try { $db->fetchOne('SELECT id FROM wcp_candidate_audit'); self::fail('Audit grant escaped ADMIN.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+        foreach (['UPDATE wcp_candidate_audit SET kind=kind WHERE false', 'DELETE FROM wcp_candidate_audit WHERE false'] as $sql) {
+            try { $adminDb->executeStatement($sql); self::fail('Audit write grant broadened.'); }
+            catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+        }
+        // The existing fixed password upgrade remains compatible with either audit-read state.
+        self::assertTrue($this->provider->passwordChangePlan()['password_changes']['admin']);
+    }
+
+    public function testAuditReadGrantRollsBackWhenItsMandatoryAuditCannotBeInserted(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->maintenance->executeStatement("ALTER TABLE public.wcp_candidate_audit ADD CONSTRAINT reject_audit_read_enable CHECK (kind <> 'candidate.database.audit_reads.enabled')");
+        $this->assertRefused(fn () => $this->provider->enableAuditReads());
+        self::assertFalse(in_array($this->maintenance->fetchOne("SELECT pg_catalog.has_table_privilege(?, 'public.wcp_candidate_audit', 'SELECT')", [$this->roles['admin']]), [true,1,'1','t'], true));
+        self::assertSame(0, (int) $this->maintenance->fetchOne("SELECT count(*) FROM wcp_candidate_audit WHERE kind='candidate.database.audit_reads.enabled'"));
+    }
+
+    public function testAuditUpgradeRefusesUnexpectedUserReadAuthorityRatherThanRepairingIt(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->maintenance->executeStatement('GRANT SELECT ON public.wcp_candidate_audit TO '.$this->maintenance->quoteIdentifier($this->roles['user']));
+        $this->assertRefused(fn () => $this->provider->enableAuditReads());
+        self::assertFalse(in_array($this->maintenance->fetchOne("SELECT pg_catalog.has_table_privilege(?, 'public.wcp_candidate_audit', 'SELECT')", [$this->roles['admin']]), [true,1,'1','t'], true));
+    }
+
+    public function testAuditReadCommandRequiresAnExplicitExclusiveSetupAction(): void
+    {
+        $this->provider->provision($this->passwords);
+        $this->context('setup');
+        $this->set('WCP_ALLOW_CANDIDATE_DATABASE_ROLES', '1');
+        $kernel = self::bootKernel();
+        $command = new CommandTester((new Application($kernel))->find('wcp:candidate:database:roles'));
+        self::assertSame(0, $command->execute(['--audit-reads' => true], ['interactive' => false]));
+        $plan = json_decode(trim($command->getDisplay()), true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame('planned', $plan['status']);
+        self::assertFalse($plan['plan']['audit_reads']);
+        self::assertSame(2, $command->execute(['--audit-reads' => true, '--password-changes' => true], ['interactive' => false]));
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+        self::assertSame(0, $command->execute(['--audit-reads' => true, '--apply' => true], ['interactive' => false]));
+        $result = json_decode(trim($command->getDisplay()), true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame('enabled', $result['status']);
+        self::assertTrue($result['plan']['audit_reads']);
+        $this->assertNoSecrets($result);
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

@@ -30,7 +30,7 @@ final class CandidateDatabaseRolesCommandTest extends KernelTestCase
         $this->set('WCP_CANDIDATE_DATABASE_USER_PASSWORD', 'private-never-display-marker');
         $kernel = self::bootKernel();
         $tester = new CommandTester((new Application($kernel))->find('wcp:candidate:database:roles'));
-        foreach ([[], ['--apply' => true]] as $arguments) {
+        foreach ([[], ['--apply' => true], ['--audit-reads' => true], ['--audit-reads' => true, '--apply' => true]] as $arguments) {
             self::assertSame(2, $tester->execute($arguments, ['interactive' => false]));
             $result = json_decode(trim($tester->getDisplay()), true, 16, JSON_THROW_ON_ERROR);
             self::assertSame('refused', $result['status']);
@@ -53,6 +53,7 @@ final class CandidateDatabaseRolesCommandTest extends KernelTestCase
         $this->set('WCP_CANDIDATE_DATABASE_USER_PASSWORD', 'private-never-display-marker');
         $kernel = self::bootKernel();
         $tester = new CommandTester((new Application($kernel))->find('wcp:candidate:database:roles'));
+        self::assertSame(2, $tester->execute(['--audit-reads' => true, '--apply' => true], ['interactive' => false]));
         self::assertSame(2, $tester->execute(['--apply' => true], ['interactive' => false]));
         self::assertSame('refused', json_decode(trim($tester->getDisplay()), true, 16, JSON_THROW_ON_ERROR)['status']);
         self::assertStringNotContainsString('private-never-display-marker', $tester->getDisplay());

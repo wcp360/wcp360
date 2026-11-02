@@ -156,6 +156,66 @@ final readonly class CandidateDatabaseRoles
         }
     }
 
+    /** Existing roles remain insert-only for audit until an explicit setup upgrade.
+     * @return array<string,mixed>
+     */
+    public function auditReadPlan(): array
+    {
+        $this->requireSetup();
+        $pdo = $this->pdo();
+        $plan = $this->inspect($pdo, true);
+
+        return $plan + ['audit_reads' => $this->auditReadsEnabled($pdo, 'admin', $plan['roles']['admin']),
+            'applied' => false, 'apply_enabled' => $this->enabled];
+    }
+
+    /** Grant only SELECT on the fixed candidate audit table to the verified ADMIN role.
+     * @return array<string,mixed>
+     */
+    public function enableAuditReads(): array
+    {
+        $this->requireSetup();
+        if (!$this->enabled) throw new \RuntimeException(self::REJECTED);
+        $pdo = $this->pdo();
+        if ($this->db->isTransactionActive() || $pdo->inTransaction()) throw new \RuntimeException(self::REJECTED);
+        $committing = false;
+        try {
+            if (!$pdo->beginTransaction()) throw new \RuntimeException(self::REJECTED);
+            $pdo->exec("SET LOCAL lock_timeout = '2000ms'");
+            $pdo->exec("SET LOCAL statement_timeout = '5000ms'");
+            if (!self::boolean($this->query($pdo, "SELECT pg_catalog.pg_try_advisory_xact_lock(pg_catalog.hashtext(current_database()), 3601701)")->fetchColumn())) throw new \RuntimeException(self::REJECTED);
+            $plan = $this->inspect($pdo, true);
+            $role = $plan['roles']['admin'];
+            $changed = !$this->auditReadsEnabled($pdo, 'admin', $role);
+            if ($changed) $pdo->exec('GRANT SELECT ON TABLE public.wcp_candidate_audit TO "'.$role.'"');
+            $this->verifyGrants($pdo, 'admin', $role);
+            if ($changed) {
+                $audit = $pdo->prepare('INSERT INTO public.wcp_candidate_audit (id,actor_id,tenant_id,kind,resource_id,created_at) VALUES (?,NULL,NULL,?,NULL,?)');
+                $audit->execute([WorkbenchStore::id(), 'candidate.database.audit_reads.enabled', WorkbenchStore::now()]);
+            }
+            $committing = true;
+            if (!$pdo->commit()) throw new \RuntimeException(self::UNCERTAIN);
+
+            $plan['grants']['admin']['audit'] = ['INSERT', 'SELECT'];
+            return $plan + ['audit_reads' => true, 'applied' => true, 'changed' => $changed, 'apply_enabled' => true];
+        } catch (\Throwable) {
+            $uncertain = $committing;
+            try { if ($pdo->inTransaction() && !$pdo->rollBack()) $uncertain = true; }
+            catch (\Throwable) { $uncertain = true; }
+            $this->db->close();
+            throw new \RuntimeException($uncertain ? self::UNCERTAIN : self::REJECTED);
+        }
+    }
+
+    private function auditReadsEnabled(\PDO $pdo, string $context, string $role): bool
+    {
+        if ($context !== 'admin') return false;
+        $statement = $pdo->prepare("SELECT pg_catalog.has_table_privilege(?, 'public.wcp_candidate_audit', 'SELECT')");
+        $statement->execute([$role]);
+
+        return self::boolean($statement->fetchColumn());
+    }
+
     private function requireSetup(): void
     {
         if ($this->runtime->context !== 'setup') {
@@ -231,6 +291,7 @@ final readonly class CandidateDatabaseRoles
             $grants = [];
             foreach (CandidateDatabasePolicy::CONTEXTS as $context) {
                 $grants[$context] = CandidateDatabasePolicy::grants($context);
+                if ($existingRoles && $this->auditReadsEnabled($pdo, $context, $roles[$context])) $grants[$context]['audit'] = ['INSERT', 'SELECT'];
             }
 
             return ['schema' => 'wcp360.candidate.database-roles/1', 'database' => $identity['database'], 'roles' => $roles, 'grants' => $grants, 'password_change_operations' => ['user' => PasswordChangeSchema::signature('user'), 'admin' => PasswordChangeSchema::signature('admin')], 'production_qualified' => false];
@@ -242,6 +303,7 @@ final readonly class CandidateDatabaseRoles
     private function verifyGrants(\PDO $pdo, string $context, string $role): void
     {
         $grants = CandidateDatabasePolicy::grants($context);
+        if ($this->auditReadsEnabled($pdo, $context, $role)) $grants['audit'] = ['INSERT', 'SELECT'];
         $options = $pdo->prepare("SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace CROSS JOIN LATERAL pg_catalog.aclexplode(COALESCE(c.relacl,pg_catalog.acldefault('r',c.relowner))) a JOIN pg_catalog.pg_roles r ON r.oid=a.grantee WHERE n.nspname='public' AND c.relname LIKE 'wcp_candidate_%' AND r.rolname=? AND a.is_grantable");
         $options->execute([$role]);
         if ((int) $options->fetchColumn() !== 0) throw new \RuntimeException(self::REJECTED);

@@ -4,6 +4,8 @@
 
 | Source | Responsibility |
 | :--- | :--- |
+| [CursorPageQuery](CursorPageQuery.php) | Shared fixed row limits, exclusive UUID cursors and query-key/value bounds for administrator and tenant read lists; never authorization. |
+| [TenantPageQuery](TenantPageQuery.php) | Adds required tenant identity and hostname-fragment validation for the existing hosting/job inventories. |
 | [BoundarySubscriber](BoundarySubscriber.php) | Existing runtime host check, CSP, Origin-adjacent browser headers and no-store responses. |
 | [RequestReference](RequestReference.php) | Fresh 128-bit random reference stored on each main Request, with no singleton request state or caller-header trust. |
 | [HttpErrorSubscriber](HttpErrorSubscriber.php) | Reference lifecycle and safe main-request exceptions; API authentication redirects become JSON refusals before standard security headers are applied. |

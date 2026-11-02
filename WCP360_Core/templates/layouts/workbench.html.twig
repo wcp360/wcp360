@@ -10,7 +10,8 @@
     {% set workspace = workspace|merge([
         {label: 'Serveurs d’application', href: path('wcp_dashboard') ~ '#runtime', icon: 'server', active: false},
         {label: 'Extensions', href: path('wcp_dashboard') ~ '#plugins', icon: 'package', active: false},
-        {label: 'Accès des utilisateurs', href: path('wcp_access_permissions'), icon: 'users', active: route == 'wcp_access_permissions'}
+        {label: 'Accès des utilisateurs', href: path('wcp_access_permissions'), icon: 'users', active: route == 'wcp_access_permissions'},
+        {label: 'Journal d’audit', href: path('wcp_audit'), icon: 'clock', active: route == 'wcp_audit'}
     ]) %}
 {% else %}
     {% set workspace = workspace|merge([
