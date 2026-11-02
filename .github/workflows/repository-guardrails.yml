@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out reviewed revision
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -74,7 +74,7 @@ jobs:
           python3 -I tools/repository/check_publication.py --ref fb2a95620f3547007a17bad9b82e18004a413bc8 --output publication-evidence/historical-mirror-fb2a9562.json
       - name: Preserve publication evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: wcp360-publication-${{ github.run_id }}-${{ github.run_attempt }}
           path: publication-evidence/*.json
@@ -87,7 +87,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out tested snapshot without persistent credentials
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 1
@@ -113,7 +113,7 @@ jobs:
         run: python3 -I tools/repository/check_repository_secrets.py --ref HEAD --output "$RUNNER_TEMP/wcp360-repository-secrets.json"
       - name: Preserve redacted secret-check evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: wcp360-repository-secrets-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/wcp360-repository-secrets.json
