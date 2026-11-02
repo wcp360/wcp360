@@ -41,7 +41,9 @@ final readonly class ServiceObservationSnapshot
                     || array_key_exists($parts[0], $properties)) self::invalid();
                 $properties[$parts[0]] = $parts[1];
             }
-            if (count($properties) !== 5 || !in_array($properties['Id'], $allowed, true)) self::invalid();
+            if (count($properties) !== 5 || !isset($properties['Id'], $properties['LoadState'], $properties['ActiveState'],
+                $properties['SubState'], $properties['UnitFileState'])) self::invalid();
+            if (!in_array($properties['Id'], $allowed, true)) self::invalid();
             foreach (['LoadState','ActiveState','SubState','UnitFileState'] as $property) {
                 if ($property === 'UnitFileState' && $properties[$property] === '') continue;
                 if (preg_match('/\A[A-Za-z0-9_-]{1,64}\z/D', $properties[$property]) !== 1) self::invalid();
