@@ -56,6 +56,10 @@ final readonly class CandidateSessions
         });
     }
 
+    /**
+     * Database state and the clock may change between calls, including when touch is false.
+     * @phpstan-impure
+     */
     public function current(string $actor, string $surface, string $selector, #[\SensitiveParameter] string $sid, int $minimumStrength = 1, bool $touch = true): bool
     {
         if (!in_array($surface, ['user', 'admin'], true) || !Uuid::isValid($actor) || !Uuid::isValid($selector)
