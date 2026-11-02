@@ -11,7 +11,7 @@ final class LocalServerObservation implements ServerObservation
 {
     public function read(): array
     {
-        // No network-table read is needed by this summary. The caller sees no UID/paths/ports.
+        // No network-table read is needed by this summary. The caller sees no UID, managed-path inventory or listener ports.
         $host = LinuxHostInventory::collect(false);
 
         return ['os_family' => PHP_OS_FAMILY, 'platform' => $host['platform'],

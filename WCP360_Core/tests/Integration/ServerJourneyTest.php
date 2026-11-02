@@ -166,9 +166,14 @@ final class ServerJourneyTest extends WebTestCase
         self::assertNotNull($result);
         $crawler = $this->browser->request('GET', 'http://admin.localhost/login');
         $this->browser->submit($crawler->selectButton('Se connecter')->form(['_username' => 'root','_password' => WorkbenchFixture::PASSWORD]));
-        self::assertResponseRedirects('/mfa');
+        // The existing form-login success response can first target the dashboard.
+        // Following that protected route must finish at the pending MFA form.
+        for ($i = 0; $i < 3 && $this->browser->getResponse()->isRedirect(); ++$i) $this->browser->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSame('/mfa', $this->browser->getRequest()->getPathInfo());
         $this->browser->request('GET', 'http://admin.localhost/workbench/server');
-        self::assertResponseRedirects('/mfa');
+        self::assertResponseRedirects();
+        self::assertContains($this->browser->getResponse()->headers->get('Location'), ['/mfa', 'http://admin.localhost/mfa']);
         self::assertStringNotContainsString('data-server-observed-at', $this->browser->getResponse()->getContent());
         $crawler = $this->browser->request('GET', 'http://admin.localhost/mfa');
         $this->browser->submit($crawler->selectButton('Valider la MFA')->form(['_auth_code' => $result['recovery_codes'][0]]));
