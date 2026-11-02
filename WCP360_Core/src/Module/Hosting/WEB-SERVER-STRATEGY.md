@@ -8,7 +8,7 @@ This document adopts the project owner's supplied web-server strategy. It define
 
 The target default for **new general-purpose hosting installations** is **Nginx → Apache MPM event → PHP-FPM**. Nginx owns the public edge; Apache applies controlled native per-directory rules; isolated PHP-FPM pools execute hosted PHP. These are components on a node, not a requirement for three servers.
 
-The implemented candidate still defaults to **Nginx → PHP-FPM**. The [application recipes](APPLICATION-PROFILES.md) now add the three-layer topology as a seventh inert preview with a dedicated version-2 document. It remains a target for future installation defaults. Current runtime settings, database constraints, stored plans and existing site assignments retain their behavior.
+The implemented candidate still defaults to **Nginx → PHP-FPM**. The [application recipes](APPLICATION-PROFILES.md) now add the three-layer topology as a seventh inert preview: `nginx_apache_php_fpm` uses `wcp360.candidate.application-plan/2` and `wcp360.candidate.application-preview/2`, with nginx/apache/php_fpm/htaccess artifacts. The six original recipes retain their version-1 contracts and bytes. It remains a target for future installation defaults. Current runtime settings, database constraints, stored plans and existing site assignments retain their behavior.
 
 Existing `php_fpm` / `classic` / revision 1 and plan/1 retain their Nginx/FPM meaning. Existing `frankenphp_worker` / `advanced` and plan/2 retain their Nginx-edge Worker meaning; the separate Modern plan/3 remains a Worker preview. A new topology requires its own explicit versioned representation, reviewed forward migration and decoder/consumer support. A global default applies to new inheriting resources only. Existing installations and sites require a separately reviewed transition. The panel application's own runtime is a separate decision.
 
@@ -43,7 +43,7 @@ These are design targets, not new public enum values or currently available inst
 
 | Topology | Intended use | Rules and mode | Current boundary |
 | :--- | :--- | :--- | :--- |
-| **Nginx → Apache event → PHP-FPM** | New general-purpose default | Controlled native .htaccess; per-site FPM | New driver, durable selection and native lifecycle still required. |
+| **Nginx → Apache event → PHP-FPM** | New general-purpose default | Controlled native .htaccess; per-site FPM | Version-2 inert recipe preview implemented; durable selection/default changes, providers, apply and native Apache/event/FPM/HTTP qualification remain open. |
 | Nginx → PHP-FPM | Simpler managed-rules hosting | Structured server rules; no native .htaccess | Current durable Classic candidate; separately guarded isolated activation only. |
 | Apache event → PHP-FPM | Dedicated Apache ingress or private compatibility backend | Controlled native .htaccess | Generated preview exists; complete public/backend lifecycle remains open. |
 | Nginx → FrankenPHP | Isolated modern PHP application | Classic initially; Worker explicitly qualified per application | Classic recipe preview and separate generic Worker plans exist; general activation remains open. |
@@ -71,6 +71,8 @@ The managers below are logical Core capabilities, not four competing orchestrato
 | Optional installers and integrations | [ExtensionManagement](../ExtensionManagement/README.md) and published extension APIs | Contribute approved recipes without becoming the authority for ingress, privileges or resource ownership. |
 
 Keep orchestration policy in Hosting's Domain/Application layers, adapters in Infrastructure and bounded host effects in the Go agent/broker. Existing candidate templates live under [the Go planner](../../../agents/wcpd/candidate/planner/README.md); do not copy them into resource directories. Select a single canonical source for each new versioned template and link its service resource index. Create directories with actual implementation, rather than empty placeholder trees.
+
+The [Platform service inventory](../Platform/SERVICES.md) is a separate bounded read-only candidate for nine families and fourteen fixed unit names. It does not cover the [24 resource families](../../../resources/services/ROADMAP.md), admit a provider, verify application health or enable control. A first provider delivery still needs its typed owning use case/adapter, selected version/target/capability references, canonical configuration/unit source, managed-path and secret-reference policy, and validation/recovery checks together. No empty providers/adapters/templates tree is needed.
 
 The Core must retain essential hosting, safe failure/recovery and lifecycle management with zero optional plugins. Disabling a recipe plugin must not terminate its running sites. Removing a plugin must refuse or explicitly transfer live resource ownership and preserve a Core-readable inventory.
 
@@ -143,5 +145,9 @@ Measure real application behavior before choosing optimizations. Keep the same w
 Test multi-tenant contention, worker leaks/state carryover, backend failure, reload/drain and restoration as part of performance acceptance. Cache/compression changes must preserve authentication, cookies, uploads, purge/invalidation and .htaccess authorization. Protected-file delivery cannot become an optimization tradeoff.
 
 Core OS targets remain **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS**. Qualify each claimed web/container provider and application combination independently on its supported targets. Core userspace CI does not certify Apache modules, container hosts, all Discourse deployments, public TLS/HTTP3 or production hosting.
+
+The existing [candidate PostgreSQL dump](../../../installer/recovery/candidate-backup.sh) and [isolated restore rehearsal](../../../installer/recovery/candidate-restore-test.sh) remain under installer/recovery. They are not complete production application/database/mail/volume recovery. Follow the [BackupRestore resource boundary](../../../resources/services/backup/README.md) without copying these helpers or starting another installer tree.
+
+Use the [working guide](../../../WORKING-GUIDE.md) to choose the owning source location and [current status](../../../STATUS.md) to distinguish implemented candidates from planned or unqualified behavior.
 
 The [web-server roadmap](WEB-SERVER-ROADMAP.md) records dependencies, acceptance evidence and the next implementation slice. The [Core roadmap](../../../ROADMAP.md#m5) remains the project-wide delivery authority.

@@ -4,6 +4,8 @@
 
 [services](services/README.md) is the source location for reviewed Linux-service templates and profiles. Delivery order, missing families and acceptance for this layer are in the [resources roadmap](ROADMAP.md) and the [per-service register](services/ROADMAP.md). Symfony dependency injection, routes and bundle configuration remain in [config](../config/README.md). Browser-facing Twig views remain in [templates](../templates/README.md).
 
+Use the [working guide](../WORKING-GUIDE.md) to choose the owning source location and [current status](../STATUS.md) to distinguish implemented candidates from planned or unqualified behavior.
+
 ## Resource families
 
 These are reviewed documentation reservations for the requested preparation. A README records scope and ownership; it supplies no implementation, selected provider or permission. Add actual templates/profiles only with the consuming reviewed implementation.
@@ -17,6 +19,8 @@ These are reviewed documentation reservations for the requested preparation. A R
 | [Toolbox](toolbox/README.md) | Observability: bounded diagnostic descriptions; code remains in modules/diagnostics. |
 | [Extension contributions](extensions/README.md) | ExtensionManagement: approved resource contributions, compatibility and owned lifecycle. |
 | [Optional AI integrations](ai/README.md) | Platform/ExtensionManagement/Operations: [providers](ai/providers/README.md), [models](ai/models/README.md), [assistant missions](ai/agents/README.md) and [MCP](ai/mcp/README.md), without privileged shortcuts. |
+
+The [Platform service inventory](../src/Module/Platform/SERVICES.md) is an implemented read-only candidate for nine families and fourteen fixed unit names. This is separate from the 24 documented service resource families: unit observations do not establish provider installation, service health, lifecycle control or complete coverage.
 
 Caddy and Docker have explicit service reservations; neither is installed by this index. Caddy embedded in FrankenPHP does not imply another daemon. Application/container state, extension packages, AI weights/caches and toolbox executables do not belong in these documentation indexes. See the [Core structure](../STRUCTURE.md).
 
@@ -35,6 +39,8 @@ Caddy and Docker have explicit service reservations; neither is installed by thi
 | Disposable build/staging output | WCP360_Build/build/; not versioned source or the authoritative production configuration |
 
 The WCP paths are target conventions subject to accepted packaging/security contracts. They do not relocate PostgreSQL data, customer website roots, mail stores, operator-managed configuration or Debian package defaults. Keep configuration, durable state and ephemeral runtime separate.
+
+A first executable provider slice brings its typed owning use case and adapter, selected version/target and capability references, canonical template or unit source, managed-path and secret-reference policy, and validation/recovery checks together. Add those real files at their existing owning locations; no empty `providers/`, `adapters/`, `templates/` or `profiles/` tree is required in advance. Existing Go candidate templates stay authoritative until an explicit source handoff.
 
 Never copy the host's /etc tree into Git or store production credentials in sample resources. A configuration change uses validated typed settings and a bounded apply operation; PHP, a template and a plugin cannot independently write arbitrary system paths.
 

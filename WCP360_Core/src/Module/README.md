@@ -2,6 +2,8 @@
 
 Each module has one owner and one [module README](../../NAVIGATION.md). These are source organization boundaries inside the Core, independent of detached optional plugins.
 
+Start with the [working guide](../../WORKING-GUIDE.md) to choose work and [STATUS](../../STATUS.md) to check current delivery boundaries. [NAVIGATION](../../NAVIGATION.md) locates source, [STRUCTURE](../../STRUCTURE.md) maps owners, [CAPABILITY-MAP](../../CAPABILITY-MAP.md) retains the 233 capability statuses and [ROADMAP](../../ROADMAP.md) orders implementation and acceptance.
+
 | Module | Change this area when working on |
 | :--- | :--- |
 | [IdentityAccess](IdentityAccess/README.md) | Identity, roles, session and recovery behavior. |

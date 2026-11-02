@@ -24,8 +24,8 @@
 [![Optional job transport: Redis](https://img.shields.io/badge/Queue-Redis%20%28optional%29-DC382D?style=flat-square&logo=redis&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target system agent: Go](https://img.shields.io/badge/Agent-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](#technology-stack-and-responsibilities)
 [![Target diagnostics: Python](https://img.shields.io/badge/Diagnostics-Python-3776AB?style=flat-square&logo=python&logoColor=white)](#technology-stack-and-responsibilities)
-[![Target web server: Nginx](https://img.shields.io/badge/Web-Nginx-009639?style=flat-square&logo=nginx&logoColor=white)](#technology-stack-and-responsibilities)
-[![PHP runtimes: PHP-FPM and FrankenPHP Worker](https://img.shields.io/badge/Runtime-PHP--FPM%20%2F%20FrankenPHP-777BB4?style=flat-square&logo=php&logoColor=white)](#technology-stack-and-responsibilities)
+[![Target hosting stack: Nginx, Apache event and PHP-FPM](https://img.shields.io/badge/Target%20hosting-Nginx%20%2B%20Apache%20event%20%2B%20PHP--FPM-009639?style=flat-square)](#hosted-php-application-servers)
+[![Target PHP runtimes: PHP-FPM and FrankenPHP classic or Worker](https://img.shields.io/badge/PHP-PHP--FPM%20%2F%20FrankenPHP-777BB4?style=flat-square&logo=php&logoColor=white)](#hosted-php-application-servers)
 
 [Frontend](#frontend-architecture) · [Backend](#backend-architecture) · [Performance](#performance-and-reliability) · [Architecture](ARCHITECTURE.md) · [233 capabilities](#required-panel-capabilities) · [149 catalog entries](#potential-and-planned-extensions-and-plugins) · [Plugin catalog](PLUGIN_CATALOG.md) · [Security](#security-architecture) · [Release layout](WCP360_Releases/README.md) · [Get started](#explore-and-get-started)
 
@@ -41,10 +41,10 @@ WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, 
 | :--- | :--- | :--- |
 | **233 documented capabilities** across 21 domains | **WCP-ADMIN** for server operations and **WCP-USER** for customers and resellers | **149 catalog entries** covering optional modules, connectors, recipes, and engine adapters |
 
-The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. The operating-system targets are **Debian 12 and 13, and Ubuntu 22.04, 24.04 and 26.04 LTS**. Go agents perform controlled system operations; Python handles specialized diagnostics; Nginx and PHP-FPM serve the panel and isolated hosted applications. Target declarations, native-package tests and complete installation qualification have distinct [platform evidence boundaries](documentation/development/SUPPORTED-PLATFORMS.md).
+The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. The operating-system targets are **Debian 12 and 13, and Ubuntu 22.04, 24.04 and 26.04 LTS**. Go agents perform controlled system operations; Python is reserved for specialized diagnostics. Nginx fronts the panel, while the new general-purpose hosting target adds a private Apache event backend before isolated PHP-FPM. Target declarations, native-package tests and complete installation qualification have distinct [platform evidence boundaries](documentation/development/SUPPORTED-PLATFORMS.md).
 
 > [!NOTE]
-> **In development — status documented on October 31, 2026.** This README describes the target architecture. The existing prototypes and candidate sources still require integration and qualification. See [Current project status](#current-project-status) and the [current manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) for the authorized development scope.
+> **In development — status updated on November 2, 2026.** This README distinguishes the executable Core candidate, the target product and production qualification. Current Core work uses `implementation/core-executable-foundation-20261031` and [draft PR #116](https://github.com/yyogas/wcp360/pull/116); historical source branches remain separate. Start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md). The [baseline manifest](documentation/manifests/WCP360-BM-0001.md) retains its own canonical scope and `CODE-BASELINE = NONE`.
 
 ## Contents
 
@@ -52,6 +52,8 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Why WCP360](#why-wcp360)
 - [Modular and extensible design](#modular-and-extensible-design)
 - [Technology stack and responsibilities](#technology-stack-and-responsibilities)
+- [Hosted PHP application servers](#hosted-php-application-servers)
+- [Application recipes and optional integrations](#application-recipes-and-optional-integrations)
 - [Frontend architecture](#frontend-architecture)
 - [Backend architecture](#backend-architecture)
 - [Performance and reliability](#performance-and-reliability)
@@ -141,8 +143,25 @@ The following defines the **project's target stack**.
 | Redis | Optional transport for Symfony Messenger jobs |
 | Go | Controlled system operations |
 | Python | Diagnostics and specialized automation |
-| Nginx | Web server and reverse proxy |
+| Nginx | Panel edge and hosting reverse proxy |
+| Apache event | Target private hosting backend for controlled native per-directory rules |
 | PHP-FPM | Isolated execution of hosted PHP applications |
+| Caddy / FrankenPHP | Alternative hosting runtimes; classic per-request or explicitly compatible Worker mode |
+
+### Current executable candidate
+
+The [Core manifest and lock](WCP360_Core/DEPENDENCIES.md) describe what is installed in the candidate. The target selections above do not imply that every library, transport or provider is implemented.
+
+| Area | Candidate today | Remaining target |
+| :--- | :--- | :--- |
+| Application | PHP `~8.4.0`, Symfony 7.4, Twig, separate USER/ADMIN contexts and bounded domain use cases. | Complete business workflows and production identity/runtime admission. |
+| Frontend | AssetMapper, Turbo, Stimulus and WCP360 CSS, with reusable Twig fragments. | Symfony Form, UX Twig/Live Components, Chart.js and a selected Tailwind build integration are not in the current lock. |
+| Persistence | Doctrine DBAL, explicit SQL, transactions and versioned migrations. ORM is installed; automatic mapping is off and candidate entities are not mapped through ORM repositories. | Accepted domain mappings and repository integration where selected. |
+| Jobs | Database-backed candidate jobs and the fixed [HostingPlanQueue](WCP360_Core/src/Module/Operations/Infrastructure/HostingPlanQueue.php), with authorization and atomic outcome/audit checks. | General operation semantics and any selected Messenger/Redis or Doctrine transport integration. Messenger and its transport packages are not currently installed. |
+| Hosting | Seven inert PHP application topology previews; separate Classic/Advanced durable candidate profiles and guarded isolated FPM effects. | Native providers, listener/TLS ownership, live application lifecycle and per-target qualification. |
+| System observations | Bounded ROOT capacity and fixed systemd state observations. | General service control, health verification, alerts and production operations. |
+
+The [working guide](WCP360_Core/WORKING-GUIDE.md) identifies the current entry points; [status](WCP360_Core/STATUS.md) distinguishes implemented paths, pending requirements and evidence. A working candidate does not establish a production release.
 
 ### How the components work in WCP360
 
@@ -161,18 +180,40 @@ Symfony renders the interface and applies business rules; Go performs authorized
 
 ## Hosted PHP application servers
 
-**PHP-FPM is the initial default. FrankenPHP Worker is an explicit opt-in** for applications with a compatible persistent-worker bootstrap and reliable per-request cleanup.
+The **current candidate defaults to Classic Nginx → PHP-FPM**. Advanced Nginx → FrankenPHP Worker remains an explicit planning opt-in for applications with a compatible bootstrap and reliable request cleanup.
 
-| Choice | Scope and behavior |
+The adopted target for **new qualified general-purpose installations** is **Nginx → Apache MPM event → PHP-FPM**. All site content, including static files, traverses Apache so its controlled per-directory rules remain on the request path. This target currently has an inert preview; it changes no installation default, existing site, persisted selector or service.
+
+| Choice | Current scope and behavior |
 | :--- | :--- |
-| Global default | ADMIN selects the profile for new plans; existing sites and queued jobs keep their recorded choice. |
-| Per-site setting | Inherit the default or select PHP-FPM / FrankenPHP Worker. A tenant may host applications using different profiles. |
-| PHP-FPM | Conventional request-scoped applications, including legacy software and WordPress, subject to version and extension requirements. |
-| FrankenPHP Worker | Dedicated process/Unix identity per site, private socket, resource limits, health checks and recycling. Application compatibility and performance require testing. |
-| Candidate | Both profiles are tested behind Nginx in disposable Linux containers. PHP-FPM activation through isolated candidate agents is separate from production provisioning. |
-| Core and platforms | The selector does not switch ADMIN/USER into worker mode. Targets are Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS; the complete Core and privileged VM candidate remain scoped to Debian 13. Native package probes and the separate FrankenPHP image do not qualify worker installation across those targets. |
+| Global default | ROOT selects an existing candidate runtime for new inheriting plans. Saving it does not change existing site assignments or queued work. |
+| Per-site choice | Plan creation can inherit the default or select PHP-FPM / acknowledged FrankenPHP Worker. This is not a live stack-switch or migration API. |
+| PHP-FPM | Request-scoped applications, including legacy scripts and WordPress, subject to their PHP and extension requirements. |
+| FrankenPHP classic | Per-request execution for ordinary PHP applications in the separate application-preview family. No persistent-worker compatibility is implied. |
+| FrankenPHP Worker | An explicitly compatible application, separate process/identity and bounded recycling. The generic Worker candidate does not qualify every application. |
+| Standalone Modern | Separate Caddy/FrankenPHP Worker preview; no durable Modern selection or native activation. |
+| Nginx → Apache event → PHP-FPM | Versioned target preview only. Apache modules, identities, private listeners, real HTTP/rules and native lifecycle remain to be qualified. |
 
-FrankenPHP/Caddy remains separate from the Go system agents. Worker planning is disabled by default through WCP_ALLOW_FRANKENPHP_PLANS and requires explicit compatibility acknowledgement. See [application-server profiles](documentation/development/APPLICATION-SERVERS.md).
+The [application-profile catalogue](WCP360_Core/src/Module/Hosting/APPLICATION-PROFILES.md) covers **seven recipes across three routing profiles**: ordinary PHP, front-controller applications and the WordPress reference. The six original Nginx/Apache/Caddy × PHP-FPM/FrankenPHP-classic recipes retain `application-plan/1`; only the new Nginx/Apache/FPM preview uses `application-plan/2`. These previews create no site/job, reserve no port and authorize no deployment. Optional syntax checks retain exact artifact hashes and explicit unavailable/unexecuted stages.
+
+FrankenPHP includes Caddy and remains separate from the Go system agents. Worker planning is off by default through `WCP_ALLOW_FRANKENPHP_PLANS` and requires explicit compatibility acknowledgement. The hosted-site selector does not convert ADMIN/USER into Worker mode.
+
+Core application verification covers Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS userspaces with the reviewed PHP 8.4 build and PostgreSQL 17 service. The privileged systemd/reboot VM candidate remains Debian 13-specific. Neither matrix qualifies native Worker installation or all seven application recipes. See [application servers](documentation/development/APPLICATION-SERVERS.md), the [web-server strategy](WCP360_Core/src/Module/Hosting/WEB-SERVER-STRATEGY.md) and [platform evidence](documentation/development/SUPPORTED-PLATFORMS.md).
+
+## Application recipes and optional integrations
+
+[WCP360_App_Deploy](WCP360_App_Deploy/README.md) contains **410 editorial references, 70 categories, 17 natures and 16 proposed profiles**. This is separate from the **149-entry extension design catalogue**. The bounded [Core bridge](WCP360_Core/src/Module/Hosting/APPLICATION-CATALOGUE.md) exposes read-only worker/setup catalogue inspection; every candidate remains non-installable. A missing optional source does not prevent Core boot.
+
+WordPress and Discourse descriptors are draft authoring examples. No recipe JSON runtime loader, trusted release admission, general app installer, updater or uninstaller is implemented. Core owners retain application instances, data, ingress, providers, jobs and recovery; recipes cannot introduce free-form shell/Compose or change Core dependencies.
+
+| Integration | Ownership and current boundary |
+| :--- | :--- |
+| Free or premium plugins | ExtensionManagement owns package admission/lifecycle. The fixed reference plugin does not implement a general package manager; premium status adds no privilege. |
+| Local commercial rights | Tenancy's [licensing design](WCP360_Core/src/Module/Tenancy/design/licensing/README.md) separates entitlements from IAM and package signatures. No client/protocol, price, trial duration or offline/grace policy is implemented or invented. Essential Core hosting, administration and recovery remain usable without plugins or a live vendor service. |
+| Docker workloads | Platform and Hosting's [container design](WCP360_Core/src/Module/Platform/design/containers/README.md) remains preparation. Observing a Docker systemd unit or running development containers is not a tenant workload provider. No tenant/PHP/plugin Docker socket is exposed. |
+| AI, models, agents and MCP | [Optional integration design](WCP360_Core/src/Module/Platform/design/ai-mcp/README.md) only. No Core assistant, model provider or MCP endpoint is implemented. Future adapters must reuse current authority and owned operations, with redaction and explicit sharing; generated text grants no execution authority. |
+
+Disabling an optional integration or ending a trial must not silently remove hosted resources or essential recovery. Uninstall retains data by default; purge is a separate authorized action. Production admission and lifecycle acceptance remain open.
 
 ## Testing and static analysis
 
@@ -191,44 +232,52 @@ See [testing](documentation/development/TESTING.md) and [isolated provisioning](
 
 ### PHP and Symfony frontend stack
 
-**Symfony renders the WCP360 frontend on the server through Twig.** Symfony UX adds navigation, partial updates, reusable components, and focused browser interactions. Controllers, forms, components, APIs, and jobs call the same domain services and authorization rules.
+**Symfony renders the WCP360 frontend on the server through Twig.** The candidate uses Turbo and Stimulus for navigation and focused interactions. Further UX component/form integrations remain explicit target work. Controllers, presentation and jobs call the same domain services and authorization rules.
 
 This follows Symfony's documented [PHP and Twig frontend approach](https://symfony.com/doc/current/frontend.html).
 
-| Layer | Selected technology | Role in WCP360 |
+| Layer | Technology | Candidate and target boundary |
 | :--- | :--- | :--- |
-| Application and routing | PHP / Symfony | Render ADMIN and USER routes, resolve context, authorize requests, and call domain services. |
-| Templates | [Twig](https://symfony.com/doc/current/templates.html) | Layouts, domain views, escaped output, form themes, and reusable presentation. |
-| Components | [Symfony UX Twig Components](https://symfony.com/bundles/ux-twig-component) | Shared tables, dialogs, status badges, resource cards, menus, and permission-aware presentation. |
-| Navigation and partial updates | [Symfony UX Turbo](https://symfony.com/bundles/ux-turbo) | Page navigation, scoped Frames, and targeted Streams using server-rendered HTML. |
-| Browser interactions | [StimulusBundle](https://symfony.com/bundles/StimulusBundle) | Small controllers for dialogs, selections, uploads, clipboard actions, and measured job refreshes. |
-| Reactive PHP components | [Symfony UX Live Components](https://symfony.com/bundles/ux-live-component) | Selected interactive filters and forms whose state is processed in PHP; server authorization applies on every action. |
-| Forms and validation | [Symfony Form](https://symfony.com/doc/current/forms.html), Validator, and Security CSRF | Shared form types, field errors, constraints, and protected mutations. |
-| Assets | [AssetMapper](https://symfony.com/doc/current/frontend/asset_mapper.html) | Import maps, versioned JavaScript/CSS, and local production assets served by Nginx. |
-| Styling | WCP360 CSS variables and [TailwindBundle](https://symfony.com/bundles/TailwindBundle) | Preserve design tokens, themes, density, and responsive layouts; prepare CSS using the pinned standalone Tailwind binary. |
-| Charts | [Symfony UX Chart.js](https://symfony.com/bundles/ux-chartjs) | Configure charts in PHP and display authorized usage and service measurements. |
-| Localization | Symfony Translation and Intl | Shared messages, locale-aware dates/numbers, and translated interfaces. |
-| Verification | [Symfony testing tools](https://symfony.com/doc/current/testing.html) and [Panther](https://symfony.com/doc/current/testing/end_to_end.html) | PHP unit/integration tests, form and authorization tests, and real-browser interaction checks. |
+| Application and routing | PHP / Symfony 7.4 | Implemented candidate routes and use cases; complete domain workflows remain open. |
+| Templates | [Twig](https://symfony.com/doc/current/templates.html) | Implemented layouts, escaped domain views and shared fragments under Core/templates. |
+| Navigation and partial updates | [Symfony UX Turbo](https://symfony.com/bundles/ux-turbo) | Installed candidate navigation and scoped updates; each journey needs its own acceptance evidence. |
+| Browser interactions | [StimulusBundle](https://symfony.com/bundles/StimulusBundle) | Installed focused controllers for navigation, appearance and form interaction. |
+| Assets | [AssetMapper](https://symfony.com/doc/current/frontend/asset_mapper.html) | Installed importmap/asset pipeline. The panel runtime requires no Node.js build service. |
+| Styling | WCP360 CSS variables and prototype-derived styles | Current implementation. [TailwindBundle](https://symfony.com/bundles/TailwindBundle) remains a target integration, with no compiler/package installed in the candidate. |
+| Typed UI components | [Symfony UX Twig Components](https://symfony.com/bundles/ux-twig-component) | Planned integration; current shared Twig includes are not UX component classes. |
+| Reactive PHP components | [Symfony UX Live Components](https://symfony.com/bundles/ux-live-component) | Planned, not currently installed; every future action must retain server authorization. |
+| Forms | [Symfony Form](https://symfony.com/doc/current/forms.html) | Planned reusable form integration. Candidate forms use Twig and explicit request/domain validation, Validator and Security CSRF. |
+| Charts | [Symfony UX Chart.js](https://symfony.com/bundles/ux-chartjs) | Planned, not currently installed; measurements must come from authorized real observations. |
+| Localization | Symfony Translation and Intl | Locale/translation integration remains to be completed; do not infer translated journeys from directory presence. |
+| Verification | PHPUnit, Symfony WebTestCase and [Panther](https://symfony.com/doc/current/testing/end_to_end.html) | Configured candidate suites have separate scopes. Executed results belong to an exact source revision and workflow. |
 
-AssetMapper and the standalone Tailwind integration allow this frontend toolchain to run without a Node.js build dependency. Asset preparation belongs to development and release builds; the production web application must not download or update its own dependencies. [TailwindBundle deployment guidance](https://symfony.com/bundles/TailwindBundle).
+If Tailwind is adopted, its pinned standalone compiler belongs to controlled development/release preparation. Production requests must not download compilers, update dependencies or acquire a Node.js runtime merely to serve the panel.
 
 ### Shared presentation and module ownership
 
-The UI library exposes WCP360 components such as `DataTable`, `FormPanel`, `ConfirmDialog`, `ResourceStatus`, and `JobProgress`. Domain modules consume these shared Twig/PHP components. Pagination, filtering, validation, accessibility, and confirmation behavior are maintained centrally.
+The reusable UI target includes `DataTable`, `FormPanel`, `ConfirmDialog`, `ResourceStatus` and `JobProgress`. Current shared fragments provide implemented pieces of those requirements; they do not establish the complete component library. Domain modules retain their validation, authority and resource ownership.
 
-The following is an intended implementation layout, rather than directories already present in `main`:
+The executable candidate follows the existing module layout:
 
 ```text
-presentation/
-├── admin/              # ADMIN controllers, routes, forms, and templates
-├── user/               # USER controllers, routes, forms, and templates
-├── shared/
-│   ├── components/     # Twig/PHP UI components
-│   ├── form-types/     # Reusable Symfony forms and themes
-│   ├── translations/   # Messages and formatting
-│   └── assets/         # Design tokens and Stimulus controllers
-└── modules/            # Domain presentation calling shared services
+WCP360_Core/
+├── src/
+│   ├── Module/<Domain>/
+│   │   ├── Domain/          # Types, invariants and resource policy
+│   │   ├── Application/     # Shared use cases and ports
+│   │   ├── Infrastructure/  # Persistence and bounded providers
+│   │   └── UI/              # Domain HTTP and Console adapters
+│   └── Shared/              # Cross-domain framework boundaries
+├── config/                  # Symfony packages, routes and contexts
+├── templates/
+│   ├── admin/ · user/ · setup/
+│   ├── hosting/ · identity/ · platform/ · operations/ · observability/
+│   └── layouts/ · components/ · errors/
+├── assets/                  # Stimulus, WCP360 styles and source images
+└── translations/
 ```
+
+[Core navigation](WCP360_Core/NAVIGATION.md) and the [working guide](WCP360_Core/WORKING-GUIDE.md) map actual files. There is no separate root `presentation/` application to build.
 
 | Boundary | Implementation rule |
 | :--- | :--- |
@@ -243,15 +292,17 @@ presentation/
 | Extensions | Accept declared contributions and reviewed assets; untrusted templates or scripts never enter the privileged shell. |
 | Accessibility | Verify labels, focus, keyboard operation, dialogs, contrast, and reduced motion in the assembled interface. |
 
-The current HTML/CSS/vanilla-JavaScript prototype remains the visual and behavioral reference. The target implementation moves shared rendering and form behavior into Symfony/Twig, with JavaScript confined to the browser interactions that require it.
+The HTML/CSS/JavaScript prototype remains the visual and behavioral reference. The Core candidate already ports selected pages into Symfony/Twig and WCP360 CSS; completing the shared UI and form library remains work. JavaScript stays focused on browser interactions.
 
 ## Backend architecture
 
-The backend target combines **PHP 8.4 / Symfony**, **Doctrine ORM and DBAL over PostgreSQL 17**, **Symfony Messenger**, and the Go agents **`wcpd` / `wcp-privd`** on **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS**. PHP handles application decisions and persistence; Go implements bounded system operations through a separate privilege boundary. Each distribution needs its own runtime-provider and service qualification.
+The backend target combines **PHP 8.4 / Symfony**, **Doctrine ORM and DBAL over PostgreSQL 17**, **Symfony Messenger**, and the Go agents **`wcpd` / `wcp-privd`** on **Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS**. The current Symfony 7.4 candidate uses DBAL persistence and its database job queue; Messenger transports and ORM entity integration remain separate work. PHP owns application decisions; Go implements bounded system operations through a distinct privilege boundary. Each distribution needs its own native provider and service qualification.
 
 Debian 13 natively supplies the selected PHP 8.4 and PostgreSQL 17 families. The other targets ship different defaults, including PHP 8.5 on Ubuntu 26.04; they require separately qualified PHP 8.4 and PostgreSQL 17 providers or services. Core's current `~8.4.0` constraint is unchanged. Exact revisions, extensions, updates and recovery must be verified per release. [Platform and package matrix](documentation/development/SUPPORTED-PLATFORMS.md).
 
 ### Backend responsibilities and runtime identities
+
+These are target runtime responsibilities. Current candidate implementations and the remaining identity/provider admission work are distinguished in [Core status](WCP360_Core/STATUS.md).
 
 | Layer | Responsibility | Runtime identity |
 | :--- | :--- | :--- |
@@ -275,7 +326,7 @@ Controller / request DTO
 
 ### PostgreSQL 17 and Doctrine persistence
 
-Doctrine is the selected persistence direction for Core metadata: identities, hosting accounts, plans, resources, relationships, policies, and operation records. Mapping belongs behind repository interfaces so controllers and business rules do not become coupled to ad hoc SQL. [Symfony and Doctrine](https://symfony.com/doc/current/doctrine.html).
+Doctrine is the selected persistence direction for Core metadata: identities, hosting accounts, plans, resources, relationships, policies and operation records. The current candidate uses explicit DBAL queries and migrations; ORM is a locked dependency with automatic mapping disabled, not an already mapped domain model. Future mappings belong behind reviewed repository interfaces and must preserve the existing ownership, constraint and transaction behavior. [Symfony and Doctrine](https://symfony.com/doc/current/doctrine.html).
 
 | Concern | Required behavior |
 | :--- | :--- |
@@ -291,7 +342,7 @@ Customer databases remain separate from the Core PostgreSQL database and its cre
 
 ### Messenger and asynchronous jobs
 
-Messages must be routed to an asynchronous transport: installing Messenger alone does not make every handler asynchronous. Redis is an optional transport; a database-backed Doctrine transport provides another deployment option. Deliveries may repeat, so handlers need stable idempotency rules. [Symfony Messenger](https://symfony.com/doc/current/messenger.html).
+Messenger and its Redis/Doctrine transport packages are not installed in the current Core lock. Candidate work is tracked through the existing database queue and bounded worker use cases. The target Messenger integration must route messages explicitly to a configured transport; Redis is optional and a Doctrine transport is another option to qualify. A transport is not the authoritative job model. Deliveries may repeat, so handlers need stable idempotency and recovery rules. [Symfony Messenger](https://symfony.com/doc/current/messenger.html).
 
 | Concern | WCP360 requirement |
 | :--- | :--- |
@@ -309,7 +360,7 @@ Archives, database provisioning, and certificate operations are examples of trac
 
 Socket transport, caller authentication, and encryption are separate concerns. Local Unix-domain IPC needs approved peer-identity, access-control, and framing rules; describing a socket alone does not establish encryption. Any network control channel requires authenticated encryption under the approved protocol. [Linux Unix-domain socket behavior](https://man7.org/linux/man-pages/man7/unix.7.html).
 
-No new listener, IPC runtime, or privileged operation is activated by this documentation. The current source status remains the [inert daemon foundation](#current-project-status).
+This documentation activates no listener, IPC runtime or privileged operation. The historical inert daemon remains a separate source lane. The executable Core also contains Go configuration planners and guarded isolated provisioning candidates; their exact disposable-environment evidence does not establish the canonical production broker or general host admission. See [candidate status](WCP360_Core/STATUS.md) and [isolated provisioning](documentation/development/ISOLATED-PROVISIONING.md).
 
 ### Trusted Core modules and isolated extensions
 
@@ -420,7 +471,9 @@ These boundaries follow the project's ADMIN/USER isolation, broker, and extensio
 | Sensitive changes | Require recent reauthentication for factor changes, secret disclosure, destructive actions, and critical network or security configuration. |
 | Browser storage | Keep session IDs, API credentials, and provider secrets out of localStorage, sessionStorage, URLs, and client-side preference data. |
 
-MFA needs an explicit integration, such as a reviewed [SchebTwoFactorBundle](https://symfony.com/bundles/SchebTwoFactorBundle); it is not activated by the framework name. Password behavior depends on the selected [Symfony hasher](https://symfony.com/doc/current/security/passwords.html) and available runtime algorithms.
+The candidate implements username/password login with Symfony Security and administrator TOTP through SchebTwoFactorBundle. **MFA is optional per administrator account and off by default** under the current product decision. Once enabled, its factor must complete; sensitive writes require fresh password proof when MFA is off or fresh completed MFA when it is on. Contact email is not a login alias. ROOT denotes panel administration and does not authenticate against Linux root credentials automatically. See [IdentityAccess](WCP360_Core/src/Module/IdentityAccess/README.md).
+
+The external canonical security baseline still requires ADMIN MFA. Reconciling that requirement with the documented product decision remains M1 integration work; this README neither changes the baseline nor claims production acceptance. Password behavior follows the selected [Symfony hasher](https://symfony.com/doc/current/security/passwords.html) and runtime algorithms.
 
 Cookie attributes and session lifecycle follow [OWASP session guidance](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html); bootstrap and surface separation remain project-specific requirements.
 
@@ -1349,7 +1402,7 @@ These requirements describe the environment to assemble and qualify for the inte
 | Requirement | Prerequisite |
 | :--- | :--- |
 | Operating system | Debian 12 or 13; Ubuntu 22.04, 24.04 or 26.04 LTS. Service, network, user, package and storage management must be qualified per target. |
-| Web access | Nginx, HTTPS configuration, a panel hostname, and appropriate DNS resolution. |
+| Web access | Nginx and qualified HTTPS/origin configuration for the panel. The new general-purpose hosting target additionally requires an admitted private Apache event backend and modules; it is not a current installation default. |
 | Frontend | PHP/Symfony, Twig, Symfony UX, AssetMapper, and a pinned standalone Tailwind compiler prepared in the build environment. |
 | Backend | PHP 8.4, a compatible pinned Symfony release, Composer, OPcache, and the extensions required by component manifests. |
 | PHP execution | PHP-FPM, separating the panel from customer application pools. |
@@ -1362,7 +1415,7 @@ These requirements describe the environment to assemble and qualify for the inte
 
 Versions and dependencies must be pinned in each component's manifests. **No minimum CPU, RAM, or disk configuration has yet been qualified for the complete panel in production.**
 
-The [supported-platform guide](documentation/development/SUPPORTED-PLATFORMS.md) records exact target IDs and native package families. The five-profile CI matrix checks OS recognition, read-only preflight and real native Nginx/PHP-FPM behavior. Its configuration is not a passing result, and its native PHP probe does not run Symfony Core on PHP 8.1, 8.2, 8.3 or 8.5. The complete PHP 8.4 candidate and privileged systemd/reboot rehearsal remain Debian 13-specific until the other targets receive their own adapters and evidence.
+The [supported-platform guide](documentation/development/SUPPORTED-PLATFORMS.md) records exact target IDs and native package families. The native package matrix checks OS recognition, read-only preflight and Nginx/PHP-FPM behavior; it does not run Symfony Core on the distributions’ PHP 8.1, 8.2, 8.3 or 8.5 streams. The separate [Core source-runtime matrix](documentation/development/CORE-RUNTIME-MATRIX.md) uses PHP 8.4 and an isolated PostgreSQL 17 service on all five target userspaces. The privileged systemd/reboot VM rehearsal remains Debian 13-specific. Workflow configuration and other-revision results never substitute for current-source execution or qualify a production provider.
 
 ### Requirements for currently available components
 
@@ -1370,7 +1423,8 @@ The [supported-platform guide](documentation/development/SUPPORTED-PLATFORMS.md)
 | :--- | :--- |
 | Read or clone the repository | Browser, repository access, and Git for source checkout. |
 | Explore the local HTML prototype | Browser with JavaScript and local storage; an HTTP server. The prototype provides loopback-only PowerShell and portable Node.js preview servers. |
-| Study the candidate kernel | PHP 8.4 and the relevant branch README; this candidate is not the complete Symfony platform described above. |
+| Work on the Symfony Core candidate | PHP `~8.4.0`, its locked dependencies and the environment in the [working guide](WCP360_Core/WORKING-GUIDE.md); PostgreSQL 17 for the applicable integration paths. Production installation remains unavailable. |
+| Study the historical candidate kernel | PHP 8.4 and its dated source-branch README; this is a separate framework-independent kernel. |
 | Run File Manager from GitHub sources | PHP `^8.2`, `json` and `fileinfo` extensions, Composer, and Symfony `^7.4` dependencies. The PHP `zip` extension is required for ZIP features. |
 | Build the inert daemon | Canonical Debian 13.7 / linux/amd64 environment, Go 1.27.3, pinned image and toolchain, and builds under UID/GID 10001 as documented in its README. |
 
@@ -1378,25 +1432,27 @@ Node.js is used by existing prototype audit tools. The selected Symfony frontend
 
 ## Current project status
 
-The stack and catalogs above describe the target. They must be distinguished from the delivery status of each component.
+The [central Core status](WCP360_Core/STATUS.md) distinguishes executable candidate behavior, planned requirements and retained execution evidence. The [working guide](WCP360_Core/WORKING-GUIDE.md) provides the entry points. The canonical `CODE-BASELINE` remains `NONE`; no production release is claimed.
 
 | Component | Documented status |
 | :--- | :--- |
-| Specifications, contracts, and governance | Present in `main`, with decision and evidence tracking. |
-| Panel prototype | HTML/CSS/JavaScript sources in `WCP360_Prototype/`, with local demo interactions and data; no server provisioning. |
-| Selected frontend target | PHP/Symfony, Twig, Symfony UX, and shared Twig components; implementation and integration remain to be completed. |
-| Selected backend target | PHP 8.4 / Symfony, Doctrine ORM/DBAL, PostgreSQL 17, and Messenger with an approved transport; these target integrations are not established by the inert foundation alone. |
-| Application kernel and interface | Candidate sources in `source/full-platform-candidate`, including a framework-independent PHP 8.4 kernel and static interface. |
-| `wcpd` daemon | Inert Go CLI foundation: help, version, and local checks; no listener or privileged effects. |
-| File Manager 0.3.0 alpha Pro | Development sources and archives in `WCP360_Plugins/`; WCP360 integration remains blocked pending contracts and an adapter. |
-| Insights Connector | Optional browser-storage prototype published in `WCP360_Plugins/wcp360-insights-connector/`, disabled by default; no production transport or remote administration is established. |
-| Complete platform | Symfony/Twig presentation, Doctrine/PostgreSQL 17 persistence, Messenger, agents, and hosting services still require integration and qualification; no production release is claimed here. |
+| Current Core development | Executable PHP 8.4 / Symfony 7.4 candidate under WCP360_Core, developed on `implementation/core-executable-foundation-20261031` in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). It is distinct from historical SOURCE candidates and from an installable production release. |
+| Authentication and presentation | Username-based USER/ROOT contexts, optional administrator MFA, candidate sessions/recovery, Twig/Turbo/Stimulus/AssetMapper and prototype-derived WCP360 CSS. Complete production IAM and the target UI library remain open. |
+| Data and operations | PostgreSQL 17 development verification, DBAL queries/migrations and bounded candidate jobs. ORM mapping, Messenger transports and general durable effect contracts remain open. |
+| Hosting and Go | Seven inert application previews, separate existing runtime profiles and narrowly guarded isolated FPM effects. Native general installation, real-domain/TLS lifecycle, stack switching and production qualification remain open. |
+| ROOT observations | Read-only capacity and fixed systemd unit-state inspection; no general service control or application-health guarantee. |
+| Application catalogue | Read-only Core bridge to AppDeploy editorial metadata. Draft descriptors and lifecycle guides do not authorize installation. |
+| Extension management | Fixed reference-plugin lifecycle candidate; general package admission, publisher trust, premium licensing and production supervision remain unfinished. |
+| Panel prototype | HTML/CSS/JavaScript demo sources in WCP360_Prototype; visual reference for the candidate, with simulated operations and browser storage. |
+| Historical source branches | `source/full-platform-candidate` and the inert daemon lanes retain their dated source/review scope; they are not the current Symfony Core implementation. |
+| File Manager 0.3.0 alpha Pro and Insights | Separate development packages/prototypes with their own manifests and integration limits. Their presence does not qualify a general plugin platform. |
+| Production release | None. Full installation, providers, security acceptance, recovery and independent release qualification remain required. |
 
-The current standalone File Manager uses **private, single-owner storage modified exclusively by that module**. This mode is not a multi-tenant backend for directories concurrently modified through SSH, FTP, or customer applications.
+The standalone File Manager's private single-owner storage is not a multi-tenant backend for directories concurrently modified through SSH, FTP or customer PHP. Current candidate code and passing checks must always be identified by exact source revision and environment.
 
 ## Explore and get started
 
-The [release directory](WCP360_Releases/README.md) reserves `v1.0.0/`, `v1.1.0/`, and a relative `latest` link. These are unreleased scaffolds: installer templates stop before system changes, and Core archives and production daemon binaries are not yet included.
+The [release directory](WCP360_Releases/README.md) contains no qualified version or `latest` pointer. Version records and a stable alias are created only for an actually qualified target. Earlier guarded installer templates live under [Core installer scaffolds](WCP360_Core/installer/scaffolds/README.md), with no installation authority.
 
 ### Clone the repository
 
@@ -1408,7 +1464,7 @@ cd wcp360
 git branch --all
 ```
 
-Start with the [current manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md), then consult the branch for the component you want to study. `main` is not an installer for the complete panel.
+Read the [working guide](WCP360_Core/WORKING-GUIDE.md), [candidate status](WCP360_Core/STATUS.md) and [baseline manifest](documentation/manifests/WCP360-BM-0001.md). Use the current Core branch/PR for its documented development candidate, and the dated branches below when studying historical components. A clone of `main` is not a complete panel installer.
 
 ### Install standalone File Manager dependencies
 
@@ -1450,6 +1506,7 @@ wcp360/
 │   ├── specifications/
 │   └── documentary references and mirrors
 ├── WCP360_Core/
+│   ├── WORKING-GUIDE.md / STATUS.md
 │   ├── NAVIGATION.md / DEPENDENCIES.md / CAPABILITY-MAP.md
 │   ├── src/                                # Shared primitives and 13 Core modules
 │   ├── config/                             # packages, routes and contexts
@@ -1465,6 +1522,7 @@ wcp360/
 │   ├── _template/
 │   ├── wcp360-file-manager-xampp/
 │   └── wcp360-insights-connector/
+├── WCP360_App_Deploy/                        # Editorial catalogue and draft recipes
 ├── WCP360_SDK/
 ├── WCP360_Build/
 ├── WCP360_Releases/
@@ -1476,13 +1534,14 @@ wcp360/
 
 | Directory | Responsibility | Current status |
 | :--- | :--- | :--- |
-| [WCP360_Core](WCP360_Core/README.md) | Symfony domain/services, reusable Twig UI, built-in extension manager, separate Go agents, setup/install source and tests. Find functions, commands, dependencies and Linux configuration in the [Core navigation index](WCP360_Core/NAVIGATION.md). | Architecture scaffold; complete runtime implementation and qualification remain pending. |
+| [WCP360_Core](WCP360_Core/README.md) | Executable Symfony candidate, domain use cases, shared Twig UI, separate Go sources, installer/recovery and tests. Start with the [working guide](WCP360_Core/WORKING-GUIDE.md). | Implemented candidate paths with explicit limits; complete product and production qualification remain pending. |
 | [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing File Manager/Insights development packages plus a documentation-only authoring template. |
-| [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures. | Reserved interface/layout; no executable client or ratified production manifest schema yet. |
-| [WCP360_Build](WCP360_Build/README.md) | Controlled environments, assembly, verification and publication. | Procedure/layout reserved; no new builder or workflow is claimed. |
+| [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures, independently versioned from Core. | Consult its own manifest/status for the selected checkout; local source presence does not establish a ratified production protocol or release. |
+| [WCP360_Build](WCP360_Build/README.md) | Controlled candidate environments, toolchains, verification and future qualified publication. | Existing candidate procedures/evidence have bounded scopes; no qualified production release pipeline is implied. |
 | [WCP360_Releases](WCP360_Releases/README.md) | Qualified version records and immutable artifact references. | No qualified release and no latest pointer. |
-| [WCP360_Prototype](WCP360_Prototype/README.md) | Existing panel UI prototype, assets and design notes. | Visual/demo reference to port into the Symfony/Twig frontend. |
+| [WCP360_Prototype](WCP360_Prototype/README.md) | Panel UI prototype, assets and design notes. | Visual/demo reference already used by the Symfony/Twig candidate; prototype interactions remain simulations. |
 | [WCP360_Developper](WCP360_Developper/README.md) | Existing developer/product documentation and historical snapshots. | Canonical authority remains in documentation/specifications and the manifest. |
+| [WCP360_App_Deploy](WCP360_App_Deploy/README.md) | Preserved editorial application catalogue and draft recipe/lifecycle authoring. | 410 references; read-only Core metadata bridge, with no live installer or deployment authority. |
 
 Core functions are namespaced services, not a global functions directory. Twig views live in Core/templates. Composer generates a separate vendor directory for each PHP application; Go dependencies use per-module manifests/cache. Generated dependencies and artifacts are not committed as source.
 
@@ -1490,7 +1549,7 @@ The Core must retain essential hosting, local administration, audit and recovery
 
 The earlier versioned installer templates now live under [Core installer scaffolds](WCP360_Core/installer/scaffolds/README.md). They remain guarded and non-operational. Version folders and a stable pointer in WCP360_Releases are created only after actual qualification.
 
-The root src reservation and old archive copies were removed; historical content remains in [the immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive). Internal Management and Official Website remain outside current main. See [repository history/path mapping](documentation/REPOSITORY-STRUCTURE.md).
+The earlier root src reservation and archive cleanup are recorded in [immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive) and [repository history/path mapping](documentation/REPOSITORY-STRUCTURE.md). Vendor Internal and the public website remain separate product concerns; their local workspace presence is not evidence of publication on `main`.
 
 Existing candidate source locations remain separate; this organizational change does not merge them:
 
@@ -1503,9 +1562,11 @@ Existing candidate source locations remain separate; this organizational change 
 
 ## GitHub branches
 
-All **14 branches** were reconciled on **October 31, 2026**: two documentation branches consolidated, one historical integration bundle retained, and ten open PR candidates kept at their exact review SHAs. Read the [branch reconciliation and dependency diagram](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) or its [complete path/blob evidence](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.json).
+The **November 2, 2026 inventory records 15 branches**. Current Core work continues on **one existing branch**, `implementation/core-executable-foundation-20261031`, in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Use the [working guide](WCP360_Core/WORKING-GUIDE.md) and [status](WCP360_Core/STATUS.md) for current orientation; this is not a claim that the candidate has merged into `main` or become a production release.
 
-| Branch | Current disposition |
+The table below preserves the **historical 14-branch snapshot from October 31, 2026**: two documentation branches consolidated, one historical integration bundle retained, and ten PR candidates kept at their review SHAs. These are dated dispositions, not a live PR-status feed. See the [reconciliation](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.md) and [path/blob evidence](documentation/governance/branches/BRANCH-RECONCILIATION-2026-10-31.json).
+
+| Branch in the October 31 snapshot | Disposition recorded at that date |
 | :--- | :--- |
 | [`audit/closure-matrix-refresh-2026-10-03`](https://github.com/yyogas/wcp360/tree/audit/closure-matrix-refresh-2026-10-03) | Integrated as a dated historical closure matrix; no audit closure claimed. |
 | [`design-system/import-v2.5.3.36.4-markdown`](https://github.com/yyogas/wcp360/tree/design-system/import-v2.5.3.36.4-markdown) | Consolidated: 20 existing identical documents reused; 2 metadata files archived. |
@@ -1532,7 +1593,8 @@ Research, source candidates and tooling branches require the applicable scope, t
 | Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/documentation/governance/PROJECT-STATUS.md). |
 | Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/documentation/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
 | Understand the architecture | [ARCHITECTURE.md](ARCHITECTURE.md): components, flows, data authority, system agents, extensions, and deployment boundaries. |
-| Study the application candidate | [Full candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [PHP kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
+| Work on the current Core | [Working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md), [Core navigation](WCP360_Core/NAVIGATION.md) and [draft PR #116](https://github.com/yyogas/wcp360/pull/116). |
+| Study historical application sources | [Full historical candidate overview](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [framework-independent kernel README](https://github.com/yyogas/wcp360/blob/source/full-platform-candidate/SOURCE/platform/README.md). |
 | Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/source/sc-m01-inert-daemon/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Follow release qualification | [Qualified version records](WCP360_Releases/README.md), [build procedures](WCP360_Build/README.md) and [installer scaffolds](WCP360_Core/installer/scaffolds/README.md). |

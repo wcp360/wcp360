@@ -6,13 +6,15 @@ WCP360 Standalone is the panel installed on a server. Its Core must remain usabl
 
 The existing **13 module owners** can accommodate the requested growth. The missing preparation is explicit ownership, implementation locations and delivery contracts, rather than duplicate Docker, AI, Licensing or Premium modules. This inventory complements the [Core roadmap](ROADMAP.md), [capability map](CAPABILITY-MAP.md), [web-server strategy](src/Module/Hosting/WEB-SERVER-STRATEGY.md) and [web-server roadmap](src/Module/Hosting/WEB-SERVER-ROADMAP.md).
 
+Use the [working guide](WORKING-GUIDE.md) for development orientation and [STATUS](STATUS.md) for current implementation and qualification. [NAVIGATION](NAVIGATION.md) locates changes, this document assigns ownership, [CAPABILITY-MAP](CAPABILITY-MAP.md) records the 233 statuses and [ROADMAP](ROADMAP.md) defines delivery order.
+
 ## What the inspection found
 
 | Area | Actual starting point | Preparation added |
 | :--- | :--- | :--- |
 | Business modules | 13 owners; several are README boundaries, others contain candidate code. | Named design locations and a cross-module responsibility map. |
 | CLI | One Symfony entry and eight domain candidate commands; native preflight tools are separate. | [Command/context inventory](bin/COMMANDS.md) and a shared Console presentation reservation. |
-| Linux resources | 17 documented service families, mostly reservations; candidate Go templates and three disposable VM units exist. | Seven additional family READMEs and updated [service index](resources/services/README.md). |
+| Linux resources | The original 17-family preparation was expanded to the current 24 families; most remain reservations, with external candidate Go templates and three disposable VM units. | Seven additional family READMEs and the current [service index](resources/services/README.md); implementation status remains in its linked register. |
 | Applications and Docker | Seven inert PHP topology recipes and a read-only editorial catalogue; no general tenant container manager. | [AppDeploy workspace](../WCP360_App_Deploy/README.md), [Core catalogue bridge](src/Module/Hosting/APPLICATION-CATALOGUE.md) and application/provider contracts with explicit data, ingress and recovery ownership. |
 | Premium and licenses | Fixed reference-plugin lifecycle; general package manager and license client unfinished. | Separate package admission, local entitlement and current-permission boundaries. |
 | AI, models and MCP | No implemented Core assistant, model provider or MCP runtime. | Optional-integration resource/design anchors; no tool or privilege is enabled. |

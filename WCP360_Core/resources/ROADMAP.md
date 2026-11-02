@@ -6,6 +6,8 @@
 
 This roadmap is subordinate to the [Core delivery roadmap](../ROADMAP.md) and the [233-capability register](../CAPABILITY-MAP.md). Folders and README reservations receive **no functional-completion credit**. The requested preparation may add reviewed README-only reservations before a backend is selected; they are documentation, not implementation. Do not create empty `templates/` or `profiles/` trees; add executable/configuration files only with their reviewed source and consuming implementation.
 
+Use the [working guide](../WORKING-GUIDE.md) to choose the owning source location and [current status](../STATUS.md) to distinguish implemented candidates from planned or unqualified behavior.
+
 ## What this layer is for
 
 | Concern | Lives here | Does not live here |
@@ -15,7 +17,7 @@ This roadmap is subordinate to the [Core delivery roadmap](../ROADMAP.md) and th
 | Candidate disposable-VM units | [systemd/candidate](services/systemd/candidate/) | Production `wcpd` / `wcp-privd` units |
 | Intended `/etc/wcp360`, `/var/lib/wcp360`, `/run/wcp360`, `/var/log/wcp360` conventions | documented in [README](README.md) | Actual machine state |
 
-The candidate Nginx, PHP-FPM and FrankenPHP **text** is currently rendered from [Go planner templates](../agents/wcpd/candidate/planner/templates), not from this directory. FrankenPHP's README already forbids copying those templates here. Promoting them into `resources/services/` is a later, explicit handoff: one renderer, one source of truth, no duplicated validators.
+The candidate Nginx, Apache, PHP-FPM, Caddy and FrankenPHP **text** is currently rendered from [Go planner templates](../agents/wcpd/candidate/planner/templates), not from this directory. FrankenPHP's README already forbids copying those templates here. Promoting them into `resources/services/` is a later, explicit handoff: one renderer, one source of truth, no duplicated validators.
 
 ## Current inventory
 
@@ -28,6 +30,8 @@ Twenty-four documented service locations exist under [services](services/README.
 | README plus disposable-VM unit files | 1 | systemd (`candidate/*.service`) |
 
 No service directory currently contains production `templates/` or `profiles/`. No resource file is an applied host configuration.
+
+The [Platform inventory](../src/Module/Platform/SERVICES.md) now supplies a bounded read-only candidate for nine service families and fourteen exact unit names. It neither covers all 24 resource families nor supplies provider admission, health verification or control; the 18/5/1 resource classification remains unchanged.
 
 ## Planned families with documentation reservations
 
@@ -66,6 +70,7 @@ Depends on: documented [configuration lifecycle](services/README.md#configuratio
 - Bind every future template to resource/tenant/service identity, observed revision, staged files, link/path refusal and post-reload health.
 - Distinguish validation failure, no-op, applied and uncertain outcome.
 - Continue to refuse `/etc` imports and secrets in Git.
+- Deliver the selected provider/version/target contract, owning typed settings/use case and adapter, canonical template/unit source, approved paths/secret references, and validation/recovery checks as one reviewed slice. The accepted contracts determine exact schemas and operation IDs; preparing this register creates none.
 
 **Acceptance:** new executable/configuration files land only under an existing service owner or an explicitly added family after backend selection. Requested reviewed README reservations may precede that selection. Navigation links resolve; no second renderer or allowlist is invented here.
 
@@ -77,7 +82,8 @@ Owners: Hosting, Platform. Depends on R0; aligns with [M2](../ROADMAP.md#m2)/[M5
 
 - Keep Go planner templates authoritative until an explicit reviewed source handoff. Existing Nginx, Apache, PHP-FPM, FrankenPHP and Caddy README pointers reference the same planner; do not copy candidate application/Modern templates into this tree.
 - Document version/package pins for Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS without claiming Ubuntu privileged qualification.
-- Preserve the current Nginx/PHP-FPM candidate default and existing assignments. The [adopted strategy](../src/Module/Hosting/WEB-SERVER-STRATEGY.md) targets Nginx -> Apache event -> PHP-FPM for new general-purpose installations only after versioned implementation and qualification. FrankenPHP classic and separately opted-in Worker remain distinct; previews grant no native activation.
+- Seven inert PHP application recipes are implemented in the single Go source: six retain application-plan/1; `nginx_apache_php_fpm` uses application-plan/2 and application-preview/2 with nginx/apache/php_fpm/htaccess artifacts. See [application profiles](../src/Module/Hosting/APPLICATION-PROFILES.md). Native Apache/event/FPM/HTTP qualification remains open.
+- Preserve the current Nginx/PHP-FPM candidate default and existing assignments. The [adopted strategy](../src/Module/Hosting/WEB-SERVER-STRATEGY.md) targets Nginx -> Apache event -> PHP-FPM for new general-purpose installations after durable-profile, provider and native-lifecycle implementation and qualification. FrankenPHP classic and separately opted-in Worker remain distinct; previews grant no installation, default change or activation.
 
 **Acceptance:** a reviewer can name the single template source for Nginx, pool and worker units. Duplicating `Caddyfile.tmpl` into `resources/` without retiring the planner copy is a failure.
 
@@ -110,7 +116,7 @@ Owner: Hosting with Files, Tenancy, Operations. Depends on R2, [M4](../ROADMAP.m
 - Per-version PHP-FPM pools, sockets, limits, extension/directive allowlists.
 - Authoritative DNS backend templates after engine selection (this folder must not imply BIND vs PowerDNS).
 - ACME client profiles and certificate deploy fragments for Nginx (mail deploy waits for R5).
-- Add the target private Apache event compatibility backend through the [web-server roadmap](../src/Module/Hosting/WEB-SERVER-ROADMAP.md); all requests traverse Apache for that profile. Dedicated Apache/FPM remains an alternative. Listener/TLS ownership and new topology contracts must precede live effects.
+- Complete native qualification and lifecycle for the existing version-2 Nginx/Apache/FPM preview through the [web-server roadmap](../src/Module/Hosting/WEB-SERVER-ROADMAP.md); all requests traverse Apache for that profile. Dedicated Apache/FPM remains an alternative. Durable topology contracts, provider admission and listener/TLS ownership must precede live effects.
 
 **Acceptance:** create/modify/suspend/delete a real-domain site on the claimed engine; failed apply leaves a repairable previous observed state or an explicit uncertain outcome.
 
@@ -147,7 +153,7 @@ Owners: Platform, Operations, BackupRestore, Observability. Depends on [M7](../R
 - OpenSSH host policy with verified administrator recovery path; SFTP/shell entitlements remain Tenancy/Files.
 - Firewall backend + lockout prevention.
 - Redis only where explicitly selected; isolate Core queues, sessions and application caches. Never expose it publicly. The current PostgreSQL-backed candidate job queue remains unchanged.
-- Backup tool profiles that work without a vendor plugin.
+- Backup tool profiles that work without a vendor plugin. The existing [candidate backup](../installer/recovery/candidate-backup.sh) and [isolated restore rehearsal](../installer/recovery/candidate-restore-test.sh) stay under installer/recovery; they do not implement the production BackupRestore lifecycle.
 - SSH/firewall/backup changes include rehearsal of recovery access when the panel UI is down.
 
 **Acceptance:** authorized apply/refuse tests, no management-plane lockout, secrets absent from diffs/logs/fixtures.

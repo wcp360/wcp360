@@ -1,5 +1,7 @@
 # Find and change Core code
 
+For the development workflow, start with the [working guide](WORKING-GUIDE.md) and [verified current status](STATUS.md). This index owns change locations; delivery order remains in ROADMAP and capability status in CAPABILITY-MAP.
+
 Start here to locate a change. This index documents the intended source locations; the experimental Symfony candidate implements the selected paths in the [run guide](../documentation/development/EXECUTABLE-CANDIDATE.md); other domains remain documentation scaffolds. Production Linux provisioning is not implemented.
 
 The [README capability map](CAPABILITY-MAP.md) traces 233 capabilities across 21 functional domains to their Core owners and distinguishes proposed plugins from missing source folders.

@@ -1,6 +1,6 @@
 # WCP360 development strategy
 
-**Decision scope:** repository organization and target development method, October 31, 2026. The layout combines documentation scaffolds with the selected executable development candidate: Symfony bootstrap, a restricted setup path, SDK/reference-plugin seam and checkout preparation helpers. Complete hosting, production installation and release qualification remain separate acceptance work. The [baseline manifest](../manifests/WCP360-BM-0001.md) and owner specifications retain authority; no runtime gate or independent review is silently granted.
+**Decision scope:** repository organization and target development method selected October 31, 2026; navigation synchronized November 2, 2026. The layout combines the executable Symfony/Go development candidate with documented reservations. Read the [Core working guide](../../WCP360_Core/WORKING-GUIDE.md) to resume work and [Core status](../../WCP360_Core/STATUS.md) for the exact verified checkpoint, its evidence and current limits. Complete hosting, production installation and release qualification remain separate acceptance work. The [baseline manifest](../manifests/WCP360-BM-0001.md) and owner specifications retain authority; no runtime gate or independent review is silently granted.
 
 Build one autonomous hosting Core, develop detached plugins against a versioned SDK, and publish each product only from qualified source and evidence. A complete Core must operate with zero optional plugins.
 
@@ -9,6 +9,7 @@ Build one autonomous hosting Core, develop detached plugins against a versioned 
 | Location | Responsibility |
 | :--- | :--- |
 | [WCP360_Core](../../WCP360_Core/README.md) | Symfony application, built-in hosting domains, reusable UI/services, extension manager, installer source, Go agents and integrated tests. |
+| [WCP360_App_Deploy](../../WCP360_App_Deploy/README.md) | Public editorial catalogue and independently authored application recipes; Core owns instances, authority, jobs, providers and recovery. The candidate bridge reads metadata only. |
 | [WCP360_Plugins](../../WCP360_Plugins/README.md) | One independently versioned/tested package per plugin. Current packages keep their names and source bytes. |
 | [WCP360_SDK](../../WCP360_SDK/README.md) | Public PHP client/contracts and synthetic testing support for integrations; no Core internals or privileged broker client. |
 | [WCP360_Build](../../WCP360_Build/README.md) | Build environments, package assembly and qualification/publication procedures. Generated output goes under ignored `build/`. |
@@ -75,7 +76,7 @@ Work in dependency order with a usable, tested result at each step. These work p
 
 | Step | Deliverable | Evidence before advancing |
 | :--- | :--- | :--- |
-| 1. Foundation | Reconcile the existing inert daemon and test candidates; bootstrap the approved Symfony/toolchain layout. | Current paths/toolchains, executed checks and applicable exact-SHA reviews. |
+| 1. Foundation | Preserve the verified Symfony/Go candidate and complete its production identity, permission and operation integration. Historical inert sources retain their own scope. | Current paths/toolchains, exact-source checks and applicable owner decisions/reviews; the candidate does not close production M1/M2. |
 | 2. Autonomous Core | Local identity, tenant isolation, permissions, jobs/audit, built-in hosting adapters, health and recovery. | Baseline hosting workflow operates with no optional plugin or vendor-service dependency. |
 | 3. Extension seam | Versioned API/SDK, package identity, compatibility, capabilities, data ownership and lifecycle registry. | Contract tests; denied cross-tenant/unknown operations; no private Core imports. |
 | 4. Plugin host | Admission, supervision, lifecycle, drain/recovery, menu registry and isolated UI contributions. | Install/enable/crash/disable/update/uninstall scenarios preserve Core and hosted workloads. |
@@ -92,7 +93,7 @@ Plugin discovery/design and isolated unit work can proceed alongside Core develo
 - Insights remains a UI/metadata prototype. Its version and crypto declarations do not prove a production transport or lifecycle.
 - The two package manifest shapes are not silently unified. Define and ratify one production manifest contract, then provide explicit migration/validation for existing packages.
 - Existing #108/#114/#110/#109 candidates keep their SHA-bound reviews. This scaffold does not copy or merge them into the target folders.
-- Feature branches can use `feature/core-<topic>`, `plugin/<id>/<topic>`, `sdk/<topic>` and `release/<version>`. Keep PRs bounded; integrate only applicable tests, owner decisions and genuine independent review.
+- Current Core development uses the single existing `implementation/core-executable-foundation-20261031` branch and draft PR #116. Do not create a new Core branch for routine continuation. The [working guide](../../WCP360_Core/WORKING-GUIDE.md) records the update workflow; independent SDK/plugin/release branch decisions require their own task scope. Keep changes bounded and preserve unrelated working-tree edits.
 - Core, SDK and plugins have independent versions and compatibility matrices. A plugin update does not require a new Core release when the approved compatibility contract remains satisfied.
 
 ## Detailed implementation guides
