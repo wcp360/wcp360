@@ -46,7 +46,7 @@ The additive `syntax_checks` member uses `wcp360.candidate.application-syntax/1`
 | Apache | `not_configured` | A separately controlled module/configuration harness is still required. |
 | .htaccess / systemd unit | `not_run` | HTTP rewrite behavior and supervisor validation need their own bounded environments. |
 
-[NativeSyntaxTools](Infrastructure/NativeSyntaxTools.php) admits only fixed installed binary locations on non-root Linux with POSIX identity support. The resolved binary and canonical parents must be root-owned and not group/world writable. Missing/inadmissible providers return `not_configured`; the Core never downloads or installs one. Presence does not establish version/module provenance or release admission.
+[NativeSyntaxTools](Infrastructure/NativeSyntaxTools.php) admits only fixed installed binary locations on non-root Linux with POSIX identity support. The resolved binary and canonical parents must be root-owned and not group/world writable; setuid/setgid executables are refused. Missing/inadmissible providers return `not_configured`; the Core never downloads or installs one. Presence does not establish version/module provenance or release admission.
 
 [SyntaxProcessRunner](Infrastructure/SyntaxProcessRunner.php) scrubs inherited and explicit process environment values, uses fixed unavailable HOME/XDG locations, empties PHP_INI_SCAN_DIR and enforces a five-second deadline, 256 KiB captured stdout and 16 KiB stderr. Failed/overflowing/timed-out children discard output and are stopped; the callback stops throwing after the first limit violation so cleanup can drain and terminate a continuing writer. These capture bounds are not OS memory/CPU sandboxing or hostile-module admission.
 

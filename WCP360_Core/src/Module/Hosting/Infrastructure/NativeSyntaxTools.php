@@ -22,7 +22,8 @@ class NativeSyntaxTools
             $current = $resolved;
             do {
                 $metadata = @stat($current);
-                if ($metadata === false || $metadata['uid'] !== 0 || ($metadata['mode'] & 0022) !== 0) continue 2;
+                if ($metadata === false || $metadata['uid'] !== 0 || ($metadata['mode'] & 0022) !== 0
+                    || ($current === $resolved && ($metadata['mode'] & 06000) !== 0)) continue 2;
                 $parent = dirname($current);
                 if ($parent === $current) break;
                 $current = $parent;

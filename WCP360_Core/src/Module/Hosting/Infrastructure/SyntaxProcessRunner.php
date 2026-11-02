@@ -21,7 +21,6 @@ class SyntaxProcessRunner
                 $environment[$key] = '/nonexistent';
             }
             $environment['PHP_INI_SCAN_DIR'] = '';
-            $process->setEnv($environment);
             $process->setTimeout(5.0);
             $process->setIdleTimeout(null);
             $process->disableOutput();
@@ -40,7 +39,7 @@ class SyntaxProcessRunner
                         throw new \RuntimeException('Parser diagnostic limit.');
                     }
                 }
-            });
+            }, $environment);
             if ($process->isSuccessful()) return new SyntaxProcessResult('passed', $stdout);
         } catch (\Throwable) {
             // Partial output and exception/native diagnostics do not cross the application boundary.
