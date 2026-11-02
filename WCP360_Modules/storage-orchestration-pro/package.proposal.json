@@ -25,13 +25,16 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced storage-pool and distributed-storage workflows using qualified providers, topology observations, snapshot coordination and controlled migration plans. Per-engine semantics, effective limits and recovery remain explicit.",
-    "core_boundary":  "Core retains local storage, filesystem quotas, ownership and ordinary backup/restore. This module adds optional advanced storage orchestration and cannot expose arbitrary device paths, mount commands or unqualified replacements for essential Core engine adapters.",
+    "summary":  "Advanced storage lifecycle orchestration covering performance/resilience tiers, pools, volumes, measured capacity, encryption-key references, snapshots, replication and controlled migration across qualified local or distributed providers. Each engine\u0027s durability, consistency, effective quota and restore semantics remain explicit.",
+    "core_boundary":  "Core retains essential local storage/device policy, filesystem quotas, ownership, encryption boundaries, ordinary snapshots where admitted and local backup/restore. This module adds advanced cross-pool/provider policy and orchestration; native storage/provider foundations remain open source, and no package receives arbitrary device paths, raw mount commands or the only recovery key.",
     "acceptance":  [
-                       "Qualify provider/version/topology capabilities and identify the actual owner of each pool, volume and snapshot.",
-                       "Verify capacity, effective quota/UID semantics, encryption references and workload dependencies before a change.",
-                       "Test partial migration, failed mounts, lost connectivity and competing operations with fencing and reconciliation.",
-                       "Refuse destructive changes without explicit dependency review, current authority and verified recovery references.",
-                       "Removing orchestration must leave mounted workloads, data ownership and a supported independent recovery path intact."
+                       "Qualify each engine/version/topology and storage tier using observed latency, resilience and durability characteristics; a tier name never proves performance or redundancy.",
+                       "Resolve authoritative pool/volume identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.",
+                       "Review encryption-at-rest support, key references, rotation, escrow/recovery and failure behavior without exporting plaintext keys into package data or logs.",
+                       "Coordinate snapshots with application/database consistency and retention; a local snapshot is not evidence of an independent backup or a tested restore.",
+                       "Qualify replication direction, lag, snapshot compatibility, fencing and recovery-point selection before an orchestrated promotion or migration.",
+                       "Exercise full pools, read-only filesystems, interrupted copies, failed mounts, concurrent changes and lost connectivity with explicit uncertain outcomes and reconciliation.",
+                       "Refuse destructive pool/volume/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.",
+                       "Removing or expiring orchestration must preserve mounted workloads, Core storage control, retained snapshots/backups, key recovery and a supported service-specific exit route."
                    ]
 }

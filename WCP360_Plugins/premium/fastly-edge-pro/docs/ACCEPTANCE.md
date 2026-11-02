@@ -7,6 +7,9 @@ Proposal: `plugin.fastly-edge-pro`. State: **design / not installable**. The aut
 - [ ] Bind account, service and candidate configuration version to an owned site and an immutable review.
 - [ ] Qualify purge granularity and cache bypass with private sessions and authorization-dependent responses.
 - [ ] Exercise failed activation, uncertain rollback and provider outages without changing local origin service.
+- [ ] Enable cache handoff only through a separately admitted profile proving protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge safety; otherwise bypass cache.
+- [ ] Qualify admitted origin TLS, origin exposure, bypass paths, trusted client-IP provenance and selected IPv4/IPv6/UDP/HTTP3 behavior without weakening origin policy.
+- [ ] Separate content-encoding negotiation, Vary/ETag and measured performance from cacheability; verify purge observation and rollback without guaranteeing speedup, attack absorption or upstream capacity.
 - [ ] Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.
 - [ ] Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.
 - [ ] Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested.

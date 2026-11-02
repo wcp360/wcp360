@@ -13,6 +13,7 @@ For request references, safe API error envelopes and branded error pages, start 
 | I need to change… | Start here | Then follow |
 | :--- | :--- | :--- |
 | Core folders, extension boundaries and growth preparation | [Structure and gap index](STRUCTURE.md) | Existing 13 owners, 24 service families, documented design/resource reservations and ordered implementation |
+| Multi-server, storage, Docker, Kubernetes, VM, booster, CDN, cybersecurity and DDoS | [Infrastructure coverage](../documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) | Existing Core owners plus separately developed optional workflows/providers; design only |
 | Core license and external PRO catalogues | [AGPL licensing](LICENSING.md), [edition strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) | [Business modules](../WCP360_Modules/CATALOG.md), [provider plugins](../WCP360_Plugins/premium/CATALOG.md); proposals remain non-installable |
 | License client, commercial rights and premium packages | [Tenancy licensing](src/Module/Tenancy/design/licensing/README.md) | [Package admission](src/Module/ExtensionManagement/design/packages/README.md); current IAM permission remains separate |
 | Docker/OCI, container networks and volumes | [Platform containers](src/Module/Platform/design/containers/README.md) | [Hosted applications](src/Module/Hosting/design/applications/README.md), [Docker resources](resources/services/docker/README.md) and durable operations |

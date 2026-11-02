@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.incus-pro",
+    "kind":  "plugin",
+    "label":  "Incus project and instance connector",
+    "category":  "compute-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "compute.lxc",
+                           "compute.containers",
+                           "compute.images"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare project-scoped Incus instance inventory and reviewed container or VM lifecycle requests.",
+    "core_boundary":  "A project mapping does not itself establish secure tenant isolation. The plugin does not receive a host socket, unrestricted profiles or privileged instance authority. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the selected Incus API, project restrictions and instance type with an explicit tenant ownership map and scoped credentials.",
+                       "Review image provenance, profiles, devices, nesting, network exposure and CPU/memory/storage limits rather than accepting arbitrary instance configuration.",
+                       "Exercise interrupted operations, snapshots and storage retention; qualify container and VM behavior separately and preserve host administration outside tenant capabilities.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

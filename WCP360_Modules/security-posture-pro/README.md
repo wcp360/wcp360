@@ -1,4 +1,4 @@
-# Security Posture Pro
+# Cybersecurity Posture Pro
 
 **Planning proposal: design / PRO / installable: false / source model: undecided.** No runtime package or premium license is delivered.
 
@@ -12,11 +12,11 @@
 
 ## Proposed optional scope
 
-Advanced cross-service posture review, exception tracking, evidence comparison and source-attributed policy recommendations. Optional scanners and advisory providers feed bounded findings rather than automatically changing server configuration.
+Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, software advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence, tracks reviewed exceptions and produces scoped remediation proposals; scanner investigations, active incident response and DDoS orchestration remain separate workflows.
 
 ## Retained Core boundary
 
-All baseline security, hardening, secrets, tenant isolation and compliance controls required by the 233 capabilities remain free Core duties. This module adds comparative assessments and exception workflows; a PRO entitlement cannot relax the Core security floor.
+All essential security, tenant isolation, credential/MFA/session protections, host hardening, firewall policy, baseline protection, audit and local recovery remain in the free Core. Cybersecurity Posture adds comparative assessments and exception/evidence workflows, without a second policy authority, raw shell or entitlement-based relaxation of mandatory controls.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

@@ -1,14 +1,17 @@
-# Security Posture Pro acceptance preparation
+# Cybersecurity Posture Pro acceptance preparation
 
 **Status: design.** These are required future checks, not executed results or production acceptance. The authoritative requirements are the acceptance list in [package.proposal.json](../package.proposal.json), materialized from [CATALOG.json](../../CATALOG.json).
 
 ## Package-specific checks
 
-1. Record engine/version/source/time for every finding and distinguish measured facts, advisory applicability and recommendations.
-2. Qualify selected checks against safe synthetic fixtures and prevent unrestricted file/network/process inspection.
-3. Bind any proposed remediation to its resource owner and current permission, with explicit diff, risk and recovery evidence.
-4. Test revoked authority, stale findings, false positives and provider outages without claiming a host is secure.
-5. Removal must preserve mandatory Core protections, local incident visibility and authorized baseline remediation.
+1. Record subject, engine/package version, evidence source/time, freshness and applicability for every posture statement, including unknown and uncollected areas.
+2. Assess identity/secret exposure, configuration drift, TLS and reachable-service policy through qualified bounded observations; do not equate an inventory with a vulnerability scan.
+3. Scope optional advisory/WAF/file-integrity findings to the actual tenant/resource and compatible provider; coordinate with malware, response and DDoS modules without duplicating their case or execution authority.
+4. Qualify check inputs, rate/resource budgets, redaction and permitted network/filesystem visibility against synthetic fixtures; refuse unrestricted scans or root inspection.
+5. Bind remediation proposals to the owning Core use case, current permission, exact resource revision, meaningful diff and supported recovery procedure.
+6. Exercise false positives, revoked actors, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.
+7. Preserve all mandatory baseline controls during disablement, expiry and provider loss; optional scores must never unlock a weaker security policy.
+8. Make reviewed findings and permitted evidence exportable while Core audit, authorized baseline remediation and local incident/recovery access remain independent of this package.
 
 ## Shared release and exit checks
 

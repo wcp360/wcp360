@@ -2,7 +2,7 @@
 
 This is an optional premium connector proposal, not an implemented or installable package. Its current state is **design**, **not installable**, with the source distribution model **undecided**.
 
-Prepare reviewed external edge service mappings, version diffs and bounded cache invalidation.
+Prepare reviewed Fastly edge mappings, performance/compression policy diffs and bounded cache invalidation for owned sites.
 
 ## Proposal record
 
@@ -20,13 +20,16 @@ Catalogue keys refer to the [existing 149-entry design catalogue](../../../PLUGI
 
 ## Core boundary
 
-The connector adds an optional edge provider and never silently replaces Core origin ownership or application privacy policy. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.
+An optional edge provider cannot replace Core origin ownership or privacy/access rules. Native compression remains free Core and the all-traffic Nginx-to-Apache/.htaccess profile keeps direct-file and response caching off by default. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.
 
 ## Intended scope and evidence
 
 1. Bind account, service and candidate configuration version to an owned site and an immutable review.
 2. Qualify purge granularity and cache bypass with private sessions and authorization-dependent responses.
 3. Exercise failed activation, uncertain rollback and provider outages without changing local origin service.
+4. Enable cache handoff only through a separately admitted profile proving protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge safety; otherwise bypass cache.
+5. Qualify admitted origin TLS, origin exposure, bypass paths, trusted client-IP provenance and selected IPv4/IPv6/UDP/HTTP3 behavior without weakening origin policy.
+6. Separate content-encoding negotiation, Vary/ETag and measured performance from cacheability; verify purge observation and rollback without guaranteeing speedup, attack absorption or upstream capacity.
 
 The complete [acceptance record](docs/ACCEPTANCE.md) defines evidence still required. No checks are marked complete, and no SDK/provider version, target compatibility, release artifact or production entitlement is selected.
 

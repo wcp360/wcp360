@@ -2,7 +2,7 @@
     "schema":  "wcp360.premium-package-proposal/1",
     "id":  "module.security-posture-pro",
     "kind":  "module",
-    "label":  "Security Posture Pro",
+    "label":  "Cybersecurity Posture Pro",
     "category":  "security",
     "tier":  "pro",
     "status":  "design",
@@ -22,13 +22,16 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced cross-service posture review, exception tracking, evidence comparison and source-attributed policy recommendations. Optional scanners and advisory providers feed bounded findings rather than automatically changing server configuration.",
-    "core_boundary":  "All baseline security, hardening, secrets, tenant isolation and compliance controls required by the 233 capabilities remain free Core duties. This module adds comparative assessments and exception workflows; a PRO entitlement cannot relax the Core security floor.",
+    "summary":  "Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, software advisories, configuration drift and selected protection integrations. It correlates source-attributed evidence, tracks reviewed exceptions and produces scoped remediation proposals; scanner investigations, active incident response and DDoS orchestration remain separate workflows.",
+    "core_boundary":  "All essential security, tenant isolation, credential/MFA/session protections, host hardening, firewall policy, baseline protection, audit and local recovery remain in the free Core. Cybersecurity Posture adds comparative assessments and exception/evidence workflows, without a second policy authority, raw shell or entitlement-based relaxation of mandatory controls.",
     "acceptance":  [
-                       "Record engine/version/source/time for every finding and distinguish measured facts, advisory applicability and recommendations.",
-                       "Qualify selected checks against safe synthetic fixtures and prevent unrestricted file/network/process inspection.",
-                       "Bind any proposed remediation to its resource owner and current permission, with explicit diff, risk and recovery evidence.",
-                       "Test revoked authority, stale findings, false positives and provider outages without claiming a host is secure.",
-                       "Removal must preserve mandatory Core protections, local incident visibility and authorized baseline remediation."
+                       "Record subject, engine/package version, evidence source/time, freshness and applicability for every posture statement, including unknown and uncollected areas.",
+                       "Assess identity/secret exposure, configuration drift, TLS and reachable-service policy through qualified bounded observations; do not equate an inventory with a vulnerability scan.",
+                       "Scope optional advisory/WAF/file-integrity findings to the actual tenant/resource and compatible provider; coordinate with malware, response and DDoS modules without duplicating their case or execution authority.",
+                       "Qualify check inputs, rate/resource budgets, redaction and permitted network/filesystem visibility against synthetic fixtures; refuse unrestricted scans or root inspection.",
+                       "Bind remediation proposals to the owning Core use case, current permission, exact resource revision, meaningful diff and supported recovery procedure.",
+                       "Exercise false positives, revoked actors, stale findings, exceptions and provider outages while keeping missing evidence distinct from secure or healthy status.",
+                       "Preserve all mandatory baseline controls during disablement, expiry and provider loss; optional scores must never unlock a weaker security policy.",
+                       "Make reviewed findings and permitted evidence exportable while Core audit, authorized baseline remediation and local incident/recovery access remain independent of this package."
                    ]
 }

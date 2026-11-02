@@ -1,0 +1,32 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.bunny-cdn-pro",
+    "kind":  "plugin",
+    "label":  "Bunny CDN edge connector",
+    "category":  "dns-cdn-domains",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "domains.cdn-edge"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare selected Bunny CDN origin, zone and reviewed delivery/performance policies for explicitly owned sites.",
+    "core_boundary":  "CDN caching and native compression are distinct. Native routing, compression and the Nginx-to-Apache all-traffic/.htaccess contract remain free Core responsibilities; no external cache is enabled by this proposal. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify an admitted provider/API profile, zone/origin ownership, origin TLS, trusted client-IP handling and IPv4/IPv6/HTTP3 behavior without bypassing origin access rules.",
+                       "Keep caching disabled for the all-traffic Apache profile unless a separately admitted profile proves protected files, nested .htaccess, authorization changes, cookies, private responses and per-tenant cache-key/purge behavior cannot expose content.",
+                       "Review content encoding, Vary/ETag, purge propagation, stale content and rollback independently; compression never implies public cacheability or guaranteed performance.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

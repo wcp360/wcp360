@@ -12,11 +12,11 @@
 
 ## Proposed optional scope
 
-Advanced multi-node service coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows. Availability claims are limited to the provider, topology, workload and failure cases actually qualified.
+Advanced service-continuity coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows on already admitted nodes/providers. Availability is scoped to qualified topology/workload/failure cases; node enrollment and placement orchestration belong to Multi-server Hosting Pro, while application releases remain deployment workflows.
 
 ## Retained Core boundary
 
-Core remains a complete standalone panel with essential recovery and ordinary service lifecycle. This module adds optional multi-node coordination; it does not turn templates into a cluster manager or make cross-node authority part of an unreviewed plugin.
+Core remains a complete standalone panel with essential recovery, ordinary service lifecycle and open-source node/provider authority when implemented. This module adds optional cross-node continuity coordination; it creates neither a second node registry nor an unreviewed remote root/cluster-control path.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

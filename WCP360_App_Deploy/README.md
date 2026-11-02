@@ -33,6 +33,8 @@ The [edition strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) kee
 
 This is a product boundary, not a working entitlement gate or installer. Existing hosted applications continue running when a premium package or subscription becomes unavailable, and essential recovery stays accessible.
 
+The [infrastructure coverage register](../documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) relates Docker, Kubernetes, VM, multi-server, storage, CDN and performance/security workflows to their Core owners. Each recipe must bind a qualified provider/isolation profile, persistent data, ingress and recovery. A Docker or Kubernetes label does not qualify Discourse, WordPress or any other application on all targets; cache acceleration must preserve the adopted Apache/protected-content boundary.
+
 ## Integration and delivery
 
 The candidate Core catalogue command reads fixed CSV metadata through a typed Hosting port. It performs no installation, package download, provider connection or host change. Every returned candidate remains non-installable. Missing catalogue files must not prevent Core boot; inspect the command's unavailable/failed result instead of inventing success. See the [exact boundary](docs/CORE-INTEGRATION.md).

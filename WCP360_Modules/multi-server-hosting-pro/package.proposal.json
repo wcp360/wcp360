@@ -1,0 +1,45 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.multi-server-hosting-pro",
+    "kind":  "module",
+    "label":  "Multi-server Hosting Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Tenancy",
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability",
+                        "BackupRestore",
+                        "Data",
+                        "Mail",
+                        "Transfers"
+                    ],
+    "catalogue_keys":  [
+                           "compute.node-groups",
+                           "compute.rolling-operations",
+                           "runtime.workers",
+                           "network.service-ha",
+                           "automation.playbooks"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced hosting orchestration across admitted servers: enrollment workflows, trust review, tenant/resource placement, scoped node routing, capacity groups, maintenance/drain waves and fleet care. It coordinates existing per-resource operations and observed outcomes rather than introducing a second authoritative node or customer registry.",
+    "core_boundary":  "Single-node hosting, identity/tenant boundaries, service control, local recovery and any future admitted node/provider/transport foundations remain open-source Core responsibilities. This premium module adds multi-server workflow intent and coordination only; it has no raw shell, privileged socket, direct Core database access or implicit authority over remote servers.",
+    "acceptance":  [
+                       "Admit nodes through reviewed enrollment, peer identity, trust roots, key rotation/revocation and version/capability evidence; reject unknown, replaced or replayed identities.",
+                       "Resolve each tenant/resource to authoritative node placement and current route/revision before dispatch; never select a destination solely from a client-supplied node ID.",
+                       "Qualify scheduling and capacity policy against effective CPU/RAM/storage/network limits, locality and isolation; distinguish recommendations from reserved or enforced resources.",
+                       "Exercise leases/fencing, stale workers, concurrent placement, partitions, delayed acknowledgements and unavailable control paths without cross-tenant effects or competing active owners.",
+                       "Track drain, maintenance, certificate/runtime upgrades and fleet-care waves with bounded batches, per-node results and service-specific recovery.",
+                       "Document which existing workloads continue during controller/provider outage; keep uncertain operations reconcilable instead of blindly replaying them on another node.",
+                       "Qualify resource migration and return-to-service checks with the owning Hosting/Data/Mail/Files/Transfers/BackupRestore contracts, retained recovery points and explicit cutover authority.",
+                       "Disable the premium coordinator without interrupting established node workloads or independent Core control, ownership inventory and recovery on each admitted server."
+                   ]
+}

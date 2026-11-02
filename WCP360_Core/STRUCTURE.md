@@ -84,6 +84,8 @@ An integration can be commercially optional without moving essential platform ow
 
 ## Modules, packages and runtime dependencies
 
+The [nine-domain coverage register](../documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) maps multi-server, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS to existing Core owners and external packages. Platform/Hosting/Operations retain future admitted provider, node and effect foundations; essential cache/compression, security and recovery are not moved behind PRO. Core foundation contracts and each provider profile still require implementation and qualification.
+
 The 13 internal domain modules retain Core ownership. External premium modules are independently packaged optional workflows, not replacements for these owners. Planning catalogues and package.proposal.json files are not runtime manifests and are not discovered by the fixed candidate registry. Catalogue creation changes no capability delivery status.
 
 ```mermaid

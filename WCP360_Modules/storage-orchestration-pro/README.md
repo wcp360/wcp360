@@ -12,11 +12,11 @@
 
 ## Proposed optional scope
 
-Advanced storage-pool and distributed-storage workflows using qualified providers, topology observations, snapshot coordination and controlled migration plans. Per-engine semantics, effective limits and recovery remain explicit.
+Advanced storage lifecycle orchestration covering performance/resilience tiers, pools, volumes, measured capacity, encryption-key references, snapshots, replication and controlled migration across qualified local or distributed providers. Each engine's durability, consistency, effective quota and restore semantics remain explicit.
 
 ## Retained Core boundary
 
-Core retains local storage, filesystem quotas, ownership and ordinary backup/restore. This module adds optional advanced storage orchestration and cannot expose arbitrary device paths, mount commands or unqualified replacements for essential Core engine adapters.
+Core retains essential local storage/device policy, filesystem quotas, ownership, encryption boundaries, ordinary snapshots where admitted and local backup/restore. This module adds advanced cross-pool/provider policy and orchestration; native storage/provider foundations remain open source, and no package receives arbitrary device paths, raw mount commands or the only recovery key.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

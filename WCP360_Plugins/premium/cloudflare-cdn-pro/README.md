@@ -2,7 +2,7 @@
 
 This is an optional premium connector proposal, not an implemented or installable package. Its current state is **design**, **not installable**, with the source distribution model **undecided**.
 
-Prepare optional CDN routing, scoped cache operations and edge observations for owned sites.
+Prepare optional Cloudflare CDN routing, reviewed performance/compression policies and scoped cache operations for explicitly owned sites.
 
 ## Proposal record
 
@@ -20,13 +20,16 @@ Catalogue keys refer to the [existing 149-entry design catalogue](../../../PLUGI
 
 ## Core boundary
 
-Core ingress, TLS ownership and application authorization remain authoritative; CDN features cannot bypass protected content policy. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.
+Core ingress, TLS ownership and application authorization remain authoritative. Native compression stays free Core; the all-traffic Nginx-to-Apache/.htaccess profile does not acquire an external cache by default. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.
 
 ## Intended scope and evidence
 
 1. Prove authenticated/private paths, cookies and uploads remain outside any unqualified cache policy.
 2. Scope purge operations to the owned site and distinguish provider acceptance from observed invalidation.
 3. Test TLS/origin conflicts, disabled integration and provider outage while existing hosting remains available.
+4. Keep response caching disabled for the all-traffic Apache profile unless a separately admitted profile proves protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge correctness.
+5. Qualify origin TLS, origin exposure and bypass paths, trusted client-IP provenance and selected IPv4/IPv6/UDP/HTTP3 behavior before changing an admitted edge profile.
+6. Review compression negotiation, Vary/ETag, purge propagation, stale-response behavior and rollback independently; compression is not permission to make content public and no speedup or DDoS capacity is guaranteed.
 
 The complete [acceptance record](docs/ACCEPTANCE.md) defines evidence still required. No checks are marked complete, and no SDK/provider version, target compatibility, release artifact or production entitlement is selected.
 

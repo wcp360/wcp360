@@ -3,7 +3,7 @@
     "id":  "module.network-traffic-pro",
     "kind":  "module",
     "label":  "Network Traffic Pro",
-    "category":  "infrastructure",
+    "category":  "networking",
     "tier":  "pro",
     "status":  "design",
     "installable":  false,
@@ -24,8 +24,8 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced traffic and overlay-network orchestration with reviewed routing policies, measured checks and staged changes across qualified edge providers. Specific load-balancer, DNS, CDN and tunnel integrations remain separate connectors.",
-    "core_boundary":  "Core retains baseline IP/network/firewall administration, management-access recovery and the seven essential engine adapters. This module adds optional global/overlay coordination; it cannot supply arbitrary network scans, tunnels or firewall command strings.",
+    "summary":  "Advanced load-balancer, global-routing and overlay-network orchestration with reviewed listener/upstream policies, measured checks and staged changes across qualified providers. CDN cache/content delivery is owned by CDN Management Pro, DDoS-response policy by DDoS Defense Pro and workload placement by Multi-server Hosting Pro.",
+    "core_boundary":  "Core retains baseline IP/network/firewall administration, native gateway/provider foundations, management-access recovery and the seven essential engine adapters. This module coordinates advanced traffic policy through accepted owned operations, not arbitrary scans, tunnels, raw firewall commands or a competing routing authority.",
     "acceptance":  [
                        "Map public/private listeners, routing authority, certificates and allowed upstreams before accepting a traffic plan.",
                        "Qualify protocol, source-address, timeout and health semantics for each selected provider combination.",

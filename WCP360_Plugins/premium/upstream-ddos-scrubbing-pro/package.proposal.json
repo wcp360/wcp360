@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.upstream-ddos-scrubbing-pro",
+    "kind":  "plugin",
+    "label":  "Upstream DDoS scrubbing provider connector",
+    "category":  "security-defense",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "network.sdn",
+                           "domains.global-routing",
+                           "security.threat-intel"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare an explicitly selected upstream L3/L4 mitigation provider profile and authorized routing/incident coordination.",
+    "core_boundary":  "Volumetric upstream mitigation is distinct from local L7 WAF, rate limits and firewall controls. This proposal provides no guarantee of attack absorption or customer uplink capacity. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify provider coverage, admitted prefixes/services, ownership, activation authority, routing/tunnel dependencies and IPv4/IPv6/UDP/HTTP3 limits before any proposed diversion.",
+                       "Coordinate origin exposure, trusted client-IP provenance and bypass paths; separate upstream L3/L4 controls from local L7 response and require current approval for routing effects.",
+                       "Exercise false positives, stale mitigation requests, upstream outage and withdrawal/rollback with synthetic isolated evidence only; no live customer attack, capacity promise or guaranteed mitigation result.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

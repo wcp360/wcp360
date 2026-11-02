@@ -1,0 +1,42 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.docker-management-pro",
+    "kind":  "module",
+    "label":  "Docker Management Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Tenancy",
+                        "Files",
+                        "Data",
+                        "Operations",
+                        "Observability",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "compute.containers",
+                           "compute.images",
+                           "compute.rolling-operations",
+                           "backup.restore-tests"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced Docker/OCI workload lifecycle management: reviewed images/build provenance, scoped containers and application groups, private networks, ports, volumes, secret references, effective quotas, logs/health, coordinated updates and verified backups. Every exposed operation depends on an explicitly admitted provider and owned resource.",
+    "core_boundary":  "Essential native hosting, storage, isolation, permissions and any future qualified Docker/provider foundations remain open source. This module adds advanced workload orchestration through Core contracts; it never hands a tenant or package the host Docker socket, unrestricted daemon API, privileged containers, raw root commands or Core credentials.",
+    "acceptance":  [
+                       "Qualify Docker/OCI versions and rootful/rootless assumptions, peer identity, cgroup delegation and actual CPU/RAM/PID/storage/log enforcement before declaring support.",
+                       "Pin images to reviewed immutable digests with upstream source/license and provenance checks; isolate builds and refuse unreviewed image/build privileges.",
+                       "Map tenant workload identity, UID/GID policy, allowed mounts, ports and network/egress ownership; refuse host sockets, sensitive bind mounts, host namespaces and unrestricted privileged modes.",
+                       "Manage volume data, consistency boundaries, database dependencies, encryption/secret references and retention explicitly rather than treating container recreation as data recovery.",
+                       "Bound logs, exec-like diagnostic capabilities, health checks and resource observations; module APIs cannot become arbitrary container or host command dispatch.",
+                       "Exercise start/stop/update/drain and supported rollback with current authority, resource revisions, health evidence and per-workload outcomes.",
+                       "Rehearse backup/restore of application data plus required configuration/secrets references on isolated targets; test failed pulls, full storage, daemon loss and interrupted updates.",
+                       "On expiry/removal, stop new premium orchestration safely while containers, data, ordinary Core provider control and independent recovery remain available."
+                   ]
+}

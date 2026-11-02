@@ -7,6 +7,9 @@ Proposal: `plugin.cloudflare-cdn-pro`. State: **design / not installable**. The 
 - [ ] Prove authenticated/private paths, cookies and uploads remain outside any unqualified cache policy.
 - [ ] Scope purge operations to the owned site and distinguish provider acceptance from observed invalidation.
 - [ ] Test TLS/origin conflicts, disabled integration and provider outage while existing hosting remains available.
+- [ ] Keep response caching disabled for the all-traffic Apache profile unless a separately admitted profile proves protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge correctness.
+- [ ] Qualify origin TLS, origin exposure and bypass paths, trusted client-IP provenance and selected IPv4/IPv6/UDP/HTTP3 behavior before changing an admitted edge profile.
+- [ ] Review compression negotiation, Vary/ETag, purge propagation, stale-response behavior and rollback independently; compression is not permission to make content public and no speedup or DDoS capacity is guaranteed.
 - [ ] Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.
 - [ ] Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.
 - [ ] Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested.

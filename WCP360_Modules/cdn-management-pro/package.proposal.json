@@ -1,0 +1,43 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.cdn-management-pro",
+    "kind":  "module",
+    "label":  "CDN Management Pro",
+    "category":  "networking",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Platform",
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "domains.cdn-edge",
+                           "domains.global-routing",
+                           "domains.cloudflare",
+                           "domains.dns-providers",
+                           "observe.synthetics"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced multi-site CDN/edge orchestration with provider-qualified delivery profiles, origin/DNS binding, cache rules, purge workflows, TLS review and source-attributed cache/availability observations. Specific CDN providers remain connectors and retain their actual capability limits.",
+    "core_boundary":  "Core domain/DNS/TLS authority, ordinary caching/compression, origin security and essential hosting remain free. The current Nginx -\u003e Apache -\u003e FPM target routes all content, including static files, through Apache with edge direct-file/response-cache off by default. This module adds advanced CDN policy coordination only; no protected/private response may move to an edge cache without explicitly admitted, versioned semantics, and no proprietary edge service becomes necessary for Core hosting or recovery.",
+    "acceptance":  [
+                       "Bind each zone/distribution/profile to the authorized tenant, domain, origin, selected provider account and current resource revision before requesting an edge change.",
+                       "Qualify origin TLS, certificate/hostname validation, SNI, origin authentication, direct-origin exposure policy and management-recovery access without disabling mandatory checks.",
+                       "Review cache keys for Host/tenant/resource, query and negotiated variants, including Vary/Accept-Encoding; require bypass for logged-in users, authorization headers, sessions, carts, admin/private APIs, cookies, private responses and state-changing methods to prevent poisoning or cross-account disclosure.",
+                       "Preserve all-request Apache authorization in the current Nginx -\u003e Apache -\u003e FPM target: default edge-cache/direct-file remains disabled, including for CSS/assets protected by nested .htaccess or directory access rules.",
+                       "Require explicit Core-owner admission/versioning and negative protected-file/auth/cookie/private-content tests before any CDN cache policy or authority handoff; compression and CDN connectivity do not authorize public caching.",
+                       "Qualify compression negotiation, variant isolation, double-compression prevention, effective resource budgets and supported rollback. Secret-bearing dynamic compression requires its own risk/correctness decision and must remain bypassed when unqualified.",
+                       "Implement bounded scoped purge/invalidation with provider receipts, replay handling and explicit propagation uncertainty; acceptance is not global purge completion.",
+                       "Constrain rewrites, redirects, upstream destinations, compression and edge-worker features to admitted capabilities and separately reviewed code where applicable.",
+                       "Measure cache correctness, origin/offload behavior, stale responses, error rates and request costs for each provider/profile; avoid treating CDN activation as proof of faster or safer delivery.",
+                       "Exercise provider outage, credential rotation/revocation, DNS/certificate changes and failed deployments with a documented service-specific exit/recovery path.",
+                       "Disabling premium orchestration must preserve current delivery policy and independent Core origin/DNS/TLS control; provider removal requires dependency review rather than silently breaking sites."
+                   ]
+}

@@ -337,6 +337,8 @@ The [edition strategy](documentation/development/EDITIONS-AND-PREMIUM.md) links 
 
 PRO targets full access to qualified App Install recipes. Core application instances, jobs, providers, ingress, data and recovery remain Core-owned. New premium workflows must check current rights and authority separately while preserving running workloads and essential recovery during expiry, outage, disablement or removal. No production entitlement engine or generic package/app installer is enabled by this design.
 
+The [infrastructure coverage register](documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) makes multi-server hosting, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS explicit. Advanced workflows and provider-specific connectors remain separate; essential Core providers, caching/compression, security, ownership and recovery stay open source. Node roles, partition/fencing, tenant isolation, hypervisor/guest separation, protected-content caching and upstream mitigation require independent acceptance before availability is claimed.
+
 ### Admission and execution
 
 An installable extension needs an identifiable publisher, artifact digest, verified trust evidence, compatibility/dependency checks, reviewed capability set, owned-data migration strategy, health checks, resource budget, and recovery/removal plan.

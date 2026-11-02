@@ -1,6 +1,6 @@
 # Premium connector catalogue
 
-**60 proposals · 10 categories · design only · not installable**
+**76 proposals · 15 categories · design only · not installable**
 
 [CATALOG.json](CATALOG.json) is authoritative. Each entry below links to its three-file proposal record; the JSON mirrors are synchronized with `packages`. Read [the catalogue contract](README.md), [editions](../../documentation/development/EDITIONS-AND-PREMIUM.md) and [Core licensing](../../WCP360_Core/LICENSING.md) before using this inventory.
 
@@ -25,7 +25,7 @@ Selected external accounts, projects, regions and node resources.
 
 ## DNS, CDN and domains
 
-DNS providers, DNS-01, registrars and admitted edge services.
+DNS providers, DNS-01, registrars and explicitly admitted CDN/performance policies.
 
 | Proposal ID | Connector | Core owners | Existing catalogue keys |
 | :--- | :--- | :--- | :--- |
@@ -37,6 +37,7 @@ DNS providers, DNS-01, registrars and admitted edge services.
 | `plugin.cloudflare-cdn-pro` | [Cloudflare CDN and edge connector](cloudflare-cdn-pro/README.md) | Hosting, Observability, Operations | `domains.cloudflare`, `domains.cdn-edge` |
 | `plugin.fastly-edge-pro` | [Fastly edge connector](fastly-edge-pro/README.md) | Hosting, Observability, Operations | `domains.cdn-edge` |
 | `plugin.registrar-portfolio-pro` | [Registrar portfolio connector pack](registrar-portfolio-pro/README.md) | Hosting, Transfers, Operations | `domains.registrars`, `domains.domain-monitoring` |
+| `plugin.bunny-cdn-pro` | [Bunny CDN edge connector](bunny-cdn-pro/README.md) | Hosting, Observability, Operations | `domains.cdn-edge` |
 
 <a id="backup-object-storage"></a>
 
@@ -156,8 +157,68 @@ Source-specific portfolio, mailbox and PostgreSQL migration profiles.
 | `plugin.imap-mailbox-migration-pro` | [IMAP mailbox migration connector](imap-mailbox-migration-pro/README.md) | Transfers, Mail, IdentityAccess | `mail.mailbox-migration` |
 | `plugin.external-postgres-migration-pro` | [External PostgreSQL migration connector](external-postgres-migration-pro/README.md) | Transfers, Data, BackupRestore | `data.external-databases`, `data.replication`, `backup.transfers` |
 
+<a id="compute-platforms"></a>
+
+## Docker, Kubernetes and virtualization
+
+Core-mediated Docker, namespace-scoped Kubernetes and distinct hypervisor/guest profiles.
+
+| Proposal ID | Connector | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| `plugin.docker-management-adapter-pro` | [Docker managed operations adapter](docker-management-adapter-pro/README.md) | Platform, Operations, Tenancy | `compute.containers`, `compute.images`, `compute.rolling-operations` |
+| `plugin.kubernetes-api-pro` | [Kubernetes API connector](kubernetes-api-pro/README.md) | Platform, Operations, Tenancy | `compute.kubernetes`, `compute.node-groups`, `compute.rolling-operations` |
+| `plugin.proxmox-ve-pro` | [Proxmox VE virtualization connector](proxmox-ve-pro/README.md) | Platform, Operations, Tenancy | `compute.proxmox`, `compute.node-groups`, `compute.images` |
+| `plugin.libvirt-kvm-pro` | [libvirt and KVM managed adapter](libvirt-kvm-pro/README.md) | Platform, Operations, Tenancy | `compute.libvirt`, `compute.images`, `compute.node-groups` |
+| `plugin.incus-pro` | [Incus project and instance connector](incus-pro/README.md) | Platform, Operations, Tenancy | `compute.lxc`, `compute.containers`, `compute.images` |
+| `plugin.openstack-pro` | [OpenStack project infrastructure connector](openstack-pro/README.md) | Platform, Operations, Tenancy | `automation.terraform-opentofu`, `compute.node-groups`, `compute.images` |
+
+<a id="storage-platforms"></a>
+
+## Storage platforms
+
+Object gateways, admitted dataset/share/snapshot APIs and retained-data decisions.
+
+| Proposal ID | Connector | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| `plugin.ceph-rgw-pro` | [Ceph RGW object-storage connector](ceph-rgw-pro/README.md) | BackupRestore, Files, Platform, Operations | `storage.ceph`, `storage.object-storage`, `backup.s3` |
+| `plugin.minio-storage-pro` | [MinIO object-storage connector](minio-storage-pro/README.md) | BackupRestore, Files, Platform, Operations | `storage.object-storage`, `backup.s3`, `backup.immutable` |
+| `plugin.truenas-zfs-pro` | [TrueNAS and ZFS storage connector](truenas-zfs-pro/README.md) | Platform, Files, BackupRestore, Operations | `storage.zfs`, `storage.nfs`, `storage.smb` |
+
+<a id="security-defense"></a>
+
+## Cybersecurity and DDoS defense
+
+Reviewed defensive decisions, WAF policy integration and distinct upstream L3/L4 mitigation.
+
+| Proposal ID | Connector | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| `plugin.crowdsec-defense-pro` | [CrowdSec defensive workflow connector](crowdsec-defense-pro/README.md) | Platform, Observability, Operations, Hosting | `security.crowdsec`, `security.threat-intel` |
+| `plugin.modsecurity-crs-pro` | [ModSecurity CRS managed-policy connector](modsecurity-crs-pro/README.md) | Hosting, Platform, Observability, Operations | `security.waf`, `security.advisories` |
+| `plugin.coraza-waf-pro` | [Coraza managed-policy connector](coraza-waf-pro/README.md) | Hosting, Platform, Observability, Operations | `security.waf`, `security.advisories` |
+| `plugin.upstream-ddos-scrubbing-pro` | [Upstream DDoS scrubbing provider connector](upstream-ddos-scrubbing-pro/README.md) | Platform, Hosting, Observability, Operations | `network.sdn`, `domains.global-routing`, `security.threat-intel` |
+
+<a id="multi-server-automation"></a>
+
+## Multi-server automation
+
+Admitted controller inventories and bounded reviewed multi-server job templates.
+
+| Proposal ID | Connector | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| `plugin.awx-controller-pro` | [AWX multi-server workflow connector](awx-controller-pro/README.md) | Platform, Operations, Tenancy | `automation.ansible`, `compute.node-groups`, `compute.rolling-operations` |
+
+<a id="performance-cache"></a>
+
+## Performance and HTTP caching
+
+Qualified external-cache profiles; native compression and target Apache routing stay Core.
+
+| Proposal ID | Connector | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| `plugin.varnish-cache-pro` | [Varnish-compatible managed cache connector](varnish-cache-pro/README.md) | Hosting, Platform, Observability, Operations | `domains.cdn-edge` |
+
 ## Count and mapping rules
 
-The 60 IDs are unique local proposal IDs. Their catalogue-key references reuse exact entries from the [149-entry catalogue](../../PLUGIN_CATALOG.md); they do not reclassify the 233 essential Core capabilities as paid features. One connector can implement several keys, and several proposed connectors can address one provider family.
+The 76 IDs are unique local proposal IDs. Their catalogue-key references reuse exact entries from the [149-entry catalogue](../../PLUGIN_CATALOG.md); they do not reclassify the 233 essential Core capabilities as paid features. One connector can implement several keys, and several proposed connectors can address one provider family.
 
-The [_template](_template/README.md) is excluded. The separate [36 module proposals](../../WCP360_Modules/CATALOG.md) are not duplicated here. No entry is a released package, Core-discovered manifest, accepted provider contract or legal licensing decision.
+The [_template](_template/README.md) is excluded. The separate [43 module proposals](../../WCP360_Modules/CATALOG.md) are not duplicated here. No entry is a released package, Core-discovered manifest, accepted provider contract or legal licensing decision.

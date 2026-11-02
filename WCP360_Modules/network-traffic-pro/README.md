@@ -5,18 +5,18 @@
 | Field | Proposed value |
 | :--- | :--- |
 | Planning ID | `module.network-traffic-pro` |
-| Category | `infrastructure` |
+| Category | `networking` |
 | Core owners | Platform, Hosting, Operations, Observability |
 | Source catalogue keys | `network.haproxy`, `network.traefik`, `domains.global-routing`, `domains.cdn-edge`, `network.wireguard` |
 | Selected package dependencies | None; Core contracts and qualified providers remain prerequisites. |
 
 ## Proposed optional scope
 
-Advanced traffic and overlay-network orchestration with reviewed routing policies, measured checks and staged changes across qualified edge providers. Specific load-balancer, DNS, CDN and tunnel integrations remain separate connectors.
+Advanced load-balancer, global-routing and overlay-network orchestration with reviewed listener/upstream policies, measured checks and staged changes across qualified providers. CDN cache/content delivery is owned by CDN Management Pro, DDoS-response policy by DDoS Defense Pro and workload placement by Multi-server Hosting Pro.
 
 ## Retained Core boundary
 
-Core retains baseline IP/network/firewall administration, management-access recovery and the seven essential engine adapters. This module adds optional global/overlay coordination; it cannot supply arbitrary network scans, tunnels or firewall command strings.
+Core retains baseline IP/network/firewall administration, native gateway/provider foundations, management-access recovery and the seven essential engine adapters. This module coordinates advanced traffic policy through accepted owned operations, not arbitrary scans, tunnels, raw firewall commands or a competing routing authority.
 
 PRO entitlement is separate from package trust/compatibility and current Core permissions. Hosted services and independent Core control/recovery must survive expiry, provider failure, disablement and removal.
 

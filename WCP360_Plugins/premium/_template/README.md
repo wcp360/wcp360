@@ -1,6 +1,6 @@
 # Premium connector proposal template
 
-This is a documentation template, excluded from the 60-entry [catalogue](../CATALOG.json). It is distinct from the existing [plugin implementation authoring template](../../_template/README.md). Neither template is an installer input or a production manifest.
+This is a documentation template, excluded from the 76-entry [catalogue](../CATALOG.json). It is distinct from the existing [plugin implementation authoring template](../../_template/README.md). Neither template is an installer input or a production manifest.
 
 Copy these three documents only when a concrete proposal is requested:
 

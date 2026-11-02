@@ -1,0 +1,44 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.kubernetes-management-pro",
+    "kind":  "module",
+    "label":  "Kubernetes Management Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "IdentityAccess",
+                        "Tenancy",
+                        "Operations",
+                        "Observability",
+                        "Files",
+                        "Data",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "compute.kubernetes",
+                           "compute.images",
+                           "compute.node-groups",
+                           "compute.rolling-operations",
+                           "network.service-ha"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced Kubernetes and multi-cluster application orchestration: admitted cluster contexts, namespaces/RBAC, workloads, services/ingress/TLS, persistent volumes, quotas, observations, controlled upgrades and restore. It preserves provider/cluster-specific behavior and does not infer tenant isolation from a namespace name alone.",
+    "core_boundary":  "Core resource ownership, current permissions, ordinary hosting/security/storage and any future admitted cluster/provider foundations remain OSS. The module adds reviewed advanced orchestration; it cannot issue cluster-admin kubeconfigs to users, expose unrestricted Kubernetes APIs, write Core tables or replace authoritative workload identity.",
+    "acceptance":  [
+                       "Enroll each cluster context with reviewed endpoint/CA/peer trust, credential scope, supported API/provider versions and tenant mapping; qualify multi-cluster routing and revocation.",
+                       "Validate namespace/RBAC/service-account boundaries, admission restrictions, pod security and network policies with negative cross-tenant and host-access cases.",
+                       "Qualify workload rollout/drain behavior, resource requests/limits, quotas and effective isolation before permitting deployment or scale changes.",
+                       "Bind services, ingress, public/private listeners, DNS and TLS/certificate ownership explicitly; reject unintended exposure or access to control-plane/metadata destinations.",
+                       "Map persistent-volume/storage-class identities, access modes, snapshots, application consistency and secret references; namespace deletion is not an accepted backup/removal plan.",
+                       "Bound logs/events/metrics and approved diagnostics, keeping tokens and sensitive pod configuration out of responses and exports.",
+                       "Exercise cluster/provider outages, API-version changes, concurrent reconciliations and reviewed upgrades with fencing, health checks and explicit uncertain states.",
+                       "Rehearse isolated application/data restore and multi-cluster recovery only for supported provider combinations; removal must retain workloads and independent cluster/Core recovery without a premium gate."
+                   ]
+}

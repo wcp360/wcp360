@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.kubernetes-api-pro",
+    "kind":  "plugin",
+    "label":  "Kubernetes API connector",
+    "category":  "compute-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Operations",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "compute.kubernetes",
+                           "compute.node-groups",
+                           "compute.rolling-operations"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare scoped Kubernetes inventory and reviewed application lifecycle requests for selected clusters and namespaces.",
+    "core_boundary":  "Core owns current authorization and admission. No generic kubeconfig, arbitrary resource YAML, pod exec or cluster-admin capability is delegated to the plugin. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify a selected API revision and admission profile with exact cluster, namespace, service-account and verb/resource RBAC; separately approve every required cluster-scoped action.",
+                       "Reject cross-namespace objects, privilege escalation, unsafe workload identities and unapproved host/network mounts; qualify resource quotas, secrets and network isolation without assuming namespace RBAC alone provides tenant isolation.",
+                       "Exercise rollout interruption, disconnected clusters, storage claims and partial reconciliation; preserve persistent data and avoid claiming a Kubernetes cluster or every OS is supported before qualification.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

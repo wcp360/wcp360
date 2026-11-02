@@ -4,11 +4,14 @@
 
 ## Package-specific checks
 
-1. Qualify provider/version/topology capabilities and identify the actual owner of each pool, volume and snapshot.
-2. Verify capacity, effective quota/UID semantics, encryption references and workload dependencies before a change.
-3. Test partial migration, failed mounts, lost connectivity and competing operations with fencing and reconciliation.
-4. Refuse destructive changes without explicit dependency review, current authority and verified recovery references.
-5. Removing orchestration must leave mounted workloads, data ownership and a supported independent recovery path intact.
+1. Qualify each engine/version/topology and storage tier using observed latency, resilience and durability characteristics; a tier name never proves performance or redundancy.
+2. Resolve authoritative pool/volume identities, tenants, capacity, inode/IO limits and mounted workload dependencies before allocating, moving, expanding or retiring storage.
+3. Review encryption-at-rest support, key references, rotation, escrow/recovery and failure behavior without exporting plaintext keys into package data or logs.
+4. Coordinate snapshots with application/database consistency and retention; a local snapshot is not evidence of an independent backup or a tested restore.
+5. Qualify replication direction, lag, snapshot compatibility, fencing and recovery-point selection before an orchestrated promotion or migration.
+6. Exercise full pools, read-only filesystems, interrupted copies, failed mounts, concurrent changes and lost connectivity with explicit uncertain outcomes and reconciliation.
+7. Refuse destructive pool/volume/snapshot actions without current authority, resource revisions, dependency review and an independently verified recovery reference.
+8. Removing or expiring orchestration must preserve mounted workloads, Core storage control, retained snapshots/backups, key recovery and a supported service-specific exit route.
 
 ## Shared release and exit checks
 

@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.truenas-zfs-pro",
+    "kind":  "plugin",
+    "label":  "TrueNAS and ZFS storage connector",
+    "category":  "storage-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Files",
+                        "BackupRestore",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "storage.zfs",
+                           "storage.nfs",
+                           "storage.smb"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare a qualified TrueNAS API profile for explicitly owned datasets, shares, snapshots and storage observations.",
+    "core_boundary":  "Local ZFS/filesystem primitives remain Core-owned and free. The plugin gains no zfs shell, direct disks, arbitrary mount paths or unrestricted storage-appliance administration. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Select a TrueNAS product/API revision and map admitted pools, datasets, shares and tenant quotas to narrowly scoped provider credentials.",
+                       "Separate snapshot, replication and share proposals from pool, disk, mount and encryption-key administration; qualify restore and key recovery independently.",
+                       "Exercise partial replication, quota exhaustion and dataset dependency conflicts; destroying a dataset or snapshot is distinct from disconnecting a share and requires retained-data review.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

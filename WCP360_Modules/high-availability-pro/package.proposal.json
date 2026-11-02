@@ -25,8 +25,8 @@
     "dependencies":  [
 
                      ],
-    "summary":  "Advanced multi-node service coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows. Availability claims are limited to the provider, topology, workload and failure cases actually qualified.",
-    "core_boundary":  "Core remains a complete standalone panel with essential recovery and ordinary service lifecycle. This module adds optional multi-node coordination; it does not turn templates into a cluster manager or make cross-node authority part of an unreviewed plugin.",
+    "summary":  "Advanced service-continuity coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows on already admitted nodes/providers. Availability is scoped to qualified topology/workload/failure cases; node enrollment and placement orchestration belong to Multi-server Hosting Pro, while application releases remain deployment workflows.",
+    "core_boundary":  "Core remains a complete standalone panel with essential recovery, ordinary service lifecycle and open-source node/provider authority when implemented. This module adds optional cross-node continuity coordination; it creates neither a second node registry nor an unreviewed remote root/cluster-control path.",
     "acceptance":  [
                        "Admit topology and peer identities explicitly, including network partitions, quorum/fencing and shared-storage assumptions.",
                        "Test split-brain, stale leaders, delayed messages and asymmetric failures before enabling a promotion strategy.",

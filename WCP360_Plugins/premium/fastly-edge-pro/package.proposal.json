@@ -1,30 +1,35 @@
 {
-  "schema": "wcp360.premium-package-proposal/1",
-  "id": "plugin.fastly-edge-pro",
-  "kind": "plugin",
-  "label": "Fastly edge connector",
-  "category": "dns-cdn-domains",
-  "tier": "pro",
-  "status": "design",
-  "installable": false,
-  "source_model": "undecided",
-  "core_owners": [
-    "Hosting",
-    "Observability",
-    "Operations"
-  ],
-  "catalogue_keys": [
-    "domains.cdn-edge"
-  ],
-  "dependencies": [],
-  "summary": "Prepare reviewed external edge service mappings, version diffs and bounded cache invalidation.",
-  "core_boundary": "The connector adds an optional edge provider and never silently replaces Core origin ownership or application privacy policy. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
-  "acceptance": [
-    "Bind account, service and candidate configuration version to an owned site and an immutable review.",
-    "Qualify purge granularity and cache bypass with private sessions and authorization-dependent responses.",
-    "Exercise failed activation, uncertain rollback and provider outages without changing local origin service.",
-    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
-    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
-    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
-  ]
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.fastly-edge-pro",
+    "kind":  "plugin",
+    "label":  "Fastly edge connector",
+    "category":  "dns-cdn-domains",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "domains.cdn-edge"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare reviewed Fastly edge mappings, performance/compression policy diffs and bounded cache invalidation for owned sites.",
+    "core_boundary":  "An optional edge provider cannot replace Core origin ownership or privacy/access rules. Native compression remains free Core and the all-traffic Nginx-to-Apache/.htaccess profile keeps direct-file and response caching off by default. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Bind account, service and candidate configuration version to an owned site and an immutable review.",
+                       "Qualify purge granularity and cache bypass with private sessions and authorization-dependent responses.",
+                       "Exercise failed activation, uncertain rollback and provider outages without changing local origin service.",
+                       "Enable cache handoff only through a separately admitted profile proving protected assets, nested .htaccess, authorization revocation, cookies, private responses and tenant cache-key/purge safety; otherwise bypass cache.",
+                       "Qualify admitted origin TLS, origin exposure, bypass paths, trusted client-IP provenance and selected IPv4/IPv6/UDP/HTTP3 behavior without weakening origin policy.",
+                       "Separate content-encoding negotiation, Vary/ETag and measured performance from cacheability; verify purge observation and rollback without guaranteeing speedup, attack absorption or upstream capacity.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
 }

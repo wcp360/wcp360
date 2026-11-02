@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "plugin.minio-storage-pro",
+    "kind":  "plugin",
+    "label":  "MinIO object-storage connector",
+    "category":  "storage-platforms",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "BackupRestore",
+                        "Files",
+                        "Platform",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "storage.object-storage",
+                           "backup.s3",
+                           "backup.immutable"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Prepare a selected MinIO deployment profile for owned object data and remote backup destinations.",
+    "core_boundary":  "The proposal does not select a MinIO edition, license or supported API revision. Provider administration, host storage and local recovery stay outside plugin authority. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+    "acceptance":  [
+                       "Qualify the exact product/distribution, API profile and licensing obligations before mapping an admitted tenant, bucket and prefix.",
+                       "Verify integrity, encryption, quota and any versioning/retention capabilities on the selected deployment; do not promise identical S3 or immutability semantics.",
+                       "Exercise unavailable credentials, incomplete uploads and clean-target restores; preserve retained data on disable/uninstall and require explicit authorization for bucket or object purge.",
+                       "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+                       "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+                       "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+                   ]
+}

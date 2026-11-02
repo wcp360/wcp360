@@ -6,6 +6,8 @@ Build one autonomous hosting Core, develop detached plugins against a versioned 
 
 The [Community/PRO strategy](EDITIONS-AND-PREMIUM.md) owns edition boundaries, premium lifecycle and the path from a proposal to a qualified package. [Core licensing](../../WCP360_Core/LICENSING.md) records the AGPL-3.0-only grant. The new catalogues are preparation; they add no live package admission, entitlement protocol or app deployment.
 
+The [infrastructure coverage register](INFRASTRUCTURE-PREMIUM-COVERAGE.md) maps multi-server hosting, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS to Core owners, optional packages and qualification gates.
+
 ## Repository responsibilities
 
 | Location | Responsibility |

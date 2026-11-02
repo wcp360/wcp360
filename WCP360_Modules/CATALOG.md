@@ -2,7 +2,7 @@
 
 <!-- Generated from CATALOG.json. Update the authoritative JSON and regenerate this view and package exports. -->
 
-**36 design proposals across 14 categories. All are PRO, non-installable and source_model: undecided.** No package implementation, provider admission, pricing or premium license is supplied.
+**43 design proposals across 16 categories. All are PRO, non-installable and source_model: undecided.** No package implementation, provider admission, pricing or premium license is supplied.
 
 This catalogue adds optional advanced workflows. All 233 essential capabilities and the seven Core engine adapters remain in the free Core scope. PRO rights never replace package trust, compatibility or current authorization. See [boundaries and authoring](README.md), the [machine catalogue](CATALOG.json), [planning schema](schemas/package-proposal.schema.json), [149-entry source](../PLUGIN_CATALOG.md) and [editions strategy](../documentation/development/EDITIONS-AND-PREMIUM.md).
 
@@ -48,9 +48,10 @@ This catalogue adds optional advanced workflows. All 233 essential capabilities 
 
 | Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
 | :--- | :--- | :--- | :--- |
-| [Security Posture Pro](security-posture-pro/README.md)<br><code>module.security-posture-pro</code> | Advanced cross-service posture review, exception tracking, evidence comparison and source-attributed policy recommendations. | Platform, IdentityAccess, Observability, Operations | `security.advisories`, `security.waf`, `security.file-integrity` |
+| [Cybersecurity Posture Pro](security-posture-pro/README.md)<br><code>module.security-posture-pro</code> | Advanced cybersecurity posture review across identities, secrets, exposed services, TLS, software advisories, configuration drift and selected protection integrations. | Platform, IdentityAccess, Observability, Operations | `security.advisories`, `security.waf`, `security.file-integrity` |
 | [Threat Response Pro](threat-response-pro/README.md)<br><code>module.threat-response-pro</code> | Advanced response playbooks that correlate selected security signals and propose scoped containment sequences. | IdentityAccess, Platform, Observability, Operations, Hosting | `security.siem`, `security.crowdsec`, `security.threat-intel`, `automation.event-rules` |
 | [Malware Investigation Pro](malware-investigation-pro/README.md)<br><code>module.malware-investigation-pro</code> | Advanced investigation cases combining scoped scanner findings, file-change evidence, comparison and reviewed quarantine proposals. | Files, Hosting, Observability, Operations, BackupRestore | `security.clamav`, `security.maldet`, `security.forensics`, `security.file-integrity` |
+| [DDoS Defense Pro](ddos-defense-pro/README.md)<br><code>module.ddos-defense-pro</code> | Advanced DDoS observation and response coordination across qualified upstream scrubbing/edge providers and admitted local L7 controls. | Platform, Hosting, IdentityAccess, Operations, Observability | `security.crowdsec`, `security.waf`, `security.threat-intel`, `domains.cdn-edge`, `network.haproxy`, `network.service-ha` |
 
 ## observability
 
@@ -86,9 +87,19 @@ This catalogue adds optional advanced workflows. All 233 essential capabilities 
 
 | Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
 | :--- | :--- | :--- | :--- |
-| [Storage Orchestration Pro](storage-orchestration-pro/README.md)<br><code>module.storage-orchestration-pro</code> | Advanced storage-pool and distributed-storage workflows using qualified providers, topology observations, snapshot coordination and controlled migration plans. | Platform, Files, Tenancy, BackupRestore, Operations | `storage.zfs`, `storage.ceph`, `storage.glusterfs`, `storage.object-storage`, `storage.raid-lvm` |
-| [High Availability Pro](high-availability-pro/README.md)<br><code>module.high-availability-pro</code> | Advanced multi-node service coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows. | Platform, Hosting, Data, Operations, Observability, BackupRestore | `network.vrrp-vip`, `network.service-ha`, `compute.node-groups`, `compute.rolling-operations` |
-| [Network Traffic Pro](network-traffic-pro/README.md)<br><code>module.network-traffic-pro</code> | Advanced traffic and overlay-network orchestration with reviewed routing policies, measured checks and staged changes across qualified edge providers. | Platform, Hosting, Operations, Observability | `network.haproxy`, `network.traefik`, `domains.global-routing`, `domains.cdn-edge`, `network.wireguard` |
+| [Storage Orchestration Pro](storage-orchestration-pro/README.md)<br><code>module.storage-orchestration-pro</code> | Advanced storage lifecycle orchestration covering performance/resilience tiers, pools, volumes, measured capacity, encryption-key references, snapshots, replication and controlled migration across qualified local or distributed providers. | Platform, Files, Tenancy, BackupRestore, Operations | `storage.zfs`, `storage.ceph`, `storage.glusterfs`, `storage.object-storage`, `storage.raid-lvm` |
+| [High Availability Pro](high-availability-pro/README.md)<br><code>module.high-availability-pro</code> | Advanced service-continuity coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows on already admitted nodes/providers. | Platform, Hosting, Data, Operations, Observability, BackupRestore | `network.vrrp-vip`, `network.service-ha`, `compute.node-groups`, `compute.rolling-operations` |
+| [Multi-server Hosting Pro](multi-server-hosting-pro/README.md)<br><code>module.multi-server-hosting-pro</code> | Advanced hosting orchestration across admitted servers: enrollment workflows, trust review, tenant/resource placement, scoped node routing, capacity groups, maintenance/drain waves and fleet care. | Platform, Hosting, Tenancy, IdentityAccess, Operations, Observability, BackupRestore, Data, Mail, Transfers | `compute.node-groups`, `compute.rolling-operations`, `runtime.workers`, `network.service-ha`, `automation.playbooks` |
+| [Docker Management Pro](docker-management-pro/README.md)<br><code>module.docker-management-pro</code> | Advanced Docker/OCI workload lifecycle management: reviewed images/build provenance, scoped containers and application groups, private networks, ports, volumes, secret references, effective quotas, logs/health, coordinated updates and verified backups. | Platform, Hosting, Tenancy, Files, Data, Operations, Observability, BackupRestore | `compute.containers`, `compute.images`, `compute.rolling-operations`, `backup.restore-tests` |
+| [Kubernetes Management Pro](kubernetes-management-pro/README.md)<br><code>module.kubernetes-management-pro</code> | Advanced Kubernetes and multi-cluster application orchestration: admitted cluster contexts, namespaces/RBAC, workloads, services/ingress/TLS, persistent volumes, quotas, observations, controlled upgrades and restore. | Platform, Hosting, IdentityAccess, Tenancy, Operations, Observability, Files, Data, BackupRestore | `compute.kubernetes`, `compute.images`, `compute.node-groups`, `compute.rolling-operations`, `network.service-ha` |
+| [VPS / VM Management Pro](vps-vm-management-pro/README.md)<br><code>module.vps-vm-management-pro</code> | Advanced VPS and virtual-machine lifecycle orchestration across qualified hypervisors/providers: reviewed templates and cloud-init inputs, guest identities, virtual disks, IP/vNIC policy, effective quotas, snapshots, backups, maintenance and explicitly supported migrations. | Platform, Tenancy, IdentityAccess, Hosting, Files, Operations, Observability, BackupRestore | `compute.proxmox`, `compute.libvirt`, `compute.lxc`, `compute.images`, `network.interfaces`, `storage.raid-lvm` |
+
+## networking
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Network Traffic Pro](network-traffic-pro/README.md)<br><code>module.network-traffic-pro</code> | Advanced load-balancer, global-routing and overlay-network orchestration with reviewed listener/upstream policies, measured checks and staged changes across qualified providers. | Platform, Hosting, Operations, Observability | `network.haproxy`, `network.traefik`, `domains.global-routing`, `domains.cdn-edge`, `network.wireguard` |
+| [CDN Management Pro](cdn-management-pro/README.md)<br><code>module.cdn-management-pro</code> | Advanced multi-site CDN/edge orchestration with provider-qualified delivery profiles, origin/DNS binding, cache rules, purge workflows, TLS review and source-attributed cache/availability observations. | Hosting, Platform, IdentityAccess, Operations, Observability | `domains.cdn-edge`, `domains.global-routing`, `domains.cloudflare`, `domains.dns-providers`, `observe.synthetics` |
 
 ## automation
 
@@ -111,6 +122,12 @@ This catalogue adds optional advanced workflows. All 233 essential capabilities 
 | Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
 | :--- | :--- | :--- | :--- |
 | [Portfolio Migration Pro](portfolio-migration-pro/README.md)<br><code>module.portfolio-migration-pro</code> | Advanced coordinated migrations for many accounts or application portfolios, with provider-specific import plans, staged synchronization, dependency waves and cutover rehearsals. | Transfers, Tenancy, Hosting, Files, Data, Mail, Operations, BackupRestore | `apps.fleet-management`, `mail.mailbox-migration`, `backup.transfers`, `automation.playbooks` |
+
+## performance
+
+| Module / planning ID | Proposed optional scope | Core owners | Existing catalogue keys |
+| :--- | :--- | :--- | :--- |
+| [Performance Booster Pro](performance-booster-pro/README.md)<br><code>module.performance-booster-pro</code> | Advanced application-aware performance profiles coordinating compatible caches, compression, static/edge delivery, runtime budgets and measured tuning proposals. | Hosting, Platform, Data, Tenancy, Operations, Observability, BackupRestore | `runtime.redis`, `runtime.memcached`, `domains.cdn-edge`, `data.sql-analysis`, `observe.synthetics` |
 
 ## Reading a package
 

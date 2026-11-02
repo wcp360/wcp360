@@ -1,0 +1,44 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.vps-vm-management-pro",
+    "kind":  "module",
+    "label":  "VPS / VM Management Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Tenancy",
+                        "IdentityAccess",
+                        "Hosting",
+                        "Files",
+                        "Operations",
+                        "Observability",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "compute.proxmox",
+                           "compute.libvirt",
+                           "compute.lxc",
+                           "compute.images",
+                           "network.interfaces",
+                           "storage.raid-lvm"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced VPS and virtual-machine lifecycle orchestration across qualified hypervisors/providers: reviewed templates and cloud-init inputs, guest identities, virtual disks, IP/vNIC policy, effective quotas, snapshots, backups, maintenance and explicitly supported migrations. VM, system-container and provider semantics remain distinct.",
+    "core_boundary":  "Core single-node hosting, baseline network/storage/security, account policy and future admitted virtualization-provider foundations remain open source. This module coordinates guest operations through owned contracts. Admitted cloud-init may carry guest code/configuration, including authorized guest-root actions, within a qualified profile; guest-root never confers host-root. No payload becomes a host hook, host-path escape, unrestricted hypervisor command or direct Core database write.",
+    "acceptance":  [
+                       "Qualify every hypervisor/provider/version/architecture/guest combination separately, distinguishing full VMs from system containers and refusing unsupported migrations.",
+                       "Verify template/image provenance, immutable references, upstream licenses and the admitted cloud-init profile. Guest code/configuration and authorized guest-root customization require their own scoped qualification; protect guest credentials and refuse host hooks, host-path escapes, management-plane commands or host secrets.",
+                       "Map tenant/guest identity, vCPU/RAM/disk/IO limits, placement and effective enforcement without claiming guest isolation from configuration text alone.",
+                       "Authorize IP assignments, vNICs, bridges/overlays, firewall boundaries, public exposure and guest-network ownership through the relevant Core/provider contracts.",
+                       "Qualify create/start/stop/rebuild/resize and console/agent access with exact scope, current authority, resource revisions and bounded diagnostics.",
+                       "Keep snapshot semantics distinct from independent backups; test consistent guest/data restore and recovery-key references before destructive rebuild or deletion.",
+                       "Exercise provider loss, full storage, concurrent actions, interrupted operations and qualified cold/live migrations with fencing and honest downtime/recovery evidence.",
+                       "Disable premium workflows while guests and retained data keep running under independent Core/provider ownership, export and recovery."
+                   ]
+}
