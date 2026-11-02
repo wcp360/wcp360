@@ -5,6 +5,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    # Routine version proposals stay within the reviewed major lines.
+    # allow.update-types does not restrict Dependabot security updates.
+    allow:
+      - dependency-type: all
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
   - package-ecosystem: gomod
     directory: /WCP360_Core/agents/wcpd/candidate/planner
     schedule:
@@ -20,18 +28,41 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    allow:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      reviewed-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
   - package-ecosystem: docker
     directory: /WCP360_Build/environments/core-candidate
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Runtime family changes require a coordinated manual migration.
+    allow:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-patch
   - package-ecosystem: docker
     directory: /WCP360_Build/environments/platform-smoke
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    allow:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-patch
   - package-ecosystem: docker
     directory: /WCP360_Build/environments/platform-core
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    allow:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-patch
