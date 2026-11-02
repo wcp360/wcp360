@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.agency-workspace-pro",
+    "kind":  "module",
+    "label":  "Agency Workspace Pro",
+    "category":  "commercial",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Tenancy",
+                        "IdentityAccess",
+                        "Hosting",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "workspace.white-label",
+                           "workspace.dashboards",
+                           "support.helpdesk"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced agency portfolio workspaces with scoped branding, client-facing views, resource links and coordinated handoffs. Optional support-system connectors can enrich workflows without becoming the source of technical ownership.",
+    "core_boundary":  "Core keeps customer/reseller lifecycle, ordinary delegation, plans, quotas and essential UI. This module adds portfolio productivity and branding within existing scope; no paid workspace can hide operator identity, weaken security messages or become necessary for client hosting access.",
+    "acceptance":  [
+                       "Resolve workspace/client/resource relationships through Core ownership and reseller ceilings rather than copying an authority ledger.",
+                       "Apply branding only through reviewed declarative assets while retaining security, consent and operator context.",
+                       "Test client isolation, staff revocation and cross-workspace links across all embedded views.",
+                       "Preserve language/accessibility fallback and usable Core navigation when the workspace is disabled.",
+                       "Keep support records and customer data exportable under explicit retention and handoff policy."
+                   ]
+}

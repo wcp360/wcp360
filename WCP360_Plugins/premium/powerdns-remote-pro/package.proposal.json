@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.powerdns-remote-pro",
+  "kind": "plugin",
+  "label": "Remote PowerDNS API connector",
+  "category": "dns-cdn-domains",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Platform",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "domains.dns-providers"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a scoped connector to an explicitly admitted external authoritative DNS service.",
+  "core_boundary": "This optional remote API connector does not make the free Core native DNS engine adapter premium or expose a generic administration endpoint. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Admit server and zone references through approved egress policy rather than a free-form URL.",
+    "Qualify record-set semantics, serial handling and DNSSEC-related capability differences for one provider revision.",
+    "Refuse foreign zones and reconcile interrupted updates without claiming an unchanged serial proves success.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

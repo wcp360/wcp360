@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.fossbilling-sync-pro",
+  "kind": "plugin",
+  "label": "FOSSBilling service synchronization",
+  "category": "billing-business",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Tenancy",
+    "Operations",
+    "Setup"
+  ],
+  "catalogue_keys": [
+    "commerce.fossbilling"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a version-qualified FOSSBilling integration for service inventory and reviewed lifecycle synchronization.",
+  "core_boundary": "The free Core remains authoritative for live hosting state, permissions, resource ownership and safe recovery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify a selected FOSSBilling revision, authentication method and product mapping instead of assuming broad version compatibility.",
+    "Reconcile remote service status against locally observed state and expose conflicts rather than repeatedly issuing destructive actions.",
+    "Exercise suspension, resume and termination proposals with scoped authorization, retained-data policy and auditable idempotency.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

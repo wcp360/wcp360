@@ -4,6 +4,8 @@
 
 **Status: an executable development candidate is available; the complete hosting engine and production release remain unqualified.**
 
+**License: [AGPL-3.0-only](LICENSE).** The [licensing guide](LICENSING.md) defines the Core scope, source obligations and independent-package boundaries. [Community/PRO strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) keeps the essential Core open source and autonomous; premium business modules and connectors are developed outside this directory, with separate admission and commercial-rights checks.
+
 Start with the [working guide](WORKING-GUIDE.md) for development orientation and the [current status](STATUS.md) for implemented candidate paths, reservations and open qualification. [NAVIGATION](NAVIGATION.md) locates code; [STRUCTURE](STRUCTURE.md) assigns ownership; the capability register and roadmap below retain delivery status and dependency order.
 
 The [Core delivery roadmap](ROADMAP.md) records the current completion estimate, implemented candidate paths, remaining work, dependency order and acceptance criteria. The [capability register](CAPABILITY-MAP.md#delivery-snapshot) assigns a delivery status to each of the 233 capabilities; source-folder coverage is separate from product completion.

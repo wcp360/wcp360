@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.ldap-directory-pro",
+  "kind": "plugin",
+  "label": "LDAP directory connector",
+  "category": "identity-secrets",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "IdentityAccess",
+    "Tenancy",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "identity.ldap"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a read-scoped external directory connector with bounded search and controlled identity linking.",
+  "core_boundary": "A directory bind does not authorize server-root access, user impersonation or arbitrary queries from browser input. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Admit a specific directory service, trusted transport, base scope and bounded attribute mapping; escape filters structurally.",
+    "Exercise duplicate usernames, referral handling, nested groups and oversized search results without widening tenant scope.",
+    "Keep directory credentials in secret references, qualify rotation and retain local access when directory service is unavailable.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

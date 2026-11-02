@@ -125,7 +125,7 @@ Follow the [web-server strategy](WCP360_Core/src/Module/Hosting/WEB-SERVER-STRAT
 
 ## Core structure
 
-The executable Symfony candidate and separate Go sources live under WCP360_Core. Detached packages belong under WCP360_Plugins, public integration libraries under WCP360_SDK, candidate build/verification inputs under WCP360_Build and future qualified version records under WCP360_Releases. [WCP360_App_Deploy](WCP360_App_Deploy/README.md) owns editorial application data and draft recipe authoring. Current implementation and documentation reservations are distinguished in the [working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md) and [Core structure](WCP360_Core/STRUCTURE.md). No directory organization merges a historical branch or qualifies a runtime.
+The executable Symfony candidate and separate Go sources live under WCP360_Core. Optional business packages belong under [WCP360_Modules](WCP360_Modules/README.md), provider connectors under [WCP360_Plugins](WCP360_Plugins/README.md) and public integration libraries under WCP360_SDK, candidate build/verification inputs under WCP360_Build and future qualified version records under WCP360_Releases. [WCP360_App_Deploy](WCP360_App_Deploy/README.md) owns editorial application data and draft recipe authoring. Current implementation and documentation reservations are distinguished in the [working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md) and [Core structure](WCP360_Core/STRUCTURE.md). No directory organization merges a historical branch or qualifies a runtime.
 
 The current presentation uses module-owned HTTP/Console adapters and shared Twig fragments:
 
@@ -325,9 +325,17 @@ The [Core application catalogue bridge](WCP360_Core/src/Module/Hosting/APPLICATI
 
 Hosting owns application instances/ingress, Platform providers, Operations jobs, Files/Data stored resources and BackupRestore recovery. Recipe contribution is not free-form execution, arbitrary Compose or permission to alter the Core dependency graph. Generic install/configure/update/uninstall and observed recovery remain work.
 
-Premium is a commercial attribute, with [local rights owned by Tenancy](WCP360_Core/src/Module/Tenancy/design/licensing/README.md) and [package lifecycle owned by ExtensionManagement](WCP360_Core/src/Module/ExtensionManagement/design/packages/README.md). Entitlements, actor permissions, package signature and installation readiness are separate decisions. No licensing client/protocol, price, trial duration or offline/grace policy is established here. Essential Core hosting, local administration/security and recovery continue with zero plugins and during vendor or trial/subscription outages; expiry does not authorize deleting data or silently stopping workloads.
+Premium is a commercial attribute, with [local rights owned by Tenancy](WCP360_Core/src/Module/Tenancy/design/licensing/README.md) and [package lifecycle owned by ExtensionManagement](WCP360_Core/src/Module/ExtensionManagement/design/packages/README.md). Entitlements, actor permissions, package signature and installation readiness are separate decisions. No licensing client/protocol, price, trial duration or timed grace configuration is implemented. Target entitlement and degraded-operation policies are defined in the [edition strategy](documentation/development/EDITIONS-AND-PREMIUM.md). Essential Core hosting, local administration/security and recovery continue with zero plugins and during vendor or trial/subscription outages; expiry does not authorize deleting data or silently stopping workloads.
 
 [Docker providers](WCP360_Core/src/Module/Platform/design/containers/README.md) and [AI/models/agents/MCP](WCP360_Core/src/Module/Platform/design/ai-mcp/README.md) remain design preparation. Development containers and Docker unit observations are not tenant workload management. No Core assistant/model provider/MCP endpoint or tenant/PHP/plugin Docker socket is enabled. Future adapters reuse owned operations, current authority, resource bounds, redaction and explicit sharing.
+
+### Community, PRO and source licensing
+
+The original Core source is [AGPL-3.0-only](WCP360_Core/LICENSING.md). Its 13 internal owners, 233 essential capability requirements and seven engine-adapter designs remain open source. PRO is an optional distribution of qualified external packages and services using that same Core; it creates no additional ROOT or tenant authority.
+
+The [edition strategy](documentation/development/EDITIONS-AND-PREMIUM.md) links the [business-module catalogue](WCP360_Modules/CATALOG.md) and [premium connector catalogue](WCP360_Plugins/premium/CATALOG.md). These are non-installable planning proposals, with source models undecided. Neither a folder nor a detached API proves that a package is an independent work for AGPL purposes; package and SDK licensing require compatibility assessment before distribution.
+
+PRO targets full access to qualified App Install recipes. Core application instances, jobs, providers, ingress, data and recovery remain Core-owned. New premium workflows must check current rights and authority separately while preserving running workloads and essential recovery during expiry, outage, disablement or removal. No production entitlement engine or generic package/app installer is enabled by this design.
 
 ### Admission and execution
 

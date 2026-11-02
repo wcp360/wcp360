@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.opentelemetry-export-pro",
+  "kind": "plugin",
+  "label": "OpenTelemetry export connector",
+  "category": "observability",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "observe.opentelemetry"
+  ],
+  "dependencies": [],
+  "summary": "Prepare redacted trace/metric/log export through an explicitly admitted telemetry profile.",
+  "core_boundary": "Request correlation and mandatory audit remain Core responsibilities; exported telemetry cannot replace authoritative operation outcomes. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Declare which signals and data categories may leave the installation and enforce field-level redaction.",
+    "Qualify the selected protocol, destination, credential scope and bounded queue/drop behavior.",
+    "Exercise oversized labels, provider failure and disablement without leaking secrets or stalling Core requests.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

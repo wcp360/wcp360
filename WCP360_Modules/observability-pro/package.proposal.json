@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.observability-pro",
+    "kind":  "module",
+    "label":  "Observability Pro",
+    "category":  "observability",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "Platform",
+                        "Tenancy",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "observe.prometheus",
+                           "observe.opentelemetry",
+                           "observe.grafana",
+                           "observe.synthetics"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced service-objective dashboards, cross-resource correlation and portfolio analysis using qualified telemetry sources. Optional external collection and synthetic scenarios are explicitly scoped, budgeted and source-attributed.",
+    "core_boundary":  "Core retains required metrics/history, service checks, local alerts, incidents, audit and diagnostics. This module adds comparative objectives and richer visualization; it does not become the only health display or replace Core telemetry authority.",
+    "acceptance":  [
+                       "Distinguish local measurements, external probes, inferred objectives and stale or absent samples in every view.",
+                       "Enforce tenant scope on series, traces, labels and dashboard queries before rendering or export.",
+                       "Bound sample cardinality, retention, aggregation cost, outbound buffers and probe targets.",
+                       "Validate objective calculations against synthetic gaps, resets, clock changes and delayed samples without claiming unmeasured availability.",
+                       "Prove local Core observations and alert fallback remain usable during sink or module outages."
+                   ]
+}

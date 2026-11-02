@@ -1,0 +1,36 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.developer-productivity-pro",
+    "kind":  "module",
+    "label":  "Developer Productivity Pro",
+    "category":  "workspace",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Files",
+                        "IdentityAccess",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "workspace.dashboards",
+                           "delivery.dependency-analysis",
+                           "delivery.previews",
+                           "workspace.web-terminal"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced project workspaces with scoped shortcuts, dependency reports, environment comparisons and qualified optional development sessions. The module focuses on multi-project productivity rather than replacing baseline panel forms or file editing.",
+    "core_boundary":  "Core keeps shared UI components, themes/accessibility, file editing, ordinary command navigation and authorized project operations. This module adds optional project coordination; custom widgets or terminal sessions cannot create an alternate resource authority.",
+    "acceptance":  [
+                       "Resolve every widget, environment link and action through current Core ownership and approved scoped APIs.",
+                       "Qualify any optional development-session broker as a non-root isolated capability with explicit expiry/revocation policy.",
+                       "Keep repository/dependency metadata and environment differences redacted and source-attributed.",
+                       "Test disabled providers, stale links, revoked staff access and cross-project leakage.",
+                       "Restore usable standard Core navigation and project/resource control when the module is disabled."
+                   ]
+}

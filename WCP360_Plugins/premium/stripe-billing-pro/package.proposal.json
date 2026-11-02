@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.stripe-billing-pro",
+  "kind": "plugin",
+  "label": "Stripe billing connector",
+  "category": "billing-business",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Tenancy",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "commerce.business-systems"
+  ],
+  "dependencies": [],
+  "summary": "Prepare payment-event and subscription-state synchronization with an explicitly selected Stripe account.",
+  "core_boundary": "Billing remains optional; payment events never directly execute host actions, elevate permissions or gate essential local server recovery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify account-scoped webhook verification, replay protection, event ordering and idempotent reconciliation before state changes.",
+    "Map products, currencies, refunds, disputes and subscription periods to reviewed business rules rather than inferred provisioning rights.",
+    "Keep payment credentials and personal data minimized; provider outages or expired entitlements must preserve existing hosting and administrator recovery.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

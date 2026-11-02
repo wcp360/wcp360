@@ -1,0 +1,32 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.bitbucket-delivery-pro",
+  "kind": "plugin",
+  "label": "Bitbucket source and delivery connector",
+  "category": "git-ci-registries",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "delivery.providers",
+    "delivery.git",
+    "delivery.pipelines"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a qualified Bitbucket repository integration for scoped source references and reviewed delivery events.",
+  "core_boundary": "Repository ownership does not establish hosting authority; deploy rights, artifact admission and rollback remain Core-controlled. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Select one Bitbucket product profile and bind workspaces, projects and repositories to an admitted local application.",
+    "Qualify webhook authentication, event replay protection and immutable revision references before any delivery proposal.",
+    "Keep build credentials isolated from tenant runtimes and exercise provider outage, revoked access and uncertain deployment completion.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.okta-identity-pro",
+  "kind": "plugin",
+  "label": "Okta identity connector",
+  "category": "identity-secrets",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "IdentityAccess",
+    "Tenancy",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "identity.saml",
+    "identity.scim"
+  ],
+  "dependencies": [],
+  "summary": "Prepare explicitly scoped SAML federation and optional provisioning against a selected Okta organization.",
+  "core_boundary": "Federated identity supplies identity evidence; Core decides sessions, tenant membership, permissions and recovery. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin the admitted organization, metadata trust roots and signed assertion validation profile before accepting login evidence.",
+    "Reject replayed, expired, wrong-audience or mismatched provisioning identities and require an explicit account-link decision.",
+    "Qualify deprovisioning delays, certificate rotation and outage fallback without deleting a local recovery identity.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

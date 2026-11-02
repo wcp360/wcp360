@@ -84,6 +84,8 @@ An integration can be commercially optional without moving essential platform ow
 
 ## Modules, packages and runtime dependencies
 
+The 13 internal domain modules retain Core ownership. External premium modules are independently packaged optional workflows, not replacements for these owners. Planning catalogues and package.proposal.json files are not runtime manifests and are not discovered by the fixed candidate registry. Catalogue creation changes no capability delivery status.
+
 ```mermaid
 flowchart LR
     Package[Free or premium detached package] --> Admission[ExtensionManagement admission]
@@ -99,7 +101,7 @@ flowchart LR
 
 The arrows show cooperating decisions, not a license-before-login requirement or a permission grant created by package installation. Essential Core paths do not depend on optional commercial/provider availability. Authorization must be current again when an effect is attempted.
 
-Detached extension source belongs in WCP360_Plugins/<package>, outside this task's editing scope. Its own process, dependency graph, data, migrations and credentials remain separate from the Core. Package code is not injected into Symfony services, Twig or the Core Composer vendor directory. The public SDK/API is an integration boundary, not permission to write Core tables.
+Optional business packages belong in [WCP360_Modules](../WCP360_Modules/README.md); provider connectors belong in [WCP360_Plugins](../WCP360_Plugins/README.md), with PRO proposals under its premium directory. The [edition strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) defines their boundary with the [AGPL Core](LICENSING.md). Each package's process, dependency graph, data, migrations and credentials remain separate from the Core. Package code is not injected into Symfony services, Twig or the Core Composer vendor directory. The public SDK/API is an integration boundary, not permission to write Core tables.
 
 Keep Composer manifests/locks and generated vendor separate from Go modules and each specialized tool/plugin's dependency files. Do not add global functions/, dependencies/, vendor copies, an unrestricted Commands/ registry or a second Services/ business layer.
 

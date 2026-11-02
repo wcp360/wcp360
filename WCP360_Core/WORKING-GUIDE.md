@@ -25,6 +25,7 @@ Use this page to resume development, locate the authoritative description of a c
 | What resources should be implemented first? | [Resource roadmap](resources/ROADMAP.md) | Cross-family dependencies change. |
 | What exists for an individual Linux service? | [Service register](resources/services/ROADMAP.md) and its linked service README | A template, provider, validator, health check or controlled operation is added. |
 | Which commands exist and who may use them? | [Command inventory](bin/COMMANDS.md) | A domain command or context restriction changes. |
+| What belongs to Community or PRO, and under which license? | [Edition strategy](../documentation/development/EDITIONS-AND-PREMIUM.md), [Core licensing](LICENSING.md) and the two linked package catalogues | Edition boundaries, package proposals or an explicitly authorized license decision change; planning metadata does not enable a package. |
 | Where are dependencies defined? | [DEPENDENCIES.md](DEPENDENCIES.md), real manifests and locks | A component's actual dependency graph changes. |
 | How is a candidate run and tested? | [Run guide](../documentation/development/EXECUTABLE-CANDIDATE.md), [testing](../documentation/development/TESTING.md), [quality stack](../documentation/development/QUALITY-SECURITY-STACK.md) | Supported commands or verification environments change. |
 | Which contracts and security constraints apply? | [Baseline manifest](../documentation/manifests/WCP360-BM-0001.md), selected owner specifications and [security policy](../SECURITY.md) | Follow their existing authority and review process; this guide does not amend them. |
@@ -44,7 +45,8 @@ Domain guides own detail. STATUS links to those guides rather than copying their
 | Linux profiles and templates | [resources/services](resources/services/README.md); retain existing canonical Go candidate templates until an explicit handoff. |
 | System agent and privileged broker | [agents](agents/README.md); separate Go modules and approved typed operations. |
 | Application metadata and authored recipes | [App Deploy](../WCP360_App_Deploy/README.md), through the [Hosting boundary](src/Module/Hosting/APPLICATION-CATALOGUE.md). |
-| Plugins and integration SDK | Separate `WCP360_Plugins/` and `WCP360_SDK/` graphs; no plugin PHP inserted into Core's container or vendor. |
+| Optional business modules | [WCP360_Modules](../WCP360_Modules/README.md); separate package source and dependencies, not additional internal Core owners. |
+| Plugins and integration SDK | Separate [WCP360_Plugins](../WCP360_Plugins/README.md) and `WCP360_SDK/` graphs; PRO connector proposals under plugins/premium; no plugin PHP inserted into Core's container or vendor. |
 | Generated libraries and state | Ignored component-local `vendor/`, module caches and `var/`; production secrets and applied configuration stay outside source. |
 | Delivery records | [WCP360_Releases](../WCP360_Releases/README.md), after actual qualification. |
 

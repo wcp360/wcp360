@@ -10,6 +10,7 @@ Technical documentation is grouped here so the repository root can focus on proj
 | See the verified revision, evidence, current limits and next checkpoint | [Core status](../WCP360_Core/STATUS.md) |
 | Follow dependency order and acceptance | [Core roadmap](../WCP360_Core/ROADMAP.md) |
 | Find code, owners, CLI and resource locations | [Navigation](../WCP360_Core/NAVIGATION.md) and [structure](../WCP360_Core/STRUCTURE.md) |
+| Find Community/PRO boundaries, premium packages and the Core license | [Edition strategy](development/EDITIONS-AND-PREMIUM.md), [Core licensing](../WCP360_Core/LICENSING.md), [business modules](../WCP360_Modules/CATALOG.md) and [premium connectors](../WCP360_Plugins/premium/CATALOG.md) |
 | Inspect the 233 capability statuses and 24 service families | [Capability register](../WCP360_Core/CAPABILITY-MAP.md) and [service register](../WCP360_Core/resources/services/ROADMAP.md) |
 
 Each document owns a different answer. Update its owning register rather than creating another feature list, service matrix or progress percentage.

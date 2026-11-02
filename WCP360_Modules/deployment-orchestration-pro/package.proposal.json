@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.deployment-orchestration-pro",
+    "kind":  "module",
+    "label":  "Deployment Orchestration Pro",
+    "category":  "delivery",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Operations",
+                        "Platform",
+                        "BackupRestore",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "delivery.pipelines",
+                           "compute.rolling-operations",
+                           "network.service-ha"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced release orchestration with stage gates, canary or rolling strategies, traffic checks, drain coordination and supported recovery plans. Strategy availability depends on measured provider and application capabilities.",
+    "core_boundary":  "Core retains the operation lifecycle, resource revisions, configuration application and ordinary recovery. This module coordinates existing typed operations; it is not an alternate scheduler with root authority or a guarantee that every deployment is reversible.",
+    "acceptance":  [
+                       "Admit each strategy only with qualified routing, drain, health and recovery capabilities for its target workloads.",
+                       "Bind approval, artifact digests, resource versions and the actual execution identity to the reviewed release plan.",
+                       "Inject failed health checks, lost acknowledgements and worker crashes; preserve service or expose an explicit reconciliation state.",
+                       "Prevent overlapping release ownership and stale workers from changing traffic or overwriting a newer release.",
+                       "Keep current workloads and independent Core recovery available when orchestration is disabled."
+                   ]
+}

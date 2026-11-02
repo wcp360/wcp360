@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.compliance-evidence-pro",
+    "kind":  "module",
+    "label":  "Compliance Evidence Pro",
+    "category":  "governance",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "IdentityAccess",
+                        "Platform",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "governance.audit-archive",
+                           "support.reports",
+                           "security.advisories"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced evidence cases, control mappings, review assignments and reproducible exports for internal or external assessments. Reports state their sources and limitations and do not claim regulatory certification from a checklist.",
+    "core_boundary":  "Core retains baseline compliance, security controls, audit integrity, retention and authorized export. This module organizes optional assessment evidence; it cannot change mandatory policy, create a second authoritative audit history or declare legal compliance automatically.",
+    "acceptance":  [
+                       "Map every assessment statement to a source, capture time, scope, control version and review status.",
+                       "Generate bounded redacted exports with explicit access and evidence-retention policy.",
+                       "Distinguish missing evidence, failed controls, accepted exceptions and verified observations.",
+                       "Test tampered source references, changed authority and retention/hold conflicts without overwriting canonical audit.",
+                       "Keep baseline security/audit access available after module removal and preserve agreed independent evidence references."
+                   ]
+}

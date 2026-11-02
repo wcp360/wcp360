@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.incident-operations-pro",
+    "kind":  "module",
+    "label":  "Incident Operations Pro",
+    "category":  "observability",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "Operations",
+                        "IdentityAccess"
+                    ],
+    "catalogue_keys":  [
+                           "notify.oncall",
+                           "notify.team-messaging",
+                           "support.status-page",
+                           "support.reports"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced incident cases, response coordination, on-call workflow integration and reviewed public-status drafting. It correlates existing authorized evidence and connector receipts without replacing local alerts.",
+    "core_boundary":  "Core retains essential incidents, local notifications and verified ROOT fallback. This module adds team coordination and publication workflows; connector delivery does not prove acknowledgement, and no message is sent without the authorized operation.",
+    "acceptance":  [
+                       "Keep incident membership, evidence visibility and public/private status content explicitly scoped.",
+                       "Distinguish queued, sent, acknowledged and failed notifications using connector evidence and bounded retries.",
+                       "Require authorized review for external publication and prevent sensitive host/customer data from entering public drafts.",
+                       "Exercise connector outages, duplicate events, shift changes and concurrent incident updates with current-authority checks.",
+                       "Disabling the module must preserve local incident history, Core alerts and independent response access."
+                   ]
+}

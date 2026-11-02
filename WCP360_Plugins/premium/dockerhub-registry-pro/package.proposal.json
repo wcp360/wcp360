@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.dockerhub-registry-pro",
+  "kind": "plugin",
+  "label": "Docker Hub registry connector",
+  "category": "git-ci-registries",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "delivery.registries"
+  ],
+  "dependencies": [],
+  "summary": "Prepare reviewed Docker Hub image references and bounded registry metadata access for admitted applications.",
+  "core_boundary": "No image gains trust from its registry location; Core controls immutable artifact admission and nonprivileged runtime policy. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Admit selected namespaces and repositories; record immutable digests and supported architecture before deployment review.",
+    "Qualify authentication, rate limiting and image provenance without relying on mutable latest tags.",
+    "Exercise unavailable digests, tag replacement and provider outage; never fall back to unreviewed images or expose the host container socket.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

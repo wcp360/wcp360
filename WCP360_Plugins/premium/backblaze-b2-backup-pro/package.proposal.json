@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.backblaze-b2-backup-pro",
+  "kind": "plugin",
+  "label": "Backblaze B2 backup destination",
+  "category": "backup-object-storage",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "BackupRestore",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "backup.s3",
+    "backup.immutable"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a provider-specific remote backup destination and verified restore path for owned backup artifacts.",
+  "core_boundary": "The destination connector cannot replace Core recovery ownership or treat S3-compatible naming as proof of identical retention semantics. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify the selected B2 interface, bucket/key scope and integrity behavior for a pinned provider profile.",
+    "Test multipart interruption, duplicate object versions and resumed transfer without accepting partial archives.",
+    "Verify retention/deletion refusal and key recovery using an isolated clean-target restore.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

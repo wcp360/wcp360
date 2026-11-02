@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.ovh-dns-pro",
+  "kind": "plugin",
+  "label": "OVHcloud DNS connector",
+  "category": "dns-cdn-domains",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "domains.dns-providers",
+    "domains.dns01"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a version-specific OVHcloud DNS mapping with scoped record previews and controlled publication.",
+  "core_boundary": "Essential authoritative DNS remains a Core service; external-zone refresh and publication need their own admitted provider contract. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify one DNS API profile, credential scope and zone ownership mapping before enabling writes.",
+    "Show record diff and any provider publication/refresh step as separate observable effects.",
+    "Test concurrent edits, conflicting challenges and failure between record preparation and publication.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

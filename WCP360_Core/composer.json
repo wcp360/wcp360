@@ -2,7 +2,7 @@
   "name": "wcp360/core",
   "type": "project",
   "description": "WCP360 executable development candidate",
-  "license": "proprietary",
+  "license": "AGPL-3.0-only",
   "require": {
     "php": "~8.4.0",
     "ext-ctype": "*",

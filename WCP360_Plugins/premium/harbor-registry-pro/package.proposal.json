@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.harbor-registry-pro",
+  "kind": "plugin",
+  "label": "Harbor OCI registry connector",
+  "category": "git-ci-registries",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "delivery.registries",
+    "delivery.dependency-analysis"
+  ],
+  "dependencies": [],
+  "summary": "Prepare project-scoped OCI artifact discovery and reviewed pull references from a selected Harbor registry.",
+  "core_boundary": "A registry reference is supply-chain input; Core retains container admission, resource bounds and execution policy. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Bind an admitted registry and project to immutable artifact digests and qualify the selected OCI media-type profile.",
+    "Verify required provenance, signature and vulnerability evidence under reviewed policy rather than treating a scan label as unconditional approval.",
+    "Exercise revoked robot credentials, foreign projects and interrupted pulls without exposing a Docker socket or arbitrary image execution.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

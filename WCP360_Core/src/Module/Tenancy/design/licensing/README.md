@@ -4,9 +4,11 @@
 
 [Tenancy](../../README.md) remains the owner of account/tenant plans, subscriptions, entitlements and resource ceilings. This location prepares that existing responsibility; it adds no fourteenth Core module, canonical contract, API identifier, database table or runtime feature. Use the [Core structure](../../../../../STRUCTURE.md) and [capability map](../../../../../CAPABILITY-MAP.md#installation-updates-and-panel-autonomy) for navigation.
 
+The [Community/PRO strategy](../../../../../../documentation/development/EDITIONS-AND-PREMIUM.md) records the product direction: the Core remains 100% open source under AGPL-3.0-only, while optional premium business modules and connectors live outside it. See [Core licensing](../../../../../LICENSING.md) for license scope. This is separate from checking commercial rights: no Core license check, paid ROOT flag or production entitlement protocol is introduced here.
+
 ## Scope and authority
 
-The intended local client inspects commercial rights for an installed product or optional package and exposes a bounded, redacted result to its authorized consumers. A central license issuer, billing service, checkout and pricing policy remain separate from the installed Core. This reservation selects no vendor, edition, price, trial duration, activation endpoint or online dependency.
+The intended local client inspects commercial rights for an installed product or optional package and exposes a bounded, redacted result to its authorized consumers. A central license issuer, billing service, checkout and pricing policy remain separate from the installed Core. The Community/PRO direction is documented separately; this reservation selects no vendor, price, trial duration, activation endpoint or online dependency. A commercial entitlement cannot withdraw rights granted by the applicable open-source license.
 
 | Decision | Existing owner | Boundary |
 | :--- | :--- | :--- |
@@ -37,7 +39,9 @@ The free Core must remain operable with zero optional plugins and no permanent l
 
 ## Package and resource lifecycle
 
-Use the shared [package design](../../../ExtensionManagement/design/packages/README.md) and [extension resource index](../../../../../resources/extensions/README.md). Keep optional premium implementation and dependencies in independently versioned plugin packages; do not add them to the Core Composer graph or load arbitrary plugin PHP into Symfony.
+Use the shared [package design](../../../ExtensionManagement/design/packages/README.md) and [extension resource index](../../../../../resources/extensions/README.md). Keep optional premium business implementation under [WCP360_Modules](../../../../../../WCP360_Modules/README.md) and provider-specific connectors under [WCP360_Plugins/premium](../../../../../../WCP360_Plugins/premium/README.md), with independently versioned packages, dependencies and processes. Do not add them to the Core Composer graph or load arbitrary package PHP into Symfony.
+
+PRO's full App Install direction applies only to qualified, eligible recipes. The 410 editorial App Deploy references do not constitute an installable set; the current Core catalogue remains read-only and non-installable. Package proposal catalogues are planning inputs, not entitlement evidence or accepted production manifests. Premium source models/licenses and the SDK license require their own decisions; payment does not itself imply proprietary licensing.
 
 Define expiry, downgrade, disablement and removal against dependent resources before exposing those actions. Preserve Core-readable inventory and data. Refuse removal of an essential active adapter until an accepted replacement or ownership transfer exists. Paid status never permits a plugin to purge hosted resources or broaden its capabilities.
 

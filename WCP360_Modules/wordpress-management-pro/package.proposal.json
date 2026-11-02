@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.wordpress-management-pro",
+    "kind":  "module",
+    "label":  "WordPress Management Pro",
+    "category":  "applications",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Data",
+                        "Files",
+                        "Operations",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "apps.wordpress-toolkit",
+                           "apps.verified-updates",
+                           "security.advisories"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced WordPress portfolio management covering instance discovery, core/plugin/theme inventory, compatible update campaigns, maintenance windows, hardening recommendations and source-attributed vulnerability tracking. Optional tooling is version-qualified and operates under each site\u0027s identity.",
+    "core_boundary":  "Ordinary WordPress hosting, PHP stack selection, files, databases, permissions and recovery remain Core capabilities. This module orchestrates reviewed WordPress-specific workflows; it neither guarantees Worker compatibility nor grants access to premium upstream themes/plugins without their own valid terms.",
+    "acceptance":  [
+                       "Distinguish standalone and multisite WordPress installations, ownership and read-only observations before offering an operation.",
+                       "Test supported PHP-FPM and FrankenPHP classic combinations independently; require separate application-specific evidence before any Worker claim.",
+                       "Bind update batches to exact plugin/theme/core versions, upstream sources, applicable licenses and verified recovery points.",
+                       "Validate logged-in sessions, commerce carts, cron, uploads and cache purge/bypass behavior before promoting an update; report failed checks without claiming compatibility.",
+                       "Refuse cross-site credentials, stale instance state and revoked authority; disabling the module must leave WordPress sites and Core recovery usable."
+                   ]
+}

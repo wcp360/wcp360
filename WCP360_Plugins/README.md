@@ -12,6 +12,14 @@ Each plugin has one source directory, its own version/dependency graph, tests, d
 
 Package sources and their existing manifest shapes are preserved. Their directory names do not set trust, permission, production compatibility or installability. The existing 149-entry catalogue describes target integrations, not 149 implemented packages.
 
+## Premium connector proposals
+
+The [premium proposal inventory](premium/README.md) contains **60 optional provider/connectors in 10 categories**. Its [JSON catalogue](premium/CATALOG.json) is authoritative; [CATALOG.md](premium/CATALOG.md) is the readable view. Each proposal has a documented Core boundary, exact references to the existing 149-entry catalogue and an acceptance record.
+
+All 60 proposals are `design`, `installable: false` and `source_model: undecided`; no implemented package or production manifest is implied. The separate [premium template](premium/_template/README.md) preserves the existing template above. The [36 business module proposals](../WCP360_Modules/CATALOG.md) describe optional workflows rather than provider connectors.
+
+The seven `engine.*` adapters and the **233 essential hosting capabilities remain free Core scope**. The chosen Core license is [AGPL-3.0-only](../WCP360_Core/LICENSING.md). No premium package license, price, source distribution model, key or vendor URL is chosen here. A separate API/process does not automatically establish legal independence for a proprietary derivative; see [editions and premium boundaries](../documentation/development/EDITIONS-AND-PREMIUM.md).
+
 ## Package layout
 
 ```text

@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.remote-backup-pro",
+    "kind":  "module",
+    "label":  "Remote Backup Pro",
+    "category":  "recovery",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "BackupRestore",
+                        "Operations",
+                        "Files",
+                        "IdentityAccess"
+                    ],
+    "catalogue_keys":  [
+                           "backup.sftp",
+                           "backup.s3",
+                           "backup.nfs-destination",
+                           "backup.restic",
+                           "backup.borg",
+                           "backup.immutable"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Remote backup policy orchestration across qualified destinations and engines, with scoped repository bindings, encryption-key references, transfer receipts, retention review and verified restore references. Storage and engine connectors remain independently selected packages.",
+    "core_boundary":  "Local backup/restore, essential retention controls and independent recovery stay in Core. This module adds optional remote copies and policy coordination; it must not hold the only recovery path or export raw backup keys into logs or package metadata.",
+    "acceptance":  [
+                       "Qualify each destination/engine version, authentication method, path/prefix scope and actual encryption/retention behavior.",
+                       "Distinguish accepted transfer, verified remote artifact and successfully rehearsed restore; verify immutable-storage capabilities rather than assuming them.",
+                       "Exercise interrupted uploads, repository locks, credential rotation, throttling and non-reversible retention changes.",
+                       "Prove key recovery and a documented restore route that does not require the running module or vendor service.",
+                       "Disabling remote orchestration must leave local backup/restore and retained remote artifacts under their existing owners."
+                   ]
+}

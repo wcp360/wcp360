@@ -5,6 +5,7 @@
 **Modular hosting management. A shared Symfony foundation. Controlled system operations.**
 
 [![Project status: in development](https://img.shields.io/badge/Status-In%20development-E89B25?style=flat-square)](#current-project-status)
+[![Core license: AGPL-3.0-only](https://img.shields.io/badge/Core%20license-AGPL--3.0--only-1E3A8A?style=flat-square)](WCP360_Core/LICENSE)
 [![Modular architecture](https://img.shields.io/badge/Architecture-Modular-4263EB?style=flat-square)](#modular-and-extensible-design)
 [![Plugin catalog: 149 entries](https://img.shields.io/badge/Plugins-149%20catalog%20entries-7C3AED?style=flat-square)](PLUGIN_CATALOG.md)
 [![Security design: least privilege](https://img.shields.io/badge/Security%20design-Least%20privilege-0F766E?style=flat-square)](#security-architecture)
@@ -51,6 +52,7 @@ The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and 
 - [Project purpose and audience](#project-purpose-and-audience)
 - [Why WCP360](#why-wcp360)
 - [Modular and extensible design](#modular-and-extensible-design)
+- [Community and PRO editions](#community-and-pro-editions)
 - [Technology stack and responsibilities](#technology-stack-and-responsibilities)
 - [Hosted PHP application servers](#hosted-php-application-servers)
 - [Application recipes and optional integrations](#application-recipes-and-optional-integrations)
@@ -131,6 +133,23 @@ Its design addresses five needs:
 - An unavailable extension withdraws its routes and new jobs; the Core and existing hosting services remain usable.
 - Private WCP360 Internal services are not installable plugins for customer servers.
 
+## Community and PRO editions
+
+**WCP360 Core is open source under [AGPL-3.0-only](WCP360_Core/LICENSE).** Its essential hosting, local administration, permissions, security, backup/recovery and extension infrastructure remain autonomous. PRO adds optional qualified business packages and provider connectors, developed outside the Core. It uses the same Core rather than a separate proprietary Core fork.
+
+| Area | Community / Core | PRO target |
+| :--- | :--- | :--- |
+| Hosting foundation | The 13 built-in owners and 233 documented essential capabilities remain in the open-source delivery scope. Current implementation limits still apply. | Reuses the same foundation; subscription does not grant ROOT, tenant access or execution authority. |
+| Engine adapters | The seven engine-adapter designs remain Core-owned. | Provider-specific connectors may be optional premium packages; essential engines are not paywalled. |
+| Business packages | Independent community packages can use the future public integration boundary. | [36 business-module proposals](WCP360_Modules/CATALOG.md): App Install, WordPress tools, delivery, backup, security, observability, agency operations, AI and other advanced workflows. |
+| Provider connectors | Existing independent development packages retain their source and status. | [60 connector proposals](WCP360_Plugins/premium/CATALOG.md), grouped by provider family; each has its own planned compatibility and acceptance work. |
+| App Install | Core retains instances, authority, providers, jobs, data and essential recovery. | Full access to the qualified App Install catalogue and advanced orchestration. Qualification and each application's own license remain required. |
+| Subscription outage or expiry | Core access, running workloads and essential recovery continue. | New premium automation follows the defined safe degraded policy; no automatic workload shutdown or data deletion. |
+
+The **96 premium proposals** are a separate commercial planning inventory. They do not replace or renumber the existing **149 design entries** or App Deploy's **410 editorial references**. All new proposals are `design`, `installable: false`, with package source models undecided. No generic premium installer, entitlement protocol or live App Install execution is implemented by these documents.
+
+Read the [edition and premium development strategy](documentation/development/EDITIONS-AND-PREMIUM.md), [module workspace](WCP360_Modules/README.md), [premium connector workspace](WCP360_Plugins/premium/README.md) and [Core licensing guide](WCP360_Core/LICENSING.md). Package licensing must be assessed against its actual relationship with the AGPL Core; separate processes do not automatically establish legal independence.
+
 ## Technology stack and responsibilities
 
 The following defines the **project's target stack**.
@@ -209,7 +228,7 @@ WordPress and Discourse descriptors are draft authoring examples. No recipe JSON
 | Integration | Ownership and current boundary |
 | :--- | :--- |
 | Free or premium plugins | ExtensionManagement owns package admission/lifecycle. The fixed reference plugin does not implement a general package manager; premium status adds no privilege. |
-| Local commercial rights | Tenancy's [licensing design](WCP360_Core/src/Module/Tenancy/design/licensing/README.md) separates entitlements from IAM and package signatures. No client/protocol, price, trial duration or offline/grace policy is implemented or invented. Essential Core hosting, administration and recovery remain usable without plugins or a live vendor service. |
+| Local commercial rights | Tenancy's [licensing design](WCP360_Core/src/Module/Tenancy/design/licensing/README.md) separates entitlements from IAM and package signatures. No client/protocol, price, trial duration or timed grace configuration is implemented. The [edition strategy](documentation/development/EDITIONS-AND-PREMIUM.md) defines the target subscription and safe degraded behavior. Essential Core hosting, administration and recovery remain usable without plugins or a live vendor service. |
 | Docker workloads | Platform and Hosting's [container design](WCP360_Core/src/Module/Platform/design/containers/README.md) remains preparation. Observing a Docker systemd unit or running development containers is not a tenant workload provider. No tenant/PHP/plugin Docker socket is exposed. |
 | AI, models, agents and MCP | [Optional integration design](WCP360_Core/src/Module/Platform/design/ai-mcp/README.md) only. No Core assistant, model provider or MCP endpoint is implemented. Future adapters must reuse current authority and owned operations, with redaction and explicit sharing; generated text grants no execution authority. |
 
@@ -1506,6 +1525,7 @@ wcp360/
 │   ├── specifications/
 │   └── documentary references and mirrors
 ├── WCP360_Core/
+│   ├── LICENSE / LICENSING.md                # AGPL-3.0-only Core scope
 │   ├── WORKING-GUIDE.md / STATUS.md
 │   ├── NAVIGATION.md / DEPENDENCIES.md / CAPABILITY-MAP.md
 │   ├── src/                                # Shared primitives and 13 Core modules
@@ -1518,7 +1538,12 @@ wcp360/
 │   ├── agents/                              # Separate wcpd and wcp-privd sources
 │   ├── diagnostics/
 │   └── installer/                           # preflight, recipes, upgrades, recovery, scaffolds
+├── WCP360_Modules/                           # PRO business-package proposals outside Core
+│   ├── CATALOG.json / CATALOG.md / schemas/
+│   ├── _template/
+│   └── <module-slug>/                       # README, proposal and acceptance criteria
 ├── WCP360_Plugins/
+│   ├── premium/                            # PRO connector catalogue and proposals
 │   ├── _template/
 │   ├── wcp360-file-manager-xampp/
 │   └── wcp360-insights-connector/
@@ -1535,7 +1560,8 @@ wcp360/
 | Directory | Responsibility | Current status |
 | :--- | :--- | :--- |
 | [WCP360_Core](WCP360_Core/README.md) | Executable Symfony candidate, domain use cases, shared Twig UI, separate Go sources, installer/recovery and tests. Start with the [working guide](WCP360_Core/WORKING-GUIDE.md). | Implemented candidate paths with explicit limits; complete product and production qualification remain pending. |
-| [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing File Manager/Insights development packages plus a documentation-only authoring template. |
+| [WCP360_Modules](WCP360_Modules/README.md) | Optional business packages developed outside the 13 Core owners. | 36 PRO proposals, schema, catalogue, authoring structure and acceptance criteria; no executable package. |
+| [WCP360_Plugins](WCP360_Plugins/README.md) | One package per plugin with its own source, dependencies, tests and lifecycle. | Existing independent development packages and template, plus 60 [premium connector proposals](WCP360_Plugins/premium/CATALOG.md). |
 | [WCP360_SDK](WCP360_SDK/README.md) | Public client/contracts and synthetic integration fixtures, independently versioned from Core. | Consult its own manifest/status for the selected checkout; local source presence does not establish a ratified production protocol or release. |
 | [WCP360_Build](WCP360_Build/README.md) | Controlled candidate environments, toolchains, verification and future qualified publication. | Existing candidate procedures/evidence have bounded scopes; no qualified production release pipeline is implied. |
 | [WCP360_Releases](WCP360_Releases/README.md) | Qualified version records and immutable artifact references. | No qualified release and no latest pointer. |

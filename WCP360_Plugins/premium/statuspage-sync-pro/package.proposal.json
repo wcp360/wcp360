@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.statuspage-sync-pro",
+  "kind": "plugin",
+  "label": "Status-page incident publishing connector",
+  "category": "collaboration-support",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "support.status-page"
+  ],
+  "dependencies": [],
+  "summary": "Prepare reviewed publication of selected service status and incident updates to an admitted status-page provider.",
+  "core_boundary": "Public incident content is a separate disclosure decision; local telemetry and private operational recovery remain free Core capabilities. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Select a provider profile and explicitly map internal services to public or private components.",
+    "Require a reviewed disclosure policy for incident title, impact and updates with secret and tenant-data redaction.",
+    "Exercise duplicate publication, stale resolution and provider failure while retaining a local publication history and recovery path.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.discord-notifications-pro",
+  "kind": "plugin",
+  "label": "Discord notification connector",
+  "category": "collaboration-support",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Observability",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "notify.team-messaging"
+  ],
+  "dependencies": [],
+  "summary": "Prepare optional redacted event notifications to explicitly admitted Discord destinations.",
+  "core_boundary": "A community channel is an external disclosure destination; this proposal does not create remote command execution or public support access. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Admit specific destination references and verify organization ownership rather than accepting arbitrary webhook URLs.",
+    "Qualify payload redaction, mentions, message size and per-tenant routing to avoid leaking diagnostics or credentials.",
+    "Exercise rate limits, revoked credentials and deletion of a destination with bounded retries and preserved local evidence.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

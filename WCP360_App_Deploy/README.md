@@ -27,6 +27,12 @@ Categories and source access/profile labels remain unchanged. [Profile routing](
 
 The initial [WordPress](App_one_click/sites-blogs-et-cms/wordpress/README.md) and [Discourse](DEPLOY/forums-modernes/discourse/README.md) locations prepare two different delivery families. They are drafts, not downloaded software or working installers. Do not create 410 placeholder application folders.
 
+## Community, PRO and App Install
+
+The [edition strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) keeps Core application instances, permissions, providers, jobs, data and recovery open source. PRO targets the full qualified App Install catalogue and advanced workflows through [App Install Pro](../WCP360_Modules/app-install-pro/README.md), developed outside the Core. Catalogue qualification, current authority, provider availability and each application's own license remain required; PRO does not make all 410 editorial references installable or grant third-party subscriptions.
+
+This is a product boundary, not a working entitlement gate or installer. Existing hosted applications continue running when a premium package or subscription becomes unavailable, and essential recovery stays accessible.
+
 ## Integration and delivery
 
 The candidate Core catalogue command reads fixed CSV metadata through a typed Hosting port. It performs no installation, package download, provider connection or host change. Every returned candidate remains non-installable. Missing catalogue files must not prevent Core boot; inspect the command's unavailable/failed result instead of inventing success. See the [exact boundary](docs/CORE-INTEGRATION.md).

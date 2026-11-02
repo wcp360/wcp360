@@ -1,0 +1,36 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.threat-response-pro",
+    "kind":  "module",
+    "label":  "Threat Response Pro",
+    "category":  "security",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "IdentityAccess",
+                        "Platform",
+                        "Observability",
+                        "Operations",
+                        "Hosting"
+                    ],
+    "catalogue_keys":  [
+                           "security.siem",
+                           "security.crowdsec",
+                           "security.threat-intel",
+                           "automation.event-rules"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced response playbooks that correlate selected security signals and propose scoped containment sequences. Reviewed automation can coordinate existing session, account, traffic or application operations with evidence and recovery tracking.",
+    "core_boundary":  "Core retains baseline alerts, incident handling, session revocation, access blocks and controlled system effects. This module adds optional response coordination; third-party intelligence, a rule match or commercial entitlement never grants an action permission.",
+    "acceptance":  [
+                       "Authenticate and bound signal ingestion, provenance, deduplication and trigger recursion before creating a response proposal.",
+                       "Bind approval and execution to exact targets, current permissions, resource revisions and supported containment operations.",
+                       "Exercise false positives, simultaneous responders, revoked access and lost acknowledgements without duplicate or cross-tenant effects.",
+                       "Separate reversible containment from destructive actions and document recovery or manual reconciliation for each stage.",
+                       "Disabling response automation must leave Core containment, current protection state and incident evidence usable."
+                   ]
+}

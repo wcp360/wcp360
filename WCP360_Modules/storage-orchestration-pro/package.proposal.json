@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.storage-orchestration-pro",
+    "kind":  "module",
+    "label":  "Storage Orchestration Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Files",
+                        "Tenancy",
+                        "BackupRestore",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "storage.zfs",
+                           "storage.ceph",
+                           "storage.glusterfs",
+                           "storage.object-storage",
+                           "storage.raid-lvm"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced storage-pool and distributed-storage workflows using qualified providers, topology observations, snapshot coordination and controlled migration plans. Per-engine semantics, effective limits and recovery remain explicit.",
+    "core_boundary":  "Core retains local storage, filesystem quotas, ownership and ordinary backup/restore. This module adds optional advanced storage orchestration and cannot expose arbitrary device paths, mount commands or unqualified replacements for essential Core engine adapters.",
+    "acceptance":  [
+                       "Qualify provider/version/topology capabilities and identify the actual owner of each pool, volume and snapshot.",
+                       "Verify capacity, effective quota/UID semantics, encryption references and workload dependencies before a change.",
+                       "Test partial migration, failed mounts, lost connectivity and competing operations with fencing and reconciliation.",
+                       "Refuse destructive changes without explicit dependency review, current authority and verified recovery references.",
+                       "Removing orchestration must leave mounted workloads, data ownership and a supported independent recovery path intact."
+                   ]
+}

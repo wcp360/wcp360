@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.high-availability-pro",
+    "kind":  "module",
+    "label":  "High Availability Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Data",
+                        "Operations",
+                        "Observability",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "network.vrrp-vip",
+                           "network.service-ha",
+                           "compute.node-groups",
+                           "compute.rolling-operations"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced multi-node service coordination, failover rehearsals, leader/fence evidence and rolling-maintenance workflows. Availability claims are limited to the provider, topology, workload and failure cases actually qualified.",
+    "core_boundary":  "Core remains a complete standalone panel with essential recovery and ordinary service lifecycle. This module adds optional multi-node coordination; it does not turn templates into a cluster manager or make cross-node authority part of an unreviewed plugin.",
+    "acceptance":  [
+                       "Admit topology and peer identities explicitly, including network partitions, quorum/fencing and shared-storage assumptions.",
+                       "Test split-brain, stale leaders, delayed messages and asymmetric failures before enabling a promotion strategy.",
+                       "Measure actual service continuity and recovery for each supported workload rather than promising generic zero downtime.",
+                       "Keep current authorization, resource revisions and audit consistent across every admitted node operation.",
+                       "Document safe module exit and independent recovery without disabling existing hosted services."
+                   ]
+}

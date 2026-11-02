@@ -1,0 +1,33 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.cpanel-migration-pro",
+  "kind": "plugin",
+  "label": "cPanel portfolio migration connector",
+  "category": "migration-data",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Transfers",
+    "Hosting",
+    "Mail",
+    "Data"
+  ],
+  "catalogue_keys": [
+    "apps.fleet-management",
+    "mail.mailbox-migration",
+    "backup.transfers"
+  ],
+  "dependencies": [],
+  "summary": "Prepare version-qualified mapping of selected cPanel exports into reviewed WCP360 import plans.",
+  "core_boundary": "Basic Core transfers, ownership checks and recovery remain free; this proposal adds a source-specific format and inventory connector only. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Qualify selected export revisions, encodings and source rights; admit archives with bounded sizes and safe path handling.",
+    "Map users, domains, databases, mail and runtime assumptions explicitly; flag unsupported directives and credentials instead of promising lossless conversion.",
+    "Rehearse a dry-run inventory and isolated restore with checksums, ownership and rollback evidence before an operator-approved cutover.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

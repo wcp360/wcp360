@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.database-operations-pro",
+    "kind":  "module",
+    "label":  "Database Operations Pro",
+    "category":  "data",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Data",
+                        "Operations",
+                        "BackupRestore",
+                        "Platform"
+                    ],
+    "catalogue_keys":  [
+                           "data.replication",
+                           "data.postgres-extensions",
+                           "data.external-databases"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced database topology workflows covering replication planning, replica initialization, lag review, controlled promotion and qualified extension campaigns. Engine-specific capabilities and external-service limits remain explicit.",
+    "core_boundary":  "Database creation, users/grants, credential rotation, import/export, baseline diagnostics and ordinary backups stay in the free Core. Database Operations adds optional advanced orchestration and never receives the control-plane PostgreSQL credentials.",
+    "acceptance":  [
+                       "Qualify replication and promotion procedures per engine/version/provider; unsupported failover actions must remain unavailable.",
+                       "Verify current topology, fencing, replica lag and recovery-point requirements before a promotion; refuse split-brain conditions.",
+                       "Use narrowly scoped hosted-database identities and separately authorize extension changes through the Data owner.",
+                       "Exercise interrupted initialization, credential revocation, stale topology and failed promotion without silently selecting a new primary.",
+                       "Disabling the module must preserve databases, grants, replication safety and documented engine-specific recovery."
+                   ]
+}

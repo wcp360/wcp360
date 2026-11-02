@@ -1,0 +1,30 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.ghcr-registry-pro",
+  "kind": "plugin",
+  "label": "GitHub Container Registry connector",
+  "category": "git-ci-registries",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "delivery.registries"
+  ],
+  "dependencies": [],
+  "summary": "Prepare explicit package and digest references from GitHub Container Registry for reviewed application deployment.",
+  "core_boundary": "Package visibility and registry authentication do not authorize privileged containers, host mounts or automatic execution. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Admit selected owners and package namespaces; resolve deployment inputs to immutable digests before approval.",
+    "Qualify pull credentials, visibility changes and provenance policy with least privilege and secret-reference storage.",
+    "Exercise unavailable artifacts, moved tags and revoked access without silently replacing an approved artifact or broadening runtime permissions.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

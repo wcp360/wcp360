@@ -1,0 +1,32 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.gitlab-delivery-pro",
+  "kind": "plugin",
+  "label": "GitLab source and delivery connector",
+  "category": "git-ci-registries",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "delivery.providers",
+    "delivery.git",
+    "delivery.pipelines"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a selected GitLab integration for admitted project references and authorized delivery reconciliation.",
+  "core_boundary": "Pipeline success is evidence for review, not proof of artifact trust or permission to mutate hosting resources. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin an admitted GitLab service profile and project ownership map, including whether the target is hosted or self-managed.",
+    "Qualify event authentication, replay controls and immutable commit/artifact references without trusting merge-request code by default.",
+    "Exercise token rotation, pipeline cancellation, stale events and partial deployments through Core-owned recovery workflows.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

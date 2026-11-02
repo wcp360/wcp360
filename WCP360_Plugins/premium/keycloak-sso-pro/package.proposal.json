@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.keycloak-sso-pro",
+  "kind": "plugin",
+  "label": "Keycloak SSO connector",
+  "category": "identity-secrets",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "IdentityAccess",
+    "Tenancy",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "identity.oidc",
+    "identity.saml"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a realm-scoped identity-provider connector with explicit account linking and reviewed login federation.",
+  "core_boundary": "Local username authentication, optional MFA, emergency access and tenant authorization remain free Core responsibilities. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin a selected realm, issuer and protocol profile; validate signatures, audience, issuer and time bounds before account linking.",
+    "Exercise account collision, unlinking, disabled identities and unavailable identity-provider recovery without silently granting a role.",
+    "Require explicit administrator mapping of external groups to existing Core permissions; preserve local emergency access.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

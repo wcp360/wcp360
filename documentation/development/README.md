@@ -4,13 +4,16 @@
 
 Build one autonomous hosting Core, develop detached plugins against a versioned SDK, and publish each product only from qualified source and evidence. A complete Core must operate with zero optional plugins.
 
+The [Community/PRO strategy](EDITIONS-AND-PREMIUM.md) owns edition boundaries, premium lifecycle and the path from a proposal to a qualified package. [Core licensing](../../WCP360_Core/LICENSING.md) records the AGPL-3.0-only grant. The new catalogues are preparation; they add no live package admission, entitlement protocol or app deployment.
+
 ## Repository responsibilities
 
 | Location | Responsibility |
 | :--- | :--- |
 | [WCP360_Core](../../WCP360_Core/README.md) | Symfony application, built-in hosting domains, reusable UI/services, extension manager, installer source, Go agents and integrated tests. |
 | [WCP360_App_Deploy](../../WCP360_App_Deploy/README.md) | Public editorial catalogue and independently authored application recipes; Core owns instances, authority, jobs, providers and recovery. The candidate bridge reads metadata only. |
-| [WCP360_Plugins](../../WCP360_Plugins/README.md) | One independently versioned/tested package per plugin. Current packages keep their names and source bytes. |
+| [WCP360_Modules](../../WCP360_Modules/README.md) | Independently developed PRO business packages; planning catalogue, package proposals and acceptance criteria. Internal Core domains remain in Core. |
+| [WCP360_Plugins](../../WCP360_Plugins/README.md) | One independently versioned/tested package per plugin; [premium connector proposals](../../WCP360_Plugins/premium/README.md) are separate from existing packages, whose names and source bytes are preserved. |
 | [WCP360_SDK](../../WCP360_SDK/README.md) | Public PHP client/contracts and synthetic testing support for integrations; no Core internals or privileged broker client. |
 | [WCP360_Build](../../WCP360_Build/README.md) | Build environments, package assembly and qualification/publication procedures. Generated output goes under ignored `build/`. |
 | [WCP360_Releases](../../WCP360_Releases/README.md) | Records for qualified releases and their immutable artifact references. No qualified version currently exists. |

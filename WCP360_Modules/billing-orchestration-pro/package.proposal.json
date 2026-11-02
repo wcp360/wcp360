@@ -1,0 +1,36 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.billing-orchestration-pro",
+    "kind":  "module",
+    "label":  "Billing Orchestration Pro",
+    "category":  "commercial",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Tenancy",
+                        "Operations",
+                        "IdentityAccess",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "commerce.usage",
+                           "commerce.whmcs",
+                           "commerce.blesta",
+                           "commerce.fossbilling",
+                           "commerce.hostbill"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced commercial reconciliation between measured usage, external customer/product mappings and reviewed provisioning requests. Provider-specific billing integrations remain connectors; payment processing and pricing stay with the selected external business system.",
+    "core_boundary":  "Core plans, quotas, ownership, essential hosting, exports and recovery remain independent of billing. This module adds reconciliation and controlled commercial workflow requests; billing events cannot write Core tables, grant permissions or silently stop existing services.",
+    "acceptance":  [
+                       "Define measurement units, periods, completeness, corrections and reconciliation evidence before any billable record is exported.",
+                       "Authenticate external events, bind customer/product/resource mappings and deduplicate retries before requesting a Core operation.",
+                       "Require current authorization and reviewed suspension/reactivation rules; missing commercial data must not fabricate technical state.",
+                       "Keep payment secrets and sensitive financial data outside the Core and minimize exported customer information.",
+                       "Test provider outage, entitlement expiry and module removal while preserving Core login, hosting, export and recovery."
+                   ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.github-delivery-pro",
+  "kind": "plugin",
+  "label": "GitHub source and delivery connector",
+  "category": "git-ci-registries",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Hosting",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "delivery.providers",
+    "delivery.git",
+    "delivery.pipelines"
+  ],
+  "dependencies": [],
+  "summary": "Prepare repository-scoped GitHub source metadata and reviewed delivery requests for admitted applications.",
+  "core_boundary": "Source control remains optional; a repository webhook, workflow or access token never directly gains root or arbitrary deployment execution. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Bind installation or repository access to admitted organizations, repositories, immutable revisions and local application ownership.",
+    "Qualify signed webhook freshness, replay protection, deployment approvals and untrusted pull-request boundaries.",
+    "Resolve selected revisions to reviewed build artifacts with provenance; do not execute repository hooks or workflows inside the Core control process.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

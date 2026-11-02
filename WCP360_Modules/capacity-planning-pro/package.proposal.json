@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.capacity-planning-pro",
+    "kind":  "module",
+    "label":  "Capacity Planning Pro",
+    "category":  "commercial",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Tenancy",
+                        "Platform",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "commerce.usage",
+                           "compute.node-groups",
+                           "automation.energy",
+                           "hardware.sensors"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced capacity forecasting, scenario comparison and explained placement recommendations from qualified usage observations. Predictions identify assumptions, data freshness and uncertainty instead of claiming measured enforceable limits.",
+    "core_boundary":  "Core keeps actual quotas, metering, capacity checks and enforcement. Capacity Planning adds forecasts and optimization proposals; it cannot raise a quota, relocate a workload or interrupt service merely because a model suggests a saving.",
+    "acceptance":  [
+                       "Track provenance, measurement units, missing intervals and forecast assumptions for each capacity result.",
+                       "Validate calculations against synthetic spikes, resets, seasonality gaps and unavailable provider data.",
+                       "Check tenant policy, real capacity and maintenance constraints again before any separately authorized placement operation.",
+                       "Bound analysis cost and prevent cross-tenant leakage through aggregated reports.",
+                       "Disable forecasting without affecting actual Core quota enforcement, metering or local capacity observations."
+                   ]
+}

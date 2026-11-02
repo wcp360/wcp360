@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.log-analytics-pro",
+    "kind":  "module",
+    "label":  "Log Analytics Pro",
+    "category":  "observability",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Observability",
+                        "IdentityAccess",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "observe.loki",
+                           "observe.syslog",
+                           "security.siem",
+                           "governance.audit-archive"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced authorized log exploration with correlation, saved investigations, bounded aggregation and export cases. Optional centralized sinks remain connectors; source logs and immutable business audit retain their original ownership.",
+    "core_boundary":  "Core keeps baseline logs, audit access, retention and diagnostic redaction. Log Analytics adds investigation conveniences, not unrestricted host journal access, a second audit ledger or permission to read another tenant\u0027s messages.",
+    "acceptance":  [
+                       "Authorize every source, cursor, search and export against current account and data sensitivity rules.",
+                       "Redact secrets and customer content before indexing where required; document retention, legal holds and purge limits.",
+                       "Bound query cost, regex complexity, time windows, result sizes and streaming buffers.",
+                       "Treat log text as untrusted data, including terminal escapes and prompt injection, with inert escaped rendering.",
+                       "Test unavailable sinks, deletion requests and module removal while preserving canonical logs/audit and Core inspection."
+                   ]
+}

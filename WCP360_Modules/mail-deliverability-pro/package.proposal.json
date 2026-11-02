@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.mail-deliverability-pro",
+    "kind":  "module",
+    "label":  "Mail Deliverability Pro",
+    "category":  "mail",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Mail",
+                        "Hosting",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "mail.dmarc",
+                           "mail.bimi",
+                           "mail.smtp-relays",
+                           "mail.mailguard"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced multi-domain deliverability reporting with DMARC aggregate analysis, qualified relay comparisons, reputation evidence and reviewed BIMI-related readiness checks. Reports distinguish observations from promises about message delivery.",
+    "core_boundary":  "Core retains SPF/DKIM/DMARC configuration checks, key rotation, basic delivery diagnostics, outbound abuse controls and local protection. This module adds historical external-report analytics and optional connector orchestration; it cannot sell or guarantee delivery.",
+    "acceptance":  [
+                       "Validate report sources, parsers, sizes and retention while minimizing message addresses and customer content.",
+                       "Separate published DNS policy, externally observed alignment, relay-provider state and inferred recommendations.",
+                       "Require explicit Mail/Hosting authorization for any resulting signing, DNS or relay change; reports alone never authorize an effect.",
+                       "Test malformed reports, missing provider data, rate limits and provider outages with honest stale/unknown states.",
+                       "Ensure removal preserves ordinary mail delivery, baseline signing/protection and Core diagnostics."
+                   ]
+}

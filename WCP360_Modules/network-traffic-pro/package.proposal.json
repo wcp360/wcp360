@@ -1,0 +1,36 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.network-traffic-pro",
+    "kind":  "module",
+    "label":  "Network Traffic Pro",
+    "category":  "infrastructure",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Platform",
+                        "Hosting",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "network.haproxy",
+                           "network.traefik",
+                           "domains.global-routing",
+                           "domains.cdn-edge",
+                           "network.wireguard"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced traffic and overlay-network orchestration with reviewed routing policies, measured checks and staged changes across qualified edge providers. Specific load-balancer, DNS, CDN and tunnel integrations remain separate connectors.",
+    "core_boundary":  "Core retains baseline IP/network/firewall administration, management-access recovery and the seven essential engine adapters. This module adds optional global/overlay coordination; it cannot supply arbitrary network scans, tunnels or firewall command strings.",
+    "acceptance":  [
+                       "Map public/private listeners, routing authority, certificates and allowed upstreams before accepting a traffic plan.",
+                       "Qualify protocol, source-address, timeout and health semantics for each selected provider combination.",
+                       "Test management lockout prevention, failed configuration checks, lost connectivity and supported rollback.",
+                       "Constrain probe and tunnel destinations, rate limits and credentials; reject metadata/control-plane reachability.",
+                       "Disable new automation without removing current routing or the Core\u0027s independent network recovery route."
+                   ]
+}

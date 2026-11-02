@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.enterprise-identity-pro",
+    "kind":  "module",
+    "label":  "Enterprise Identity Pro",
+    "category":  "identity",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "IdentityAccess",
+                        "Tenancy",
+                        "Operations",
+                        "ExtensionManagement"
+                    ],
+    "catalogue_keys":  [
+                           "identity.oidc",
+                           "identity.saml",
+                           "identity.ldap",
+                           "identity.scim"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced federation and provisioning orchestration with reviewed organizational mappings, synchronization plans and identity-source change tracking. OIDC/SAML/directory/SCIM protocol adapters remain separate qualified connectors.",
+    "core_boundary":  "Local authentication, optional MFA, recovery, permissions and tenant isolation remain Core. This module adds organization-scale workflows and never converts an external claim, group or premium entitlement into authority above current Core policy.",
+    "acceptance":  [
+                       "Validate provider trust, tenant binding and current subject mappings through the selected protocol connector.",
+                       "Show synchronization and deprovisioning plans with conflicts, scope ceilings and explicit account-retention behavior.",
+                       "Test claim/group changes, revoked sessions, duplicate subjects, provider outages and synchronization replay.",
+                       "Keep a tested local administrator recovery route independent of federation and commercial/provider availability.",
+                       "Removing the module must not silently delete local identities, grant broader roles or bypass enabled MFA."
+                   ]
+}

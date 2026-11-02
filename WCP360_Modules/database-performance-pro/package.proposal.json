@@ -1,0 +1,33 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.database-performance-pro",
+    "kind":  "module",
+    "label":  "Database Performance Pro",
+    "category":  "data",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Data",
+                        "Observability",
+                        "Operations"
+                    ],
+    "catalogue_keys":  [
+                           "data.sql-analysis",
+                           "data.anonymization",
+                           "observe.grafana"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Longitudinal database workload analysis with redacted query fingerprints, execution-plan comparison, capacity trends and explainable tuning proposals. Optional diagnostic collection is cost-bounded and never applies schema changes automatically.",
+    "core_boundary":  "Core keeps baseline engine status, connections/locks, slow-query access and authorized diagnostics. This module adds historical comparative analysis and recommendation workflows without a second SQL execution authority.",
+    "acceptance":  [
+                       "Prove that query text, literals and samples are minimized or redacted before storage and export.",
+                       "Bound diagnostic query time, rows, memory and concurrency; refuse unrestricted SQL supplied as an analysis request.",
+                       "Mark recommendations with source, capture time, engine/version and uncertainty; distinguish advice from measured improvement.",
+                       "Require a separately authorized Data operation for any accepted index, extension or configuration change.",
+                       "Test retention, tenant isolation, unavailable metrics and disabling collection without disturbing hosted database traffic."
+                   ]
+}

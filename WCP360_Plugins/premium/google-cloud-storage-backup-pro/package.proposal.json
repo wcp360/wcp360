@@ -1,0 +1,32 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.google-cloud-storage-backup-pro",
+  "kind": "plugin",
+  "label": "Google Cloud Storage backup destination",
+  "category": "backup-object-storage",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "BackupRestore",
+    "Operations",
+    "IdentityAccess"
+  ],
+  "catalogue_keys": [
+    "backup.transfers",
+    "backup.immutable",
+    "storage.object-storage"
+  ],
+  "dependencies": [],
+  "summary": "Prepare project/bucket-scoped remote backup and restore integration for an admitted storage profile.",
+  "core_boundary": "Core recovery remains independent of the optional cloud destination and its account availability. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Constrain project, bucket, object prefix and credential scope before reading or writing backup artifacts.",
+    "Qualify generation/version preconditions, integrity checks and any retention policy selected for that provider.",
+    "Exercise lost acknowledgements, stale object references and restoration without exporting credentials.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

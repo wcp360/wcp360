@@ -4,12 +4,15 @@
 
 [ExtensionManagement](../../README.md) remains the single Core package-lifecycle owner. This location prepares its existing responsibility within the thirteen-module structure. It adds no automatic discovery, production manifest, commercial contract, installed package or permission grant. Start with the [Core structure](../../../../../STRUCTURE.md), [extension resource index](../../../../../resources/extensions/README.md) and [detached lifecycle design](../../../../../../documentation/development/PLUGIN-LIFECYCLE.md).
 
+The [Community/PRO strategy](../../../../../../documentation/development/EDITIONS-AND-PREMIUM.md) defines the edition direction without changing this reservation's implementation status. The Core, its thirteen owners, 233 essential functional capabilities and seven Core engine/provider adapters remain in the open-source perimeter under AGPL-3.0-only; individual implementation and qualification states still apply. See [Core licensing](../../../../../LICENSING.md). PRO uses the same Core, with no fork, paid ROOT flag or premium PHP loaded into its process.
+
 ## Package types and ownership
 
 | Kind | Source and authority | Removal boundary |
 | :--- | :--- | :--- |
 | Built-in Core module | Controlled Core source and release; existing domain owns its rules/data. | Change through supported Core updates/migrations, not runtime plugin uninstall. |
-| Optional free or premium plugin | Independent package under [WCP360_Plugins](../../../../../../WCP360_Plugins/README.md), dedicated dependencies/process/storage and approved APIs. | Drain/revoke contributions and preserve declared data; Core and existing hosted resources remain operable. |
+| Optional business module | Independent package under [WCP360_Modules](../../../../../../WCP360_Modules/README.md), dedicated dependencies/process/storage and approved APIs. | Drain/revoke contributions and preserve declared data; Core and existing hosted resources remain operable. |
+| Optional connector or community plugin | Independent package under [WCP360_Plugins](../../../../../../WCP360_Plugins/README.md); premium connectors belong in its [premium workspace](../../../../../../WCP360_Plugins/premium/README.md). The same isolation and owning-use-case boundaries apply. | Remove only declared integration components after resolving consumers; retain managed resources and their recovery path. |
 | Active engine/provider adapter | Its existing Core resource owner retains the sites, services or data it manages. | Refuse removal until dependent resources have an accepted replacement, migration or ownership transfer. |
 
 Premium is a commercial attribute of an optional package, not an extra execution privilege or a second lifecycle manager. Authentication/permissions belong to [IdentityAccess](../../../IdentityAccess/README.md), commercial rights to [Tenancy](../../../Tenancy/design/licensing/README.md), durable work to [Operations](../../../Operations/README.md), and Core installation/update/recovery to [Setup](../../../Setup/README.md).
@@ -19,6 +22,8 @@ Installation, enablement, licensing and resource authorization are separate deci
 ## Admission and isolated execution
 
 The accepted production package contract must define identity/publisher, immutable artifact evidence, compatibility, dependencies/conflicts, capability changes, settings/secret references, owned data/migrations, approved contributions, budgets, egress, health, recovery and removal behavior. This reservation invents no manifest fields, endpoint names, tables, signing protocol or package state enum.
+
+The [module JSON catalogue](../../../../../../WCP360_Modules/CATALOG.json) and [premium connector JSON catalogue](../../../../../../WCP360_Plugins/premium/CATALOG.json) are authoritative inventories of proposals; their Markdown catalogues are derived views. A `package.proposal.json` is planning metadata, not an admitted production manifest or executable package. Neither an entry nor a schema match authorizes install or activation.
 
 Existing candidate manifests remain distinct authoring inputs until a versioned schema and explicit adapters are accepted. Directory presence must not execute code. Build each plugin's dependencies independently in the controlled build lane; package installation must not edit the Core lock/vendor, register an unrestricted Symfony bundle, load plugin Twig into Core, expose arbitrary root hooks or resolve unreviewed dependencies inside the panel.
 
@@ -43,9 +48,11 @@ A failed migration or missing acknowledgement is not proof of rollback. Preserve
 
 ## Commercial expiry and continuity
 
-Use Tenancy's future local rights result; do not contact a separate vendor from every request or maintain a competing entitlement cache in each controller. Trial expiry, subscription expiry, unknown license state and commercial downgrade require an explicit product policy before enforcement. This document chooses no price, trial/grace period or offline protocol.
+Use Tenancy's future local rights result; do not contact a separate vendor from every request or maintain a competing entitlement cache in each controller. The PRO App Install offer is limited to qualified, eligible recipes; it does not make the 410 App Deploy references installable or bypass application licensing, host compatibility or actor permissions. Trial expiry, subscription expiry, unknown license state and commercial downgrade require an explicit product policy before enforcement. This document chooses no price, trial/grace period or offline protocol.
 
 Commercial transitions must preserve essential Core login/administration, security, hosted services and baseline backup/recovery. Do not delete package/customer data, stop a hosted workload or purge resources merely because a trial ends. Any restriction on new premium work and treatment of in-flight operations must follow the accepted policy, current authorization and safe lifecycle boundary.
+
+Premium package source models and licenses remain undecided, and the SDK license needs a separate decision. A paid package may be open source. An out-of-process API boundary does not by itself determine AGPL compatibility or whether a package is a separate work; review actual code, dependencies and interaction before release. This reservation grants no blanket proprietary-compatibility promise or license exception.
 
 Core must remain usable with zero optional plugins and during catalogue/license/vendor outages. Removing a management integration does not remove the sites, applications, databases, mailboxes, volumes or remote resources it helped manage. Keep a Core-readable inventory and recovery path. If an essential dependency cannot be retained or transferred safely, refuse removal and expose the reason.
 

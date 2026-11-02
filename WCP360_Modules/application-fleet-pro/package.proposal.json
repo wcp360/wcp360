@@ -1,0 +1,34 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.application-fleet-pro",
+    "kind":  "module",
+    "label":  "Application Fleet Pro",
+    "category":  "applications",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Tenancy",
+                        "Operations",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "apps.fleet-management",
+                           "apps.verified-updates",
+                           "workspace.dashboards"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Cross-application portfolio views with version/dependency drift, qualified campaign targeting, bounded rollout batches and per-instance reporting. Operators can schedule reviewed maintenance across explicitly selected authorized applications.",
+    "core_boundary":  "Individual site/application operations, baseline inventories, ordinary bulk authorization and job tracking remain in the Core. Fleet views reuse those authorities and do not introduce a global tenant bypass or infer that every application has an installable recipe.",
+    "acceptance":  [
+                       "Resolve every campaign target to a current owned resource and qualified application/provider combination.",
+                       "Test batch budgets, maintenance windows, fairness, cancellation boundaries and per-instance failure isolation.",
+                       "Recheck permissions and resource revisions when each job executes; revocation must prevent later effects.",
+                       "Distinguish stale inventory, unavailable checks and verified results without converting missing observations into healthy states.",
+                       "Disable new campaigns without interrupting installed workloads; retain job outcomes and resource links for Core recovery."
+                   ]
+}

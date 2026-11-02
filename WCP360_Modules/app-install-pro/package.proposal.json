@@ -1,0 +1,37 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.app-install-pro",
+    "kind":  "module",
+    "label":  "AppInstall Pro",
+    "category":  "applications",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Hosting",
+                        "Data",
+                        "Files",
+                        "Operations",
+                        "BackupRestore",
+                        "Tenancy"
+                    ],
+    "catalogue_keys":  [
+                           "apps.installer",
+                           "apps.cms-recipes",
+                           "apps.business-recipes",
+                           "apps.verified-updates"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "A curated application installation product with complete versioned recipes: requirements, trusted upstream artifacts, compatible runtime/database combinations, scoped configuration, install, update, backup, restore and dependency-aware removal. The 410 editorial references are discovery input; each deliverable recipe requires independent qualification and upstream license review.",
+    "core_boundary":  "Core retains all 233 essential capabilities, application/resource ownership, ordinary hosting, local backup/recovery and the seven engine adapters. AppInstall Pro adds qualified optional application recipes and orchestration through detached extension contracts; it creates no privileged executor, legal compatibility decision or automatic installability for catalogue entries.",
+    "acceptance":  [
+                       "Qualify each offered recipe on an explicit application/version/OS/architecture/runtime/database/provider matrix; unsupported combinations must remain unavailable.",
+                       "Pin and verify upstream sources and recipe artifacts, record the applicable upstream licenses and redistribution/source obligations, and refuse unreviewed artifacts or incompatible combinations.",
+                       "Exercise fresh install, interrupted install, update, supported rollback, backup/restore and removal with owned writable paths, secret references, data retention and per-instance results.",
+                       "Run dependency installers as the application identity through admitted operations; deny arbitrary executable hooks, shell text, tenant escapes and access to Core credentials.",
+                       "Demonstrate that removing or disabling AppInstall Pro preserves installed applications, canonical resource inventory, local recovery and access through the free Core."
+                   ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "wcp360.premium-package-proposal/1",
+  "id": "plugin.mcp-http-connector-pro",
+  "kind": "plugin",
+  "label": "MCP HTTP provider connector",
+  "category": "ai-mcp",
+  "tier": "pro",
+  "status": "design",
+  "installable": false,
+  "source_model": "undecided",
+  "core_owners": [
+    "Platform",
+    "ExtensionManagement",
+    "Operations"
+  ],
+  "catalogue_keys": [
+    "automation.ai-readonly",
+    "automation.chatops"
+  ],
+  "dependencies": [],
+  "summary": "Prepare a version-qualified MCP HTTP integration for explicitly admitted external tools and read-oriented resources.",
+  "core_boundary": "MCP is an optional orchestration protocol, not a replacement for Core permissions or a channel to wcpd, arbitrary stdio launchers or Docker sockets. This is a design-only connector proposal. Essential hosting, current actor and tenant authorization, native service drivers and recovery remain in the free Core. No production interface, publisher trust, installation or effectful capability is established by this metadata.",
+  "acceptance": [
+    "Pin a reviewed MCP revision and HTTP transport profile with admitted server identity, issuer, audience, redirect and egress rules.",
+    "Qualify OAuth state, token audience and resource binding; reject token passthrough, cross-tenant credentials and unapproved destinations.",
+    "Treat tool descriptions and outputs as hostile content; keep allowlisted capabilities read-only initially and require a new review for any effectful use case.",
+    "Before implementation, qualify an explicitly selected provider/interface revision, supported compatibility matrix, immutable package provenance, dependency inventory and licensing model; no release is admitted by this proposal.",
+    "Enforce current Core actor, tenant and capability checks at each admitted request; keep credentials in scoped secret references, redact diagnostics and reject arbitrary destinations, shell commands or host/container sockets.",
+    "Demonstrate that disablement, removal, provider outage and commercial entitlement loss preserve essential Core access, hosted workloads, local audit and recovery; retain owned data unless a separately authorized purge is requested."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.portfolio-migration-pro",
+    "kind":  "module",
+    "label":  "Portfolio Migration Pro",
+    "category":  "transfers",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Transfers",
+                        "Tenancy",
+                        "Hosting",
+                        "Files",
+                        "Data",
+                        "Mail",
+                        "Operations",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "apps.fleet-management",
+                           "mail.mailbox-migration",
+                           "backup.transfers",
+                           "automation.playbooks"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced coordinated migrations for many accounts or application portfolios, with provider-specific import plans, staged synchronization, dependency waves and cutover rehearsals. External-panel/format adapters remain separately selected and qualified.",
+    "core_boundary":  "Core retains ordinary instance transfers, resource mapping, supported import/export and recovery. This module adds optional portfolio planning and bulk coordination; it cannot replace resource owners, claim arbitrary source compatibility or remove the only recovery route.",
+    "acceptance":  [
+                       "Inventory source scope, ownership, formats, versions and unavailable items before proposing destination resources.",
+                       "Validate destination policy, quota, dependencies and per-resource compatibility through existing Core owners.",
+                       "Test resumable copy, changed source data, final synchronization, DNS/mail cutover and per-item result tracking.",
+                       "Require reviewed cutover and recovery criteria; retain the source and verified backups until explicit authorized cleanup.",
+                       "Disabling orchestration must preserve ordinary Core transfers, completed destinations and independent recovery references."
+                   ]
+}

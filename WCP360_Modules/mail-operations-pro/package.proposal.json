@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.mail-operations-pro",
+    "kind":  "module",
+    "label":  "Mail Operations Pro",
+    "category":  "mail",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Mail",
+                        "Hosting",
+                        "Transfers",
+                        "Operations",
+                        "BackupRestore"
+                    ],
+    "catalogue_keys":  [
+                           "mail.mailbox-migration",
+                           "mail.mailing-lists",
+                           "mail.sogo"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced mail portfolio workflows for provider-assisted mailbox moves, coordinated domain cutovers, optional collaboration-suite integration and large-group policy campaigns. Compatibility is qualified for each source, destination and selected connector.",
+    "core_boundary":  "All eighteen essential mail capabilities, including domains, mailboxes, quotas, queues, signing, baseline protection and diagnostics, remain Core responsibilities. This module adds optional migration and collaboration orchestration without replacing mail identity or routing policy.",
+    "acceptance":  [
+                       "Map source/destination mailboxes and ownership explicitly, including aliases, folder semantics and retained data.",
+                       "Validate synchronization, duplicates, partial failures, delivery cutover and supported rollback before claiming a completed migration.",
+                       "Keep collaboration-suite credentials and data outside the Core control plane and require qualified connector behavior.",
+                       "Recheck Mail permissions for each batch item and record per-mailbox results rather than treating a campaign as one success.",
+                       "Preserve delivery, mailbox access, Core queue controls and recovery when the module or an external suite is unavailable."
+                   ]
+}

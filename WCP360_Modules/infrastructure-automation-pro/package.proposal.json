@@ -1,0 +1,35 @@
+{
+    "schema":  "wcp360.premium-package-proposal/1",
+    "id":  "module.infrastructure-automation-pro",
+    "kind":  "module",
+    "label":  "Infrastructure Automation Pro",
+    "category":  "automation",
+    "tier":  "pro",
+    "status":  "design",
+    "installable":  false,
+    "source_model":  "undecided",
+    "core_owners":  [
+                        "Operations",
+                        "Platform",
+                        "IdentityAccess",
+                        "Observability"
+                    ],
+    "catalogue_keys":  [
+                           "automation.playbooks",
+                           "automation.event-rules",
+                           "automation.terraform-opentofu",
+                           "automation.ansible"
+                       ],
+    "dependencies":  [
+
+                     ],
+    "summary":  "Advanced versioned playbooks, reusable workflow parameters and reviewed bulk infrastructure plans. Infrastructure-as-code and configuration-management integrations remain connectors using the same admitted Core contracts.",
+    "core_boundary":  "Core keeps its scheduler, jobs, API, validation and controlled system operations. This module adds optional workflow authoring and coordination; a workflow cannot register new privileged commands, bypass current policy or treat a dry-run label as proof of no effects.",
+    "acceptance":  [
+                       "Restrict steps to closed typed operations and validate scope, resource versions, secrets and execution identity before planning.",
+                       "Test event loops, recursion, duplicate triggers, budgets, backpressure and per-tenant fairness.",
+                       "Require approvals bound to the exact plan where policy demands them, then recheck permissions at execution.",
+                       "Inject failure at each effect boundary and reconcile uncertain outcomes without blindly replaying destructive work.",
+                       "Stop new workflows cleanly on disablement while retaining active resource ownership and Core job/recovery access."
+                   ]
+}
