@@ -1,0 +1,28 @@
+name: SC-M01 read-only governance preflight
+
+on:
+  pull_request:
+    paths:
+      - "tools/governance/sc_m01_preflight.py"
+      - "tools/governance/test_sc_m01_preflight.py"
+      - "governance/verification/**"
+      - ".github/workflows/sc-m01-governance-preflight.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  governance-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout read-only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Python standard library version
+        run: python3 --version
+      - name: Unit tests (no network or WCP daemon)
+        run: python3 -m unittest discover -s tools/governance -p 'test_sc_m01_preflight.py' -v
+      - name: Require eight exact pinned inputs (not owner approval or E3)
+        run: python3 tools/governance/sc_m01_preflight.py --format json --require-all-pinned

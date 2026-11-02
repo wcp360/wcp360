@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "status": "COORDINATION_ONLY_NON_CANONICAL",
+  "as_of": "2026-10-26",
+  "source_main_sha": "e1fd356f5aa6bc89e1a9316442f6ed033e90ed14",
+  "purpose": "Read-only worktree file/sha preflight; NEVER implementation authority, owner approval, or E3 evidence",
+  "artifacts": [
+    {
+      "id": "API",
+      "version": "1.0",
+      "owner": "API / IPC / CONTRACTS",
+      "path": "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea",
+      "issue": 4
+    },
+    {
+      "id": "IPC",
+      "version": "WCP360-IPC-B/1",
+      "owner": "API / IPC / CONTRACTS",
+      "path": "specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "fec9c74e8413db822662e47c76c40486e282334f",
+      "issue": 5
+    },
+    {
+      "id": "PERMISSIONS",
+      "version": "v1.0",
+      "owner": "SECURITY / HARDENING",
+      "path": "specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "81f3d425f36470167aba4bfb7ba069268626342f",
+      "issue": 13
+    },
+    {
+      "id": "SECURITY",
+      "version": "v1.0",
+      "owner": "SECURITY / HARDENING",
+      "path": "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "6d74f2f363524511424f839ca7262143c2af95ab",
+      "issue": 13
+    },
+    {
+      "id": "DATABASE",
+      "version": "v1.0",
+      "owner": "DATABASE / DATA MODEL",
+      "path": "specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md",
+      "expected_git_blob_sha": null,
+      "issue": 6
+    },
+    {
+      "id": "QA",
+      "version": "v1.0 metadata",
+      "owner": "TESTS / QA",
+      "path": null,
+      "expected_git_blob_sha": null,
+      "issue": 7
+    },
+    {
+      "id": "DEVOPS",
+      "version": "v1.0",
+      "owner": "DEVOPS / BUILD / RELEASE",
+      "path": "specifications/devops/WCP360_SC-M01_DEVOPS_BASELINE_v1.0.md",
+      "expected_git_blob_sha": "61edf698c50cf58779b75ba02fba913bf8276c61",
+      "issue": 8
+    },
+    {
+      "id": "ENGINEERING",
+      "version": "ENG-WCP-RULESET-0001 v0.2",
+      "owner": "ENGINEERING / CODE REVIEW",
+      "path": "specifications/engineering/WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": null,
+      "issue": 9
+    }
+  ],
+  "notes": [
+    "Five SHAs are verified published blobs as of the source_main_sha. They are version-specific expected inputs, not an implementation GO.",
+    "Database and Engineering source bodies absent; no SHA may be invented.",
+    "QA canonical filename intentionally unset until TESTS / QA owner declares it.",
+    "A future owner-final publication requires separate provenance, approval, baseline impact and independent verification; update pins by a reviewed PR.",
+    "Running this tool on a branch/worktree does not prove its files are in GitHub main."
+  ]
+}

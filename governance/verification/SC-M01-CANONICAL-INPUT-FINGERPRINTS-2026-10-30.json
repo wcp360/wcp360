@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "status": "COORDINATION_ONLY_NON_CANONICAL",
+  "as_of": "2026-10-30",
+  "source_main_sha": "580e9ed58286304ade30142caf9415f4b87c0c28",
+  "purpose": "Read-only worktree file/sha preflight; NEVER implementation authority, owner approval, or E3 evidence",
+  "artifacts": [
+    {
+      "id": "API",
+      "version": "1.0",
+      "owner": "API / IPC / CONTRACTS",
+      "path": "specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea",
+      "issue": 4
+    },
+    {
+      "id": "IPC",
+      "version": "WCP360-IPC-B/1",
+      "owner": "API / IPC / CONTRACTS",
+      "path": "specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "fec9c74e8413db822662e47c76c40486e282334f",
+      "issue": 5
+    },
+    {
+      "id": "PERMISSIONS",
+      "version": "v1.0",
+      "owner": "SECURITY / HARDENING",
+      "path": "specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "81f3d425f36470167aba4bfb7ba069268626342f",
+      "issue": 13
+    },
+    {
+      "id": "SECURITY",
+      "version": "v1.0",
+      "owner": "SECURITY / HARDENING",
+      "path": "specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "6d74f2f363524511424f839ca7262143c2af95ab",
+      "issue": 13
+    },
+    {
+      "id": "DATABASE",
+      "version": "v1.0",
+      "owner": "DATABASE / DATA MODEL",
+      "path": "specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md",
+      "expected_git_blob_sha": "2660e057bad1d00592c57f354b1f3745ccccbe7d",
+      "issue": 6
+    },
+    {
+      "id": "QA",
+      "version": "v1.0",
+      "owner": "TESTS / QA",
+      "path": "specifications/tests/WCP360_SC-M01_Test_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "e0cdf924c5d7353624c069552f921f587cad8561",
+      "issue": 7
+    },
+    {
+      "id": "DEVOPS",
+      "version": "v1.0",
+      "owner": "DEVOPS / BUILD / RELEASE",
+      "path": "specifications/devops/WCP360_SC-M01_DEVOPS_BASELINE_v1.0.md",
+      "expected_git_blob_sha": "61edf698c50cf58779b75ba02fba913bf8276c61",
+      "issue": 8
+    },
+    {
+      "id": "ENGINEERING",
+      "version": "ENG-WCP-RULESET-0001 v0.3",
+      "owner": "ENGINEERING / CODE REVIEW",
+      "path": "specifications/engineering/WCP360_ENGINEERING_Code_Review_ENG-WCP-RULESET-0001-v0.2_CANONICAL_IMPLEMENTATION_EXPORT.md",
+      "expected_git_blob_sha": "a2d5035454d90f0a252da7041b3a6b239265c557",
+      "issue": 9
+    }
+  ],
+  "notes": [
+    "All eight expected blobs are taken from the selected source_main_sha, whose baseline manifest records eight accepted canonical inputs. This inventory does not independently verify owner approval.",
+    "QA v1.0 source is the first canonical owner publication; Database v1.0 is the corrected owner reconstruction; Engineering v0.3 is the manifest-selected successor retained under its legacy v0.2 locator.",
+    "The 2026-10-26 five-pin snapshot is retained unchanged as historical evidence. Current CLI/CI defaults use this 2026-10-30 inventory.",
+    "Exact pins are byte-level input checks only. Matching eight pins does not supply independent E3, semantic compatibility, the selected-slice GO or a CODE-BASELINE.",
+    "Running on a worktree does not establish GitHub-main membership. Unknown/missing/tampered inputs must fail strict mode; canonical source changes require a separately reviewed inventory update."
+  ],
+  "source_authority_manifest": {
+    "path": "manifests/WCP360-BM-0001.md",
+    "git_blob_sha": "4da48d8d7b3c8b16d8f4a65c6140c534c5d7b7d5"
+  }
+}
