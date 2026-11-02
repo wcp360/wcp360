@@ -14,7 +14,7 @@ RUN go test -race ./... && go vet ./... \
     && go test -run='^$' -fuzz='^FuzzActivationJournal$' -fuzztime=10s -parallel=2 . \
     && CGO_ENABLED=0 go build -trimpath -o /out/wcp-candidate-node ./cmd/wcp-candidate-node
 
-FROM php:8.4.27-fpm-trixie AS candidate
+FROM php:8.5.11-fpm-trixie AS candidate
 RUN apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev libpq-dev libicu-dev libzip-dev unzip curl nginx postgresql-client ca-certificates \
     && docker-php-ext-install curl intl pdo_pgsql zip opcache \
     && rm -rf /var/lib/apt/lists/*
