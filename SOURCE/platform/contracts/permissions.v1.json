@@ -1,0 +1,418 @@
+{
+  "version": "v1.0",
+  "source_path": "specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md",
+  "source_blob_sha": "81f3d425f36470167aba4bfb7ba069268626342f",
+  "count": 82,
+  "permissions": [
+    {
+      "id": "api.tokens.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "applications.create",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "applications.deploy",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "applications.maintenance",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "applications.read",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "applications.runtime.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "approvals.decide",
+      "surface": "POLICY / privileged",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "approvals.request",
+      "surface": "POLICY / privileged",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "audit.export",
+      "surface": "POLICY / privileged",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "audit.read",
+      "surface": "POLICY / privileged",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "automations.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "backups.create",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "backups.delete",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "backups.policy.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "backups.read",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "backups.restore",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "break_glass.use",
+      "surface": "POLICY / privileged",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "clusters.failover",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "clusters.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.create",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.delete",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.export",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.grants.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.import",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.read",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.restore",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "databases.users.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "domains.create",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "domains.dnssec.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "domains.read",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "domains.write",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.aliases.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.antispam.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.auth.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.domains.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.mailboxes.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "email.read",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "files.access.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "files.delete",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "files.permissions.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "files.read",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "files.write",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "iam.account_overrides.manage",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "iam.features.manage",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "iam.plans.manage",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "iam.resellers.manage",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "iam.roles.manage",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "iam.users.manage",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "impersonation.start",
+      "surface": "WCP-ADMIN / OWNER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "incidents.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "jobs.cancel",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "jobs.read",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "monitoring.read",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "network.firewall.manage",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "network.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "network.routes.manage",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "notifications.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "privilege.elevate",
+      "surface": "POLICY / privileged",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "processes.kill",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "processes.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "processes.terminate",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "security.keys.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "security.network.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "security.sessions.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "security.tokens.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "security.waf.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "servers.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "servers.reboot",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "servers.services.manage",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "service_config.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "service_config.write",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "settings.profile.manage",
+      "surface": "WCP-USER",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "settings.system.manage",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "ssl.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "ssl.read",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "storage.expand",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "storage.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "support.bundle.create",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "updates.apply",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "updates.read",
+      "surface": "WCP-ADMIN",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "webhooks.manage",
+      "surface": "BOTH / scope-bound",
+      "status": "ACTIVE"
+    }
+  ]
+}

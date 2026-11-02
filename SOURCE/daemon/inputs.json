@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "scope": "SC-M01 inert daemon foundation",
+  "authorization_commit": "3fd2f8007baa49c2454cc89c0a5488a57c77911b",
+  "owner_addendum_commit": "1ff4c195e75dade00cda13215b92ffe7576637b7",
+  "owner_addendum_blob": "f8608d6258f87b8c1099b9b3a7e32ec95c72dc27",
+  "module": "github.com/yyogas/wcp360/daemon",
+  "module_root": "SOURCE/daemon",
+  "go_version": "1.27.3",
+  "go_linux_amd64_sha256": "65efbc80fdc1fa2cd2631cad5b481777a68e8725f34e89f50fc6ac714e379b40",
+  "builder": "debian@sha256:918311b7b6c4c6f68b232ba516584925f6c78ad82b6fd534b98979df6438e483",
+  "uid": 10001,
+  "gid": 10001,
+  "govulncheck": "v1.9.0",
+  "runtime_dependencies": [],
+  "code_baseline": null
+}
