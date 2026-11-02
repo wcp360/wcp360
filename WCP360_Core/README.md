@@ -60,6 +60,8 @@ The [Core runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md) u
 
 The [administrator audit journal](src/Module/Observability/README.md) provides bounded event and request-reference inspection in the WCP360 ADMIN interface. Restricted PostgreSQL reads require a separate explicit setup opt-in; default role grants remain unchanged.
 
+The ADMIN surface represents the [server root administrator](src/Module/IdentityAccess/README.md#server-root-administrator) and is presented as ROOT. Its [server overview](src/Module/Platform/README.md#root-server-overview) shows observed OS, architecture, memory and storage capacity; the PHP runtime remains separated from privileged Linux execution.
+
 ## Source layout
 
 ```text

@@ -115,6 +115,15 @@ final class LinuxHostInventoryTest extends TestCase
         }
     }
 
+    public function testCapacityOnlyCollectionLeavesEveryNetworkObservationUnchecked(): void
+    {
+        $report = LinuxHostInventory::collect(false);
+        self::assertSame(['tcp4' => null, 'tcp6' => null, 'udp4' => null, 'udp6' => null], $report['network']);
+        self::assertFalse($report['host_changes']);
+        self::assertSame('current_process_namespace', $report['scope']);
+        self::assertSame(php_uname('m'), $report['architecture']);
+    }
+
     private function row(string $local, string $state, string $remote = '00000000:0000', string $tail = '1 0000000000000000 100 0 0 10 0'): string
     {
         return "  0: $local $remote $state 00000000:00000000 00:00000000 00000000 1000 0 42".($tail === '' ? '' : ' '.$tail)."\n";

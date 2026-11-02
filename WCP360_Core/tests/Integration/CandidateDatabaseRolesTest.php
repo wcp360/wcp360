@@ -637,6 +637,24 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $this->assertNoSecrets($result);
     }
 
+    public function testRootServerOverviewNeedsOnlyExistingAdminIdentityReads(): void
+    {
+        $this->provider->provision($this->passwords);
+        $db = $this->login('admin');
+        $service = new \Wcp360\Core\Module\Platform\Application\ServerOverview(
+            new \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization($db),
+            new \Wcp360\Core\Module\Platform\Infrastructure\LocalServerObservation());
+        $before = (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit');
+        $report = $service->inspect($this->fixture['users']['admin']);
+        self::assertSame('current_process_namespace', $report['scope']);
+        self::assertSame('Linux', $report['server']['os_family']);
+        self::assertSame($this->roles['admin'], $db->fetchOne('SELECT current_user'));
+        self::assertSame($before, (int) $this->maintenance->fetchOne('SELECT count(*) FROM wcp_candidate_audit'));
+        self::assertFalse($this->provider->auditReadPlan()['audit_reads']);
+        try { $db->fetchOne('SELECT id FROM wcp_candidate_audit'); self::fail('Server overview enabled unrelated audit access.'); }
+        catch (DriverException $error) { self::assertSame('42501', $error->getSQLState()); }
+    }
+
     private function passwordCallFixture(?AbstractLogger $logger = null): array
     {
         $db = $this->login('user', null, $logger);

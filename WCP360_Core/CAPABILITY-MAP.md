@@ -333,7 +333,7 @@ Primary owner is coordination and authoritative business responsibility. Collabo
 
 | README capability | Primary owner | Collaborators | Candidate delivery status | Next milestone |
 | :--- | :--- | :--- | :--- | :--- |
-| Server identity | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Strict target and boot-bound fixture identity; full node inventory absent. | [M9](ROADMAP.md#m9) |
+| Server identity | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Strict target, boot-bound fixture identity and current-ROOT OS/architecture/memory/storage observations; full node inventory absent. | [M9](ROADMAP.md#m9) |
 | System users and groups | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed disposable identities and UID checks; production lifecycle absent. | [M9](ROADMAP.md#m9) |
 | Services | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Candidate systemd units and fixed processes only. | [M9](ROADMAP.md#m9) |
 | Service dependencies | [Platform](src/Module/Platform/README.md) | [Operations](src/Module/Operations/README.md) | Partial — Fixed candidate startup ordering; general service dependency policy absent. | [M9](ROADMAP.md#m9) |

@@ -41,6 +41,20 @@ Start here when changing: **Identity, roles, session and recovery behavior.**
 
 The candidate checks current tenant authority for the single `candidate.hosting.plan` permission through `CandidateAuthorization`; [WorkbenchStore](../Operations/Infrastructure/WorkbenchStore.php) delegates its existing authorization and visibility facade to that service. It does not yet provide a general permission/delegation engine. Account and tenant lifecycle, plans and quotas belong to [Tenancy](../Tenancy/README.md).
 
+## Server root administrator
+
+The **ADMIN surface represents the server root administrator**: the operator responsible for the WCP360 instance, its server-wide settings, hosting accounts and infrastructure. The UI labels this surface **ROOT — Server administration**. Existing internal `admin`, `ROLE_ADMIN`, WCP-ADMIN surface claims, origins, session namespaces, database roles and permissions remain stable; this is not a new role hierarchy or a second administrator tier.
+
+| Identity | Current responsibility | Execution boundary |
+| :--- | :--- | :--- |
+| Server root administrator (ROOT / ADMIN) | Server-wide panel administration through implemented Core use cases. | Authenticated panel requests use the dedicated non-root administration runtime; approved privileged effects pass through the Go agent/broker boundary. |
+| Hosting account (USER) | Its currently authorized hosting spaces and resources. | Separate USER origin, sessions and permissions; a username such as `root` grants no administrator authority. |
+| Linux root / UID 0 | Minimal operating-system privileges needed by approved primitives. | The existing minimal `wcp-privd` broker; not PHP-FPM, FrankenPHP, templates or a general shell endpoint. |
+
+The candidate login still verifies the existing Core username/password credential. To enroll a development root panel account, run the existing interactive setup command, enter username `root` and choose context `admin`. This does **not** create/rename a Unix account, set the Linux root password or enable PAM/SSH authentication. Existing administrator login names/passwords remain valid and are never silently renamed or synchronized. Native Linux-root credential verification/linkage requires an accepted bounded authentication adapter and remains open production integration work.
+
+The [server overview](../Platform/README.md#root-server-overview) checks current active ADMIN authority before and after collection. Optional MFA remains optional; an enabled second factor and current sessions still gate access. Browser visibility or a root-looking username is never an authorization decision.
+
 ## Username authentication
 
 The USER surface is the **hosting workspace**. Both USER and ADMIN sign in with a canonical username: 3–32 lowercase ASCII letters, digits or underscores, beginning with a letter. The contact email remains a separate field and is never a login alias. Username lookup is parameterized and bound to the configured runtime context; a USER username cannot select the ADMIN identity. The database enforces format and uniqueness within each context. Existing login throttling, password hashing, CSRF, Origin checks and optional account MFA continue to apply.

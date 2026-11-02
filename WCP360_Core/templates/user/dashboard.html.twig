@@ -3,8 +3,8 @@
 {% set page_title = 'Tableau de bord' %}
 {% block content %}
 <div class="wcp-page-head page-heading">
-    <div><p class="wcp-page-eyebrow">{{ context == 'admin' ? 'VOTRE CENTRE DE CONTRÔLE' : 'VOTRE ESPACE DE TRAVAIL' }}</p><h1 class="wcp-page-heading">Tableau de bord</h1><p class="wcp-page-sub">{{ context == 'admin' ? 'Les réglages de votre panneau et ses extensions, au même endroit.' : 'Préparez vos hébergements et gardez le fil de vos opérations.' }}</p></div>
-    <div class="wcp-page-actions">{% if context == 'user' and tenants %}<a class="button" href="#hosting">{{ ui.icon('plus') }} Préparer un hébergement</a>{% else %}<a class="button secondary" href="{{ path('wcp_account_sessions') }}">{{ ui.icon('sessions') }} Mes sessions</a>{% endif %}</div>
+    <div><p class="wcp-page-eyebrow">{{ context == 'admin' ? 'ROOT — ADMINISTRATION DU SERVEUR' : 'VOTRE ESPACE DE TRAVAIL' }}</p><h1 class="wcp-page-heading">Tableau de bord</h1><p class="wcp-page-sub">{{ context == 'admin' ? 'Votre serveur, ses hébergements et ses services, au même endroit.' : 'Préparez vos hébergements et gardez le fil de vos opérations.' }}</p></div>
+    <div class="wcp-page-actions">{% if context == 'user' and tenants %}<a class="button" href="#hosting">{{ ui.icon('plus') }} Préparer un hébergement</a>{% elseif context == 'admin' %}<a class="button secondary" href="{{ path('wcp_server') }}">{{ ui.icon('server') }} Vue du serveur</a>{% else %}<a class="button secondary" href="{{ path('wcp_account_sessions') }}">{{ ui.icon('sessions') }} Mes sessions</a>{% endif %}</div>
 </div>
 {% if context == 'admin' %}
 <div class="wcp-core-admin-grid">

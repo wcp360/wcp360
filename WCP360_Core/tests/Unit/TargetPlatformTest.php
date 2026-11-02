@@ -97,6 +97,19 @@ final class TargetPlatformTest extends TestCase
         self::assertNull(TargetPlatform::detectHost($etc, $vendor));
     }
 
+    public function testOversizedReleaseAndCatalogueInputsAreBoundedWithoutUsingAFallback(): void
+    {
+        $etc = $this->temporaryDirectory.'/etc-large';
+        $vendor = $this->temporaryDirectory.'/vendor-valid';
+        file_put_contents($vendor, "ID=ubuntu\nVERSION_ID=24.04\n");
+        file_put_contents($etc, "ID=debian\nVERSION_ID=13\n".str_repeat('#x\n', 22000));
+        self::assertNull(TargetPlatform::detectHost($etc, $vendor));
+        $path = $this->temporaryDirectory.'/catalogue-large';
+        file_put_contents($path, str_repeat(' ', 16385).file_get_contents(dirname(__DIR__, 2).'/config/platforms/targets.json'));
+        $this->expectException(\RuntimeException::class);
+        TargetPlatform::profiles($path);
+    }
+
     public function testCatalogueRejectsExtraExecutableFieldsDuplicateTargetsAndWrongRequirements(): void
     {
         $catalogue = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/config/platforms/targets.json'), true, 16, JSON_THROW_ON_ERROR);

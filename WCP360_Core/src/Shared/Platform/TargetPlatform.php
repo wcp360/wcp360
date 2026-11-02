@@ -19,7 +19,7 @@ final class TargetPlatform
     public static function profiles(?string $cataloguePath = null): array
     {
         $path = $cataloguePath ?? dirname(__DIR__, 3).'/config/platforms/targets.json';
-        $content = @file_get_contents($path);
+        $content = @file_get_contents($path, false, null, 0, 16385);
         if (!is_string($content) || strlen($content) > 16384) {
             throw new \RuntimeException('Target platform catalogue is unavailable or oversized.');
         }
@@ -102,9 +102,9 @@ final class TargetPlatform
         $etcPath = $etcPath ?? '/etc/os-release';
         $fallbackPath = $fallbackPath ?? '/usr/lib/os-release';
         $path = file_exists($etcPath) || is_link($etcPath) ? $etcPath : $fallbackPath;
-        $release = @file_get_contents($path);
+        $release = @file_get_contents($path, false, null, 0, 65537);
 
-        return is_string($release) ? self::detect($release) : null;
+        return is_string($release) && strlen($release) <= 65536 ? self::detect($release) : null;
     }
 
     /** @return array<string, string>|null */

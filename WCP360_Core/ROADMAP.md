@@ -244,6 +244,14 @@ The default candidate PostgreSQL grants remain unchanged. A separate explicit se
 
 M1/M2/M9 remain open, approximately 20% overall and capability counts unchanged. Production audit permissions, retention, log access, indexing/large-volume qualification, metrics and alerts remain unfinished.
 
+### Root server administration and read-only capacity view
+
+The ADMIN surface is clarified as the [server root administrator](src/Module/IdentityAccess/README.md#server-root-administrator), presented as ROOT while retaining existing internal context/role/session identities. The current Core login credential remains separate from Linux root authentication; no PAM/SSH linkage, UID change, credential synchronization or automatic account rename is implemented.
+
+The [server overview](src/Module/Platform/README.md#root-server-overview) adds authenticated browser/API inspection of recognized OS, architecture, nullable memory and `/var` capacity. Existing bounded inventory parsers are reused with network-table reads skipped; release/catalogue reads are bounded before parsing. Current ADMIN authority is checked before collection and before publication. USER accounts, including a username `root`, cannot read server observations. Windows/unavailable measurements stay unknown; the process-namespace view does not prove host capacity, cgroup budgets, service health or effect authority.
+
+[Service](tests/Integration/ServerOverviewTest.php), [HTTP/MFA](tests/Integration/ServerJourneyTest.php), [restricted-role](tests/Integration/CandidateDatabaseRolesTest.php) and platform definitions cover refusal, racing revocation, optional/enabled MFA, projection, unknown/zero measurements, escaping, bounded files, methods and default grants. Exact-source CI belongs to draft PR #116. Local executable checks remain stopped. M1/M9 stay open; approximately 20% and capability counts unchanged.
+
 ## Ordered delivery plan
 
 Milestone numbers express dependency order, not dates, release versions, approval grants or promised completion percentages. All remain open unless explicitly marked as the achieved candidate checkpoint. An implementation may proceed in parallel when its prerequisite contracts and failure boundaries are settled.

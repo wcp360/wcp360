@@ -19,8 +19,10 @@ final class LinuxHostInventory
     private const MAX_BYTES = 2097152;
     private const NETWORK_HEADER = ['sl', 'local_address', 'rem_address', 'st', 'tx_queue', 'rx_queue', 'tr', 'tm->when', 'retrnsmt', 'uid', 'timeout', 'inode'];
 
-    /** @return HostObservation */
-    public static function collect(): array
+    /** @param bool $includeNetwork False skips all procfs network-table reads; other observations remain independent.
+     * @return HostObservation
+     */
+    public static function collect(bool $includeNetwork = true): array
     {
         $linux = PHP_OS_FAMILY === 'Linux';
         $platform = null;
@@ -36,7 +38,7 @@ final class LinuxHostInventory
         $status = $linux ? self::readBounded('/proc/self/status') : null;
         $network = [];
         foreach (['tcp4' => 'tcp', 'tcp6' => 'tcp6', 'udp4' => 'udp', 'udp6' => 'udp6'] as $key => $file) {
-            $content = $linux ? self::readBounded('/proc/net/'.$file) : null;
+            $content = $linux && $includeNetwork ? self::readBounded('/proc/net/'.$file) : null;
             $network[$key] = $content === null ? null : self::parseNetwork($content, substr($key, 0, 3), substr($key, -1));
         }
         $paths = [];

@@ -16,6 +16,7 @@ services:
     Wcp360\Core\:
         resource: ../src/
         exclude: ['../src/Kernel.php', '../src/Module/IdentityAccess/Domain/Principal.php', '../src/Module/Operations/Domain/', '../src/Module/Setup/Infrastructure/InstallationJournal.php', '../src/Module/Setup/Infrastructure/InstallationInputs.php', '../src/Module/Setup/Infrastructure/CandidateInstaller.php']
+    Wcp360\Core\Module\Platform\Application\ServerObservation: '@Wcp360\Core\Module\Platform\Infrastructure\LocalServerObservation'
     Wcp360\Core\Module\IdentityAccess\Domain\RecoveryKeySource: '@Wcp360\Core\Module\IdentityAccess\Infrastructure\RuntimeRecoveryKeys'
     Wcp360\Core\Module\IdentityAccess\Application\CompletePasswordRecovery:
         arguments:
