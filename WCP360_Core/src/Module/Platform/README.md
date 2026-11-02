@@ -44,6 +44,16 @@ Saving the default affects only new plans that inherit it. Existing site selecti
 
 [Service/revocation cases](../../../tests/Integration/RuntimeSettingsTest.php), [browser/API/MFA journeys](../../../tests/Integration/RuntimeSettingsJourneyTest.php), the [existing dashboard regression](../../../tests/Integration/ApplicationServerUiTest.php), [inheritance cases](../../../tests/Integration/ApplicationServerTest.php) and [restricted PostgreSQL-role cases](../../../tests/Integration/CandidateDatabaseRolesTest.php) define the checks. Exact-source CI evidence remains in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); local executable checks remain stopped. General hierarchical configuration and production integration remain open.
 
+## Shared hosting web-stack catalogue
+
+The [fixed catalogue](../../Shared/Platform/WebStackCatalogue.php) separates a complete hosting topology from a PHP application engine. It is shared by standalone installer inspection, ROOT settings and the hosting-plan form. `GET /workbench/v1/web-stacks` returns the candidate catalogue to a fully authenticated current ROOT account, with the existing optional/enabled MFA boundary, no query parameters, no-store and body-free HEAD. The existing settings report keeps its schema and projection unchanged.
+
+Classic is the default and maps to stored `php_fpm`. The existing opt-in `frankenphp_worker` maps to Advanced: Nginx fronts a per-site Caddy/FrankenPHP socket. Standalone Modern and Apache Legacy have no submission value or implemented plan driver; even the Worker-planning flag cannot enable them. The frontend offers only the two existing engine values, labels their actual stacks and displays the full catalogue separately. Forging an unavailable stack as an engine remains a refusal, not a fallback.
+
+The read-only catalogue distinguishes plan implementation, operator opt-in, isolated candidate activation, native installation, migration and multi-PHP. Native installation, general migration and managed multi-version PHP remain unavailable. Existing plan/1–2, persisted assignments, compatibility acknowledgements, site/panel separation, installer apply behavior and database grants are unchanged. The catalogue grants no effect authority and performs no service/package/configuration changes.
+
+[Catalogue/standalone cases](../../../tests/Unit/WebStackCatalogueTest.php), [ROOT/USER/MFA/API journeys](../../../tests/Integration/WebStackJourneyTest.php) and the existing [restricted-role case](../../../tests/Integration/CandidateDatabaseRolesTest.php) define the checks. Current-source execution belongs to draft PR #116; local executable tests remain stopped. See [Hosting's development direction](../Hosting/README.md#web-stack-profiles-and-development-direction) for the future direct driver and controlled migration requirements.
+
 ## Remaining scope
 
 Node inventory, general hierarchical settings, service/package/storage administration, SSH/network/firewall adapters and a complete production API remain to be implemented and qualified. The current global runtime default is one candidate setting, not a complete configuration subsystem.

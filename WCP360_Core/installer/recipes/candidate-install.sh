@@ -2,6 +2,16 @@
 set -euo pipefail
 umask 077
 core_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd -P)"
+if [[ ${1:-} == --web-stacks ]]; then
+    shift
+    command -v php >/dev/null || { echo 'PHP 8.1 or newer is required for read-only inspection.' >&2; exit 1; }
+    exec php "$core_root/installer/preflight/runtime-plan.php" --web-stacks "$@"
+fi
+if [[ ${1:-} == --plan && ${2:-} == --web-stack=* ]]; then
+    shift
+    command -v php >/dev/null || { echo 'PHP 8.1 or newer is required for read-only inspection.' >&2; exit 1; }
+    exec php "$core_root/installer/preflight/runtime-plan.php" "$@"
+fi
 [[ $# -le 1 ]] || { echo 'Usage: candidate-install.sh [--plan|--check-runtime|--host-check|--status|--resume]' >&2; exit 64; }
 case "${1:-}" in
     --plan|--check-runtime)

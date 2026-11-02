@@ -42,7 +42,7 @@ final class WorkbenchController extends AbstractController
         $tenants=$runtime->context==='user'?$store->tenants($user->id):[];
         $tenant=$request->query->getString('tenant',$tenants[0]['id']??'');
         $jobs=$tenant!==''?$store->jobs($user->id,$tenant):[];
-        return $this->render('user/dashboard.html.twig',['idempotency_key'=>WorkbenchStore::id(),'context'=>$runtime->context,'tenants'=>$tenants,'tenant'=>$tenant,'jobs'=>$jobs,'runtime_settings'=>$settings->current(),'worker_plans_enabled'=>$policy->workerPlansEnabled,'plugins'=>$runtime->context==='admin'?$plugins->installed():[]]);
+        return $this->render('user/dashboard.html.twig',['idempotency_key'=>WorkbenchStore::id(),'context'=>$runtime->context,'tenants'=>$tenants,'tenant'=>$tenant,'jobs'=>$jobs,'runtime_settings'=>$settings->current(),'worker_plans_enabled'=>$policy->workerPlansEnabled,'web_stacks'=>\Wcp360\Core\Shared\Platform\WebStackCatalogue::report($policy->workerPlansEnabled),'plugins'=>$runtime->context==='admin'?$plugins->installed():[]]);
     }
 
     #[Route('/workbench/plans',name:'wcp_plan',methods:['POST'])]

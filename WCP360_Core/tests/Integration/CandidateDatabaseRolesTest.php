@@ -432,6 +432,8 @@ final class CandidateDatabaseRolesTest extends WebTestCase
         $settings = new ApplicationServerSettings($store, new \Wcp360\Core\Module\Hosting\Application\ApplicationServerPolicy(true));
         $actor = $this->fixture['users']['admin'];
         self::assertSame(1, $settings->inspect($actor)['settings']['revision']);
+        self::assertSame('classic', $settings->webStacks($actor)['default']);
+        self::assertFalse($settings->webStacks($actor)['native_installation_available']);
         $reference = str_repeat('e', 32);
         $settings->change($actor, 'frankenphp_worker', 1, $reference);
         self::assertSame('frankenphp_worker', $settings->inspect($actor)['settings']['application_server']);

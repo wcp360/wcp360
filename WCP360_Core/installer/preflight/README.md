@@ -25,6 +25,32 @@ php WCP360_Core/installer/preflight/native-plan.php
 
 The installer exposes runtime planning as `bash WCP360_Core/installer/recipes/candidate-install.sh --plan`, runtime readiness as `--check-runtime` and the native-installation handoff below as `--host-check`. These options return before checkout preparation, journaling or migrations. See the [runtime matrix guide](../../../documentation/development/CORE-RUNTIME-MATRIX.md) for the corresponding five-target development image, application journey and evidence requirements.
 
+## Hosting web-stack inspection
+
+The same native PHP 8.1-compatible entry can list or inspect a hosting stack without loading Composer, Symfony or `.env`:
+
+~~~sh
+php WCP360_Core/installer/preflight/runtime-plan.php --web-stacks
+php WCP360_Core/installer/preflight/runtime-plan.php --web-stack=classic
+php WCP360_Core/installer/preflight/runtime-plan.php --web-stack=advanced --worker-plans
+~~~
+
+The [shared catalogue](../../src/Shared/Platform/WebStackCatalogue.php) contains Classic (Nginx/PHP-FPM), Modern (standalone Caddy/FrankenPHP Worker), Legacy (Apache/PHP-FPM) and Advanced (current Nginx-to-FrankenPHP Worker). Classic has current candidate planning and separately guarded isolated activation. Advanced planning requires explicit opt-in and has no activation adapter. Modern and Legacy remain planned/unavailable, never silently replaced by Classic.
+
+`--web-stacks` returns fixed catalogue metadata without host discovery, even on an unsupported preview OS. `--worker-plans` simulates an explicit planning opt-in in that read-only result; it does not change the application configuration. `--web-stack=...` combines the existing host runtime inspection with a distinct `hosting_web_stack` selection and `native_installation_available: false`. The panel runtime plan remains separate from hosted-site topology.
+
+Exit 0 means the requested catalogue listing or supported target/candidate-plan inspection succeeded. It is never native installation approval. Unavailable stacks, missing Worker opt-in or unsupported hosts return 78; unknown, duplicated, oversized or conflicting arguments return 64 without reflecting arbitrary input. Running with no arguments retains the original runtime-plan output. This entry installs nothing, creates no journal/checkpoint and grants no permission to apply a change.
+
+The installer shell entry forwards the same read-only checks before bootstrap or mutations:
+
+~~~sh
+bash WCP360_Core/installer/recipes/candidate-install.sh --web-stacks
+bash WCP360_Core/installer/recipes/candidate-install.sh --plan --web-stack=classic
+bash WCP360_Core/installer/recipes/candidate-install.sh --plan --web-stack=advanced --worker-plans
+~~~
+
+Remaining argv is quoted and parsed by the fixed PHP inspection script; it cannot select a different executable. Existing single-argument `--plan`, `--host-check`, status, resume and installation behavior remain unchanged. [Shell integration cases](../../tests/Integration/WebStackInstallerTest.php) use disposable checkouts and verify refusal, literal argument handling, no framework/env loading and no source/state mutation.
+
 ## Runtime identity inspection
 
 [runtime-identity.php](runtime-identity.php) uses the standalone [RuntimeIdentity](../../src/Shared/Platform/RuntimeIdentity.php) collector without Composer, Symfony, `.env`, database access, subprocesses or host writes. PHP 8.1 or newer can run it. Supply exactly one profile: `user`, `admin`, `worker`, `wcpd` or `wcp-privd`. Names and required groups follow the accepted [runtime identity table](../../config/contexts/README.md#inspect-the-calling-identity); arbitrary UID/group overrides and an apply mode are rejected.

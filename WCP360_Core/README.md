@@ -46,6 +46,23 @@ The Core owns essential hosting, local administration/recovery and the extension
 
 Start with the [change-location index](NAVIGATION.md) to find a function, command, dependency or Linux-service configuration. The [dependency guide](DEPENDENCIES.md) identifies manifests, locks and generated libraries.
 
+## Hosting web stacks
+
+The Core uses one [stack catalogue](src/Shared/Platform/WebStackCatalogue.php) across installer inspection, ROOT settings and the hosting-plan form. Stack topology and PHP execution mode are separate concepts.
+
+| Profile | Intended topology | Current implementation |
+| :--- | :--- | :--- |
+| **Classic — default** | Nginx + PHP-FPM; managed multi-version PHP is the target. | Candidate plans and separately guarded isolated FPM activation. One reviewed PHP series today; complete multi-PHP management remains open. |
+| **Modern** | Standalone Caddy/FrankenPHP Worker, replacing the web server and PHP-FPM. | Planned/unavailable; a dedicated direct driver, listeners, TLS policy and activation remain required. |
+| **Legacy / compatibility** | Apache + PHP-FPM for Apache-specific application behavior. | Planned/unavailable. Any future mod_php variant requires its own explicit isolation and qualification decision. |
+| **Advanced mix — optional** | An edge proxy with a separately managed backend. | Existing opt-in Nginx → Caddy/FrankenPHP Worker plans; activation unavailable. Other compositions remain planned. |
+
+FrankenPHP embeds PHP with Caddy and can serve directly; Worker mode requires application-state reset and bounded recycling. HTTP/3 and automatic HTTPS depend on the selected public listeners, networking, TLS ownership and configuration; they are not enabled by catalogue membership. See the official [migration guide](https://frankenphp.dev/docs/migrate/) and [Worker documentation](https://frankenphp.dev/docs/worker/).
+
+Existing `frankenphp_worker` sites and plan/2 keep their Nginx-edge meaning. Their current Caddy socket backend disables automatic HTTPS and the admin API. A future standalone Modern profile must not silently reinterpret or migrate those assignments. Changes between stacks need typed persisted profile/revision, versioned Go templates, config diff, capacity/compatibility checks, drain, health verification and recovery. A global default affects only new inheriting plans; the panel's own runtime stays separate.
+
+Use `php installer/preflight/runtime-plan.php --web-stacks` from the Core directory to inspect the catalogue. ROOT also exposes `GET /workbench/v1/web-stacks`. These are read-only candidate capabilities, not a production installer or general migration workflow. [Hosting details](src/Module/Hosting/README.md#web-stack-profiles-and-development-direction) and the [preflight guide](installer/preflight/README.md#hosting-web-stack-inspection) explain the boundaries.
+
 See [application-server profiles](../documentation/development/APPLICATION-SERVERS.md) for PHP-FPM defaults, per-site FrankenPHP Worker plans, compatibility and runtime-isolation requirements.
 
 See [isolated provisioning](../documentation/development/ISOLATED-PROVISIONING.md) for the real-effects PHP-FPM experiment and [testing](../documentation/development/TESTING.md) for PHPUnit, PHPStan and Panther commands.

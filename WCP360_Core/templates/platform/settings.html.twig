@@ -17,10 +17,8 @@
         <button class="button" type="submit" data-form-guard-target="button">Enregistrer le défaut</button><p class="field-help" role="status" data-form-guard-target="status"></p>
     </form>
 </div></section>
-<section class="wcp-panel"><div class="wcp-panel-head"><h2 class="wcp-panel-title">Choisir selon l’application</h2></div><div class="table-scroll"><table><caption class="sr-only">Comparaison des modes pour les nouveaux plans</caption><thead><tr><th scope="col">Mode</th><th scope="col">Usage</th><th scope="col">À vérifier</th></tr></thead><tbody>
-<tr><th scope="row">PHP-FPM</th><td>Applications PHP classiques et sites existants, avec un pool dédié.</td><td>Version de PHP, extensions et limites adaptées au site.</td></tr>
-<tr><th scope="row">FrankenPHP Worker</th><td>Applications explicitement compatibles avec un processus persistant.</td><td>État réinitialisé entre les requêtes, isolation et recyclage du processus. La confirmation de compatibilité reste obligatoire pour chaque nouveau plan Worker.</td></tr>
-</tbody></table></div></section>
+<section class="wcp-panel"><div class="wcp-panel-head"><h2 class="wcp-panel-title">Choisir une stack web</h2></div>{% include 'components/forms/web-stack-options.html.twig' %}</section>
+<p class="field-help">Chaque application Worker doit réinitialiser son état entre les requêtes et accepter un recyclage borné. La confirmation de compatibilité reste obligatoire pour chaque nouveau plan Worker.</p>
 <p class="field-help">La disponibilité de préparation des plans ne prouve pas qu’un service est installé ou prêt à servir un site. Enregistrer ce défaut ne lance aucune installation ni aucun redémarrage.</p>
 <p><a href="{{ path('wcp_audit', {kind:'candidate.runtime.default.changed'}) }}">Consulter les changements dans le journal d’audit</a></p>
 {% endblock %}

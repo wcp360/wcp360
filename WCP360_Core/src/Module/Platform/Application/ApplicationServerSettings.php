@@ -31,6 +31,16 @@ final readonly class ApplicationServerSettings
             'capabilities' => ['frankenphp_worker_plans' => $this->policy->workerPlansEnabled]];
     }
 
+    /** @return array<string,mixed> */
+    public function webStacks(string $actor): array
+    {
+        $this->store->requireAdmin($actor);
+        $report = \Wcp360\Core\Shared\Platform\WebStackCatalogue::report($this->policy->workerPlansEnabled);
+        $this->store->requireAdmin($actor);
+
+        return $report;
+    }
+
     public function change(string $actor, string $value, int $expectedRevision, ?string $requestId = null): void
     {
         \Wcp360\Core\Shared\Correlation\RequestId::assertValid($requestId);

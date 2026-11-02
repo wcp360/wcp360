@@ -84,6 +84,15 @@ final class RuntimeSettingsController extends AbstractController
         return $this->json($this->settings->inspect($actor->id));
     }
 
+    #[Route('/workbench/v1/web-stacks', name: 'wcp_api_web_stacks', methods: ['GET'])]
+    public function webStacks(Request $request): JsonResponse
+    {
+        $actor = $this->administrator();
+        $this->noQuery($request);
+
+        return $this->json($this->settings->webStacks($actor->id));
+    }
+
     private function administrator(): Principal
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -117,7 +126,8 @@ final class RuntimeSettingsController extends AbstractController
     private function page(string $actor, bool $conflict = false): Response
     {
         return $this->render('platform/settings.html.twig', ['context' => 'admin',
-            'report' => $this->settings->inspect($actor), 'conflict' => $conflict],
+            'report' => $this->settings->inspect($actor), 'conflict' => $conflict,
+            'web_stacks' => $this->settings->webStacks($actor)],
             new Response(status: $conflict ? 409 : 200));
     }
 }

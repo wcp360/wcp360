@@ -16,6 +16,23 @@ Start here when changing: **Website creation, virtual hosts, certificates and PH
 | Physical activation | [SubmitActivation](Application/SubmitActivation.php) and [RunActivation](Application/RunActivation.php) require a separate activation grant, check the planned revision and distinguish failure from an uncertain outcome. Inspection reconciles an uncertain result without blindly replaying the apply operation. |
 | Execution boundary | [DisposableExecution](Infrastructure/DisposableExecution.php) restricts this activation experiment to an explicitly prepared disposable container or Debian 13 VM. It does not authorize production execution or privileged execution on every recognized OS. |
 
+## Web-stack profiles and development direction
+
+The [shared web-stack catalogue](../../Shared/Platform/WebStackCatalogue.php) describes the accepted direction independently of the existing application-server setting. Its read-only installer entry is `php installer/preflight/runtime-plan.php --web-stacks`; the ROOT workbench exposes the same catalogue through `GET /workbench/v1/web-stacks`. A catalogue entry or inspection result does not establish installed-service support, native installation admission or production readiness.
+
+| Profile | Intended composition | Current boundary |
+| :--- | :--- | :--- |
+| Classic — default | Nginx + PHP-FPM, with isolated site pools and eventual managed PHP-version assignment. | The candidate renders this composition and has a separately guarded PHP-FPM activation experiment. Its reviewed runtime uses one PHP series; complete hosted multi-PHP management is not implemented. |
+| Modern | Standalone Caddy/FrankenPHP in Worker mode, without a mandatory Nginx edge. | Planned and unavailable for selection or activation. Public listeners, TLS ownership and runtime qualification remain to be implemented. |
+| Legacy / compatibility | Apache HTTP Server + PHP-FPM for applications requiring Apache-specific behavior. | Planned and unavailable. A future `mod_php` variant would require a separate explicitly selected and qualified optional profile; it is not a default or an available driver. |
+| Advanced / reverse proxy | An explicitly chosen edge proxy and backend combination. The existing candidate is Nginx → Caddy/FrankenPHP Worker over a per-site Unix socket. | Existing Worker rendering is opt-in and plan-only. Other combinations remain planned; enabling the planning flag does not install or activate a backend. |
+
+Existing `frankenphp_worker` assignments and candidate plan/2 retain their original Nginx-edge meaning. They must not be reinterpreted as standalone Modern plans. The current Caddy socket backend disables automatic HTTPS and its admin API, and provides no public Caddy listener or HTTP/3 exposure. Standalone Modern may later offer those Caddy capabilities after explicit configuration and qualification; catalogue membership does not guarantee them or a performance improvement.
+
+Worker applications must explicitly support persistent execution, reset request-specific state between requests and use bounded process recycling. Each tenant site requires its own unprivileged process identity and isolated runtime resources; sharing one persistent application process across unrelated sites is not an accepted shortcut. The panel's own runtime and a hosted site's runtime remain separate choices.
+
+An eventual installation or site/group stack switch must persist a typed profile and its revision, select versioned Go-owned templates and present a configuration diff before applying. It must establish listener and TLS ownership, check capabilities and runtime compatibility, drain existing workers when needed, verify resulting health and retain a controlled recovery path. Existing sites must not change merely because a global default changes. Reviewed agent operations perform bounded effects; no profile accepts arbitrary shell commands, service names or configuration paths.
+
 ## Prepared-plan file inspection and downloads
 
 [PreparedPlanDocument](Domain/PreparedPlanDocument.php) owns the existing candidate plan/1 PHP-FPM and plan/2 FrankenPHP field shape, including the original field order and runtime marker. [GoPlanRenderer](Infrastructure/GoPlanRenderer.php) retains its fixed executable, 5-second child limit and 65,536-byte transport capture cap, then delegates document validation. Existing callers retain the same field arrays.

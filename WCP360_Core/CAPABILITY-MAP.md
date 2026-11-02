@@ -21,6 +21,8 @@ The [other-session revocation action](src/Module/IdentityAccess/README.md#discon
 
 The [ROOT runtime-settings workflow](src/Module/Platform/README.md#root-global-runtime-settings) adds a dedicated form and protected browser API over the same revisioned default, with conflict review and correlated audit. Hierarchical configuration and Configuration validation remain Partial; counts and estimates are unchanged.
 
+The [hosting stack catalogue](src/Module/Hosting/README.md#web-stack-profiles-and-development-direction) separates Classic, standalone Modern, Apache Legacy and Advanced. Current Worker plans remain Advanced; Modern/Legacy, complete multi-PHP and stack migration remain unimplemented. Read-only installer/UI/API integration does not change capability status or counts.
+
 ## Delivery snapshot
 
 **Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.

@@ -45,6 +45,7 @@
         {% include 'components/forms/application-server.html.twig' with {field_id: 'site-application-server', allow_inherit: true, selected: 'inherit'} %}
         <label class="checkbox-row"><input type="checkbox" name="worker_acknowledged" value="1"{% if not worker_plans_enabled %} disabled{% endif %}><span>Je confirme que cette application est compatible avec le mode worker et réinitialise son état entre les requêtes.</span></label>
         <p class="field-help">Confirmation obligatoire si le mode worker est sélectionné ou hérité. Un plan ne déploie ni service ni application.</p>
+        <details><summary>Comparer les stacks web</summary>{% include 'components/forms/web-stack-options.html.twig' %}</details>
         <button class="button wcp-core-submit" type="submit" data-form-guard-target="button">{{ ui.icon('plus') }} Générer le plan</button><p class="field-help" role="status" data-form-guard-target="status"></p>
         </form>
     </div></section>
