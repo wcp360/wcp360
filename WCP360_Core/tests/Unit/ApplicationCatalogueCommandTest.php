@@ -7,6 +7,7 @@ namespace Wcp360\Core\Tests\Unit;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Tester\CommandTester;
 use Wcp360\Core\Module\Hosting\Application\ApplicationCatalogueSource;
 use Wcp360\Core\Module\Hosting\Application\ListApplicationCandidates;
@@ -37,11 +38,12 @@ final class ApplicationCatalogueCommandTest extends TestCase
         foreach (['path', 'url', 'install', 'apply', 'shell'] as $unsupported) self::assertFalse($command->getDefinition()->hasOption($unsupported));
         $tester = new CommandTester($command);
 
-        self::assertSame(Command::SUCCESS, $tester->execute(['--profile' => 'PHP', '--limit' => '25', '--offset' => '0'],
+        self::assertSame(Command::SUCCESS, $tester->execute(['--app-profile' => 'PHP', '--limit' => '25', '--offset' => '0'],
             ['interactive' => false, 'decorated' => true]));
         $output = $tester->getDisplay();
         $report = json_decode($output, true, 32, JSON_THROW_ON_ERROR);
         self::assertSame('available', $report['status']);
+        self::assertSame('PHP', $report['filters']['profile']);
         self::assertSame($fields, $report['items'][0]['source_fields']);
         self::assertFalse($report['items'][0]['installable']);
         self::assertFalse($report['deployment_available']);
@@ -74,7 +76,7 @@ final class ApplicationCatalogueCommandTest extends TestCase
         yield 'leading zero' => [['--offset' => '01']];
         yield 'too large offset' => [['--offset' => '2049']];
         yield 'negative offset' => [['--offset' => '-1']];
-        yield 'terminal escape' => [['--profile' => "\x1b[31m"]];
+        yield 'terminal escape' => [['--app-profile' => "\x1b[31m"]];
         yield 'empty category' => [['--category' => '']];
     }
 
@@ -86,6 +88,25 @@ final class ApplicationCatalogueCommandTest extends TestCase
         $tester = new CommandTester(new ApplicationCatalogueCommand(new ListApplicationCandidates($source), self::runtime('worker')));
         self::assertSame(Command::INVALID, $tester->execute($arguments));
         self::assertSame('invalid', json_decode($tester->getDisplay(), true, 16, JSON_THROW_ON_ERROR)['status']);
+    }
+
+    public static function unknownOptions(): iterable
+    {
+        yield 'path selector' => [['--path' => '/private/catalogue.csv']];
+        yield 'URL selector' => [['--url' => 'https://example.invalid/catalogue.csv']];
+        yield 'apply flag' => [['--apply' => true]];
+        yield 'install flag' => [['--install' => true]];
+        yield 'shell fragment' => [['--shell' => 'synthetic']];
+    }
+
+    #[DataProvider('unknownOptions')]
+    public function testUnknownDomainOptionsAreRejectedWithoutReadingTheSource(array $arguments): void
+    {
+        $source = $this->createMock(ApplicationCatalogueSource::class);
+        $source->expects(self::never())->method('read');
+        $tester = new CommandTester(new ApplicationCatalogueCommand(new ListApplicationCandidates($source), self::runtime('worker')));
+        $this->expectException(InvalidOptionException::class);
+        $tester->execute($arguments);
     }
 
     public static function unavailableSources(): iterable

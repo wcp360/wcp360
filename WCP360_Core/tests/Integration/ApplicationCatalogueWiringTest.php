@@ -6,6 +6,7 @@ namespace Wcp360\Core\Tests\Integration;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Tester\ApplicationTester;
 use Wcp360\Core\Module\Hosting\Application\ApplicationCatalogueSource;
 use Wcp360\Core\Module\Hosting\Infrastructure\CsvApplicationCatalogueSource;
 use Wcp360\Core\Module\Hosting\UI\Console\ApplicationCatalogueCommand;
@@ -45,5 +46,15 @@ final class ApplicationCatalogueWiringTest extends KernelTestCase
         $command = $application->find('wcp:candidate:apps:catalogue');
         self::assertInstanceOf(ApplicationCatalogueCommand::class, $command);
         self::assertSame('wcp:candidate:apps:catalogue', $command->getName());
+        // Help uses Symfony's real definition merge without executing the catalogue use case.
+        $application->setAutoExit(false);
+        $application->setCatchExceptions(false);
+        $tester = new ApplicationTester($application);
+        self::assertSame(0, $tester->run(['command' => 'wcp:candidate:apps:catalogue', '--help' => true],
+            ['interactive' => false, 'decorated' => false]));
+        self::assertStringContainsString('--app-profile', $tester->getDisplay());
+        self::assertStringContainsString('--profile', $tester->getDisplay());
+        self::assertFalse($command->getDefinition()->getOption('profile')->acceptValue());
+        self::assertTrue($command->getDefinition()->getOption('app-profile')->isValueRequired());
     }
 }

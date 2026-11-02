@@ -30,12 +30,12 @@ The CSV is the canonical editorial input. Core's Hosting boundary uses these can
 
 These names identify the candidate implementation; they do not define new canonical resource/action identifiers. Source wiring selects the fixed CSV through dependency injection. Callers cannot supply a path, URL, manifest or executable. The sixteen-profile JSON mapping and draft recipe descriptors are not loaded by that CSV reader.
 
-The command is **wcp:candidate:apps:catalogue**, restricted to the existing worker/setup candidate contexts. Its catalogue filters are category and profile, its accepted page sizes are 25, 50 or 100, and offset is bounded to 0–2048. Symfony's framework options remain separate from these domain inputs.
+The command is **wcp:candidate:apps:catalogue**, restricted to the existing worker/setup candidate contexts. Its catalogue filters are --category and --app-profile (Symfony reserves --profile for profiling), its accepted page sizes are 25, 50 or 100, and offset is bounded to 0–2048. Symfony's framework options remain separate from these domain inputs.
 
 Example inspection from WCP360_Core, on an already prepared candidate:
 
 ```sh
-WCP_CONTEXT=worker php bin/console wcp:candidate:apps:catalogue --profile=PHP --limit=25 --offset=0
+WCP_CONTEXT=worker php bin/console wcp:candidate:apps:catalogue --app-profile=PHP --limit=25 --offset=0
 WCP_CONTEXT=setup php bin/console wcp:candidate:apps:catalogue --category="Forums modernes" --limit=25 --offset=0
 ```
 

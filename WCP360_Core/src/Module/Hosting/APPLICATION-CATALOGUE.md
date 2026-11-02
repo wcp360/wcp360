@@ -42,13 +42,13 @@ In an already configured development candidate, the Linux shell form is:
 
 ```sh
 APP_ENV=dev WCP_CANDIDATE=1 WCP_CONTEXT=setup php bin/console wcp:candidate:apps:catalogue --limit=25
-APP_ENV=dev WCP_CANDIDATE=1 WCP_CONTEXT=setup php bin/console wcp:candidate:apps:catalogue --profile=PHP --limit=25
+APP_ENV=dev WCP_CANDIDATE=1 WCP_CONTEXT=setup php bin/console wcp:candidate:apps:catalogue --app-profile=PHP --limit=25
 APP_ENV=dev WCP_CANDIDATE=1 WCP_CONTEXT=setup php bin/console wcp:candidate:apps:catalogue --category="Forums modernes" --offset=0
 ```
 
 These examples are documentation, not commands executed during this change. Worker is the other admitted candidate context; USER and ADMIN browser contexts cannot use the command. A context setting is not proof of a production Unix identity.
 
-Category/profile filters match their source labels exactly. Page sizes are 25, 50 or 100 and offset is bounded at 2,048. JSON output uses raw Console output so catalogue text cannot become Console formatting instructions. Unknown/invalid input and unavailable/invalid sources have explicit unsuccessful outcomes; a successful catalogue read proves no deployment.
+The --category and --app-profile filters match their source labels exactly. The application filter avoids Symfony's reserved --profile profiler option. Page sizes are 25, 50 or 100 and offset is bounded at 2,048. JSON output uses raw Console output so catalogue text cannot become Console formatting instructions. Unknown/invalid input and unavailable/invalid sources have explicit unsuccessful outcomes; a successful catalogue read proves no deployment.
 
 Each page is drawn from the current bounded snapshot. Consumers should inspect the source fingerprint and restart pagination if it changes; offset is not an immutable application reference. Proposed access and qualification never change the false installable/deployment flags.
 

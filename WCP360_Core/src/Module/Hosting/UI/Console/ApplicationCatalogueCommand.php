@@ -24,7 +24,7 @@ final class ApplicationCatalogueCommand extends Command
     protected function configure(): void
     {
         $this->addOption('category', null, InputOption::VALUE_REQUIRED, 'Exact candidate category.');
-        $this->addOption('profile', null, InputOption::VALUE_REQUIRED, 'Exact proposed profile; metadata is not admission.');
+        $this->addOption('app-profile', null, InputOption::VALUE_REQUIRED, 'Exact proposed profile; metadata is not admission.');
         $this->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Page size: 25, 50 or 100.', '25');
         $this->addOption('offset', null, InputOption::VALUE_REQUIRED, 'Offset from 0 to 2048.', '0');
     }
@@ -37,7 +37,7 @@ final class ApplicationCatalogueCommand extends Command
         }
         try {
             $query = ApplicationCatalogueQuery::fromArray([
-                'category' => $input->getOption('category'), 'profile' => $input->getOption('profile'),
+                'category' => $input->getOption('category'), 'profile' => $input->getOption('app-profile'),
                 'limit' => $input->getOption('limit'), 'offset' => $input->getOption('offset')]);
         } catch (\InvalidArgumentException) {
             $this->failure($output, 'invalid');
