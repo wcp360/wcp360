@@ -49,8 +49,14 @@ The 13-entry gate inventory is checked for exact names, absence of duplicates an
 
 ## Negative gate evidence and host isolation
 
-CI runs six deliberate-invalid fixtures in disposable writable copies inside a separate offline, nonroot container. They verify rejection at the exact expected gate: simulated wrong Go version output, forbidden dependency, stale unused go.sum entry, formatting drift, vet printf diagnostic and failing unit assertion. Expected fixture failures are recorded as REJECTED_AS_EXPECTED in negative-gates.tsv; they are not product failures and do not replace the normal candidate gate report.
+CI runs seven deliberate-invalid fixtures in disposable writable copies inside a separate offline, nonroot container. They verify rejection at the exact expected gate: simulated wrong Go version output, forbidden dependency, stale unused go.sum entry, formatting drift, vet printf diagnostic, failing unit assertion and a main wrapper that discards the CLI exit code. Expected fixture failures are recorded as REJECTED_AS_EXPECTED in negative-gates.tsv; they are not product failures and do not replace the normal candidate gate report.
 
 The scanner's host-directed traffic is denied on INPUT as well as external forwarded traffic on DOCKER-USER. An empty-directory host listener bound only to the dedicated bridge provides a live positive control; the scanner must fail to connect while host checks succeed before and after. Nonzero host REJECT counters are required. The temporary listener and rules are removed after the job.
 
 Linked scanner versions and h1 checksums must exactly match tools/govulncheck.modules. That file locks the previously observed upstream closure; owner review of the disclosed telemetry pseudo-version remains required.
+
+## CLI process contract verification
+
+The `daemon-smoke` gate runs `tools/check-cli.sh` against the actual compiled executable. Its 21 process cases check all five successful invocations, nine rejected argument forms and seven output-failure paths. Exact stdout/stderr bytes and process exit codes are checked; synthetic credential/path arguments must never appear in the response. Debian's `/dev/full`, first verified to reject writes, supplies deterministic stdout/stderr failures. Per-case results are retained in `out/sc-m01/daemon/cli-process.tsv` and the CI artifact.
+
+The seventh negative fixture removes `os.Exit` in a disposable main wrapper. Unit tests of `cli.Run` still pass, but `daemon-smoke` must fail on the executable's incorrect exit code. This verifies the process boundary beyond unit coverage of the CLI function. These are inert CLI checks, not API/IPC, session, privileged-operation or full-product QA acceptance. No runtime Go source or canonical contract is changed by this test extension. Prior PR #108 owner assessments remain bound to their original SHA; this follow-up needs its own applicable review and independent E3 before merge.

@@ -68,5 +68,9 @@ prepare failing-unit
 sed -i 's/{"default", nil, "Usage: wcpd"}/{"default", nil, "INTENTIONAL NEGATIVE FIXTURE"}/' "$fixture/SOURCE/daemon/internal/cli/cli_test.go"
 reject_at failing-unit daemon-unit
 
-test "$(wc -l < "$output/negative-gates.tsv")" -eq 6
+prepare ignored-cli-exit
+sed -i 's/os.Exit(cli.Run(os.Args\[1:\], os.Stdout, os.Stderr))/cli.Run(os.Args[1:], os.Stdout, os.Stderr)/' "$fixture/SOURCE/daemon/cmd/wcpd/main.go"
+reject_at ignored-cli-exit daemon-smoke
+
+test "$(wc -l < "$output/negative-gates.tsv")" -eq 7
 cat "$output/negative-gates.tsv"
