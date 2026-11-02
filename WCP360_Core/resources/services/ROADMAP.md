@@ -11,6 +11,8 @@ This is the per-service register for [resources/ROADMAP.md](../ROADMAP.md). It d
 | Candidate-local | Files exist here but are disposable-VM / fixture-identity only. |
 | Planned-gap | Additional capability recorded in an owner/index; no service implementation or selected provider. Requested README reservations are documentation, not executable/configuration delivery. |
 
+The [Platform service inventory](../../src/Module/Platform/SERVICES.md) adds read-only unit observations only. It neither supplies production templates nor changes the per-service lifecycle statuses in this register. Successful native systemd-host observation and future controlled management require separate evidence.
+
 ## Delivery order
 
 Implement in this sequence unless an accepted contract says otherwise. The candidate still defaults to Nginx/FPM. The [adopted target for new general-purpose installations](../../src/Module/Hosting/WEB-SERVER-STRATEGY.md) is Nginx -> Apache event -> FPM after explicit versioned implementation and qualification; existing profiles are not reinterpreted. MySQL, MariaDB and Redis remain explicitly selected providers. A README does not change native installation.

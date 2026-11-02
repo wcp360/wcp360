@@ -15,6 +15,10 @@
 
 Run `composer check` from Core for Symfony-aware PHPStan, analyzer regressions, PHPUnit and framework lints. Run `composer test:browser` in the documented Chromium/WebDriver environment. See the [testing guide](../../documentation/development/TESTING.md) for commands, scopes, fixture safeguards and Linux/VM evidence. The deliberate-error PHPStan fixtures live in `tools/phpstan/fixtures`, outside application test discovery.
 
+## ROOT service observations
+
+[ServiceObservationSnapshotTest](Unit/ServiceObservationSnapshotTest.php) defines strict bounded property parsing, alias coalescing and malformed-output refusal. [ServiceOverviewTest](Integration/ServiceOverviewTest.php) checks authorization/revocation, explicit uncertainty and read-only reporting. [SystemdServiceObservationTest](Integration/SystemdServiceObservationTest.php) checks the fixed adapter contract without accepting runtime selectors. [ServiceJourneyTest](Integration/ServiceJourneyTest.php) covers browser/API roles, enabled MFA, query/method refusals, safe failures and HEAD/no-store behavior. Synthetic data and unavailable-manager cases do not qualify successful observation on a native systemd host. Local executable checks remain stopped; exact-source CI outcomes are recorded in draft PR #116.
+
 ## Versioned target web-stack preview
 
 The seventh [application topology](../src/Module/Hosting/APPLICATION-PROFILES.md#nginx-to-apache-target-preview) is checked through Go renderer/CLI compatibility definitions, [strict document decoding](Unit/ApplicationPlanDocumentTest.php), [authorized preview services](Integration/ApplicationPlanPreviewTest.php), [ROOT browser/API journeys](Integration/ApplicationPreviewJourneyTest.php) and the [native Nginx artifact matrix](Integration/NginxSyntaxProbeTest.php). Historical recipe documents remain version 1; the Nginx/Apache/FPM target requires version 2. These tests distinguish generated configuration and partial grammar coverage from missing Apache/event/FPM/HTTP qualification. Execution outcomes must identify the exact CI source; local executable checks remain stopped.

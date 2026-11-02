@@ -32,6 +32,8 @@ The [candidate authorization boundary](src/Module/IdentityAccess/README.md#candi
 
 The [candidate session registry](src/Module/IdentityAccess/README.md#candidate-session-inventory-and-revocation) adds `/account/sessions` for USER and authenticated ADMIN accounts. Each account can inspect and revoke its own sessions in the current browser context, with exact Origin, target-bound CSRF and current-password confirmation; administrator changes also require recent password authentication, or recent MFA when enabled. Durable, separate candidate tables store session metadata and a SHA-256 binding, while Symfony's session payload remains in server-side files. Older checkouts must apply [Version20261101000300](migrations/Version20261101000300.php) and sign in again: existing cookies are never automatically registered. Revocation blocks subsequent admitted requests; complete production session contracts, database grants and in-flight effect fencing remain open.
 
+The [ROOT service inventory](src/Module/Platform/SERVICES.md) adds read-only browser/API observations for nine service families through a bounded, fixed systemd probe. It distinguishes missing observations from collection failures, retains current ADMIN checks and exposes no start/restart action or health guarantee. The 24 service-resource locations retain their existing implementation status.
+
 [ROOT global settings](src/Module/Platform/README.md#root-global-runtime-settings) provides a dedicated PHP-FPM / FrankenPHP Worker default page and protected browser API. They reuse the existing settings writer, refuse stale revisions, show current values for explicit review and correlate changes with audit references. The choice affects new inheriting plans; existing sites and the panel runtime remain unchanged. Worker-planning availability does not imply installed-service readiness.
 
 [Disconnecting other sessions](src/Module/IdentityAccess/README.md#disconnecting-other-sessions) lets USER and ROOT keep the current browser signed in while revoking their other registrations. The action shares current-password confirmation, exact Origin, its own CSRF token and the existing attempt budget. A locked credential/session/factor recheck and aggregate audit protect the account-scoped update; enabled MFA stays enforced and optional MFA stays optional. It covers all other registrations, including those outside the displayed page, using existing PostgreSQL grants.
@@ -126,7 +128,7 @@ WCP360_Core/
 │   ├── platforms/               # Exact target catalogue; native package families and profile IDs
 │   ├── routes/
 │   └── contexts/
-├── resources/services/          # Seventeen documented Linux-service source locations
+├── resources/services/          # Twenty-four documented Linux-service source locations
 ├── templates/
 │   ├── admin/
 │   ├── user/
@@ -176,7 +178,7 @@ The [capability-to-owner map](CAPABILITY-MAP.md) accounts for all 233 README cap
 
 ## Configuration and commands
 
-Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all thirteen built-in domains and seventeen service-resource locations to their owners.
+Symfony configuration belongs in config; Linux-service template/profile sources belong in [resources/services](resources/services/README.md). Applied /etc files and machine-specific secrets/state stay outside source. [The navigation index](NAVIGATION.md) maps all thirteen built-in domains and twenty-four service-resource locations to their owners.
 
 Business functions are cohesive services in the owning module. CLI adapters belong in that module's UI/Console layer and call the same authorized use cases as HTTP. bin contains entry points; agents contain the accepted controlled system operations. See the [command guide](bin/README.md).
 

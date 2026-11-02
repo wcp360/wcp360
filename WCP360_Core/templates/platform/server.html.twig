@@ -2,7 +2,7 @@
 {% set page_title = 'Vue du serveur' %}
 {% set server = report.server %}
 {% block content %}
-<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1>Vue du serveur</h1><p class="wcp-page-sub">Système, mémoire et stockage visibles par le panneau.</p></div><div class="wcp-page-actions"><a class="button secondary" href="{{ path('wcp_server') }}">Actualiser</a></div></div>
+<div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1>Vue du serveur</h1><p class="wcp-page-sub">Système, mémoire et stockage visibles par le panneau.</p></div><div class="wcp-page-actions"><a class="button secondary" href="{{ path('wcp_server') }}">Actualiser</a><a class="button secondary" href="{{ path('wcp_services') }}">Services du serveur</a></div></div>
 <div class="wcp-health-strip" aria-label="Ressources observées">
 <div class="wcp-health-cell"><div class="wcp-health-label">Système</div><div class="wcp-health-value" data-server-platform>{{ server.platform|default(server.os_family) }}</div><div class="wcp-health-meta">{{ server.platform ? 'Plate-forme cible reconnue' : 'Environnement observé' }}</div></div>
 <div class="wcp-health-cell"><div class="wcp-health-label">Architecture</div><div class="wcp-health-value" data-server-architecture>{{ server.architecture }}</div></div>

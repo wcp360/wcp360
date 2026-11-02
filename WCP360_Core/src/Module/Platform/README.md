@@ -12,6 +12,7 @@ Preparation for growth is documented in [container providers](design/containers/
 
 | Concern | Actual source and scope |
 | :--- | :--- |
+| ROOT service observations | [ServiceOverview](Application/ServiceOverview.php), a fixed read-only systemd observation port and ROOT browser/API; bounded collection with explicit uncertainty and no service control. |
 | Root server overview | [ServerOverview](Application/ServerOverview.php), a narrow read-only local observation port and browser/API routes; current ADMIN checks, memory/storage and no system effects. |
 | Application-server defaults | [ApplicationServerSettings](Application/ApplicationServerSettings.php) stores the default for new hosting plans, checks current administrator authority and rejects stale revisions. Existing sites retain their selected runtime. |
 | Runtime-settings interface | [RuntimeSettingsController](UI/Http/RuntimeSettingsController.php) shares dedicated ROOT forms/API, guarded reads and revision/audit writes; retains the dashboard POST contract. |
@@ -19,6 +20,10 @@ Preparation for growth is documented in [container providers](design/containers/
 | OS and runtime preflight | Shared [TargetPlatform](../../Shared/Platform/TargetPlatform.php), [RuntimePlan](../../Shared/Platform/RuntimePlan.php) and [RuntimeReadiness](../../Shared/Platform/RuntimeReadiness.php) support Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS recognition, read-only PHP 8.4 planning and actual PostgreSQL 17 readiness checks. |
 
 Target recognition, native package probes and userspace tests do not qualify privileged host operations. The disposable activation VM gate remains Debian 13 only; these helpers do not widen it or install system packages/services.
+
+## ROOT service observations
+
+The [service observation guide](SERVICES.md) documents the new read-only Platform use case, fixed nine-family/fourteen-unit catalogue and bounded systemd adapter. ROOT browser/API routes distinguish validated unit state, missing observations and unavailable collection; service health and control remain explicitly unverified/unavailable. Current ADMIN checks surround collection, all selectors are refused and no system-control permission or provider installation is added. Native systemd-host qualification remains separate from parser, adapter-contract and HTTP fixture checks.
 
 ## Root server overview
 

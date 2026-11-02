@@ -1,5 +1,7 @@
 # Linux-service source directory
 
+The read-only [ROOT service inventory](../../src/Module/Platform/SERVICES.md) lives in Platform. Its fixed systemd lookups observe nine families without installing providers, validating service health or enabling control. They do not change the 24 resource-family counts or the implementation statuses below.
+
 This index makes the service's template, owning PHP domain and target configuration boundary easy to locate. Entries identify source ownership. The candidate PHP-FPM and FrankenPHP renderers are explicitly linked; other entries remain documented source reservations. A directory is not evidence that an adapter is implemented, selected, installed or permitted to run.
 
 The directory has **24 documented service locations**. Their README reservations prepare the requested layout; they do not install providers or create empty implementation trees. Each service README records its owner, current boundary and remaining work. The [Core roadmap](../../ROADMAP.md) and [structure index](../../STRUCTURE.md) organize the dependencies for future executable/configuration files. The current candidate default remains Nginx/FPM; the [target for new general-purpose installations](../../src/Module/Hosting/WEB-SERVER-STRATEGY.md) is Nginx -> Apache event -> FPM after explicit implementation and qualification. Existing assignments do not change.
