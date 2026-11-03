@@ -51,6 +51,8 @@ The integration is publication of development candidates under the user's consol
 
 ## Branch completion
 
+**Completed on November 3, 2026:** the [closure record](BRANCH-COMPLETION-2026-11-03.md) records all retired refs, the qualified dependency follow-up and the five deliberately deferred migrations. The procedure below is retained as the rule applied to the original integrated work branches.
+
 After main contains the tested integration, verify each frozen branch SHA against main, close any remaining superseded/stacked pull requests with an integration reference, and remove only the verified work-branch refs. Keep main, immutable Git history, source inventories and the dated records. Continue subsequent local work from main.
 
 Content evidence: [411 changed-path records](BRANCH-INTEGRATION-2026-11-02.paths.json), including 337 byte/mode-identical retained files and 74 explicit path/shared-content resolutions. These records cover historical work branches; the complete current workspace is retained through its frozen implementation head.

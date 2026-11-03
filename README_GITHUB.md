@@ -1618,7 +1618,7 @@ Consolidated candidate sources remain independent workbenches:
 
 ## GitHub branches
 
-Development is consolidated on **main** through [PR #116](https://github.com/yyogas/wcp360/pull/116). The [November 2 integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) records all **15 input branches**, their immutable heads and file dispositions. Work-branch refs are retired only after their heads are verified as ancestors of main; source history is preserved.
+Development is consolidated on **main** through [PR #116](https://github.com/yyogas/wcp360/pull/116) and [PR #125](https://github.com/yyogas/wcp360/pull/125). The [completed branch register](documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md) records **23 reviewed refs**: main remains, 17 work heads are merged, and five deferred major migrations are archived separately. All 22 work-branch refs are retired and no pull request remains open at that snapshot. The [original integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) retains the fifteen initial inputs and their file dispositions.
 
 | Work | Source on main |
 | :--- | :--- |

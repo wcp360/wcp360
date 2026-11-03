@@ -1,0 +1,268 @@
+{
+    "schema":  "wcp360.deferred-dependency-proposals/1",
+    "date":  "2026-11-03",
+    "timezone":  "Europe/Paris",
+    "captured_at_utc":  "2026-11-02T23:31:11.1478163Z",
+    "status":  "DEFERRED_ARCHIVED_NOT_MERGED",
+    "purpose":  "Preserve complete, non-executable proposal diffs and exact remote Git histories without changing the adopted runtime stack.",
+    "count":  5,
+    "proposals":  [
+                      {
+                          "pr":  119,
+                          "url":  "https://github.com/yyogas/wcp360/pull/119",
+                          "title":  "build(deps): bump symfony/process from 7.4.22 to 8.1.10 in /WCP360_Core",
+                          "branch":  "dependabot/composer/WCP360_Core/symfony/process-8.1.10",
+                          "base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "merge_base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "head_sha":  "9bc2ce64e3b7c68473519c77e97b69c2a2fc4823",
+                          "archive_tag":  "archive/deferred-pr-119-20261103",
+                          "disposition":  "DEFERRED_ARCHIVED_NOT_MERGED",
+                          "reason":  "Direct 7.4.* to 8.1.* component constraint change is outside the selected Symfony 7.4 line; requires a coordinated, separately qualified major migration.",
+                          "archive":  {
+                                          "path":  "pr-119.diff.gz",
+                                          "bytes":  5123,
+                                          "sha256":  "90c38bddb25e6391d22f6235dc7047377ce2175d6db2cf28858540d382c87412"
+                                      },
+                          "uncompressed_diff":  {
+                                                    "bytes":  39696,
+                                                    "sha256":  "a08bf46070ec6192388dd17eae1ee2760b0bedd2771b48245f31b9ab3906ff41",
+                                                    "format":  "native git diff --binary --full-index --no-ext-diff --no-textconv"
+                                                },
+                          "files":  [
+                                        {
+                                            "path":  "WCP360_Core/composer.json",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "021da680613320bb7c6b4062075e6ddf7323d58c",
+                                            "head_blob":  "f14827bdb799d16658d513aecb284928f95ed98c",
+                                            "additions":  1,
+                                            "deletions":  1
+                                        },
+                                        {
+                                            "path":  "WCP360_Core/composer.lock",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "f39969183101b2cb0f7706f43468609f4af8e4f0",
+                                            "head_blob":  "9b60bf84867354916b6c90da85dc1a854818689f",
+                                            "additions":  119,
+                                            "deletions":  230
+                                        }
+                                    ],
+                          "source_preservation_checks":  {
+                                                             "source_blobs":  "verified",
+                                                             "complete_native_diff":  "verified-against-complete-api-file-counts",
+                                                             "additions":  120,
+                                                             "deletions":  231,
+                                                             "local_runtime":  "not_run"
+                                                         }
+                      },
+                      {
+                          "pr":  120,
+                          "url":  "https://github.com/yyogas/wcp360/pull/120",
+                          "title":  "build(deps): bump php from 8.4.27-fpm-trixie to 8.5.11-fpm-trixie in /WCP360_Build/environments/core-candidate",
+                          "branch":  "dependabot/docker/WCP360_Build/environments/core-candidate/php-8.5.11-fpm-trixie",
+                          "base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "merge_base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "head_sha":  "6d2c92c1c258018c43b51d4bc6d2027a0a72ad87",
+                          "archive_tag":  "archive/deferred-pr-120-20261103",
+                          "disposition":  "DEFERRED_ARCHIVED_NOT_MERGED",
+                          "reason":  "PHP 8.5.11 Docker base conflicts with Core php ~8.4.0 and the PHP 8.4.27 runtime catalogue; remote CI fails building PHP extensions before Composer.",
+                          "archive":  {
+                                          "path":  "pr-120.diff.gz",
+                                          "bytes":  508,
+                                          "sha256":  "4f6c825aafb6816315ba8d73a72e216dbb433fdd8f17f65bf97372df31aacb90"
+                                      },
+                          "uncompressed_diff":  {
+                                                    "bytes":  929,
+                                                    "sha256":  "0272bf8789ddf715f6acf457e8c667c679faa897f519897b5b13cf752a134c0d",
+                                                    "format":  "native git diff --binary --full-index --no-ext-diff --no-textconv"
+                                                },
+                          "files":  [
+                                        {
+                                            "path":  "WCP360_Build/environments/core-candidate/Dockerfile",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "5128302a75861d656cbb933c1c2693d7ac1939e8",
+                                            "head_blob":  "900cbf253021bb41d8be4fadfbb8bc9533d0b2b0",
+                                            "additions":  1,
+                                            "deletions":  1
+                                        }
+                                    ],
+                          "source_preservation_checks":  {
+                                                             "source_blobs":  "verified",
+                                                             "complete_native_diff":  "verified-against-complete-api-file-counts",
+                                                             "additions":  1,
+                                                             "deletions":  1,
+                                                             "local_runtime":  "not_run"
+                                                         }
+                      },
+                      {
+                          "pr":  122,
+                          "url":  "https://github.com/yyogas/wcp360/pull/122",
+                          "title":  "build(deps-dev): bump symfony/css-selector from 7.4.22 to 8.1.10 in /WCP360_Core",
+                          "branch":  "dependabot/composer/WCP360_Core/symfony/css-selector-8.1.10",
+                          "base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "merge_base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "head_sha":  "65f2f2e42efbc6c9424525cade8c525183dc43ff",
+                          "archive_tag":  "archive/deferred-pr-122-20261103",
+                          "disposition":  "DEFERRED_ARCHIVED_NOT_MERGED",
+                          "reason":  "Direct 7.4.* to 8.1.* component constraint change is outside the selected Symfony 7.4 line; requires a coordinated, separately qualified major migration.",
+                          "archive":  {
+                                          "path":  "pr-122.diff.gz",
+                                          "bytes":  5158,
+                                          "sha256":  "1581f190841b0b50dbbf891725f56b8e97ccb97a9d36e0ad0fd383d419da698b"
+                                      },
+                          "uncompressed_diff":  {
+                                                    "bytes":  39696,
+                                                    "sha256":  "9ed7550ed52799486085d4b43c847e66e041da2e361d32a32ee9e6bca4efd358",
+                                                    "format":  "native git diff --binary --full-index --no-ext-diff --no-textconv"
+                                                },
+                          "files":  [
+                                        {
+                                            "path":  "WCP360_Core/composer.json",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "021da680613320bb7c6b4062075e6ddf7323d58c",
+                                            "head_blob":  "a9027bbcd725e33aa5357e535cad8d82c1c83ec3",
+                                            "additions":  1,
+                                            "deletions":  1
+                                        },
+                                        {
+                                            "path":  "WCP360_Core/composer.lock",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "f39969183101b2cb0f7706f43468609f4af8e4f0",
+                                            "head_blob":  "9304e5da526518a8fdad388b98e6b2cdb2499438",
+                                            "additions":  119,
+                                            "deletions":  230
+                                        }
+                                    ],
+                          "source_preservation_checks":  {
+                                                             "source_blobs":  "verified",
+                                                             "complete_native_diff":  "verified-against-complete-api-file-counts",
+                                                             "additions":  120,
+                                                             "deletions":  231,
+                                                             "local_runtime":  "not_run"
+                                                         }
+                      },
+                      {
+                          "pr":  123,
+                          "url":  "https://github.com/yyogas/wcp360/pull/123",
+                          "title":  "build(deps): bump symfony/twig-bundle from 7.4.21 to 8.1.9 in /WCP360_Core",
+                          "branch":  "dependabot/composer/WCP360_Core/symfony/twig-bundle-8.1.9",
+                          "base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "merge_base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "head_sha":  "0c8188017204c78c70a86de6832005649ca7236d",
+                          "archive_tag":  "archive/deferred-pr-123-20261103",
+                          "disposition":  "DEFERRED_ARCHIVED_NOT_MERGED",
+                          "reason":  "Direct 7.4.* to 8.1.* component constraint change is outside the selected Symfony 7.4 line; requires a coordinated, separately qualified major migration.",
+                          "archive":  {
+                                          "path":  "pr-123.diff.gz",
+                                          "bytes":  5431,
+                                          "sha256":  "24d66fa05ab9946f99774208c7e28249146cad59a0ad881110c46a3c985c6231"
+                                      },
+                          "uncompressed_diff":  {
+                                                    "bytes":  41799,
+                                                    "sha256":  "bc06900f0b6a74298b3e9bafe695c226c8764652eb45c528841ca3cb0af853f5",
+                                                    "format":  "native git diff --binary --full-index --no-ext-diff --no-textconv"
+                                                },
+                          "files":  [
+                                        {
+                                            "path":  "WCP360_Core/composer.json",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "021da680613320bb7c6b4062075e6ddf7323d58c",
+                                            "head_blob":  "fd58f2a38f2515688361f74244c63ad2f0591b1b",
+                                            "additions":  1,
+                                            "deletions":  1
+                                        },
+                                        {
+                                            "path":  "WCP360_Core/composer.lock",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "f39969183101b2cb0f7706f43468609f4af8e4f0",
+                                            "head_blob":  "ec69fd484bd599444dd7a38b6f18af2ce0cf549d",
+                                            "additions":  134,
+                                            "deletions":  251
+                                        }
+                                    ],
+                          "source_preservation_checks":  {
+                                                             "source_blobs":  "verified",
+                                                             "complete_native_diff":  "verified-against-complete-api-file-counts",
+                                                             "additions":  135,
+                                                             "deletions":  252,
+                                                             "local_runtime":  "not_run"
+                                                         }
+                      },
+                      {
+                          "pr":  124,
+                          "url":  "https://github.com/yyogas/wcp360/pull/124",
+                          "title":  "build(deps): bump symfony/dotenv from 7.4.18 to 8.1.6 in /WCP360_Core",
+                          "branch":  "dependabot/composer/WCP360_Core/symfony/dotenv-8.1.6",
+                          "base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "merge_base_sha":  "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+                          "head_sha":  "8b1b7078243c384a3247b2a850bcb104d6006660",
+                          "archive_tag":  "archive/deferred-pr-124-20261103",
+                          "disposition":  "DEFERRED_ARCHIVED_NOT_MERGED",
+                          "reason":  "Direct 7.4.* to 8.1.* component constraint change is outside the selected Symfony 7.4 line; requires a coordinated, separately qualified major migration.",
+                          "archive":  {
+                                          "path":  "pr-124.diff.gz",
+                                          "bytes":  5152,
+                                          "sha256":  "4a4eb3224911bde72345516dab89560656bc258b2f98701f391cad899b81531b"
+                                      },
+                          "uncompressed_diff":  {
+                                                    "bytes":  39990,
+                                                    "sha256":  "5f951ba4904cac8cb40410f465d7488b16e2f82ea5ae1160faf7002c8e290f0a",
+                                                    "format":  "native git diff --binary --full-index --no-ext-diff --no-textconv"
+                                                },
+                          "files":  [
+                                        {
+                                            "path":  "WCP360_Core/composer.json",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "021da680613320bb7c6b4062075e6ddf7323d58c",
+                                            "head_blob":  "d69a03276032e74c7cd5e1663b03c3d076d0a22d",
+                                            "additions":  1,
+                                            "deletions":  1
+                                        },
+                                        {
+                                            "path":  "WCP360_Core/composer.lock",
+                                            "status":  "modified",
+                                            "base_mode":  "100644",
+                                            "head_mode":  "100644",
+                                            "base_blob":  "f39969183101b2cb0f7706f43468609f4af8e4f0",
+                                            "head_blob":  "757818b65f083d001b0eeca5e558b6d302591d9a",
+                                            "additions":  121,
+                                            "deletions":  236
+                                        }
+                                    ],
+                          "source_preservation_checks":  {
+                                                             "source_blobs":  "verified",
+                                                             "complete_native_diff":  "verified-against-complete-api-file-counts",
+                                                             "additions":  122,
+                                                             "deletions":  237,
+                                                             "local_runtime":  "not_run"
+                                                         }
+                      }
+                  ],
+    "checks":  {
+                   "complete_git_diffs_and_blobs":  "passed",
+                   "gzip_round_trip_and_sha256":  "passed",
+                   "remote_archive_tags_at_exact_heads":  "passed",
+                   "local_runtime_tests":  "not_run",
+                   "github_advisory_alert_list":  "not_run: connector endpoint unavailable; no absence-of-advisories claim"
+               },
+    "limits":  [
+                   "Archived tags are not release tags.",
+                   "No Symfony 8 or PHP 8.5 qualification is claimed.",
+                   "Closing a version proposal is not dismissal of a security advisory."
+               ]
+}

@@ -1,0 +1,694 @@
+{
+  "schema": "wcp360.branch-completion/1",
+  "date": "2026-11-03",
+  "timezone": "Europe/Paris",
+  "initial_integration": {
+    "pull_request": 116,
+    "head": "59fb0ce189e8fdf312c5f48ca4a7e9a7881e6302",
+    "tree": "8d97f4dec3b85c3bf3e1d13de47c5fde508aa2d6",
+    "merge": "d6f04e1697062cb0f1b0f1f46ad676eddab12fe9",
+    "check_runs_success": 30
+  },
+  "followup": {
+    "pull_request": 125,
+    "head": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+    "tree": "d42ddb97a101b32140f900f77321b8f4d80e221a",
+    "tested_pr_merge": "8b887c9ab093b64fb36fb08d265002ca232a7a01",
+    "main_merge": "cf968e7a246ceccd9296423060c323fac72c06f3",
+    "successful_check_runs": 31,
+    "successful_workflows": 12,
+    "successful_core_jobs": 14
+  },
+  "merged_original_work_refs": [
+    {
+      "name": "audit/closure-matrix-refresh-2026-10-03",
+      "sha": "1fdbe4994f54ddc7682fba03a8b0c37038608b45"
+    },
+    {
+      "name": "design-system/import-v2.5.3.36.4-markdown",
+      "sha": "5ff41780a5b72f9b7d4153debd7dc5449c688cae"
+    },
+    {
+      "name": "extensions/file-manager-v0.3.0-import",
+      "sha": "899e0020a3421ac2231dee689f173cc2dd3e6631"
+    },
+    {
+      "name": "integration/sc-m01-owner-readiness-20261026",
+      "sha": "b1ae801dbc82f0972ab94a9caf0156b86b0b82f1"
+    },
+    {
+      "name": "maintenance/sc-m01-repository-guardrails",
+      "sha": "fb2a95620f3547007a17bad9b82e18004a413bc8"
+    },
+    {
+      "name": "research/sc-m01-control-protocol-options-20261026",
+      "sha": "44c85eebcd297dd00ca8afe55f84b26a6df919ce"
+    },
+    {
+      "name": "research/sc-m01-ipcb-go-framing-20261027",
+      "sha": "c5ef94c875fe16e9b7874541a363d9c783d50f55"
+    },
+    {
+      "name": "source/full-platform-candidate",
+      "sha": "284daabc8d57a65d3ad11e326baee32898e64254"
+    },
+    {
+      "name": "source/sc-m01-domain-foundation",
+      "sha": "31fd3fe4d9203d9e5dbc2b43843c6c9ec74f2940"
+    },
+    {
+      "name": "source/sc-m01-inert-daemon",
+      "sha": "71deefa2976a7005983d410907dc2050287be05f"
+    },
+    {
+      "name": "test/sc-m01-cli-process-contract",
+      "sha": "462792110330f00b2a1911dd03175e8257379b3a"
+    },
+    {
+      "name": "tooling/sc-m01-contract-traceability-20261026",
+      "sha": "a1c7a2743c300f1cc426485267af1be66dcdac3d"
+    },
+    {
+      "name": "tooling/sc-m01-preflight-checks-20261026",
+      "sha": "547669eee40dd2b866282f5e2fd5d6941c9a6d47"
+    },
+    {
+      "name": "implementation/core-executable-foundation-20261031",
+      "sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "initial_frozen_head": "c94bd41e849c91450bcbff2f549727e52114e3b8"
+    }
+  ],
+  "accepted_proposals": [
+    {
+      "pull_request": 117,
+      "branch": "dependabot/composer/WCP360_Core/symfony/ux-turbo-3.6.0",
+      "head": "a05cc3056d8199d8afec2c007ff4298884dc9d70",
+      "title": "build(deps): bump symfony/ux-turbo from 2.36.0 to 3.6.0 in /WCP360_Core"
+    },
+    {
+      "pull_request": 118,
+      "branch": "dependabot/github_actions/actions/checkout-7.0.1",
+      "head": "ef2dac759da842df726bffd52fab63fe5992e8f7",
+      "title": "build(deps): bump actions/checkout from 4.2.2 to 7.0.1"
+    },
+    {
+      "pull_request": 121,
+      "branch": "dependabot/github_actions/actions/upload-artifact-7.0.2",
+      "head": "176f03c0efc8e1b2836bf8b34219f5f142fde273",
+      "title": "build(deps): bump actions/upload-artifact from 4.6.2 to 7.0.2"
+    }
+  ],
+  "deferred_proposals": [
+    {
+      "pr": 119,
+      "name": "dependabot/composer/WCP360_Core/symfony/process-8.1.10",
+      "sha": "9bc2ce64e3b7c68473519c77e97b69c2a2fc4823",
+      "archive_tag": "archive/deferred-pr-119-20261103"
+    },
+    {
+      "pr": 120,
+      "name": "dependabot/docker/WCP360_Build/environments/core-candidate/php-8.5.11-fpm-trixie",
+      "sha": "6d2c92c1c258018c43b51d4bc6d2027a0a72ad87",
+      "archive_tag": "archive/deferred-pr-120-20261103"
+    },
+    {
+      "pr": 122,
+      "name": "dependabot/composer/WCP360_Core/symfony/css-selector-8.1.10",
+      "sha": "65f2f2e42efbc6c9424525cade8c525183dc43ff",
+      "archive_tag": "archive/deferred-pr-122-20261103"
+    },
+    {
+      "pr": 123,
+      "name": "dependabot/composer/WCP360_Core/symfony/twig-bundle-8.1.9",
+      "sha": "0c8188017204c78c70a86de6832005649ca7236d",
+      "archive_tag": "archive/deferred-pr-123-20261103"
+    },
+    {
+      "pr": 124,
+      "name": "dependabot/composer/WCP360_Core/symfony/dotenv-8.1.6",
+      "sha": "8b1b7078243c384a3247b2a850bcb104d6006660",
+      "archive_tag": "archive/deferred-pr-124-20261103"
+    }
+  ],
+  "local_runtime_tests": "not_run",
+  "production_qualification": "not_established; CODE-BASELINE=NONE; no independent E3 or release qualification is inferred",
+  "status": "COMPLETED",
+  "verified_at_utc": "2026-11-02T23:59:47Z",
+  "main_merge": "cf968e7a246ceccd9296423060c323fac72c06f3",
+  "main_merge_tree_matches_tested_tree": true,
+  "summary": {
+    "branch_refs_reviewed": 23,
+    "work_refs_retired": 22,
+    "work_heads_merged_into_main": 17,
+    "deferred_proposals_archived_not_merged": 5,
+    "remaining_remote_branches": [
+      "main"
+    ],
+    "remaining_local_branches": [
+      "main"
+    ],
+    "open_pull_requests": 0
+  },
+  "verification": {
+    "git_ancestry_of_all_17_merged_heads": "passed",
+    "remote_archive_tags_for_5_deferred_heads": "passed",
+    "main_tree_equality_with_tested_candidate": "passed",
+    "local_runtime_tests": "not_run",
+    "independent_E3": "not_established",
+    "production_qualification": "not_established"
+  },
+  "runs": [
+    {
+      "id": 41545847743,
+      "name": "SC-M01 input fingerprints (current relocation and historical fixtures)",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847743"
+    },
+    {
+      "id": 41545847916,
+      "name": "SC-M01 integrated development-source review (noncanonical)",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847916"
+    },
+    {
+      "id": 41545847587,
+      "name": "SC-M01 IPC-B Go research-only framing tests",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847587"
+    },
+    {
+      "id": 41545847670,
+      "name": "Full platform candidate verification",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847670"
+    },
+    {
+      "id": 41545847684,
+      "name": "File Manager standalone candidate",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847684"
+    },
+    {
+      "id": 41545847626,
+      "name": "Repository guardrails",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847626"
+    },
+    {
+      "id": 41545847703,
+      "name": "SC-M01 inert daemon foundation",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847703"
+    },
+    {
+      "id": 41545847754,
+      "name": "Core executable candidate",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754"
+    },
+    {
+      "id": 41545847485,
+      "name": "SC-M01 inert control-protocol research tests",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847485"
+    },
+    {
+      "id": 41545847456,
+      "name": "SC-M01 historical reference traceability (noncanonical)",
+      "event": "pull_request",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847456"
+    },
+    {
+      "id": 41545821771,
+      "name": "Full platform candidate verification",
+      "event": "push",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545821771"
+    },
+    {
+      "id": 41545821570,
+      "name": "SC-M01 inert daemon foundation",
+      "event": "push",
+      "head_sha": "5bd4b54f1f2f12d6783d018f94b04ed48acd12cb",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545821570"
+    }
+  ],
+  "check_runs": [
+    {
+      "id": 125626882927,
+      "name": "platform-core (ubuntu-26.04, ubuntu:26.04)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882927"
+    },
+    {
+      "id": 125626882836,
+      "name": "platform-core (ubuntu-22.04, ubuntu:22.04)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882836"
+    },
+    {
+      "id": 125626882820,
+      "name": "platform-packages (debian-12, debian:12-slim)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882820"
+    },
+    {
+      "id": 125626882812,
+      "name": "platform-packages (ubuntu-22.04, ubuntu:22.04)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882812"
+    },
+    {
+      "id": 125626882796,
+      "name": "platform-packages (ubuntu-24.04, ubuntu:24.04)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882796"
+    },
+    {
+      "id": 125626882770,
+      "name": "platform-packages (ubuntu-26.04, ubuntu:26.04)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882770"
+    },
+    {
+      "id": 125626882732,
+      "name": "platform-core (ubuntu-24.04, ubuntu:24.04)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882732"
+    },
+    {
+      "id": 125626882725,
+      "name": "platform-core (debian-13, debian:13-slim)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882725"
+    },
+    {
+      "id": 125626882691,
+      "name": "platform-core (debian-12, debian:12-slim)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882691"
+    },
+    {
+      "id": 125626882686,
+      "name": "platform-packages (debian-13, debian:13-slim)",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882686"
+    },
+    {
+      "id": 125621148896,
+      "name": "platform-matrix",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148896"
+    },
+    {
+      "id": 125621148807,
+      "name": "browser-panther",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148807"
+    },
+    {
+      "id": 125621148787,
+      "name": "frankenphp-worker",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148787"
+    },
+    {
+      "id": 125621148725,
+      "name": "standalone-php-8.3",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847684/job/125621148725"
+    },
+    {
+      "id": 125621148697,
+      "name": "platform-kernel",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847670/job/125621148697"
+    },
+    {
+      "id": 125621148662,
+      "name": "standalone-php-8.4",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847684/job/125621148662"
+    },
+    {
+      "id": 125621148480,
+      "name": "integrated-development-sources",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847916/job/125621148480"
+    },
+    {
+      "id": 125621148339,
+      "name": "debian-postgresql",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148339"
+    },
+    {
+      "id": 125621148306,
+      "name": "static-ui",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847670/job/125621148306"
+    },
+    {
+      "id": 125621148281,
+      "name": "standalone-php-8.2",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847684/job/125621148281"
+    },
+    {
+      "id": 125621148065,
+      "name": "repository-secrets",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847626/job/125621148065"
+    },
+    {
+      "id": 125621148025,
+      "name": "fingerprint-evidence",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847743/job/125621148025"
+    },
+    {
+      "id": 125621147932,
+      "name": "daemon-foundation",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847703/job/125621147932"
+    },
+    {
+      "id": 125621147869,
+      "name": "gitignore-regression",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847626/job/125621147869"
+    },
+    {
+      "id": 125621147263,
+      "name": "go-ipcb-research",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847587/job/125621147263"
+    },
+    {
+      "id": 125621147036,
+      "name": "inert-control-research",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847485/job/125621147036"
+    },
+    {
+      "id": 125621146914,
+      "name": "historical-reference-check",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847456/job/125621146914"
+    },
+    {
+      "id": 125621067034,
+      "name": ".github/dependabot.yml",
+      "app": "dependabot",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/runs/125621067034"
+    },
+    {
+      "id": 125621062862,
+      "name": "platform-kernel",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545821771/job/125621062862"
+    },
+    {
+      "id": 125621062753,
+      "name": "daemon-foundation",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545821570/job/125621062753"
+    },
+    {
+      "id": 125621062563,
+      "name": "static-ui",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545821771/job/125621062563"
+    }
+  ],
+  "core_jobs": [
+    {
+      "id": 125621148339,
+      "name": "debian-postgresql",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148339"
+    },
+    {
+      "id": 125621148787,
+      "name": "frankenphp-worker",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148787"
+    },
+    {
+      "id": 125621148807,
+      "name": "browser-panther",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148807"
+    },
+    {
+      "id": 125621148896,
+      "name": "platform-matrix",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125621148896"
+    },
+    {
+      "id": 125626882686,
+      "name": "platform-packages (debian-13, debian:13-slim)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882686"
+    },
+    {
+      "id": 125626882691,
+      "name": "platform-core (debian-12, debian:12-slim)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882691"
+    },
+    {
+      "id": 125626882725,
+      "name": "platform-core (debian-13, debian:13-slim)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882725"
+    },
+    {
+      "id": 125626882732,
+      "name": "platform-core (ubuntu-24.04, ubuntu:24.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882732"
+    },
+    {
+      "id": 125626882770,
+      "name": "platform-packages (ubuntu-26.04, ubuntu:26.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882770"
+    },
+    {
+      "id": 125626882796,
+      "name": "platform-packages (ubuntu-24.04, ubuntu:24.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882796"
+    },
+    {
+      "id": 125626882812,
+      "name": "platform-packages (ubuntu-22.04, ubuntu:22.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882812"
+    },
+    {
+      "id": 125626882820,
+      "name": "platform-packages (debian-12, debian:12-slim)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882820"
+    },
+    {
+      "id": 125626882836,
+      "name": "platform-core (ubuntu-22.04, ubuntu:22.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882836"
+    },
+    {
+      "id": 125626882927,
+      "name": "platform-core (ubuntu-26.04, ubuntu:26.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yyogas/wcp360/actions/runs/41545847754/job/125626882927"
+    }
+  ],
+  "test_evidence": {
+    "composer": "2.11.1; manifest/platform/audit passed; no advisories reported at execution time",
+    "phpstan": "2.3.4; no errors; Symfony analysis regression passed",
+    "phpunit": {
+      "version": "12.5.42",
+      "tests": 1383,
+      "assertions": 14353,
+      "non_failing_notices": 2,
+      "notice_reason": "Mocks without expectations"
+    },
+    "browser": {
+      "tests": 2,
+      "assertions": 44
+    },
+    "vm": "Debian 13 systemd recovery, child crash, actual reboot and persistent sessions/state passed",
+    "file_manager": {
+      "run": 41545847684,
+      "tested_merge": "8b887c9ab093b64fb36fb08d265002ca232a7a01",
+      "lanes": [
+        {
+          "php": "8.2",
+          "job": 125621148281,
+          "artifact": 13188498582,
+          "bytes": 7376
+        },
+        {
+          "php": "8.3",
+          "job": 125621148725,
+          "artifact": 13189630339,
+          "bytes": 7381
+        },
+        {
+          "php": "8.4",
+          "job": 125621148662,
+          "artifact": 13188238213,
+          "bytes": 7378
+        }
+      ],
+      "per_lane": {
+        "suites_passed": 14,
+        "phpunit_tests": 50,
+        "assertions": 122,
+        "browser_journeys_passed": 28,
+        "uploaded_files": 7,
+        "archive": true
+      },
+      "artifact_metadata_verified": true,
+      "archives_downloaded": false
+    }
+  },
+  "archives": "deferred-updates-2026-11-03/MANIFEST.json",
+  "local_work_preserved": [
+    {
+      "path": "WCP360_SDK/php/registry-client/examples/local-registry.php",
+      "status": "Concurrent working-tree edit preserved uncommitted outside the consolidation; not part of the tested candidate."
+    }
+  ],
+  "limits": [
+    "This records source integration, not completion of the Core roadmap.",
+    "No stable release, production qualification, security-owner acceptance or independent E3 approval is inferred.",
+    "Future normal update proposals may create new branches; main is the development reference."
+  ]
+}
