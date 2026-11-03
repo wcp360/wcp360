@@ -2,6 +2,13 @@
   "schema_version": 1,
   "scope": "SC-M01 inert daemon foundation",
   "authorization_commit": "3fd2f8007baa49c2454cc89c0a5488a57c77911b",
+  "superseding_master_decision": {
+    "record": "documentation/governance/decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md",
+    "date": "2026-11-03",
+    "status": "ratified",
+    "inventory_reference_commit": "d42d86ab12968ea0cbb3b0dec2a2eee4c9ec625f",
+    "inventory_reference_is_not_code_baseline": true
+  },
   "owner_addendum_commit": "1ff4c195e75dade00cda13215b92ffe7576637b7",
   "owner_addendum_blob": "f8608d6258f87b8c1099b9b3a7e32ec95c72dc27",
   "module": "github.com/yyogas/wcp360/daemon",

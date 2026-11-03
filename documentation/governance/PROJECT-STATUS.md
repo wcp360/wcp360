@@ -1,10 +1,16 @@
 # WCP360 — Project Status
 
+## Current MASTER authorization — 2026-11-03
+
+The project owner explicitly ratified one bounded increment: **SC-M01 — INERT DAEMON FOUNDATION**. The [decision record](decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md) is effective only for verification/consolidation of the existing inert daemon, its directly related positive/negative checks and a revision-bound review handoff. It does not authorize general Core/application work, privileged behavior, IPC-B execution, database changes, a release or SC-M02.
+
+The observed source reference `d42d86ab12968ea0cbb3b0dec2a2eee4c9ec625f` is inventory only, not a newly approved code SHA. The [first implementation package handoff](handoffs/WCP360-FIRST-IMPLEMENTATION-PACKAGE-HANDOFF-SC-M01-2026-11-03.md) records the current evidence and blockers: the successful reference CI run is on a different commit, exact-candidate CI is not run, and E3 / Security / QA / DevOps reviews remain outstanding. `CODE-BASELINE = NONE`; no merge or production qualification is claimed.
+
 ## Repository branch reconciliation — 2026-10-31
 
 [All 14 branches, content resolutions and remaining merge conditions](branches/BRANCH-RECONCILIATION-2026-10-31.md) are recorded with exact heads, path/blob evidence, PR dependencies and existing CI/review identities. Two documentation branches are consolidated; the closed #90 integration bundle is retained as historical; ten code/tooling/research PR candidates remain unmerged. Independent E3 remains missing; #113 additionally needs package-path reconciliation and final owner revalidation, and #109/#110 require wider scope decisions. Existing canonical contracts and the narrow MASTER authorization are unchanged. No branch deletion, code baseline, audit closure or release is declared.
 
-## Limited source-code resume — 2026-10-28
+## Historical limited source-code resume — 2026-10-28 (scope superseded)
 
 MASTER authorization: `3fd2f8007baa49c2454cc89c0a5488a57c77911b` in `manifests/WCP360-BM-0001.md`.
 
@@ -14,7 +20,7 @@ The owner-approved daemon toolchain addendum v1.0 (commit `1ff4c195e75dade00cda1
 The inert implementation candidate is published in `SOURCE/daemon/` on open, ready-for-review PR #108. Follow that PR for exact candidate SHA and executed CI results. Independent E3 remains required before I1/R1 merge. No wider component, service, privileged operation, database or web surface is activated.
 
 Canonical specification gate = 8/8 accepted. SC-M02 = NOT AUTHORIZED. CODE-BASELINE = NONE.
-Earlier PAUSED / missing-toolchain statements below describe the state before this limited authorization.
+The 2026-11-03 ratified decision above narrows and governs the current increment. Earlier PAUSED / missing-toolchain statements below describe prior states and remain historical.
 
 ## MASTER canonical evidence acceptance — 2026-10-28
 

@@ -2,11 +2,13 @@
 
 Use this page to resume development, locate the authoritative description of a concern and finish a bounded change without creating competing inventories.
 
-**Start with [current status](STATUS.md), then [delivery order](ROADMAP.md).** The [public project overview](../README_GITHUB.md) describes the product scope. Core is the built-in engine of WCP360 Standalone; essential hosting and local recovery must work without optional plugins or a vendor connection.
+**Start with [current status](STATUS.md), then [delivery order](ROADMAP.md), and verify the active implementation gate in the [baseline manifest](../documentation/manifests/WCP360-BM-0001.md).** The [public project overview](../README_GITHUB.md) describes the product scope. Core is the built-in engine of WCP360 Standalone; essential hosting and local recovery must work without optional plugins or a vendor connection.
+
+The MASTER decision ratified on 2026-11-03 authorizes only the bounded [inert daemon foundation](../documentation/governance/decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md) under `SOURCE/daemon/`. It does not authorize changes to the Core application or a duplicate under `WCP360_Core/agents/`. Do not run Core/daemon builds or tests locally; use only the authorized exact-source CI workflow. General Core development remains outside this increment.
 
 ## Resume in five steps
 
-1. Read [STATUS.md](STATUS.md) for the last verified executable revision, its CI scope, open qualification boundaries and the next candidate checkpoint.
+1. Read [STATUS.md](STATUS.md) for the last verified executable revision, its CI scope and open qualification boundaries; then verify the active [manifest gate](../documentation/manifests/WCP360-BM-0001.md) and any [current MASTER decision](../documentation/governance/decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md).
 2. Read the relevant milestone in [ROADMAP.md](ROADMAP.md). A candidate helper or a folder does not close a production milestone.
 3. Find the owner in [NAVIGATION.md](NAVIGATION.md), then read that module's README and concrete source guide. Use [STRUCTURE.md](STRUCTURE.md) for cross-module growth boundaries.
 4. Check applicable specifications and current product decisions. Keep the existing branch and the authorized scope. Development is consolidated on `main` through [PR #116](https://github.com/wcp360/wcp360/pull/116) and [PR #125](https://github.com/wcp360/wcp360/pull/125). Follow the [completed branch register](../documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md); do not create another branch as an organizational shortcut.

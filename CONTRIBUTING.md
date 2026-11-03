@@ -38,12 +38,12 @@ Never commit:
 
 ```text
 CANONICAL SPECIFICATION INPUTS = 8/8 ACCEPTED
-SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY
+SC-M01 = GO LIMITED — INERT DAEMON FOUNDATION ONLY (MASTER RATIFIED 2026-11-03)
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-Repository, governance and documentation maintenance may continue. The [current manifest](documentation/manifests/WCP360-BM-0001.md) selects only the inert daemon foundation; additional runtime slices need explicit owner-backed authorization and the applicable reviews.
+The only active source increment is the already-present inert daemon foundation under `SOURCE/daemon/`, with its existing workflow. Follow the [ratified MASTER decision](documentation/governance/decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md), [manifest](documentation/manifests/WCP360-BM-0001.md) and [handoff](documentation/governance/handoffs/WCP360-FIRST-IMPLEMENTATION-PACKAGE-HANDOFF-SC-M01-2026-11-03.md). Do not implement general Core behavior or extend this slice. No local Core/daemon build or tests; exact-source validation must use authorized CI. E3, Security, QA and DevOps reviews remain required before merge. The inventory SHA is not a code baseline. Any additional runtime slice needs separate explicit MASTER authorization.
 
 
 ## Review and merge evidence
