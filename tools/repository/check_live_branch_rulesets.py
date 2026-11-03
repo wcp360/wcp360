@@ -8,9 +8,11 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import re
+from collections.abc import Callable
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 REPO = "wcp360/wcp360"
 ROOT = Path(__file__).resolve().parents[2]
@@ -90,46 +92,117 @@ def self_test() -> None:
             if not differences(invalid, model):
                 raise AssertionError(f"unsafe ruleset accepted: {branch}/{name}")
             negatives += 1
+    # Deterministic offline listing simulations guard against false PASS from
+    # ambiguous identities or a truncated GitHub ruleset API page.
+    models = {branch: expected(branch) for branch in BRANCHES}
+    entries = [
+        {"name": models["develop"]["name"], "id": 101},
+        {"name": models["main"]["name"], "id": 102},
+    ]
+
+    def fake_fetch(url: str, listing: list[dict] = entries) -> object:
+        if url == f"{API}?per_page=100":
+            return listing
+        if url == f"{API}/101":
+            return {**models["develop"], "enforcement": "active"}
+        if url == f"{API}/102":
+            return {**models["main"], "enforcement": "active"}
+        raise AssertionError("Unexpected remote endpoint in offline test")
+
+    good_report, good = live_report(fake_fetch)
+    if not good or good_report["live_enforcement_verified"] is not False:
+        raise AssertionError("Conforming rulesets must be configuration-only matches")
+
+    ambiguous = {
+        "duplicate_named_ruleset": entries + [{"name": models["develop"]["name"], "id": 103}],
+        "invalid_id_before_valid": [{"name": models["develop"]["name"], "id": "invalid"}] + entries,
+        "truncated_page": entries + [{"name": "unrelated", "id": 1000 + i} for i in range(98)],
+    }
+    for name, rows in ambiguous.items():
+        try:
+            _, approved = live_report(lambda url, values=rows: fake_fetch(url, values))
+        except ValueError:
+            if name != "truncated_page":
+                raise AssertionError(f"Unexpected listing error: {name}")
+        else:
+            if approved:
+                raise AssertionError(f"Ambiguous or incomplete listing accepted: {name}")
+
+    for forbidden_url in ("https://untrusted.example.invalid/rulesets", API + "/123/other"):
+        try:
+            get_json(forbidden_url)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Unapproved API URL accepted")
+    if DenyRedirects().redirect_request(
+        None, None, 302, "redirect", {}, "https://untrusted.example.invalid/"
+    ) is not None:
+        raise AssertionError("HTTP redirect permitted")
+
     print(f"Ruleset live-audit fixtures: {successes} active templates accepted; "
-          f"{negatives} invalid variants rejected; no API calls.")
+          f"{negatives} invalid variants rejected; 3 unsafe listings, 2 "
+          f"unapproved URLs and redirects rejected; no API calls.")
+
+
+class DenyRedirects(HTTPRedirectHandler):
+    """Prevent urllib from following GitHub HTTP redirects to another host."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
 
 
 def get_json(url: str) -> object:
-    # Only fixed GitHub REST URLs are formed. No caller-supplied host or redirects.
+    listing = f"{API}?per_page=100"
+    if url != listing and re.fullmatch(re.escape(API) + r"/[1-9][0-9]*", url) is None:
+        raise ValueError("Unapproved GitHub ruleset endpoint")
     request = Request(url, headers={
         "Accept": "application/vnd.github+json",
         "User-Agent": "wcp360-ruleset-readonly-audit",
         "X-GitHub-Api-Version": "2022-11-28",
     })
-    with urlopen(request, timeout=10) as response:
+    opener = build_opener(DenyRedirects)
+    with opener.open(request, timeout=10) as response:
         payload = response.read(MAX_BYTES + 1)
     if len(payload) > MAX_BYTES:
         raise ValueError("Oversized GitHub API response")
     return json.loads(payload)
 
 
-def live_report() -> tuple[dict, bool]:
-    items = get_json(API)
-    if not isinstance(items, list) or len(items) > 75:
-        raise ValueError("Unexpected ruleset listing")
+def live_report(fetcher: Callable[[str], object] = get_json) -> tuple[dict, bool]:
+    items = fetcher(f"{API}?per_page=100")
+    # One bounded response is sufficient only if GitHub didn't fill the page.
+    # Unknown pagination/duplicate identities must never yield a false PASS.
+    if not isinstance(items, list) or len(items) >= 100:
+        raise ValueError("Unexpected or possibly paginated ruleset listing")
     names = {expected(branch)["name"]: branch for branch in BRANCHES}
-    results = {branch: {"configuration": "MISSING", "id": None,
-                        "reasons": ["no_named_ruleset"],
-                        "enforcement_negative_tests": "NOT_EXECUTED"}
-               for branch in BRANCHES}
-    seen = set()
-    for item in items:
-        if not isinstance(item, dict) or item.get("name") not in names:
+    results = {
+        branch: {"configuration": "MISSING", "id": None,
+                 "reasons": ["no_named_ruleset"],
+                 "enforcement_negative_tests": "NOT_EXECUTED"}
+        for branch in BRANCHES
+    }
+    for name, branch in names.items():
+        matching = [item for item in items
+                    if isinstance(item, dict) and item.get("name") == name]
+        if not matching:
             continue
-        branch = names[item["name"]]
-        identifier = item.get("id")
-        if not isinstance(identifier, int) or identifier <= 0 or branch in seen:
-            results[branch] = {"configuration": "UNVERIFIED", "id": identifier,
-                               "reasons": ["ambiguous_ruleset_identity"],
-                               "enforcement_negative_tests": "NOT_EXECUTED"}
+        if len(matching) != 1:
+            results[branch] = {
+                "configuration": "UNVERIFIED", "id": None,
+                "reasons": ["ambiguous_ruleset_identity"],
+                "enforcement_negative_tests": "NOT_EXECUTED",
+            }
             continue
-        seen.add(branch)
-        live = get_json(f"{API}/{identifier}")
+        identifier = matching[0].get("id")
+        if isinstance(identifier, bool) or not isinstance(identifier, int) or identifier <= 0:
+            results[branch] = {
+                "configuration": "UNVERIFIED", "id": None,
+                "reasons": ["invalid_ruleset_identifier"],
+                "enforcement_negative_tests": "NOT_EXECUTED",
+            }
+            continue
+        live = fetcher(f"{API}/{identifier}")
         defects = differences(live, expected(branch))
         results[branch] = {
             "configuration": "MATCHES_TEMPLATE" if not defects else "NONCONFORMING",
