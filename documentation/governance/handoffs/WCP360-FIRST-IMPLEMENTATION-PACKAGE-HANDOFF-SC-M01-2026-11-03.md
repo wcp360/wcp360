@@ -3,7 +3,7 @@
 - **Date:** 2026-11-03
 - **Slice:** `SC-M01 — INERT DAEMON FOUNDATION`
 - **Authority:** [Ratified MASTER decision](../decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md)
-- **Package status:** **BLOCKED — exact-candidate CI and independent reviews remain outstanding**
+- **Package status:** **BLOCKED — exact-SHA CI for this handoff revision, artifact inspection, and independent reviews remain outstanding**
 - **Code baseline:** `NONE`
 
 ## Decision and scope
@@ -54,25 +54,28 @@ No Go implementation, canonical API/IPC/Security/Database contract or permission
 | Exact source identity and isolated inventory | `passed` | The isolated worktree was clean before edits at `d42d86ab12968ea0cbb3b0dec2a2eee4c9ec625f`; the pre-edit source tree is recorded above. |
 | Static boundary review | `passed` | CLI is finite and only `cmd/wcpd` imports process arguments/streams; the workflow's exact import allowlist excludes filesystem, process, network-I/O, database and arbitrary execution imports from policy packages. This is static review, not independent E3. |
 | Reference CI run | `passed` | Run [41549448511](https://github.com/wcp360/wcp360/actions/runs/41549448511), head `cf968e7a246ceccd9296423060c323fac72c06f3`, completed successfully on 2026-11-03. Before this handoff's documentation/provenance edits, its daemon subtree, workflow, `inputs.json` and five consumed contract-source blobs matched the `d42d86a` inventory reference exactly. The new candidate edits `README.md` and `inputs.json`, so this is not CI for the final candidate. |
-| CI artifact metadata | `passed` | The reference run exposes one non-expired 4,714,007-byte artifact. The artifact contents were not downloaded or independently inspected. |
-| CI on the exact inventory SHA or resulting candidate | `not_run` | No workflow run for `d42d86ab12968ea0cbb3b0dec2a2eee4c9ec625f` was found. The workflow has no manual-dispatch trigger; no branch was pushed and no PR was created. |
-| Build, unit tests, CLI process tests, negative fixtures, reproducibility and vulnerability scan on the exact SHA | `not_run` | Local execution is prohibited by the ratified decision; the exact SHA workflow evidence is absent. Reference run output does not transfer to the exact SHA. |
+| CI on the inventory SHA | `not_run` | No workflow run for `d42d86ab12968ea0cbb3b0dec2a2eee4c9ec625f` was found. |
+| Authorized CI on the published candidate | `passed` | Draft PR [#126](https://github.com/wcp360/wcp360/pull/126), branch `sc-m01/ratified-handoff-878c68f`, candidate SHA `878c68fd46cf86b04f7025f8dc2192cacb7d214a`; authorized workflow run [41659668121](https://github.com/wcp360/wcp360/actions/runs/41659668121) completed successfully on that exact SHA. The offline build/unit, negative-fixture, reproducibility, evidence and constrained vulnerability-scan gates passed. |
+| CI artifact inspection | `not_run` | The exact-candidate run exposes one non-expired 4,713,982-byte artifact. An unauthenticated download returned HTTP 401; its contents were not inspected and no binary SHA-256 is claimed. |
+| CI on this follow-up handoff revision | `not_run` | This document is being updated after run 41659668121. The new documentation commit requires its own exact-SHA workflow result; evidence from SHA `878c68f` does not transfer. |
+| Local build, unit tests, CLI process tests, negative fixtures, reproducibility and vulnerability scan | `not_run` | Local execution remains prohibited by the ratified decision. |
 | Independent Engineering E3 | `not_run` | Required on the final candidate SHA; no independent approval is claimed. |
 | Security / Hardening review | `not_run` | Required before merge. Existing scanner egress notes are not an independent review. |
 | QA review | `not_run` | Required before merge. |
 | DevOps / Build / Release review | `not_run` | Required before merge. |
 | Production qualification / release | `not_applicable` | Explicitly outside this slice and not authorized. |
 
-The successful reference workflow covers a pinned Debian/Go environment, offline build and unit gates, negative fixtures, CLI process tests, reproducible builds and the constrained `govulncheck` scan. The result remains bound to its own head SHA. A green run or passing test does not constitute independent review.
+The successful candidate workflow used the pinned Debian/Go environment and checked the complete gate inventory, including offline build/unit, negative fixtures, CLI process, reproducible-build and constrained `govulncheck` gates. Its result remains bound to SHA `878c68f`; it does not qualify this follow-up handoff commit. The run produced a non-expired artifact, but its contents were not inspected. A green run or passing test does not constitute independent review.
 
 ## Findings and blockers
 
-1. **Exact-revision evidence is missing.** The one successful public main-branch run found is for `cf968e7...`, not the inventory commit or the subsequent candidate. Equal source/input blobs reduce uncertainty but do not satisfy the exact-SHA evidence requirement.
+1. **The new handoff revision needs its own CI.** The earlier candidate SHA `878c68f` passed run 41659668121, but the documentation follow-up creates a new commit. Its exact-SHA result must be verified separately; no evidence transfers between commits.
 2. **Independent reviews remain mandatory.** The repository's review policy requires technically separate, exact-SHA E3; existing PR/status checks do not substitute for it.
 3. **No code defect was established by this static pass.** No source correction was made. This is not a claim that the daemon is qualified or that all candidate policy packages are approved.
 4. **Existing pure policy packages remain unapproved for integration.** Their own guide identifies them as later candidates and calls for Engineering/Security review. Their continued presence on `main` is not retroactively accepted here.
 5. **Historical documentation links remain stale.** The unchanged lower section of `PROJECT-STATUS.md` references readiness snapshots absent from this tree. New/modified links for this decision and handoff are checked separately; the historical references are not represented as passing.
+6. **PR path filters also start broader workflows.** PR #126 triggered Full platform candidate run 41659668006 and Core executable candidate run 41659668143 in addition to the authorized SC-M01 workflow. These are not SC-M01 evidence. The owner separately authorized the automatic Core/platform reruns for this follow-up documentation commit; no Core application feature or privileged daemon capability is authorized.
 
 ## Handoff decision
 
-Do not merge, release, deploy, create a code baseline or widen the slice. The next controlled step is for MASTER to authorize a single review/CI submission of the local candidate so the existing workflow can run on its exact commit. Then obtain the required E3, Security, QA and DevOps opinions on that same final SHA and return the evidence package to MASTER.
+Do not merge, release, deploy, create a code baseline or widen the slice. Verify the SC-M01 workflow on this follow-up commit's exact SHA, obtain and inspect the artifact through authorized access, then obtain independent E3, Security, QA and DevOps opinions on the same final SHA. Return the complete evidence package to MASTER; the PR remains a draft until those gates and MASTER acceptance are complete.
