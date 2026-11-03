@@ -14,8 +14,8 @@ Périmètre : ce dépôt `WCP360_Standalone`. Les sites Grav, stockages métier 
 ## Méthode de travail
 
 - Un objectif par tâche, terminé avec ses contrôles ; découper les grandes fonctionnalités selon leurs dépendances.
-- Pour repérer le propriétaire, les sources et les contrôles d'une tâche WCP360, utiliser le skill local [wcp360-development](../../.agents/skills/wcp360-development/SKILL.md), invocable avec `$wcp360-development`. Charger les autres skills pertinents selon le besoin.
-- Pour une vue d'ensemble ou un impact sur d'autres projets WCP360, utiliser [wcp360-ecosystem](../../.agents/skills/wcp360-ecosystem/SKILL.md) et vérifier les contrats des producteurs/consommateurs concernés avant de limiter le changement au seul Standalone.
+- Les skills `wcp360-development` et `wcp360-ecosystem`, lorsqu'ils sont disponibles dans l'espace de travail local `.agents/skills/`, peuvent aider au repérage ; ils ne font pas partie de ce dépôt et ne remplacent pas ses guides versionnés.
+- Pour une vue d'ensemble ou un impact sur d'autres projets WCP360, vérifier les contrats des producteurs/consommateurs concernés avant de limiter le changement au seul Standalone.
 - Examiner `git status` et les différences ciblées ; préserver les modifications d'autrui et la branche existante. Rechercher avec `rg`, lire seulement les fichiers nécessaires.
 - MCP selon le besoin : Context7 pour API/version de bibliothèque, documentation OpenAI pour intégration OpenAI, Playwright pour navigateur autorisé. Réutiliser la documentation vérifiée encore applicable.
 - Outils selon disponibilité : Git, Zeal/DevDocs, Ollama, Bruno, DBeaver ; PHPStan, golangci-lint, Ruff selon leur configuration. Voir le catalogue ci-dessous ; aucune installation globale ni transmission de secrets implicite.
@@ -23,7 +23,7 @@ Périmètre : ce dépôt `WCP360_Standalone`. Les sites Grav, stockages métier 
 
 ## Tests et sécurité à chaque modification
 
-Suivre [TESTING](documentation/development/TESTING.md), la [matrice de sécurité](documentation/development/SECURITY-TEST-MATRIX.md) et le [catalogue d'outils](documentation/development/QUALITY-SECURITY-STACK.md). En environnement XAMPP, appliquer aussi la procédure locale `../WCP360_Quality/README.md` lorsqu'elle est présente.
+Suivre [TESTING](documentation/development/TESTING.md), la [matrice de sécurité](documentation/development/SECURITY-TEST-MATRIX.md) et le [catalogue d'outils](documentation/development/QUALITY-SECURITY-STACK.md). Dans l'espace de travail XAMPP, `projects/WCP360_Quality/README.md` décrit les recettes locales ; ce dossier qualité est hors de ce dépôt.
 
 Les essais exécutables locaux restent arrêtés selon le guide Core ; utiliser la CI existante. Commandes de référence en environnement autorisé, après les prérequis de TESTING :
 

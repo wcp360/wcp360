@@ -2,7 +2,7 @@
 
 Independent PHP ≥8.3 library (JSON, Sodium; cURL for HTTP), evaluated under the site PHP 8.3 and standalone PHP 8.4 toolchains. No Core vendor, dependency lock, startup hook or hosting authorization is changed. This is a candidate website identity handshake, not the accepted Core API, machine attestation, licensing client or production SDK integration.
 
-The provider [contract](../../../../../htdocs/WCP360-Hub/user/plugins/verify-license/PAIRING.md) defines exact signed bytes, fields, limits and recovery semantics. Verify License 0.2.0 currently supports **only direct loopback HTTP** with explicit operator opt-in. This library requires HTTPS by default and verifies TLS; that does not imply a qualified HTTPS provider exists. No redirects, proxy, cookies or Admin credentials; bounded bodies / headers and deadlines. A fresh cURL handle leaves NETRC ignored (the libcurl default); it never loads credentials from a caller-owned shared handle.
+The provider contract in the separate Hub checkout (`WCP360-Hub/user/plugins/verify-license/PAIRING.md`) defines exact signed bytes, fields, limits and recovery semantics. Verify License 0.2.0 currently supports **only direct loopback HTTP** with explicit operator opt-in. This library requires HTTPS by default and verifies TLS; that does not imply a qualified HTTPS provider exists. No redirects, proxy, cookies or Admin credentials; bounded bodies / headers and deadlines. A fresh cURL handle leaves NETRC ignored (the libcurl default); it never loads credentials from a caller-owned shared handle.
 
 ## Standalone tool
 
@@ -31,6 +31,6 @@ An identity can be revoked in the owner’s portal. A fresh `check` is then refu
 
 ## Validation
 
-`tests/run.php` tests an independent consumer against synthetic transports; an optional private loopback router exercises actual cURL redirect, size and credential behavior. [validate-pairing.ps1](../../../../WCP360_Quality/validate-pairing.ps1) adds real MariaDB, Grav sessions, provider / consumer proof interoperability, two-worker consumption, rollback, restricted SQL, foreign ownership, replay / expiry / revocation, actual PHP 8.4 CLI and Chrome. PHPStan level 5 uses its own tooling, not Core’s vendor.
+`tests/run.php` tests an independent consumer against synthetic transports; an optional private loopback router exercises actual cURL redirect, size and credential behavior. The XAMPP workspace recipe `projects/WCP360_Quality/validate-pairing.ps1` adds real MariaDB, Grav sessions, provider / consumer proof interoperability, two-worker consumption, rollback, restricted SQL, foreign ownership, replay / expiry / revocation, actual PHP 8.4 CLI and Chrome. PHPStan level 5 uses its own tooling, not Core’s vendor.
 
 Reports contain exact hashes and explicit `not_run` / `not_configured` gaps. HTTPS / proxy deployment, Linux filesystem and Core startup, Admin2 privileged session, SAST / secret scanning, independent protocol review, capacity, retention and recovery / rotation block production qualification. No claim of complete security or Internet readiness follows from local tests.
