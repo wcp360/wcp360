@@ -23,8 +23,16 @@ final class RequestReference
 
     public function begin(Request $request): string
     {
-        $reference = RequestId::generate();
-        $this->issued[$request] = $reference;
+        // An early error or another listener may have already minted this
+        // Request's reference. Never rotate it within the same request.
+        $reference = $this->issued[$request] ?? null;
+        if (!is_string($reference) || !RequestId::valid($reference)) {
+            $reference = RequestId::generate();
+            $this->issued[$request] = $reference;
+        }
+
+        // Inbound headers and valid-looking attributes have no authority.
+        // Restore the server-issued reference after any attribute tampering.
         $request->attributes->set(self::ATTRIBUTE, $reference);
 
         return $reference;
@@ -32,16 +40,6 @@ final class RequestReference
 
     public function get(Request $request): string
     {
-        // A valid-looking attribute or inbound header is not evidence that this
-        // service generated the reference for this Request.
-        $reference = $this->issued[$request] ?? null;
-        if (!is_string($reference) || !RequestId::valid($reference)) {
-            return $this->begin($request);
-        }
-
-        // Restore the issued value if downstream request attributes were changed.
-        $request->attributes->set(self::ATTRIBUTE, $reference);
-
-        return $reference;
+        return $this->begin($request);
     }
 }

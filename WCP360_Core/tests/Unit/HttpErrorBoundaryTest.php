@@ -82,6 +82,48 @@ final class HttpErrorBoundaryTest extends TestCase
         self::assertNotSame($issued, $references->get($second));
     }
 
+    public function testRepeatedInitializationPreservesOneServerIssuedRequestReference(): void
+    {
+        $refs = new RequestReference();
+        $request = Request::create('/workbench/v1/plans', server: [
+            'HTTP_X_WCP360_REQUEST_ID' => str_repeat('d', 32),
+        ]);
+        $request->attributes->set('_wcp_candidate_request_reference', str_repeat('e', 32));
+
+        $issued = $refs->get($request);
+        self::assertMatchesRegularExpression('/^[a-f0-9]{32}$/D', $issued);
+        self::assertNotSame(str_repeat('d', 32), $issued);
+        self::assertNotSame(str_repeat('e', 32), $issued);
+
+        $request->attributes->set('_wcp_candidate_request_reference', str_repeat('f', 32));
+        self::assertSame($issued, $refs->begin($request));
+        self::assertSame($issued, $refs->begin($request));
+        self::assertSame($issued, $request->attributes->get('_wcp_candidate_request_reference'));
+    }
+
+    public function testEarlyDiagnosticReferenceSurvivesMainListenerAndResponse(): void
+    {
+        $refs = new RequestReference();
+        $responder = new HttpErrorResponder($refs, new Environment(new ArrayLoader()));
+        $subscriber = new HttpErrorSubscriber($refs, $responder,
+            new \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage());
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $request = Request::create('http://user.localhost/workbench/v1/plans');
+        $early = $refs->get($request);
+
+        // A later begin() on the same main Request must not break a previously
+        // logged diagnostic reference or the final response header.
+        $subscriber->begin(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));
+        $response = new Response(headers: [RequestReference::HEADER => str_repeat('a', 32)]);
+        $subscriber->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        self::assertSame($early, $response->headers->get(RequestReference::HEADER));
+        self::assertSame($early, $refs->get($request));
+
+        $newRequest = Request::create('http://user.localhost/workbench/v1/plans');
+        self::assertNotSame($early, $refs->begin($newRequest));
+    }
+
     public function testNamespaceDeterminesTheTransportWithoutAcceptHeaderOrPrefixConfusion(): void
     {
         self::assertTrue(CandidateApiRequest::matches(Request::create('/workbench/v1/plans')));
