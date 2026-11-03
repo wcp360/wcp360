@@ -49,6 +49,39 @@ final class HttpErrorBoundaryTest extends TestCase
         self::assertNotSame($seen[0], $seen[1]);
     }
 
+    public function testWellFormedUnissuedRequestReferenceCannotBecomeAnErrorReference(): void
+    {
+        $references = new RequestReference();
+        $request = Request::create('/workbench/v1/plans', server: [
+            'HTTP_X_WCP360_REQUEST_ID' => str_repeat('b', 32),
+        ]);
+        $forged = str_repeat('a', 32);
+        $request->attributes->set('_wcp_candidate_request_reference', $forged);
+
+        // The response/error path can run before the main request listener.
+        $issued = $references->get($request);
+        self::assertMatchesRegularExpression('/^[a-f0-9]{32}$/D', $issued);
+        self::assertNotSame($forged, $issued);
+        self::assertNotSame(str_repeat('b', 32), $issued);
+        self::assertSame($issued, $request->attributes->get('_wcp_candidate_request_reference'));
+        self::assertSame($issued, $references->get($request));
+    }
+
+    public function testDownstreamReferenceAttributeTamperingCannotReplaceIssuedValue(): void
+    {
+        $references = new RequestReference();
+        $first = Request::create('/workbench/v1/plans');
+        $issued = $references->begin($first);
+        $first->attributes->set('_wcp_candidate_request_reference', str_repeat('c', 32));
+
+        self::assertSame($issued, $references->get($first));
+        self::assertSame($issued, $first->attributes->get('_wcp_candidate_request_reference'));
+
+        $second = Request::create('/workbench/v1/plans');
+        $second->attributes->set('_wcp_candidate_request_reference', $issued);
+        self::assertNotSame($issued, $references->get($second));
+    }
+
     public function testNamespaceDeterminesTheTransportWithoutAcceptHeaderOrPrefixConfusion(): void
     {
         self::assertTrue(CandidateApiRequest::matches(Request::create('/workbench/v1/plans')));

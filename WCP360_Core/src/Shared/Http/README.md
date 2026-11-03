@@ -7,7 +7,7 @@
 | [CursorPageQuery](CursorPageQuery.php) | Shared fixed row limits, exclusive UUID cursors and query-key/value bounds for administrator and tenant read lists; never authorization. |
 | [TenantPageQuery](TenantPageQuery.php) | Adds required tenant identity and hostname-fragment validation for the existing hosting/job inventories. |
 | [BoundarySubscriber](BoundarySubscriber.php) | Candidate main-request host admission, fresh CSP nonce, explicit framing/isolation headers, no-store and TLS-only HSTS. |
-| [RequestReference](RequestReference.php) | Fresh 128-bit random reference stored on each main Request, with no singleton request state or caller-header trust. |
+| [RequestReference](RequestReference.php) | Fresh server-generated 128-bit request reference, tracked with weak keys so unissued or overwritten Request attributes cannot forge its diagnostic origin. |
 | [HttpErrorSubscriber](HttpErrorSubscriber.php) | Reference lifecycle and safe main-request exceptions; API authentication redirects become JSON refusals before standard security headers are applied. |
 | [HttpFailure](HttpFailure.php) | Fixed status/code/message mapping; no exception-message, path, query or payload reflection. |
 | [HttpErrorResponder](HttpErrorResponder.php) | JSON/browser presentation, narrowed exception headers, optional safe diagnostic metadata and nonrecursive rendering fallback. |
@@ -21,7 +21,7 @@
 
 ## Request references
 
-Every admitted main HTTP request receives a new server-generated `X-WCP360-Request-Id` response header containing 32 lowercase hexadecimal characters. Client values in that header, `X-Request-Id`, `traceparent`, query/body data and preexisting request attributes never establish the new reference. Request attributes hold the reference; no service property retains it between FrankenPHP worker requests. Subrequests do not replace the main reference.
+Every admitted main HTTP request receives a new server-generated `X-WCP360-Request-Id` response header containing 32 lowercase hexadecimal characters. Client values in that header, `X-Request-Id`, `traceparent`, query/body data and preexisting request attributes never establish the new reference. The issued reference is re-bound into Request attributes for existing consumers, but a weak-keyed service map is authoritative; it does not keep completed Request objects alive across FrankenPHP worker requests. Subrequests do not replace the main reference.
 
 This reference is diagnostic metadata, never an identity, permission, tenant selector, idempotency key, job ID or audit-record ID. [Hosting-plan submission](../../Module/Operations/README.md#durable-hosting-plan-request-correlation) now persists the first request reference with the job and its lifecycle audit occurrences. Other resources, IPC and complete distributed tracing remain outside this slice. Errors optionally log only the reference, status and fixed code through an available PSR logger; no new log backend is installed. Existing framework/domain logging and secret-redaction obligations remain separate.
 
