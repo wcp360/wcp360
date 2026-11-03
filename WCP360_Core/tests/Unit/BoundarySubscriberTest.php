@@ -64,6 +64,58 @@ final class BoundarySubscriberTest extends TestCase
         self::assertTrue($response->headers->hasCacheControlDirective('no-store'));
     }
 
+    public function testWellFormedUnissuedNonceCannotControlEarlyErrorCsp(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $request = Request::create('http://user.localhost/health');
+        $unissued = str_repeat('A', 24);
+        $request->attributes->set('_csp_nonce', $unissued);
+        $response = new Response('early error', 500);
+
+        // The request listener never ran, but the forged attribute looks valid.
+        $this->subscriber()->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        $issued = $request->attributes->get('_csp_nonce');
+        self::assertIsString($issued);
+        self::assertMatchesRegularExpression('/^[A-Za-z0-9+\\/]{24}$/D', $issued);
+        self::assertNotSame($unissued, $issued);
+        self::assertStringContainsString("'nonce-".$issued."'", (string) $response->headers->get('Content-Security-Policy'));
+        self::assertStringNotContainsString("'nonce-".$unissued."'", (string) $response->headers->get('Content-Security-Policy'));
+    }
+
+    public function testDownstreamAttributeReplacementCannotOverrideIssuedMainNonce(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $boundary = $this->subscriber();
+        $request = Request::create('http://user.localhost/health');
+        $boundary->request(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));
+        $issued = $request->attributes->get('_csp_nonce');
+
+        $request->attributes->set('_csp_nonce', str_repeat('B', 24));
+        $response = new Response('ok');
+        $boundary->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        self::assertSame($issued, $request->attributes->get('_csp_nonce'));
+        self::assertStringContainsString("'nonce-".$issued."'", (string) $response->headers->get('Content-Security-Policy'));
+        self::assertStringNotContainsString("'nonce-".str_repeat('B', 24)."'", (string) $response->headers->get('Content-Security-Policy'));
+    }
+
+    public function testDistinctEarlyErrorRequestsNeverReuseNonceInSameSubscriber(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $boundary = $this->subscriber();
+        $first = Request::create('http://user.localhost/early-a');
+        $second = Request::create('http://user.localhost/early-b');
+
+        foreach ([$first, $second] as $request) {
+            $boundary->response(new ResponseEvent(
+                $kernel, $request, HttpKernelInterface::MAIN_REQUEST, new Response('error', 500)
+            ));
+        }
+
+        self::assertNotSame($first->attributes->get('_csp_nonce'), $second->attributes->get('_csp_nonce'));
+    }
+
     public function testDistinctMainRequestsDoNotReuseANonce(): void
     {
         $kernel = $this->createStub(HttpKernelInterface::class);

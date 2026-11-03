@@ -12,7 +12,14 @@ use Wcp360\Core\Shared\Security\RuntimeContext;
 /** Candidate browser boundary. Production admission remains separately gated. */
 final readonly class BoundarySubscriber implements EventSubscriberInterface
 {
-    public function __construct(private RuntimeContext $context) {}
+    /** @var \WeakMap<\Symfony\Component\HttpFoundation\Request, string> */
+    private \WeakMap $issuedNonces;
+
+    public function __construct(private RuntimeContext $context)
+    {
+        // Weak keys prevent long-lived workers from retaining completed requests.
+        $this->issuedNonces = new \WeakMap();
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -30,7 +37,9 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $this->context->requireBrowserHost($request->getHost());
-        $request->attributes->set('_csp_nonce', base64_encode(random_bytes(18)));
+        $nonce = base64_encode(random_bytes(18));
+        $this->issuedNonces[$request] = $nonce;
+        $request->attributes->set('_csp_nonce', $nonce);
     }
 
     public function response(ResponseEvent $event): void
@@ -40,14 +49,16 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $nonce = $request->attributes->get('_csp_nonce');
-
-        // Early exception responses can bypass the request listener. Never emit an
-        // empty or malformed nonce in their browser security policy.
-        if (!is_string($nonce) || preg_match('/^[A-Za-z0-9+\/]{24}$/D', $nonce) !== 1) {
+        // Only a nonce minted by this subscriber for this Request is trusted.
+        // A syntactically valid Request attribute is not proof of issuance.
+        $nonce = $this->issuedNonces[$request] ?? null;
+        if ($nonce === null) {
+            // Early errors can bypass the request listener entirely.
             $nonce = base64_encode(random_bytes(18));
-            $request->attributes->set('_csp_nonce', $nonce);
+            $this->issuedNonces[$request] = $nonce;
         }
+        // Rebind the authoritative nonce if another listener changed an attribute.
+        $request->attributes->set('_csp_nonce', $nonce);
 
         $headers = $event->getResponse()->headers;
         $headers->set('Content-Security-Policy',
