@@ -7,6 +7,7 @@ namespace Wcp360\Core\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -114,6 +115,58 @@ final class BoundarySubscriberTest extends TestCase
         }
 
         self::assertNotSame($first->attributes->get('_csp_nonce'), $second->attributes->get('_csp_nonce'));
+    }
+
+    public function testEarlyExceptionMakesTheNonceAvailableBeforeErrorTemplateRenders(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $boundary = $this->subscriber();
+        $request = Request::create('http://user.localhost/health');
+        $request->attributes->set('_csp_nonce', str_repeat('X', 24));
+
+        $events = BoundarySubscriber::getSubscribedEvents();
+        self::assertSame(['exception', 256], $events['kernel.exception']);
+        $boundary->exception(new ExceptionEvent(
+            $kernel, $request, HttpKernelInterface::MAIN_REQUEST,
+            new AccessDeniedHttpException('Early rejection.')
+        ));
+
+        $nonceBeforeRendering = $request->attributes->get('_csp_nonce');
+        self::assertIsString($nonceBeforeRendering);
+        self::assertMatchesRegularExpression('/^[A-Za-z0-9+\\/]{24}$/D', $nonceBeforeRendering);
+        self::assertNotSame(str_repeat('X', 24), $nonceBeforeRendering);
+
+        // Simulate an error layout that reads the attribute before response().
+        $response = new Response('<meta name="csp-nonce" content="'.$nonceBeforeRendering.'">', 403);
+        $boundary->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+        self::assertSame($nonceBeforeRendering, $request->attributes->get('_csp_nonce'));
+        self::assertStringContainsString(
+            "'nonce-".$nonceBeforeRendering."'",
+            (string) $response->headers->get('Content-Security-Policy')
+        );
+    }
+
+    public function testExceptionListenerRestoresIssuedNonceAndIgnoresSubrequests(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $boundary = $this->subscriber();
+        $main = Request::create('http://user.localhost/health');
+        $boundary->request(new RequestEvent($kernel, $main, HttpKernelInterface::MAIN_REQUEST));
+        $nonce = $main->attributes->get('_csp_nonce');
+        $main->attributes->set('_csp_nonce', str_repeat('Y', 24));
+
+        $boundary->exception(new ExceptionEvent(
+            $kernel, $main, HttpKernelInterface::MAIN_REQUEST,
+            new AccessDeniedHttpException('Denied.')
+        ));
+        self::assertSame($nonce, $main->attributes->get('_csp_nonce'));
+
+        $sub = Request::create('http://user.localhost/subrequest');
+        $boundary->exception(new ExceptionEvent(
+            $kernel, $sub, HttpKernelInterface::SUB_REQUEST,
+            new AccessDeniedHttpException('Subrequest denied.')
+        ));
+        self::assertFalse($sub->attributes->has('_csp_nonce'));
     }
 
     public function testDistinctMainRequestsDoNotReuseANonce(): void

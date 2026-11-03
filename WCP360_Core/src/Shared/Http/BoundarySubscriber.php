@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Wcp360\Core\Shared\Http;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Wcp360\Core\Shared\Security\RuntimeContext;
@@ -25,6 +27,9 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
     {
         return [
             'kernel.request' => ['request', 128],
+            // Before HttpErrorSubscriber (-96): the error template needs its
+            // actual CSP nonce before Twig renders the page.
+            'kernel.exception' => ['exception', 256],
             'kernel.response' => ['response', -128],
         ];
     }
@@ -37,9 +42,18 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $this->context->requireBrowserHost($request->getHost());
-        $nonce = base64_encode(random_bytes(18));
-        $this->issuedNonces[$request] = $nonce;
-        $request->attributes->set('_csp_nonce', $nonce);
+        $this->nonceFor($request);
+    }
+
+    public function exception(ExceptionEvent $event): void
+    {
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
+        // Request listeners may throw before a CSP nonce was assigned. Twig's
+        // error layout must see the SAME nonce that appears in the final CSP.
+        $this->nonceFor($event->getRequest());
     }
 
     public function response(ResponseEvent $event): void
@@ -49,16 +63,7 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        // Only a nonce minted by this subscriber for this Request is trusted.
-        // A syntactically valid Request attribute is not proof of issuance.
-        $nonce = $this->issuedNonces[$request] ?? null;
-        if ($nonce === null) {
-            // Early errors can bypass the request listener entirely.
-            $nonce = base64_encode(random_bytes(18));
-            $this->issuedNonces[$request] = $nonce;
-        }
-        // Rebind the authoritative nonce if another listener changed an attribute.
-        $request->attributes->set('_csp_nonce', $nonce);
+        $nonce = $this->nonceFor($request);
 
         $headers = $event->getResponse()->headers;
         $headers->set('Content-Security-Policy',
@@ -84,5 +89,20 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
             // including an early error that skipped the request listener.
             $headers->remove('Strict-Transport-Security');
         }
+    }
+
+    private function nonceFor(Request $request): string
+    {
+        // A syntactically valid Request attribute is not proof of issuance.
+        $nonce = $this->issuedNonces[$request] ?? null;
+        if ($nonce === null) {
+            $nonce = base64_encode(random_bytes(18));
+            $this->issuedNonces[$request] = $nonce;
+        }
+
+        // Rebind the same nonce for Twig and the final HTTP response.
+        $request->attributes->set('_csp_nonce', $nonce);
+
+        return $nonce;
     }
 }
