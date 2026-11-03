@@ -113,6 +113,59 @@ final class BoundarySubscriberTest extends TestCase
         self::assertSame($nonce, $main->attributes->get('_csp_nonce'));
     }
 
+
+    public function testPlainHttpRemovesPreexistingDownstreamHstsHeader(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $boundary = $this->subscriber();
+        $request = Request::create('http://user.localhost/health');
+        $response = new Response('ok', 200, [
+            'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains',
+        ]);
+
+        $boundary->request(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));
+        $boundary->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        self::assertFalse($response->headers->has('Strict-Transport-Security'));
+        self::assertSame('DENY', $response->headers->get('X-Frame-Options'));
+    }
+
+    public function testEarlyHttpErrorResponseRemovesPreexistingHstsHeader(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $request = Request::create('http://user.localhost/health');
+        $response = new Response('error', 500, [
+            'Strict-Transport-Security' => 'max-age=31536000',
+        ]);
+
+        // Some errors arrive before the request listener runs.
+        $this->subscriber()->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        self::assertFalse($response->headers->has('Strict-Transport-Security'));
+        $nonce = $request->attributes->get('_csp_nonce');
+        self::assertIsString($nonce);
+        self::assertMatchesRegularExpression('/^[A-Za-z0-9+\\/]{24}$/D', $nonce);
+        self::assertStringContainsString(
+            "'nonce-".$nonce."'",
+            (string) $response->headers->get('Content-Security-Policy')
+        );
+    }
+
+    public function testHttpsOverridesDownstreamHstsWithCanonicalPolicy(): void
+    {
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $boundary = $this->subscriber();
+        $request = Request::create('https://user.localhost/health');
+        $response = new Response('ok', 200, [
+            'Strict-Transport-Security' => 'max-age=0',
+        ]);
+
+        $boundary->request(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));
+        $boundary->response(new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        self::assertSame('max-age=31536000', $response->headers->get('Strict-Transport-Security'));
+    }
+
     public function testWrongSurfaceHostIsRejectedBeforeNonceCreation(): void
     {
         $kernel = $this->createStub(HttpKernelInterface::class);

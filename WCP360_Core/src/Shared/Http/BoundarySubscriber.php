@@ -68,6 +68,10 @@ final readonly class BoundarySubscriber implements EventSubscriberInterface
         // Development HTTP endpoints must not advertise an HSTS policy.
         if ($request->isSecure()) {
             $headers->set('Strict-Transport-Security', 'max-age=31536000');
+        } else {
+            // Never inherit HSTS from a downstream response on plain HTTP,
+            // including an early error that skipped the request listener.
+            $headers->remove('Strict-Transport-Security');
         }
     }
 }
