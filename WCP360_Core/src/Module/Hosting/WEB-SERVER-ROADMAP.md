@@ -44,12 +44,12 @@ flowchart TD
     W7 -->|If claimed| W8
 ```
 
-Design, inert rendering and disposable CI harnesses may progress while production foundations remain open. Privileged/live execution waits for the relevant authority, identity, artifact and operation contracts. Security, recovery and performance evidence accompany each slice; WS8 consolidates them. Its optional-profile dependencies apply only to features claimed by that release: an initial qualified FPM scope need not wait for Docker, Worker or assisted migration. Unfinished features remain explicitly unavailable.
+Roadmap ordering does not grant implementation authority. Design, inert rendering and disposable CI harness work may proceed only when the active [baseline manifest](../../../../documentation/manifests/WCP360-BM-0001.md) authorizes the slice; privileged/live execution also waits for the relevant authority, identity, artifact and operation contracts. As of November 3, 2026, SC-M01 is paused pending a MASTER resume decision, so the WS1 harness scaffold below is not authorized for extension or execution. Security, recovery and performance evidence accompany each authorized slice; WS8 consolidates them. Its optional-profile dependencies apply only to features claimed by that release: an initial qualified FPM scope need not wait for Docker, Worker or assisted migration. Unfinished features remain explicitly unavailable.
 
 | Stage | Status | Main owner | Dependency |
 | :--- | :--- | :--- | :--- |
 | WS0 — Versioned model | Candidate preview versioning implemented; durable production model open | Hosting / Platform / Operations | Required M1/M2 contracts. |
-| WS1 — New default renderer | Inert target renderer implemented; Apache/FPM/HTTP harnesses open | Hosting / Go planner | WS0 preview contract. |
+| WS1 — New default renderer | Inert target renderer implemented; Apache/FPM/HTTP harness drafted but not executed; acceptance open | Hosting / Go planner | WS0 preview contract and active implementation authorization. |
 | WS2 — Providers and isolation | Partial candidate foundations | Hosting / Platform | WS0/WS1, trusted provider admission. |
 | WS3 — Live resource lifecycle | Isolated FPM experiment only | Hosting / Operations / Setup | WS2 and relevant M1–M4 acceptance. |
 | WS4 — Rules and PHP apps | Preview examples only | Hosting / Files | WS3 plus required M4 limits, M6 files/data and M7 recovery. |
@@ -77,6 +77,8 @@ Design, inert rendering and disposable CI harnesses may progress while productio
 - Document how a preview's synthetic resources differ from provisioned identities, reserved listeners and live services.
 
 **Acceptance:** positive/negative renderer and decoder cases preserve old formats; real native harnesses inspect exact artifacts without starting services; a missing parser/module is not reported as passed. The public preview still authorizes no installation or activation.
+
+The disposable Debian 13 CI harness is drafted to feed the current plan/2 artifacts unchanged to native Nginx, Apache event-module and PHP-FPM checks, then exercise static delivery, `.htaccess` front-controller routing, the admitted synthetic FPM identity, and protected-file/upload-PHP refusals through loopback-only services. It is designed to record exact artifact hashes and package versions, but has not run; no native acceptance is evidenced. This is one candidate target and one synthetic application fixture: it does not admit a production provider, qualify other distributions, or mark preview syntax as complete. Run it only after the active manifest authorizes the slice, and treat its results as executed evidence only for the exact tested source and environment.
 
 ## WS2 — Admit providers and isolate runtime resources
 
@@ -182,7 +184,7 @@ Release evidence includes exact source/artifact/provider revisions, signed distr
 
 ## Next concrete implementation slice
 
-1. Retain the reviewed candidate WS0-preview contract: catalogue/2 announces plan/1 for the six original recipes and plan/2 only for the new Nginx/Apache/FPM recipe. Complete the separate durable ownership/provider/migration contracts before any persisted selection or activation.
+1. Subject to active implementation authorization, retain the reviewed candidate WS0-preview contract: catalogue/2 announces plan/1 for the six original recipes and plan/2 only for the new Nginx/Apache/FPM recipe. Complete the separate durable ownership/provider/migration contracts before any persisted selection or activation.
 2. Complete **WS1 native acceptance** around the implemented inert target renderer: admitted Apache event/modules and FPM harnesses, actual per-directory/static/PHP behavior and exact artifact evidence. Current Nginx grammar coverage is partial; missing/unexecuted stages remain explicit.
 3. Use its evidence to select and qualify the first native provider/target under WS2, while M1/M2/M3 production prerequisites continue.
 4. Develop the registered application/backend and container contracts in parallel where independent; implement Docker/Discourse activation only after their authority, data and recovery prerequisites.

@@ -35,6 +35,8 @@ The existing 13 owners cover all 233 mapped capabilities. Tenancy, Data, Files, 
 
 The 24 [service-resource families](resources/services/ROADMAP.md) contain 18 reservations, five external Go-template references and one family with three disposable-VM systemd units. These are not 24 installed providers. Application, host, observability, Toolbox, extension and AI resources are additional preparation registers.
 
+The November 3 [production-readiness review](../documentation/development/PRODUCTION-READINESS-REVIEW.md) makes the remaining watchdog, update/recovery, isolation/session, virtual-host content, notification and infrastructure gates explicit. Its documentary coverage does not establish complete implementation, security parity, a new percentage or production qualification; the executable checkpoint and stopped-local-execution boundary above remain unchanged.
+
 ## Evidence boundaries
 
 | Check family | What the successful checkpoint covers | What it does not establish |
@@ -54,17 +56,19 @@ The [runtime matrix](../documentation/development/CORE-RUNTIME-MATRIX.md), [VM g
 | :--- | :--- | :--- |
 | Product name | WCP360; Standalone is the server-installed panel, Core is its built-in engine. | Folder names do not rename the product. |
 | ROOT | Server administrator's panel context, with current active ADMIN authority. | PHP/wcpd remain non-root; Unix root and the minimal privileged broker are separate. |
-| Login and MFA | Username login; administrator MFA optional/off by default, enforced once enabled; [IdentityAccess](src/Module/IdentityAccess/README.md). | Historical mandatory-MFA production baseline wording requires M1 reconciliation; it is not silently amended or declared satisfied. |
+| Login and MFA | Username login; the owner confirmed on November 3, 2026 that MFA remains optional for each administrator and off by default, enforced once enabled; [IdentityAccess](src/Module/IdentityAccess/README.md). | The mandatory-MFA wording retained in the frozen canonical baseline is a known contract mismatch awaiting explicit M1 review; it does not silently replace the current product decision or count as accepted production alignment. |
 | Web strategy | Target new general-purpose stack: Nginx → Apache event → FPM; existing durable Classic remains Nginx/FPM; [strategy](src/Module/Hosting/WEB-SERVER-STRATEGY.md). | Preview generation does not switch defaults or existing sites. |
 | FrankenPHP | Classic application previews and explicitly acknowledged compatible Worker plans; Caddy is embedded where applicable. | Do not assume WordPress Worker compatibility, native .htaccess in a proxy-only chain or performance without acceptance/measurement. |
-| Core license and editions | [AGPL-3.0-only](LICENSING.md) for original Core source; [Community/PRO strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) and external planning catalogues are documented. | Package source models, general admission, entitlement implementation and PRO App Install qualification remain open. |
+| Core license and editions | [AGPL-3.0-only](LICENSING.md) for original Core source; the November 3 [Free/PRO decision](../documentation/development/EDITIONS-AND-PREMIUM.md) gives both editions unlimited websites, Free without premium packages and PRO including all WCP360 premium modules/connectors. | Package source models, general admission, entitlement implementation and PRO App Install qualification remain open. Unlimited is an edition policy, not a claim of unlimited host resources or completed hosting implementation. |
 | Optional integrations | Plugins/premium rights, Docker, Toolbox and AI/MCP retain their [existing owners](STRUCTURE.md); the [infrastructure coverage register](../documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) adds explicit multi-server, storage, Kubernetes, VM, performance/CDN and defensive-security planning. | Proposal catalogues do not implement providers or change maturity. Essential hosting, ordinary cache/compression, security and local recovery remain independent of optional packages and vendor connectivity. |
 
 These record implemented product decisions and their limits. They are not replacement API/IPC/permission schemas, new operation IDs or amendments to accepted owner specifications.
 
+The [dated owner decision of November 3](../documentation/governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) preserves the Free/unlimited and optional-administrator-MFA choices with their remaining contract-review boundary. No frozen canonical export or independent-review result is changed by this note.
+
 ## Next bounded checkpoint
 
-**Candidate continuation:** complete the native Apache event/modules and FPM validation path for the existing Nginx → Apache → FPM preview, using its exact artifacts and admitted synthetic identities. Extend positive/refusal checks remotely; retain explicit unavailable/unexecuted stages. No installation, default migration or apply action is enabled by that work.
+**WS1 candidate (blocked):** the native Apache event/modules and FPM validation path for the existing Nginx → Apache → FPM preview remains a possible next slice, using its exact artifacts and admitted synthetic identities. The current [baseline manifest](../documentation/manifests/WCP360-BM-0001.md) sets SC-M01 to paused pending a MASTER resume decision; this roadmap candidate is not implementation or CI authorization. Do not extend or execute the unrun WS1 harness until that decision selects and authorizes the slice. Keep unavailable/unexecuted stages explicit.
 
 **Production dependency:** [M1](ROADMAP.md#m1) and [M2](ROADMAP.md#m2) remain open. Current authority, identity/permission composition, durable intent, effect revisions/fencing, audit, uncertain outcomes and recovery must be settled for the first production business path. Read-only WS1 qualification does not bypass those gates.
 

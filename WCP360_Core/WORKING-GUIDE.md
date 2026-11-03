@@ -2,12 +2,12 @@
 
 Use this page to resume development, locate the authoritative description of a concern and finish a bounded change without creating competing inventories.
 
-**Start with [current status](STATUS.md), then [delivery order](ROADMAP.md).** The [public project overview](../README_GITHUB.md) describes the product scope. Core is the built-in engine of WCP360 Standalone; essential hosting and local recovery must work without optional plugins or a vendor connection.
+**Start with [current status](STATUS.md), then [delivery order](ROADMAP.md).** Before changing source or adding/executing CI work, verify the active implementation gate in the [baseline manifest](../documentation/manifests/WCP360-BM-0001.md) and [contribution rules](../CONTRIBUTING.md). A status checkpoint, roadmap stage, existing scaffold, or user goal does not override a paused gate or authorize an implementation slice. When implementation is paused, continue only explicitly permitted documentation/governance work until MASTER selects and authorizes a slice. The [public project overview](../README_GITHUB.md) describes the product scope. Core is the built-in engine of WCP360 Standalone; essential hosting and local recovery must work without optional plugins or a vendor connection.
 
 ## Resume in five steps
 
-1. Read [STATUS.md](STATUS.md) for the last verified executable revision, its CI scope, open qualification boundaries and the next candidate checkpoint.
-2. Read the relevant milestone in [ROADMAP.md](ROADMAP.md). A candidate helper or a folder does not close a production milestone.
+1. Read [STATUS.md](STATUS.md) for the last verified executable revision, its CI scope, open qualification boundaries and the next candidate checkpoint; verify the active implementation gate in the [baseline manifest](../documentation/manifests/WCP360-BM-0001.md).
+2. Read the relevant milestone in [ROADMAP.md](ROADMAP.md) for ordering and acceptance only. A candidate checkpoint, helper, CI scaffold or folder is not implementation authority and does not close a production milestone.
 3. Find the owner in [NAVIGATION.md](NAVIGATION.md), then read that module's README and concrete source guide. Use [STRUCTURE.md](STRUCTURE.md) for cross-module growth boundaries.
 4. Check applicable specifications and current product decisions. Keep the existing branch and the authorized scope. Development is consolidated on `main` through [PR #116](https://github.com/wcp360/wcp360/pull/116) and [PR #125](https://github.com/wcp360/wcp360/pull/125). Follow the [completed branch register](../documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md); do not create another branch as an organizational shortcut.
 5. Implement one complete bounded slice with validation/refusal behavior, update its owning documents and record exact-source evidence before changing its delivery status.
@@ -32,6 +32,8 @@ Use this page to resume development, locate the authoritative description of a c
 | Which contracts and security constraints apply? | [Baseline manifest](../documentation/manifests/WCP360-BM-0001.md), selected owner specifications and [security policy](../SECURITY.md) | Follow their existing authority and review process; this guide does not amend them. |
 
 Domain guides own detail. STATUS links to those guides rather than copying their schemas, fixtures or complete acceptance lists. The roadmap owns ordering; the capability map owns the 233-row register. Neither this guide nor a new directory creates another registry.
+
+Use the [production-readiness review](../documentation/development/PRODUCTION-READINESS-REVIEW.md) to review cross-cutting gaps in watchdogs, updates, isolation, sessions, hosting pages, notifications and recovery. It links existing owners and qualification criteria; it does not replace the capability register, accept contracts or qualify the candidate.
 
 ## Source locations
 
@@ -80,6 +82,10 @@ Local executable tests remain stopped under the current working instruction. Use
 
 ## Decision and history boundaries
 
-Current product decisions and unresolved production-contract integration are summarized in [STATUS.md](STATUS.md#current-product-decisions). In particular, administrator MFA is optional/off by default and enforced for an account once enabled. Older mandatory-MFA baseline wording must be reconciled in M1; this guide neither changes that source artifact nor declares production acceptance.
+Current product decisions and unresolved production-contract integration are summarized in [STATUS.md](STATUS.md#current-product-decisions). The owner confirmed on November 3, 2026 that administrator MFA is optional per administrator, off by default and enforced for an account once enabled. The frozen canonical baseline still contains mandatory-ADMIN-MFA wording: this known mismatch requires explicit M1 contract review, not silent application of the older requirement or a claim of production acceptance. This guide does not amend that artifact.
+
+The same dated [edition decision](../documentation/development/EDITIONS-AND-PREMIUM.md) gives Free/Community unlimited websites with the essential Core and no premium packages; PRO also has unlimited websites and includes all WCP360 premium modules/connectors after their individual release, admission and qualification. Do not reinstate the earlier 30-site proposal or confuse an edition limit with host capacity, hosting-plan quotas or implementation maturity.
+
+The [owner-decision register](../documentation/governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) records these product choices and the M1 contract review still required for the frozen mandatory-MFA wording.
 
 Historical branch/source inventories stay dated. The active candidate, canonical documentary baseline and an eventual production release are separate identities. Preserve imported sources and unrelated working-tree edits; never publish them accidentally with a documentation or Core change.

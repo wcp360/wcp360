@@ -38,12 +38,12 @@ Never commit:
 
 ```text
 CANONICAL SPECIFICATION INPUTS = 8/8 ACCEPTED
-SC-M01 = LIMITED RESUME — INERT DAEMON FOUNDATION ONLY
+SC-M01 = PAUSED — IMPLEMENTATION SLICE / RESUME DECISION PENDING
 SC-M02 = NOT AUTHORIZED
 CODE-BASELINE = NONE
 ```
 
-Repository, governance and documentation maintenance may continue. The [current manifest](documentation/manifests/WCP360-BM-0001.md) selects only the inert daemon foundation; additional runtime slices need explicit owner-backed authorization and the applicable reviews.
+Repository, governance and documentation maintenance may continue. The current [baseline manifest](documentation/manifests/WCP360-BM-0001.md) pauses implementation pending a new MASTER decision selecting and authorizing a slice. Earlier limited-resume wording in that manifest is historical and does not authorize runtime or CI work now. SC-M02 remains unauthorized.
 
 
 ## Review and merge evidence

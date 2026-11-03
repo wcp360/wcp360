@@ -44,6 +44,8 @@ The candidate checks current tenant authority for the single `candidate.hosting.
 
 ## Server root administrator
 
+**Naming target recorded on November 3, 2026:** new human login allocations are intended to follow [6–32-character usernames and reserved-name refusals](../../../../documentation/development/naming-and-account-identifiers.md). The candidate behavior and setup examples below still accept 3–32 characters and names such as `root`; the new rule is not implemented here. Preserve existing login, session refresh, recovery and restore until a reviewed migration. Panel usernames, roles and generated UNIX accounts are distinct; no prefix grants authority.
+
 The **ADMIN surface represents the server root administrator**: the operator responsible for the WCP360 instance, its server-wide settings, hosting accounts and infrastructure. The UI labels this surface **ROOT — Server administration**. Existing internal `admin`, `ROLE_ADMIN`, WCP-ADMIN surface claims, origins, session namespaces, database roles and permissions remain stable; this is not a new role hierarchy or a second administrator tier.
 
 | Identity | Current responsibility | Execution boundary |
@@ -152,7 +154,9 @@ This candidate does not implement or grant any of the 82 canonical permissions. 
 
 MFA is **optional per administrator account and off by default**. An account without an active factor signs in with its password and receives normal administrator access at authentication strength 1. Account security offers voluntary setup with current-password confirmation; enrollment uses the existing Symfony/Scheb pipeline and withholds roles until the selected activation is confirmed. Once enabled, each login requires the second factor and completes at strength 2. Confirmed disablement removes the factor/codes and ends the session; the next password login is sufficient. USER login retains its existing flow.
 
-This follows the current product decision and supersedes earlier Core notes requiring MFA for all administrators. The external canonical security baseline still specifies mandatory ADMIN MFA; reconciling that requirement with this product decision remains explicit M1 integration work. Core-only implementation does not claim production contract acceptance.
+**Product decision reaffirmed by the owner on November 3, 2026:** MFA remains optional for each administrator. This supersedes earlier Core notes requiring MFA for all administrators. The frozen external canonical security baseline still specifies mandatory ADMIN MFA; that text is a known mismatch awaiting explicit M1 contract review, not an unexplained active product requirement. Preserve its provenance and review the affected action-strength, recovery and session acceptance before claiming alignment. Core-only implementation and this dated decision do not constitute independent review or production contract acceptance; see [current product decisions](../../../STATUS.md#current-product-decisions).
+
+The [dated owner-decision register](../../../../documentation/governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) records this choice and its remaining contract-review status. Enabled-account MFA, CSRF, Origin, session revocation and current-action authorization remain required according to their documented candidate scope.
 
 | Mechanism | Implemented candidate behavior |
 | :--- | :--- |

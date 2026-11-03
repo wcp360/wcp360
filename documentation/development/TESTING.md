@@ -6,6 +6,73 @@ The executable candidate uses locked development dependencies: PHPUnit 12, Symfo
 
 ## Commands
 
+### Windows development tools and MCP
+
+The workstation setup verified on November 3, 2026 uses private tools under
+`WCP360_Build/build/toolchains`: Node.js 24.22.2, PHP 8.4.27, Composer 2.11.1,
+and Go 1.27.3. Git for Windows and a uv-managed Python 3.15.2 are selected
+by [the environment helper](../../tools/development/enter-environment.ps1).
+These generated toolchains remain ignored; the Core Composer lock is unchanged.
+XAMPP's separate PHP 8.3 executable does not satisfy Core's PHP 8.4 requirement.
+
+From the repository root, dot-source the helper in a PowerShell session:
+
+~~~powershell
+. ./tools/development/enter-environment.ps1
+# If Python is installed elsewhere:
+. ./tools/development/enter-environment.ps1 -PythonExecutable C:/path/to/python.exe
+~~~
+
+If local script execution is restricted, start a disposable session with
+`powershell.exe -NoProfile -ExecutionPolicy Bypass` and run the helper there.
+This does not change the persisted execution policy. The helper changes only
+the current session's PATH and location, exposes the private Composer PHAR,
+and creates an ignored `python3` shell shim for Git for Windows hooks.
+It builds the current Go planner as `WCP360_Core/var/bin/wcp-plan-dev.exe`
+and sets process-local `WCP_PLANNER` so tests use that build. Composer commands
+get a bounded 1,200-second process timeout for cold analysis on this workstation.
+It does not install a pre-commit hook.
+
+Context7 is registered at `https://mcp.context7.com/mcp`; the public read check
+does not need an account. Optional OAuth account login is separate. The
+connected GitHub integration was verified with an authenticated read of
+[issue #13](https://github.com/wcp360/wcp360/issues/13), without a repository write.
+Playwright MCP 0.0.84 is installed separately from Core dependencies and
+registered with headless Chrome, isolated storage and blocked service workers.
+Restart the Codex session to discover newly registered MCP servers.
+
+The [MCP smoke helper](../../tools/development/check-mcp.py) verifies public
+version-specific documentation or serves an in-memory synthetic page on a
+random loopback port. The browser check starts its own isolated browser,
+clicks its fixture button, checks the updated accessibility snapshot, and
+closes the browser and HTTP server. It never serves the repository or uses
+an existing browser session. Its request allowlist is test scoping, not a
+security boundary for arbitrary pages.
+
+~~~powershell
+python -I tools/development/check-mcp.py context7 --library-id /websites/symfony_doc/7.4
+python -I tools/development/check-mcp.py playwright `
+  --node WCP360_Build/build/toolchains/node-v24.22.2-win-x64/node.exe `
+  --cli WCP360_Build/build/toolchains/playwright-mcp/node_modules/@playwright/mcp/cli.js `
+  --output-dir WCP360_Build/build/install-check/playwright
+~~~
+
+### Pull-request checks
+
+[Development checks](../../.github/workflows/development-checks.yml) adds three
+jobs for every pull request, with no path or target-branch filter: Symfony
+analysis/functional tests with disposable PostgreSQL 17, candidate Go race
+tests and vet, and Python repository/inert-parser tests. It also supports
+manual dispatch. Existing scoped browser, Linux, VM and daemon checks retain
+their own environments and acceptance scope.
+
+This workflow is active on GitHub only after publication. Required status
+checks and branch protection are repository settings; a local workflow file
+does not enforce merges. Local Windows/SQLite results do not establish the
+Linux/PostgreSQL job outcome.
+
+### Application checks
+
 From WCP360_Core, after composer install and building the Go planner:
 
 ~~~sh
@@ -47,7 +114,7 @@ The dedicated bootstrap in `WCP360_Core/tools/phpstan` supplies synthetic settin
 | Defined Console option | Accepted. |
 | Unknown Console option | Rejected by `symfonyConsole.optionNotFound`. |
 
-The runner checks the exact diagnostic identifiers and rejects missing or additional errors. Deliberately invalid fixtures are never loaded by the hosting application and are excluded from normal analysis paths. The Linux PostgreSQL job runs both analysis commands before PHPUnit; static analysis itself never uses that PostgreSQL database. The workflow runs for relevant pull-request changes and pushes to main, avoiding duplicate push/pull-request executions on the candidate branch.
+The runner checks the exact diagnostic identifiers and rejects missing or additional errors. Deliberately invalid fixtures are never loaded by the hosting application and are excluded from normal analysis paths. The Linux PostgreSQL job runs both analysis commands before PHPUnit; static analysis itself never uses that PostgreSQL database. The existing `core-executable-candidate.yml` workflow runs for relevant pull-request changes and pushes to main, avoiding duplicate push/pull-request executions on the candidate branch. The additional `development-checks.yml` workflow runs for every pull request.
 
 ## Browser setup and data
 

@@ -1,5 +1,9 @@
 # WCP360 — Project Status
 
+## Owner decision on unresolved privileged IPC bindings — 2026-11-03
+
+The project owner has selected an explicit **deny** for all twelve unresolved Security/API parent-binding operations tracked by [issue #91](https://github.com/wcp360/wcp360/issues/91). The [decision record](decisions/OWNER-DECISION-SC-M01-PRIVILEGED-IPC-BINDINGS-2026-11-03.md) lists the exact IPC IDs, refusal behavior and per-operation conditions for any future approval. It does not alter canonical exports, claim runtime enforcement, or resume implementation: SC-M01 remains paused pending separate MASTER authorization, SC-M02 is not authorized and `CODE-BASELINE = NONE`. Refusal tests and independent review remain outstanding.
+
 ## Repository branch reconciliation — 2026-10-31
 
 [All 14 branches, content resolutions and remaining merge conditions](branches/BRANCH-RECONCILIATION-2026-10-31.md) are recorded with exact heads, path/blob evidence, PR dependencies and existing CI/review identities. Two documentation branches are consolidated; the closed #90 integration bundle is retained as historical; ten code/tooling/research PR candidates remain unmerged. Independent E3 remains missing; #113 additionally needs package-path reconciliation and final owner revalidation, and #109/#110 require wider scope decisions. Existing canonical contracts and the narrow MASTER authorization are unchanged. No branch deletion, code baseline, audit closure or release is declared.
@@ -50,9 +54,9 @@ The dated sections below predate the 2026-10-28 acceptance above. Their 5/8 and 
 **Repository:** `yyogas/wcp360`  
 **Main branch:** `main`  
 **Latest coordination refresh:** 2026-10-27 addendum (G1, NON-CANONICAL)
-**Current SC-M01 coordination snapshot:** [2026-10-27 readiness](SC-M01-CURRENT-READINESS-2026-10-27.md)
+**Historical SC-M01 coordination snapshot:** `SC-M01-CURRENT-READINESS-2026-10-27.md` is not present in this checkout. Use the [current baseline manifest](../manifests/WCP360-BM-0001.md) for active implementation authority; the missing historical snapshot is not reconstructed here.
 
-> Sections below preserve the detailed 2026-10-04 project audit/status record. For subsequent publication and CI evidence, consult the 2026-10-27 snapshot; 2026-10-26 remains historical. No baseline or SC-M01 code gate is changed by that newer coordination file.
+> Sections below preserve the detailed 2026-10-04 project audit/status record. Later publication decisions and CI evidence must be verified against their exact linked sources; 2026-10-26 and 2026-10-27 coordination records remain historical. No active gate is inferred from a missing snapshot.
 
 ## 1. Baseline state
 
