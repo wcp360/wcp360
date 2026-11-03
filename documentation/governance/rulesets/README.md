@@ -30,7 +30,7 @@ The templates **do not** contain `update` or `creation` restrictions or admin by
 From the repository root, run:
     python3 -I tools/repository/check_branch_ruleset_templates.py
 
-This validates these exact disabled templates and exercises 28 negative fixtures, without installing rulesets, changing branches, calling GitHub APIs or running product code. It is included in the draft [repository guardrails](../../../.github/workflows/repository-guardrails.yml) check. A green CI is not evidence of live branch protection.
+This validates these exact disabled templates and exercises 32 negative fixtures, without installing rulesets, changing branches, calling GitHub APIs or running product code. It is included in the draft [repository guardrails](../../../.github/workflows/repository-guardrails.yml) check. A green CI is not evidence of live branch protection.
 
 ## CI branch-route validation
 
@@ -38,7 +38,7 @@ The existing `gitignore-regression` job now additionally checks pull-request rou
 
 ## Live GitHub Ruleset configuration observation
 
-After import and activation, run `python3 -I tools/repository/check_live_branch_rulesets.py --live` from the repository root to verify that GitHub publicly reports an **active**, exact-target ruleset with the required review and check settings for both `develop` and `main`. If one is missing or inconsistent the command exits 2 and outputs a bounded, non-secret JSON diagnosis; `--live --report-only` is available for an observational report without failing the shell. The script performs GET requests only to the fixed public GitHub rulesets endpoints for `wcp360/wcp360`. It never installs, edits or enables protection and requires no administrator token. The CI job runs `--self-test` without network calls, exercising 2 valid active configurations and 34 invalid variants. **Even `MATCHES_TEMPLATE` proves configuration only, not real branch protection enforcement.** DevOps must still demonstrate rejected unauthorized pushes, force pushes, deletions, missing reviews/checks and an allowed reviewed merge. An API network error is `UNVERIFIED`, never `PROTECTED`.
+After import and activation, run `python3 -I tools/repository/check_live_branch_rulesets.py --live` from the repository root to verify that GitHub publicly reports an **active**, exact-target ruleset with the required review and check settings for both `develop` and `main`. If one is missing or inconsistent the command exits 2 and outputs a bounded, non-secret JSON diagnosis; `--live --report-only` is available for an observational report without failing the shell. The script performs GET requests only to the fixed public GitHub rulesets endpoints for `wcp360/wcp360`. It never installs, edits or enables protection and requires no administrator token. The CI job runs `--self-test` without network calls, exercising 2 valid active configurations and 42 invalid variants. **Even `MATCHES_TEMPLATE` proves configuration only, not real branch protection enforcement.** DevOps must still demonstrate rejected unauthorized pushes, force pushes, deletions, missing reviews/checks and an allowed reviewed merge. An API network error is `UNVERIFIED`, never `PROTECTED`.
 
 ### Fail-closed GitHub API observation
 
@@ -51,3 +51,7 @@ Both mandatory checks are bound to `integration_id: 15368` (the GitHub Actions a
 GitHub documents that an unbound required-check name can be set by another account/integration with repository write/status permissions. The expected-source binding rejects checks from a different app, **but not weakened workflows executed under GitHub Actions**. Workflow edits still require independent review. The two disabled templates and the read-only live-auditor fixtures now reject missing/incorrect app IDs. Recheck the provider if the real check source changes; never silently remove the pin as a workaround.
 
 No live repository ruleset has been installed or activated by these files; actual enforcement requires a settings-authorized administrator and negative tests.
+
+## Strict live-ruleset parameter matching
+
+The read-only live auditor compares each expected `pull_request` and `required_status_checks` parameters mapping **exactly**, rather than checking only that expected keys are present. Unreviewed extra parameters now produce `NONCONFORMING`; this deliberately fails closed if GitHub adds an API field requiring an owner decision. The CI negative fixtures include unexpected additional PR and status-check parameters for both permanent branches. The source-model conformance result still does not establish that GitHub enforces the rules in practice.

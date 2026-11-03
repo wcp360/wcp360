@@ -53,7 +53,10 @@ def differences(live: object, template: dict) -> list[str]:
             continue
         actual = found[name].get("parameters")
         need = wanted[name]["parameters"]
-        if not isinstance(actual, dict) or any(actual.get(k) != value for k, value in need.items()):
+        # Fail closed if GitHub adds an unreviewed parameter, even when all
+        # expected fields are still present. This is template conformity,
+        # not an assertion that repository rules are enforced.
+        if not isinstance(actual, dict) or actual != need:
             defects.append(f"{name}_parameters_mismatch")
     return sorted(set(defects))
 
@@ -87,6 +90,8 @@ def self_test() -> None:
             ("missing_app_binding", lambda r: r["rules"][3]["parameters"]["required_status_checks"][0].pop("integration_id")),
             ("wrong_app_binding", lambda r: r["rules"][3]["parameters"]["required_status_checks"][1].update(integration_id=4321)),
             ("non_strict_checks", lambda r: r["rules"][3]["parameters"].update(strict_required_status_checks_policy=False)),
+            ("extra_pr_parameter", lambda r: r["rules"][2]["parameters"].update(unreviewed_extension=True)),
+            ("extra_status_parameter", lambda r: r["rules"][3]["parameters"].update(unreviewed_extension=True)),
         ]
         for name, mutation in cases:
             invalid = copy.deepcopy(accepted)
