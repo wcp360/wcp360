@@ -6,7 +6,7 @@
 | :--- | :--- |
 | [CursorPageQuery](CursorPageQuery.php) | Shared fixed row limits, exclusive UUID cursors and query-key/value bounds for administrator and tenant read lists; never authorization. |
 | [TenantPageQuery](TenantPageQuery.php) | Adds required tenant identity and hostname-fragment validation for the existing hosting/job inventories. |
-| [BoundarySubscriber](BoundarySubscriber.php) | Existing runtime host check, CSP, Origin-adjacent browser headers and no-store responses. |
+| [BoundarySubscriber](BoundarySubscriber.php) | Candidate main-request host admission, fresh CSP nonce, explicit framing/isolation headers, no-store and TLS-only HSTS. |
 | [RequestReference](RequestReference.php) | Fresh 128-bit random reference stored on each main Request, with no singleton request state or caller-header trust. |
 | [HttpErrorSubscriber](HttpErrorSubscriber.php) | Reference lifecycle and safe main-request exceptions; API authentication redirects become JSON refusals before standard security headers are applied. |
 | [HttpFailure](HttpFailure.php) | Fixed status/code/message mapping; no exception-message, path, query or payload reflection. |
@@ -44,6 +44,9 @@ The body reference matches the response header. Status mappings reuse a bounded 
 Anonymous API calls receive 401 JSON instead of the browser login page. Existing session-revocation and pending-factor redirects in this namespace are rendered as 401 or 403/MFA_REQUIRED after security has already refused access. This namespace has no resource redirects; it continues to use cookie authentication, Origin/CSRF and the existing authorization gates. It does not accept bearer tokens or grant roles during a pending challenge.
 
 ## Browser and failure behavior
+
+The candidate main-response security policy explicitly includes the Security v1.0 CSP object/frame directives and same-origin framing/resource headers. It generates a nonce per admitted main request, rejects invalid nonce material on early error responses, and does not overwrite subrequest responses. HSTS is emitted only for HTTPS responses; this does not qualify proxy trust, production TLS, origin routing, or the complete canonical security baseline. Regression coverage: [BoundarySubscriberTest](../../../tests/Unit/BoundarySubscriberTest.php). The change remains review-only until MASTER and independent owners accept the exact SHA.
+
 
 Browser login/MFA redirects remain intact. Other main-request exceptions use the [official auth layout](../../../templates/errors/http.html.twig), French fixed messages and a reference the owner can quote to the instance operator. Raw exception text, SQL, stack traces, file paths, cookies, submitted credentials and another tenant's details are never copied into this presentation. The existing credential-route listener delegates to this responder before debug rendering.
 
