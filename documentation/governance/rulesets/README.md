@@ -43,3 +43,11 @@ After import and activation, run `python3 -I tools/repository/check_live_branch_
 ### Fail-closed GitHub API observation
 
 The live auditor uses a fixed GitHub HTTPS REST endpoint, rejects redirects, permits only the repository's ruleset listing/detail URLs, and limits each response to 512 KiB. It requests up to 100 rulesets; if the page is full, the result is **UNVERIFIED** rather than claiming all rulesets were examined. Duplicate target names or invalid IDs are also treated as unverified, regardless of listing order. The offline CI fixture set now covers those ambiguous listings, disallowed URLs and redirect refusal. The actual GitHub ruleset still requires a settings-authorized operator and live negative enforcement tests.
+
+## Required status-check source binding
+
+Both mandatory checks are bound to `integration_id: 15368` (the GitHub Actions application). This ID was verified against exact successful check runs named `gitignore-regression` and `repository-secrets` for PR #128, SHA `b759fd04faa6e4b2b685bcbeb2c00b1e75140b96` on 2026-11-03.
+
+GitHub documents that an unbound required-check name can be set by another account/integration with repository write/status permissions. The expected-source binding rejects checks from a different app, **but not weakened workflows executed under GitHub Actions**. Workflow edits still require independent review. The two disabled templates and the read-only live-auditor fixtures now reject missing/incorrect app IDs. Recheck the provider if the real check source changes; never silently remove the pin as a workaround.
+
+No live repository ruleset has been installed or activated by these files; actual enforcement requires a settings-authorized administrator and negative tests.

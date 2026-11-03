@@ -16,6 +16,7 @@ FILES = {
 }
 REQUIRED_CHECKS = ("repository-secrets", "gitignore-regression")
 ALLOWED_METHODS = ("merge", "squash", "rebase")
+EXPECTED_STATUS_APP_ID = 15368  # GitHub Actions, verified on exact PR check runs.
 RULE_TYPES = ("deletion", "non_fast_forward", "pull_request", "required_status_checks")
 
 
@@ -64,7 +65,7 @@ def check(data: object, branch: str, review_count: int) -> None:
     require(params == {
         "strict_required_status_checks_policy": True,
         "do_not_enforce_on_create": True,
-        "required_status_checks": [{"context": name} for name in REQUIRED_CHECKS],
+        "required_status_checks": [{"context": name, "integration_id": EXPECTED_STATUS_APP_ID} for name in REQUIRED_CHECKS],
     }, "unknown or missing required checks")
 
 
@@ -94,13 +95,15 @@ def self_test() -> None:
             ("reviewer-downgrade", lambda d: d["rules"][2]["parameters"].update(require_last_push_approval=False)),
             ("code-owner-self-lock", lambda d: d["rules"][2]["parameters"].update(require_code_owner_review=True)),
             ("removed-check", lambda d: d["rules"][3]["parameters"]["required_status_checks"].pop()),
+            ("missing-app-id", lambda d: d["rules"][3]["parameters"]["required_status_checks"][0].pop("integration_id")),
+            ("wrong-app-id", lambda d: d["rules"][3]["parameters"]["required_status_checks"][1].update(integration_id=4321)),
             ("wildcard-check", lambda d: d["rules"][3]["parameters"].update(required_status_checks=[{"context": "*"}])),
             ("non-strict-ci", lambda d: d["rules"][3]["parameters"].update(strict_required_status_checks_policy=False)),
             ("force-push-allowed", lambda d: d["rules"].pop(1)),
         ]
         for name, mutate in cases:
             must_reject(mutate, name)
-    print("Ruleset templates verified: 2 disabled drafts; 28 hostile cases rejected; no GitHub settings changed.")
+    print("Ruleset templates verified: 2 disabled drafts; 32 hostile cases rejected; no GitHub settings changed.")
 
 
 if __name__ == "__main__":

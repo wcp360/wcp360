@@ -84,6 +84,8 @@ def self_test() -> None:
             ("no_stale_dismissal", lambda r: r["rules"][2]["parameters"].update(dismiss_stale_reviews_on_push=False)),
             ("no_checks", lambda r: r["rules"].pop(3)),
             ("missing_check", lambda r: r["rules"][3]["parameters"]["required_status_checks"].pop()),
+            ("missing_app_binding", lambda r: r["rules"][3]["parameters"]["required_status_checks"][0].pop("integration_id")),
+            ("wrong_app_binding", lambda r: r["rules"][3]["parameters"]["required_status_checks"][1].update(integration_id=4321)),
             ("non_strict_checks", lambda r: r["rules"][3]["parameters"].update(strict_required_status_checks_policy=False)),
         ]
         for name, mutation in cases:

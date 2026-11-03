@@ -40,10 +40,12 @@
         "do_not_enforce_on_create": true,
         "required_status_checks": [
           {
-            "context": "repository-secrets"
+            "context": "repository-secrets",
+            "integration_id": 15368
           },
           {
-            "context": "gitignore-regression"
+            "context": "gitignore-regression",
+            "integration_id": 15368
           }
         ]
       }
