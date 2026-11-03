@@ -77,7 +77,7 @@ PHP topology previews are another family: [ApplicationRecipeCatalogue](../../Sha
 
 ## Evidence and remaining delivery
 
-Synthetic reader/query/command tests cover malformed and oversized data, Unicode/quoting, duplicate identities, missing sources, classifications, context refusals and false deployment flags. Their definitions are not executed results; exact-source CI is tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116). Local executable tests remain stopped.
+Synthetic reader/query/command tests cover malformed and oversized data, Unicode/quoting, duplicate identities, missing sources, classifications, context refusals and false deployment flags. Their definitions are not executed results; exact-source CI is tracked in [draft PR #116](https://github.com/wcp360/wcp360/pull/116). Local executable tests remain stopped.
 
 This increment changes no site/job/schema, grants, dependency lock, existing plan, PHP runtime assignment or system service. Production catalogue admission, recipe parsing/trust, customer UI/API, actual application lifecycle and each claimed app/provider/OS/architecture combination still require implementation and qualification.
 

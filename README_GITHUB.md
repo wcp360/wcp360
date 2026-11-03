@@ -46,7 +46,7 @@ WCP360 targets a scope comparable to cPanel or Plesk: users, websites, domains, 
 The target frontend is **PHP/Symfony with Twig, Symfony UX Turbo, Stimulus, and reusable Twig Components**. The backend target is PHP 8.4 / Symfony with Doctrine ORM over PostgreSQL 17 and Symfony Messenger, using Redis when selected. The operating-system targets are **Debian 12 and 13, and Ubuntu 22.04, 24.04 and 26.04 LTS**. Go agents perform controlled system operations; Python is reserved for specialized diagnostics. Nginx fronts the panel, while the new general-purpose hosting target adds a private Apache event backend before isolated PHP-FPM. Target declarations, native-package tests and complete installation qualification have distinct [platform evidence boundaries](documentation/development/SUPPORTED-PLATFORMS.md).
 
 > [!NOTE]
-> **In development — status updated on November 3, 2026.** This README distinguishes the executable Core candidate, the target product and production qualification. Development sources are consolidated on `main` through [PR #116](https://github.com/yyogas/wcp360/pull/116). The [integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) preserves the fifteen input heads and their content dispositions; SOURCE remains a separate workbench. Start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md). The [baseline manifest](documentation/manifests/WCP360-BM-0001.md) retains its own canonical scope and `CODE-BASELINE = NONE`.
+> **In development — status updated on November 3, 2026.** This README distinguishes the executable Core candidate, the target product and production qualification. Development sources are consolidated on `main` through [PR #116](https://github.com/wcp360/wcp360/pull/116). The [integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) preserves the fifteen input heads and their content dispositions; SOURCE remains a separate workbench. Start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md). The [baseline manifest](documentation/manifests/WCP360-BM-0001.md) retains its own canonical scope and `CODE-BASELINE = NONE`.
 
 ## Contents
 
@@ -679,7 +679,7 @@ Each implementation must provide reproducible evidence for the relevant cases be
 | Secret leakage | Logs, errors, HTML, audit records, browser storage, and support exports contain no raw credentials. |
 | Recovery and dependency outage | Documented local sign-in, export, recovery, and existing hosting continue when optional integrations are unavailable. |
 
-Report suspected vulnerabilities using the repository’s [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md).
+Report suspected vulnerabilities using the repository’s [SECURITY.md](https://github.com/wcp360/wcp360/blob/main/SECURITY.md).
 
 ## Required panel capabilities
 
@@ -1486,7 +1486,7 @@ The [central Core status](WCP360_Core/STATUS.md) distinguishes executable candid
 
 | Component | Documented status |
 | :--- | :--- |
-| Current Core development | Executable PHP 8.4 / Symfony 7.4 candidate under WCP360_Core, published on `main` through [PR #116](https://github.com/yyogas/wcp360/pull/116). It is distinct from historical SOURCE candidates and from an installable production release. |
+| Current Core development | Executable PHP 8.4 / Symfony 7.4 candidate under WCP360_Core, published on `main` through [PR #116](https://github.com/wcp360/wcp360/pull/116). It is distinct from historical SOURCE candidates and from an installable production release. |
 | Authentication and presentation | Username-based USER/ROOT contexts, optional administrator MFA, candidate sessions/recovery, Twig/Turbo/Stimulus/AssetMapper and prototype-derived WCP360 CSS. Complete production IAM and the target UI library remain open. |
 | Data and operations | PostgreSQL 17 development verification, DBAL queries/migrations and bounded candidate jobs. ORM mapping, Messenger transports and general durable effect contracts remain open. |
 | Hosting and Go | Seven inert application previews, separate existing runtime profiles and narrowly guarded isolated FPM effects. Native general installation, real-domain/TLS lifecycle, stack switching and production qualification remain open. |
@@ -1509,7 +1509,7 @@ The [release directory](WCP360_Releases/README.md) contains no qualified version
 Repository access is required. From a terminal with Git installed:
 
 ```sh
-git clone https://github.com/yyogas/wcp360.git
+git clone https://github.com/wcp360/wcp360.git
 cd wcp360
 git branch --all
 ```
@@ -1525,7 +1525,7 @@ Set-Location WCP360_Plugins/wcp360-file-manager-xampp
 composer install --no-dev --prefer-dist
 ```
 
-Then read the [File Manager README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md) to configure storage and use the appropriate launcher. GitHub sources do not include `vendor/`. For development and module tests, use `composer install` with development dependencies.
+Then read the [File Manager README](https://github.com/wcp360/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md) to configure storage and use the appropriate launcher. GitHub sources do not include `vendor/`. For development and module tests, use `composer install` with development dependencies.
 
 ### Open the interactive prototype
 
@@ -1606,7 +1606,7 @@ The Core must retain essential hosting, local administration, audit and recovery
 
 The earlier versioned installer templates now live under [Core installer scaffolds](WCP360_Core/installer/scaffolds/README.md). They remain guarded and non-operational. Version folders and a stable pointer in WCP360_Releases are created only after actual qualification.
 
-The earlier root src reservation and archive cleanup are recorded in [immutable pre-cleanup history](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive) and [repository history/path mapping](documentation/REPOSITORY-STRUCTURE.md). Vendor Internal and the public website remain separate product concerns; their local workspace presence is not evidence of publication on `main`.
+The earlier root src reservation and archive cleanup are recorded in [immutable pre-cleanup history](https://github.com/wcp360/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive) and [repository history/path mapping](documentation/REPOSITORY-STRUCTURE.md). Vendor Internal and the public website remain separate product concerns; their local workspace presence is not evidence of publication on `main`.
 
 Consolidated candidate sources remain independent workbenches:
 
@@ -1618,7 +1618,7 @@ Consolidated candidate sources remain independent workbenches:
 
 ## GitHub branches
 
-Development is consolidated on **main** through [PR #116](https://github.com/yyogas/wcp360/pull/116) and [PR #125](https://github.com/yyogas/wcp360/pull/125). The [completed branch register](documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md) records **23 reviewed refs**: main remains, 17 work heads are merged, and five deferred major migrations are archived separately. All 22 work-branch refs are retired and no pull request remains open at that snapshot. The [original integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) retains the fifteen initial inputs and their file dispositions.
+Development is consolidated on **main** through [PR #116](https://github.com/wcp360/wcp360/pull/116) and [PR #125](https://github.com/wcp360/wcp360/pull/125). The [completed branch register](documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md) records **23 reviewed refs**: main remains, 17 work heads are merged, and five deferred major migrations are archived separately. All 22 work-branch refs are retired and no pull request remains open at that snapshot. The [original integration register](documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md) retains the fifteen initial inputs and their file dispositions.
 
 | Work | Source on main |
 | :--- | :--- |
@@ -1635,18 +1635,18 @@ Continue routine Core work on main. Integration records and successful tests do 
 | Need | Reference |
 | :--- | :--- |
 | Navigate the organized repository | [Documentation index](documentation/README.md) and [repository structure](documentation/REPOSITORY-STRUCTURE.md). |
-| Understand the project's authorized status | [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and [project status](https://github.com/yyogas/wcp360/blob/main/documentation/governance/PROJECT-STATUS.md). |
-| Read requirements and documentation | [Specifications](https://github.com/yyogas/wcp360/tree/main/documentation/specifications), [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts), and [documentation](https://github.com/yyogas/wcp360/tree/main/documentation). |
+| Understand the project's authorized status | [Baseline manifest](https://github.com/wcp360/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and [project status](https://github.com/wcp360/wcp360/blob/main/documentation/governance/PROJECT-STATUS.md). |
+| Read requirements and documentation | [Specifications](https://github.com/wcp360/wcp360/tree/main/documentation/specifications), [contracts](https://github.com/wcp360/wcp360/tree/main/documentation/contracts), and [documentation](https://github.com/wcp360/wcp360/tree/main/documentation). |
 | Understand the architecture | [ARCHITECTURE.md](ARCHITECTURE.md): components, flows, data authority, system agents, extensions, and deployment boundaries. |
-| Work on the current Core | [Working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md), [Core navigation](WCP360_Core/NAVIGATION.md) and [integration PR #116](https://github.com/yyogas/wcp360/pull/116). |
-| Study historical application sources | [Full historical candidate overview](https://github.com/yyogas/wcp360/blob/main/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [framework-independent kernel README](https://github.com/yyogas/wcp360/blob/main/SOURCE/platform/README.md). |
-| Study the daemon | [Inert foundation README](https://github.com/yyogas/wcp360/blob/main/SOURCE/daemon/README.md), including its canonical build environment. |
+| Work on the current Core | [Working guide](WCP360_Core/WORKING-GUIDE.md), [status](WCP360_Core/STATUS.md), [Core navigation](WCP360_Core/NAVIGATION.md) and [integration PR #116](https://github.com/wcp360/wcp360/pull/116). |
+| Study historical application sources | [Full historical candidate overview](https://github.com/wcp360/wcp360/blob/main/SOURCE/FULL-PLATFORM-CANDIDATE.md) and [framework-independent kernel README](https://github.com/wcp360/wcp360/blob/main/SOURCE/platform/README.md). |
+| Study the daemon | [Inert foundation README](https://github.com/wcp360/wcp360/blob/main/SOURCE/daemon/README.md), including its canonical build environment. |
 | Browse the detailed plugin catalog | [149 design entries, family contracts, local package profiles, and lifecycle requirements](PLUGIN_CATALOG.md). |
 | Follow release qualification | [Qualified version records](WCP360_Releases/README.md), [build procedures](WCP360_Build/README.md) and [installer scaffolds](WCP360_Core/installer/scaffolds/README.md). |
 | Explore the imported workspace | [Core](WCP360_Core/README.md), [Prototype](WCP360_Prototype/README.md), [developer documentation](WCP360_Developper/README.md), and [plugins](WCP360_Plugins/). |
-| Study File Manager | [Module README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
-| Propose a contribution | [CONTRIBUTING.md](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
-| Report a security issue | [SECURITY.md](https://github.com/yyogas/wcp360/blob/main/SECURITY.md). |
+| Study File Manager | [Module README](https://github.com/wcp360/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md). |
+| Propose a contribution | [CONTRIBUTING.md](https://github.com/wcp360/wcp360/blob/main/CONTRIBUTING.md), read alongside the current manifest for authorized scope. |
+| Report a security issue | [SECURITY.md](https://github.com/wcp360/wcp360/blob/main/SECURITY.md). |
 
 Contributions should identify the component, its contract, and the checks performed. A working interface, a passing local test, or a source branch does not replace the review and promotion required by project governance.
 

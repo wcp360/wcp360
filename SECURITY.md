@@ -12,7 +12,7 @@ WCP360 manages hosting resources and sensitive server operations. This policy ex
 
 Send your report to **security@wcp360.com**, using a subject such as `[WCP360 Security] Short description`.
 
-Keep vulnerability details out of public issues, pull requests, discussions, and commits while assessment and remediation are being coordinated. For ordinary bugs and feature requests, use the [issue tracker](https://github.com/yyogas/wcp360/issues).
+Keep vulnerability details out of public issues, pull requests, discussions, and commits while assessment and remediation are being coordinated. For ordinary bugs and feature requests, use the [issue tracker](https://github.com/wcp360/wcp360/issues).
 
 A useful report includes:
 
@@ -178,6 +178,6 @@ documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IM
 
 - [Permission Registry](documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): approved permissions and namespace rules.
 - [Security Baseline](documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md): required boundaries, protocol constraints, and negative test expectations.
-- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
+- [Review and merge evidence policy](https://github.com/wcp360/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md): verification, independent review, and publication requirements.
 
 This policy summarizes existing requirements and defines reporting guidance. It does not amend canonical contracts, authorize implementation or release, certify compliance, or close audit findings. Conflicting requirements must be resolved by the responsible owner.

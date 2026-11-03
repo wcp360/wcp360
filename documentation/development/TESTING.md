@@ -61,7 +61,7 @@ The ordinary suite uses a dedicated wcp360_test database or SQLite. Fixture clea
 
 Pest is an optional alternative syntax over PHPUnit and is not installed in the default dependency graph. Review the selected Pest major's PHP/PHPUnit constraints before adopting it; current/latest versions cannot be assumed compatible with this lock. Keep existing PHPUnit assertions and the Symfony integration/browser suites working. No universal compatibility promise or automatic rewrite is made.
 
-Static analysis is a type/correctness control, not a replacement for a security audit, adversarial testing or independent review. Run outcomes are bound to the exact commit and environment in [PR #116](https://github.com/yyogas/wcp360/pull/116).
+Static analysis is a type/correctness control, not a replacement for a security audit, adversarial testing or independent review. Run outcomes are bound to the exact commit and environment in [PR #116](https://github.com/wcp360/wcp360/pull/116).
 
 References: [Symfony testing](https://symfony.com/doc/7.4/testing.html), [PHPStan levels](https://phpstan.org/user-guide/rule-levels), [Panther](https://symfony.com/doc/current/testing/end_to_end.html), [Pest installation](https://pestphp.com/docs/installation).
 

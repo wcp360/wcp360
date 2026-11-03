@@ -94,7 +94,7 @@ php bin/console asset-map:compile
 (cd agents/wcpd/candidate/planner && go test ./... && go vet ./...)
 ~~~
 
-The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM, FrankenPHP Worker and backup/restore probes. The first complete run passed; see [PR #116](https://github.com/yyogas/wcp360/pull/116) for results bound to the latest candidate head. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
+The GitHub workflow .github/workflows/core-executable-candidate.yml builds Debian 13, runs the application tests against PostgreSQL 17 and executes the isolated Nginx/PHP-FPM, FrankenPHP Worker and backup/restore probes. The first complete run passed; see [PR #116](https://github.com/wcp360/wcp360/pull/116) for results bound to the latest candidate head. Actual outcomes belong in the linked workflow run; defining a test is not evidence that it passed.
 
 Its additional platform jobs derive the five profile IDs from the shared catalogue and configure native Nginx/PHP-FPM smoke checks per distribution. The native package results are separate from the full Core job and from the Debian 13 systemd/reboot VM. They establish only their recorded assertions on the exact tested source/image; no production or cross-distribution qualification is inherited.
 

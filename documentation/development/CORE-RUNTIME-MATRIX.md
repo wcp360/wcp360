@@ -1,6 +1,6 @@
 # Core runtime matrix on Debian and Ubuntu
 
-This development verification runs the same locked Symfony Core with PHP 8.4 and a real PostgreSQL 17 service on five target userspaces: Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS. It exercises application behavior beyond the separate [native package probes](SUPPORTED-PLATFORMS.md#what-each-verification-layer-establishes). Configuring these jobs is not evidence that they have passed; inspect the exact source SHA and job results in [PR #116](https://github.com/yyogas/wcp360/pull/116).
+This development verification runs the same locked Symfony Core with PHP 8.4 and a real PostgreSQL 17 service on five target userspaces: Debian 12/13 and Ubuntu 22.04/24.04/26.04 LTS. It exercises application behavior beyond the separate [native package probes](SUPPORTED-PLATFORMS.md#what-each-verification-layer-establishes). Configuring these jobs is not evidence that they have passed; inspect the exact source SHA and job results in [PR #116](https://github.com/wcp360/wcp360/pull/116).
 
 ## Shared runtime inputs
 

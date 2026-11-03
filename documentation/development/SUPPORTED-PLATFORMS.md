@@ -43,7 +43,7 @@ Primary package references: [Debian 12 PHP](https://packages.debian.org/bookworm
 
 Neither five-profile matrix starts the privileged candidate broker or adds systemd/VM admission to Ubuntu or Debian 12. Extending those paths requires reviewed runtime providers, distribution adapters and real VM evidence. The FrankenPHP Worker probe also remains a separate PHP 8.4 ZTS image test; it does not qualify a native worker installation on all five systems.
 
-For execution outcomes, inspect the exact source SHA and jobs linked from [PR #116](https://github.com/yyogas/wcp360/pull/116). A successful Debian 13 run cannot qualify another operating system, and a pending or failed profile is never recorded as passing.
+For execution outcomes, inspect the exact source SHA and jobs linked from [PR #116](https://github.com/wcp360/wcp360/pull/116). A successful Debian 13 run cannot qualify another operating system, and a pending or failed profile is never recorded as passing.
 
 ## Installer and service adaptation
 

@@ -50,7 +50,7 @@ Repository, governance and documentation maintenance may continue. The [current 
 
 Repository review evidence is defined in:
 
-[Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md)
+[Review and merge evidence policy](https://github.com/wcp360/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md)
 
 Key rules:
 - automated checks are not independent review;

@@ -51,7 +51,7 @@ systemd documents `show` for machine-readable properties and `--all` for retaini
 
 ## Verification and remaining work
 
-[Parser cases](../../../tests/Unit/ServiceObservationSnapshotTest.php), [authority and reporting cases](../../../tests/Integration/ServiceOverviewTest.php), [adapter contracts](../../../tests/Integration/SystemdServiceObservationTest.php) and [ROOT HTTP journeys](../../../tests/Integration/ServiceJourneyTest.php) define this slice. Synthetic observations establish contract behavior; they do not establish native service availability. Local executable checks remain stopped. Executed results must identify the exact source in [draft PR #116](https://github.com/yyogas/wcp360/pull/116).
+[Parser cases](../../../tests/Unit/ServiceObservationSnapshotTest.php), [authority and reporting cases](../../../tests/Integration/ServiceOverviewTest.php), [adapter contracts](../../../tests/Integration/SystemdServiceObservationTest.php) and [ROOT HTTP journeys](../../../tests/Integration/ServiceJourneyTest.php) define this slice. Synthetic observations establish contract behavior; they do not establish native service availability. Local executable checks remain stopped. Executed results must identify the exact source in [draft PR #116](https://github.com/wcp360/wcp360/pull/116).
 
 A container without a local systemd manager should report not configured. Passing a refusal/fixture case there does not qualify successful native observation. Qualification still needs a disposable supported systemd host, a non-root panel identity, alias/missing-unit cases, measured deadline behavior and a check that observation never mutates service state.
 

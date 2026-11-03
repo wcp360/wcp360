@@ -18,7 +18,7 @@ Scope: `WCP360_Core/`, on the existing development branch. Templates, services, 
 | Containers | Development infrastructure and existing isolated test environments. | Tenant workload inventory, provider admission, networking, secrets, volumes, lifecycle and recovery. |
 | Performance | Bounded candidate checks, including an existing generic FrankenPHP Worker journey. | Reproducible application benchmarks and operational SLOs for each supported profile. |
 
-Source checkpoint `72aea4ed31bd7e4d993e104ffa87274dcf047345`: [CI run 41428259383](https://github.com/yyogas/wcp360/actions/runs/41428259383) completed all **14 jobs successfully**, including 1,147 PHPUnit tests / 12,323 assertions in the main suite. This is historical candidate evidence; it does not qualify the new topology, all six preview recipes, Docker/Discourse or a production release. Two pre-existing PHPUnit notices remain outside this documentation change.
+Source checkpoint `72aea4ed31bd7e4d993e104ffa87274dcf047345`: [CI run 41428259383](https://github.com/wcp360/wcp360/actions/runs/41428259383) completed all **14 jobs successfully**, including 1,147 PHPUnit tests / 12,323 assertions in the main suite. This is historical candidate evidence; it does not qualify the new topology, all six preview recipes, Docker/Discourse or a production release. Two pre-existing PHPUnit notices remain outside this documentation change.
 
 The [Core roadmap](../../../ROADMAP.md) and [capability register](../../../CAPABILITY-MAP.md) keep their existing milestone/status meanings. This sub-roadmap does not increase the completion estimate merely by describing planned work.
 

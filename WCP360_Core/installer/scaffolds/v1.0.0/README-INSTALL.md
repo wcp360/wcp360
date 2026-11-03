@@ -35,4 +35,4 @@ Qualified version records belong in [WCP360_Releases](../../../../WCP360_Release
 
 A distributable version requires the approved Core package and daemon, a reviewed installer, artifact integrity/signature verification, pinned compatibility, installation evidence, and documented recovery/rollback limits. Production installation commands belong here once that package is qualified.
 
-See the [installer scaffold guide](../README.md), [architecture](../../../../ARCHITECTURE.md), and [current baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).
+See the [installer scaffold guide](../README.md), [architecture](../../../../ARCHITECTURE.md), and [current baseline manifest](https://github.com/wcp360/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).

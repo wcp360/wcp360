@@ -9,7 +9,7 @@
 [![Premium: 141 planning proposals](https://img.shields.io/badge/Premium-141%20planning%20proposals-DB2777?style=flat-square)](PREMIUM_CATALOG.md)
 ![Availability: development](https://img.shields.io/badge/Availability-Development-E89B25?style=flat-square)
 
-[Project overview](https://github.com/yyogas/wcp360/blob/main/README.md) · [Family index](#family-index) · [Local packages](#local-package-profiles) · [Plugin contract](#required-plugin-record) · [Security and lifecycle](#security-and-lifecycle) · [Ownership and reuse](#ownership-and-reuse)
+[Project overview](https://github.com/wcp360/wcp360/blob/main/README.md) · [Family index](#family-index) · [Local packages](#local-package-profiles) · [Plugin contract](#required-plugin-record) · [Security and lifecycle](#security-and-lifecycle) · [Ownership and reuse](#ownership-and-reuse)
 
 </div>
 
@@ -97,7 +97,7 @@ These profiles summarize sources imported under `WCP360_Plugins/`. Manifest decl
 | :--- | :--- |
 | Package identity | `wcp360/file-manager` in the local extension metadata and Composer package. |
 | Declared version | `0.3.0-alpha-pro`; development status. |
-| Source | [Package README](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md), [extension metadata](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/extension.json), and [Composer requirements](https://github.com/yyogas/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/composer.json). |
+| Source | [Package README](https://github.com/wcp360/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/README.md), [extension metadata](https://github.com/wcp360/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/extension.json), and [Composer requirements](https://github.com/wcp360/wcp360/blob/main/WCP360_Plugins/wcp360-file-manager-xampp/composer.json). |
 | Runtime | PHP `^8.2`, Symfony `^7.4`, JSON and fileinfo; ZIP operations require the relevant runtime support. The WCP360 target remains PHP 8.4. |
 | Implemented mode | Standalone single-owner private storage. The storage must be exclusively modified by this module. |
 | Functional scope | File navigation, search, create/copy/move/rename, trash/restore, bounded uploads and downloads, text editing/history, and permissions within the process identity. See the package README for exact limits. |
@@ -593,7 +593,7 @@ Before an entry can become an installable release, its publisher must provide a 
 | Lifecycle | Installation plan, disposable checks, canary, activation, draining, quarantine, migration recovery, safe rollback conditions, and removal constraints. |
 | Evidence | Source revision, test results and environment, integration acceptance, failure-injection results, and known limits. None may be inferred solely from a manifest field. |
 
-PHP runtime modules, PostgreSQL engine extensions, and WCP360 plugins are different objects. PHP ZIP or PostgreSQL PostGIS, for example, belong in a detected engine/package catalog. Their activation uses the owning runtime/database contract, not the detached-plugin installer. See [managed PHP and PostgreSQL extensions](https://github.com/yyogas/wcp360/blob/main/README.md#managed-php-and-postgresql-extensions).
+PHP runtime modules, PostgreSQL engine extensions, and WCP360 plugins are different objects. PHP ZIP or PostgreSQL PostGIS, for example, belong in a detected engine/package catalog. Their activation uses the owning runtime/database contract, not the detached-plugin installer. See [managed PHP and PostgreSQL extensions](https://github.com/wcp360/wcp360/blob/main/README_GITHUB.md#managed-php-and-postgresql-extensions).
 
 ## Security and lifecycle
 
@@ -652,18 +652,18 @@ Use two distinct fields in the future registry: **documentation maturity** and *
 1. Classify a proposal as a Core capability, an engine implementation, or an optional workflow before adding it.
 2. Reuse an existing integration driver or shared service when only the workflow differs; add a separate record only when ownership or the deployment contract differs.
 3. Preserve catalog keys, link renamed entries, and assign real package IDs only through the approved manifest contract.
-4. Keep names and functions aligned with the 149-entry summaries in the [GitHub README](https://github.com/yyogas/wcp360/blob/main/README.md#potential-and-planned-extensions-and-plugins) and the local workspace `README.md`. Update all counts when the inventory changes.
+4. Keep names and functions aligned with the 149-entry summaries in the [GitHub README](https://github.com/wcp360/wcp360/blob/main/README_GITHUB.md#potential-and-planned-extensions-and-plugins) and the local workspace `README.md`. Update all counts when the inventory changes.
 5. Link local or released artifacts and evidence before changing maturity. Never infer release availability, security verification, or compatibility from a version string.
 6. Record supported versions, licensing, provider costs, and integration limits for each actual release. Retain documented migration and removal paths.
 
 ## Architecture references
 
-- [Project architecture, frontend/backend choices, and security requirements](https://github.com/yyogas/wcp360/blob/main/README.md).
-- [Current baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).
-- [Published specifications](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/README.md) and [contracts](https://github.com/yyogas/wcp360/tree/main/documentation/contracts).
-- [Repository documentation](https://github.com/yyogas/wcp360/blob/main/documentation/README.md).
-- [Design System reference branch](https://github.com/yyogas/wcp360/tree/5ff41780a5b72f9b7d4153debd7dc5449c688cae/design-system).
-- [Review and merge evidence policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md).
+- [Project architecture, frontend/backend choices, and security requirements](https://github.com/wcp360/wcp360/blob/main/README.md).
+- [Current baseline manifest](https://github.com/wcp360/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md).
+- [Published specifications](https://github.com/wcp360/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/specifications/README.md) and [contracts](https://github.com/wcp360/wcp360/tree/main/documentation/contracts).
+- [Repository documentation](https://github.com/wcp360/wcp360/blob/main/documentation/README.md).
+- [Design System reference branch](https://github.com/wcp360/wcp360/tree/5ff41780a5b72f9b7d4153debd7dc5449c688cae/design-system).
+- [Review and merge evidence policy](https://github.com/wcp360/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md).
 
 Imported design references (non-normative):
 

@@ -43,7 +43,7 @@ Changed or invalid profiles discard the result and commit the existing FAILED/PL
 
 This guards the rendering/publication interval only. There is no site-switch endpoint, profile-revision increment workflow, immutable job topology history, lease or general effect fence. Future actual stack migration must snapshot/fence job intent and coordinate listeners, TLS ownership, worker draining, health and recovery. A plan/3 Modern preview does not enter this queue or authorize activation.
 
-[Profile unit definitions](../../../tests/Unit/SiteRuntimeProfileTest.php), [consumer regressions](../../../tests/Integration/SiteRuntimeProfileWorkflowTest.php) and [restricted-role checks](../../../tests/Integration/CandidateDatabaseRolesTest.php) cover valid/malformed pairs, changed-profile publication, retained generic behavior and existing permissions. They are definitions, not local execution evidence; current-source CI is tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116).
+[Profile unit definitions](../../../tests/Unit/SiteRuntimeProfileTest.php), [consumer regressions](../../../tests/Integration/SiteRuntimeProfileWorkflowTest.php) and [restricted-role checks](../../../tests/Integration/CandidateDatabaseRolesTest.php) cover valid/malformed pairs, changed-profile publication, retained generic behavior and existing permissions. They are definitions, not local execution evidence; current-source CI is tracked in [draft PR #116](https://github.com/wcp360/wcp360/pull/116).
 
 ## Durable hosting-plan request correlation
 
@@ -79,7 +79,7 @@ Hosting owns [plan submission](../Hosting/Application/SubmitHostingPlan.php), in
 
 [Administrator access blocks](../IdentityAccess/README.md#candidate-authorization-and-access-blocks) are idempotent, transactional and audited by IdentityAccess. Blocks survive membership deletion/regrant; removing a block cannot create membership. The worker rechecks the shared rule before processing a queued hosting plan. This is the bounded candidate execution check, not a claim of general production revocation fencing or resolution of every concurrent revocation/effect race.
 
-Older candidate databases must apply [Version20261101000200](../../../migrations/Version20261101000200.php) before these checks run. [Authorization regressions](../../../tests/Integration/CandidateAuthorizationTest.php) cover blocked queued work and transaction/audit behavior; [HTTP journeys](../../../tests/Integration/PermissionAdministrationTest.php) cover existing user sessions, API reads and queued work after a block. Current-source executed results belong to [draft PR #116](https://github.com/yyogas/wcp360/pull/116), separately from historical checkpoints.
+Older candidate databases must apply [Version20261101000200](../../../migrations/Version20261101000200.php) before these checks run. [Authorization regressions](../../../tests/Integration/CandidateAuthorizationTest.php) cover blocked queued work and transaction/audit behavior; [HTTP journeys](../../../tests/Integration/PermissionAdministrationTest.php) cover existing user sessions, API reads and queued work after a block. Current-source executed results belong to [draft PR #116](https://github.com/wcp360/wcp360/pull/116), separately from historical checkpoints.
 
 Use the common [module layout](../README.md) for Domain, Application, Infrastructure and UI code. Domain-specific decisions remain in the domain use case; an operation identifier is not an authorization grant.
 

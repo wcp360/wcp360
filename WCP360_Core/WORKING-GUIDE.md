@@ -9,7 +9,7 @@ Use this page to resume development, locate the authoritative description of a c
 1. Read [STATUS.md](STATUS.md) for the last verified executable revision, its CI scope, open qualification boundaries and the next candidate checkpoint.
 2. Read the relevant milestone in [ROADMAP.md](ROADMAP.md). A candidate helper or a folder does not close a production milestone.
 3. Find the owner in [NAVIGATION.md](NAVIGATION.md), then read that module's README and concrete source guide. Use [STRUCTURE.md](STRUCTURE.md) for cross-module growth boundaries.
-4. Check applicable specifications and current product decisions. Keep the existing branch and the authorized scope. Development is consolidated on `main` through [PR #116](https://github.com/yyogas/wcp360/pull/116) and [PR #125](https://github.com/yyogas/wcp360/pull/125). Follow the [completed branch register](../documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md); do not create another branch as an organizational shortcut.
+4. Check applicable specifications and current product decisions. Keep the existing branch and the authorized scope. Development is consolidated on `main` through [PR #116](https://github.com/wcp360/wcp360/pull/116) and [PR #125](https://github.com/wcp360/wcp360/pull/125). Follow the [completed branch register](../documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md); do not create another branch as an organizational shortcut.
 5. Implement one complete bounded slice with validation/refusal behavior, update its owning documents and record exact-source evidence before changing its delivery status.
 
 ## Which document owns which answer?

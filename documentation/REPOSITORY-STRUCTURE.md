@@ -73,9 +73,9 @@ Root security reporting remains in `SECURITY.md`, and GitHub templates/ownership
 
 The old `archive/` tree contained **2,118 files**. **1,865** have identical blobs and modes elsewhere in the retained repository. The other **253** are historical versions or import metadata and remain available at the immutable pre-cleanup commit:
 
-- [Complete previous archive](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive).
-- [Original import inventory](https://github.com/yyogas/wcp360/blob/112c790111e192156c405c83cde0ddd2eeafd481/archive/imports/2026-10-30/INVENTORY.json).
-- [Earlier Design System import](https://github.com/yyogas/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive/imports/2026-10-30/workspace/WCP360_Design_System).
+- [Complete previous archive](https://github.com/wcp360/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive).
+- [Original import inventory](https://github.com/wcp360/wcp360/blob/112c790111e192156c405c83cde0ddd2eeafd481/archive/imports/2026-10-30/INVENTORY.json).
+- [Earlier Design System import](https://github.com/wcp360/wcp360/tree/112c790111e192156c405c83cde0ddd2eeafd481/archive/imports/2026-10-30/workspace/WCP360_Design_System).
 
 `archive/` is removed from the current tree; Git history is not rewritten. The 253 historical versions are not described as duplicates. Current Design System and developer sources are retained. Previously removed Internal Management and Official Website folders are not restored.
 

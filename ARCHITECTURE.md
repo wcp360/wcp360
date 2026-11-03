@@ -4,7 +4,7 @@
 
 This document explains the executable Core candidate, the target WCP360 architecture and the boundaries implementations must preserve. It is intended for contributors, operators, reviewers and extension developers. For current entry points and evidence, start with the [Core working guide](WCP360_Core/WORKING-GUIDE.md) and [candidate status](WCP360_Core/STATUS.md).
 
-> **Document status:** non-normative architecture overview. The [baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and approved owner contracts remain authoritative. Architecture diagrams describe the target; they are not evidence of a deployed or production-qualified system.
+> **Document status:** non-normative architecture overview. The [baseline manifest](https://github.com/wcp360/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) and approved owner contracts remain authoritative. Architecture diagrams describe the target; they are not evidence of a deployed or production-qualified system.
 
 [System overview](#system-overview) · [Core structure](#core-structure) · [Operation flows](#operation-flows) · [Data and tenancy](#data-and-tenancy) · [Extensions](#extension-architecture) · [Deployment](#deployment-model) · [Implementation status](#implementation-status)
 
@@ -159,7 +159,7 @@ The Core is organized around hosting domains, with reusable cross-cutting servic
 | Backup and restore | Local recovery points, verification, retention, and authorized restore. Remote destinations add optional integration. |
 | Server operations | Services, network/firewall policy, storage dependencies, observed health, packages, and controlled updates. |
 
-The complete functional inventory is maintained in the [project README](https://github.com/yyogas/wcp360/blob/main/README.md#required-panel-capabilities); optional workflows and provider integrations are described in the [plugin catalog](https://github.com/yyogas/wcp360/blob/main/PLUGIN_CATALOG.md).
+The complete functional inventory is maintained in the [project README](https://github.com/wcp360/wcp360/blob/main/README_GITHUB.md#required-panel-capabilities); optional workflows and provider integrations are described in the [plugin catalog](https://github.com/wcp360/wcp360/blob/main/PLUGIN_CATALOG.md).
 
 ### Layers inside a module
 
@@ -356,7 +356,7 @@ At runtime it uses a dedicated identity, restricted resources and network access
 | Uninstall | Check jobs/dependencies, revoke credentials and retain data by default; purge is a separate authorized operation with its own scope and recovery boundary. |
 | Replace an in-use provider/engine | Plan service-specific migration and recovery; verify live resource dependencies before withdrawal. |
 
-The [plugin catalog](https://github.com/yyogas/wcp360/blob/main/PLUGIN_CATALOG.md) records the 149-entry design inventory, family contracts, local package profiles, and ownership/reuse rules. A catalog record is not an installable release.
+The [plugin catalog](https://github.com/wcp360/wcp360/blob/main/PLUGIN_CATALOG.md) records the 149-entry design inventory, family contracts, local package profiles, and ownership/reuse rules. A catalog record is not an installable release.
 
 ## WCP360 Internal
 
@@ -428,11 +428,11 @@ The baseline manifest retains **SC-M01 limited to the inert daemon foundation**,
 
 | Area | Current interpretation |
 | :--- | :--- |
-| Current Core branch | `implementation/core-executable-foundation-20261031`, [draft PR #116](https://github.com/yyogas/wcp360/pull/116): PHP 8.4 / Symfony 7.4 candidate, Twig/UX navigation, DBAL/migrations, bounded database jobs, Go previews/isolated candidates and ROOT observations. General production integration remains open. |
+| Current Core branch | `main`, consolidated through [PR #116](https://github.com/wcp360/wcp360/pull/116) and [PR #125](https://github.com/wcp360/wcp360/pull/125): PHP 8.4 / Symfony 7.4 candidate, Twig/UX navigation, DBAL/migrations, bounded database jobs, Go previews/isolated candidates and ROOT observations. General production integration remains open. |
 | Current entry points and evidence | [Working guide](WCP360_Core/WORKING-GUIDE.md) and [status](WCP360_Core/STATUS.md); exact source/environment outcomes remain separate from implemented test definitions. |
 | Application target | Seven inert previews and read-only AppDeploy metadata; no general installer, live application migration or tenant Docker provider. |
-| `main` | Reference publication with its own actual file/commit scope; the current candidate branch is not implicitly merged or released. |
-| Historical SOURCE branches | `source/full-platform-candidate` and `source/sc-m01-inert-daemon` retain their dated kernel/inert-foundation scope and review evidence. They are not the current Symfony implementation. |
+| `main` | Current development reference; the [completed branch register](documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md) records integration and archived migrations. Source consolidation is separate from production qualification and release. |
+| Historical SOURCE workbench | The [SOURCE workbench](SOURCE/README.md) is preserved on main, with its dated kernel/inert-foundation scope and review evidence. It is separate from the current Symfony implementation. |
 | Extensions | Fixed reference-plugin lifecycle plus separate File Manager/Insights development sources/prototypes; general publisher admission, licensing, supervision and production integration remain open. |
 | File Manager storage | Its standalone private single-owner mode is unsuitable for a hostile multi-tenant home concurrently modified through SSH, FTP, PHP or cron. |
 | Production qualification | None declared. Complete native installation, providers, identity/permissions, data/recovery, security acceptance and independent release review remain required. |
@@ -461,12 +461,12 @@ Evidence identifies the source revision or artifact, environment, procedure, res
 
 | Document | Role |
 | :--- | :--- |
-| [Project README](https://github.com/yyogas/wcp360/blob/main/README.md) | Product scope, selected stack, capability inventory, requirements, and branches. |
-| [Baseline manifest](https://github.com/yyogas/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) | Current authority, baseline versions, and implementation gates. |
-| [API contract](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Authentication/scope, type boundaries, API schemas, job binding, errors, and compatibility. |
-| [IPC contract](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md) | Physical privileged boundary, caller identity, framing, operations, validation, and uncertain outcomes. |
-| [Database model](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md) | Logical/physical state authority, ownership, sessions, operations, and persistence constraints. |
-| [Security policy](https://github.com/yyogas/wcp360/blob/main/SECURITY.md) | Private vulnerability reporting, review context, and required security boundaries. |
-| [Security Baseline](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) and [Permission Registry](https://github.com/yyogas/wcp360/blob/main/documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Canonical security rules, permission namespaces, and operation bindings. |
-| [Plugin catalog](https://github.com/yyogas/wcp360/blob/main/PLUGIN_CATALOG.md) | Optional workflows, providers, engine adapters, and local package evidence. |
-| [Contributing](https://github.com/yyogas/wcp360/blob/main/CONTRIBUTING.md) and [review policy](https://github.com/yyogas/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md) | Contribution process, evidence, ownership, and independent review requirements. |
+| [Project README](https://github.com/wcp360/wcp360/blob/main/README.md) | Product scope, selected stack, capability inventory, requirements, and branches. |
+| [Baseline manifest](https://github.com/wcp360/wcp360/blob/main/documentation/manifests/WCP360-BM-0001.md) | Current authority, baseline versions, and implementation gates. |
+| [API contract](https://github.com/wcp360/wcp360/blob/main/documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Authentication/scope, type boundaries, API schemas, job binding, errors, and compatibility. |
+| [IPC contract](https://github.com/wcp360/wcp360/blob/main/documentation/specifications/ipc/WCP360_IPC_Contract_WCP360-IPC-B-1_CANONICAL_IMPLEMENTATION_EXPORT.md) | Physical privileged boundary, caller identity, framing, operations, validation, and uncertain outcomes. |
+| [Database model](https://github.com/wcp360/wcp360/blob/main/documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md) | Logical/physical state authority, ownership, sessions, operations, and persistence constraints. |
+| [Security policy](https://github.com/wcp360/wcp360/blob/main/SECURITY.md) | Private vulnerability reporting, review context, and required security boundaries. |
+| [Security Baseline](https://github.com/wcp360/wcp360/blob/main/documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) and [Permission Registry](https://github.com/wcp360/wcp360/blob/main/documentation/specifications/security/WCP360_Permission_Registry_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md) | Canonical security rules, permission namespaces, and operation bindings. |
+| [Plugin catalog](https://github.com/wcp360/wcp360/blob/main/PLUGIN_CATALOG.md) | Optional workflows, providers, engine adapters, and local package evidence. |
+| [Contributing](https://github.com/wcp360/wcp360/blob/main/CONTRIBUTING.md) and [review policy](https://github.com/wcp360/wcp360/blob/da265278c20e230d5ba4614647a8271f4b0d7506/documentation/governance/REVIEW-MERGE-POLICY.md) | Contribution process, evidence, ownership, and independent review requirements. |

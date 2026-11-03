@@ -179,7 +179,7 @@ flowchart LR
 
 For each executed check, retain source/merge SHA, package and tool versions, resolved dependencies, platform/runtime/image identity, scope and exclusions, command/configuration, outcome, database freshness where relevant and redacted reports. Distinguish **not applicable**, **not configured**, **not run**, **failed** and **passed**. A scan crash, empty target, missing dependency or absent browser is not a passing result.
 
-Findings require triage and a fix or an explicit owner-approved, scoped and expiring decision. Do not hide a new security problem with a global ignore, lowered analysis level, skipped suite or permanent `continue-on-error`. Automated checks support review; they do not close the independent review or production gates in the [merge policy](https://github.com/yyogas/wcp360/blob/9d159fd81352201e8af5bbdd81bb65c53e46c52c/documentation/governance/REVIEW-MERGE-POLICY.md).
+Findings require triage and a fix or an explicit owner-approved, scoped and expiring decision. Do not hide a new security problem with a global ignore, lowered analysis level, skipped suite or permanent `continue-on-error`. Automated checks support review; they do not close the independent review or production gates in the [merge policy](https://github.com/wcp360/wcp360/blob/9d159fd81352201e8af5bbdd81bb65c53e46c52c/documentation/governance/REVIEW-MERGE-POLICY.md).
 
 Release verification must inspect the distributed artifact, not just the source tree: dependencies/locks, provenance and identity, signatures/attestations, SBOM, secret absence, install/upgrade/rollback/restore behavior, plugin compatibility, tenant isolation and operational recovery. No stable release is created by adding tools or obtaining a high coverage/hardening score.
 

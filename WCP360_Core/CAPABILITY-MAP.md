@@ -2,7 +2,7 @@
 
 This navigation audit maps **233 capabilities in 21 README domains to 13 Core module owners**. It also checks the **149 catalog entries in 21 extension families**. An owner/path means there is an identifiable implementation location; it does not mean that the capability, adapter, test or security control is implemented.
 
-Source: [README at ee85186](https://github.com/yyogas/wcp360/blob/ee85186c2ac369a311062a63e858c07738612f8a/README.md), Git blob 570033415f61d6516b25aba3720007ddb26947a4. Capability labels/counts are retained from that source. The mapping is design-level navigation subordinate to accepted API/DB/permission/IPC contracts and current gates; it does not create public identifiers or authorize runtime code.
+Source: [README at ee85186](https://github.com/wcp360/wcp360/blob/ee85186c2ac369a311062a63e858c07738612f8a/README.md), Git blob 570033415f61d6516b25aba3720007ddb26947a4. Capability labels/counts are retained from that source. The mapping is design-level navigation subordinate to accepted API/DB/permission/IPC contracts and current gates; it does not create public identifiers or authorize runtime code.
 
 Use the [working guide](WORKING-GUIDE.md) for development orientation and [STATUS](STATUS.md) for the current implementation and qualification snapshot. [NAVIGATION](NAVIGATION.md) locates sources and [STRUCTURE](STRUCTURE.md) maps owners; this register retains the 233 capability rows and their delivery statuses, while [ROADMAP](ROADMAP.md) defines acceptance and dependency order.
 
@@ -33,7 +33,7 @@ The [ROOT service inventory](src/Module/Platform/SERVICES.md) adds a narrow read
 
 ## Delivery snapshot
 
-**Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/yyogas/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
+**Initial assessed runtime: 61adf46e3e29a666c3c0fc462591b7fbd639a85a, 2026-11-01.** See the [Core roadmap and weighted estimate](ROADMAP.md) for scope, dependencies and acceptance. Later live capacity/port/path inspection extends the prerequisite-check row. Offline operator-pinned artifact verification moves Update verification from Planned to Partial; update admission and official publisher trust remain absent. These later sources and current CI outcomes are tracked in [draft PR #116](https://github.com/wcp360/wcp360/pull/116) and distinguished from the initial checkpoint in the roadmap. The candidate-status column below records inspected behavior; it does not amend canonical contracts or certify production readiness.
 
 | Candidate status | Rows | Meaning |
 | :--- | ---: | :--- |

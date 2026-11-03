@@ -39,7 +39,7 @@ Successful `/workbench/v1/*` payloads and application authorization remain uncha
 }
 ```
 
-The body reference matches the response header. Status mappings reuse a bounded subset of the accepted [API Error Registry](https://github.com/yyogas/wcp360/blob/742844f16bcc25b300e67ead645c23498a7eb72b/documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md#5-error-registry): validation, authentication, authorization, missing resource, resource/idempotency conflict, rate limit, unavailable service, timeout and internal error. A typed idempotency conflict is distinct from an arbitrary 409 message. This candidate envelope is not a new canonical API schema or implementation of the full registry.
+The body reference matches the response header. Status mappings reuse a bounded subset of the accepted [API Error Registry](https://github.com/wcp360/wcp360/blob/742844f16bcc25b300e67ead645c23498a7eb72b/documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md#5-error-registry): validation, authentication, authorization, missing resource, resource/idempotency conflict, rate limit, unavailable service, timeout and internal error. A typed idempotency conflict is distinct from an arbitrary 409 message. This candidate envelope is not a new canonical API schema or implementation of the full registry.
 
 Anonymous API calls receive 401 JSON instead of the browser login page. Existing session-revocation and pending-factor redirects in this namespace are rendered as 401 or 403/MFA_REQUIRED after security has already refused access. This namespace has no resource redirects; it continues to use cookie authentication, Origin/CSRF and the existing authorization gates. It does not accept bearer tokens or grant roles during a pending challenge.
 
@@ -58,7 +58,7 @@ An HTTP error does not prove that a mutation failed or authorize retry. Unknown 
 - [Actual HTTP/API journeys](../../../tests/Integration/HttpErrorJourneyTest.php): authentication, idempotency, tenant/Origin/CSRF refusal, routing/host errors, branded pages, revoked sessions and audit rollback.
 - [Pending administrator challenge](../../../tests/Integration/MfaJourneyTest.php) and existing credential journeys protect retained authentication behavior.
 
-These are test definitions. Exact-source CI results are recorded in [draft PR #116](https://github.com/yyogas/wcp360/pull/116); local executable tests remain stopped by user instruction.
+These are test definitions. Exact-source CI results are recorded in [draft PR #116](https://github.com/wcp360/wcp360/pull/116); local executable tests remain stopped by user instruction.
 
 Domain controllers and form mappings stay in `src/Module/<Owner>/UI`; business validation, authorization and durable effects stay in their application use cases. This folder is not a second API registry, universal controller, plugin SDK or alternative authorization engine.
 

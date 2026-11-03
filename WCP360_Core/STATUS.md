@@ -9,10 +9,10 @@ Read [WORKING-GUIDE.md](WORKING-GUIDE.md) to resume work. Use [ROADMAP.md](ROADM
 | Item | Exact reference |
 | :--- | :--- |
 | Development branch | `main`; all frozen work-branch inputs are tracked by the [integration register](../documentation/governance/branches/BRANCH-INTEGRATION-2026-11-02.md). |
-| Publication | [PR #116](https://github.com/yyogas/wcp360/pull/116) and [PR #125](https://github.com/yyogas/wcp360/pull/125); [branch closure](../documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md) is complete. Independent review and production qualification remain distinct. |
-| Runtime source | [5bd4b54f1f2f12d6783d018f94b04ed48acd12cb](https://github.com/yyogas/wcp360/commit/5bd4b54f1f2f12d6783d018f94b04ed48acd12cb) |
+| Publication | [PR #116](https://github.com/wcp360/wcp360/pull/116) and [PR #125](https://github.com/wcp360/wcp360/pull/125); [branch closure](../documentation/governance/branches/BRANCH-COMPLETION-2026-11-03.md) is complete. Independent review and production qualification remain distinct. |
+| Runtime source | [5bd4b54f1f2f12d6783d018f94b04ed48acd12cb](https://github.com/wcp360/wcp360/commit/5bd4b54f1f2f12d6783d018f94b04ed48acd12cb) |
 | Source tree | `d42ddb97a101b32140f900f77321b8f4d80e221a` |
-| Executed evidence | [Workflow 41545847754](https://github.com/yyogas/wcp360/actions/runs/41545847754): **14/14 jobs successful**; the complete follow-up has 31 successful check runs. |
+| Executed evidence | [Workflow 41545847754](https://github.com/wcp360/wcp360/actions/runs/41545847754): **14/14 jobs successful**; the complete follow-up has 31 successful check runs. |
 | Local execution | Stopped under the current working instruction; documentation/source inspection does not restart it. |
 | Production state | Not qualified; `CODE-BASELINE=NONE`. No stable release or `latest` pointer. |
 
