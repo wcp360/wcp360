@@ -34,6 +34,9 @@ jobs:
       - name: Test the publication checker with synthetic Git fixtures
         shell: bash
         run: python3 -I tools/repository/test_publication_checker.py
+      - name: Verify disabled branch protection templates and negative fixtures
+        shell: bash
+        run: python3 -I tools/repository/check_branch_ruleset_templates.py
       - name: Test branding archive validation rules
         shell: bash
         run: python3 -I tools/repository/check_branding_archive.py --self-test
