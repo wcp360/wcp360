@@ -37,6 +37,18 @@ jobs:
       - name: Verify disabled branch protection templates and negative fixtures
         shell: bash
         run: python3 -I tools/repository/check_branch_ruleset_templates.py
+      - name: Verify approved PR branch flow
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.base_ref }}
+          PR_HEAD: ${{ github.head_ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python3 -I tools/repository/check_branch_routing.py --self-test
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            python3 -I tools/repository/check_branch_routing.py --base "$PR_BASE" --head "$PR_HEAD" --number "$PR_NUMBER"
+          fi
       - name: Test branding archive validation rules
         shell: bash
         run: python3 -I tools/repository/check_branding_archive.py --self-test

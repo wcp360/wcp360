@@ -31,3 +31,7 @@ From the repository root, run:
     python3 -I tools/repository/check_branch_ruleset_templates.py
 
 This validates these exact disabled templates and exercises 28 negative fixtures, without installing rulesets, changing branches, calling GitHub APIs or running product code. It is included in the draft [repository guardrails](../../../.github/workflows/repository-guardrails.yml) check. A green CI is not evidence of live branch protection.
+
+## CI branch-route validation
+
+The existing `gitignore-regression` job now additionally checks pull-request routing under the four-stage permanent branch policy. Normal admission is `features/* → develop`, `develop → stable`, `stable → main`, and `main → production`. The sole documented pre-policy exception is **existing PR #126** (`sc-m01/ratified-handoff-878c68f → develop`), not a reusable prefix or permission for new branches. The validator exercises eight allowed and 22 forbidden routes using only the Python standard library, without GitHub write access. Direct pushes still require live ruleset enforcement; this check is not an independent review, production gate, release or CODE-BASELINE decision. Exceptional urgent production routing requires a separate MASTER/DevOps contract, not an unreviewed `features/fix-* → production` bypass.
