@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 FILES = {
     "develop": ("wcp360-develop.disabled.json", 0),
-    "main": ("wcp360-main.disabled.json", 2),
+    "main": ("wcp360-main.disabled.json", 0),
 }
 REQUIRED_CHECKS = ("repository-secrets", "gitignore-regression")
 ALLOWED_METHODS = ("merge", "squash", "rebase")
@@ -60,7 +60,7 @@ def check(data: object, branch: str, review_count: int) -> None:
         "required_approving_review_count": review_count,
         "required_review_thread_resolution": True,
     }, "review protections differ from approved candidate")
-    # D-GOV-SOLO-0001 removes impossible second-person approval on develop only.
+    # D-GOV-SOLO-MAIN-0001 extends the single-maintainer review policy to main.
     require(set(rules[3]) == {"type", "parameters"}, "unexpected status rule fields")
     params = rules[3]["parameters"]
     require(isinstance(params, dict) and set(params) == {
@@ -113,7 +113,18 @@ def self_test() -> None:
         for name, mutate in cases:
             must_reject(mutate, name)
             negatives += 1
-    print(f"Ruleset templates verified: 2 disabled drafts; {negatives} hostile cases rejected; no GitHub settings changed.")
+    # An activation payload in Git is not a live rule; it must differ only in status.
+    directory = ROOT / "documentation/governance/rulesets"
+    active = json.loads((directory / "wcp360-main.active.json").read_text(encoding="utf-8"))
+    if active.get("enforcement") != "active":
+        raise AssertionError("Main activation payload must explicitly request active enforcement")
+    disabled = copy.deepcopy(active)
+    disabled["enforcement"] = "disabled"
+    check(disabled, "main", FILES["main"][1])
+    template = json.loads((directory / FILES["main"][0]).read_text(encoding="utf-8"))
+    if disabled != template:
+        raise AssertionError("Main activation payload differs from reviewed configuration")
+    print(f"Ruleset templates verified: 2 disabled drafts and main activation payload; {negatives} hostile cases rejected; no GitHub settings changed.")
 
 
 if __name__ == "__main__":
