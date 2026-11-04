@@ -88,3 +88,14 @@ func UnixUser(id string) string { h := sha256.Sum256([]byte(id)); return fmt.Spr
 func Reply(r Request, status string, replayed bool) Response {
 	return Response{Schema, r.JobID, r.SiteID, status, replayed}
 }
+
+// dispatchFrame is the shared decode-before-handler boundary used by Serve.
+// Invalid candidate frames never reach an effect handler or echo attacker IDs.
+// This is not an IPC-B dispatcher and grants no canonical operation authority.
+func dispatchFrame(input io.Reader, handler func(Request) Response) Response {
+	r, err := Decode(input)
+	if err != nil || handler == nil {
+		return Reply(Request{}, "REJECTED", false)
+	}
+	return handler(r)
+}
