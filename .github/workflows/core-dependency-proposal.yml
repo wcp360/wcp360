@@ -12,122 +12,91 @@ jobs:
   propose-lock:
     if: github.repository == 'wcp360/wcp360' && github.event.pull_request.number == 135 && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'sc-m01/ratified-handoff-878c68f'
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 5
     permissions:
-      contents: write # One unreferenced lock blob only; no ref or Settings mutation.
+      contents: write # Store one unreferenced lock blob; no ref or Settings writes.
+      actions: read # Read only the exact previously generated artifact.
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
           fetch-depth: 1
-      - name: Verify unchanged dependency inputs
-        env:
-          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          set -euo pipefail
-          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
-          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
-          test "$(git hash-object WCP360_Core/composer.json)" = b8020a5727d9bae5401bd302fbbe6a1659d81f89
-          test "$(git hash-object WCP360_Core/composer.lock)" = 7c62b2da72ff139a6234c8934a42cf95dda0ebcd
-          mkdir -p "$RUNNER_TEMP/dep-proposal/work" "$RUNNER_TEMP/dep-proposal/evidence"
-          cp WCP360_Core/composer.{json,lock} "$RUNNER_TEMP/dep-proposal/work/"
-          cp WCP360_Core/composer.lock "$RUNNER_TEMP/dep-proposal/evidence/before.lock"
-          printf '%s\n' "$SOURCE_SHA" > "$RUNNER_TEMP/dep-proposal/evidence/source-sha.txt"
-      - name: Build isolated Composer resolver from pinned toolchain images
-        run: |
-          set -euo pipefail
-          cd "$RUNNER_TEMP/dep-proposal"
-          php_ref='php@sha256:3a6527017daca7917709afa08a37388ec108db093857f31d642cfff2e6f0449e'
-          composer_ref='composer@sha256:5190d9b445add2fa26090108273cb1ef1e1af98175201c737b85b3c4f90fbf7c'
-          printf 'php=%s\ncomposer=%s\n' "$php_ref" "$composer_ref" > evidence/images.txt
-          cat > Dockerfile <<'DOCKERFILE'
-          ARG COMPOSER_IMAGE
-          ARG PHP_IMAGE
-          FROM ${COMPOSER_IMAGE} AS composer
-          FROM ${PHP_IMAGE}
-          RUN apt-get update && apt-get install -y --no-install-recommends libicu-dev libpq-dev libzip-dev libonig-dev unzip ca-certificates && docker-php-ext-install intl pdo_pgsql zip mbstring && rm -rf /var/lib/apt/lists/*
-          COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-          WORKDIR /work
-          DOCKERFILE
-          docker build --build-arg "PHP_IMAGE=$php_ref" --build-arg "COMPOSER_IMAGE=$composer_ref" -t wcp360-lock-proposal .
-      - name: Resolve audited patch updates with scripts and plugins disabled
-        run: |
-          set -euo pipefail
-          cat > "$RUNNER_TEMP/dep-proposal/work/resolve.sh" <<'SH'
-          set -eu
-          php --version > php-version.txt
-          composer --version > composer-version.txt
-          composer --no-plugins validate --no-check-publish
-          before_status=0
-          composer --no-plugins audit --locked --format=json --no-interaction > audit-before.json || before_status=$?
-          printf '%s\n' "$before_status" > audit-before-exit.txt
-          composer --no-plugins update symfony/config:7.4.23 symfony/filesystem:7.4.23 symfony/framework-bundle:7.4.23 symfony/http-client:7.4.23 symfony/http-foundation:7.4.23 symfony/http-kernel:7.4.23 symfony/routing:7.4.23 symfony/security-http:7.4.23 symfony/validator:7.4.23 symfony/yaml:7.4.23 --with-dependencies --minimal-changes --no-install --no-scripts --no-interaction --prefer-stable
-          composer --no-plugins validate --no-check-publish
-          composer --no-plugins audit --locked --format=json --no-interaction > audit-after.json
-          SH
-          docker run --rm --user "$(id -u):$(id -g)" --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g -e HOME=/tmp -e COMPOSER_HOME=/tmp/composer -e COMPOSER_CACHE_DIR=/tmp/composer-cache -v "$RUNNER_TEMP/dep-proposal/work:/work" -w /work --entrypoint sh wcp360-lock-proposal /work/resolve.sh
-      - name: Validate delta and store one unreferenced lock blob
+      - name: Read exact clean-audit artifact
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/dep-evidence"
+          curl --fail --silent --show-error --location --max-redirs 3 --proto '=https' --proto-redir '=https' --max-filesize 1048576 -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/wcp360/wcp360/actions/artifacts/13365461454/zip' -o "$RUNNER_TEMP/resolved-lock.zip"
+          echo '9109b1c5c308f41e7318b9a5cc0580b0abc3836ac84ec43f525632e57d732c65  '"$RUNNER_TEMP/resolved-lock.zip" | sha256sum --check --strict
+      - name: Verify exact delta and store an unreferenced blob
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,urllib.request
-          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dep-proposal'
-          work=root/'work'; evidence=root/'evidence'
-          old=json.loads((evidence/'before.lock').read_text())
-          raw=(work/'composer.lock').read_bytes()
-          assert 0<len(raw)<1024*1024
-          new=json.loads(raw)
-          assert (work/'composer.json').read_bytes()==pathlib.Path('WCP360_Core/composer.json').read_bytes()
-          assert old['content-hash']==new['content-hash']
-          def packages(data):
-              result={}
-              for group in ('packages','packages-dev'):
-                  for package in data[group]:
-                      assert package['name'] not in result
-                      result[package['name']]=(group,package)
-              return result
-          before=packages(old); after=packages(new)
-          assert before.keys()==after.keys(), 'Unexpected package addition/removal'
-          allowed={'symfony/'+name for name in ['config','filesystem','framework-bundle','http-client','http-foundation','http-kernel','routing','security-http','validator','yaml']}
-          changed=[name for name in before if before[name]!=after[name]]
-          assert set(changed)==allowed, changed
-          for name in allowed:
-              assert before[name][0]==after[name][0]
-              assert before[name][1]['type']==after[name][1]['type']
-              assert after[name][1]['version'].lstrip('v')=='7.4.23'
-          assert before['twig/twig']==after['twig/twig']
-          audit=json.loads((work/'audit-after.json').read_text())
-          assert not audit.get('advisories'), 'Security findings remain'
-          assert not audit.get('abandoned'), 'Abandoned packages require review'
-          digest=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
-          report={'schema':'wcp360.dependency-proposal/1','source_sha':(evidence/'source-sha.txt').read_text().strip(),'changed_packages':[{'name':name,'from':before[name][1]['version'],'to':after[name][1]['version'],'source_reference':after[name][1]['source']['reference']} for name in sorted(changed)],'composer_json_changed':False,'sha256':hashlib.sha256(raw).hexdigest(),'git_blob_sha':digest,'bytes':len(raw),'audit':'PASS','runtime_tests_executed':False,'ref_updated':False}
+          import datetime,hashlib,json,os,pathlib,re,urllib.request,zipfile
+          temp=pathlib.Path(os.environ['RUNNER_TEMP']); output=temp/'dep-evidence'
+          def blob(raw): return hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+          with zipfile.ZipFile(temp/'resolved-lock.zip') as z:
+              assert len(z.infolist())==11 and sum(x.file_size for x in z.infolist())<2*1024*1024
+              assert z.read('source-sha.txt').decode().strip()=='017f0ffd5c18f6e7c6ca7892e52a1dec4c579f90'
+              before=z.read('before.lock'); raw=z.read('composer.lock'); root=z.read('composer.json')
+              assert blob(before)=='7c62b2da72ff139a6234c8934a42cf95dda0ebcd'
+              assert blob(raw)=='05c4daa9075b66347b6f0c4f9cf4116a6f171179'
+              assert blob(root)=='b8020a5727d9bae5401bd302fbbe6a1659d81f89'
+              assert pathlib.Path('WCP360_Core/composer.lock').read_bytes()==before
+              assert pathlib.Path('WCP360_Core/composer.json').read_bytes()==root
+              old=json.loads(before); new=json.loads(raw)
+              assert old['plugin-api-version']=='2.9.0' and new['plugin-api-version']=='2.11.0'
+              for key in (old.keys()|new.keys())-{'packages','packages-dev','plugin-api-version'}:
+                  assert old.get(key)==new.get(key), key
+              def packages(data):
+                  result={}
+                  for group in ('packages','packages-dev'):
+                      for p in data[group]:
+                          assert p['name'] not in result
+                          result[p['name']]=(group,p)
+                  return result
+              a=packages(old); b=packages(new)
+              assert a.keys()==b.keys() and len(a)==111
+              allowed={'symfony/'+n for n in ['config','filesystem','framework-bundle','http-client','http-foundation','http-kernel','routing','security-http','validator','yaml']}
+              updated=[]; metadata=[]
+              for name in a:
+                  oldgroup,p=a[name]; newgroup,q=b[name]
+                  assert oldgroup==newgroup and p['type']==q['type'], name
+                  if p==q: continue
+                  if name in allowed:
+                      assert q['version']=='v7.4.23' and p['version'] in ('v7.4.21','v7.4.22')
+                      assert re.fullmatch('[0-9a-f]{40}',q['source']['reference'])
+                      assert q['source']['url']==p['source']['url'] and q['source']['type']=='git'
+                      updated.append({'name':name,'from':p['version'],'to':q['version'],'source_reference':q['source']['reference']})
+                  else:
+                      assert 'published-time' not in p and isinstance(q.get('published-time'),str)
+                      datetime.datetime.fromisoformat(q['published-time'])
+                      assert p=={k:v for k,v in q.items() if k!='published-time'}, name
+                      metadata.append(name)
+              assert {p['name'] for p in updated}==allowed and len(metadata)==29
+              audit=json.loads(z.read('audit-after.json'))
+              assert audit=={'advisories':[],'abandoned':[],'filter':[],'cooldown':[]}
+              for name in ('audit-before.json','audit-after.json','images.txt','composer-version.txt','php-version.txt'):
+                  (output/name).write_bytes(z.read(name))
+          digest=blob(raw)
+          report={'schema':'wcp360.dependency-proposal/2','publisher_sha':os.environ['SOURCE_SHA'],'resolver_sha':'017f0ffd5c18f6e7c6ca7892e52a1dec4c579f90','resolver_run':41916582081,'artifact_id':13365461454,'artifact_sha256':'9109b1c5c308f41e7318b9a5cc0580b0abc3836ac84ec43f525632e57d732c65','changed_packages':sorted(updated,key=lambda p:p['name']),'published_time_metadata_only':sorted(metadata),'plugin_api_metadata':{'from':'2.9.0','to':'2.11.0'},'package_count':111,'composer_json_changed':False,'sha256':hashlib.sha256(raw).hexdigest(),'git_blob_sha':digest,'bytes':len(raw),'audit':'PASS','runtime_tests_executed':False,'ref_updated':False}
           payload=json.dumps({'content':raw.decode('utf-8'),'encoding':'utf-8'}).encode()
           request=urllib.request.Request('https://api.github.com/repos/wcp360/wcp360/git/blobs',data=payload,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json','X-GitHub-Api-Version':'2022-11-28'},method='POST')
-          with urllib.request.urlopen(request,timeout=30) as response:
-              stored=json.load(response)
+          with urllib.request.urlopen(request,timeout=30) as response: stored=json.load(response)
           assert stored['sha']==digest
-          (evidence/'proposal.json').write_text(json.dumps(report,indent=2)+'\n')
+          (output/'proposal.json').write_text(json.dumps(report,indent=2)+'\n')
           print(json.dumps(report,indent=2))
           PY
-      - name: Preserve evidence without automatic integration
-        if: always()
-        run: |
-          set -euo pipefail
-          root="$RUNNER_TEMP/dep-proposal"
-          mkdir -p "$root/evidence"
-          for file in composer.json composer.lock audit-before.json audit-after.json audit-before-exit.txt php-version.txt composer-version.txt; do
-            if [[ -f "$root/work/$file" ]]; then cp "$root/work/$file" "$root/evidence/$file"; fi
-          done
-          cd "$root/evidence"
-          sha256sum *.json *.lock *.txt > SHA256SUMS
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: core-dependency-proposal-${{ github.run_id }}
-          path: ${{ runner.temp }}/dep-proposal/evidence/
+          path: ${{ runner.temp }}/dep-evidence/
           if-no-files-found: error
           retention-days: 30
-# No ref mutation, deployment, admin permission, blocked authentication patch,
-# ignored platform requirement, audit exception or owner file transfer.
+# Temporary metadata transport only. No branch/ref mutation, administration,
+# application patch, audit waiver, script/plugin execution or deployment.
