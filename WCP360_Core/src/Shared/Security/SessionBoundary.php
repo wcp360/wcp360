@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Wcp360\Core\Shared\Security;
 
+use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +27,18 @@ use Wcp360\Core\Module\IdentityAccess\Domain\Principal;
 /** Candidate session admission; no automatic registration of existing cookies. */
 final readonly class SessionBoundary
 {
-    public function __construct(private RuntimeContext $runtime, private TokenStorageInterface $tokens, private CandidateSessions $sessions, private CandidateMfa $mfa) {}
+    private ClockInterface $clock;
+
+    public function __construct(
+        private RuntimeContext $runtime,
+        private TokenStorageInterface $tokens,
+        private CandidateSessions $sessions,
+        private CandidateMfa $mfa,
+        ?ClockInterface $clock = null,
+    ) {
+        // Server-owned time, never a Request attribute or browser timestamp.
+        $this->clock = $clock ?? new NativeClock();
+    }
 
     #[AsEventListener(event: 'kernel.request', priority: 12)]
     public function beforeFirewall(RequestEvent $event): void
@@ -104,7 +117,9 @@ final readonly class SessionBoundary
         if (!$event->isMainRequest() || !$this->tokens->getToken()?->getUser() instanceof Principal) return;
         $request = $event->getRequest();
         $session = $request->getSession();
-        $now = time(); $created = $session->get('_wcp_created'); $last = $session->get('_wcp_last');
+        $now = $this->clock->now()->getTimestamp();
+        $created = $session->get('_wcp_created');
+        $last = $session->get('_wcp_last');
         // A future activity timestamp is not a valid session heartbeat.
         // Never let it suppress idle expiry; the DB registry already rejects
         // last_seen_at > now, so the browser-side admission must agree.
