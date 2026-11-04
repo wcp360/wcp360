@@ -38,10 +38,8 @@ jobs:
         run: |
           set -euo pipefail
           cd "$RUNNER_TEMP/dep-proposal"
-          docker pull php:8.4.27-fpm-trixie
-          docker pull composer:2.11.1
-          php_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' php:8.4.27-fpm-trixie)"
-          composer_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' composer:2.11.1)"
+          php_ref='php@sha256:3a6527017daca7917709afa08a37388ec108db093857f31d642cfff2e6f0449e'
+          composer_ref='composer@sha256:5190d9b445add2fa26090108273cb1ef1e1af98175201c737b85b3c4f90fbf7c'
           printf 'php=%s\ncomposer=%s\n' "$php_ref" "$composer_ref" > evidence/images.txt
           cat > Dockerfile <<'DOCKERFILE'
           ARG COMPOSER_IMAGE
@@ -53,7 +51,7 @@ jobs:
           WORKDIR /work
           DOCKERFILE
           docker build --build-arg "PHP_IMAGE=$php_ref" --build-arg "COMPOSER_IMAGE=$composer_ref" -t wcp360-lock-proposal .
-      - name: Resolve two reviewed packages with no application execution
+      - name: Resolve audited Symfony patch updates with no application execution
         run: |
           set -euo pipefail
           cat > "$RUNNER_TEMP/dep-proposal/work/resolve.sh" <<'SH'
@@ -64,7 +62,7 @@ jobs:
           before_status=0
           composer --no-plugins audit --locked --format=json --no-interaction > audit-before.json || before_status=$?
           printf '%s\n' "$before_status" > audit-before-exit.txt
-          composer --no-plugins update symfony/http-foundation:7.4.23 twig/twig:3.30.0 --with-dependencies --minimal-changes --no-install --no-scripts --no-interaction --prefer-stable
+          composer --no-plugins update symfony/config:7.4.23 symfony/filesystem:7.4.23 symfony/framework-bundle:7.4.23 symfony/http-client:7.4.23 symfony/http-foundation:7.4.23 symfony/http-kernel:7.4.23 symfony/routing:7.4.23 symfony/security-http:7.4.23 symfony/validator:7.4.23 symfony/yaml:7.4.23 --with-dependencies --minimal-changes --no-install --no-scripts --no-interaction --prefer-stable
           composer --no-plugins validate --no-check-publish
           composer --no-plugins audit --locked --format=json --no-interaction > audit-after.json
           SH
@@ -92,15 +90,19 @@ jobs:
               return result
           before=packages(old); after=packages(new)
           assert before.keys()==after.keys(), 'Package additions/removals require separate review'
+          allowed={'symfony/'+name for name in ['config','filesystem','framework-bundle','http-client','http-foundation','http-kernel','routing','security-http','validator','yaml']}
           changed=[name for name in before if before[name]!=after[name]]
-          assert set(changed)=={'symfony/http-foundation','twig/twig'}, changed
-          assert after['symfony/http-foundation'][1]['version'].lstrip('v')=='7.4.23'
-          assert after['twig/twig'][1]['version'].lstrip('v')=='3.30.0'
+          assert set(changed)==allowed, changed
+          for name in allowed:
+              assert before[name][0]==after[name][0]
+              assert after[name][1]['version'].lstrip('v')=='7.4.23'
+              assert after[name][1]['type']=='library'
+          assert before['twig/twig']==after['twig/twig'], 'Twig is already current in the verified input'
           audit=json.loads((work/'audit-after.json').read_text())
           assert not audit.get('advisories'), 'Security findings remain'
           assert not audit.get('abandoned'), 'Abandoned packages require review'
           digest=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
-          report={'schema':'wcp360.dependency-proposal/1','source_sha':(evidence/'source-sha.txt').read_text().strip(),'changed_packages':[{ 'name':name,'from':before[name][1]['version'],'to':after[name][1]['version'],'source_reference':after[name][1]['source']['reference']} for name in sorted(changed)],'composer_json_changed':False,'sha256':hashlib.sha256(raw).hexdigest(),'git_blob_sha':digest,'bytes':len(raw),'audit':'PASS','runtime_tests_executed':False,'ref_updated':False}
+          report={'schema':'wcp360.dependency-proposal/1','source_sha':(evidence/'source-sha.txt').read_text().strip(),'changed_packages':[{'name':name,'from':before[name][1]['version'],'to':after[name][1]['version'],'source_reference':after[name][1]['source']['reference']} for name in sorted(changed)],'composer_json_changed':False,'sha256':hashlib.sha256(raw).hexdigest(),'git_blob_sha':digest,'bytes':len(raw),'audit':'PASS','runtime_tests_executed':False,'ref_updated':False}
           payload=json.dumps({'content':raw.decode('utf-8'),'encoding':'utf-8'}).encode()
           request=urllib.request.Request('https://api.github.com/repos/wcp360/wcp360/git/blobs',data=payload,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json','X-GitHub-Api-Version':'2022-11-28'},method='POST')
           with urllib.request.urlopen(request,timeout=30) as response:
