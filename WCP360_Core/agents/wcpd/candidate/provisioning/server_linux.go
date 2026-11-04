@@ -129,13 +129,7 @@ func Serve(ctx context.Context, path string, peerUID uint32, owner, group int, h
 			continue
 		}
 		// One bounded frame per connection. The client half-closes its write side.
-		r, e := Decode(conn)
-		var response Response
-		if e != nil {
-			response = Reply(Request{}, "REJECTED", false)
-		} else {
-			response = handler(r)
-		}
+		response := dispatchFrame(conn, handler)
 		json.NewEncoder(conn).Encode(response)
 		conn.Close()
 	}

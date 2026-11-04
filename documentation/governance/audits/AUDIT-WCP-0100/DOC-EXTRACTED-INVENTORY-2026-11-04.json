@@ -1,0 +1,13 @@
+{
+  "source_commit": "726fa36bf59b21da4669d97f6d4cbcf555bba3e2",
+  "source_tree": "72414170b182c5da7b1fe631445ed363fd9c854e",
+  "source_artifact_id": 13325426766,
+  "source_artifact_sha256": "212aba8caefa6ce5f480a6b97db8497b3b0b5c78fc0107395b3cf13fd1ff6ba0",
+  "corpus_prefix": "WCP360_Developper/WCP-Design-System-Spec-v4.0.21.23-global-canonical-registry-consolidation/",
+  "file_count": 1458,
+  "total_bytes": 2853454,
+  "metadata_inventory_sha256": "4d7594d3459f8d18fd6d94879ed504fc01020340dd07d07f01071f9881055a6b",
+  "original_zip_identity": "NOT_ESTABLISHED",
+  "original_zip_sha256": null,
+  "method": "Metadata-only filter of candidate.json; sort records by relative path; JSON sort_keys=True and separators=(comma,colon); UTF-8 SHA-256. Not a re-created original archive or whole-corpus review."
+}

@@ -17,7 +17,8 @@ final class SessionLifetimePolicy
         $created = $createdAt->getTimestamp();
         $last = $lastActivityAt->getTimestamp();
         $current = $now->getTimestamp();
-        if ($last < $created || $current < $created) {
+        // Every caller must reject future activity, not only browser admission.
+        if ($last < $created || $current < $created || $last > $current) {
             throw new ContractViolation('session timestamps are not monotonic');
         }
 

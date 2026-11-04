@@ -12,6 +12,7 @@ PERMANENT = ("develop", "stable", "main", "production")
 FEATURE = re.compile(r"features/[A-Za-z0-9][A-Za-z0-9._-]*\Z")
 LEGACY_NUMBER = 126
 LEGACY_BRANCH = "sc-m01/ratified-handoff-878c68f"
+TECHNICAL_NUMBER = 134  # D-TECH-RESOLUTION-0001; existing work ref only.
 DOC_NUMBER = 133
 DOC_BRANCH = "docs/core-documentation-2026-11-03"
 
@@ -28,9 +29,11 @@ def require_route(base: str, head: str, number: int) -> str:
             return "feature-to-develop"
         if number == LEGACY_NUMBER and head == LEGACY_BRANCH:
             return "grandfathered-pr-126-to-develop"
+        if number == TECHNICAL_NUMBER and head == LEGACY_BRANCH:
+            return "existing-work-ref-pr-134-to-develop"
         if number == DOC_NUMBER and head == DOC_BRANCH:
             return "existing-documentation-pr-133-to-develop"
-        raise ValueError("develop accepts features/* except the exact existing PRs #126 and #133")
+        raise ValueError("develop accepts features/* except the exact existing-ref PRs #126, #133 and #134")
     previous = {"stable": "develop", "main": "stable", "production": "main"}[base]
     if head != previous:
         raise ValueError(f"{base} only accepts pull requests from {previous}")
@@ -45,6 +48,7 @@ def self_test() -> None:
         ("develop", "features/plugin-backup", 123),
         ("develop", LEGACY_BRANCH, LEGACY_NUMBER),
         ("develop", DOC_BRANCH, DOC_NUMBER),
+        ("develop", LEGACY_BRANCH, TECHNICAL_NUMBER),
         ("stable", "develop", 140),
         ("main", "stable", 141),
         ("production", "main", 142),
@@ -79,6 +83,12 @@ def self_test() -> None:
         ("main", DOC_BRANCH, DOC_NUMBER),
         ("production", DOC_BRANCH, DOC_NUMBER),
         ("develop", DOC_BRANCH, True),
+        ("develop", LEGACY_BRANCH, TECHNICAL_NUMBER + 1),
+        ("develop", LEGACY_BRANCH + "-other", TECHNICAL_NUMBER),
+        ("develop", "sc-m01/other", TECHNICAL_NUMBER),
+        ("stable", LEGACY_BRANCH, TECHNICAL_NUMBER),
+        ("main", LEGACY_BRANCH, TECHNICAL_NUMBER),
+        ("production", LEGACY_BRANCH, TECHNICAL_NUMBER),
     ]
     for base, head, number in admitted:
         require_route(base, head, number)
