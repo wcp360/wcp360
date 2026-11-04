@@ -34,9 +34,9 @@ Outputs are under out/sc-m01/daemon/, including gates.tsv, unit.jsonl, coverage,
 
 Owner addendum: specifications/devops/WCP360_SC-M01_DAEMON_FOUNDATION_TOOLCHAIN_ADDENDUM_v1.0.md, blob f8608d6258f87b8c1099b9b3a7e32ec95c72dc27.
 
-MASTER authorization: 3fd2f8007baa49c2454cc89c0a5488a57c77911b. The human-requested SOURCE/ root relocates daemon/ to SOURCE/daemon/; the Go module identity is unchanged. Relative output paths are adjusted to ../../out/. No toolchain/security policy is changed.
+The prior implementation authorization is recorded at 3fd2f8007baa49c2454cc89c0a5488a57c77911b. The current, narrower authority is the [MASTER decision ratified 2026-11-03](../../documentation/governance/decisions/OWNER-DECISION-SC-M01-INERT-DAEMON-FOUNDATION-2026-11-03.md). The observed `d42d86ab12968ea0cbb3b0dec2a2eee4c9ec625f` is an inventory reference, not an approved source baseline. The human-requested SOURCE/ root relocates daemon/ to SOURCE/daemon/; the Go module identity is unchanged. Relative output paths are adjusted to ../../out/. No toolchain/security policy is changed.
 
-This I1/R1 candidate requires E1 and independent E3 plus applicable DevOps/Security review before merge. No implementation baseline, production deployment, socket/IPC-B, wcp-privd, database migration or web behavior is activated.
+Do not run the build or tests locally contrary to the active stop instruction; exact-candidate validation must use the authorized workflow. This I1/R1 candidate requires E1 and independent E3 plus applicable DevOps/Security/QA review before merge. No implementation baseline, production deployment, socket/IPC-B, wcp-privd, database migration or web behavior is activated.
 
 ## Review follow-up (PR #108)
 
