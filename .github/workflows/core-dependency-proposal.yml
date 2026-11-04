@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
-      contents: write # Store one reviewed unreferenced lock blob, never update a ref.
+      contents: write # One unreferenced lock blob only; no ref or Settings mutation.
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -34,7 +34,7 @@ jobs:
           cp WCP360_Core/composer.{json,lock} "$RUNNER_TEMP/dep-proposal/work/"
           cp WCP360_Core/composer.lock "$RUNNER_TEMP/dep-proposal/evidence/before.lock"
           printf '%s\n' "$SOURCE_SHA" > "$RUNNER_TEMP/dep-proposal/evidence/source-sha.txt"
-      - name: Build isolated Composer resolver from existing toolchain families
+      - name: Build isolated Composer resolver from pinned toolchain images
         run: |
           set -euo pipefail
           cd "$RUNNER_TEMP/dep-proposal"
@@ -51,7 +51,7 @@ jobs:
           WORKDIR /work
           DOCKERFILE
           docker build --build-arg "PHP_IMAGE=$php_ref" --build-arg "COMPOSER_IMAGE=$composer_ref" -t wcp360-lock-proposal .
-      - name: Resolve audited Symfony patch updates with no application execution
+      - name: Resolve audited patch updates with scripts and plugins disabled
         run: |
           set -euo pipefail
           cat > "$RUNNER_TEMP/dep-proposal/work/resolve.sh" <<'SH'
@@ -67,7 +67,7 @@ jobs:
           composer --no-plugins audit --locked --format=json --no-interaction > audit-after.json
           SH
           docker run --rm --user "$(id -u):$(id -g)" --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g -e HOME=/tmp -e COMPOSER_HOME=/tmp/composer -e COMPOSER_CACHE_DIR=/tmp/composer-cache -v "$RUNNER_TEMP/dep-proposal/work:/work" -w /work --entrypoint sh wcp360-lock-proposal /work/resolve.sh
-      - name: Validate package delta and store only an unreferenced lock blob
+      - name: Validate delta and store one unreferenced lock blob
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -89,15 +89,15 @@ jobs:
                       result[package['name']]=(group,package)
               return result
           before=packages(old); after=packages(new)
-          assert before.keys()==after.keys(), 'Package additions/removals require separate review'
+          assert before.keys()==after.keys(), 'Unexpected package addition/removal'
           allowed={'symfony/'+name for name in ['config','filesystem','framework-bundle','http-client','http-foundation','http-kernel','routing','security-http','validator','yaml']}
           changed=[name for name in before if before[name]!=after[name]]
           assert set(changed)==allowed, changed
           for name in allowed:
               assert before[name][0]==after[name][0]
+              assert before[name][1]['type']==after[name][1]['type']
               assert after[name][1]['version'].lstrip('v')=='7.4.23'
-              assert after[name][1]['type']=='library'
-          assert before['twig/twig']==after['twig/twig'], 'Twig is already current in the verified input'
+          assert before['twig/twig']==after['twig/twig']
           audit=json.loads((work/'audit-after.json').read_text())
           assert not audit.get('advisories'), 'Security findings remain'
           assert not audit.get('abandoned'), 'Abandoned packages require review'
@@ -111,7 +111,7 @@ jobs:
           (evidence/'proposal.json').write_text(json.dumps(report,indent=2)+'\n')
           print(json.dumps(report,indent=2))
           PY
-      - name: Preserve generated metadata for review, not automatic integration
+      - name: Preserve evidence without automatic integration
         if: always()
         run: |
           set -euo pipefail
@@ -129,5 +129,5 @@ jobs:
           path: ${{ runner.temp }}/dep-proposal/evidence/
           if-no-files-found: error
           retention-days: 30
-# Temporary engineering tool: no ref mutation, deployment, main administration,
-# blocked custom authentication patch, ignore-platform flag or audit waiver.
+# No ref mutation, deployment, admin permission, blocked authentication patch,
+# ignored platform requirement, audit exception or owner file transfer.
