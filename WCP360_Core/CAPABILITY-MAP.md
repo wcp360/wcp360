@@ -4,6 +4,8 @@ This navigation audit maps **233 capabilities in 21 README domains to 13 Core mo
 
 Source: [README at ee85186](https://github.com/wcp360/wcp360/blob/ee85186c2ac369a311062a63e858c07738612f8a/README.md), Git blob 570033415f61d6516b25aba3720007ddb26947a4. Capability labels/counts are retained from that source. The mapping is design-level navigation subordinate to accepted API/DB/permission/IPC contracts and current gates; it does not create public identifiers or authorize runtime code.
 
+**Product-scope delta, November 3, 2026:** the [owner's reseller decision](../documentation/governance/decisions/OWNER-DECISION-COMMUNITY-RESELLER-2026-11-03.md) excludes reseller management/delegation from Community. The 233 historical capability rows, labels, statuses and counts below are preserved; this inventory is not a promise that all rows belong to the current Community edition. Essential tenant/customer ownership, IAM, ordinary resource plans/quotas, isolation and recovery remain Core. Reseller-specific entries retain their design/ownership history pending separate optional-workflow contracts; no commercial placement, available package, identifier removal, implementation credit or production acceptance is created here.
+
 Use the [working guide](WORKING-GUIDE.md) for development orientation and [STATUS](STATUS.md) for the current implementation and qualification snapshot. [NAVIGATION](NAVIGATION.md) locates sources and [STRUCTURE](STRUCTURE.md) maps owners; this register retains the 233 capability rows and their delivery statuses, while [ROADMAP](ROADMAP.md) defines acceptance and dependency order.
 
 ## Findings and resulting structure

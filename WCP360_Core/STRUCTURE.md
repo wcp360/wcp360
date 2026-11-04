@@ -8,6 +8,8 @@ The existing **13 module owners** can accommodate the requested growth. The miss
 
 Use the [working guide](WORKING-GUIDE.md) for development orientation and [STATUS](STATUS.md) for current implementation and qualification. [NAVIGATION](NAVIGATION.md) locates changes, this document assigns ownership, [CAPABILITY-MAP](CAPABILITY-MAP.md) records the 233 statuses and [ROADMAP](ROADMAP.md) defines delivery order.
 
+For new path and account names, follow the [naming and account-identifier guide](../documentation/development/naming-and-account-identifiers.md). Lowercase kebab-case applies to freely named project paths; PSR-4 classes, standard filenames, existing identifiers and generated UNIX identities retain their own contracts. This is not a bulk rename or a claim that the candidate implements the new login-allocation policy.
+
 ## What the inspection found
 
 | Area | Actual starting point | Preparation added |
@@ -84,7 +86,7 @@ An integration can be commercially optional without moving essential platform ow
 
 ## Modules, packages and runtime dependencies
 
-The [eleven-area platform register](../documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) maps named external tools to optional packages and current Core responsibilities. [Reseller package templates, quotas, assignment and authorized overrides](src/Module/Tenancy/RESELLER-PACKAGES.md) remain Tenancy/IdentityAccess/resource-owner work in the free Core. Basic DNS/TLS, security, monitoring/notifications and backup/recovery do not become premium prerequisites; independent control planes need a qualified ownership handover before managing the same resources.
+The [eleven-area platform register](../documentation/development/PLATFORM-INTEGRATIONS-COVERAGE.md) maps named external tools to optional packages and current Core responsibilities. Under the [owner's Community decision](../documentation/governance/decisions/OWNER-DECISION-COMMUNITY-RESELLER-2026-11-03.md), reseller packages, reseller assignment and reseller overrides are outside Community; any commercial placement remains undecided. Ordinary accounts, Tenancy, IAM, resource ownership, quotas, isolation and recovery remain essential Core work. The [reseller design](src/Module/Tenancy/RESELLER-PACKAGES.md) retains its history and scope boundary. Basic DNS/TLS, security, monitoring/notifications and backup/recovery do not become premium prerequisites; independent control planes need a qualified ownership handover before managing the same resources.
 
 The [nine-domain coverage register](../documentation/development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) maps multi-server, storage, Docker, Kubernetes, VPS/VM, performance/compression, CDN, cybersecurity and DDoS to existing Core owners and external packages. Platform/Hosting/Operations retain future admitted provider, node and effect foundations; essential cache/compression, security and recovery are not moved behind PRO. Core foundation contracts and each provider profile still require implementation and qualification.
 

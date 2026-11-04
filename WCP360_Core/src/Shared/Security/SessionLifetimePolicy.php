@@ -6,8 +6,6 @@ namespace Wcp360\Core\Shared\Security;
 
 use DateTimeImmutable;
 
-
-
 final class SessionLifetimePolicy
 {
     public static function isExpired(
@@ -41,7 +39,10 @@ final class SessionLifetimePolicy
 
     public static function mfaMandatoryAtLogin(Surface $surface): bool
     {
-        return $surface === Surface::Admin;
+        // Owner decision #132: neither surface mandates MFA enrollment.
+        // Account admission must still enforce an enrolled factor. This helper
+        // does not grant authentication strength or waive operation step-up.
+        return false;
     }
 
     public static function rememberMeAllowed(Surface $surface): bool

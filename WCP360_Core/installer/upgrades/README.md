@@ -1,6 +1,8 @@
 # Host and product upgrades
 
-**Status: implementation location documented; no installation script or host mutation is implemented here.**
+**Status: a candidate database-migration helper is present. Supported product-release upgrades, native host orchestration and general rollback remain unimplemented and unqualified.**
+
+[candidate-upgrade.sh](candidate-upgrade.sh) accepts a candidate dump under the checkout's `var/backups`, checks it against its adjacent SHA-256 sidecar, then invokes Doctrine migrations in that checkout. A matching digest establishes agreement with that sidecar, not backup authenticity, application-consistent completeness or a successful restore. The helper neither authenticates/switches product releases nor rolls back schema, operating-system packages or external effects; it is not a production update procedure. Failed or interrupted migrations require the existing [recovery inspection](../recovery/README.md), without assuming failure means no effect or replay is safe. This documentation correction does not authorize running the helper.
 
 Version-specific compatibility checks and orchestration for upgrades from explicitly supported installed versions.
 

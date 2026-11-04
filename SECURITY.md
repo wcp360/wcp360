@@ -79,6 +79,8 @@ Browser input, resource identifiers, filenames, uploads, archive members, webhoo
 
 These are security requirements, not claims that every planned component is implemented or validated. Exact identifiers, protocol parameters, and acceptance criteria belong to the canonical artifacts linked below.
 
+The [owner decision recorded on November 3, 2026](documentation/governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) confirms optional MFA per administrator, enforced once enabled, and Free websites without an edition-imposed count limit. Frozen canonical exports retain their provenance, including mandatory-ADMIN-MFA wording awaiting explicit M1 contract review. This reference creates no scanner exclusion, severity change, accepted-risk waiver or production qualification; current-action authorization, session controls and enabled-factor enforcement remain in scope.
+
 ### Privileged architecture invariant
 
 ```text

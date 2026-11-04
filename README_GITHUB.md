@@ -140,12 +140,17 @@ Its design addresses five needs:
 
 **WCP360 Core is open source under [AGPL-3.0-only](WCP360_Core/LICENSE).** Its essential hosting, local administration, permissions, security, backup/recovery and extension infrastructure remain autonomous. PRO adds optional qualified business packages and provider connectors, developed outside the Core. It uses the same Core rather than a separate proprietary Core fork.
 
+**Edition decision confirmed on November 3, 2026:** Free/Community has **unlimited websites**, the essential Core and no premium modules or premium connectors. This supersedes the earlier 30-site Free proposal. PRO also has unlimited websites and includes all WCP360 premium modules and connectors, as individually released, admitted and qualified. Unlimited means no edition-imposed site-count ceiling; host capacity, tenant plans, delegated quotas and application licenses still apply. This product direction does not implement an installer, entitlement engine or released premium package.
+
+The dated [owner decision and pending contract review](documentation/governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) also reaffirms optional MFA per administrator; a factor becomes required for that account once enabled. The retained canonical mandatory-MFA wording still needs M1 contract review.
+
 | Area | Community / Core | PRO target |
 | :--- | :--- | :--- |
+| Edition site limit | Unlimited websites; essential Core, without premium modules or connectors. | Unlimited websites; all WCP360 premium modules and connectors included after their individual qualification and admission. |
 | Hosting foundation | The 13 built-in owners and 233 documented essential capabilities remain in the open-source delivery scope. Current implementation limits still apply. | Reuses the same foundation; subscription does not grant ROOT, tenant access or execution authority. |
 | Engine adapters | The seven engine-adapter designs remain Core-owned. | Provider-specific connectors may be optional premium packages; essential engines are not paywalled. |
-| Business packages | Independent community packages can use the future public integration boundary. | [44 business-module proposals](WCP360_Modules/CATALOG.md): App Install, WordPress tools, delivery, backup, security, observability, agency operations, AI and other advanced workflows. |
-| Provider connectors | Existing independent development packages retain their source and status. | [97 connector proposals](WCP360_Plugins/premium/CATALOG.md), grouped by provider family; each has its own planned compatibility and acceptance work. |
+| Business packages | Independent community packages can use the future public integration boundary; no premium entitlement is included. | All WCP360 premium modules are included in the product direction. The [44 business-module proposals](WCP360_Modules/CATALOG.md) still require implementation, release, admission and qualification. |
+| Provider connectors | Existing independent development packages retain their source and status; no premium entitlement is included. | All WCP360 premium connectors are included in the product direction. The [97 connector proposals](WCP360_Plugins/premium/CATALOG.md) retain their own compatibility and acceptance work. |
 | App Install | Core retains instances, authority, providers, jobs, data and essential recovery. | Full access to the qualified App Install catalogue and advanced orchestration. Qualification and each application's own license remain required. |
 | Subscription outage or expiry | Core access, running workloads and essential recovery continue. | New premium automation follows the defined safe degraded policy; no automatic workload shutdown or data deletion. |
 

@@ -6,6 +6,13 @@ The executable candidate uses locked development dependencies: PHPUnit 12, Symfo
 
 ## Commands
 
+The Core [working guide](../../WCP360_Core/WORKING-GUIDE.md) and repository
+[contribution rules](../../CONTRIBUTING.md) define the current implementation
+gate. These commands document available checks; they do not authorize local
+execution while that gate is paused.
+
+### Application checks
+
 From WCP360_Core, after composer install and building the Go planner:
 
 ~~~sh
@@ -47,7 +54,7 @@ The dedicated bootstrap in `WCP360_Core/tools/phpstan` supplies synthetic settin
 | Defined Console option | Accepted. |
 | Unknown Console option | Rejected by `symfonyConsole.optionNotFound`. |
 
-The runner checks the exact diagnostic identifiers and rejects missing or additional errors. Deliberately invalid fixtures are never loaded by the hosting application and are excluded from normal analysis paths. The Linux PostgreSQL job runs both analysis commands before PHPUnit; static analysis itself never uses that PostgreSQL database. The workflow runs for relevant pull-request changes and pushes to main, avoiding duplicate push/pull-request executions on the candidate branch.
+The runner checks the exact diagnostic identifiers and rejects missing or additional errors. Deliberately invalid fixtures are never loaded by the hosting application and are excluded from normal analysis paths. The Linux PostgreSQL job runs both analysis commands before PHPUnit; static analysis itself never uses that PostgreSQL database. The existing `core-executable-candidate.yml` workflow runs for relevant pull-request changes and pushes to main, avoiding duplicate push/pull-request executions on the candidate branch. No general `development-checks.yml` workflow is included in this branch.
 
 ## Browser setup and data
 

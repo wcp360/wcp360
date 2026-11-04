@@ -107,7 +107,7 @@ The backup helpers accept only wcp360_workbench or wcp360_test. The restore help
 - Go accepts one bounded, exact JSON schema and generates fixed-path configurations from UUIDv7 IDs and ASCII .test names. It has no listener, filesystem effects or subprocess capability.
 - The worker rechecks the original actor's current tenant permission and never changes a plan into a claim of physical activation.
 - Audit persistence and logical mutation commit together. Database triggers reject audit UPDATE/DELETE.
-- A password change, account deactivation, context mismatch or session expiry invalidates the relevant session. ADMIN MFA is still missing, so this candidate is deliberately prevented from production use.
+- A password change, account deactivation, context mismatch or session expiry invalidates the relevant session. The current candidate now supplies optional per-administrator MFA, off by default and enforced once enabled; see the [IdentityAccess owner guide](../../WCP360_Core/src/Module/IdentityAccess/README.md#administrator-mfa-candidate). The [November 3 owner decision](../governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) reaffirms that policy. The frozen mandatory-ADMIN-MFA wording still requires M1 contract review; this correction does not remove production boot refusal or the remaining identity, authorization, recovery and qualification gates.
 - Source-audit checks, application tests, Linux probes and independent reviews are distinct forms of evidence. None substitutes for another.
 
 ~~~mermaid
