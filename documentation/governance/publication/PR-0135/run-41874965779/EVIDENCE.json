@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "HISTORICAL_CI_ARTIFACT_INDEX",
+  "repository": "wcp360/wcp360",
+  "pull_request": 135,
+  "head_commit": "9db6fc8844facbb2502943e758744944a67995fd",
+  "base_commit": "bcc6f7ab4cb6a36b377ae40e3bb9258506396be9",
+  "tested_commit": "dff8d82767ecddebb4d327462e77a53582794e4d",
+  "tested_tree": "ce44ab49e95eb596470cd8f9b32d85bde907d641",
+  "run_id": 41874965779,
+  "run_attempt": 1,
+  "artifact_id": 13346761433,
+  "artifact_url": "https://github.com/wcp360/wcp360/actions/runs/41874965779/artifacts/13346761433",
+  "artifact_bytes": 949337,
+  "artifact_sha256": "308ac9809089283d3fb89d675b53ddb02e269c51c994383c67922aba26c1f388",
+  "archive_digest_verified_from_available_bytes": true,
+  "members": [
+    {"path": "base.json", "bytes": 1237614, "sha256": "056053d0789f253f3d6a3d88f4af7999b68f9929721ac7dcb85b037e6716086b", "storage": "GITHUB_ACTIONS_ARTIFACT"},
+    {"path": "candidate.json", "bytes": 1239395, "sha256": "55316bc995f6540847cfb8a6619b31fdf90b755d12f4f7bf6cb40ca88069b357", "storage": "GITHUB_ACTIONS_ARTIFACT"},
+    {"path": "branding.json", "bytes": 465, "sha256": "931be660ce47d54c806bb876b34c002ac5820a9da94022c19df935651a05741a", "storage": "GITHUB_ACTIONS_ARTIFACT"},
+    {"path": "checked-out.json", "bytes": 1239395, "sha256": "2191826be7ab32df5e28bd559f74897b13b85c548a93604cdd764f04616c530b", "storage": "GITHUB_ACTIONS_ARTIFACT"},
+    {"path": "historical-mirror-fb2a9562.json", "bytes": 133880, "sha256": "ff1805037f271f25bf5436a4807d0b6a0fe38c8bacfc8fb4704e9ad454ec2a45", "storage": "GITHUB_ACTIONS_ARTIFACT"},
+    {"path": "mfa-alignment.json", "bytes": 1169, "sha256": "2129dd3e0f6e7a62785859da874bcb99f7b2b5b854ecf87a1f132e640a5826d7", "storage": "GIT_AND_GITHUB_ACTIONS_ARTIFACT"}
+  ],
+  "historical_local_review_archive": {
+    "name": "WCP360_MFA_Engineering_Review_2026-11-04.zip",
+    "bytes": 9596,
+    "sha256": "835ccd891a7b034a8fb74ad31f77d0e9314ab8c7559624b6f3261639efe7e10b",
+    "all_documentary_members_versioned": true,
+    "repository_directory": "../local-review-2026-11-04",
+    "application_source_included": false
+  },
+  "qualification": {
+    "scope": "SOURCE_TRACEABILITY_ONLY",
+    "application_tests_executed": false,
+    "canonical_amendment_approved": false,
+    "runtime_qualification": "NOT_ESTABLISHED",
+    "remaining_gate_count": 6,
+    "applies_to_later_delivery_commit": false
+  },
+  "note": "Essential readable reports are versioned in Git. Large regenerable inventories remain repository CI artifacts, indexed here by digest; artifact retention is not permanent. No user download, blocked runtime patch publication, new test execution, merge or baseline ratification is implied."
+}

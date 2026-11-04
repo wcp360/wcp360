@@ -1,0 +1,181 @@
+{
+  "recorded_at_utc": "2026-11-04T16:21:35.833920+00:00",
+  "source_base": "bcc6f7ab4cb6a36b377ae40e3bb9258506396be9",
+  "remote_pr": 135,
+  "remote_scope_head": "0f0160db98c54ea703fc6d5f18e606b4de1cd267",
+  "publication": "SCOPE_ONLY_IMPLEMENTATION_NOT_COMMITTED",
+  "local_evidence_scope": "Dependency-free PHP harnesses and syntax checks. Not PHPUnit, Symfony kernel, PostgreSQL, browser, real agent or production execution.",
+  "checks": [
+    {
+      "name": "php_version",
+      "command": [
+        "php",
+        "-r",
+        "echo PHP_VERSION, \"\\n\";"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "8.4.24",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:WCP360_Core/src/Module/IdentityAccess/Application/ChangeOwnPassword.php",
+      "command": [
+        "php",
+        "-l",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Module/IdentityAccess/Application/ChangeOwnPassword.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "No syntax errors detected in /mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Module/IdentityAccess/Application/ChangeOwnPassword.php",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:WCP360_Core/src/Module/IdentityAccess/Application/RegenerateMfaRecoveryCodes.php",
+      "command": [
+        "php",
+        "-l",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Module/IdentityAccess/Application/RegenerateMfaRecoveryCodes.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "No syntax errors detected in /mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Module/IdentityAccess/Application/RegenerateMfaRecoveryCodes.php",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:WCP360_Core/src/Shared/Security/RecentAuthenticationProof.php",
+      "command": [
+        "php",
+        "-l",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Shared/Security/RecentAuthenticationProof.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "No syntax errors detected in /mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Shared/Security/RecentAuthenticationProof.php",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:WCP360_Core/src/Shared/Security/SessionBoundary.php",
+      "command": [
+        "php",
+        "-l",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Shared/Security/SessionBoundary.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "No syntax errors detected in /mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Shared/Security/SessionBoundary.php",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:WCP360_Core/tests/Integration/MfaCompletionProofTest.php",
+      "command": [
+        "php",
+        "-l",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/tests/Integration/MfaCompletionProofTest.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "No syntax errors detected in /mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/tests/Integration/MfaCompletionProofTest.php",
+      "stderr": ""
+    },
+    {
+      "name": "syntax:WCP360_Core/tests/Unit/RecentAuthenticationProofTest.php",
+      "command": [
+        "php",
+        "-l",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/tests/Unit/RecentAuthenticationProofTest.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "No syntax errors detected in /mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/tests/Unit/RecentAuthenticationProofTest.php",
+      "stderr": ""
+    },
+    {
+      "name": "proof_vectors_dependency_free",
+      "command": [
+        "php",
+        "/mnt/data/wcp360-mfa-alignment/probes/proof_vectors.php",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Shared/Security/RecentAuthenticationProof.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "{\"vectors\":30,\"failed\":[]}",
+      "stderr": ""
+    },
+    {
+      "name": "original_listener_isolated_negative_control",
+      "command": [
+        "php",
+        "/mnt/data/wcp360-mfa-alignment/probes/listener.php",
+        "/mnt/data/wcp360-mfa-alignment/original/WCP360_Core/src/Shared/Security/SessionBoundary.php"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "matched_expected_exit": true,
+      "stdout": "{\"cases\":8,\"failed\":[\"old-revision\",\"missing-revision\",\"disabled\",\"unconfigured\"]}",
+      "stderr": ""
+    },
+    {
+      "name": "patched_listener_isolated",
+      "command": [
+        "php",
+        "/mnt/data/wcp360-mfa-alignment/probes/listener.php",
+        "/mnt/data/wcp360-mfa-alignment/patch/WCP360_Core/src/Shared/Security/SessionBoundary.php"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "{\"cases\":8,\"failed\":[]}",
+      "stderr": ""
+    },
+    {
+      "name": "proposed_branch_routing_local_only",
+      "command": [
+        "python",
+        "/mnt/data/wcp360-mfa-alignment/patch/tools/repository/check_branch_routing.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "matched_expected_exit": true,
+      "stdout": "Branch route tests: 11 allowed, 42 forbidden; PASS.",
+      "stderr": ""
+    }
+  ],
+  "earlier_mutation_evidence": {
+    "deadline": {
+      "vectors": 30,
+      "failed": [
+        "exact-deadline",
+        "maximum-integer-expired"
+      ]
+    },
+    "revision": {
+      "vectors": 30,
+      "failed": [
+        "old-revision",
+        "future-revision",
+        "missing-revision",
+        "revision-string",
+        "revision-float",
+        "revision-boolean",
+        "revision-null",
+        "claimed-strength-cannot-repair-revision"
+      ]
+    },
+    "future": {
+      "vectors": 30,
+      "failed": [
+        "future-proof"
+      ]
+    }
+  }
+}

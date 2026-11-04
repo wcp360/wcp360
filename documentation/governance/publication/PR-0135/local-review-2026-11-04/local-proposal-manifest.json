@@ -1,0 +1,46 @@
+{
+  "status": "LOCAL_UNPUBLISHED_PROPOSAL",
+  "note": "Only metadata; the source files listed here are not contained in this delivery and are not committed in PR #135.",
+  "files": [
+    {
+      "path": "WCP360_Core/src/Module/IdentityAccess/Application/ChangeOwnPassword.php",
+      "size": 4935,
+      "sha": "64cc07bb79362cad5b124c4b516bfa541d79b1a1"
+    },
+    {
+      "path": "WCP360_Core/src/Module/IdentityAccess/Application/RegenerateMfaRecoveryCodes.php",
+      "size": 3961,
+      "sha": "880282d52a7edc73aefde4a7286cb3f820e2b404"
+    },
+    {
+      "path": "WCP360_Core/src/Shared/Security/RecentAuthenticationProof.php",
+      "size": 1065,
+      "sha": "f49b862d289863cfd7b5229308eefc0fb5dd3e68"
+    },
+    {
+      "path": "WCP360_Core/src/Shared/Security/SessionBoundary.php",
+      "size": 11371,
+      "sha": "153a4737fcec8e93b094168741db7ecf4a4efbbe"
+    },
+    {
+      "path": "WCP360_Core/tests/Integration/MfaCompletionProofTest.php",
+      "size": 9606,
+      "sha": "402a80f05b6d0f7a1e6be7bb583ac3b35b94e84f"
+    },
+    {
+      "path": "WCP360_Core/tests/Unit/RecentAuthenticationProofTest.php",
+      "size": 3000,
+      "sha": "5cd5343efb20089e51de52ec9f2e0d9cee122ecf"
+    },
+    {
+      "path": "documentation/governance/engineering/MFA-IDENTITY-ALIGNMENT-2026-11-04.md",
+      "size": 11853,
+      "sha": "dd8cc9ccdfb91fdcdfaad75c40a03abd66fe3acd"
+    },
+    {
+      "path": "tools/repository/check_branch_routing.py",
+      "size": 5574,
+      "sha": "99d3446c20d5004e608a5ad43a140c3c4f5b71b7"
+    }
+  ]
+}
