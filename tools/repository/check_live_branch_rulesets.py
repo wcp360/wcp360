@@ -27,6 +27,28 @@ def expected(branch: str) -> dict:
     return json.loads((DIRECTORY / BRANCHES[branch]).read_text(encoding="utf-8"))
 
 
+def parameters_match(actual: object, required: dict, rule_type: str) -> bool:
+    """Allow only reviewed GitHub readback defaults, never arbitrary extra keys."""
+    if not isinstance(actual, dict):
+        return False
+    wanted = copy.deepcopy(required)
+    if rule_type == "pull_request":
+        readback_defaults = {
+            "required_reviewers": [],
+            "dismissal_restriction": {"enabled": False, "allowed_actors": []},
+        }
+        # GitHub's documented extra-review flag has no effect at zero approvals.
+        # Do not normalize it for a nonzero/frozen promotion policy.
+        if type(required.get("required_approving_review_count")) is int and required["required_approving_review_count"] == 0:
+            readback_defaults["require_extra_approval_for_unattributed_changes"] = True
+        for name, value in readback_defaults.items():
+            if name in actual and name not in wanted:
+                wanted[name] = value
+    # Exact JSON also rejects false/0 and true/1 substitutions, nested unknown
+    # keys, nonempty reviewers and altered checks. Inputs are never mutated.
+    return json.dumps(actual, sort_keys=True) == json.dumps(wanted, sort_keys=True)
+
+
 def differences(live: object, template: dict) -> list[str]:
     """Conservative template conformance check; never asserts enforcement."""
     if not isinstance(live, dict):
@@ -55,9 +77,8 @@ def differences(live: object, template: dict) -> list[str]:
             continue
         actual = found[name].get("parameters")
         need = wanted[name]["parameters"]
-        # JSON comparison also distinguishes booleans from integer counts.
-        # Unreviewed added parameters still fail closed.
-        if not isinstance(actual, dict) or json.dumps(actual, sort_keys=True) != json.dumps(need, sort_keys=True):
+        # Only the explicit readback defaults below are compatible additions.
+        if not parameters_match(actual, need, name):
             defects.append(f"{name}_parameters_mismatch")
     return sorted(set(defects))
 
@@ -71,6 +92,27 @@ def self_test() -> None:
         accepted["enforcement"] = "active"
         assert differences(accepted, model) == [], branch
         successes += 1
+        readback_fields = {
+            "required_reviewers": [],
+            "dismissal_restriction": {"enabled": False, "allowed_actors": []},
+        }
+        if branch == "develop":
+            readback_fields["require_extra_approval_for_unattributed_changes"] = True
+        names = tuple(readback_fields)
+        # Cover every partial/default-expanded response, not just today's full
+        # GitHub payload. A provider may omit these optional fields.
+        for mask in range(1, 1 << len(names)):
+            expanded = copy.deepcopy(accepted)
+            expanded["rules"][2]["parameters"].update({
+                name: copy.deepcopy(readback_fields[name])
+                for index, name in enumerate(names) if mask & (1 << index)
+            })
+            before = copy.deepcopy(expanded)
+            if differences(expanded, model) or expanded != before:
+                raise AssertionError(f"Reviewed readback altered or refused: {branch}/{mask}")
+            successes += 1
+        # Apply all pre-existing hostile mutations also to the expanded shape.
+        accepted["rules"][2]["parameters"].update(copy.deepcopy(readback_fields))
         needs_last_push_review = model["rules"][2]["parameters"]["require_last_push_approval"]
         cases = [
             ("disabled", lambda r: r.update(enforcement="disabled")),
@@ -97,7 +139,21 @@ def self_test() -> None:
             ("boolean_review_count", lambda r: r["rules"][2]["parameters"].update(required_approving_review_count=False)),
             ("numeric_last_push", lambda r: r["rules"][2]["parameters"].update(require_last_push_approval=int(needs_last_push_review))),
             ("malformed_rule_type", lambda r: r["rules"][0].update(type=[])),
+            ("required_reviewers_null", lambda r: r["rules"][2]["parameters"].update(required_reviewers=None)),
+            ("required_reviewers_object", lambda r: r["rules"][2]["parameters"].update(required_reviewers={})),
+            ("required_reviewers_nonempty", lambda r: r["rules"][2]["parameters"].update(required_reviewers=[{"id": 123}])),
+            ("restricted_dismissal", lambda r: r["rules"][2]["parameters"]["dismissal_restriction"].update(enabled=True)),
+            ("dismissal_actor", lambda r: r["rules"][2]["parameters"]["dismissal_restriction"].update(allowed_actors=[{"id": 123}])),
+            ("numeric_dismissal_flag", lambda r: r["rules"][2]["parameters"]["dismissal_restriction"].update(enabled=0)),
+            ("missing_dismissal_field", lambda r: r["rules"][2]["parameters"]["dismissal_restriction"].pop("allowed_actors")),
+            ("extra_dismissal_field", lambda r: r["rules"][2]["parameters"]["dismissal_restriction"].update(unknown=False)),
+            ("null_dismissal", lambda r: r["rules"][2]["parameters"].update(dismissal_restriction=None)),
+            ("unreviewed_extra_approval_false", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=False)),
+            ("numeric_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=1)),
+            ("null_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=None)),
         ]
+        if branch == "main":
+            cases.append(("unreviewed_main_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=True)))
         for name, mutation in cases:
             invalid = copy.deepcopy(accepted)
             mutation(invalid)
@@ -125,6 +181,28 @@ def self_test() -> None:
     if not good or good_report["live_enforcement_verified"] is not False:
         raise AssertionError("Conforming rulesets must be configuration-only matches")
 
+    # The currently observed partial rollout must not become a global PASS:
+    # develop matches with its known readback defaults; main is still missing.
+    def partial_rollout(url: str) -> object:
+        if url == f"{API}?per_page=100":
+            return entries[:1]
+        if url == f"{API}/101":
+            observed = copy.deepcopy(models["develop"])
+            observed["enforcement"] = "active"
+            observed["rules"][2]["parameters"].update({
+                "required_reviewers": [],
+                "dismissal_restriction": {"enabled": False, "allowed_actors": []},
+                "require_extra_approval_for_unattributed_changes": True,
+            })
+            return observed
+        raise AssertionError("Unexpected request for missing main protection")
+
+    report, complete = live_report(partial_rollout)
+    if (complete or report["live_enforcement_verified"] is not False
+            or report["branch_results"]["develop"]["configuration"] != "MATCHES_TEMPLATE"
+            or report["branch_results"]["main"]["configuration"] != "MISSING"):
+        raise AssertionError("Partial protection rollout misrepresented")
+
     ambiguous = {
         "duplicate_named_ruleset": entries + [{"name": models["develop"]["name"], "id": 103}],
         "invalid_id_before_valid": [{"name": models["develop"]["name"], "id": "invalid"}] + entries,
@@ -139,6 +217,13 @@ def self_test() -> None:
         else:
             if approved:
                 raise AssertionError(f"Ambiguous or incomplete listing accepted: {name}")
+
+    explicit = {**models["develop"]["rules"][2]["parameters"],
+                "require_extra_approval_for_unattributed_changes": False}
+    changed = {**explicit, "require_extra_approval_for_unattributed_changes": True}
+    if (not parameters_match(explicit, explicit, "pull_request")
+            or parameters_match(changed, explicit, "pull_request")):
+        raise AssertionError("Explicit template fields overridden by readback defaults")
 
     for forbidden_url in ("https://untrusted.example.invalid/rulesets", API + "/123/other"):
         try:
