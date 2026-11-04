@@ -1,0 +1,131 @@
+name: Core dependency lock proposal
+on:
+  pull_request:
+    branches: [develop]
+    paths: ['.github/workflows/core-dependency-proposal.yml']
+permissions:
+  contents: read
+concurrency:
+  group: core-dependency-proposal-135
+  cancel-in-progress: true
+jobs:
+  propose-lock:
+    if: github.repository == 'wcp360/wcp360' && github.event.pull_request.number == 135 && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'sc-m01/ratified-handoff-878c68f'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write # Store one reviewed unreferenced lock blob, never update a ref.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify unchanged dependency inputs
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          test "$(git hash-object WCP360_Core/composer.json)" = b8020a5727d9bae5401bd302fbbe6a1659d81f89
+          test "$(git hash-object WCP360_Core/composer.lock)" = 7c62b2da72ff139a6234c8934a42cf95dda0ebcd
+          mkdir -p "$RUNNER_TEMP/dep-proposal/work" "$RUNNER_TEMP/dep-proposal/evidence"
+          cp WCP360_Core/composer.{json,lock} "$RUNNER_TEMP/dep-proposal/work/"
+          cp WCP360_Core/composer.lock "$RUNNER_TEMP/dep-proposal/evidence/before.lock"
+          printf '%s\n' "$SOURCE_SHA" > "$RUNNER_TEMP/dep-proposal/evidence/source-sha.txt"
+      - name: Build isolated Composer resolver from existing toolchain families
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/dep-proposal"
+          docker pull php:8.4.27-fpm-trixie
+          docker pull composer:2.11.1
+          php_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' php:8.4.27-fpm-trixie)"
+          composer_ref="$(docker image inspect --format '{{index .RepoDigests 0}}' composer:2.11.1)"
+          printf 'php=%s\ncomposer=%s\n' "$php_ref" "$composer_ref" > evidence/images.txt
+          cat > Dockerfile <<'DOCKERFILE'
+          ARG COMPOSER_IMAGE
+          ARG PHP_IMAGE
+          FROM ${COMPOSER_IMAGE} AS composer
+          FROM ${PHP_IMAGE}
+          RUN apt-get update && apt-get install -y --no-install-recommends libicu-dev libpq-dev libzip-dev libonig-dev unzip ca-certificates && docker-php-ext-install intl pdo_pgsql zip mbstring && rm -rf /var/lib/apt/lists/*
+          COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+          WORKDIR /work
+          DOCKERFILE
+          docker build --build-arg "PHP_IMAGE=$php_ref" --build-arg "COMPOSER_IMAGE=$composer_ref" -t wcp360-lock-proposal .
+      - name: Resolve two reviewed packages with no application execution
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/dep-proposal/work/resolve.sh" <<'SH'
+          set -eu
+          php --version > php-version.txt
+          composer --version > composer-version.txt
+          composer --no-plugins validate --no-check-publish
+          before_status=0
+          composer --no-plugins audit --locked --format=json --no-interaction > audit-before.json || before_status=$?
+          printf '%s\n' "$before_status" > audit-before-exit.txt
+          composer --no-plugins update symfony/http-foundation:7.4.23 twig/twig:3.30.0 --with-dependencies --minimal-changes --no-install --no-scripts --no-interaction --prefer-stable
+          composer --no-plugins validate --no-check-publish
+          composer --no-plugins audit --locked --format=json --no-interaction > audit-after.json
+          SH
+          docker run --rm --user "$(id -u):$(id -g)" --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g -e HOME=/tmp -e COMPOSER_HOME=/tmp/composer -e COMPOSER_CACHE_DIR=/tmp/composer-cache -v "$RUNNER_TEMP/dep-proposal/work:/work" -w /work --entrypoint sh wcp360-lock-proposal /work/resolve.sh
+      - name: Validate package delta and store only an unreferenced lock blob
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,urllib.request
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dep-proposal'
+          work=root/'work'; evidence=root/'evidence'
+          old=json.loads((evidence/'before.lock').read_text())
+          raw=(work/'composer.lock').read_bytes()
+          assert 0<len(raw)<1024*1024
+          new=json.loads(raw)
+          assert (work/'composer.json').read_bytes()==pathlib.Path('WCP360_Core/composer.json').read_bytes()
+          assert old['content-hash']==new['content-hash']
+          def packages(data):
+              result={}
+              for group in ('packages','packages-dev'):
+                  for package in data[group]:
+                      assert package['name'] not in result
+                      result[package['name']]=(group,package)
+              return result
+          before=packages(old); after=packages(new)
+          assert before.keys()==after.keys(), 'Package additions/removals require separate review'
+          changed=[name for name in before if before[name]!=after[name]]
+          assert set(changed)=={'symfony/http-foundation','twig/twig'}, changed
+          assert after['symfony/http-foundation'][1]['version'].lstrip('v')=='7.4.23'
+          assert after['twig/twig'][1]['version'].lstrip('v')=='3.30.0'
+          audit=json.loads((work/'audit-after.json').read_text())
+          assert not audit.get('advisories'), 'Security findings remain'
+          assert not audit.get('abandoned'), 'Abandoned packages require review'
+          digest=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+          report={'schema':'wcp360.dependency-proposal/1','source_sha':(evidence/'source-sha.txt').read_text().strip(),'changed_packages':[{ 'name':name,'from':before[name][1]['version'],'to':after[name][1]['version'],'source_reference':after[name][1]['source']['reference']} for name in sorted(changed)],'composer_json_changed':False,'sha256':hashlib.sha256(raw).hexdigest(),'git_blob_sha':digest,'bytes':len(raw),'audit':'PASS','runtime_tests_executed':False,'ref_updated':False}
+          payload=json.dumps({'content':raw.decode('utf-8'),'encoding':'utf-8'}).encode()
+          request=urllib.request.Request('https://api.github.com/repos/wcp360/wcp360/git/blobs',data=payload,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json','X-GitHub-Api-Version':'2022-11-28'},method='POST')
+          with urllib.request.urlopen(request,timeout=30) as response:
+              stored=json.load(response)
+          assert stored['sha']==digest
+          (evidence/'proposal.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Preserve generated metadata for review, not automatic integration
+        if: always()
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/dep-proposal"
+          mkdir -p "$root/evidence"
+          for file in composer.json composer.lock audit-before.json audit-after.json audit-before-exit.txt php-version.txt composer-version.txt; do
+            if [[ -f "$root/work/$file" ]]; then cp "$root/work/$file" "$root/evidence/$file"; fi
+          done
+          cd "$root/evidence"
+          sha256sum *.json *.lock *.txt > SHA256SUMS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: core-dependency-proposal-${{ github.run_id }}
+          path: ${{ runner.temp }}/dep-proposal/evidence/
+          if-no-files-found: error
+          retention-days: 30
+# Temporary engineering tool: no ref mutation, deployment, main administration,
+# blocked custom authentication patch, ignore-platform flag or audit waiver.
