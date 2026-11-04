@@ -63,7 +63,8 @@ php -r '$a=json_decode(file_get_contents("/tmp/worker-one.json"),true,16,JSON_TH
 [[ "$(curl -sS -o /dev/null -w '%{http_code}' -H 'Host: worker.test' http://127.0.0.1:8080/.secret)" == 403 ]]
 [[ "$(curl -sS -o /dev/null -w '%{http_code}' -H 'Host: worker.test' http://127.0.0.1:8080/other.php)" == 404 ]]
 
-php -r '$ctx=stream_context_create(["http"=>["header"=>"Host: worker.test\r\nX-Request-Marker: recycle\r\n","timeout"=>5]]);for($i=0;$i<502;++$i){$r=json_decode(file_get_contents("http://127.0.0.1:8080/recycle",false,$ctx),true,16,JSON_THROW_ON_ERROR);if($r["previous"]!==null || $r["marker"]!=="recycle")exit(1);}if($r["requests"]>10 || $r["euid"]===0)exit(1);'
+# Retain marker/OS/recycling assertions and exercise the actual Core HTTP services.
+php /opt/wcp360/verify-core-worker.php
 # No Caddy TCP listener: the application is reachable only through its Unix socket.
 if curl --connect-timeout 1 -sS http://127.0.0.1:8081/ >/dev/null 2>&1; then exit 1; fi
 if curl --connect-timeout 1 -sS http://127.0.0.1:2019/config/ >/dev/null 2>&1; then exit 1; fi
