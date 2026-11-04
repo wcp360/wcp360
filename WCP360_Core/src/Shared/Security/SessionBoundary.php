@@ -105,7 +105,11 @@ final readonly class SessionBoundary
         $request = $event->getRequest();
         $session = $request->getSession();
         $now = time(); $created = $session->get('_wcp_created'); $last = $session->get('_wcp_last');
-        $valid = $session->get('_wcp_context') === $this->runtime->context && is_int($created) && is_int($last);
+        // A future activity timestamp is not a valid session heartbeat.
+        // Never let it suppress idle expiry; the DB registry already rejects
+        // last_seen_at > now, so the browser-side admission must agree.
+        $valid = $session->get('_wcp_context') === $this->runtime->context
+            && is_int($created) && is_int($last) && $last <= $now;
         if ($valid) {
             try {
                 $valid = !SessionLifetimePolicy::isExpired($this->runtime->context === 'admin' ? SessionKind::Admin : SessionKind::User,
