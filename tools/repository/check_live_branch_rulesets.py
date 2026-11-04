@@ -77,7 +77,6 @@ def differences(live: object, template: dict) -> list[str]:
             continue
         actual = found[name].get("parameters")
         need = wanted[name]["parameters"]
-        # Only the explicit readback defaults below are compatible additions.
         if not parameters_match(actual, need, name):
             defects.append(f"{name}_parameters_mismatch")
     return sorted(set(defects))
@@ -96,11 +95,10 @@ def self_test() -> None:
             "required_reviewers": [],
             "dismissal_restriction": {"enabled": False, "allowed_actors": []},
         }
-        if branch == "develop":
+        if model["rules"][2]["parameters"]["required_approving_review_count"] == 0:
             readback_fields["require_extra_approval_for_unattributed_changes"] = True
         names = tuple(readback_fields)
-        # Cover every partial/default-expanded response, not just today's full
-        # GitHub payload. A provider may omit these optional fields.
+        # Cover partial readbacks as well as GitHub's complete default expansion.
         for mask in range(1, 1 << len(names)):
             expanded = copy.deepcopy(accepted)
             expanded["rules"][2]["parameters"].update({
@@ -111,7 +109,6 @@ def self_test() -> None:
             if differences(expanded, model) or expanded != before:
                 raise AssertionError(f"Reviewed readback altered or refused: {branch}/{mask}")
             successes += 1
-        # Apply all pre-existing hostile mutations also to the expanded shape.
         accepted["rules"][2]["parameters"].update(copy.deepcopy(readback_fields))
         needs_last_push_review = model["rules"][2]["parameters"]["require_last_push_approval"]
         cases = [
@@ -152,17 +149,25 @@ def self_test() -> None:
             ("numeric_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=1)),
             ("null_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=None)),
         ]
-        if branch == "main":
-            cases.append(("unreviewed_main_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=True)))
+        if model["rules"][2]["parameters"]["required_approving_review_count"] > 0:
+            cases.append(("unreviewed_extra_approval", lambda r: r["rules"][2]["parameters"].update(require_extra_approval_for_unattributed_changes=True)))
         for name, mutation in cases:
             invalid = copy.deepcopy(accepted)
             mutation(invalid)
             if not differences(invalid, model):
                 raise AssertionError(f"unsafe ruleset accepted: {branch}/{name}")
             negatives += 1
-    # Deterministic offline listing simulations prevent a false PASS from
-    # ambiguous identities or a truncated GitHub ruleset API page.
     models = {branch: expected(branch) for branch in BRANCHES}
+    # Preserve the refusal of extra approvals for any future nonzero policy.
+    nonzero = copy.deepcopy(models["main"])
+    nonzero["rules"][2]["parameters"].update(required_approving_review_count=2, require_last_push_approval=True)
+    nonzero_live = copy.deepcopy(nonzero)
+    nonzero_live["enforcement"] = "active"
+    assert differences(nonzero_live, nonzero) == []
+    nonzero_live["rules"][2]["parameters"]["require_extra_approval_for_unattributed_changes"] = True
+    if not differences(nonzero_live, nonzero):
+        raise AssertionError("Unreviewed extra approval accepted for a nonzero policy")
+    negatives += 1
     entries = [
         {"name": models["develop"]["name"], "id": 101},
         {"name": models["main"]["name"], "id": 102},
@@ -181,8 +186,6 @@ def self_test() -> None:
     if not good or good_report["live_enforcement_verified"] is not False:
         raise AssertionError("Conforming rulesets must be configuration-only matches")
 
-    # The currently observed partial rollout must not become a global PASS:
-    # develop matches with its known readback defaults; main is still missing.
     def partial_rollout(url: str) -> object:
         if url == f"{API}?per_page=100":
             return entries[:1]
@@ -268,7 +271,6 @@ def get_json(url: str) -> object:
 
 def live_report(fetcher: Callable[[str], object] = get_json) -> tuple[dict, bool]:
     items = fetcher(f"{API}?per_page=100")
-    # A full page or ambiguous identity is never sufficient for PASS.
     if not isinstance(items, list) or len(items) >= 100:
         raise ValueError("Unexpected or possibly paginated ruleset listing")
     names = {expected(branch)["name"]: branch for branch in BRANCHES}

@@ -97,7 +97,7 @@ final class ServerJourneyTest extends WebTestCase
         $data = json_decode($this->browser->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
         self::assertSame(['schema','observed_at','scope','server'], array_keys($data));
         self::assertSame('current_process_namespace', $data['scope']);
-        self::assertSame(['os_family','platform','architecture','memory','disk'], array_keys($data['server']));
+        self::assertSame(['os_family','platform','architecture','memory','disk','runtime'], array_keys($data['server']));
         foreach (['effective_uid','managed_paths','network','password_hash','session_id','database_url',WorkbenchFixture::PASSWORD] as $private) self::assertStringNotContainsString($private, $this->browser->getResponse()->getContent());
         $this->browser->request('HEAD', 'http://admin.localhost/workbench/v1/server');
         self::assertResponseIsSuccessful();
@@ -153,6 +153,7 @@ final class ServerJourneyTest extends WebTestCase
         self::assertSelectorTextContains('[data-server-memory-total]', 'Non disponible');
         self::assertSelectorTextContains('[data-server-storage-free]', 'Non disponible');
         self::assertSelectorTextContains('[role="status"]', 'Windows');
+        foreach (['uptime','load-1','load-5','load-15'] as $metric) self::assertSelectorTextSame('[data-server-'.$metric.']', 'Non disponible');
         self::assertStringContainsString('&lt;script&gt;', $this->browser->getResponse()->getContent());
         self::assertStringNotContainsString('<script>private-arch-mark</script>', $this->browser->getResponse()->getContent());
         self::assertSelectorNotExists('meter');
@@ -180,5 +181,66 @@ final class ServerJourneyTest extends WebTestCase
         self::assertResponseRedirects('/');
         $this->browser->request('GET', 'http://admin.localhost/workbench/server');
         self::assertResponseIsSuccessful();
+    }
+    private function useRuntimeObservation(array $runtime): void
+    {
+        $probe = new class($runtime) implements ServerObservation {
+            public function __construct(private array $runtime) {}
+            public function read(): array { return ServerOverviewTest::sample() + ['runtime' => $this->runtime]; }
+        };
+        self::getContainer()->set(ServerOverview::class, new ServerOverview(new CandidateAuthorization($this->store->db), $probe));
+    }
+
+    public function testUptimeAndLoadRenderAndReachTheExistingApiWithoutBusinessWrites(): void
+    {
+        $this->login();
+        $runtime = ['uptime_seconds' => 86400, 'load_average' => ['one_minute' => 0.0, 'five_minutes' => 1.25, 'fifteen_minutes' => 2.75]];
+        $this->useRuntimeObservation($runtime);
+        $before = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_audit ORDER BY id');
+        $this->browser->request('GET', 'http://admin.localhost/workbench/server');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextSame('[data-server-uptime]', '86 400 s');
+        self::assertSelectorTextSame('[data-server-load-1]', '0,00');
+        self::assertSelectorTextSame('[data-server-load-5]', '1,25');
+        self::assertSelectorTextSame('[data-server-load-15]', '2,75');
+        $this->browser->request('GET', 'http://admin.localhost/workbench/v1/server');
+        self::assertResponseIsSuccessful();
+        $data = json_decode($this->browser->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        self::assertEquals($runtime, $data['server']['runtime']);
+        self::assertSame(['uptime_seconds','load_average'], array_keys($data['server']['runtime']));
+        self::assertSame($before, $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_audit ORDER BY id'));
+    }
+
+    public function testUnknownRuntimeValuesStayNullInJsonAndUnavailableInThePage(): void
+    {
+        $this->login();
+        $runtime = ['uptime_seconds' => null, 'load_average' => null];
+        $this->useRuntimeObservation($runtime);
+        $this->browser->request('GET', 'http://admin.localhost/workbench/server');
+        self::assertResponseIsSuccessful();
+        foreach (['uptime','load-1','load-5','load-15'] as $metric) self::assertSelectorTextSame('[data-server-'.$metric.']', 'Non disponible');
+        $this->browser->request('GET', 'http://admin.localhost/workbench/v1/server');
+        self::assertResponseIsSuccessful();
+        self::assertSame($runtime, json_decode($this->browser->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR)['server']['runtime']);
+    }
+
+    public function testPartialObservationsDoNotHideKnownZeroOrOtherAvailableMetrics(): void
+    {
+        $this->login();
+        $this->useRuntimeObservation(['uptime_seconds' => 0, 'load_average' => null]);
+        $this->browser->request('GET', 'http://admin.localhost/workbench/server');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextSame('[data-server-uptime]', '0 s');
+        self::assertSelectorTextSame('[data-server-load-1]', 'Non disponible');
+    }
+
+    public function testLoadRemainsAvailableWhenUptimeIsUnknown(): void
+    {
+        $this->login();
+        $this->useRuntimeObservation(['uptime_seconds' => null, 'load_average' => ['one_minute' => 0.0, 'five_minutes' => 0.0, 'fifteen_minutes' => 0.0]]);
+        $this->browser->request('GET', 'http://admin.localhost/workbench/server');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextSame('[data-server-uptime]', 'Non disponible');
+        foreach (['load-1','load-5','load-15'] as $metric) self::assertSelectorTextSame('[data-server-'.$metric.']', '0,00');
     }
 }

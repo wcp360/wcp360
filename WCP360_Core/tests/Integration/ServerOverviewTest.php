@@ -99,7 +99,8 @@ final class ServerOverviewTest extends KernelTestCase
     public function testLiveLocalAdapterProjectsOnlyCapacityWithoutNetworkProcessOrPrivatePaths(): void
     {
         $report = self::getContainer()->get(ServerOverview::class)->inspect($this->fixture['users']['admin']);
-        self::assertSame(['os_family','platform','architecture','memory','disk'], array_keys($report['server']));
+        self::assertSame(['os_family','platform','architecture','memory','disk','runtime'], array_keys($report['server']));
+        self::assertSame(['uptime_seconds','load_average'], array_keys($report['server']['runtime']));
         self::assertSame(PHP_OS_FAMILY, $report['server']['os_family']);
         self::assertLessThanOrEqual(64, strlen($report['server']['architecture']));
         if ($report['server']['memory'] !== null) {
@@ -123,5 +124,20 @@ final class ServerOverviewTest extends KernelTestCase
             $this->expectException(AccessDeniedHttpException::class);
             $overview->inspect($fixture['users']['alice']);
         } finally { $db->close(); }
+    }
+    public function testOptionalRuntimeMeasurementsPreserveZeroAndNullWithoutWrites(): void
+    {
+        $before = $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_audit ORDER BY id');
+        foreach ([
+            ['uptime_seconds' => 0, 'load_average' => ['one_minute' => 0.0, 'five_minutes' => 0.0, 'fifteen_minutes' => 0.0]],
+            ['uptime_seconds' => null, 'load_average' => ['one_minute' => 1.0, 'five_minutes' => 2.0, 'fifteen_minutes' => 3.0]],
+            ['uptime_seconds' => 86400, 'load_average' => null],
+        ] as $runtime) {
+            $probe = $this->probe(static fn (): array => self::sample() + ['runtime' => $runtime]);
+            $overview = new ServerOverview(new CandidateAuthorization($this->store->db), $probe);
+            self::assertSame($runtime, $overview->inspect($this->fixture['users']['admin'])['server']['runtime']);
+            self::assertSame(1, $probe->calls);
+        }
+        self::assertSame($before, $this->store->db->fetchAllAssociative('SELECT * FROM wcp_candidate_audit ORDER BY id'));
     }
 }

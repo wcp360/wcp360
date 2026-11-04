@@ -1,0 +1,137 @@
+{
+  "data": {
+    "admin_sessions": "wcp_iam.admin_sessions",
+    "atomic_upgrade_implemented": false,
+    "candidate_strengths_are_canonical": false,
+    "migration_added": false,
+    "user_sessions": "wcp_iam.user_sessions"
+  },
+  "policy": {
+    "admin_enrollment_required": false,
+    "enabled_factor_enforced": true,
+    "ordinary_login_grants_privileged_context": false,
+    "password_only_is_mfa": false,
+    "proof_from_request_allowed": false,
+    "user_enrollment_required": false
+  },
+  "qa": [
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 1,
+      "test_files": [
+        "WCP360_Core/tests/Unit/OptionalLoginMfaPolicyTest.php",
+        "WCP360_Core/tests/Integration/MfaJourneyTest.php"
+      ]
+    },
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 2,
+      "test_files": [
+        "WCP360_Core/tests/Integration/CandidateMfaTest.php",
+        "WCP360_Core/tests/Integration/MfaJourneyTest.php"
+      ]
+    },
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 3,
+      "test_files": [
+        "WCP360_Core/tests/Integration/MfaJourneyTest.php",
+        "WCP360_Core/tests/Integration/CandidateSessionsTest.php"
+      ]
+    },
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 4,
+      "test_files": [
+        "WCP360_Core/tests/Integration/MfaRecoveryRenewalTest.php",
+        "WCP360_Core/tests/Integration/ChangeOwnPasswordTest.php"
+      ]
+    },
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 5,
+      "test_files": [
+        "WCP360_Core/tests/Integration/CandidateSessionsTest.php",
+        "WCP360_Core/tests/Integration/MfaJourneyTest.php"
+      ]
+    },
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 6,
+      "test_files": [
+        "WCP360_Core/tests/Integration/CandidateAuthorizationTest.php"
+      ]
+    },
+    {
+      "evidence": "SOURCE_MAPPED_NOT_EXECUTED_BY_THIS_CHECK",
+      "packet_scenario": 7,
+      "test_files": [
+        "WCP360_Core/tests/Unit/OptionalLoginMfaPolicyTest.php",
+        "WCP360_Core/tests/Unit/SessionTimestampConsistencyTest.php"
+      ]
+    }
+  ],
+  "remaining_gates": {
+    "atomic-factor-session-upgrade": "OPEN",
+    "blocked-runtime-publication": "OPEN",
+    "canonical-policy-version": "OPEN",
+    "full-stack-qualification": "OPEN",
+    "isolated-database-equivalence": "OPEN",
+    "user-mfa-journey": "OPEN"
+  },
+  "runtime_qualification": "NOT_ESTABLISHED",
+  "schema_version": 1,
+  "sensitive_api_profiles": {
+    "API-WCP-0002": "AUTH-PRIV",
+    "API-WCP-0003": "AUTH-PRIV",
+    "API-WCP-0007": "AUTH-PRIV",
+    "API-WCP-0706": "AUTH-P",
+    "API-WCP-0707": "AUTH-PRIV",
+    "API-WCP-0708": "AUTH-E",
+    "API-WCP-0802": "AUTH-PRIV",
+    "API-WCP-0803": "AUTH-PRIV",
+    "API-WCP-0805": "AUTH-PRIV",
+    "API-WCP-0807": "AUTH-PRIV",
+    "API-WCP-0809": "AUTH-PRIV",
+    "API-WCP-0810": "AUTH-PRIV",
+    "API-WCP-0812": "AUTH-PRIV",
+    "API-WCP-0814": "AUTH-PRIV",
+    "API-WCP-0816": "AUTH-PRIV"
+  },
+  "source_commit": "bcc6f7ab4cb6a36b377ae40e3bb9258506396be9",
+  "sources": {
+    "api": {
+      "git_blob": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea",
+      "path": "documentation/specifications/api/WCP360_API_Contract_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
+    },
+    "database": {
+      "git_blob": "2660e057bad1d00592c57f354b1f3745ccccbe7d",
+      "path": "documentation/specifications/database/WCP360_DB_Model_v1.0_Canonical_Implementation_Contract.md"
+    },
+    "factor": {
+      "git_blob": "144dedb4bd7b2beaf7767071769754974514c650",
+      "path": "WCP360_Core/src/Module/IdentityAccess/Application/CandidateMfa.php"
+    },
+    "factor_guard": {
+      "git_blob": "b333d24a1d9d7069040b9903226a672998eb1e12",
+      "path": "WCP360_Core/src/Module/IdentityAccess/Infrastructure/MfaSessionGuard.php"
+    },
+    "recovery_renewal": {
+      "git_blob": "13c652ee850d7422cc39caf10cb9c9d411e0a1e5",
+      "path": "WCP360_Core/src/Module/IdentityAccess/Application/RegenerateMfaRecoveryCodes.php"
+    },
+    "security": {
+      "git_blob": "6d74f2f363524511424f839ca7262143c2af95ab",
+      "path": "documentation/specifications/security/WCP360_Security_Baseline_v1.0_CANONICAL_IMPLEMENTATION_EXPORT.md"
+    },
+    "session_boundary": {
+      "git_blob": "9e9e626cdf2314459fde225aad2fde77c4c88677",
+      "path": "WCP360_Core/src/Shared/Security/SessionBoundary.php"
+    },
+    "sessions": {
+      "git_blob": "1e8f5be5941a5b81b70270ea3b1e23c98144b6f1",
+      "path": "WCP360_Core/src/Module/IdentityAccess/Application/CandidateSessions.php"
+    }
+  },
+  "status": "REVIEW"
+}

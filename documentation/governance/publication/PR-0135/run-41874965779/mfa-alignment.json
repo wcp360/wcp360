@@ -1,0 +1,29 @@
+{
+  "application_tests_executed": false,
+  "canonical_amendment_approved": false,
+  "checked_source_blobs": {
+    "api": "4893c5191b4928ecfa5a70f4dc14b39a8939fcea",
+    "database": "2660e057bad1d00592c57f354b1f3745ccccbe7d",
+    "factor": "144dedb4bd7b2beaf7767071769754974514c650",
+    "factor_guard": "b333d24a1d9d7069040b9903226a672998eb1e12",
+    "recovery_renewal": "13c652ee850d7422cc39caf10cb9c9d411e0a1e5",
+    "security": "6d74f2f363524511424f839ca7262143c2af95ab",
+    "session_boundary": "9e9e626cdf2314459fde225aad2fde77c4c88677",
+    "sessions": "1e8f5be5941a5b81b70270ea3b1e23c98144b6f1"
+  },
+  "remaining_gates": {
+    "atomic-factor-session-upgrade": "OPEN",
+    "blocked-runtime-publication": "OPEN",
+    "canonical-policy-version": "OPEN",
+    "full-stack-qualification": "OPEN",
+    "isolated-database-equivalence": "OPEN",
+    "user-mfa-journey": "OPEN"
+  },
+  "result": "PASS_WITH_DECLARED_GAPS",
+  "runtime_qualification": "NOT_ESTABLISHED",
+  "schema_version": 1,
+  "scope": "SOURCE_TRACEABILITY_ONLY",
+  "sensitive_api_profiles_checked": 15,
+  "source_reference_commit": "bcc6f7ab4cb6a36b377ae40e3bb9258506396be9",
+  "test_sources_present": 8
+}

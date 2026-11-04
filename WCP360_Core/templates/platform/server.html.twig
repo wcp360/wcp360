@@ -1,6 +1,7 @@
 {% extends 'layouts/workbench.html.twig' %}
 {% set page_title = 'Vue du serveur' %}
 {% set server = report.server %}
+{% set runtime = server.runtime|default(null) %}
 {% block content %}
 <div class="wcp-page-head"><div><p class="wcp-page-eyebrow">ROOT — ADMINISTRATION DU SERVEUR</p><h1>Vue du serveur</h1><p class="wcp-page-sub">Système, mémoire et stockage visibles par le panneau.</p></div><div class="wcp-page-actions"><a class="button secondary" href="{{ path('wcp_server') }}">Actualiser</a><a class="button secondary" href="{{ path('wcp_services') }}">Services du serveur</a></div></div>
 <div class="wcp-health-strip" aria-label="Ressources observées">
@@ -22,6 +23,15 @@
 <p>Les valeurs décrivent l’environnement visible par le panneau. Dans un conteneur, la mémoire disponible et les limites attribuées peuvent être différentes.</p>
 {% if server.os_family != 'Linux' %}<p role="status">Aperçu de développement sous {{ server.os_family }}. Les mesures Linux apparaîtront sur le serveur cible.</p>{% endif %}
 <p><a href="{{ path('wcp_audit') }}">Consulter le journal d’audit</a></p>
+</div></section>
+<section class="wcp-panel" aria-labelledby="server-runtime-title"><div class="wcp-panel-head"><div><h2 class="wcp-panel-title" id="server-runtime-title">Durée et charge du système</h2><p class="wcp-panel-sub">Mesures Linux en lecture seule</p></div></div><div class="wcp-panel-body">
+<dl>
+<dt>Durée depuis le démarrage</dt><dd data-server-uptime>{{ runtime is not null and runtime.uptime_seconds is not null ? runtime.uptime_seconds|number_format(0, ',', ' ') ~ ' s' : 'Non disponible' }}</dd>
+<dt>Charge moyenne — 1 minute</dt><dd data-server-load-1>{{ runtime is not null and runtime.load_average is not null ? runtime.load_average.one_minute|number_format(2, ',', ' ') : 'Non disponible' }}</dd>
+<dt>Charge moyenne — 5 minutes</dt><dd data-server-load-5>{{ runtime is not null and runtime.load_average is not null ? runtime.load_average.five_minutes|number_format(2, ',', ' ') : 'Non disponible' }}</dd>
+<dt>Charge moyenne — 15 minutes</dt><dd data-server-load-15>{{ runtime is not null and runtime.load_average is not null ? runtime.load_average.fifteen_minutes|number_format(2, ',', ' ') : 'Non disponible' }}</dd>
+</dl>
+<p>La charge moyenne n’est pas un pourcentage CPU. Ces mesures reflètent le système visible par le panneau, pas les limites attribuées à un conteneur ou à un compte.</p>
 </div></section>
 </div>
 <a class="button secondary" href="{{ path('wcp_dashboard') }}">Retour au tableau de bord</a>

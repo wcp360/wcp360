@@ -6,6 +6,7 @@ namespace Wcp360\Core\Module\Platform\Infrastructure;
 
 use Wcp360\Core\Module\Platform\Application\ServerObservation;
 use Wcp360\Core\Shared\Platform\LinuxHostInventory;
+use Wcp360\Core\Shared\Platform\LinuxRuntimeMetrics;
 
 final class LocalServerObservation implements ServerObservation
 {
@@ -15,6 +16,7 @@ final class LocalServerObservation implements ServerObservation
         $host = LinuxHostInventory::collect(false);
 
         return ['os_family' => PHP_OS_FAMILY, 'platform' => $host['platform'],
-            'architecture' => substr($host['architecture'], 0, 64), 'memory' => $host['memory'], 'disk' => $host['disk']];
+            'architecture' => substr($host['architecture'], 0, 64), 'memory' => $host['memory'], 'disk' => $host['disk'],
+            'runtime' => LinuxRuntimeMetrics::collect()];
     }
 }
