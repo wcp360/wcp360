@@ -6,8 +6,8 @@
 | :--- | :--- |
 | [CursorPageQuery](CursorPageQuery.php) | Shared fixed row limits, exclusive UUID cursors and query-key/value bounds for administrator and tenant read lists; never authorization. |
 | [TenantPageQuery](TenantPageQuery.php) | Adds required tenant identity and hostname-fragment validation for the existing hosting/job inventories. |
-| [BoundarySubscriber](BoundarySubscriber.php) | Existing runtime host check, CSP, Origin-adjacent browser headers and no-store responses. |
-| [RequestReference](RequestReference.php) | Fresh 128-bit random reference stored on each main Request, with no singleton request state or caller-header trust. |
+| [BoundarySubscriber](BoundarySubscriber.php) | Candidate main-request host admission, fresh CSP nonce, explicit framing/isolation headers, no-store and TLS-only HSTS. |
+| [RequestReference](RequestReference.php) | Fresh server-generated 128-bit request reference, tracked with weak keys so unissued or overwritten Request attributes cannot forge its diagnostic origin. |
 | [HttpErrorSubscriber](HttpErrorSubscriber.php) | Reference lifecycle and safe main-request exceptions; API authentication redirects become JSON refusals before standard security headers are applied. |
 | [HttpFailure](HttpFailure.php) | Fixed status/code/message mapping; no exception-message, path, query or payload reflection. |
 | [HttpErrorResponder](HttpErrorResponder.php) | JSON/browser presentation, narrowed exception headers, optional safe diagnostic metadata and nonrecursive rendering fallback. |
@@ -21,7 +21,7 @@
 
 ## Request references
 
-Every admitted main HTTP request receives a new server-generated `X-WCP360-Request-Id` response header containing 32 lowercase hexadecimal characters. Client values in that header, `X-Request-Id`, `traceparent`, query/body data and preexisting request attributes never establish the new reference. Request attributes hold the reference; no service property retains it between FrankenPHP worker requests. Subrequests do not replace the main reference.
+Every admitted main HTTP request receives a new server-generated `X-WCP360-Request-Id` response header containing 32 lowercase hexadecimal characters. Client values in that header, `X-Request-Id`, `traceparent`, query/body data and preexisting request attributes never establish the new reference. The issued reference is re-bound into Request attributes for existing consumers, but a weak-keyed service map is authoritative; repeated begin/get calls on the same Request are idempotent, including early error handling before the main request listener. It does not keep completed Request objects alive across FrankenPHP worker requests. Subrequests do not replace the main reference.
 
 This reference is diagnostic metadata, never an identity, permission, tenant selector, idempotency key, job ID or audit-record ID. [Hosting-plan submission](../../Module/Operations/README.md#durable-hosting-plan-request-correlation) now persists the first request reference with the job and its lifecycle audit occurrences. Other resources, IPC and complete distributed tracing remain outside this slice. Errors optionally log only the reference, status and fixed code through an available PSR logger; no new log backend is installed. Existing framework/domain logging and secret-redaction obligations remain separate.
 
@@ -44,6 +44,9 @@ The body reference matches the response header. Status mappings reuse a bounded 
 Anonymous API calls receive 401 JSON instead of the browser login page. Existing session-revocation and pending-factor redirects in this namespace are rendered as 401 or 403/MFA_REQUIRED after security has already refused access. This namespace has no resource redirects; it continues to use cookie authentication, Origin/CSRF and the existing authorization gates. It does not accept bearer tokens or grant roles during a pending challenge.
 
 ## Browser and failure behavior
+
+The candidate main-response security policy explicitly includes the Security v1.0 CSP object/frame directives and same-origin framing/resource headers. It records each server-issued CSP nonce against its main Request using weak keys, preventing even well-formed unissued or downstream-overwritten Request attributes from selecting the policy nonce. The exception listener issues or restores the server nonce before Twig renders early error pages, so the HTML importmap nonce matches the final CSP; early responses also get a fresh nonce even if a preexisting attribute looks valid. Separate requests do not share nonce state in a long-lived worker. It does not overwrite subrequest responses. TLS main responses receive the canonical HSTS value, replacing downstream overrides; HTTP main responses actively remove any downstream HSTS header, including early errors. This does not qualify proxy trust, production TLS, origin routing, or the complete canonical security baseline. Regression coverage: [BoundarySubscriberTest](../../../tests/Unit/BoundarySubscriberTest.php). The change remains review-only until MASTER and independent owners accept the exact SHA.
+
 
 Browser login/MFA redirects remain intact. Other main-request exceptions use the [official auth layout](../../../templates/errors/http.html.twig), French fixed messages and a reference the owner can quote to the instance operator. Raw exception text, SQL, stack traces, file paths, cookies, submitted credentials and another tenant's details are never copied into this presentation. The existing credential-route listener delegates to this responder before debug rendering.
 

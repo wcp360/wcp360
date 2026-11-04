@@ -137,7 +137,7 @@ final class PasswordRecoveryCodeTest extends KernelTestCase
     public function testConcurrentCredentialChangeSurvivesRejectedRedemption(): void
     {
         $code=$this->code();
-        $hasher=$this->createMock(UserPasswordHasherInterface::class);
+        $hasher=$this->createStub(UserPasswordHasherInterface::class);
         $hasher->method('isPasswordValid')->willReturn(false);
         $hasher->method('hashPassword')->willReturnCallback(function():string{
             $this->store->db->update('wcp_candidate_users',['password_hash'=>'concurrent-code-verifier'],['id'=>$this->fixture['users']['alice']]);

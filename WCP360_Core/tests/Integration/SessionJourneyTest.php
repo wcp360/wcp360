@@ -141,6 +141,30 @@ final class SessionJourneyTest extends WebTestCase
         }
     }
 
+    public function testFutureBrowserSessionHeartbeatIsRejectedInBothUserAndAdminContexts(): void
+    {
+        foreach (['user' => 'alice', 'admin' => 'admin'] as $surface => $username) {
+            $this->bootBrowser($surface, true);
+            $this->login($username);
+
+            $session = $this->browser->getRequest()->getSession();
+            $created = $session->get('_wcp_created');
+            $last = $session->get('_wcp_last');
+            self::assertIsInt($created);
+            self::assertIsInt($last);
+            self::assertLessThanOrEqual(time(), $last);
+
+            // Keep the registry row valid while corrupting only the browser
+            // activity clock. The safe result is logout, not extended access.
+            $session->set('_wcp_last', time() + 3600);
+            $session->save();
+
+            $this->browser->request('GET', $this->url('/account/sessions'));
+            self::assertResponseRedirects('/login');
+            self::assertFalse($this->browser->getRequest()->getSession()->has('_wcp_registry'));
+        }
+    }
+
     public function testRevokeOthersPreservesCurrentCookieAndBlocksTheOtherCookieAfterRestart(): void
     {
         $this->login();

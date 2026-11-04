@@ -1,7 +1,19 @@
 {
   "source_repository": "yyogas/wcp360",
   "source_commit": "284daabc8d57a65d3ad11e326baee32898e64254",
-  "adaptation": "Namespace/import relocation only; session decision logic unchanged.",
+  "adaptation": "Initial namespace/import relocation. Session lifetime logic remains unchanged; the Core login-policy derivative now follows owner-requested optional MFA enrollment as explicitly recorded below.",
+  "owner_policy_deltas": [
+    {
+      "reference": "D-CORE-M1-S2 / issue #132",
+      "authorization": "https://github.com/wcp360/wcp360/issues/132#issuecomment-6630205789",
+      "date": "2026-11-04",
+      "target": "WCP360_Core/src/Shared/Security/SessionLifetimePolicy.php",
+      "method": "mfaMandatoryAtLogin",
+      "change": "No blanket enrollment requirement on either surface; enabled-factor admission and operation-specific strong-auth gates are unchanged.",
+      "scope": "development candidate; no frozen export or historical SOURCE/platform alteration",
+      "note": "WCP360_Core/src/Shared/Security/OPTIONAL-MFA-POLICY.md"
+    }
+  ],
   "files": [
     {
       "source": "SOURCE/platform/src/Security/SessionLifetimePolicy.php",

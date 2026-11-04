@@ -1,6 +1,6 @@
 # WCP360 — Repository branch-protection templates
 
-**STATUS: VERSIONED CONFIGURATION CANDIDATE / DISABLED / NOT INSTALLED.**
+**STATUS: VERSIONED TEMPLATES DISABLED; DEVELOP ACTIVATION OBSERVED 2026-11-04.**
 
 The target workflow remains `features/* → develop → stable → main → production`.
 The owner prohibits creating any new branch. Existing contributions are processed
@@ -70,8 +70,9 @@ python3 -I tools/repository/check_live_branch_rulesets.py --self-test
 ```
 
 The current fixtures exercise 38 rejected template variants, 9 admitted / 29
-refused branch routes, and 2 conforming / 48 rejected live-configuration variants,
-plus unsafe listings, URLs and redirects. They do not call GitHub or change refs.
+refused branch routes, and 12 conforming / 73 rejected live-configuration variants,
+plus unsafe listings, URLs, redirects, partial rollout and explicit-field
+precedence. They do not call GitHub or change refs.
 
 For configuration-only readback:
 
@@ -82,8 +83,38 @@ python3 -I tools/repository/check_live_branch_rulesets.py --live
 `--live --report-only` reports uncertainty without a failing shell status.
 `MATCHES_TEMPLATE` means configuration agreement only. An unavailable API is
 UNVERIFIED. The observer rejects redirects, unknown destinations, oversized
-responses, ambiguous identities, incomplete pagination and extra policy fields.
-Boolean values cannot stand in for numeric review counts.
+responses, ambiguous identities, incomplete pagination and unreviewed policy
+fields. Boolean values cannot stand in for numeric review counts.
+
+## Reviewed GitHub readback fields — November 4, 2026
+
+[Live readback in #129](https://github.com/wcp360/wcp360/issues/129#issuecomment-6631293983)
+observed active ruleset `26531327`, exact target `refs/heads/develop`, and
+`develop.protected=true`. Main was still unprotected. This dated observation is
+not a promise that settings cannot change and not a live refusal-test result.
+
+GitHub adds optional PR parameters absent from the original import. The observer
+accepts only these explicitly reviewed values when not already defined by the
+versioned template:
+
+- `required_reviewers: []`;
+- `dismissal_restriction: {"enabled": false, "allowed_actors": []}`;
+- `require_extra_approval_for_unattributed_changes: true`, **only** when the
+  template requires integer zero approving reviews.
+
+The [official GitHub rules reference](https://docs.github.com/en/rest/repos/rules)
+defines the extra-review flag as applying to unattributed Copilot PRs only when a
+nonzero approval count is required. It therefore adds no reviewer to develop.
+For main's nonzero frozen threshold, this field is deliberately not normalized;
+any such readback requires a separate explicit policy decision. The templates
+and live Settings are not modified by this compatibility fix.
+
+Every other parameter remains an exact, type-sensitive JSON comparison.
+Nonempty reviewers, restricted dismissal, unexpected nested fields, wrong
+booleans/counts, modified checks and arbitrary new fields remain nonconforming.
+An explicitly specified template field always wins over compatibility defaults.
+The partial-rollout fixture verifies that matching develop while main is missing
+never produces overall conformance or `live_enforcement_verified=true`.
 
 ## Existing-branch routing exceptions and retirement
 

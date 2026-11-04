@@ -116,6 +116,23 @@ final class HttpErrorJourneyTest extends WebTestCase
         self::assertStringNotContainsString('private-credential-marker', $this->browser->getResponse()->getContent());
     }
 
+    public function testRejectedHostErrorPageNonceMatchesFinalCsp(): void
+    {
+        // Wrong-surface rejection happens in the request listener before its
+        // ordinary nonce assignment; Twig still needs the nonce before render.
+        $this->browser->request('GET', 'http://admin.localhost/private-error-marker');
+        self::assertResponseStatusCodeSame(403);
+        self::assertSelectorExists('meta[name="csp-nonce"]');
+        $nonce = $this->browser->getCrawler()->filter('meta[name="csp-nonce"]')->attr('content');
+        self::assertIsString($nonce);
+        self::assertMatchesRegularExpression('/^[A-Za-z0-9+\\/]{24}$/D', $nonce);
+        $csp = $this->browser->getResponse()->headers->get('Content-Security-Policy');
+        self::assertIsString($csp);
+        self::assertStringContainsString("'nonce-".$nonce."'", $csp);
+        self::assertSame('DENY', $this->browser->getResponse()->headers->get('X-Frame-Options'));
+        self::assertStringNotContainsString('private-error-marker', $this->browser->getResponse()->getContent());
+    }
+
     public function testBrowserErrorsUseOfficialLayoutAndIgnoreInjectedTraceHeaders(): void
     {
         $this->browser->request('GET', 'http://user.localhost/private-page-marker?token=private-secret-marker', [], [], [
