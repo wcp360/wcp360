@@ -4,7 +4,11 @@
 
 [Tenancy](../../README.md) remains the owner of account/tenant plans, subscriptions, entitlements and resource ceilings. This location prepares that existing responsibility; it adds no fourteenth Core module, canonical contract, API identifier, database table or runtime feature. Use the [Core structure](../../../../../STRUCTURE.md) and [capability map](../../../../../CAPABILITY-MAP.md#installation-updates-and-panel-autonomy) for navigation.
 
-The [Community/PRO strategy](../../../../../../documentation/development/EDITIONS-AND-PREMIUM.md) records the product direction: the Core remains 100% open source under AGPL-3.0-only, while optional premium business modules and connectors live outside it. See [Core licensing](../../../../../LICENSING.md) for license scope. This is separate from checking commercial rights: no Core license check, paid ROOT flag or production entitlement protocol is introduced here.
+The [Community/PRO strategy](../../../../../../documentation/development/EDITIONS-AND-PREMIUM.md) records the product direction: the community Core source is offered under AGPL-3.0-only, with a possible separate commercial license subject to published terms and rights-holder authority. Optional premium business modules and connectors live outside the Core. See [Core licensing](../../../../../LICENSING.md) for license scope. This is separate from checking commercial rights: no Core license check, paid ROOT flag or production entitlement protocol is introduced here.
+
+**Edition decision confirmed on November 3, 2026:** Free/Community has unlimited websites with the essential Core and no premium modules or premium connectors; PRO has unlimited websites and includes all WCP360 premium modules/connectors once individually released, admitted and qualified. This replaces the earlier 30-site Free proposal. A future verifier must not invent an edition-level site-count ceiling for Free. Host capacity, tenant-owned hosting plans and delegated resource quotas remain separate concerns with their own implementation and acceptance; this reservation implements none of them.
+
+The [dated owner decision](../../../../../../documentation/governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) is product-policy provenance, not a license grant, package-admission result or production protocol.
 
 ## Scope and authority
 

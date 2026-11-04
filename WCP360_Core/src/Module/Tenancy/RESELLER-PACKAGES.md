@@ -2,7 +2,13 @@
 
 **Status: Core design preparation, November 2, 2026.** This guide organizes existing requirements; it implements no plan builder, quota engine, database schema, permission identifier, API or provisioning action. [M4](../../../ROADMAP.md#m4) and the [233-capability map](../../../CAPABILITY-MAP.md) retain their delivery status.
 
-Package templates, reseller delegation, resource ceilings, assignment and authorized exceptions belong to the **AGPL Core**. They are not premium-only features. An optional agency/billing package may coordinate advanced portfolios through accepted Core use cases; it cannot replace Tenancy or become a condition for ordinary reseller hosting.
+**Edition-scope amendment, November 3, 2026:** the [owner's reseller decision](../../../../documentation/governance/decisions/OWNER-DECISION-COMMUNITY-RESELLER-2026-11-03.md) excludes reseller management and reseller-specific delegation from Community. An optional commercial workflow may be considered later; no reseller package is available or qualified, and PRO inclusion, package identity and terms remain unconfirmed. Essential account/tenant ownership, ordinary hosting plans/quotas, IAM, isolation, audit and local recovery remain Core duties. The thirteen owners, existing licence and canonical identifiers are unchanged.
+
+The former edition inclusion statement is retained below as **superseded product scope**, not current Community requirements:
+
+> Package templates, reseller delegation, resource ceilings, assignment and authorized exceptions belong to the **AGPL Core**. They are not premium-only features. An optional agency/billing package may coordinate advanced portfolios through accepted Core use cases; it cannot replace Tenancy or become a condition for ordinary reseller hosting.
+
+All detailed specifications and refusal criteria below are preserved. Requirements concerning ordinary account plans and quotas remain essential Core requirements; reseller hierarchy/delegation/portfolio requirements are retained design for a possible separately accepted workflow. Their presence does not implement that workflow or commit its commercial placement. Future reseller operations must reuse accepted Core ownership and authorization boundaries; moving the product surface does not authorize paid code to bypass them.
 
 ## Product vocabulary
 

@@ -4,7 +4,7 @@
 
 **Status: an executable development candidate is available; the complete hosting engine and production release remain unqualified.**
 
-**License: [AGPL-3.0-only](LICENSE).** The [licensing guide](LICENSING.md) defines the Core scope, source obligations and independent-package boundaries. [Community/PRO strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) keeps the essential Core open source and autonomous; premium business modules and connectors are developed outside this directory, with separate admission and commercial-rights checks.
+**Public source license: [AGPL-3.0-only](LICENSE).** WCP360's dual-licensing direction may allow a separate commercial license; no such agreement or proprietary grant is included here. The [licensing guide](LICENSING.md) defines the Core scope, source obligations and independent-package boundaries. [Community/PRO strategy](../documentation/development/EDITIONS-AND-PREMIUM.md) keeps the essential Core open source and autonomous; premium business modules and connectors are developed outside this directory, with separate admission and commercial-rights checks.
 
 Start with the [working guide](WORKING-GUIDE.md) for development orientation and the [current status](STATUS.md) for implemented candidate paths, reservations and open qualification. [NAVIGATION](NAVIGATION.md) locates code; [STRUCTURE](STRUCTURE.md) assigns ownership; the capability register and roadmap below retain delivery status and dependency order.
 

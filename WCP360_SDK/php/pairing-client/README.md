@@ -2,7 +2,7 @@
 
 Independent PHP ≥8.3 library (JSON, Sodium; cURL for HTTP), evaluated under the site PHP 8.3 and standalone PHP 8.4 toolchains. No Core vendor, dependency lock, startup hook or hosting authorization is changed. This is a candidate website identity handshake, not the accepted Core API, machine attestation, licensing client or production SDK integration.
 
-The provider [contract](../../../../../htdocs/grav/user/plugins/verify-license/PAIRING.md) defines exact signed bytes, fields, limits and recovery semantics. Verify License 0.2.0 currently supports **only direct loopback HTTP** with explicit operator opt-in. This library requires HTTPS by default and verifies TLS; that does not imply a qualified HTTPS provider exists. No redirects, proxy, cookies or Admin credentials; bounded bodies / headers and deadlines. A fresh cURL handle leaves NETRC ignored (the libcurl default); it never loads credentials from a caller-owned shared handle.
+The provider contract in the separate Hub checkout (`WCP360-Hub/user/plugins/verify-license/PAIRING.md`) defines exact signed bytes, fields, limits and recovery semantics. Verify License 0.2.0 currently supports **only direct loopback HTTP** with explicit operator opt-in. This library requires HTTPS by default and verifies TLS; that does not imply a qualified HTTPS provider exists. No redirects, proxy, cookies or Admin credentials; bounded bodies / headers and deadlines. A fresh cURL handle leaves NETRC ignored (the libcurl default); it never loads credentials from a caller-owned shared handle.
 
 ## Standalone tool
 
@@ -13,7 +13,7 @@ The executable [tools/hub-pair.php](../../../tools/hub-pair.php) runs separately
 3. Run the tool below, then paste the one-time code into its standard input and press Enter. Never put the code in argv, an environment variable, a URL or shell history. The tool waits for stdin; the command line contains no code.
 
 ```powershell
-& 'C:\xampp\projects\WCP360_Standalone\WCP360_Build\build\toolchains\php84\php.exe' 'C:\xampp\projects\WCP360_Standalone\tools\hub-pair.php' pair --state-dir=C:\xampp\projects\WCP360_Instance_Pairing --hub=http://localhost/grav --core-version=1.0.0 --os=unknown --architecture=unknown --allow-loopback-http
+& 'C:\xampp\projects\WCP360_Standalone\WCP360_Build\build\toolchains\php84\php.exe' 'C:\xampp\projects\WCP360_Standalone\tools\hub-pair.php' pair --state-dir=C:\xampp\projects\WCP360_Instance_Pairing --hub=http://localhost/WCP360-Hub --core-version=1.0.0 --os=unknown --architecture=unknown --allow-loopback-http
 ```
 
 The parent `C:\xampp\projects` exists in this development example. Choose a separate protected directory for each instance. The tool creates a local Ed25519 key and saves a pending request before any network operation. Its stdout contains only status, instance ID and public-key fingerprint. Success atomically replaces pending request / raw code with the public receipt; it retains the private key locally. The Vault holds an exclusive nonblocking lock and checks paths, links, file count / size and permissions supported by the platform. Atomic replacement and crash durability still require Linux target qualification.
@@ -31,6 +31,6 @@ An identity can be revoked in the owner’s portal. A fresh `check` is then refu
 
 ## Validation
 
-`tests/run.php` tests an independent consumer against synthetic transports; an optional private loopback router exercises actual cURL redirect, size and credential behavior. [validate-pairing.ps1](../../../../WCP360_Quality/validate-pairing.ps1) adds real MariaDB, Grav sessions, provider / consumer proof interoperability, two-worker consumption, rollback, restricted SQL, foreign ownership, replay / expiry / revocation, actual PHP 8.4 CLI and Chrome. PHPStan level 5 uses its own tooling, not Core’s vendor.
+`tests/run.php` tests an independent consumer against synthetic transports; an optional private loopback router exercises actual cURL redirect, size and credential behavior. The XAMPP workspace recipe `projects/WCP360_Quality/validate-pairing.ps1` adds real MariaDB, Grav sessions, provider / consumer proof interoperability, two-worker consumption, rollback, restricted SQL, foreign ownership, replay / expiry / revocation, actual PHP 8.4 CLI and Chrome. PHPStan level 5 uses its own tooling, not Core’s vendor.
 
 Reports contain exact hashes and explicit `not_run` / `not_configured` gaps. HTTPS / proxy deployment, Linux filesystem and Core startup, Admin2 privileged session, SAST / secret scanning, independent protocol review, capacity, retention and recovery / rotation block production qualification. No claim of complete security or Internet readiness follows from local tests.

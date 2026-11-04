@@ -10,6 +10,7 @@ Technical documentation is grouped here so the repository root can focus on proj
 | Find consolidated histories, source locations and final branch disposition | [Integration register](governance/branches/BRANCH-INTEGRATION-2026-11-02.md) and [completed closure](governance/branches/BRANCH-COMPLETION-2026-11-03.md) |
 | Resume a bounded Core change and keep documents consistent | [Core working guide](../WCP360_Core/WORKING-GUIDE.md) |
 | See the verified revision, evidence, current limits and next checkpoint | [Core status](../WCP360_Core/STATUS.md) |
+| See the owner decision for the twelve unresolved privileged IPC bindings | [Deny-until-approved decision for issue #91](governance/decisions/OWNER-DECISION-SC-M01-PRIVILEGED-IPC-BINDINGS-2026-11-03.md) |
 | Follow dependency order and acceptance | [Core roadmap](../WCP360_Core/ROADMAP.md) |
 | Find code, owners, CLI and resource locations | [Navigation](../WCP360_Core/NAVIGATION.md) and [structure](../WCP360_Core/STRUCTURE.md) |
 | Find multi-server, storage, containers, VM, performance and defensive-security scope | [Nine-domain infrastructure coverage](development/INFRASTRUCTURE-PREMIUM-COVERAGE.md) |

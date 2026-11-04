@@ -1,16 +1,21 @@
 # Community, PRO and premium packages
 
-**Product direction recorded on 2026-11-02.** WCP360 uses one open-source Core and separately packaged optional products. This document records the edition boundaries and the work required to deliver them; it does not activate an edition, admit a package or qualify an application recipe.
+**Product direction recorded on 2026-11-02; edition decision confirmed on 2026-11-03.** WCP360 uses one open-source Core and separately packaged optional products. This document records the edition boundaries and the work required to deliver them; it does not activate an edition, admit a package or qualify an application recipe.
 
 The [Core working guide](../../WCP360_Core/WORKING-GUIDE.md), [current status](../../WCP360_Core/STATUS.md) and [roadmap](../../WCP360_Core/ROADMAP.md) describe the executable candidate. The licensing scope is defined in [Core licensing](../../WCP360_Core/LICENSING.md) and its [AGPL-3.0-only license](../../WCP360_Core/LICENSE). Product descriptions and planning catalogues must not override those sources.
+
+See the [November 3 owner decision](../governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) for Free's unlimited-site policy and the separate optional-administrator-MFA decision. It records the decisions and remaining contract review without changing frozen exports or implementation maturity.
+
+The later [November 3 reseller-scope decision](../governance/decisions/OWNER-DECISION-COMMUNITY-RESELLER-2026-11-03.md) excludes reseller management/delegation from the Community target. An optional future commercial workflow is only reserved; PRO inclusion and package terms remain unconfirmed. Essential Tenancy, IAM, ordinary resource plans/quotas, isolation and recovery remain Core duties.
 
 ## Decisions and present limits
 
 | Topic | Decision | Current implementation boundary |
 | :--- | :--- | :--- |
-| Community | The Core is 100% open source under AGPL-3.0-only. | The existing candidate remains incomplete; open-source scope is not a claim that every planned capability works. |
-| Essential platform | The thirteen Core domain owners, 233 essential functional capabilities and seven Core engine/provider adapters remain in the open-source perimeter. | Their individual implementation and qualification states still apply. No essential adapter is moved behind a premium entitlement. |
-| PRO | A commercial offer of optional business modules, connectors and advanced workflows using the same Core. | No executable edition selector, subscription entitlement verifier or PRO activation protocol is delivered by this document. |
+| Free / Community site limit | Unlimited websites, essential Core only, without premium modules or premium connectors. The November 3 decision supersedes the earlier 30-site proposal. | No edition-imposed site-count ceiling is selected. Host capacity, tenant-plan limits, delegated quotas and third-party application licenses remain independent constraints; their implementation status is unchanged. |
+| Community | The Core source is offered under AGPL-3.0-only. Recipients retain those rights even if a separate commercial license is later offered. | The existing candidate remains incomplete; open-source scope is not a claim that every planned capability works. |
+| Essential platform | The thirteen Core domain owners and essential Core engine/provider foundations remain open source. The preserved 233-capability inventory includes earlier scope and is not a declaration that every row belongs to Community after the reseller decision. | Individual implementation and qualification states still apply. Reseller-specific scope is excluded from Community; essential hosting, IAM, ordinary account quotas and recovery do not move behind a premium entitlement. Historical counts/statuses remain unchanged. |
+| PRO | Unlimited websites and all WCP360 premium modules and premium connectors included, using the same Core. Inclusion applies to their individually released, admitted and qualified versions. | No executable edition selector, subscription entitlement verifier or PRO activation protocol is delivered by this document; inclusion is not availability of an unfinished proposal. |
 | Premium business modules | Independently versioned packages under `WCP360_Modules/`. | The catalogue contains 44 design proposals, not 44 installable packages. |
 | Premium connectors | Independently versioned integrations under `WCP360_Plugins/premium/`. | The catalogue contains 97 design proposals, not 97 admitted or qualified connectors. |
 | App Install PRO | Full access to application installation workflows for recipes that have passed the required qualification and admission checks. | No executable general App Installer exists today; the 410 App Deploy references are not all installable applications. |
@@ -25,19 +30,21 @@ The matrix defines the product direction. A check in this table is not evidence 
 
 | Area | Community | PRO |
 | :--- | :--- | :--- |
+| Edition site-count ceiling | Unlimited websites; no 30-site Free cap. | Unlimited websites. Host capacity and tenant-owned resource policies apply to both editions. |
 | Core installation, setup wizard, supported updates and repair | Open-source Core scope. | The same Core and recovery path. |
 | Authentication, tenant isolation, permissions, audit and security controls | Essential Core scope; no commercial dependency. | The same controls, including checks for every premium action. |
 | Hosting, files, databases, mail and essential resource management | The essential capabilities and adapters remain open source. | The same ownership, extended through optional admitted workflows. |
+| Reseller management and reseller-specific delegation | Outside the Community product target. Essential customer workspaces, ownership, IAM, ordinary resource plans/quotas and isolation remain Core. | A future optional commercial workflow may be considered; PRO inclusion, package identity and terms are unconfirmed. No reseller package is made available by this strategy. |
 | Existing sites, applications and retained customer data | Remain manageable through supported Core workflows. | Premium management never becomes the sole keeper of these resources. |
 | Baseline backup, restore, export and recovery | Remain accessible according to current resource permissions. | Optional advanced orchestration may add capabilities without removing baseline access. |
 | Optional community packages | May be offered under their published terms and accepted package contract. | May coexist with premium packages when dependencies and permissions allow. |
-| Advanced business modules | No PRO entitlement is assumed. | Access to the offered premium modules after package admission, configuration and explicit activation. Final bundle contents remain to be defined. |
-| Provider-specific premium connectors | No PRO entitlement is assumed; baseline Core adapters remain available. | Access to the offered connectors after trust, compatibility, credential and scope checks. |
+| Advanced business modules | Premium modules are not included. Independent community packages retain their own terms. | All WCP360 premium modules are included, after individual release, package admission, configuration and explicit activation. Inclusion does not turn a design proposal into an available package. |
+| Provider-specific premium connectors | Premium connectors are not included; baseline Core adapters remain available. | All WCP360 premium connectors are included, after individual release, trust, compatibility, credential and scope checks. Third-party service fees and application licenses are separate. |
 | Full App Install | Essential Core site/resource primitives remain available; this strategy invents no free installer quota or recipe subset. | Full qualified-recipe workflow access, subject to the host, provider, application license, compatibility, entitlement and actor permissions. |
 | Vendor outage or subscription expiry | Essential operation and recovery continue. | The same continuity requirement; changes to new premium work require an accepted commercial policy. |
 | Support, service levels and pricing | No commitment is created here. | No price, support guarantee or service level is defined here. |
 
-The functional scope in the [capability map](../../WCP360_Core/CAPABILITY-MAP.md) remains the reference for Core ownership. Premium automation may combine existing owning use cases; it cannot take ownership of essential resource records, move security checks into paid code or make Core depend on an optional package.
+The preserved [capability map](../../WCP360_Core/CAPABILITY-MAP.md) remains the historical ownership and delivery inventory, with the dated reseller scope delta recorded separately. Its 233 rows are not an unchanged Community inclusion promise. Premium automation may combine existing owning use cases; it cannot take ownership of essential resource records, move security checks into paid code or make Core depend on an optional package.
 
 ## Repository and catalogue ownership
 
@@ -81,11 +88,11 @@ The [nine-domain infrastructure register](INFRASTRUCTURE-PREMIUM-COVERAGE.md) co
 
 Ordinary hosting, admitted provider foundations, local storage/quota management, safe cache/compression and essential security remain Core scope. Premium packages orchestrate advanced workflows; they cannot bypass protected-file authorization, tenant scope, distributed effect fencing or recovery. A namespace, container, snapshot, compression switch or local firewall is not by itself proof of isolation, backup, speed or upstream DDoS protection.
 
-The [eleven-area platform register](PLATFORM-INTEGRATIONS-COVERAGE.md) adds the named integration and hosting workflows without duplicating Core owners. [Reseller templates, plans, quotas, assignments and authorized overrides](../../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md), basic/global DNS, wildcard certificate lifecycle, essential security and baseline notifications remain open-source Core duties. The additional DNS/TLS module provides advanced cross-provider/node orchestration, with no paywall over those foundations.
+The [eleven-area platform register](PLATFORM-INTEGRATIONS-COVERAGE.md) adds the named integration and hosting workflows without duplicating Core owners. Its earlier blanket inclusion of reseller templates, plans, quotas, assignments and overrides in free Core is superseded by the [reseller-scope decision](../governance/decisions/OWNER-DECISION-COMMUNITY-RESELLER-2026-11-03.md). Essential account/tenant policy, ordinary hosting plans/quotas, IAM, isolation and recovery remain Core; reseller-specific portfolio/delegation workflows are outside Community and have no confirmed commercial package placement. The complete [reseller design](../../WCP360_Core/src/Module/Tenancy/RESELLER-PACKAGES.md) is retained with this boundary. Basic/global DNS, wildcard certificate lifecycle, essential security and baseline notifications remain open-source Core duties. The additional DNS/TLS module provides advanced cross-provider/node orchestration, with no paywall over those foundations.
 
 ## Open-source licensing and commercial rights
 
-The Core license decision is **AGPL-3.0-only**, not an automatic grant of later license versions. Preserve the applicable notices and fulfill the license obligations for the covered code. In particular, AGPL version 3 addresses corresponding-source access for users interacting remotely with a modified version; see the [license text](../../WCP360_Core/LICENSE) and the [GNU explanation](https://www.gnu.org/licenses/gpl-faq.en.html#UnreleasedModsAGPL).
+The public Core license is **AGPL-3.0-only**, not an automatic grant of later license versions. The project direction permits a separate commercial/proprietary license, but this strategy is not that agreement and grants no exception. Recipients under AGPL retain its rights. Preserve the applicable notices and fulfill the license obligations for covered AGPL code. In particular, AGPL version 3 addresses corresponding-source access for users interacting remotely with a modified version; see the [license text](../../WCP360_Core/LICENSE) and the [GNU explanation](https://www.gnu.org/licenses/gpl-faq.en.html#UnreleasedModsAGPL).
 
 Charging for software does not by itself make it proprietary; see the [GNU explanation of commercial distribution](https://www.gnu.org/licenses/gpl-faq.en.html#GPLCommercially). Each premium package must declare its actual source model, license, notices and dependency obligations before distribution.
 
@@ -160,7 +167,7 @@ Preserve only the bounded verified evidence that the accepted policy permits. Ke
 
 ## Ordered delivery work
 
-1. **Establish the public scope.** Record AGPL-3.0-only for the Core, retain the thirteen owners and essential capabilities/adapters, and identify the separate license reviews for packages, SDK, dependencies and distribution artifacts. This document and the catalogue proposals record direction; they do not complete those reviews.
+1. **Establish the public scope.** Record AGPL-3.0-only for the public Core source, retain the thirteen owners and essential capabilities/adapters, and identify the separate license reviews for packages, SDK, dependencies and distribution artifacts. Before offering a commercial Core license, confirm rights to dual-license the covered contributions and publish the separate written terms. This document and the catalogue proposals record direction; they do not complete those reviews or grant commercial rights.
 2. **Review the proposed inventories.** Maintain the JSON catalogues and generated Markdown views, consolidate overlap between business modules and connectors, and identify a small pilot set. Decide the actual PRO offer and publish package terms before promising availability.
 3. **Accept versioned integration contracts.** Review detached package admission, contributions, entitlement evidence, API/SDK compatibility and the application-recipe boundary. Existing design reservations and proposal schemas remain non-production inputs until that work is accepted.
 4. **Implement bounded Core admission and rights consumers.** Keep Tenancy, ExtensionManagement, IdentityAccess, Operations, Setup and resource owners separate. Add explicit consent, safe offline/error behavior, revocation, durable evidence and reconciliation without loading optional code into Core.

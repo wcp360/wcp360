@@ -1,0 +1,85 @@
+# Production-readiness review
+
+## Purpose
+
+**Documentary review, November 3, 2026. The project is not completely implemented or production qualified.** This guide consolidates operational, hosting and security acceptance across the existing owners. It responds to gaps around watchdogs, updates, baseline security, isolation, load balancing, default/error pages, transactional email, alerts and session protection. It creates no runtime, permission, protocol, registry or completion credit.
+
+[Core STATUS](../../WCP360_Core/STATUS.md) identifies the executable checkpoint, stopped local execution and `CODE-BASELINE=NONE`. [ROADMAP](../../WCP360_Core/ROADMAP.md) owns delivery order and maturity; [CAPABILITY-MAP](../../WCP360_Core/CAPABILITY-MAP.md) owns the 233 capabilities. Source, documented requirement, implemented candidate, executed evidence and production acceptance are distinct. An imported Grav page preserves knowledge; its presence does not settle contradictions or prove implementation.
+
+Essential hosting, security, local administration, audit, alerts and recovery must work without optional packages or vendor connectivity. The [edition decision](../governance/decisions/OWNER-DECISION-FREE-SITES-MFA-2026-11-03.md) keeps Free/Community websites unlimited by edition and administrator MFA optional, enforced once enabled. Unlimited does not remove physical capacity or operator resource limits. The [Community reseller decision](../governance/decisions/OWNER-DECISION-COMMUNITY-RESELLER-2026-11-03.md) excludes reseller commercial/delegation workflows from the Community target while preserving tenant ownership, account separation and essential resource controls. Historical specifications and existing legal grants remain preserved; a future optional workflow is not an available package.
+
+“At least cPanel-level security” is a product benchmark to evaluate through a dated, scoped comparison and demonstrated journeys. It is not a certification, a blanket feature checklist or a security conclusion from this review.
+
+## Data model
+
+Use the thirteen existing owners: IdentityAccess, Tenancy, Hosting, Data, Files, Mail, Operations, BackupRestore, Transfers, Observability, Platform, Setup and ExtensionManagement. Their [navigation](../../WCP360_Core/NAVIGATION.md) and [structure](../../WCP360_Core/STRUCTURE.md) remain authoritative. Watchdog observations belong with Platform/Observability; authorized repair belongs with Operations and the resource owner. Do not create competing queues, node inventories, policy evaluators or a fourteenth notification module.
+
+A readiness evidence record binds the requirement and owner to exact source/artifact hashes, target OS/runtime/provider versions, identities, fixture scope, positive/refusal assertions, observed outcome, recovery inputs, reviewer and remaining limits. Record `passed`, `failed`, `not_run`, `not_configured` or `not_applicable` with reasons. These are reporting terms, not new canonical API states. Unavailable observations are not healthy services; a signature is not installation permission; a licence is not tenant authority.
+
+| Area | Present evidence boundary | Qualification still needed |
+| :--- | :--- | :--- |
+| Supervision | Disposable Debian 13 systemd restart/reboot candidate. | Functional watchdog, bounded repair and per-service containment. |
+| Updates | Offline operator-pinned artifact verification and candidate migration helper. | Official trust/freshness, release admission, activation and supported recovery. |
+| Identity | Candidate login, optional MFA, session inventory/revocation and bounded recovery. | Canonical production composition, Internet deployment and emergency recovery. |
+| Isolation | Preview identities/templates and bounded Linux experiments. | Effective tenant filesystem, process, database and network confinement. |
+| Hosting | Planning/rendering and limited activation experiments. | Complete domain/site lifecycle, virtual-host content and qualified providers. |
+| Observability | Candidate audit metadata and limited observations. | Metrics/history, alert delivery, retention and local fallback. |
+| Continuity | Candidate database restore and HA/network proposals. | Complete tenant restore, load-balancer/failover and measured recovery objectives. |
+
+The table is a review lens over existing records, not a second capability catalogue. No new percentage follows from its rows, test counts or documentation changes.
+
+## Interfaces
+
+Browser, CLI, automation and provider adapters must call the same currently authorized use cases. Durable intent precedes bounded effects; the effect recipient rejects stale ownership/revisions. Plans identify tenant/resource/node, provider/template version, artifact identity and expected revision. Unknown effects require observation and reconciliation, not blind retries.
+
+The following acceptance concerns attach to existing capabilities and milestones. They introduce no operation IDs, enum values or installer flags.
+
+| Concern and owners | Positive path and important refusal/failure cases |
+| :--- | :--- |
+| Watchdog — Platform, Observability, domain owner | Separate liveness, readiness and functional health with freshness/dependencies. Detect a hang without process exit. Missing samples, timeouts and invalid probes remain explicit; bound targets/egress and refuse arbitrary scans. |
+| Controlled recovery — Operations, Platform | Authorize typed restart/repair against desired state, with budgets, backoff and maintenance handling. Refuse arbitrary units/commands, stale authority and overlapping repair; repeated failure stops safely instead of causing restart storms. |
+| Update trust — Setup, ExtensionManagement | Admit component/version/target, publisher/key, digest, signature, compatibility and provenance. Refuse corruption, wrong target, unknown/revoked key, stale metadata/replay and unsupported downgrade. Consume the same immutable verified bytes. |
+| Update activation — Setup, Operations, owners | Lock, stage, reserve space, drain, activate the intended revision, verify health and record outcome. Exercise interruption, changed source, full disk and reply loss; do not promise universal zero downtime. |
+| Migration — Setup, Data, BackupRestore | Support declared source→target versions and API/worker/job compatibility. Test irreversible/partial migrations and ambiguous commits. Choose verified restore or forward repair; old code alone cannot roll back data. |
+| Security patches — Platform, Operations | Inventory actual installed revisions and admitted repositories, dated advisories, compatibility and reboot requirements. Refuse untrusted packages/repositories and OS mismatch; verify after change while preserving management access. |
+| Load balancing — Hosting, Platform | Qualify listeners/upstreams, TLS/SNI/Host, checks, drain, timeouts, streaming/WebSocket, IPv4/IPv6 and proxy trust. Reject cross-tenant backends, SSRF, forged forwarding headers and private-response caching. |
+| HA — Platform, Operations, domain owners | Distinguish ingress, workload, database, storage and control-plane HA. Exercise partition, split brain, obsolete leader, delayed replication, credential revocation and recovery; publish topology-bound measured RPO/RTO. |
+| Transactional email — emitting owner, Observability, Operations | Commit lifecycle fact and durable delivery intent together; bind verified recipient, locale/template version and correlation. Test rollback, forged events, provider timeout, bounce, stale recipient, deduplication and authorized resend. |
+| Alerts — Observability | Define severity, threshold/hysteresis, grouping, acknowledgement, bounded silence, escalation, resolution and local fallback. Exercise alert storms, missing signals, wrong-tenant recipients and unavailable providers; delivery is not human acknowledgement. |
+| Operational signals — Observability, Platform | Timestamp/redact logs, metrics and diagnostics; enforce retention/cardinality/storage/access budgets. Test hostile text, secrets, clock drift, collector failure and full disks. Collection cannot exhaust the host or implicitly authorize mutation. |
+| Backup/restore — BackupRestore and owners | Capture consistent files/database/mail/configuration and independent key material; verify integrity, retention and clean-target restore. Refuse wrong tenant, hostile archive, corruption and unavailable keys; prove application recovery, not archive creation. |
+| Scheduling — Operations | Specify timezone/DST, missed runs, overlap, fairness, deadlines, cancellation and admission budgets. Exercise duplicate messages, live stale workers, expired leases, revoked actor and lost acknowledgements; fence before effects. |
+| Resource pressure — Platform, Tenancy, owners | Enforce measured CPU/RAM/PID/FD/I/O/disk/inode/network limits and reserve administration/backup capacity. Exercise noisy neighbours, OOM/ENOSPC, saturated queues and unavailable measurements without treating unlimited sites as infinite capacity. |
+| Maintenance — Platform, Setup, Operations | Notify, drain, reboot, reobserve and reconcile; preserve independent recovery. Critical firewall/TLS/DNS changes need bounded anti-lockout recovery. Test incorrect policy, reboot, expired secrets and unavailable vendor network. |
+
+[SYSTEMD-RECOVERY](SYSTEMD-RECOVERY.md) documents restart controls and their limits; readiness notification is not a functional watchdog. [Service observations](../../WCP360_Core/src/Module/Platform/SERVICES.md) deliberately keep health/control unverified/unavailable. [Distributed execution](../../WCP360_Core/src/Module/Operations/design/distributed-execution/README.md) reserves general leases, fencing, outbox and retries. Existing narrow candidate paths must not inherit these future guarantees.
+
+[Upgrade documentation](../../WCP360_Core/installer/upgrades/README.md) distinguishes the candidate Doctrine helper from product upgrades. A SHA-256 sidecar is not authenticated backup provenance or restore evidence. [Offline verification](../../WCP360_Core/installer/preflight/README.md#offline-candidate-artifact-verification) does not select official release trust, revocation, freshness or rollout policy.
+
+Hosting must distinguish server configuration templates, customer HTML assets and deployable application recipes. Specify version/locale/topology/variables/hash/owner for new-site, parked, maintenance, suspended and unknown-host pages, plus 403/404/429 and appropriate 5xx responses. Preserve HTTP status, cache and authentication semantics, deliberate ACME/health exceptions and safe missing-template fallback. Reject unknown SNI/Host without serving another tenant's default vhost. Escape variables; no arbitrary Twig/PHP, directives, paths or globally writable replacement. Test malicious Host, wrong tenant, traversal/races, template injection, drift, reload failure and interrupted publication. [Panel error handling](../../WCP360_Core/src/Shared/Http/README.md) is a separate candidate, not these hosted pages.
+
+Account invitation/activation, hosting-ready, credential/factor/contact changes, suspicious sessions, suspension/reactivation, quota/backup/certificate/service/update notices require explicit event/recipient policy. Account creation is not successful hosting provisioning. Reset/activation links use a configured trusted HTTPS origin and short-lived, single-purpose, single-use tokens; never request-controlled Host. Do not email passwords, MFA seeds or session material. Separate mandatory security delivery from optional news/preferences. SMTP secrets, sender scope, TLS, budgets, redacted diagnostics, backlog and bounce/unknown outcomes need their own adapter contract; a full hosted mailbox product is not a prerequisite.
+
+## Roles and security
+
+IdentityAccess must qualify deny-by-default role/resource/tenant/ownership policy and current authority at every interface and before effects. Preserve USER/ADMIN origin, cookie, runtime and data separation; a ROOT panel identity is not Unix root. Administrator MFA stays optional, but enabled accounts cannot bypass their factor through recovery or session reuse. The frozen mandatory-MFA wording remains an explicit M1 contract-review mismatch, not permission to change either artifact silently.
+
+The [session candidate](../../WCP360_Core/src/Module/IdentityAccess/README.md) rotates identifiers, records bound sessions and revokes them. Its documented USER idle/absolute limits are 30 minutes/12 hours; ADMIN limits are 15 minutes/8 hours. Qualify the actual production handler, secure host-only cookies, trusted proxy/TLS boundary, rotation, expiry, logout, recovery/store loss, concurrent revocation and cross-surface refusal. Exercise fixation, stolen selectors, CSRF/Origin failures, stale confirmation, cross-action proofs, secret leakage, cached private responses and persistent channels after logout. Worker reuse must not leak request identity or state.
+
+Tenant isolation requires effective UID/GID, private FPM/Worker sockets, temporary/session/log paths, secrets, database grants and network restrictions, with enforced resource budgets. Test adversarial PHP/SSH/SFTP/cron access, cross-tenant reads/writes, inherited groups, symlink/hardlink/mount substitution and concurrent filesystem races. Templates, `open_basedir`, a container or a hardening score alone do not prove isolation.
+
+The [XAMPP FileManager security model](../../WCP360_Plugins/wcp360-file-manager-xampp/docs/SECURITY.md) explicitly excludes hostile hosting homes modified by other processes. Its cooperative lock and check-then-open backend must not be activated for multi-tenant hosting. Files/agents need confined descriptor-relative operations, authorization at effect time and real Linux race/mount/hardlink tests; no root PHP shortcut.
+
+Keep the [privileged boundary](../../SECURITY.md#privileged-architecture-invariant): non-root backend/agent to an authenticated minimal broker with fixed primitives. Refuse generic shell, SQL, systemctl, executable, signal or filesystem proxies. Audit intent/outcome without secrets; audit failure and uncertain commits cannot become success. Essential baseline firewall, brute-force controls, safe SSH, patching, TLS, audit and recovery are Core duties, independent of premium WAF or vendor integrations.
+
+## Dependencies
+
+Follow the [existing roadmap](../../WCP360_Core/ROADMAP.md), without deferring security required by an earlier path until its whole later family is complete. First settle M1 identity/session/permission and recovery contracts, including MFA harmonization. Then establish M2 durable intent, effect fencing, bounded broker authority and native admission. Qualify tenant ownership/resource limits and one complete isolated hosting lifecycle before advanced orchestration.
+
+That lifecycle includes authoritative DNS/delegation, record/serial/TTL consistency, DNSSEC/key custody and safe zone changes; ACME challenge ownership, renewal, key loss, expiry alerts and coordinated deployment; hosted database identities separate from control-plane PostgreSQL; and application-consistent recovery. Hosted Mail additionally needs SMTP authentication/TLS, no open relay, mailbox isolation, queue/abuse/rate/quota policy, SPF/DKIM/DMARC, key rotation and retention. The [service register](../../WCP360_Core/resources/services/README.md) links their existing owners and unimplemented provider decisions.
+
+The Hub supplies catalogue/distribution/commercial services; local permission, signed entitlement, package trust, download authorization and installation consent remain separate checks. [Licensing design](../../WCP360_Core/src/Module/Tenancy/design/licensing/README.md) and [package admission](../../WCP360_Core/src/Module/ExtensionManagement/design/packages/README.md) must cover offline/revocation/grace and uncertain downloads without claiming that administrative binding proves piracy or current installation. Billing checkout, signed payment events, reconciliation, licence issuance and legal invoices require their own qualified end-to-end chain. Vendor failure must not disable essential hosting or independent restore.
+
+[Network Traffic](../../WCP360_Modules/network-traffic-pro/README.md), [High Availability](../../WCP360_Modules/high-availability-pro/README.md) and other proposals remain non-installable until their single-node foundations and each topology/provider are qualified. Do not add a second controller over existing listeners, certificates, volumes or workloads.
+
+Use [SECURITY-TEST-MATRIX](SECURITY-TEST-MATRIX.md), [quality tooling](QUALITY-SECURITY-STACK.md) and [release acceptance](DELIVERY-AND-RELEASES.md) for exact-source checks, real disposable Linux lifecycle/refusal tests, dependency/secret review, recovery rehearsals and independent approval. This documentary change executes none of those runtime checks and starts no remote CI. Existing local execution remains stopped. Preserve frozen contracts, licence text, locks and historical evidence; resolve their integration through the established review process before claiming production readiness.

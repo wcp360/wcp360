@@ -1,0 +1,67 @@
+name: Retire owner-requested integrated branches
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - '.github/workflows/retire-integrated-branches.yml'
+      - 'tools/repository/retire_integrated_branches.py'
+  push:
+    branches: [develop]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: owner-requested-branch-retirement
+  cancel-in-progress: false
+
+jobs:
+  safety:
+    name: branch-retirement-safety
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read the exact source without persistent credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Test exact allowlist, denial cases and real local lease race
+        run: python3 -I tools/repository/retire_integrated_branches.py --self-test
+
+  retire:
+    name: retire-integrated-owner-refs
+    needs: safety
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'wcp360/wcp360'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Read only the trusted integrated source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Retire exact merged refs with an explicit atomic HEAD lease
+        shell: bash
+        env:
+          WCP360_RETIRE_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -I tools/repository/retire_integrated_branches.py --apply | tee "$RUNNER_TEMP/wcp360-branch-retirement.json"
+      - name: Preserve bounded retirement evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: wcp360-branch-retirement-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/wcp360-branch-retirement.json
+          if-no-files-found: error
+          retention-days: 7
+
+# Explicit owner-requested repository maintenance, not application execution.
+# Only three enumerated existing branches and their exact PRs can be retired.
+# The write path expires at 2026-11-06T00:00:00Z and never modifies a permanent ref.
+# No pull_request_target, personal credential, production secret or ruleset bypass.
