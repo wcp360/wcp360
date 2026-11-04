@@ -38,9 +38,11 @@ def differences(live: object, template: dict) -> list[str]:
     if live.get("enforcement") != "active":
         defects.append("enforcement_not_active")
     rules = live.get("rules")
-    if not isinstance(rules, list) or any(not isinstance(x, dict) for x in rules):
+    if not isinstance(rules, list) or any(
+        not isinstance(x, dict) or not isinstance(x.get("type"), str) for x in rules
+    ):
         return defects + ["invalid_rules"]
-    found = {x.get("type"): x for x in rules}
+    found = {x["type"]: x for x in rules}
     wanted = {x["type"]: x for x in template["rules"]}
     if len(found) != len(rules) or set(found) != set(wanted):
         defects.append("rules_mismatch")
@@ -53,10 +55,9 @@ def differences(live: object, template: dict) -> list[str]:
             continue
         actual = found[name].get("parameters")
         need = wanted[name]["parameters"]
-        # Fail closed if GitHub adds an unreviewed parameter, even when all
-        # expected fields are still present. This is template conformity,
-        # not an assertion that repository rules are enforced.
-        if not isinstance(actual, dict) or actual != need:
+        # JSON comparison also distinguishes booleans from integer counts.
+        # Unreviewed added parameters still fail closed.
+        if not isinstance(actual, dict) or json.dumps(actual, sort_keys=True) != json.dumps(need, sort_keys=True):
             defects.append(f"{name}_parameters_mismatch")
     return sorted(set(defects))
 
@@ -70,6 +71,7 @@ def self_test() -> None:
         accepted["enforcement"] = "active"
         assert differences(accepted, model) == [], branch
         successes += 1
+        needs_last_push_review = model["rules"][2]["parameters"]["require_last_push_approval"]
         cases = [
             ("disabled", lambda r: r.update(enforcement="disabled")),
             ("evaluate", lambda r: r.update(enforcement="evaluate")),
@@ -82,8 +84,8 @@ def self_test() -> None:
             ("duplicate_rule", lambda r: r["rules"].append({"type": "deletion"})),
             ("no_deletion", lambda r: r["rules"].pop(0)),
             ("no_pr", lambda r: r["rules"].pop(2)),
-            ("review_count_zero", lambda r: r["rules"][2]["parameters"].update(required_approving_review_count=0)),
-            ("no_latest_push_review", lambda r: r["rules"][2]["parameters"].update(require_last_push_approval=False)),
+            ("wrong_review_count", lambda r: r["rules"][2]["parameters"].update(required_approving_review_count=1)),
+            ("wrong_last_push_policy", lambda r: r["rules"][2]["parameters"].update(require_last_push_approval=not needs_last_push_review)),
             ("no_stale_dismissal", lambda r: r["rules"][2]["parameters"].update(dismiss_stale_reviews_on_push=False)),
             ("no_checks", lambda r: r["rules"].pop(3)),
             ("missing_check", lambda r: r["rules"][3]["parameters"]["required_status_checks"].pop()),
@@ -92,6 +94,9 @@ def self_test() -> None:
             ("non_strict_checks", lambda r: r["rules"][3]["parameters"].update(strict_required_status_checks_policy=False)),
             ("extra_pr_parameter", lambda r: r["rules"][2]["parameters"].update(unreviewed_extension=True)),
             ("extra_status_parameter", lambda r: r["rules"][3]["parameters"].update(unreviewed_extension=True)),
+            ("boolean_review_count", lambda r: r["rules"][2]["parameters"].update(required_approving_review_count=False)),
+            ("numeric_last_push", lambda r: r["rules"][2]["parameters"].update(require_last_push_approval=int(needs_last_push_review))),
+            ("malformed_rule_type", lambda r: r["rules"][0].update(type=[])),
         ]
         for name, mutation in cases:
             invalid = copy.deepcopy(accepted)
@@ -99,7 +104,7 @@ def self_test() -> None:
             if not differences(invalid, model):
                 raise AssertionError(f"unsafe ruleset accepted: {branch}/{name}")
             negatives += 1
-    # Deterministic offline listing simulations guard against false PASS from
+    # Deterministic offline listing simulations prevent a false PASS from
     # ambiguous identities or a truncated GitHub ruleset API page.
     models = {branch: expected(branch) for branch in BRANCHES}
     entries = [
@@ -178,8 +183,7 @@ def get_json(url: str) -> object:
 
 def live_report(fetcher: Callable[[str], object] = get_json) -> tuple[dict, bool]:
     items = fetcher(f"{API}?per_page=100")
-    # One bounded response is sufficient only if GitHub didn't fill the page.
-    # Unknown pagination/duplicate identities must never yield a false PASS.
+    # A full page or ambiguous identity is never sufficient for PASS.
     if not isinstance(items, list) or len(items) >= 100:
         raise ValueError("Unexpected or possibly paginated ruleset listing")
     names = {expected(branch)["name"]: branch for branch in BRANCHES}
@@ -240,7 +244,6 @@ def main() -> None:
     try:
         report, matched = live_report()
     except (HTTPError, URLError, OSError, ValueError, json.JSONDecodeError):
-        # Error output is sanitized: no tokens, raw GitHub responses or operator URLs.
         report, matched = {
             "repository": REPO, "observation": "UNVERIFIED",
             "reason": "github_api_read_unavailable",

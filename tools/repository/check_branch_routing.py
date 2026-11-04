@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """Read-only admission of approved WCP360 pull-request branch routes.
 
-This does not replace live GitHub rulesets, approvals, or release decisions.
+This does not replace live GitHub rulesets, source review, or release decisions.
 """
 from __future__ import annotations
 
 import argparse
 import re
 
-
 PERMANENT = ("develop", "stable", "main", "production")
 FEATURE = re.compile(r"features/[A-Za-z0-9][A-Za-z0-9._-]*\Z")
 LEGACY_NUMBER = 126
 LEGACY_BRANCH = "sc-m01/ratified-handoff-878c68f"
+DOC_NUMBER = 133
+DOC_BRANCH = "docs/core-documentation-2026-11-03"
 
 
 def require_route(base: str, head: str, number: int) -> str:
@@ -27,7 +28,9 @@ def require_route(base: str, head: str, number: int) -> str:
             return "feature-to-develop"
         if number == LEGACY_NUMBER and head == LEGACY_BRANCH:
             return "grandfathered-pr-126-to-develop"
-        raise ValueError("develop accepts features/* except the existing PR #126")
+        if number == DOC_NUMBER and head == DOC_BRANCH:
+            return "existing-documentation-pr-133-to-develop"
+        raise ValueError("develop accepts features/* except the exact existing PRs #126 and #133")
     previous = {"stable": "develop", "main": "stable", "production": "main"}[base]
     if head != previous:
         raise ValueError(f"{base} only accepts pull requests from {previous}")
@@ -41,6 +44,7 @@ def self_test() -> None:
         ("develop", "features/fix-file-manager-upload", 8),
         ("develop", "features/plugin-backup", 123),
         ("develop", LEGACY_BRANCH, LEGACY_NUMBER),
+        ("develop", DOC_BRANCH, DOC_NUMBER),
         ("stable", "develop", 140),
         ("main", "stable", 141),
         ("production", "main", 142),
@@ -68,6 +72,13 @@ def self_test() -> None:
         ("develop", "", 120),
         ("develop", "features/x", 0),
         ("develop", "features/x", -1),
+        ("develop", DOC_BRANCH, DOC_NUMBER + 1),
+        ("develop", "docs/other", DOC_NUMBER),
+        ("develop", DOC_BRANCH + "-other", DOC_NUMBER),
+        ("stable", DOC_BRANCH, DOC_NUMBER),
+        ("main", DOC_BRANCH, DOC_NUMBER),
+        ("production", DOC_BRANCH, DOC_NUMBER),
+        ("develop", DOC_BRANCH, True),
     ]
     for base, head, number in admitted:
         require_route(base, head, number)

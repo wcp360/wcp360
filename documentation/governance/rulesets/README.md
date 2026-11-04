@@ -1,57 +1,105 @@
 # WCP360 — Repository branch-protection templates
 
-**STATUS: PROPOSAL / DISABLED / NOT INSTALLED.** Owner-confirmed branch policy:
-`features/* → develop → stable → main → production`.
+**STATUS: VERSIONED CONFIGURATION CANDIDATE / DISABLED / NOT INSTALLED.**
 
-This directory contains two repository-level, importable JSON templates for the **existing** branches `develop` and `main`, not an organization-wide ruleset and not an executed ruleset migration. The GitHub connector cannot apply repository ruleset settings. These files must never be confused with the live GitHub protection state.
+The target workflow remains `features/* → develop → stable → main → production`.
+The owner prohibits creating any new branch. Existing contributions are processed
+through existing branches and PRs, without direct permanent-branch pushes.
 
-| File | Exact target | Approval target | Required always-on checks |
+## Single-maintainer development policy
+
+[D-GOV-SOLO-0001](../decisions/D-GOV-SOLO-0001.md) records the owner's decision.
+The owner's alternate accounts are not independent reviewers. Neither an approval
+from an alias nor assistant self-review may be presented as independent E3.
+
+| File | Exact target | Review threshold | Required checks |
 | --- | --- | --- | --- |
-| `wcp360-develop.disabled.json` | `refs/heads/develop` | 1 independent reviewer | `repository-secrets`, `gitignore-regression` |
-| `wcp360-main.disabled.json` | `refs/heads/main` | 2 independent reviewers | same |
+| `wcp360-develop.disabled.json` | `refs/heads/develop` | 0 other-person approvals; PR and substantive source-bound assessment still required | `repository-secrets`, `gitignore-regression` |
+| `wcp360-main.disabled.json` | `refs/heads/main` | 2 independent approvals; unchanged frozen promotion policy | same |
 
-The files deliberately use `enforcement: disabled`. **Do not activate** until the acceptance conditions below have been met. GitHub's nonblocking `evaluate` ruleset mode may require an Enterprise plan; this repository-level proposal does not rely on its availability.
+On `develop`, `require_last_push_approval` is false so that the latest author push
+does not recreate an impossible second-person requirement. Required conversation
+resolution, strict checks, stale-review dismissal, no bypass actors, no force-push
+and no deletion remain. This does not waive failed tests, findings, contracts or
+MASTER's exact-source integration decision.
 
-## Activation order and safeguards
+The owner has not approved a release-policy relaxation. The main template is
+therefore unchanged: this is a protected/frozen promotion target, not a claim
+that aliases can satisfy its independent-review policy. No `main` promotion,
+`stable`/`production` creation, deployment or CODE-BASELINE is authorized here.
 
-1. Have Engineering/DevOps independently review and merge [PR #128](https://github.com/wcp360/wcp360/pull/128) through the authorized integration gate. Until it lands on the target branch, the guardrails workflow there does not necessarily emit the required check names. `develop` must receive the trigger change before activating `develop` protections. `main` must receive that change by the approved `develop → stable → main` promotion path before activating `main` protections.
-2. Have MASTER approve the rule thresholds and name the required **distinct human reviewers** with verified repo access. `.github/CODEOWNERS` currently lists only `@yyogas`: self-approval does **not** count. `require_code_owner_review=false` intentionally avoids silently requiring the original author as an independent owner. `require_last_push_approval=true` preserves review separation.
-3. Open repository [Settings → Rules → Rulesets](https://github.com/wcp360/wcp360/settings/rules). Select **New ruleset → Import a ruleset** and import one JSON file. Inspect the exact target, `disabled` state, approvals and checks before saving. Do not import as an organization-wide ruleset.
-4. Confirm `repository-secrets` and `gitignore-regression` appear as successful checks on a fresh PR targeting the chosen branch, with review capability available. Then change the new ruleset to **Active**. No existing rule should lock merges unexpectedly.
-5. On disposable test contributions, verify rejections for direct push, force push, deletion, zero/insufficient independent reviews, stale approvals, missing/failing checks, and acceptance of a legitimate approved PR. Record observed rule ID, actions, actor, SHA and denial evidence in [OPS-WCP-GIT-0001](https://github.com/wcp360/wcp360/issues/129). Avoid destructive tests on permanent source.
-6. Recheck API/branch protection, live rulesets and actual review-enforcement evidence. Write `PROTECTED` only after these checks pass.
+## Administrative activation is a separate operation
 
-The templates **do not** contain `update` or `creation` restrictions or admin bypasses. They do forbid deletion and non-fast-forward updates and require a PR and status checks once active. Avoid repointing the legacy `DEFAULT` ruleset with blanket `update` to a permanent branch: it can block legitimate merges.
+The files deliberately remain `enforcement: disabled`. Importing these files or
+passing their offline tests is not evidence of live protection. The connected
+GitHub actions expose content/PR changes but not ruleset administration or branch
+deletion. The user's own repository Admin role does not make an unsupported
+connector operation available.
 
-`stable` requires an independently selected stabilization candidate; `production` requires proof of an actually deployed commit. Do not create either merely to fill the workflow. A tag, build artifact and production deployment are distinct objects. No CODE-BASELINE change is implied.
+1. Review and integrate #128 under the recorded single-maintainer controls. The
+   integration bootstraps the always-on checks on `develop`; it does not activate
+   GitHub Settings.
+2. A settings-authorized administrator must inspect the existing DEFAULT ruleset,
+   exact target, bypass actors and checks. Do not silently remove an existing rule.
+   Do not repoint blanket `update`/`creation` restrictions onto permanent branches.
+3. In repository Settings → Rules → Rulesets, import each reviewed JSON, inspect
+   its exact branch and disabled state, and activate it only after the actual
+   required check names/app are available on that target. Check existing `main`
+   workflow availability directly rather than creating a promotion branch.
+4. Confirm required checks originate from GitHub Actions (`integration_id=15368`).
+   This constrains status provenance, not the integrity of workflow source.
+5. Record ruleset IDs, configuration readback, recovery operator and evidence in
+   #129. Configuration conformance and real denial evidence are separate fields.
+   Never run force-push/deletion probes on an unprotected permanent branch. Never
+   create a disposable branch against the owner's instruction. Mark unperformed
+   tests BLOCKED/NOT EXECUTED rather than PASS.
 
-## Read-only verification
+Use the existing PR merge controls and non-mutating observations for safe initial
+checks. A legitimate authorized merge is separate positive evidence; it does not
+prove every refusal scenario. The main promotion policy remains frozen pending a
+separate release decision.
 
-From the repository root, run:
-    python3 -I tools/repository/check_branch_ruleset_templates.py
+## Read-only tests and audit
 
-This validates these exact disabled templates and exercises 32 negative fixtures, without installing rulesets, changing branches, calling GitHub APIs or running product code. It is included in the draft [repository guardrails](../../../.github/workflows/repository-guardrails.yml) check. A green CI is not evidence of live branch protection.
+Run from the repository root:
 
-## CI branch-route validation
+```sh
+python3 -I tools/repository/check_branch_ruleset_templates.py
+python3 -I tools/repository/check_branch_routing.py --self-test
+python3 -I tools/repository/check_live_branch_rulesets.py --self-test
+```
 
-The existing `gitignore-regression` job now additionally checks pull-request routing under the four-stage permanent branch policy. Normal admission is `features/* → develop`, `develop → stable`, `stable → main`, and `main → production`. The sole documented pre-policy exception is **existing PR #126** (`sc-m01/ratified-handoff-878c68f → develop`), not a reusable prefix or permission for new branches. The validator exercises eight allowed and 22 forbidden routes using only the Python standard library, without GitHub write access. Direct pushes still require live ruleset enforcement; this check is not an independent review, production gate, release or CODE-BASELINE decision. Exceptional urgent production routing requires a separate MASTER/DevOps contract, not an unreviewed `features/fix-* → production` bypass.
+The current fixtures exercise 38 rejected template variants, 9 admitted / 29
+refused branch routes, and 2 conforming / 48 rejected live-configuration variants,
+plus unsafe listings, URLs and redirects. They do not call GitHub or change refs.
 
-## Live GitHub Ruleset configuration observation
+For configuration-only readback:
 
-After import and activation, run `python3 -I tools/repository/check_live_branch_rulesets.py --live` from the repository root to verify that GitHub publicly reports an **active**, exact-target ruleset with the required review and check settings for both `develop` and `main`. If one is missing or inconsistent the command exits 2 and outputs a bounded, non-secret JSON diagnosis; `--live --report-only` is available for an observational report without failing the shell. The script performs GET requests only to the fixed public GitHub rulesets endpoints for `wcp360/wcp360`. It never installs, edits or enables protection and requires no administrator token. The CI job runs `--self-test` without network calls, exercising 2 valid active configurations and 42 invalid variants. **Even `MATCHES_TEMPLATE` proves configuration only, not real branch protection enforcement.** DevOps must still demonstrate rejected unauthorized pushes, force pushes, deletions, missing reviews/checks and an allowed reviewed merge. An API network error is `UNVERIFIED`, never `PROTECTED`.
+```sh
+python3 -I tools/repository/check_live_branch_rulesets.py --live
+```
 
-### Fail-closed GitHub API observation
+`--live --report-only` reports uncertainty without a failing shell status.
+`MATCHES_TEMPLATE` means configuration agreement only. An unavailable API is
+UNVERIFIED. The observer rejects redirects, unknown destinations, oversized
+responses, ambiguous identities, incomplete pagination and extra policy fields.
+Boolean values cannot stand in for numeric review counts.
 
-The live auditor uses a fixed GitHub HTTPS REST endpoint, rejects redirects, permits only the repository's ruleset listing/detail URLs, and limits each response to 512 KiB. It requests up to 100 rulesets; if the page is full, the result is **UNVERIFIED** rather than claiming all rulesets were examined. Duplicate target names or invalid IDs are also treated as unverified, regardless of listing order. The offline CI fixture set now covers those ambiguous listings, disallowed URLs and redirect refusal. The actual GitHub ruleset still requires a settings-authorized operator and live negative enforcement tests.
+## Existing-branch routing exceptions and retirement
 
-## Required status-check source binding
+Normal routes remain `features/* → develop`, `develop → stable`, `stable → main`
+and `main → production`. Two narrowly enumerated exceptions preserve already
+existing work without creating replacement branches:
 
-Both mandatory checks are bound to `integration_id: 15368` (the GitHub Actions application). This ID was verified against exact successful check runs named `gitignore-regression` and `repository-secrets` for PR #128, SHA `b759fd04faa6e4b2b685bcbeb2c00b1e75140b96` on 2026-11-03.
+- PR #126 only: `sc-m01/ratified-handoff-878c68f → develop`.
+- PR #133 only: `docs/core-documentation-2026-11-03 → develop`.
 
-GitHub documents that an unbound required-check name can be set by another account/integration with repository write/status permissions. The expected-source binding rejects checks from a different app, **but not weakened workflows executed under GitHub Actions**. Workflow edits still require independent review. The two disabled templates and the read-only live-auditor fixtures now reject missing/incorrect app IDs. Recheck the provider if the real check source changes; never silently remove the pin as a workaround.
+Neither exception grants a reusable branch family or permission to create refs.
+Wrong PR numbers, similar branch names and promotion targets are rejected.
 
-No live repository ruleset has been installed or activated by these files; actual enforcement requires a settings-authorized administrator and negative tests.
-
-## Strict live-ruleset parameter matching
-
-The read-only live auditor compares each expected `pull_request` and `required_status_checks` parameters mapping **exactly**, rather than checking only that expected keys are present. Unreviewed extra parameters now produce `NONCONFORMING`; this deliberately fails closed if GitHub adds an API field requiring an owner decision. The CI negative fixtures include unexpected additional PR and status-check parameters for both permanent branches. The source-model conformance result still does not establish that GitHub enforces the rules in practice.
+The owner requested retirement of the existing documentation branch and the
+`features/branch-protection-readiness` / `features/core-http-security-headers`
+branches. Before deleting any, verify the PR is merged, its exact latest HEAD is
+preserved in the target ancestry, and no new commits or dependent open PRs would
+be lost. A closed PR and a deleted branch are different states. No deletion is
+claimed until GitHub confirms the ref is absent. No force push is a cleanup tool.
