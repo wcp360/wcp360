@@ -232,6 +232,11 @@ final class ServerJourneyTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextSame('[data-server-uptime]', '0 s');
         self::assertSelectorTextSame('[data-server-load-1]', 'Non disponible');
+    }
+
+    public function testLoadRemainsAvailableWhenUptimeIsUnknown(): void
+    {
+        $this->login();
         $this->useRuntimeObservation(['uptime_seconds' => null, 'load_average' => ['one_minute' => 0.0, 'five_minutes' => 0.0, 'fifteen_minutes' => 0.0]]);
         $this->browser->request('GET', 'http://admin.localhost/workbench/server');
         self::assertResponseIsSuccessful();

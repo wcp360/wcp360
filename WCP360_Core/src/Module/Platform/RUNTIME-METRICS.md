@@ -41,10 +41,12 @@ Primary semantics: https://www.kernel.org/doc/html/latest/filesystems/proc.html
 ## Tests and execution
 
 `LinuxRuntimeMetricsTest` provides 24 uptime vectors, 26 load vectors and two
-composition/live-shape tests. Four new integration/journey tests cover JSON and
+composition/live-shape tests. Five new integration/journey tests cover JSON and
 HTML, zero/null distinction, partial availability and read-only behavior. Existing
 USER/anonymous/inactive-account/enabled-factor denial and query/method tests remain.
 The legacy observer without runtime fields is still exercised by the Windows/UI test.
+Partial-availability HTTP cases use independent kernels so a previously initialized
+controller cannot retain the earlier observation fixture.
 
 Local PHP 8.4.24: all six PHP files pass syntax validation; a dependency-free
 harness executes the 50 parser vectors plus five composition/live-shape checks,
