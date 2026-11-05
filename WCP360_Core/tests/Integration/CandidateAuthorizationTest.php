@@ -36,10 +36,38 @@ final class CandidateAuthorizationTest extends KernelTestCase
         $actor = $this->fixture['users']['alice'];
         $tenant = $this->fixture['tenants']['alice'];
         self::assertTrue($this->authorization->allowsTenantPermission($actor, $tenant));
-        foreach (['', '*', 'candidate.*', 'candidate.hosting.plan.*', 'candidate.hosting.plan ', "candidate.hosting.plan\n", 'CANDIDATE.HOSTING.PLAN', 'applications.create', 'applications.read', 'iam.users.manage', 'settings.system.manage', 'servers.reboot', 'domains.record.update', 'dns.change.apply', 'dns.record.updated', 'nginx.reload', 'candidate.summary.read'] as $permission) {
+        foreach (['', '*', 'candidate.*', 'candidate.hosting.plan.*', 'candidate.hosting.plan ', "candidate.hosting.plan\n", 'CANDIDATE.HOSTING.PLAN', 'applications.create', 'applications.read', 'servers.read', 'jobs.read', 'audit.read', 'security.sessions.manage', 'iam.users.manage', 'settings.system.manage', 'servers.reboot', 'domains.record.update', 'dns.change.apply', 'dns.record.updated', 'nginx.reload', 'candidate.summary.read'] as $permission) {
             self::assertFalse($this->authorization->allowsTenantPermission($actor, $tenant, $permission), $permission);
             $this->denied(fn () => $this->authorization->requireTenantPermission($actor, $tenant, $permission));
         }
+        self::assertSame(0, $this->auditCount());
+    }
+
+    /** #136: the candidate membership table is not a canonical RBAC grant store. */
+    public function testCandidateGrantStorageRejectsCanonicalApi136Permissions(): void
+    {
+        $actor = $this->fixture['users']['bob'];
+        $tenant = $this->fixture['tenants']['alice'];
+
+        // This intentionally exercises the existing CHECK constraint, with no
+        // canonical permission grant, schema change, or production side effect.
+        foreach (['servers.read', 'jobs.read', 'audit.read', 'security.sessions.manage', 'iam.users.manage'] as $permission) {
+            try {
+                $this->store->db->insert('wcp_candidate_memberships', [
+                    'user_id' => $actor,
+                    'tenant_id' => $tenant,
+                    'permission' => $permission,
+                ]);
+                self::fail('Canonical permission entered the candidate grant store: '.$permission);
+            } catch (Exception) {
+                self::assertSame(0, (int) $this->store->db->fetchOne(
+                    'SELECT COUNT(*) FROM wcp_candidate_memberships WHERE user_id = ? AND tenant_id = ? AND permission = ?',
+                    [$actor, $tenant, $permission],
+                ));
+            }
+        }
+
+        self::assertFalse($this->authorization->allowsTenantPermission($actor, $tenant));
         self::assertSame(0, $this->auditCount());
     }
 
