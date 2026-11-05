@@ -187,7 +187,7 @@ def verify(root: Path) -> dict[str, Any]:
         raise ContractDrift("Canonical API v1.0 catalogue metadata differs")
     if documents["actions"].get("version") != "1.0" or documents["actions"].get("count") != 86:
         raise ContractDrift("Canonical action catalogue metadata differs")
-    if documents["permissions"].get("version") != "1.0" or documents["permissions"].get("count") != 82:
+    if documents["permissions"].get("version") != "v1.0" or documents["permissions"].get("count") != 82:
         raise ContractDrift("Canonical permission catalogue metadata differs")
     if documents["daemon"].get("schema_version") != 1:
         raise ContractDrift("Daemon registry schema metadata differs")
