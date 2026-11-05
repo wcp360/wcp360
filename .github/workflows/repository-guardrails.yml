@@ -60,6 +60,11 @@ jobs:
       - name: Verify source-bound MFA contract traceability without runtime qualification
         shell: bash
         run: python3 -I tools/repository/check_mfa_alignment.py --root . --report publication-evidence/mfa-alignment.json
+      - name: Verify API #136 declaration drift without claiming canonical test PASS
+        shell: bash
+        run: |
+          python3 -I tools/repository/test_core_api_136.py
+          python3 -I tools/repository/check_core_api_136.py --root .
       - name: Test branding archive validation rules
         shell: bash
         run: python3 -I tools/repository/check_branding_archive.py --self-test
