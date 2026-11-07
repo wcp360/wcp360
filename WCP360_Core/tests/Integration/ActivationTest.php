@@ -93,4 +93,65 @@ final class ActivationTest extends KernelTestCase
         self::assertSame('inspect_php_fpm',$this->gateway->requests[1]['operation']);
         self::assertSame($this->gateway->requests[0]['job_id'],$this->gateway->requests[1]['job_id']);
     }
+
+
+    public function testGrantForDifferentTenantCannotAuthorizeQueuedSiteActivation(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        $this->store->db->insert('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['bob'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testDisablingIsolatedActivationAfterEnqueuePreventsDispatch(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $disabledWorker = new RunActivation($this->store, $this->gateway, new SubmitActivation($this->store, false));
+
+        self::assertSame($id, $disabledWorker->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testSiteStateChangeAfterEnqueuePreventsPhysicalDispatch(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->update('wcp_candidate_sites', [
+            'state' => 'PLAN_FAILED',
+        ], [
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testGrantRevocationAfterLostReplyBlocksFurtherInspection(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->gateway->fail = true;
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        $this->gateway->fail = false;
+        self::assertSame(1, $this->activationWorker()->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+        self::assertSame('provision_php_fpm', $this->gateway->requests[0]['operation']);
+    }
 }
