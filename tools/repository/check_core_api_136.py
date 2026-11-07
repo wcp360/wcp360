@@ -149,10 +149,20 @@ DAEMON_FIELDS = {
 }
 
 
+def unique_object_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Reject duplicate keys at every JSON nesting level, including escaped aliases."""
+    data: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in data:
+            raise ContractDrift(f"Duplicate JSON property: {key}")
+        data[key] = value
+    return data
+
+
 def load_json(root: Path, relative: str) -> dict[str, Any]:
     source = root / relative
     try:
-        data = json.loads(source.read_text(encoding="utf-8"))
+        data = json.loads(source.read_text(encoding="utf-8"), object_pairs_hook=unique_object_pairs)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ContractDrift(f"Required source unavailable or invalid: {relative}") from exc
     if not isinstance(data, dict):
@@ -196,8 +206,14 @@ def verify(root: Path) -> dict[str, Any]:
     actions = index_rows(documents["actions"], "actions", "contract_id")
     permissions = index_rows(documents["permissions"], "permissions", "id")
     daemon = index_rows(documents["daemon"], "apis", "id")
-    if len(daemon) != 86:
-        raise ContractDrift("Daemon API contract count differs")
+    for label, rows, expected in (
+        ("Canonical API", contracts, 86),
+        ("Action catalogue", actions, 86),
+        ("Permission catalogue", permissions, 82),
+        ("Daemon API", daemon, 86),
+    ):
+        if len(rows) != expected:
+            raise ContractDrift(f"{label} actual row count differs from reviewed declaration")
     if "candidate.hosting.plan" in permissions:
         raise ContractDrift("Candidate-only permission leaked into canonical permission registry")
 
