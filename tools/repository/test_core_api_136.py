@@ -98,6 +98,66 @@ class CoreApi136DriftTest(unittest.TestCase):
         with self.assertRaises(checker.ContractDrift):
             checker.verify(self.fixture)
 
+    def test_duplicate_top_level_json_property_is_rejected(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["api"]
+        original = path.read_text(encoding="utf-8")
+        tampered = original.replace('"count": 86,', '"count": 86,\n  "count": 86,', 1)
+        self.assertNotEqual(tampered, original)
+        path.write_text(tampered, encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_duplicate_nested_contract_property_is_rejected_even_outside_five_rows(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["api"]
+        original = path.read_text(encoding="utf-8")
+        tampered = original.replace(
+            '"permission_id": "applications.read",',
+            '"permission_id": "applications.read", "permission_id": "jobs.read",',
+            1,
+        )
+        self.assertNotEqual(tampered, original)
+        path.write_text(tampered, encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_unicode_escaped_duplicate_property_is_rejected(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["api"]
+        original = path.read_text(encoding="utf-8")
+        tampered = original.replace(
+            '"permission_id": "applications.read",',
+            '"permission_id": "applications.read", "perm\\u0069ssion_id": "jobs.read",',
+            1,
+        )
+        self.assertNotEqual(tampered, original)
+        path.write_text(tampered, encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_api_array_cardinality_must_match_reviewed_metadata(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["api"]
+        contents = json.loads(path.read_text(encoding="utf-8"))
+        contents["contracts"].pop()
+        path.write_text(json.dumps(contents, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_action_array_cardinality_must_match_reviewed_metadata(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["actions"]
+        contents = json.loads(path.read_text(encoding="utf-8"))
+        contents["actions"].pop()
+        path.write_text(json.dumps(contents, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_permission_array_cardinality_must_match_reviewed_metadata(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["permissions"]
+        contents = json.loads(path.read_text(encoding="utf-8"))
+        contents["permissions"].pop()
+        path.write_text(json.dumps(contents, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
