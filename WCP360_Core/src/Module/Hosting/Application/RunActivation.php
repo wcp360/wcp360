@@ -46,6 +46,13 @@ final readonly class RunActivation
     {
         if(!$this->availability->enabled)throw new \RuntimeException('Provisioning disabled.');
         $this->store->requireActivationGrant($row['actor_id'],$row['tenant_id']);
+        // A queued activation cannot outlive the successful, actor-owned plan that admitted it.
+        // Recheck the source job at dispatch and inspection; a changed job fails closed.
+        $plan=$this->store->db->fetchOne(
+            "SELECT id FROM wcp_candidate_jobs WHERE id=? AND actor_id=? AND tenant_id=? AND site_id=? AND state='SUCCEEDED'",
+            [$row['plan_job_id'],$row['actor_id'],$row['tenant_id'],$row['site_id']]
+        );
+        if(!is_string($plan))throw new \RuntimeException('Plan authority changed.');
         $site=$this->store->db->fetchAssociative('SELECT hostname,revision,application_server,state,web_stack,stack_revision FROM wcp_candidate_sites WHERE id=? AND tenant_id=?',[$row['site_id'],$row['tenant_id']]);
         if(!$site||(int)$site['revision']!==(int)$row['expected_revision']||$site['application_server']!=='php_fpm'||$site['state']!=='PLAN_READY')throw new \RuntimeException('Site revision changed.');
         \Wcp360\Core\Module\Hosting\Domain\SiteRuntimeProfile::fromStorage($site);
