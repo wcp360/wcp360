@@ -136,6 +136,83 @@ final class ActivationTest extends KernelTestCase
         self::assertSame([], $this->gateway->requests);
     }
 
+
+    public function testDeactivatedUserCannotDispatchAlreadyQueuedActivation(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->update('wcp_candidate_users', ['active' => 0], [
+            'id' => $this->fixture['users']['alice'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testAdministratorCannotActivateTenantSiteWithForgedCandidateGrants(): void
+    {
+        $plan = $this->plan();
+        $actor = $this->fixture['users']['admin'];
+        $tenant = $this->fixture['tenants']['alice'];
+
+        $this->store->db->insert('wcp_candidate_memberships', [
+            'user_id' => $actor,
+            'tenant_id' => $tenant,
+            'permission' => \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization::HOSTING_PLAN,
+        ]);
+        $this->store->db->insert('wcp_candidate_activation_grants', [
+            'user_id' => $actor,
+            'tenant_id' => $tenant,
+        ]);
+
+        try {
+            $this->submit->submit($actor, $plan);
+            self::fail('WCP-ADMIN identity acquired tenant activation authority.');
+        } catch (AccessDeniedHttpException) {
+            self::assertSame(0, (int) $this->store->db->fetchOne(
+                'SELECT COUNT(*) FROM wcp_candidate_activations'
+            ));
+            self::assertSame([], $this->gateway->requests);
+        }
+    }
+
+    public function testChangedRuntimeServerAfterQueueCannotDispatchPhpFpm(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->update('wcp_candidate_sites', [
+            'application_server' => 'frankenphp_worker',
+            'web_stack' => 'advanced',
+        ], [
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testFailedActivationCannotBeRetriedByRestoringARevokedGrant(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+
+        $this->store->db->insert('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        self::assertSame($id, $this->submit->submit($this->fixture['users']['alice'], $plan));
+        self::assertNull($this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
     public function testGrantRevocationAfterLostReplyBlocksFurtherInspection(): void
     {
         $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
