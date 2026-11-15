@@ -273,6 +273,61 @@ final class ActivationTest extends KernelTestCase
         ));
     }
 
+
+    public function testPlanFailureAfterEnqueuePreventsCandidateActivationDispatch(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->store->db->update('wcp_candidate_jobs', ['state' => 'FAILED'], [
+            'id' => $plan,
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.active'"
+        ));
+    }
+
+    public function testOriginalPlanActorChangeAfterEnqueuePreventsDispatch(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->store->db->update('wcp_candidate_jobs', [
+            'actor_id' => $this->fixture['users']['bob'],
+        ], [
+            'id' => $plan,
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testChangedPlanAfterLostReplyPreventsUntrustedInspection(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->gateway->fail = true;
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+
+        $this->store->db->update('wcp_candidate_jobs', ['state' => 'FAILED'], [
+            'id' => $plan,
+        ]);
+        $this->gateway->fail = false;
+
+        self::assertSame(1, $this->activationWorker()->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+        self::assertSame('provision_php_fpm', $this->gateway->requests[0]['operation']);
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.active'"
+        ));
+    }
+
     public function testGrantRevocationAfterLostReplyBlocksFurtherInspection(): void
     {
         $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
