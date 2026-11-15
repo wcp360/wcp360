@@ -56,8 +56,18 @@ final readonly class RunActivation
     {
         $this->store->db->transactional(function()use($row,$state):void{
             // Preserve observed physical outcome even if authorization was revoked after dispatch.
-            $changed=$this->store->db->executeStatement("UPDATE wcp_candidate_activations SET state=?,completed_at=? WHERE id=? AND state IN ('DISPATCHING','UNKNOWN_OUTCOME')",[$state,WorkbenchStore::now(),$row['id']]);
-            if($changed!==1)throw new \RuntimeException('Concurrent activation state changed.');
+            // An unchanged UNKNOWN_OUTCOME is an inspection attempt, not a state transition.
+            // Repeated reconciliation must not emit duplicate terminal-state audit events.
+            $changed=$this->store->db->executeStatement(
+                "UPDATE wcp_candidate_activations SET state=?,completed_at=? WHERE id=? AND state IN ('DISPATCHING','UNKNOWN_OUTCOME') AND state<>?",
+                [$state,WorkbenchStore::now(),$row['id'],$state]
+            );
+            if($changed!==1){
+                if($state==='UNKNOWN_OUTCOME' && $this->store->db->fetchOne(
+                    'SELECT state FROM wcp_candidate_activations WHERE id=?',[$row['id']]
+                )==='UNKNOWN_OUTCOME')return;
+                throw new \RuntimeException('Concurrent activation state changed.');
+            }
             $this->store->audit($row['actor_id'],$row['tenant_id'],'candidate.hosting.activation.'.strtolower($state),$row['id']);
         });
     }
