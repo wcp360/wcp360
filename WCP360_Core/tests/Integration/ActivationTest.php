@@ -214,6 +214,65 @@ final class ActivationTest extends KernelTestCase
         self::assertSame([], $this->gateway->requests);
     }
 
+
+    public function testRepeatedRevokedReconciliationDoesNotFabricateUnknownStateTransitions(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->gateway->fail = true;
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+
+        $auditCount = (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome'"
+        );
+        self::assertSame(1, $auditCount);
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        for ($attempt = 0; $attempt < 3; ++$attempt) {
+            self::assertSame(1, $this->activationWorker()->reconcile());
+            self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+            self::assertCount(1, $this->gateway->requests);
+        }
+        self::assertSame($auditCount, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome'"
+        ));
+    }
+
+    public function testUnchangedProviderUnknownObservationDoesNotDuplicateTransitionAudit(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $unknownGateway = new class implements ProvisioningGateway {
+            public array $requests = [];
+
+            public function send(array $request): string
+            {
+                $this->requests[] = $request;
+
+                return 'UNKNOWN_OUTCOME';
+            }
+        };
+        $worker = new RunActivation($this->store, $unknownGateway, $this->submit);
+        self::assertSame($id, $worker->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertSame([
+            'provision_php_fpm', 'inspect_php_fpm', 'inspect_php_fpm',
+        ], array_column($unknownGateway->requests, 'operation'));
+        self::assertSame(1, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome'"
+        ));
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.active'"
+        ));
+    }
+
     public function testGrantRevocationAfterLostReplyBlocksFurtherInspection(): void
     {
         $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
