@@ -182,6 +182,7 @@ final class ActivationTest extends KernelTestCase
         $this->store->db->update('wcp_candidate_sites', [
             'application_server' => 'frankenphp_worker',
             'web_stack' => 'advanced',
+            'worker_acknowledged' => 1,
         ], [
             'tenant_id' => $this->fixture['tenants']['alice'],
         ]);
