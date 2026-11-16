@@ -42,6 +42,9 @@ class CoreApi136DriftTest(unittest.TestCase):
     def test_current_source_has_exact_five_reviewed_declarations_without_pass_credit(self) -> None:
         evidence = checker.verify(self.fixture)
         self.assertEqual(evidence["contracts_checked"], 5)
+        self.assertEqual(evidence["registry_api_action_daemon_rows_checked"], 86)
+        self.assertEqual(evidence["registry_permission_mirror_rows_checked"], 82)
+        self.assertFalse(evidence["production_permission_enforcement_qualified"])
         self.assertEqual(evidence["status"], "DECLARATION_DRIFT_CHECK_ONLY")
         self.assertFalse(evidence["canonical_implementation_qualified"])
         self.assertEqual(evidence["canonical_test_api_passes"], 0)
