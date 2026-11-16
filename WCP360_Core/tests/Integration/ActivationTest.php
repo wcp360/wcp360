@@ -346,4 +346,58 @@ final class ActivationTest extends KernelTestCase
         self::assertCount(1, $this->gateway->requests);
         self::assertSame('provision_php_fpm', $this->gateway->requests[0]['operation']);
     }
+    public function testInterruptedDispatchWithRevokedGrantKeepsUnknownWithoutReplay(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        // Model a process crash after dispatch has started, before any reply was recorded.
+        // No mock provider request is sent here: the host-side outcome is deliberately unknown.
+        $this->store->db->update('wcp_candidate_activations', [
+            'state' => 'DISPATCHING',
+        ], ['id' => $id]);
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        $worker = $this->activationWorker();
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+        self::assertSame(1, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome' AND resource_id=?",
+            [$id]
+        ));
+
+        // A second polling pass must not invent an ACTIVE result or a second transition.
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+        self::assertSame(1, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome' AND resource_id=?",
+            [$id]
+        ));
+        self::assertNull($worker->runOne());
+    }
+
+    public function testInterruptedDispatchWithCurrentGrantInspectsRatherThanReprovisions(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        // A resumed worker sees a dispatched job, not a fresh QUEUED operation.
+        $this->store->db->update('wcp_candidate_activations', [
+            'state' => 'DISPATCHING',
+        ], ['id' => $id]);
+
+        $worker = $this->activationWorker();
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('ACTIVE', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+        self::assertSame('inspect_php_fpm', $this->gateway->requests[0]['operation']);
+        self::assertSame($id, $this->gateway->requests[0]['job_id']);
+        self::assertNull($worker->runOne());
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome' AND resource_id=?",
+            [$id]
+        ));
+    }
+
 }
