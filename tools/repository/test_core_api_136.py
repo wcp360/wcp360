@@ -207,5 +207,47 @@ class CoreApi136DriftTest(unittest.TestCase):
                     checker.verify(self.fixture)
 
 
+    def test_unreviewed_api_identity_replacement_with_same_count_is_denied(self) -> None:
+        self.mutate("api", "contracts", "contract_id", "API-WCP-0101",
+                    "contract_id", "API-WCP-9999")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_unreviewed_action_permission_drift_with_same_count_is_denied(self) -> None:
+        self.mutate("actions", "actions", "contract_id", "API-WCP-0101",
+                    "permission_id", "jobs.read")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_unreviewed_daemon_authentication_drift_is_denied(self) -> None:
+        self.mutate("daemon", "apis", "id", "API-WCP-0101",
+                    "authentication", "AUTH-A")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_unreviewed_api_response_schema_drift_is_denied(self) -> None:
+        self.mutate("api", "contracts", "contract_id", "API-WCP-0101",
+                    "response_schema", "UnreviewedResponse")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_unreviewed_action_domain_drift_is_denied(self) -> None:
+        self.mutate("actions", "actions", "contract_id", "API-WCP-0101",
+                    "domain", "jobs")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_unreviewed_permission_reference_drift_across_three_sources_is_denied(self) -> None:
+        # Even three agreeing source registries cannot invent a permission.
+        self.mutate("api", "contracts", "contract_id", "API-WCP-0101",
+                    "permission_id", "not.a.canonical.permission")
+        self.mutate("actions", "actions", "contract_id", "API-WCP-0101",
+                    "permission_id", "not.a.canonical.permission")
+        self.mutate("daemon", "apis", "id", "API-WCP-0101",
+                    "permission", "not.a.canonical.permission")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
