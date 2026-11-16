@@ -214,17 +214,28 @@ def verify(root: Path) -> dict[str, Any]:
     contracts = index_rows(api, "contracts", "contract_id")
     actions = index_rows(documents["actions"], "actions", "contract_id")
     permissions = index_rows(documents["permissions"], "permissions", "id")
+    daemon_permissions = index_rows(documents["daemon"], "permissions", "id")
     daemon = index_rows(documents["daemon"], "apis", "id")
     for label, rows, expected in (
         ("Canonical API", contracts, 86),
         ("Action catalogue", actions, 86),
         ("Permission catalogue", permissions, 82),
+        ("Daemon permission mirror", daemon_permissions, 82),
         ("Daemon API", daemon, 86),
     ):
         if len(rows) != expected:
             raise ContractDrift(f"{label} actual row count differs from reviewed declaration")
-    if "candidate.hosting.plan" in permissions:
+    if "candidate.hosting.plan" in permissions or "candidate.hosting.plan" in daemon_permissions:
         raise ContractDrift("Candidate-only permission leaked into canonical permission registry")
+    if set(daemon_permissions) != set(permissions):
+        raise ContractDrift("Canonical and daemon permission identities differ")
+    for permission_id, canonical_permission in permissions.items():
+        emitted_permission = daemon_permissions[permission_id]
+        for field in ("surface", "status"):
+            expected_value = canonical_permission.get(field)
+            if not isinstance(expected_value, str) or not expected_value:
+                raise ContractDrift(f"{permission_id}: invalid canonical permission {field}")
+            exact(emitted_permission, field, expected_value, permission_id + " daemon permission")
 
     if set(contracts) != set(actions) or set(contracts) != set(daemon):
         raise ContractDrift("Canonical API/action/daemon contract identities differ")
