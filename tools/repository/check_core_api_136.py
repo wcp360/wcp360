@@ -149,10 +149,29 @@ DAEMON_FIELDS = {
 }
 
 
+def unique_object_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Reject duplicate keys at every JSON nesting level, including escaped aliases."""
+    data: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in data:
+            raise ContractDrift(f"Duplicate JSON property: {key}")
+        data[key] = value
+    return data
+
+
+def reject_nonfinite_constant(value: str) -> None:
+    """JSON does not admit NaN or Infinity in canonical contract sources."""
+    raise ContractDrift(f"Non-finite JSON value: {value}")
+
+
 def load_json(root: Path, relative: str) -> dict[str, Any]:
     source = root / relative
     try:
-        data = json.loads(source.read_text(encoding="utf-8"))
+        data = json.loads(
+            source.read_text(encoding="utf-8"),
+            object_pairs_hook=unique_object_pairs,
+            parse_constant=reject_nonfinite_constant,
+        )
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ContractDrift(f"Required source unavailable or invalid: {relative}") from exc
     if not isinstance(data, dict):
@@ -195,11 +214,55 @@ def verify(root: Path) -> dict[str, Any]:
     contracts = index_rows(api, "contracts", "contract_id")
     actions = index_rows(documents["actions"], "actions", "contract_id")
     permissions = index_rows(documents["permissions"], "permissions", "id")
+    daemon_permissions = index_rows(documents["daemon"], "permissions", "id")
     daemon = index_rows(documents["daemon"], "apis", "id")
-    if len(daemon) != 86:
-        raise ContractDrift("Daemon API contract count differs")
-    if "candidate.hosting.plan" in permissions:
+    for label, rows, expected in (
+        ("Canonical API", contracts, 86),
+        ("Action catalogue", actions, 86),
+        ("Permission catalogue", permissions, 82),
+        ("Daemon permission mirror", daemon_permissions, 82),
+        ("Daemon API", daemon, 86),
+    ):
+        if len(rows) != expected:
+            raise ContractDrift(f"{label} actual row count differs from reviewed declaration")
+    if "candidate.hosting.plan" in permissions or "candidate.hosting.plan" in daemon_permissions:
         raise ContractDrift("Candidate-only permission leaked into canonical permission registry")
+    if set(daemon_permissions) != set(permissions):
+        raise ContractDrift("Canonical and daemon permission identities differ")
+    for permission_id, canonical_permission in permissions.items():
+        emitted_permission = daemon_permissions[permission_id]
+        for field in ("surface", "status"):
+            expected_value = canonical_permission.get(field)
+            if not isinstance(expected_value, str) or not expected_value:
+                raise ContractDrift(f"{permission_id}: invalid canonical permission {field}")
+            exact(emitted_permission, field, expected_value, permission_id + " daemon permission")
+
+    if set(contracts) != set(actions) or set(contracts) != set(daemon):
+        raise ContractDrift("Canonical API/action/daemon contract identities differ")
+
+    # Relational integrity for all declarations, not approval of their meaning.
+    # Only the five owner-reviewed contracts below have pinned semantic values.
+    for contract_id, canonical in contracts.items():
+        emitted = daemon[contract_id]
+        action = actions[contract_id]
+        for field, daemon_field in DAEMON_FIELDS.items():
+            expected_value = canonical.get(field)
+            if not isinstance(expected_value, str) or not expected_value:
+                raise ContractDrift(f"{contract_id}: missing canonical field {field}")
+            exact(emitted, daemon_field, expected_value, contract_id + " daemon parity")
+        for field in ("version", "compatibility"):
+            expected_value = canonical.get(field)
+            if not isinstance(expected_value, str) or not expected_value:
+                raise ContractDrift(f"{contract_id}: missing canonical field {field}")
+            exact(emitted, field, expected_value, contract_id + " daemon parity")
+        for field in ("action_id", "permission_id", "surface", "resource_type"):
+            exact(action, field, canonical[field], contract_id + " action parity")
+        action_id = canonical["action_id"]
+        if action.get("domain") != action_id.split(".", 1)[0]:
+            raise ContractDrift(f"{contract_id}: action domain differs from canonical action ID")
+        if canonical["permission_id"] not in permissions:
+            raise ContractDrift(f"{contract_id}: permission reference not in canonical catalogue")
+
 
     for contract_id, fields in EXPECTED.items():
         if contract_id not in contracts or contract_id not in actions or contract_id not in daemon:
@@ -231,6 +294,9 @@ def verify(root: Path) -> dict[str, Any]:
         "reference": "wcp360/wcp360#136",
         "contract_ids_checked": sorted(EXPECTED),
         "contracts_checked": len(EXPECTED),
+        "registry_api_action_daemon_rows_checked": len(contracts),
+        "registry_permission_mirror_rows_checked": len(permissions),
+        "production_permission_enforcement_qualified": False,
         "canonical_implementation_qualified": False,
         "canonical_test_api_passes": 0,
         "authorizes_permission_expansion": False,
