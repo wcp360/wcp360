@@ -93,4 +93,311 @@ final class ActivationTest extends KernelTestCase
         self::assertSame('inspect_php_fpm',$this->gateway->requests[1]['operation']);
         self::assertSame($this->gateway->requests[0]['job_id'],$this->gateway->requests[1]['job_id']);
     }
+
+
+    public function testGrantForDifferentTenantCannotAuthorizeQueuedSiteActivation(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        $this->store->db->insert('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['bob'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testDisablingIsolatedActivationAfterEnqueuePreventsDispatch(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $disabledWorker = new RunActivation($this->store, $this->gateway, new SubmitActivation($this->store, false));
+
+        self::assertSame($id, $disabledWorker->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testSiteStateChangeAfterEnqueuePreventsPhysicalDispatch(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->update('wcp_candidate_sites', [
+            'state' => 'PLAN_FAILED',
+        ], [
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+
+    public function testDeactivatedUserCannotDispatchAlreadyQueuedActivation(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->update('wcp_candidate_users', ['active' => 0], [
+            'id' => $this->fixture['users']['alice'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testAdministratorCannotActivateTenantSiteWithForgedCandidateGrants(): void
+    {
+        $plan = $this->plan();
+        $actor = $this->fixture['users']['admin'];
+        $tenant = $this->fixture['tenants']['alice'];
+
+        $this->store->db->insert('wcp_candidate_memberships', [
+            'user_id' => $actor,
+            'tenant_id' => $tenant,
+            'permission' => \Wcp360\Core\Module\IdentityAccess\Application\CandidateAuthorization::HOSTING_PLAN,
+        ]);
+        $this->store->db->insert('wcp_candidate_activation_grants', [
+            'user_id' => $actor,
+            'tenant_id' => $tenant,
+        ]);
+
+        try {
+            $this->submit->submit($actor, $plan);
+            self::fail('WCP-ADMIN identity acquired tenant activation authority.');
+        } catch (AccessDeniedHttpException) {
+            self::assertSame(0, (int) $this->store->db->fetchOne(
+                'SELECT COUNT(*) FROM wcp_candidate_activations'
+            ));
+            self::assertSame([], $this->gateway->requests);
+        }
+    }
+
+    public function testChangedRuntimeServerAfterQueueCannotDispatchPhpFpm(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->store->db->update('wcp_candidate_sites', [
+            'application_server' => 'frankenphp_worker',
+            'web_stack' => 'advanced',
+            'worker_acknowledged' => 1,
+        ], [
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testFailedActivationCannotBeRetriedByRestoringARevokedGrant(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+
+        $this->store->db->insert('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        self::assertSame($id, $this->submit->submit($this->fixture['users']['alice'], $plan));
+        self::assertNull($this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+
+    public function testRepeatedRevokedReconciliationDoesNotFabricateUnknownStateTransitions(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->gateway->fail = true;
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+
+        $auditCount = (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome'"
+        );
+        self::assertSame(1, $auditCount);
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        for ($attempt = 0; $attempt < 3; ++$attempt) {
+            self::assertSame(1, $this->activationWorker()->reconcile());
+            self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+            self::assertCount(1, $this->gateway->requests);
+        }
+        self::assertSame($auditCount, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome'"
+        ));
+    }
+
+    public function testUnchangedProviderUnknownObservationDoesNotDuplicateTransitionAudit(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $unknownGateway = new class implements ProvisioningGateway {
+            public array $requests = [];
+
+            public function send(array $request): string
+            {
+                $this->requests[] = $request;
+
+                return 'UNKNOWN_OUTCOME';
+            }
+        };
+        $worker = new RunActivation($this->store, $unknownGateway, $this->submit);
+        self::assertSame($id, $worker->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertSame([
+            'provision_php_fpm', 'inspect_php_fpm', 'inspect_php_fpm',
+        ], array_column($unknownGateway->requests, 'operation'));
+        self::assertSame(1, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome'"
+        ));
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.active'"
+        ));
+    }
+
+
+    public function testPlanFailureAfterEnqueuePreventsCandidateActivationDispatch(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->store->db->update('wcp_candidate_jobs', ['state' => 'FAILED'], [
+            'id' => $plan,
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.active'"
+        ));
+    }
+
+    public function testOriginalPlanActorChangeAfterEnqueuePreventsDispatch(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->store->db->update('wcp_candidate_jobs', [
+            'actor_id' => $this->fixture['users']['bob'],
+        ], [
+            'id' => $plan,
+        ]);
+
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('FAILED', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+    }
+
+    public function testChangedPlanAfterLostReplyPreventsUntrustedInspection(): void
+    {
+        $plan = $this->plan();
+        $id = $this->submit->submit($this->fixture['users']['alice'], $plan);
+        $this->gateway->fail = true;
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+
+        $this->store->db->update('wcp_candidate_jobs', ['state' => 'FAILED'], [
+            'id' => $plan,
+        ]);
+        $this->gateway->fail = false;
+
+        self::assertSame(1, $this->activationWorker()->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+        self::assertSame('provision_php_fpm', $this->gateway->requests[0]['operation']);
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.active'"
+        ));
+    }
+
+    public function testGrantRevocationAfterLostReplyBlocksFurtherInspection(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        $this->gateway->fail = true;
+        self::assertSame($id, $this->activationWorker()->runOne());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+        $this->gateway->fail = false;
+        self::assertSame(1, $this->activationWorker()->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+        self::assertSame('provision_php_fpm', $this->gateway->requests[0]['operation']);
+    }
+    public function testInterruptedDispatchWithRevokedGrantKeepsUnknownWithoutReplay(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        // Model a process crash after dispatch has started, before any reply was recorded.
+        // No mock provider request is sent here: the host-side outcome is deliberately unknown.
+        $this->store->db->update('wcp_candidate_activations', [
+            'state' => 'DISPATCHING',
+        ], ['id' => $id]);
+        $this->store->db->delete('wcp_candidate_activation_grants', [
+            'user_id' => $this->fixture['users']['alice'],
+            'tenant_id' => $this->fixture['tenants']['alice'],
+        ]);
+
+        $worker = $this->activationWorker();
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+        self::assertSame(1, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome' AND resource_id=?",
+            [$id]
+        ));
+
+        // A second polling pass must not invent an ACTIVE result or a second transition.
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('UNKNOWN_OUTCOME', $this->state($id));
+        self::assertSame([], $this->gateway->requests);
+        self::assertSame(1, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome' AND resource_id=?",
+            [$id]
+        ));
+        self::assertNull($worker->runOne());
+    }
+
+    public function testInterruptedDispatchWithCurrentGrantInspectsRatherThanReprovisions(): void
+    {
+        $id = $this->submit->submit($this->fixture['users']['alice'], $this->plan());
+        // A resumed worker sees a dispatched job, not a fresh QUEUED operation.
+        $this->store->db->update('wcp_candidate_activations', [
+            'state' => 'DISPATCHING',
+        ], ['id' => $id]);
+
+        $worker = $this->activationWorker();
+        self::assertSame(1, $worker->reconcile());
+        self::assertSame('ACTIVE', $this->state($id));
+        self::assertCount(1, $this->gateway->requests);
+        self::assertSame('inspect_php_fpm', $this->gateway->requests[0]['operation']);
+        self::assertSame($id, $this->gateway->requests[0]['job_id']);
+        self::assertNull($worker->runOne());
+        self::assertSame(0, (int) $this->store->db->fetchOne(
+            "SELECT COUNT(*) FROM wcp_candidate_audit WHERE kind='candidate.hosting.activation.unknown_outcome' AND resource_id=?",
+            [$id]
+        ));
+    }
+
 }
