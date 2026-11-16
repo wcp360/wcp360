@@ -226,6 +226,33 @@ def verify(root: Path) -> dict[str, Any]:
     if "candidate.hosting.plan" in permissions:
         raise ContractDrift("Candidate-only permission leaked into canonical permission registry")
 
+    if set(contracts) != set(actions) or set(contracts) != set(daemon):
+        raise ContractDrift("Canonical API/action/daemon contract identities differ")
+
+    # Relational integrity for all declarations, not approval of their meaning.
+    # Only the five owner-reviewed contracts below have pinned semantic values.
+    for contract_id, canonical in contracts.items():
+        emitted = daemon[contract_id]
+        action = actions[contract_id]
+        for field, daemon_field in DAEMON_FIELDS.items():
+            expected_value = canonical.get(field)
+            if not isinstance(expected_value, str) or not expected_value:
+                raise ContractDrift(f"{contract_id}: missing canonical field {field}")
+            exact(emitted, daemon_field, expected_value, contract_id + " daemon parity")
+        for field in ("version", "compatibility"):
+            expected_value = canonical.get(field)
+            if not isinstance(expected_value, str) or not expected_value:
+                raise ContractDrift(f"{contract_id}: missing canonical field {field}")
+            exact(emitted, field, expected_value, contract_id + " daemon parity")
+        for field in ("action_id", "permission_id", "surface", "resource_type"):
+            exact(action, field, canonical[field], contract_id + " action parity")
+        action_id = canonical["action_id"]
+        if action.get("domain") != action_id.split(".", 1)[0]:
+            raise ContractDrift(f"{contract_id}: action domain differs from canonical action ID")
+        if canonical["permission_id"] not in permissions:
+            raise ContractDrift(f"{contract_id}: permission reference not in canonical catalogue")
+
+
     for contract_id, fields in EXPECTED.items():
         if contract_id not in contracts or contract_id not in actions or contract_id not in daemon:
             raise ContractDrift(f"Required canonical contract missing: {contract_id}")
