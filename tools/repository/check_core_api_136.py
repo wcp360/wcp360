@@ -159,10 +159,19 @@ def unique_object_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return data
 
 
+def reject_nonfinite_constant(value: str) -> None:
+    """JSON does not admit NaN or Infinity in canonical contract sources."""
+    raise ContractDrift(f"Non-finite JSON value: {value}")
+
+
 def load_json(root: Path, relative: str) -> dict[str, Any]:
     source = root / relative
     try:
-        data = json.loads(source.read_text(encoding="utf-8"), object_pairs_hook=unique_object_pairs)
+        data = json.loads(
+            source.read_text(encoding="utf-8"),
+            object_pairs_hook=unique_object_pairs,
+            parse_constant=reject_nonfinite_constant,
+        )
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ContractDrift(f"Required source unavailable or invalid: {relative}") from exc
     if not isinstance(data, dict):
