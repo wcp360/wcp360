@@ -159,5 +159,53 @@ class CoreApi136DriftTest(unittest.TestCase):
 
 
 
+    def test_daemon_array_cardinality_must_match_reviewed_declaration(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["daemon"]
+        contents = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(len(contents["apis"]), 86)
+        contents["apis"].pop()
+        path.write_text(json.dumps(contents, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_duplicate_daemon_top_level_metadata_is_denied(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["daemon"]
+        original = path.read_text(encoding="utf-8")
+        tampered = original.replace(
+            '"schema_version": 1,',
+            '"schema_version": 1, "schema_version": 1,',
+            1,
+        )
+        self.assertNotEqual(tampered, original)
+        path.write_text(tampered, encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_duplicate_permission_key_outside_five_reviewed_rows_is_denied(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["permissions"]
+        original = path.read_text(encoding="utf-8")
+        tampered = original.replace(
+            '"id": "api.tokens.manage",',
+            '"id": "api.tokens.manage", "id": "jobs.read",',
+            1,
+        )
+        self.assertNotEqual(tampered, original)
+        path.write_text(tampered, encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_nonfinite_json_values_are_denied(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["actions"]
+        original = path.read_text(encoding="utf-8")
+        self.assertTrue(original.lstrip().startswith("{"))
+        for constant in ("NaN", "Infinity", "-Infinity"):
+            with self.subTest(constant=constant):
+                # Python's standard decoder accepts these unless explicitly forbidden.
+                tampered = original.replace("{", '{"invalid_extra": ' + constant + ", ", 1)
+                path.write_text(tampered, encoding="utf-8")
+                with self.assertRaises(checker.ContractDrift):
+                    checker.verify(self.fixture)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
