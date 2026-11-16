@@ -249,5 +249,45 @@ class CoreApi136DriftTest(unittest.TestCase):
             checker.verify(self.fixture)
 
 
+    def test_missing_daemon_permission_mirror_row_is_denied(self) -> None:
+        path = self.fixture / checker.SOURCE_FILES["daemon"]
+        contents = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(len(contents["permissions"]), 82)
+        contents["permissions"].pop()
+        path.write_text(json.dumps(contents, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_daemon_permission_mirror_identity_swap_with_same_count_is_denied(self) -> None:
+        self.mutate("daemon", "permissions", "id", "api.tokens.manage",
+                    "id", "api.tokens.unreviewed")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_daemon_permission_mirror_surface_downgrade_is_denied(self) -> None:
+        self.mutate("daemon", "permissions", "id", "api.tokens.manage",
+                    "surface", "WCP-USER")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_daemon_permission_mirror_status_drift_is_denied(self) -> None:
+        self.mutate("daemon", "permissions", "id", "api.tokens.manage",
+                    "status", "INACTIVE")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_daemon_permission_mirror_duplicate_identity_is_denied(self) -> None:
+        self.mutate("daemon", "permissions", "id", "applications.create",
+                    "id", "api.tokens.manage")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+    def test_candidate_permission_cannot_hide_inside_daemon_mirror(self) -> None:
+        self.mutate("daemon", "permissions", "id", "api.tokens.manage",
+                    "id", "candidate.hosting.plan")
+        with self.assertRaises(checker.ContractDrift):
+            checker.verify(self.fixture)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
